@@ -1,0 +1,46 @@
+syntax = "proto3";
+package proto;
+
+message Board {
+    string BoardID = 1;
+    string BoardName = 2;
+    repeated string ThreadIDs = 3;
+    repeated string DocIDs = 4;
+}
+
+message User {
+    string UserID = 1;
+    string Username = 2;
+    string Password = 3;
+    repeated Privilege Privileges = 4;
+}
+
+message Privilege {
+    string CourseName = 1;
+    string CourseID = 2;
+    string AccessLevel = 3;
+}
+
+message Thread {
+    string ThreadName = 1;
+	string ThreadID = 2;
+	string PosterID = 3; 
+	string PosterUsername = 4;
+	string Content = 5; 
+	repeated Comment Comments = 6;
+	string Timestamp = 7;
+}
+
+message Comment {
+    string CommentID = 1;
+	string PosterID = 2;
+	string PosterUsername = 3;
+	string Timestamp = 4;
+	string Content = 5;
+}
+
+message Course {
+    string CourseID = 1;
+    string CourseName = 2;
+    repeated string BoardIDs = 3;
+}

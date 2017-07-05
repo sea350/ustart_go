@@ -2,7 +2,7 @@ package get
 
 import(
     elastic "gopkg.in/olivere/elastic.v5"
-    types "github.com/nicolaifsf/TheTandon-Server/types"
+    types "github.com/sea350/ustart/goCode/types"
     "golang.org/x/net/context"
     "errors"
     "encoding/json"
