@@ -1,8 +1,8 @@
 package convert
 
 import(
-        "github.com/nicolaifsf/TheTandon-Server/server/proto"
-        "github.com/nicolaifsf/TheTandon-Server/types"
+        "github.com/sea350/ustart/server/proto"
+        "github.com/sea350/ustart/types"
 )
 
 func ToUserProto(u types.User) *proto.User {

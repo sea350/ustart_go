@@ -6,8 +6,8 @@ import(
         "os"
         "log"
 
-        _ "github.com/nicolaifsf/TheTandon-Server/requests/get"
-        "github.com/nicolaifsf/TheTandon-Server/server/handler"
+        _ "github.com/sea350/ustart/goCode/requests/get"
+        "github.com/sea350/ustart/goCode/server/handler"
 )
 
 // func handle(w http.ResponseWriter, r *http.Request){

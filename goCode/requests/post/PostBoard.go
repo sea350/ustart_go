@@ -5,7 +5,7 @@ import(
     types "github.com/nicolaifsf/TheTandon-Server/types"
     _"fmt"
     "golang.org/x/net/context"
-    "github.com/nicolaifsf/TheTandon-Server/server/proto"
+    "github.com/sea350/ustart/goCode/server/proto"
     "errors"
     _"encoding/json"
 )

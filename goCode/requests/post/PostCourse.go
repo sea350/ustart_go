@@ -3,7 +3,7 @@ package post
 import(
     elastic "gopkg.in/olivere/elastic.v5"
     // types "github.com/nicolaifsf/TheTandon-Server/types"
-    "github.com/nicolaifsf/TheTandon-Server/server/proto"
+    "github.com/sea350/ustart/goCode/server/proto"
     "golang.org/x/net/context"
     "errors"
 )
