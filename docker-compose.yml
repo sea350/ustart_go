@@ -1,8 +1,8 @@
-version:"3"
+version: '3'
 services:
-  goEnv:
+  go_dev:
     build: ./
     environment:
-      - ELASTIC_HOST: elastic
+      - ELASTIC_HOST=elastic
   elastic:
     image: elasticsearch

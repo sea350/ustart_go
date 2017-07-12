@@ -1,5 +1,5 @@
 FROM golang
 
-RUN git clone https://github.com/sea350/ustart
+COPY ./ /home/dev/
 
-CMD ['/bin/sh']
+VOLUME /home/dev/
