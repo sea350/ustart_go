@@ -1,4 +1,4 @@
-package Post
+package post
 
 import(
     elastic "gopkg.in/olivere/elastic.v5"

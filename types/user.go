@@ -1,17 +1,18 @@
-package User
+package types
 
-type user struct {
+type User struct {
 	
-	Password   string   	`json:Password` // Maybe we shouldn't keep it in plain text later?
+	Password			string   	`json:Password` // Maybe we shouldn't keep it in plain text later?
 	//Privileges []Privilege 	`json:Privileges`
 	
 	
 	FirstName			string      `json:FirstName`
+	LastName			string      `json:LastName`
 	Email				string	    `json:Email`
 	Location			[]string    `json:Location`
 	HighSchool			[]string	`json:HighSchool`
 	GradDate			string		`json:GradDate`
-	UndergradSchool		string  `json:UndergradSchool`
+	UndergradSchool		string  	`json:UndergradSchool`
 	Majors				[]string	`json:Majors`
 	Minors				[]string	`json:Minors`
 	Class				int8		`json:Class`
@@ -19,9 +20,9 @@ type user struct {
 	AccCreation 		string	    `json:AccCreation`
 	Visible				bool		`json:Visible`
 	Status				bool		`json:Status`
-	ExpirationDate		string	`json:ExpirationDate`
+	ExpirationDate		string		`json:ExpirationDate`
 	Avatar				string		`json:Avatar`
-	CroppedAvatar 		string	`json:CropAvatar`
+	CroppedAvatar 		string		`json:CropAvatar`
 	Banner				string		`json:Banner`
 	Organization 		string		`json:Organization`
 	Category			string		`json:Category`
@@ -32,7 +33,7 @@ type user struct {
 	QuickLinks			string		`json:QuickLinks`
 	Tags				string		`json:Tags`
 	//Projects			[]Project	`json:Projects`
-	BlockedUsers 		[]User		`json:BlockedUsers`
+	BlockedUsers 		[]string	`json:BlockedUsers`
 	//ConversationIDs []ConversationID	`json:ConversationIDs`
 	
 }
