@@ -1,5 +1,5 @@
 FROM golang
 
-COPY ./ /home/dev/
+WORKDIR /home/dev/
 
-VOLUME /home/dev/
+CMD ["/bin/sh"]

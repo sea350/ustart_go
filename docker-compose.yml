@@ -4,5 +4,7 @@ services:
     build: ./
     environment:
       - ELASTIC_HOST=elastic
+    tty: true
+    stdin_open: true
   elastic:
     image: elasticsearch
