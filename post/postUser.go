@@ -15,6 +15,7 @@ const USER_TYPE  = "USER"
 
 
 func IndexUser(newAcc types.User){
+	//ADDS NEW USER TO ES RECORDS (requires a User type)
     ctx := context.Background()
 	eclient, err:= elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 	if err != nil {fmt.Println(err)}
@@ -38,5 +39,10 @@ func IndexUser(newAcc types.User){
 	 
     }
     //return nil
+}
+
+func ChangeName(userID string, newName string){
+	
+
 }
 
