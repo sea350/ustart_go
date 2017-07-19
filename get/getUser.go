@@ -13,7 +13,7 @@ import(
 const USER_INDEX="test-user_data"
 const USER_TYPE="USER"
 
-func GetUserFromEmail(email string) []types.User {
+func GetUserFromEmail(email string) (string, []types.User) {
 	//SEARCHES ES FOR A CERTAIN USER (REQUIRES USER EMAIL STRING)
 	//IF SUCESSFUL SHOULD RETURN USER ARRAY OF SIZE 1
 	ctx := context.Background()
@@ -26,10 +26,10 @@ func GetUserFromEmail(email string) []types.User {
 	exists, err:= eclient.IndexExists(USER_INDEX).Do(ctx) 
 	
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 	}
 	if !exists {
-		fmt.Println(err)
+		//fmt.Println(err)
 	}
 
 	matchQuery := elastic.NewMatchQuery("Email",email)
@@ -49,5 +49,12 @@ func GetUserFromEmail(email string) []types.User {
 	 	}
 	 }
 	// fmt.Println(ret)
-	 return ret
+	 if (ret.SIZE != 1) {
+
+	 	err := "More than one user found"
+
+	 	fmt.Println(err)
+	 }
+
+	 return err, ret
 }
