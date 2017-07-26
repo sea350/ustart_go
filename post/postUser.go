@@ -2,7 +2,7 @@ package post
 
 import(
     elastic "gopkg.in/olivere/elastic.v5"
-    "github.com/sea350/ustart/types"
+    "github.com/sea350/ustart_go/types"
     "context"
 	// "errors"
     "fmt"
@@ -41,8 +41,8 @@ func IndexUser(newAcc types.User){
     //return nil
 }
 
-func ChangeName(userID string, newName string){
+//func ChangeName(userID string, newName string){
 	
 
-}
+//}
 

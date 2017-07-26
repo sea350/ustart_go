@@ -16,7 +16,7 @@ type User struct {
 	Majors				[]string	`json:Majors`
 	Minors				[]string	`json:Minors`
 	Class				int8		`json:Class`
-	// dob					string		`json:dob`
+	Dob					string		`json:Dob`
 	AccCreation 		string	    `json:AccCreation`
 	Visible				bool		`json:Visible`
 	Status				bool		`json:Status`
@@ -32,9 +32,9 @@ type User struct {
 	Description 		string		`json:Description`
 	QuickLinks			string		`json:QuickLinks`
 	Tags				string		`json:Tags`
-	//Projects			[]Project	`json:Projects`
+	Projects			[]string	`json:Projects`
 	BlockedUsers 		[]string	`json:BlockedUsers`
-	//ConversationIDs []ConversationID	`json:ConversationIDs`
+	ConversationIDs 	[]string	`json:ConversationIDs`
 }
 
 
