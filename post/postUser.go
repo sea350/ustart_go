@@ -11,14 +11,11 @@ import(
 const USER_INDEX = "test-user_data"
 const USER_TYPE  = "USER"
 
-
-
-
-func IndexUser(newAcc types.User){
+func IndexUser(eclient *elastic.Client, newAcc types.User)error {
 	//ADDS NEW USER TO ES RECORDS (requires a User type)
     ctx := context.Background()
-	eclient, err:= elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-	if err != nil {fmt.Println(err)}
+	
+	//if err != nil {fmt.Println(err)}
 	exists, err := eclient.IndexExists(USER_INDEX).Do(ctx)
     if err != nil {
         //return err 
@@ -38,11 +35,60 @@ func IndexUser(newAcc types.User){
 		fmt.Println(err)
 	 
     }
-    //return nil
+    return nil
 }
 
-//func ChangeName(userID string, newName string){
-	
+func UpdateUser(eclient *elastic.Client, userID string, userAcc types.User)error {
+    //ADDS NEW USER TO ES RECORDS (requires a User type)
+    ctx := context.Background()
+    
+    //if err != nil {fmt.Println(err)}
+    exists, err := eclient.IndexExists(USER_INDEX).Do(ctx)
+    if err != nil {
+        //return err 
+        fmt.Println(err)
+    }
+    if !exists {
+        //return errors.New("Index does not exist")
+        fmt.Println(err)
+    }
+    _, err = eclient.Index().
+        Index(USER_INDEX).
+        Type(USER_TYPE).
+        Id(userID).
+        BodyJson(userAcc).
+        Do(ctx)
+    if err != nil {
+        //return err
+        fmt.Println(err)
+     
+    }
+    return nil
+}
 
-//}
+
+func ModifyDescription(eclient *elastic.Client, userID string, newDescription string){
+   
+    ctx:=context.Background()
+
+    usr:= eclient.Get().
+        Index(USER_INDEX).
+        Type(USER_TYPE).
+        Id(userID).
+       // BodyJson(userAcc).
+        Do(ctx)
+
+    usr.Description = newDescription
+    
+    UpdateUser(eclient,userID,usr)
+
+   
+}
+
+
+
+
+
+
+
 

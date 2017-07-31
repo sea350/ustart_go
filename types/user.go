@@ -1,7 +1,7 @@
 package types
 
 type User struct {
-	
+	//_id					string		`json:_id`
 	Password			string   	`json:Password` // Maybe we shouldn't keep it in plain text later?
 	//Privileges []Privilege 	`json:Privileges`
 	

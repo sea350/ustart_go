@@ -4,68 +4,76 @@ import(
 	elastic "gopkg.in/olivere/elastic.v5"
 	types "github.com/sea350/ustart_go/types"
 	"context"
-	//"encoding/json"
-	
-	"fmt"
 	"reflect"
-	//"errors"
 )
 
 const USER_INDEX="test-user_data"
 const USER_TYPE="USER"
 
-func GetUserFromEmail(email string) ([]types.User) {
+func GetUserFromEmail(eclient *elastic.Client, email string) ([]types.User, error) {
 	//SEARCHES ES FOR A CERTAIN USER (REQUIRES USER EMAIL STRING)
 	//IF SUCCESSFUL SHOULD RETURN USER ARRAY OF SIZE 1
 	ctx := context.Background()
-
-	eclient, anErr := elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-	if anErr != nil {fmt.Println(anErr)}
-	// userID := "TestMan"
-	
 	var ret []types.User
-	//exists, err:= eclient.IndexExists(USER_INDEX).Do(ctx) 
-	
-//	if err != nil {
-		//fmt.Println(err)
-//	}
-//	if !exists {
-		//fmt.Println(err)
-//	}
 
 	matchQuery := elastic.NewMatchQuery("Email",email)
 	
 	searchResult, err := eclient.Search().
-		Index("test-user_data").
+		Index(USER_INDEX).
 		Query(matchQuery).
 		Do(ctx)
 
-	// after here = good
-	 if err != nil{fmt.Println(err)}
-	 var ttyp types.User  // ttyp is a "t" of type User.
-	 for _, item := range searchResult.Each(reflect.TypeOf(ttyp)){
-	 	if t, ok := item.(types.User); ok {	
-			//fmt.Println(t)
- 			ret = append(ret, t)
-	 	}
-	 }
-	// fmt.Println(ret)
-	 //retSize := ret
-	// counter := 0
-	 //for i:=0;retSize[i] != nil; i++{
-	 	//counter = i
-	 //}
+	if err != nil{return ret, err}
 
-	 //if (counter != 1) {
+	var ttyp types.User  // ttyp is a "t" of type User.
+	for _, item := range searchResult.Each(reflect.TypeOf(ttyp)){
+		if t, ok := item.(types.User); ok {	
+			ret = append(ret, t)
+		}
+	}
 
-	 	//err := "More than one user found"
+	if (err != nil) {return ret, err}
+	return ret, err
+}
 
-	 	//fmt.Println(err)
-	 //}
+func GetIdFromEmail(eclient *elastic.Client, email string) ([]string, error) {
+	//SEARCHES ES FOR A CERTAIN USER (REQUIRES USER EMAIL STRING)
+	//IF SUCCESSFUL SHOULD RETURN USER ARRAY OF SIZE 1
+	ctx := context.Background()
+	var ids []string
+	
+	exists, err:= eclient.IndexExists(USER_INDEX).Do(ctx) 
+	
+	if err != nil {return ids, err}
+	if !exists {return ids, err}
 
-	 if (err != nil) {
-	 	fmt.Println(err)
+	matchQuery := elastic.NewMatchQuery("Email", email)
 
-	 }
-	 return ret
+	searchResult, err := eclient.Search().
+		Index(USER_INDEX).
+		Query(matchQuery).
+		Do(ctx)
+
+
+	if err != nil{return ids, err}
+
+	for _, hit := range searchResult.Hits.Hits{
+		ids = append(ids, hit.Id)
+	}
+
+	return ids, err
+}
+
+func GetUserFromId(eclient *elastic.Client, userID string)(types.User, error){
+	ctx:=context.Background()
+	usr, err := eclient.Get().
+		Index(USER_INDEX).
+        Type(USER_TYPE).
+        Id(userID).
+        BodyJson(userAcc).
+        Do(ctx)
+	}
+
+	return usr, err
+	
 }
