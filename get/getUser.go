@@ -12,7 +12,7 @@ const USER_TYPE="USER"
 
 func GetUserFromEmail(eclient *elastic.Client, email string) ([]types.User, error) {
 	//SEARCHES ES FOR A CERTAIN USER (REQUIRES USER EMAIL STRING)
-	//IF SUCCESSFUL SHOULD RETURN USER ARRAY OF SIZE 1
+	//IF SUCCESSFUL SHOULD RETURN []types.User OF SIZE 1 AND AN error
 	ctx := context.Background()
 	var ret []types.User
 
@@ -37,8 +37,8 @@ func GetUserFromEmail(eclient *elastic.Client, email string) ([]types.User, erro
 }
 
 func GetIdFromEmail(eclient *elastic.Client, email string) ([]string, error) {
-	//SEARCHES ES FOR A CERTAIN USER (REQUIRES USER EMAIL STRING)
-	//IF SUCCESSFUL SHOULD RETURN USER ARRAY OF SIZE 1
+	//SEARCHES ES FOR A CERTAIN USER (REQUIRES elastic client pointer AND A string USER EMAIL)
+	//IF SUCCESSFUL SHOULD RETURN string array OF SIZE 1 AND error
 	ctx := context.Background()
 	var ids []string
 	
@@ -65,15 +65,20 @@ func GetIdFromEmail(eclient *elastic.Client, email string) ([]string, error) {
 }
 
 func GetUserFromId(eclient *elastic.Client, userID string)(types.User, error){
+	//SEARCHES ES FOR A CERTAIN USER (REQUIRES elastic client pointer AND A 
+	//		string USER EMAIL)
+	//IF SUCCESSFUL SHOULD RETURN string array OF SIZE 1 AND error
 	ctx:=context.Background()
-	usr, err := eclient.Get().
+	searchResult, err := eclient.Get().
 		Index(USER_INDEX).
         Type(USER_TYPE).
         Id(userID).
-        BodyJson(userAcc).
         Do(ctx)
-	}
+	
+	//if (err!=nil) {return , err}
+
+
+    usr:=searchResult
 
 	return usr, err
-	
 }
