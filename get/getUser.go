@@ -5,6 +5,8 @@ import(
 	types "github.com/sea350/ustart_go/types"
 	"context"
 	"reflect"
+	"encoding/json"
+	
 )
 
 const USER_INDEX="test-user_data"
@@ -42,7 +44,7 @@ func GetIdFromEmail(eclient *elastic.Client, email string) ([]string, error) {
 	ctx := context.Background()
 	var ids []string
 	
-	exists, err:= eclient.IndexExists(USER_INDEX).Do(ctx) 
+	exists, err := eclient.IndexExists(USER_INDEX).Do(ctx) 
 	
 	if err != nil {return ids, err}
 	if !exists {return ids, err}
@@ -63,11 +65,10 @@ func GetIdFromEmail(eclient *elastic.Client, email string) ([]string, error) {
 
 	return ids, err
 }
+ 
+
 
 func GetUserFromId(eclient *elastic.Client, userID string)(types.User, error){
-	//SEARCHES ES FOR A CERTAIN USER (REQUIRES elastic client pointer AND A 
-	//		string USER EMAIL)
-	//IF SUCCESSFUL SHOULD RETURN string array OF SIZE 1 AND error
 	ctx:=context.Background()
 	searchResult, err := eclient.Get().
 		Index(USER_INDEX).
@@ -75,10 +76,12 @@ func GetUserFromId(eclient *elastic.Client, userID string)(types.User, error){
         Id(userID).
         Do(ctx)
 	
-	//if (err!=nil) {return , err}
+    var usr types.User
+	
+	Err:= json.Unmarshal(*searchResult.Source, &usr)
+	if (Err!=nil){return usr,err}
 
+	return usr, Err
 
-    usr:=searchResult
-
-	return usr, err
 }
+

@@ -4,12 +4,12 @@ import(
 	elastic "gopkg.in/olivere/elastic.v5"
 	types "github.com/sea350/ustart_go/types"
 	"context"
-
-	 
+	"reflect"
+	"encoding/json"
+	
 )
-
-const PROJ_INDEX="test-project_data"
-const PROJ_TYPE="PROJECT"
+const PROJECT_INDEX="test-project_data"
+const PROJECT_TYPE="PROJECT"
 
 
 func GetProjectFromId(eclient *elastic.Client, projectID string){
@@ -18,14 +18,16 @@ func GetProjectFromId(eclient *elastic.Client, projectID string){
 	//RETURNS A types. Project AND AN error
 	ctx:=context.Background()
 	searchResult, err := eclient.Get().
-		Index(PROJ_INDEX).
-        Type(PROJ_TYPE).
+		Index(PROJECT_INDEX).
+        Type(PROJECT_TYPE).
         Id(projectID).
         Do(ctx)
 	
-	//if (err!=nil) {return nil, err}
+    var proj types.Project
+	
+	Err:= json.Unmarshal(*searchResult.Source, &proj)
+	if (Err!=nil){return proj,err}
 
-	proj:=searchResult
-	return proj, err
+	return proj, Err
 	
 }
