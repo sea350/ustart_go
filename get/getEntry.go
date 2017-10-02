@@ -12,7 +12,7 @@ import(
 const ENTRY_INDEX="test-entry_data"
 const ENTRY_TYPE="ENTRY"
 
-func GetEntryById(eclient *elastic.Client, entryID string)(types.Entry, error){
+func GetEntryByID(eclient *elastic.Client, entryID string)(types.Entry, error){
 
 	var entry types.Entry //initialize type entry
 

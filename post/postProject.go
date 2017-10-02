@@ -8,29 +8,47 @@ import(
 	get"github.com/sea350/ustart_go/get"
 )
 
-const PROJ_INDEX = "test-project_data"
-const PROJ_TYPE  = "PROJECT"
+const PROJECT_INDEX = "test-project_data"
+const PROJECT_TYPE  = "PROJECT"
 
-func IndexProject(eclient *elastic.Client, newProj types.Project)error {
+
+
+
+const proj_mapping = `
+{
+    "mappings":{
+        "Project":{
+            "properties":{
+                "URLName":{
+                    "type":"keyword"
+                }
+                
+            }
+        }
+    }
+}`
+
+func IndexProject(eclient *elastic.Client, newProj types.Project)(string, error) {
 	//ADDS NEW PROJ TO ES RECORDS (requires an elastic client pointer and project type)
 	//RETURNS AN error
+	tempString := "Project has not been indexed"
 	ctx := context.Background()
 
-	exists, err := eclient.IndexExists(PROJ_INDEX).Do(ctx)
+	exists, err := eclient.IndexExists(PROJECT_INDEX).Do(ctx)
 
-	if err != nil {return err}
+	if err != nil {return tempString, err}
 
-	if !exists {return errors.New("Index does not exist")}
+	if !exists {return tempString, errors.New("Index does not exist")}
 
-	_, err = eclient.Index().
-		Index(PROJ_INDEX).
-		Type(PROJ_TYPE).
+	storedProj, err := eclient.Index().
+		Index(PROJECT_INDEX).
+		Type(PROJECT_TYPE).
 		BodyJson(newProj).
 		Do(ctx)
 
-	if err != nil {return err}
+	if err != nil {return tempString, err}
 
-	return nil
+	return storedProj.Id, nil
 }
 
 func ReindexProject(eclient *elastic.Client, projectID string, projectPage types.Project)error {
@@ -39,14 +57,14 @@ func ReindexProject(eclient *elastic.Client, projectID string, projectPage types
 	//RETURNS AN ERROR
 	ctx := context.Background()
 	
-	exists, err := eclient.IndexExists(PROJ_INDEX).Do(ctx)
+	exists, err := eclient.IndexExists(PROJECT_INDEX).Do(ctx)
 
 	if err != nil {return err }
 	if !exists {return errors.New("Index does not exist")}
 
 	_, err = eclient.Index().
-		Index(PROJ_INDEX).
-		Type(PROJ_TYPE).
+		Index(PROJECT_INDEX).
+		Type(PROJECT_TYPE).
 		Id(projectID).
 		BodyJson(projectPage).
 		Do(ctx)
@@ -56,19 +74,19 @@ func ReindexProject(eclient *elastic.Client, projectID string, projectPage types
 	return nil
 }
 
-func UpdateProject(eclient *elastic.Client, projectID string, newContent interface{}, field string) error{
+func UpdateProject(eclient *elastic.Client, projectID string, field string, newContent interface{}) error{
 	ctx:=context.Background()
 
-	exists, err := eclient.IndexExists(PROJ_INDEX).Do(ctx)
+	exists, err := eclient.IndexExists(PROJECT_INDEX).Do(ctx)
 	if err != nil {return err}
 	if !exists {return errors.New("Index does not exist")}
 
-	_, err = get.GetProjectById(eclient, projectID)
+	_, err = get.GetProjectByID(eclient, projectID)
 	if (err!=nil){return err}
 
 	_, err = eclient.Update().
-		Index(PROJ_INDEX).
-		Type(PROJ_TYPE).
+		Index(PROJECT_INDEX).
+		Type(PROJECT_TYPE).
 		Id(projectID).
 		Doc(map[string]interface{}{field: newContent}).
 		Do(ctx)
@@ -77,14 +95,54 @@ func UpdateProject(eclient *elastic.Client, projectID string, newContent interfa
 	return nil
 }
 
-/*
-func ModifyName(eclient *elastic.Client, projectID string, newName string)error{
 
-	proj,err := get.GetProjectById(eclient, projectID)
-	if (err != nil){return err}
 
-	proj.Name = newName
+func AppendToProject(eclient *elastic.Client, projID string, field string, data interface{})error{return nil}//RETURN HERE
+func RemoveFromProject(eclient *elastic.Client, projID string, field string, idx int, data interface{})error{return nil}
+
+
+
+
+
+func AppendMember(eclient *elastic.Client, projectID string, member types.Member)error{
+	ctx:= context.Background()
+	proj, err := get.GetProjectByID(eclient, projectID)
+
+	if (err!=nil) {return errors.New("Project does not exist")}
+
 	
-	return UpdateProject(eclient,projectID,proj)
+	 proj.Members = append(proj.Members, member)
+
+	_,err =  eclient.Update().
+		Index(PROJECT_INDEX).
+		Type(PROJECT_TYPE).
+		Id(projectID).
+		Doc(map[string]interface{}{"Members": proj.Members}).
+		Do(ctx)
+
+	return err
+	
 }
-*/
+
+
+func DeleteMember(eclient *elastic.Client, projID string, memberID string,idx int)error{
+	ctx:= context.Background()
+	proj, err := get.GetProjectByID(eclient, projID)
+	if (err!=nil) {return errors.New("Project does not exist")}
+	
+	
+	proj.Members = append(proj.Members[:idx],proj.Members[idx+1:]...)
+
+	_,err =  eclient.Update().
+		Index(USER_INDEX).
+		Type(USER_TYPE).
+		Id(projID).
+		Doc(map[string]interface{}{"Members": proj.Members}).
+		Do(ctx)
+	
+	return err
+	
+
+	
+}
+

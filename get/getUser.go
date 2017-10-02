@@ -6,6 +6,7 @@ import(
 	"errors"
 	"context"
 	"encoding/json"
+	//get "github.com/sea350/ustart_go/get"
 )
 
 const USER_INDEX="test-user_data"
@@ -13,7 +14,7 @@ const USER_TYPE="USER"
 
 
 
-func GetUserById(eclient *elastic.Client, userID string)(types.User, error){
+func GetUserByID(eclient *elastic.Client, userID string)(types.User, error){
 	ctx:=context.Background() //intialize context background
 	var usr types.User //initialize type user
 	searchResult, err := eclient.Get(). //Get returns doc type, index, etc.
@@ -30,6 +31,26 @@ func GetUserById(eclient *elastic.Client, userID string)(types.User, error){
 
 }
 
+func GetIDByUsername(eclient *elastic.Client, username string)(string, error){
+	ctx:=context.Background()
+	termQuery := elastic.NewTermQuery("Username",username)
+	searchResult,err:=eclient.Search().
+		Index(USER_INDEX).
+		Query(termQuery).
+		Do(ctx)
+
+	var result string //save id to a result variable
+	if (searchResult.TotalHits() > 1) {return result,errors.New("More than one user found")} 
+	
+	for _,element:=range searchResult.Hits.Hits{ //interate through hits, get the element id
+		result = element.Id
+		
+	}
+
+		
+	return result, err //return id
+}
+
 
 func EmailToUsername(email string)(string){
     
@@ -43,9 +64,9 @@ func EmailToUsername(email string)(string){
         }
      }
 
-    retUsr:=string(usr) //converts to string for username
+    retUsr:=string(usr[0:len(usr)-3]) //converts to string for username
 
-    return retUsr //return s username
+    return retUsr //returns username
 
 }
 
@@ -72,7 +93,7 @@ func GetUserByEmail(eclient *elastic.Client, email string)(types.User,error){
 		break
 	}
 	
-	usr, _ = GetUserById(eclient,result)
+	usr, _ = GetUserByID(eclient,result)
 
 	return usr, err
 
@@ -131,3 +152,12 @@ func EmailInUse(eclient *elastic.Client, theEmail string)(bool,error){
 
 }
 
+/*func GetUserEmailByID(eclient *elastic.Client, usrID string) (string,error) {
+	retEmail:=""
+	usr, err:= GetUserById(eclient, usrID)
+
+	if (err != nil) {return retEmail,err}
+	retEmail = usr.Email
+	
+	return retEmail, err
+}*/

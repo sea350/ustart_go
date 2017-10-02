@@ -2,34 +2,28 @@ package types
 
 import(
 	"time"
-
-
 )
 
 type Like struct{
 
-	UserId				string				`json:UserId`
-	TimeStamp			time.Time			`json:TimeStamp`
-
-}
-
-type Share struct{
-
-	UserId				string				`json:UserId`
-	TimeStamp			time.Time			`json:TimeStamp`
+	UserID				string				`json:UserID`
+	//TimeStamp			string				`json:TimeStamp`
 
 }
 
 type Entry struct{
 
-	PosterId			string				`json:PosterId`
-	Classification		int8				`json:Classification`
+	PosterID			string				`json:PosterID`
+	Classification		int					`json:Classification`
+		//class 0 = user original post
+		//class 1 = user reply post
+		//class 2 = user share post
 	Content				[]rune				`json:Content`
 	ReferenceEntry		string				`json:RefrenceEntry`
 	MediaRef			string				`json:MediaRef`
 	TimeStamp			time.Time			`json:TimeStamp`
 	Likes				[]Like				`json:Likes`
-	Shares				[]Share				`json:Shares`
+	ShareIDs			[]string			`json:Shares`
 	ReplyIDs			[]string			`json:ReplyIDs`
 	Visible				bool				`json:Visible`
 
