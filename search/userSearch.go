@@ -30,7 +30,7 @@ const ENTRY_TYPE = "ENTRY"
 
 
 //only a mockup of code, certain things like iterating through searchResult.Hits aren't coded coded yet
-func USearch(eclient *elastic.Client, searchFor []interface{}, queryType string, filter string) ([]interface{}, error){
+/*func USearch(eclient *elastic.Client, searchFor []interface{}, queryType string, filter string) ([]interface{}, error){
 	ctx:= context.Background()
 
 
@@ -84,6 +84,30 @@ func USearch(eclient *elastic.Client, searchFor []interface{}, queryType string,
 	}
 
 	return results, nil
+
+
+}*/
+
+
+func USearch(eclient *elastic.Client, searchFor []interface{}, queryType string, filter string) ([]interface{}, error){
+	
+
+	if(filter == "User"){
+		termQuery := elastic.NewTermQuery("user", "olivere")
+		searchResult, err := client.Search().
+    		Index("twitter").   // search in index "twitter"
+    		Query(termQuery).  // specify the query
+    		Sort("user", true). // sort by "user" field, ascending
+    		From(0).Size(10).   // take documents 0-9
+    		Pretty(true).       // pretty print request and response JSON
+    		Do()                // execute
+	
+		if err != nil {
+    		// Handle error
+    		panic(err)
+		}
+	}
+
 
 
 }

@@ -6,7 +6,7 @@ import(
 	"errors"
 	"context"
 	"encoding/json"
-	//get "github.com/sea350/ustart_go/get"
+	//post "github.com/sea350/ustart_go/post"
 )
 
 const USER_INDEX="test-user_data"
@@ -64,7 +64,7 @@ func EmailToUsername(email string)(string){
         }
      }
 
-    retUsr:=string(usr[0:len(usr)-3]) //converts to string for username
+    retUsr:=string(usr) //converts to string for username
 
     return retUsr //returns username
 
@@ -84,16 +84,18 @@ func GetUserByEmail(eclient *elastic.Client, email string)(types.User,error){
 		Query(termQuery).
 		Do(ctx)
 
-	
-	var result string
 	var usr types.User
+	if (err != nil) {return usr, err}
+	var result string
+	
 	for _,element:=range searchResult.Hits.Hits{
 	
 		result = element.Id
 		break
 	}
 	
-	usr, _ = GetUserByID(eclient,result)
+	usr, err = GetUserByID(eclient,result)
+
 
 	return usr, err
 
@@ -151,6 +153,8 @@ func EmailInUse(eclient *elastic.Client, theEmail string)(bool,error){
 
 
 }
+
+
 
 /*func GetUserEmailByID(eclient *elastic.Client, usrID string) (string,error) {
 	retEmail:=""

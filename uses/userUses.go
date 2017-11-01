@@ -1,4 +1,4 @@
-package uses
+  package uses
 
 import(
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -9,6 +9,7 @@ import(
 	"errors"
 	"golang.org/x/crypto/bcrypt"
 	"time"
+	"fmt"
 )
 
 
@@ -27,6 +28,8 @@ func SignUpBasic(eclient *elastic.Client, email string, password []byte, fname s
 	newUsr.LastName = lname
 	newUsr.Email = email
 	newUsr.Username = get.EmailToUsername(email)
+	fmt.Println(newUsr.Username)
+	fmt.Println("HELLO BUDDY psych")
 	//hashPass := bcrypt.GenerateFromPassword(password,10)
 	newUsr.Password = password
 	newUsr.University = school
@@ -100,33 +103,30 @@ func Login(eclient *elastic.Client, userEmail string, password []byte)(bool, typ
 	userSession.Email = userEmail
 	userSession.DocID = uID
 	userSession.Username = usr.Username
-
+	fmt.Println(userSession.Username)
+	
+	fmt.Println("_____________________________________-")
+	fmt.Println(usr.Username)
 	return loginSucessful, userSession, err
 
 }
 
 
-func UserPage(eclient *elastic.Client, username string, viewerID string)(types.User, []types.JournalEntry, string, bool, error){
+func UserPage(eclient *elastic.Client, username string, viewerID string)(types.User, string, bool, error){
 	//Returns all information relevant to the user page given a username
-	maxPull := 20
-	//maxReplyPull := 5
-	counter := 0
-	//replyCounter := 0
+
 	var usr types.User
 
-	var entries []types.JournalEntry
 	var isFollowed bool
+
 	userID, err := get.GetIDByUsername(eclient, username)
-	if (err!=nil){return usr, entries, userID, isFollowed, err}
+	if (err!=nil){return usr, userID, isFollowed, err}
 
-
-	userID, err = get.GetIDByUsername(eclient, username)
-	if (err!=nil){return usr, entries, userID, isFollowed, err}
 	usr, err = get.GetUserByID(eclient, userID)
-	if (err!=nil){return usr, entries, userID, isFollowed, err}
+	if (err!=nil){return usr, userID, isFollowed, err}
 
 	viewer, err := get.GetUserByID(eclient, viewerID)
-	if (err!=nil){return usr, entries, userID, isFollowed, err}
+	if (err!=nil){return usr, userID, isFollowed, err}
 
 	for _, element := range viewer.Following{
 		if (element == userID) {
@@ -136,59 +136,83 @@ func UserPage(eclient *elastic.Client, username string, viewerID string)(types.U
 	}
 
 
-	for _, i := range usr.EntryIDs {
-		//goes through the user's entries
-		entry, err := get.GetEntryByID(eclient, i)
-		if (err!=nil){return usr, entries, userID, isFollowed, err}
-		if (!entry.Visible){continue}//checks if entry is visible
-		//if invisible, then skip
-
-		var newEntry types.JournalEntry
-		newEntry.Element = entry
-		newEntry.FirstName = usr.FirstName
-		newEntry.LastName = usr.LastName
-		newEntry.NumReplies = len(entry.ReplyIDs)
-		newEntry.NumLikes = len(entry.Likes)
-		newEntry.NumShares = len(entry.ShareIDs)
-
-
-		/*if(len(entry.ReplyIDs) > 0){
-			for _, j := range entry.ReplyIDs{
-				//loops through each entries comment entries
-				reply, err := get.GetEntryByID(eclient, j)
-				if (err!=nil){return usr, entries, userID, isFollowed, err}
-				if (!reply.Visible){continue}//checks if entry is visible
-				//if invisible, then skip
-				replyUsr, err := get.GetUserByID(eclient, reply.PosterID)
-				if (err!=nil){return usr, entries, userID, isFollowed, err}
-
-				var newReply types.JournalEntry
-				newReply.Element = reply
-				newReply.FirstName = replyUsr.FirstName
-				newReply.LastName = replyUsr.LastName
-				newReply.NumReplies = len(entry.ReplyIDs)
-				newReply.NumLikes = len(entry.Likes)
-				newReply.NumShares = len(entry.ShareIDs)
-
-				newEntry.RepliesArray = append(newEntry.RepliesArray, newReply)
-				replyCounter += 1
-				if (replyCounter > maxReplyPull){
-					replyCounter = 0
-					break
-				}
-			}
-		}
-		*/
-		//check if invis
-		entries = append(entries, newEntry)
-		counter += 1
-		if (counter > maxPull){break}
-	}
-
-	return usr, entries, userID, isFollowed, err
+	return usr, userID, isFollowed, err
 }
 
 
+func LoadEntries(eclient *elastic.Client, loadList []string) ([]types.JournalEntry, error){
+
+	var entries []types.JournalEntry
+
+	for _, entryID := range loadList {
+		jEntry, err := ConvertEntryToJournalEntry(eclient, entryID)
+		if (err!=nil){return entries, err}
+
+		if (!jEntry.Element.Visible){
+			continue
+		}
+
+		entries = append(entries, jEntry)
+	}
+
+	return entries, nil
+}
+
+func LoadComments(eclient *elastic.Client, entryID string, lowerBound int, upperBound int) (types.JournalEntry, []types.JournalEntry, error){
+	// set upperBound to -1 to pull infinitely
+	var entries []types.JournalEntry
+	var parent types.JournalEntry
+	var start int
+	var finish int
+
+	if (lowerBound<0){return parent, entries, errors.New("Lower Bound limit is out of bounds")}
+
+	parent, err := ConvertEntryToJournalEntry(eclient, entryID)
+	if (err!=nil){return parent, entries, err}
+	if (upperBound == -1){finish = 0}else if(len(parent.Element.ReplyIDs)-upperBound < 0){
+		finish = 0
+	}else{finish = len(parent.Element.ReplyIDs)-upperBound}
+
+	start = (len(parent.Element.ReplyIDs)-1)-lowerBound
+	for i := start; i <= finish; i-- {
+		jEntry, err := ConvertEntryToJournalEntry(eclient, parent.Element.ReplyIDs[i])
+		if (err!=nil){return parent, entries, err}
+
+		if (!jEntry.Element.Visible && finish>0){
+			finish--
+			continue
+		}
+
+		entries = append(entries, jEntry)
+	}
+
+	return parent, entries, err
+}
+
+func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string) (types.JournalEntry, error){
+	var newJournalEntry types.JournalEntry
+
+	newJournalEntry.ElementID = entryID
+
+	entry, err := get.GetEntryByID(eclient, entryID)
+	if (err!=nil){return newJournalEntry, err}
+	newJournalEntry.Element = entry
+	newJournalEntry.NumShares = len(entry.ShareIDs)
+	newJournalEntry.NumLikes = len(entry.Likes)
+	newJournalEntry.NumReplies = len(entry.ReplyIDs)
+
+	usr, err := get.GetUserByID(eclient, entry.PosterID)
+	if (err!=nil){return newJournalEntry, err}
+	newJournalEntry.FirstName = usr.FirstName
+	newJournalEntry.LastName = usr.LastName
+	newJournalEntry.Image = usr.Avatar
+
+	if (entry.Classification == 2){
+		newJournalEntry.ReferenceElement, err = ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry)
+	}
+
+	return newJournalEntry, err
+}
 
 func ModifyDescription(eclient *elastic.Client, userID string, newDescription string)error{
 
@@ -224,60 +248,63 @@ func UserCreatesEntry(eclient *elastic.Client, userID string, newContent []rune)
 
 }
 
-func UserLike(eclient *elastic.Client, entryID string,userID string)error{
-	_, err:= get.GetEntryByID(eclient,entryID)
+func UserLikePost(eclient *elastic.Client, entryID string, likerID string) error{
+	//AppendLike appends to post
+	err := post.AppendLike(eclient, entryID, likerID)
+	if (err!=nil){return err}
+	//AppendLikedEntryID appends too user
+	err = post.AppendLikedEntryID(eclient, likerID, entryID)
+	if (err!=nil){return err}
 
-	if (err!=nil){return errors.New("Post does not exist")}
+	return nil
+}
 
-	//var usrLike types.Like
-	//usrLike.UserID = userID
-	//usrLike.TimeStamp = time.Now()
+func UserUnlikePost(eclient *elastic.Client, entryID string, likerID string) error{
 
-	return post.AppendLike(eclient,entryID, userID)  
+	//DeleteLike deletes from post
+	err := post.DeleteLike(eclient, entryID, likerID)
+	if (err!=nil){return err}
 
+	//DeleteLikedEntryID deletes from usr
+	err = post.DeleteLikedEntryID(eclient, likerID, entryID)
+	if (err!=nil){return err}
+
+	return nil
 }
 
 
 
+func UserReplies(eclient *elastic.Client, entryID string, content []rune) error{
+	_, err := get.GetEntryByID(eclient,entryID)
+	if (err != nil) {return err}
 
-/*func UserFollow(eclient *elastic.Client, usrID string, usrFollowID string) error{
+	var newReply types.Entry
+	newReply.Content = content
+	newReply.TimeStamp = time.Now()
+	newReply.Classification = 2
 
-	usr, err := get.GetUserByID(eclient,usrID)
-	if (err!=nil){return err}
+	replyID, err := post.IndexEntry(eclient, newReply)
 
+	post.AppendReplyID(eclient, entryID, replyID)
 
-	for _, element := range usr.Following{
-		if (element == usrID) {return errors.New("You are already following this user")}
-	}
-
-	usr.Following = append(usr.Following, usrFollowID)
-	//append new follow to user
-	//append new follow by user
-
-
-	return err
+	return nil
 }
 
-func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error{
 
-	usr, err := get.GetUserByID(eclient,usrID)
-	if (err!=nil){return err}
 
-	var newFollows []string
-
-	for _, element := range usr.Following{
-		if (element != followID) {
-			newFollows = append(newFollows, element)
+func IsLiked(eclient *elastic.Client, entryID string, viewerID string) (bool, error){
+	isLiked := false
+	entry, err := get.GetEntryByID(eclient, entryID)
+	if (err!=nil){return isLiked, err}
+	for _,element := range entry.Likes{
+		if(element.UserID == viewerID){
+			isLiked = true
+			return isLiked, err
 		}
-		if (isFollowing) {return errors.New("You are already following this user")}
 	}
-
-	usr.Following = append(usr.Following, usrFollowID)
-	post.UpdateUser(eclient, usrID, "Following", usr.Following)//CHANGE TO APPEND!!!!!
-
-	return err
+	return isLiked, err
 }
-*/
+
 func RequestColleague(eclient *elastic.Client, usrID string, requestedUserID string) error{
 	usr, err := get.GetUserByID(eclient,usrID) 
 	if (err!=nil){return err}
@@ -332,6 +359,7 @@ func UserNewTextEntry (eclient *elastic.Client, userID string, content []rune) e
 
 }
 
+
 func UserNewReplyEntry (eclient *elastic.Client, userID string, content []rune, hostEntryID string) error{
 
 	var newEntry types.Entry
@@ -344,18 +372,22 @@ func UserNewReplyEntry (eclient *elastic.Client, userID string, content []rune, 
 
 	//remove this after append is made!!!!!
 	usr, err :=  get.GetUserByID(eclient, userID)
+	fmt.Println("LINE 375")
 	if (err != nil){return err}
 	entry, err := get. GetEntryByID(eclient, hostEntryID)
 	if (err != nil){return err}
 	//-----------
 
 	id, err := post.IndexEntry(eclient, newEntry)
+	fmt.Println("LINE 382")
 	if (err != nil){return err}
 
 	//modify this after append is made
 	err = post.UpdateUser(eclient, userID, "EntryIDs", append(usr.EntryIDs, id))
+	fmt.Println("LINE 387")
 	if (err != nil){return err}
 	err = post.UpdateEntry(eclient, hostEntryID, "ReplyIDs", append(entry.ReplyIDs, id))
+	fmt.Println("YOU'VE REACHED THE END")
 	return err
 
 }
@@ -400,45 +432,143 @@ func UpdateUserTags (eclient *elastic.Client, userID string, tags []string) erro
 
 
 
-func ToggleUserFollow (eclient *elastic.Client, followerID string, targetID string) error{
+func ToggleUserFollow (eclient *elastic.Client, followerID string, entryID string) error{
+	//FIX THIS INEFFICENT BULLSHIT
+	//JONDKJDBSKJLASLND;LBJGAD
+
 	follower, err := get.GetUserByID(eclient, followerID)
 	if (err != nil) {return err}
+	followed, err := get.GetUserByID(eclient, entryID)
+	if (err != nil){return err}
 
-	for element := range follower.Following{
-		if (follower.Following[element] == targetID){
-			//remove target id from follower
-			//remove follower id from target
-			
-			return err
+	for idx,element := range follower.Following{
+		if (element == entryID){
+			followErr := post.DeleteFollow(eclient, entryID, true, idx)
+			if (followErr!=nil){return followErr}
+
+			for idx2, element := range followed.Followers{
+				if (element == followerID){
+				followingErr := post.DeleteFollow(eclient,followerID,false, idx2)
+				if (followingErr!=nil){return followingErr}
+				}
+			}
+			return nil
 		}
 	}
 
-	//add target id to follower's followed
-	//add follower id to target's followers
-
-	return err
-
+	followErr := post.AppendFollow(eclient, followerID, entryID, true)
+	if (followErr!=nil){return followErr}
+	followingErr := post.AppendFollow(eclient,entryID,followerID,false)
+	if (followingErr!=nil){return followingErr}
+	
+	return nil
 }
 
-
+/*
 func ToggleUserLike (eclient *elastic.Client, likerID string, entryID string) error {
-
+	//FIX THIS INEFFICENT BULLSHIT
+	//JONDKJDBSKJLASLND;LBJGAD
+	//WARNING THIS FUNCTION IS IN SHAMBLES
+	//REPAIR BEFORE REMOVINGE WARNING
+	//DO NOT USE
 	liker, err := get.GetUserByID(eclient, likerID)
 	if (err != nil) {return err}
 
-	for _,element := range liker.LikedEntryIDs{
+	for idx,element := range liker.LikedEntryIDs{
 		if (element == entryID){
-			//remove post id from liked list
-			//remove liker id from entry's likes list
-			
-			return err
+			followErr := post.DeleteFollow(eclient, likerID, entryID, true, idx)
+			if (followErr!=nil){return followErr}
+			liked, err := get.GetUserByID(eclient, entryID)
+			if (err!=nil){return err}
+			for idx2, element := range liked.LikedEntryIDs{
+				if (element == likerID){
+				followingErr := post.DeleteFollow(eclient,entryID,likerID,false, idx2)
+				if (followingErr!=nil){return followingErr}
+				}
+			}
+			return nil
 		}
 	}
 
-	//add post id to liker's liked list
-	//add liker id to posts likes list
+	followErr := post.AppendFollow(eclient, likerID, entryID, true)
+	if (followErr!=nil){return followErr}
+	followingErr := post.AppendFollow(eclient,entryID,likerID,false)
+	if (followingErr!=nil){return followingErr}
+	
+	return nil
+}
+*/
 
-	return err
+
+func UserFollow(eclient *elastic.Client, usrID string, followID string) error{
+	//true = append to following
+	followErr := post.AppendFollow(eclient, usrID, followID, true)
+	if (followErr!=nil){return followErr}
+	//false = append to followers
+	followingErr := post.AppendFollow(eclient,followID,usrID,false)
+	if (followingErr!=nil){return followingErr}
+	
+	return nil
+}
+
+func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error{
+	user, err := get.GetUserByID(eclient, usrID)
+	if (err != nil) {return err}
+	target, err := get.GetUserByID(eclient, followID)
+	if (err != nil){return err}
+
+	for idx,element := range user.Following{
+		if (element == followID){
+			err = post.DeleteFollow(eclient, usrID, true, idx)
+			if (err!=nil){return err}
+		}
+	}
+	for idx2, element := range target.Followers{
+		if (element == usrID){
+			err := post.DeleteFollow(eclient, followID, false, idx2)
+			if (err!=nil){return err}
+		}
+	}
+	return nil
+}
+
+func IsFollowed(eclient *elastic.Client, usrID string, viewerID string) (bool, error){
+	isFollowed := false
+	user, err := get.GetUserByID(eclient, usrID)
+	if (err!=nil){return isFollowed, err}
+	for _,element := range user.Followers{
+		if(element == viewerID){
+			isFollowed = true
+			return isFollowed, err
+		}
+	}
+	return isFollowed, err
+}
+
+func NumFollow(eclient *elastic.Client, usrID string, whichOne bool)(int, error){
+	
+	usr,err := get.GetUserByID(eclient, usrID)
+	if (err != nil) {return -1, err}
+	if (whichOne){return len(usr.Following), nil}
+	
+	return len(usr.Followers), nil
+	
 
 }
 
+/*func UserComment(eclient *elastic.Client, usrID string, entryID string,  newContent string) error {
+	var newEntry types.Entry
+	newEntry.PosterID = usrID
+	newEntry.Classification = 1
+	newEntry.ReferenceEntry = entryID
+	newEntry.Visible = true
+	newEntry.Content = []rune(newContent)
+	newEntry.TimeStamp = time.Now()
+	hostEntry, hostErr := get.GetEntryByID(eclient, entryID)
+	if (hostErr != nil) {return hostErr}
+	err := post.UpdateEntry(eclient, entryID, "ReplyIDs", append(hostEntry.ReplyIDs, usrID))
+	if (err != nil) {return err}
+	_,err = post.IndexEntry(eclient, newEntry)
+
+	return err	
+}*/

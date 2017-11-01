@@ -14,6 +14,12 @@ type ProjectInfo struct{
 	Visible				bool		`Visible`	 
 }
 
+type Request struct{
+	SenderID	string 		`json:UserID`
+	Timestamp	time.Time 	`json:Timestamp`
+
+}
+
 
 type User struct {
 	Password			[]byte		`json:Password` // Maybe we shouldn't keep it in plain text later?
@@ -28,6 +34,7 @@ type User struct {
 	Phone				string		`json:Phone`
 	PhoneVis			bool		`json:PhoneVis`
 	Description 		[]rune		`json:Description`
+	Blurb				[]rune 		`json:Blurb`
 	Username			string  	`json:Username`
 	Location			LocStruct	`json:Location`
 	HighSchool			string		`json:HighSchool`
@@ -66,6 +73,7 @@ type User struct {
 	SentProjReq			[]string	`json:SentProjReq`
 	ReceivedProjReq		[]string	`json:ReceivedProjReq`
 	FirstLogin			bool		`json:FirstLogin`
+
 	
 }
 

@@ -103,7 +103,7 @@ func RemoveFromProject(eclient *elastic.Client, projID string, field string, idx
 
 
 
-
+//Appends a new member
 func AppendMember(eclient *elastic.Client, projectID string, member types.Member)error{
 	ctx:= context.Background()
 	proj, err := get.GetProjectByID(eclient, projectID)
@@ -125,13 +125,14 @@ func AppendMember(eclient *elastic.Client, projectID string, member types.Member
 }
 
 
+//Deletes a member
 func DeleteMember(eclient *elastic.Client, projID string, memberID string,idx int)error{
 	ctx:= context.Background()
 	proj, err := get.GetProjectByID(eclient, projID)
 	if (err!=nil) {return errors.New("Project does not exist")}
 	
 	
-	proj.Members = append(proj.Members[:idx],proj.Members[idx+1:]...)
+	proj.Members = append(proj.Members[:idx],proj.Members[idx+1:]...) //maintains order, while appending everything except the element at idx
 
 	_,err =  eclient.Update().
 		Index(USER_INDEX).
@@ -145,4 +146,50 @@ func DeleteMember(eclient *elastic.Client, projID string, memberID string,idx in
 
 	
 }
+
+//Add QuickLink
+func AppendProjectLink(eclient *elastic.Client, projectID string, link types.Link)error{
+	ctx:= context.Background()
+	proj, err := get.GetProjectByID(eclient, projectID)
+
+	if (err!=nil) {return errors.New("Project does not exist")} //return error if nonexistent
+
+	
+	proj.QuickLinks = append(proj.QuickLinks,link) //retreive project
+
+	_,err =  eclient.Update(). 
+		Index(PROJECT_INDEX).
+		Type(PROJECT_TYPE).
+		Id(projectID).
+		Doc(map[string]interface{}{"QuickLinks": proj.QuickLinks}). //update project doc with new link appended to array
+		Do(ctx)
+
+	return err
+	
+}
+
+
+//Delete QuickLink
+func DeleteProjectLink(eclient *elastic.Client, projectID string, link types.Link,idx int)error{
+	ctx:= context.Background()
+	proj, err := get.GetProjectByID(eclient, projectID)
+	if (err!=nil) {return errors.New("Project does not exist")}
+	
+	
+	proj.QuickLinks = append(proj.QuickLinks[:idx],proj.QuickLinks[idx+1:]...) //append all elements BUT element at idx, maintains order
+
+	_,err =  eclient.Update().
+		Index(PROJECT_INDEX).
+		Type(PROJECT_TYPE).
+		Id(projectID).
+		Doc(map[string]interface{}{"Quicklinks": proj.QuickLinks}). 
+		Do(ctx)
+	
+	return err
+	
+
+	
+}
+
+
 

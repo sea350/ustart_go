@@ -13,14 +13,26 @@ type SessionUser struct {
 
 }
 
-type JournalEntry struct{
+type FloatingHead struct{
 
+	UserID				string			`json:FirstName`
 	FirstName			string			`json:FirstName`
 	LastName			string			`json:LastName`
+	Image				string			`json:Image`
+	Followed			bool			`json:Followed`
+
+}
+
+type JournalEntry struct{
+
+	ElementID			string			`json:ElementID`
+	FirstName			string			`json:FirstName`
+	LastName			string			`json:LastName`
+	Image				string			`json:Image`
 	Element				Entry			`json:Element`
-	RepliesArray		[]JournalEntry	`json:RepliesArray`
 	NumReplies			int				`json:NumReplies`
 	NumLikes			int				`json:NumLikes`
 	NumShares			int				`json:NumShares`
+	ReferenceElement	interface{}		`json:ReferenceElement`
 
 }

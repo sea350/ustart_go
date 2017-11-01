@@ -35,7 +35,7 @@ const mapping = `
 }`
 
 func IndexUser(eclient *elastic.Client, newAcc types.User)error {
-	//ADDS NEW USER TO ES RECORDS (requires an elastic client and a User type)
+	//ADDS NEW USER TO ES RECORDS (requires an elastic client pointer and a User type)
 	//RETURNS AN error IF SUCESSFUL error = nil
 	ctx := context.Background()
 
@@ -127,13 +127,16 @@ func RemoveFromUser(eclient *elastic.Client, usrID string, field string, idx int
 
 
 
-func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whichOne bool)error{
+func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whichOne bool)error{ 
+	//appends to either sent or received collegue request arrays within user
+	//takes in eclient, user ID, collegue ID, and a bool
+	//true = sent, false = received
 	ctx:= context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if (err!=nil) {return errors.New("User does not exist")}
 
-	if (whichOne == true){
+	if (whichOne == true){ 
 		usr.SentCollReq = append(usr.SentCollReq,collegueID)
 
 		_,err =  eclient.Update().
@@ -143,7 +146,7 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 			Doc(map[string]interface{}{"SentCollReq": usr.SentCollReq}).
 			Do(ctx)
 
-		return CheckSentCollReq(eclient, usrID, collegueID, true, 0)
+		return CheckSentCollReq(eclient, usrID, collegueID, true, 0) //in case of simulataneous appends
 	}else{
 		usr.ReceivedCollReq = append(usr.ReceivedCollReq,collegueID)
 
@@ -154,14 +157,17 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 			Doc(map[string]interface{}{"ReceivedCollReq": usr.ReceivedCollReq}).
 			Do(ctx)
 
-		return CheckReceivedCollReq(eclient, usrID, collegueID, true, 0)
+		return CheckReceivedCollReq(eclient, usrID, collegueID, true, 0) //in case of 
 
 	}
 
 }
 
 
-func DeleteCollReq(eclient *elastic.Client, usrID string, colleagueID string, whichOne bool, idx int)error{
+func DeleteCollReq(eclient *elastic.Client, usrID string, whichOne bool, idx int)error{
+	//deletes from either sent or received collegue request arrays within user
+	//takes in eclient, user ID, collegue ID, and a bool
+	//true = sent, false = received
 	ctx:= context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if (err!=nil) {return errors.New("User does not exist")}
@@ -176,7 +182,7 @@ func DeleteCollReq(eclient *elastic.Client, usrID string, colleagueID string, wh
 			Doc(map[string]interface{}{"SentCollReq": usr.SentCollReq}).
 			Do(ctx)
 
-		return CheckSentCollReq(eclient, usrID,colleagueID, false, idx)
+		return CheckSentCollReq(eclient, usrID,"blank", false, idx)
 	}else{
 		usr.ReceivedCollReq = append(usr.ReceivedCollReq[:idx],usr.ReceivedCollReq[idx+1:]...)
 
@@ -187,7 +193,7 @@ func DeleteCollReq(eclient *elastic.Client, usrID string, colleagueID string, wh
 			Doc(map[string]interface{}{"ReceivedCollReq": usr.ReceivedCollReq}).
 			Do(ctx)
 
-		return CheckReceivedCollReq(eclient, usrID, colleagueID, false, idx)
+		return CheckReceivedCollReq(eclient, usrID, "blank", false, idx)
 
 	}
 
@@ -198,7 +204,12 @@ func DeleteCollReq(eclient *elastic.Client, usrID string, colleagueID string, wh
 
 
 func CheckSentCollReq(eclient *elastic.Client, usrID string, colleagueID string, action bool, idx int)error{
-	isAppended := false
+	//extra check to ensure change goes through
+	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
+	//action bool indicates whether to append or delete
+	//append = true, delete = false
+
+	isAppended := false //if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
 
 	for isAppended == false{
 			theDoc, err := get.GetUserByID(eclient,usrID)
@@ -228,7 +239,7 @@ func CheckSentCollReq(eclient *elastic.Client, usrID string, colleagueID string,
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteCollReq(eclient, usrID, colleagueID, true, idx)
+			checkErr := DeleteCollReq(eclient, usrID, true, idx)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -237,7 +248,11 @@ func CheckSentCollReq(eclient *elastic.Client, usrID string, colleagueID string,
 }
 
 func CheckReceivedCollReq(eclient *elastic.Client, usrID string, colleagueID string, action bool, idx int)error{
-	isAppended := false
+	//extra check to ensure change goes through
+	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
+	//action bool indicates whether to append or delete
+	//append = true, delete = false
+	isAppended := false//if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
 
 	for isAppended == false{
 			theDoc, err := get.GetUserByID(eclient,usrID)
@@ -267,7 +282,7 @@ func CheckReceivedCollReq(eclient *elastic.Client, usrID string, colleagueID str
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteCollReq(eclient, usrID, colleagueID, false, idx)
+			checkErr := DeleteCollReq(eclient, usrID, false, idx)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -283,6 +298,8 @@ func CheckReceivedCollReq(eclient *elastic.Client, usrID string, colleagueID str
 
 
 func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string)error{
+	//appends to collegue array within user
+	//takes in eclient, user ID, and collegue ID
 	ctx:= context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
@@ -303,7 +320,7 @@ func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string)e
 }
 
 
-func DeleteColleague(eclient *elastic.Client, usrID string, colleagueID string,idx int)error{
+func DeleteColleague(eclient *elastic.Client, usrID string, idx int)error{
 	ctx:= context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if (err!=nil) {return errors.New("User does not exist")}
@@ -318,7 +335,7 @@ func DeleteColleague(eclient *elastic.Client, usrID string, colleagueID string,i
 		Doc(map[string]interface{}{"Colleagues": usr.Colleagues}).
 		Do(ctx)
 	
-	return CheckColleagues(eclient, usrID,colleagueID, false,idx)
+	return CheckColleagues(eclient, usrID, "blank",false,idx)
 	
 
 	
@@ -329,7 +346,11 @@ func DeleteColleague(eclient *elastic.Client, usrID string, colleagueID string,i
 
 
 func CheckColleagues(eclient *elastic.Client, usrID string, colleagueID string, action bool, idx int)error{
-	isAppended := false
+	//extra check to ensure change goes through
+	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
+	//action bool indicates whether to append or delete
+	//append = true, delete = false
+	isAppended := false//if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
 
 	for isAppended == false{
 			theDoc, err := get.GetUserByID(eclient,usrID)
@@ -359,7 +380,7 @@ func CheckColleagues(eclient *elastic.Client, usrID string, colleagueID string, 
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteColleague(eclient, usrID, colleagueID,idx)
+			checkErr := DeleteColleague(eclient, usrID,idx)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -375,6 +396,9 @@ func CheckColleagues(eclient *elastic.Client, usrID string, colleagueID string, 
 
 
 func AppendMajorMinor(eclient *elastic.Client, usrID string, major_minor string, whichOne bool)error{
+	//appends to either sent or received collegue request arrays within user
+	//takes in eclient, user ID, the major or minor, and a bool
+	//true = major, false = minor
 	ctx:= context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
@@ -390,7 +414,7 @@ func AppendMajorMinor(eclient *elastic.Client, usrID string, major_minor string,
 		Doc(map[string]interface{}{"Majors": usr.Majors}).
 		Do(ctx)
 
-	return CheckMajor(eclient, usrID, major_minor, true, 0)
+	return CheckMajor(eclient, usrID, major_minor, true, 0) //perform a check to ensure changes occur in event of concurrency issues
 	}else{
 		usr.Minors = append(usr.Minors,major_minor)
 
@@ -408,6 +432,9 @@ func AppendMajorMinor(eclient *elastic.Client, usrID string, major_minor string,
 }
 
 func DeleteMajorMinor(eclient *elastic.Client, usrID string, major_minor string, whichOne bool, idx int)error{
+	//appends to either sent or received collegue request arrays within user
+	//takes in eclient, user ID, the major or minor, an index of the element within the array, and a bool
+	//true = major, false = minor
 	ctx:= context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if (err!=nil) {return errors.New("User does not exist")}
@@ -422,7 +449,7 @@ func DeleteMajorMinor(eclient *elastic.Client, usrID string, major_minor string,
 			Doc(map[string]interface{}{"Majors": usr.Majors}).
 			Do(ctx)
 
-		return CheckMajor(eclient, usrID, major_minor, false, idx)
+		return CheckMajor(eclient, usrID, "blank", false, idx)
 	}else{
 		usr.Minors = append(usr.Minors[:idx],usr.Minors[idx+1:]...)
 
@@ -433,7 +460,7 @@ func DeleteMajorMinor(eclient *elastic.Client, usrID string, major_minor string,
 			Doc(map[string]interface{}{"Minors": usr.Minors}).
 			Do(ctx)
 
-		return CheckMinor(eclient, usrID, major_minor, false, idx)
+		return CheckMinor(eclient, usrID,"blank", false, idx)
 
 	}
 
@@ -442,7 +469,12 @@ func DeleteMajorMinor(eclient *elastic.Client, usrID string, major_minor string,
 
 
 func CheckMajor(eclient *elastic.Client, usrID string, major string, action bool, idx int)error{
-	isAppended := false
+	//extra check to ensure change goes through
+	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
+	//action bool indicates whether to append or delete
+	//append = true, delete = false
+	isAppended := false//if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
+
 
 	for isAppended == false{
 			theDoc, err := get.GetUserByID(eclient,usrID)
@@ -472,7 +504,7 @@ func CheckMajor(eclient *elastic.Client, usrID string, major string, action bool
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteMajorMinor(eclient, usrID, major, true, idx)
+			checkErr := DeleteMajorMinor(eclient, usrID, "blank", true, idx)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -482,7 +514,12 @@ func CheckMajor(eclient *elastic.Client, usrID string, major string, action bool
 
 
 func CheckMinor(eclient *elastic.Client, usrID string, minor string, action bool, idx int)error{
-	isAppended := false
+	//extra check to ensure change goes through
+	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
+	//action bool indicates whether to append or delete
+	//append = true, delete = false
+	isAppended := false//if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
+
 
 	for isAppended == false{
 			theDoc, err := get.GetUserByID(eclient,usrID)
@@ -512,7 +549,7 @@ func CheckMinor(eclient *elastic.Client, usrID string, minor string, action bool
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteMajorMinor(eclient, usrID, minor, false, idx)
+			checkErr := DeleteMajorMinor(eclient, usrID, "blank", false, idx)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -521,6 +558,9 @@ func CheckMinor(eclient *elastic.Client, usrID string, minor string, action bool
 }
 
 func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichOne bool)error{
+	//appends to either sent or received collegue request arrays within user
+	//takes in eclient, user ID, the follower ID, and a bool
+	//true = append to following, false = append to followers
 	ctx:= context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
@@ -533,7 +573,7 @@ func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichO
 			Index(USER_INDEX).
 			Type(USER_TYPE).
 			Id(usrID).
-			Doc(map[string]interface{}{"Following": usr.SentCollReq}).
+			Doc(map[string]interface{}{"Following": usr.Following}).
 			Do(ctx)
 
 		return CheckFollowing(eclient, usrID, followID, true, 0)
@@ -554,7 +594,10 @@ func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichO
 }
 
 
-func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichOne bool, idx int)error{
+func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int)error{
+	//whichOne: true = following
+	//whichOne: false = followers
+	//followID does nothing
 	ctx:= context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if (err!=nil) {return errors.New("User does not exist")}
@@ -569,7 +612,8 @@ func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichO
 			Doc(map[string]interface{}{"Following": usr.Following}).
 			Do(ctx)
 
-		return CheckFollowers(eclient, usrID,followID, false, idx)
+		return CheckFollowing(eclient,usrID,"blank",false,idx)
+
 	}else{
 		usr.Followers = append(usr.Followers[:idx],usr.Followers[idx+1:]...)
 
@@ -580,7 +624,7 @@ func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichO
 			Doc(map[string]interface{}{"Followers": usr.Followers}).
 			Do(ctx)
 
-		return CheckFollowing(eclient, usrID, followID, false, idx)
+		return CheckFollowers(eclient,usrID,"blank",false,idx)
 
 	}
 
@@ -621,7 +665,7 @@ func CheckFollowers(eclient *elastic.Client, usrID string, followID string, acti
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteFollow(eclient, usrID, followID, true, idx)
+			checkErr := DeleteFollow(eclient, usrID, true, idx)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -662,7 +706,7 @@ func CheckFollowing(eclient *elastic.Client, usrID string, followID string, acti
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteFollow(eclient, usrID, followID, false, idx)
+			checkErr := DeleteFollow(eclient, usrID, false, idx)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -733,7 +777,7 @@ func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOn
 			Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
 			Do(ctx)
 
-		return CheckReceivedProjReq(eclient, usrID, projID, false, idx)
+		return CheckReceivedProjReq(eclient, usrID, "blank", false, idx)
 
 	}
 
@@ -774,7 +818,7 @@ func CheckSentProjReq(eclient *elastic.Client, usrID string, projID string, acti
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteProjReq(eclient, usrID, projID, true, idx)
+			checkErr := DeleteProjReq(eclient, usrID, "blank", true, idx)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -814,7 +858,7 @@ func CheckReceivedProjReq(eclient *elastic.Client, usrID string, projID string, 
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteProjReq(eclient, usrID, projID, false, idx)
+			checkErr := DeleteProjReq(eclient, usrID, "blank", false, idx)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -844,13 +888,17 @@ func AppendLikedEntryID(eclient *elastic.Client, usrID string, entryID string)er
 }
 
 
-func DeleteLikedEntryID(eclient *elastic.Client, usrID string, entryID string,idx int)error{
+func DeleteLikedEntryID(eclient *elastic.Client, usrID string, likerID string )error{
 	ctx:= context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if (err!=nil) {return errors.New("User does not exist")}
 	
-	
+	idx := 0
+	for i := range usr.LikedEntryIDs{
+		if usr.LikedEntryIDs[i] == likerID{idx = i}
+	} 
 	usr.LikedEntryIDs = append(usr.LikedEntryIDs[:idx],usr.LikedEntryIDs[idx+1:]...)
+
 
 	_,err =  eclient.Update().
 		Index(USER_INDEX).

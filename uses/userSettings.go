@@ -11,18 +11,25 @@ import(
 	"bytes"
 )
 
-func ChangeAccountImagesAndStatus(eclient *elastic.Client, userID string, image string, status bool, banner string)error{
+func ChangeAccountImagesAndStatus(eclient *elastic.Client, userID string, image string, status bool, banner string, action string)error{
 
-	err := post.UpdateUser(eclient,userID,"Avatar", image)
-	if (err!= nil){return err}
-	err = post.UpdateUser(eclient,userID,"Status", status)
-	if (err!= nil){return err}
-	err = post.UpdateUser(eclient,userID,"Banner", banner)
-	return err
+	if (action == "Avatar"){
+		err := post.UpdateUser(eclient,userID,"Avatar", image)
+		return err
+		}else if (action == "Status"){
+		err := post.UpdateUser(eclient,userID,"Status", status)
+		return err
+	}else{
+		err := post.UpdateUser(eclient,userID,"Banner", banner)
+		return err
+	}
+		
 
 }
 
-func ChangeContactAndDescription(eclient *elastic.Client, userID string, phone string, phoneVis bool, gender string, genderVis bool, email string, emailVis bool, description string)error{
+
+
+func ChangeContactAndDescription(eclient *elastic.Client, userID string, phone string, phoneVis bool, gender string, genderVis bool, email string, emailVis bool, description []rune)error{
 
 	err := post.UpdateUser(eclient,userID,"Phone", phone)
 	if (err!= nil){return err}
@@ -34,7 +41,7 @@ func ChangeContactAndDescription(eclient *elastic.Client, userID string, phone s
 	if (err!= nil){return err}
 	err = post.UpdateUser(eclient,userID,"Email", email)
 	if (err!= nil){return err}
-	err = post.UpdateUser(eclient,userID,"EmailVis", emailVis)
+	err = post.UpdateUser(eclient,userID,"EmailVis", emailVis)  
 	if (err!= nil){return err}
 	err = post.UpdateUser(eclient,userID,"Description", description)
 	return err
@@ -60,10 +67,11 @@ func ChangePassword(eclient *elastic.Client, userID string, oldPass []byte, newP
 
 }
 
-func ChangeLocation(eclient *elastic.Client, userID string, country string, state string, stateVis bool, city string, cityVis bool, zip string, zipVis bool)error{
+func ChangeLocation(eclient *elastic.Client, userID string, country string, countryVis bool, state string, stateVis bool, city string, cityVis bool, zip string, zipVis bool)error{
 
 	var newLoc types.LocStruct
 	newLoc.Country = country
+	newLoc.CountryVis = countryVis
 	newLoc.State = state
 	newLoc.StateVis = stateVis
 	newLoc.City = city
@@ -75,7 +83,7 @@ func ChangeLocation(eclient *elastic.Client, userID string, country string, stat
 
 }
 
-func ChangeEducation(eclient *elastic.Client, userID string, accType int8, hs string, hsGrad string, uni string, uniGrad string, major []string, minor []string)error{
+func ChangeEducation(eclient *elastic.Client, userID string, accType int, hs string, hsGrad string, uni string, uniGrad string, major []string, minor []string)error{
 
 	err := post.UpdateUser(eclient,userID,"AccType", accType)
 	if (err!= nil){return err}

@@ -7,7 +7,7 @@ import(
 type Like struct{
 
 	UserID				string				`json:UserID`
-	//TimeStamp			string				`json:TimeStamp`
+	TimeStamp			time.Time			`json:TimeStamp`
 
 }
 
@@ -19,7 +19,7 @@ type Entry struct{
 		//class 1 = user reply post
 		//class 2 = user share post
 	Content				[]rune				`json:Content`
-	ReferenceEntry		string				`json:RefrenceEntry`
+	ReferenceEntry		string				`json:ReferenceEntry`
 	MediaRef			string				`json:MediaRef`
 	TimeStamp			time.Time			`json:TimeStamp`
 	Likes				[]Like				`json:Likes`

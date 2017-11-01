@@ -6,6 +6,7 @@ import(
 	get "github.com/sea350/ustart_go/get"
 	"context"
 	"errors"
+	"time"
 )
 
 const ENTRY_INDEX="test-entry_data"
@@ -116,7 +117,7 @@ func AppendLike(eclient *elastic.Client, entryID string, likerID string)(error){
 	if (err!=nil){return nil}
 	newLike:=types.Like{}
 	newLike.UserID = likerID
-	//newLike.TimeStamp = time.Now()
+	newLike.TimeStamp = time.Now()
 	anEntry.Likes = append(anEntry.Likes, newLike)
 	_,err = eclient.Update().
 		Index(ENTRY_INDEX).
@@ -127,12 +128,12 @@ func AppendLike(eclient *elastic.Client, entryID string, likerID string)(error){
 
 
 
-	return CheckLike(eclient, entryID,newLike,true,0)
+	return CheckLike(eclient, entryID,newLike,true)
 
 }
 
 
-func CheckLike(eclient *elastic.Client, entryID string, theLike types.Like, action bool, idx int) error{
+func CheckLike(eclient *elastic.Client, entryID string, theLike types.Like, action bool) error{
 	isAppended := false
 
 	for isAppended == false{
@@ -163,7 +164,7 @@ func CheckLike(eclient *elastic.Client, entryID string, theLike types.Like, acti
 		}
 
 		if (action == false && isAppended == true){
-			checkErr := DeleteLike(eclient, entryID, theLike, idx)
+			checkErr := DeleteLike(eclient, entryID, theLike.UserID)
 			if (checkErr != nil){return checkErr}
 		}
 
@@ -171,12 +172,13 @@ func CheckLike(eclient *elastic.Client, entryID string, theLike types.Like, acti
 }
 
 
-func DeleteLike(eclient *elastic.Client, entryID string, liker types.Like, idx int)error{
+func DeleteLike(eclient *elastic.Client, entryID string, likerID string)error{
 	ctx:=context.Background()
 	anEntry, err := get.GetEntryByID(eclient,entryID)
 	
-	likerID:=liker.UserID
 
+
+	idx:=0
 	for i:= range anEntry.Likes{
 		if (likerID == anEntry.Likes[i].UserID){
 			idx = i
@@ -194,8 +196,9 @@ func DeleteLike(eclient *elastic.Client, entryID string, liker types.Like, idx i
 		Do(ctx)
 
 	if(err!=nil){return err}
-
-	return CheckLike(eclient,entryID,liker,false,idx)
+	var like types.Like
+	like.UserID = likerID
+	return CheckLike(eclient,entryID,like,false)
 
 
 	
