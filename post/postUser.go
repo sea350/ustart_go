@@ -5,9 +5,8 @@ import (
 	"errors"
 
 	get "github.com/sea350/ustart_go/get"
-	"github.com/sea350/ustart_go/types"
+	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
-	//"fmt"
 )
 
 const esUserIndex = "test-user_data"
