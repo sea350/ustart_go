@@ -1,17 +1,16 @@
 package post
 
-import(
-	elastic "gopkg.in/olivere/elastic.v5"
-	"github.com/sea350/ustart_go/types"
-	get "github.com/sea350/ustart_go/get"
+import (
 	"context"
 	"errors"
-	//"fmt"
 
+	get "github.com/sea350/ustart_go/get"
+	types "github.com/sea350/ustart_go/types"
+	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-const USER_INDEX = "test-user_data"
-const USER_TYPE  = "USER"
+const esUserIndex = "test-user_data"
+const esUserType = "USER"
 
 const mapping = `
 {
@@ -34,1169 +33,745 @@ const mapping = `
     }
 }`
 
-func IndexUser(eclient *elastic.Client, newAcc types.User)error {
-	//ADDS NEW USER TO ES RECORDS (requires an elastic client pointer and a User type)
-	//RETURNS AN error IF SUCESSFUL error = nil
+/*TODO: Make this function much better*/
+
+//IndexUser ...
+// adds a new user document to the ES cluster
+// returns err, nil if successful.
+func IndexUser(eclient *elastic.Client, newAcc types.User) error {
+	// Check if the index exists
 	ctx := context.Background()
-
-	exists, err := eclient.IndexExists(USER_INDEX).Do(ctx)
-	if err != nil {return err}
-
+	exists, err := eclient.IndexExists(esUserIndex).Do(ctx)
+	if err != nil {
+		return err
+	}
+	// If the index doesn't exist, create it and return error.
 	if !exists {
-		createIndex, Err := eclient.CreateIndex(USER_INDEX).BodyString(mapping).Do(ctx)
-
+		createIndex, Err := eclient.CreateIndex(esUserIndex).BodyString(mapping).Do(ctx)
 		if Err != nil {
-			// Handle error
-			_,_ = eclient.IndexExists(USER_INDEX).Do(ctx)
+			_, _ = eclient.IndexExists(esUserIndex).Do(ctx)
 			panic(Err)
 		}
+		// TODO fix this.
 		if !createIndex.Acknowledged {
 		}
 
-
+		// Return an error saying ti doesn't exist
 		return errors.New("Index does not exist")
 	}
 
+	// Index the document.
 	_, Err := eclient.Index().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+		Index(esUserIndex).
+		Type(esUserType).
 		BodyJson(newAcc).
 		Do(ctx)
 
-	if (Err!=nil){return Err}
-
+	if Err != nil {
+		return Err
+	}
 
 	return nil
 }
 
-func ReindexUser(eclient *elastic.Client, userID string, userAcc types.User)error {
-	//ADDS NEW USER TO ES RECORDS (requires an elastic client pointer and a User type)
-	//RETURN AN error IF SUCESSFUL error = nil
+//ReindexUser ...
+//  Add a new user to ES.
+//  Returns an error, nil if successful
+func ReindexUser(eclient *elastic.Client, userID string, userAcc types.User) error {
 
 	ctx := context.Background()
+	exists, err := eclient.IndexExists(esUserIndex).Do(ctx)
+	if err != nil {
+		return err
+	}
 
-	exists, err := eclient.IndexExists(USER_INDEX).Do(ctx)
-	if err != nil {return err}
-
-	if !exists {return errors.New("Index does not exist")}
+	if !exists {
+		return errors.New("Index does not exist")
+	}
 
 	_, err = eclient.Index().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(userID).
 		BodyJson(userAcc).
 		Do(ctx)
 
-	if err != nil {return err}
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
-func UpdateUser(eclient *elastic.Client, userID string, field string, newContent interface{})error {
-	//CHANGES A SINGLE FIELD OF ES USER DOCUMENT(requires an elastic client pointer,
-	//	the user DocID, the feild you wish to modify as a string,
-	//	and what you want to change that field to as any type necessary)
-	//RETURN AN error IF SUCESSFUL error = nil
+//UpdateUser ...
+//  Change a single field of the ES Document
+//  Return an error, nil if successful
+func UpdateUser(eclient *elastic.Client, userID string, field string, newContent interface{}) error {
 
 	ctx := context.Background()
 
-	exists, err := eclient.IndexExists(USER_INDEX).Do(ctx)
-	if err != nil {return err}
-	if !exists {return errors.New("Index does not exist")}
+	exists, err := eclient.IndexExists(esUserIndex).Do(ctx)
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return errors.New("Index does not exist")
+	}
 
 	_, err = get.GetUserByID(eclient, userID)
-	if (err!=nil){return err}
+	if err != nil {
+		return err
+	}
 
 	_, err = eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(userID).
 		Doc(map[string]interface{}{field: newContent}).
 		Do(ctx)
-	
 
 	return err
 }
 
+func AppendToUser(eclient *elastic.Client, usrID string, field string, data interface{}) error {
+	return nil
+} //RETURN HERE
+func RemoveFromUser(eclient *elastic.Client, usrID string, field string, idx int, data interface{}) error {
+	return nil
+}
 
-func AppendToUser(eclient *elastic.Client, usrID string, field string, data interface{})error{return nil}//RETURN HERE
-func RemoveFromUser(eclient *elastic.Client, usrID string, field string, idx int, data interface{})error{return nil}
+//AppendCollReq ...
+//  Appends to either sent or received collegue, based on whichOne
+//  True = sent; False = received.
+func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whichOne bool) error {
 
-
-
-
-
-
-func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whichOne bool)error{ 
-	//appends to either sent or received collegue request arrays within user
-	//takes in eclient, user ID, collegue ID, and a bool
-	//true = sent, false = received
-	ctx:= context.Background()
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if whichOne == true {
+		usr.SentCollReq = append(usr.SentCollReq, collegueID)
 
-	if (whichOne == true){ 
-		usr.SentCollReq = append(usr.SentCollReq,collegueID)
-
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
 			Id(usrID).
 			Doc(map[string]interface{}{"SentCollReq": usr.SentCollReq}).
 			Do(ctx)
 
-		return CheckSentCollReq(eclient, usrID, collegueID, true, 0) //in case of simulataneous appends
-	}else{
-		usr.ReceivedCollReq = append(usr.ReceivedCollReq,collegueID)
-
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
-			Id(usrID).
-			Doc(map[string]interface{}{"ReceivedCollReq": usr.ReceivedCollReq}).
-			Do(ctx)
-
-		return CheckReceivedCollReq(eclient, usrID, collegueID, true, 0) //in case of 
-
+		return err
 	}
+	usr.ReceivedCollReq = append(usr.ReceivedCollReq, collegueID)
 
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
+		Id(usrID).
+		Doc(map[string]interface{}{"ReceivedCollReq": usr.ReceivedCollReq}).
+		Do(ctx)
+
+	return err
 }
 
-
-func DeleteCollReq(eclient *elastic.Client, usrID string, whichOne bool, idx int)error{
-	//deletes from either sent or received collegue request arrays within user
-	//takes in eclient, user ID, collegue ID, and a bool
-	//true = sent, false = received
-	ctx:= context.Background()
+//DeleteCollReq ...
+//  Deletes from sent or received collegue request arrays depending on whichOne
+//  True = sent; false = received
+func DeleteCollReq(eclient *elastic.Client, usrID string, whichOne bool, idx int) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	if (whichOne == true){
-		usr.SentCollReq = append(usr.SentCollReq[:idx],usr.SentCollReq[idx+1:]...)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
+	if whichOne == true {
+		usr.SentCollReq = append(usr.SentCollReq[:idx], usr.SentCollReq[idx+1:]...)
+
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
 			Id(usrID).
 			Doc(map[string]interface{}{"SentCollReq": usr.SentCollReq}).
 			Do(ctx)
 
-		return CheckSentCollReq(eclient, usrID,"blank", false, idx)
-	}else{
-		usr.ReceivedCollReq = append(usr.ReceivedCollReq[:idx],usr.ReceivedCollReq[idx+1:]...)
-
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
-			Id(usrID).
-			Doc(map[string]interface{}{"ReceivedCollReq": usr.ReceivedCollReq}).
-			Do(ctx)
-
-		return CheckReceivedCollReq(eclient, usrID, "blank", false, idx)
-
+		return err
 	}
 
+	usr.ReceivedCollReq = append(usr.ReceivedCollReq[:idx], usr.ReceivedCollReq[idx+1:]...)
+
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
+		Id(usrID).
+		Doc(map[string]interface{}{"ReceivedCollReq": usr.ReceivedCollReq}).
+		Do(ctx)
+
+	return err
 }
 
-
-
-
-
-func CheckSentCollReq(eclient *elastic.Client, usrID string, colleagueID string, action bool, idx int)error{
-	//extra check to ensure change goes through
-	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
-	//action bool indicates whether to append or delete
-	//append = true, delete = false
-
-	isAppended := false //if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
-
-	for isAppended == false{
-			theDoc, err := get.GetUserByID(eclient,usrID)
-			if (err!=nil) {return errors.New("User does not exist")}
-
-			for i:=range theDoc.SentCollReq{
-
-				if (theDoc.SentCollReq[i]==colleagueID){
-					if (action == true){
-						isAppended = true
-						return nil
-
-						}else{
-							isAppended = false
-						}
-				}
-			}
-		
-			if (action == true && isAppended == false){
-				checkErr := AppendCollReq(eclient, usrID, colleagueID,true)
-				if (checkErr != nil){return checkErr}
-
-			}else if (action == false && isAppended == false){
-				return nil
-				}
-
-		}
-
-		if (action == false && isAppended == true){
-			checkErr := DeleteCollReq(eclient, usrID, true, idx)
-			if (checkErr != nil){return checkErr}
-		}
-
-		return nil
-
-}
-
-func CheckReceivedCollReq(eclient *elastic.Client, usrID string, colleagueID string, action bool, idx int)error{
-	//extra check to ensure change goes through
-	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
-	//action bool indicates whether to append or delete
-	//append = true, delete = false
-	isAppended := false//if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
-
-	for isAppended == false{
-			theDoc, err := get.GetUserByID(eclient,usrID)
-			if (err!=nil) {return errors.New("User does not exist")}
-
-			for i:=range theDoc.ReceivedCollReq{
-
-				if (theDoc.ReceivedCollReq[i]==colleagueID){
-					if (action == true){
-						isAppended = true
-						return nil
-
-						}else{
-							isAppended = false
-						}
-				}
-			}
-		
-			if (action == true && isAppended == false){
-				checkErr := AppendCollReq(eclient, usrID, colleagueID,false)
-				if (checkErr != nil){return checkErr}
-
-			}else if (action == false && isAppended == false){
-				return nil
-				}
-
-		}
-
-		if (action == false && isAppended == true){
-			checkErr := DeleteCollReq(eclient, usrID, false, idx)
-			if (checkErr != nil){return checkErr}
-		}
-
-		return nil
-
-}
-
-
-
-
-
-
-
-
-func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string)error{
+func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string) error {
 	//appends to collegue array within user
 	//takes in eclient, user ID, and collegue ID
-	ctx:= context.Background()
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	
-	usr.Colleagues = append(usr.Colleagues,colleagueID)
+	usr.Colleagues = append(usr.Colleagues, colleagueID)
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"Colleagues": usr.Colleagues}).
 		Do(ctx)
 
-	return CheckColleagues(eclient, usrID, colleagueID, true, 0)
-	
+	return err
+
 }
 
-
-func DeleteColleague(eclient *elastic.Client, usrID string, idx int)error{
-	ctx:= context.Background()
+func DeleteColleague(eclient *elastic.Client, usrID string, idx int) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	
-	usr.Colleagues = append(usr.Colleagues[:idx],usr.Colleagues[idx+1:]...)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	usr.Colleagues = append(usr.Colleagues[:idx], usr.Colleagues[idx+1:]...)
+
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"Colleagues": usr.Colleagues}).
 		Do(ctx)
-	
-	return CheckColleagues(eclient, usrID, "blank",false,idx)
-	
 
-	
-}
-
-
-
-
-
-func CheckColleagues(eclient *elastic.Client, usrID string, colleagueID string, action bool, idx int)error{
-	//extra check to ensure change goes through
-	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
-	//action bool indicates whether to append or delete
-	//append = true, delete = false
-	isAppended := false//if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
-
-	for isAppended == false{
-			theDoc, err := get.GetUserByID(eclient,usrID)
-			if (err!=nil) {return errors.New("User does not exist")}
-
-			for i:=range theDoc.Colleagues{
-
-				if (theDoc.Colleagues[i]==colleagueID){
-					if (action == true){
-						isAppended = true
-						return nil
-
-						}else{
-							isAppended = false
-						}
-				}
-			}
-		
-			if (action == true && isAppended == false){
-				checkErr := AppendColleague(eclient, usrID, colleagueID)
-				if (checkErr != nil){return checkErr}
-
-			}else if (action == false && isAppended == false){
-				return nil
-				}
-
-		}
-
-		if (action == false && isAppended == true){
-			checkErr := DeleteColleague(eclient, usrID,idx)
-			if (checkErr != nil){return checkErr}
-		}
-
-		return nil
+	return err
 
 }
 
-
-
-
-
-
-
-
-func AppendMajorMinor(eclient *elastic.Client, usrID string, major_minor string, whichOne bool)error{
+func AppendMajorMinor(eclient *elastic.Client, usrID string, major_minor string, whichOne bool) error {
 	//appends to either sent or received collegue request arrays within user
 	//takes in eclient, user ID, the major or minor, and a bool
 	//true = major, false = minor
-	ctx:= context.Background()
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
-
-	if (whichOne == true){
-	usr.Majors = append(usr.Majors,major_minor)
-
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
-		Id(usrID).
-		Doc(map[string]interface{}{"Majors": usr.Majors}).
-		Do(ctx)
-
-	return CheckMajor(eclient, usrID, major_minor, true, 0) //perform a check to ensure changes occur in event of concurrency issues
-	}else{
-		usr.Minors = append(usr.Minors,major_minor)
-
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
-			Id(usrID).
-			Doc(map[string]interface{}{"Minors": usr.Minors}).
-			Do(ctx)
-
-		return CheckMinor(eclient, usrID, major_minor, true, 0)
-
+	if err != nil {
+		return errors.New("User does not exist")
 	}
 
-}
+	if whichOne == true {
+		usr.Majors = append(usr.Majors, major_minor)
 
-func DeleteMajorMinor(eclient *elastic.Client, usrID string, major_minor string, whichOne bool, idx int)error{
-	//appends to either sent or received collegue request arrays within user
-	//takes in eclient, user ID, the major or minor, an index of the element within the array, and a bool
-	//true = major, false = minor
-	ctx:= context.Background()
-	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	if (whichOne == true){
-		usr.Majors = append(usr.Majors[:idx],usr.Majors[idx+1:]...)
-
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
 			Id(usrID).
 			Doc(map[string]interface{}{"Majors": usr.Majors}).
 			Do(ctx)
 
-		return CheckMajor(eclient, usrID, "blank", false, idx)
-	}else{
-		usr.Minors = append(usr.Minors[:idx],usr.Minors[idx+1:]...)
+		return err
+	}
+	usr.Minors = append(usr.Minors, major_minor)
 
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
-			Id(usrID).
-			Doc(map[string]interface{}{"Minors": usr.Minors}).
-			Do(ctx)
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
+		Id(usrID).
+		Doc(map[string]interface{}{"Minors": usr.Minors}).
+		Do(ctx)
 
-		return CheckMinor(eclient, usrID,"blank", false, idx)
+	return err
 
+}
+
+func DeleteMajorMinor(eclient *elastic.Client, usrID string, major_minor string, whichOne bool, idx int) error {
+	//appends to either sent or received collegue request arrays within user
+	//takes in eclient, user ID, the major or minor, an index of the element within the array, and a bool
+	//true = major, false = minor
+	ctx := context.Background()
+	usr, err := get.GetUserByID(eclient, usrID)
+	if err != nil {
+		return errors.New("User does not exist")
 	}
 
+	if whichOne == true {
+		usr.Majors = append(usr.Majors[:idx], usr.Majors[idx+1:]...)
+
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
+			Id(usrID).
+			Doc(map[string]interface{}{"Majors": usr.Majors}).
+			Do(ctx)
+
+		return err
+	}
+	usr.Minors = append(usr.Minors[:idx], usr.Minors[idx+1:]...)
+
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
+		Id(usrID).
+		Doc(map[string]interface{}{"Minors": usr.Minors}).
+		Do(ctx)
+
+	return err
 }
 
-
-
-func CheckMajor(eclient *elastic.Client, usrID string, major string, action bool, idx int)error{
-	//extra check to ensure change goes through
-	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
-	//action bool indicates whether to append or delete
-	//append = true, delete = false
-	isAppended := false//if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
-
-
-	for isAppended == false{
-			theDoc, err := get.GetUserByID(eclient,usrID)
-			if (err!=nil) {return errors.New("User does not exist")}
-
-			for i:=range theDoc.Majors{
-
-				if (theDoc.Majors[i]==major){
-					if (action == true){
-						isAppended = true
-						return nil
-
-						}else{
-							isAppended = false
-						}
-				}
-			}
-		
-			if (action == true && isAppended == false){
-				checkErr := AppendMajorMinor(eclient, usrID, major,true)
-				if (checkErr != nil){return checkErr}
-
-			}else if (action == false && isAppended == false){
-				return nil
-				}
-
-		}
-
-		if (action == false && isAppended == true){
-			checkErr := DeleteMajorMinor(eclient, usrID, "blank", true, idx)
-			if (checkErr != nil){return checkErr}
-		}
-
-		return nil
-
-}
-
-
-func CheckMinor(eclient *elastic.Client, usrID string, minor string, action bool, idx int)error{
-	//extra check to ensure change goes through
-	//idx used if we want to delete; default to 0 if we want to append, it won't be used anyway
-	//action bool indicates whether to append or delete
-	//append = true, delete = false
-	isAppended := false//if appended and user wants it appended, success. If appended but it must be deleted, will call delete  
-
-
-	for isAppended == false{
-			theDoc, err := get.GetUserByID(eclient,usrID)
-			if (err!=nil) {return errors.New("User does not exist")}
-
-			for i:=range theDoc.Minors{
-
-				if (theDoc.Minors[i]==minor){
-					if (action == true){
-						isAppended = true
-						return nil
-
-						}else{
-							isAppended = false
-						}
-				}
-			}
-		
-			if (action == true && isAppended == false){
-				checkErr := AppendMajorMinor(eclient, usrID, minor, true)
-				if (checkErr != nil){return checkErr}
-
-			}else if (action == false && isAppended == false){
-				return nil
-				}
-
-		}
-
-		if (action == false && isAppended == true){
-			checkErr := DeleteMajorMinor(eclient, usrID, "blank", false, idx)
-			if (checkErr != nil){return checkErr}
-		}
-
-		return nil
-
-}
-
-func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichOne bool)error{
+func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichOne bool) error {
 	//appends to either sent or received collegue request arrays within user
 	//takes in eclient, user ID, the follower ID, and a bool
 	//true = append to following, false = append to followers
-	ctx:= context.Background()
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	if (whichOne == true){
-		usr.Following = append(usr.Following,followID)
+	if whichOne == true {
+		usr.Following = append(usr.Following, followID)
 
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
 			Id(usrID).
 			Doc(map[string]interface{}{"Following": usr.Following}).
 			Do(ctx)
 
-		return CheckFollowing(eclient, usrID, followID, true, 0)
-	}else{
-		usr.Followers = append(usr.Followers,followID)
-
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
-			Id(usrID).
-			Doc(map[string]interface{}{"Followers": usr.Followers}).
-			Do(ctx)
-
-		return CheckFollowers(eclient, usrID, followID, true, 0)
-
+		return err
 	}
+	usr.Followers = append(usr.Followers, followID)
 
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
+		Id(usrID).
+		Doc(map[string]interface{}{"Followers": usr.Followers}).
+		Do(ctx)
+
+	return err
 }
 
-
-func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int)error{
+func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int) error {
 	//whichOne: true = following
 	//whichOne: false = followers
 	//followID does nothing
-	ctx:= context.Background()
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	if (whichOne == true){
-		usr.Following = append(usr.Following[:idx],usr.Following[idx+1:]...)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
+	if whichOne == true {
+		usr.Following = append(usr.Following[:idx], usr.Following[idx+1:]...)
+
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
 			Id(usrID).
 			Doc(map[string]interface{}{"Following": usr.Following}).
 			Do(ctx)
 
-		return CheckFollowing(eclient,usrID,"blank",false,idx)
-
-	}else{
-		usr.Followers = append(usr.Followers[:idx],usr.Followers[idx+1:]...)
-
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
-			Id(usrID).
-			Doc(map[string]interface{}{"Followers": usr.Followers}).
-			Do(ctx)
-
-		return CheckFollowers(eclient,usrID,"blank",false,idx)
+		return err
 
 	}
+	usr.Followers = append(usr.Followers[:idx], usr.Followers[idx+1:]...)
 
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
+		Id(usrID).
+		Doc(map[string]interface{}{"Followers": usr.Followers}).
+		Do(ctx)
+
+	return err
 }
 
-
-
-
-
-func CheckFollowers(eclient *elastic.Client, usrID string, followID string, action bool, idx int)error{
-	isAppended := false
-
-	for isAppended == false{
-			theDoc, err := get.GetUserByID(eclient,usrID)
-			if (err!=nil) {return errors.New("User does not exist")}
-
-			for i:=range theDoc.Followers{
-
-				if (theDoc.Followers[i]==followID){
-					if (action == true){
-						isAppended = true
-						return nil
-
-						}else{
-							isAppended = false
-						}
-				}
-			}
-		
-			if (action == true && isAppended == false){
-				checkErr := AppendFollow(eclient, usrID, followID,true)
-				if (checkErr != nil){return checkErr}
-
-			}else if (action == false && isAppended == false){
-				return nil
-				}
-
-		}
-
-		if (action == false && isAppended == true){
-			checkErr := DeleteFollow(eclient, usrID, true, idx)
-			if (checkErr != nil){return checkErr}
-		}
-
-		return nil
-
-}
-
-
-
-func CheckFollowing(eclient *elastic.Client, usrID string, followID string, action bool, idx int)error{
-	isAppended := false
-
-	for isAppended == false{
-			theDoc, err := get.GetUserByID(eclient,usrID)
-			if (err!=nil) {return errors.New("User does not exist")}
-
-			for i:=range theDoc.Following{
-
-				if (theDoc.Following[i]==followID){
-					if (action == true){
-						isAppended = true
-						return nil
-
-						}else{
-							isAppended = false
-						}
-				}
-			}
-		
-			if (action == true && isAppended == false){
-				checkErr := AppendFollow(eclient, usrID, followID,false)
-				if (checkErr != nil){return checkErr}
-
-			}else if (action == false && isAppended == false){
-				return nil
-				}
-
-		}
-
-		if (action == false && isAppended == true){
-			checkErr := DeleteFollow(eclient, usrID, false, idx)
-			if (checkErr != nil){return checkErr}
-		}
-
-		return nil
-
-}
-
-
-
-
-func AppendProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool)error{
-	ctx:= context.Background()
+func AppendProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	if (whichOne == true){
-		usr.SentProjReq = append(usr.SentProjReq,projID)
+	if whichOne == true {
+		usr.SentProjReq = append(usr.SentProjReq, projID)
 
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
 			Id(usrID).
 			Doc(map[string]interface{}{"SentProjReq": usr.SentProjReq}).
 			Do(ctx)
 
-		return CheckSentCollReq(eclient, usrID, projID, true, 0)
-	}else{
-		usr.ReceivedProjReq = append(usr.ReceivedProjReq,projID)
-
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
-			Id(usrID).
-			Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
-			Do(ctx)
-
-		return CheckReceivedCollReq(eclient, usrID, projID, true, 0)
-
+		return err
 	}
+	usr.ReceivedProjReq = append(usr.ReceivedProjReq, projID)
 
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
+		Id(usrID).
+		Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
+		Do(ctx)
+
+	return err
 }
 
-
-func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool, idx int)error{
-	ctx:= context.Background()
+func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool, idx int) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	if (whichOne == true){
-		usr.SentProjReq = append(usr.SentProjReq[:idx],usr.SentProjReq[idx+1:]...)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
+	if whichOne == true {
+		usr.SentProjReq = append(usr.SentProjReq[:idx], usr.SentProjReq[idx+1:]...)
+
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
 			Id(usrID).
 			Doc(map[string]interface{}{"SentProjReq": usr.SentProjReq}).
 			Do(ctx)
 
-		return CheckSentProjReq(eclient, usrID, projID, false, idx)
-	}else{
-		usr.ReceivedProjReq = append(usr.ReceivedProjReq[:idx],usr.ReceivedProjReq[idx+1:]...)
-
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
-			Id(usrID).
-			Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
-			Do(ctx)
-
-		return CheckReceivedProjReq(eclient, usrID, "blank", false, idx)
-
+		return err
 	}
+	usr.ReceivedProjReq = append(usr.ReceivedProjReq[:idx], usr.ReceivedProjReq[idx+1:]...)
 
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
+		Id(usrID).
+		Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
+		Do(ctx)
+
+	return err
 }
 
-
-
-
-
-func CheckSentProjReq(eclient *elastic.Client, usrID string, projID string, action bool, idx int)error{
-	isAppended := false
-
-	for isAppended == false{
-			theDoc, err := get.GetUserByID(eclient,usrID)
-			if (err!=nil) {return errors.New("User does not exist")}
-
-			for i:=range theDoc.SentProjReq{
-
-				if (theDoc.SentProjReq[i]==projID){
-					if (action == true){
-						isAppended = true
-						return nil
-
-						}else{
-							isAppended = false
-						}
-				}
-			}
-		
-			if (action == true && isAppended == false){
-				checkErr := AppendProjReq(eclient, usrID, projID,true)
-				if (checkErr != nil){return checkErr}
-
-			}else if (action == false && isAppended == false){
-				return nil
-				}
-
-		}
-
-		if (action == false && isAppended == true){
-			checkErr := DeleteProjReq(eclient, usrID, "blank", true, idx)
-			if (checkErr != nil){return checkErr}
-		}
-
-		return nil
-
-}
-
-
-func CheckReceivedProjReq(eclient *elastic.Client, usrID string, projID string, action bool, idx int)error{
-	isAppended := false
-
-	for isAppended == false{
-			theDoc, err := get.GetUserByID(eclient,usrID)
-			if (err!=nil) {return errors.New("User does not exist")}
-
-			for i:=range theDoc.ReceivedProjReq{
-
-				if (theDoc.ReceivedProjReq[i]==projID){
-					if (action == true){
-						isAppended = true
-						return nil
-
-						}else{
-							isAppended = false
-						}
-				}
-			}
-		
-			if (action == true && isAppended == false){
-				checkErr := AppendProjReq(eclient, usrID, projID,false)
-				if (checkErr != nil){return checkErr}
-
-			}else if (action == false && isAppended == false){
-				return nil
-				}
-
-		}
-
-		if (action == false && isAppended == true){
-			checkErr := DeleteProjReq(eclient, usrID, "blank", false, idx)
-			if (checkErr != nil){return checkErr}
-		}
-
-		return nil
-
-}
-
-
-func AppendLikedEntryID(eclient *elastic.Client, usrID string, entryID string)error{
-	ctx:= context.Background()
+func AppendLikedEntryID(eclient *elastic.Client, usrID string, entryID string) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	
-	usr.LikedEntryIDs = append(usr.LikedEntryIDs,entryID)
+	usr.LikedEntryIDs = append(usr.LikedEntryIDs, entryID)
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"LikedEntryIDs": usr.LikedEntryIDs}).
 		Do(ctx)
 
 	return err
-	
+
 }
 
-
-func DeleteLikedEntryID(eclient *elastic.Client, usrID string, likerID string )error{
-	ctx:= context.Background()
+func DeleteLikedEntryID(eclient *elastic.Client, usrID string, likerID string) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
+	if err != nil {
+		return errors.New("User does not exist")
+	}
+
 	idx := 0
-	for i := range usr.LikedEntryIDs{
-		if usr.LikedEntryIDs[i] == likerID{idx = i}
-	} 
-	usr.LikedEntryIDs = append(usr.LikedEntryIDs[:idx],usr.LikedEntryIDs[idx+1:]...)
+	for i := range usr.LikedEntryIDs {
+		if usr.LikedEntryIDs[i] == likerID {
+			idx = i
+		}
+	}
+	usr.LikedEntryIDs = append(usr.LikedEntryIDs[:idx], usr.LikedEntryIDs[idx+1:]...)
 
-
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"LikedEntryIDs": usr.LikedEntryIDs}).
 		Do(ctx)
-	
-	return err
-	
 
-	
+	return err
+
 }
 
-
-
-func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo)error{
-	ctx:= context.Background()
+func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	
-	usr.Projects = append(usr.Projects,proj)
+	usr.Projects = append(usr.Projects, proj)
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"Projects": usr.Projects}).
 		Do(ctx)
 
 	return err
-	
+
 }
 
-func AppendLink(eclient *elastic.Client, usrID string, link types.Link)error{
-	ctx:= context.Background()
+func AppendLink(eclient *elastic.Client, usrID string, link types.Link) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	
-	usr.QuickLinks = append(usr.QuickLinks,link)
+	usr.QuickLinks = append(usr.QuickLinks, link)
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"QuickLinks": usr.QuickLinks}).
 		Do(ctx)
 
 	return err
-	
+
 }
 
-
-func DeleteLink(eclient *elastic.Client, usrID string, link types.Link,idx int)error{
-	ctx:= context.Background()
+func DeleteLink(eclient *elastic.Client, usrID string, link types.Link, idx int) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	
-	usr.QuickLinks = append(usr.QuickLinks[:idx],usr.QuickLinks[idx+1:]...)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	usr.QuickLinks = append(usr.QuickLinks[:idx], usr.QuickLinks[idx+1:]...)
+
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"Quicklinks": usr.QuickLinks}).
 		Do(ctx)
-	
-	return err
-	
 
-	
+	return err
+
 }
 
-
-
-
-func AppendTag(eclient *elastic.Client, usrID string, tag string)error{
-	ctx:= context.Background()
+func AppendTag(eclient *elastic.Client, usrID string, tag string) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	
-	usr.Tags = append(usr.Tags,tag)
+	usr.Tags = append(usr.Tags, tag)
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"Tags": usr.Tags}).
 		Do(ctx)
 
 	return err
-	
+
 }
 
-
-func DeleteTag(eclient *elastic.Client, usrID string, tag string,idx int)error{
-	ctx:= context.Background()
+func DeleteTag(eclient *elastic.Client, usrID string, tag string, idx int) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	
-	usr.Tags = append(usr.Tags[:idx],usr.Tags[idx+1:]...)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	usr.Tags = append(usr.Tags[:idx], usr.Tags[idx+1:]...)
+
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"Tags": usr.Tags}).
 		Do(ctx)
-	
-	return err
-	
 
-	
+	return err
+
 }
 
-
-
-
-func AppendBlock(eclient *elastic.Client, usrID string, blockID string, whichOne bool)error{
-	ctx:= context.Background()
+func AppendBlock(eclient *elastic.Client, usrID string, blockID string, whichOne bool) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	if (whichOne == true){
-		usr.BlockedUsers = append(usr.BlockedUsers,blockID)
+	if whichOne == true {
+		usr.BlockedUsers = append(usr.BlockedUsers, blockID)
 
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
 			Id(usrID).
 			Doc(map[string]interface{}{"BlockedUsers": usr.BlockedUsers}).
 			Do(ctx)
 
 		return err
-		}else{
-			usr.BlockedUsers = append(usr.BlockedUsers,blockID)
+	} else {
+		usr.BlockedUsers = append(usr.BlockedUsers, blockID)
 
-			_,err =  eclient.Update().
-				Index(USER_INDEX).
-				Type(USER_TYPE).
-				Id(usrID).
-				Doc(map[string]interface{}{"BlockedBy": usr.BlockedBy}).
-				Do(ctx)
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
+			Id(usrID).
+			Doc(map[string]interface{}{"BlockedBy": usr.BlockedBy}).
+			Do(ctx)
 
-			return err
-		}
-	
+		return err
+	}
+
 }
 
-
-func DeleteBlock(eclient *elastic.Client, usrID string, blockID string,idx int, whichOne bool)error{
-	ctx:= context.Background()
+func DeleteBlock(eclient *elastic.Client, usrID string, blockID string, idx int, whichOne bool) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	if (whichOne == true){
-		usr.BlockedUsers = append(usr.BlockedUsers[:idx],usr.BlockedUsers[idx+1:]...)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-		_,err =  eclient.Update().
-			Index(USER_INDEX).
-			Type(USER_TYPE).
+	if whichOne == true {
+		usr.BlockedUsers = append(usr.BlockedUsers[:idx], usr.BlockedUsers[idx+1:]...)
+
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
 			Id(usrID).
 			Doc(map[string]interface{}{"BlockedUsers": usr.BlockedUsers}).
 			Do(ctx)
-	
+
 		return err
-		}else{
-			usr.BlockedBy = append(usr.BlockedBy[:idx],usr.BlockedBy[idx+1:]...)
+	} else {
+		usr.BlockedBy = append(usr.BlockedBy[:idx], usr.BlockedBy[idx+1:]...)
 
-			_,err =  eclient.Update().
-				Index(USER_INDEX).
-				Type(USER_TYPE).
-				Id(usrID).
-				Doc(map[string]interface{}{"BlockedBy": usr.BlockedBy}).
-				Do(ctx)
-	
-			return err
+		_, err = eclient.Update().
+			Index(esUserIndex).
+			Type(esUserType).
+			Id(usrID).
+			Doc(map[string]interface{}{"BlockedBy": usr.BlockedBy}).
+			Do(ctx)
 
+		return err
 
-		}
-	
+	}
 
-	
 }
 
-
-func AppendEntryID(eclient *elastic.Client, usrID string, entryID string)error{
-	ctx:= context.Background()
+func AppendEntryID(eclient *elastic.Client, usrID string, entryID string) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	
-	usr.EntryIDs = append(usr.EntryIDs,entryID)
+	usr.EntryIDs = append(usr.EntryIDs, entryID)
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"EntryIDs": usr.EntryIDs}).
 		Do(ctx)
 
 	return err
-	
+
 }
 
-
-func DeleteEntryID(eclient *elastic.Client, usrID string, entryID string,idx int)error{
-	ctx:= context.Background()
+func DeleteEntryID(eclient *elastic.Client, usrID string, entryID string, idx int) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	
-	usr.EntryIDs = append(usr.EntryIDs[:idx],usr.EntryIDs[idx+1:]...)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	usr.EntryIDs = append(usr.EntryIDs[:idx], usr.EntryIDs[idx+1:]...)
+
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"EntryIDs": usr.EntryIDs}).
 		Do(ctx)
-	
-	return err
-	
 
-	
+	return err
+
 }
 
-func AppendConvoID(eclient *elastic.Client, usrID string, convoID string)error{
-	ctx:= context.Background()
+func AppendConvoID(eclient *elastic.Client, usrID string, convoID string) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
-	if (err!=nil) {return errors.New("User does not exist")}
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	
-	usr.ConversationIDs = append(usr.ConversationIDs,convoID)
+	usr.ConversationIDs = append(usr.ConversationIDs, convoID)
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"ConversationIDs": usr.ConversationIDs}).
 		Do(ctx)
 
 	return err
-	
+
 }
 
-
-func DeleteConvoID(eclient *elastic.Client, usrID string, convoID string,idx int)error{
-	ctx:= context.Background()
+func DeleteConvoID(eclient *elastic.Client, usrID string, convoID string, idx int) error {
+	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
-	if (err!=nil) {return errors.New("User does not exist")}
-	
-	
-	usr.ConversationIDs = append(usr.ConversationIDs[:idx],usr.ConversationIDs[idx+1:]...)
+	if err != nil {
+		return errors.New("User does not exist")
+	}
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	usr.ConversationIDs = append(usr.ConversationIDs[:idx], usr.ConversationIDs[idx+1:]...)
+
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"ConversationIDs": usr.ConversationIDs}).
 		Do(ctx)
-	
-	return err
-	
 
-	
+	return err
+
 }
 
-
-
-
-
-func AppendSearch(eclient *elastic.Client, usrID string, newSearch string) error{
-	ctx:=context.Background()
-	usr, err := get.GetUserByID(eclient,usrID)
-	if(err!=nil){return err}
+func AppendSearch(eclient *elastic.Client, usrID string, newSearch string) error {
+	ctx := context.Background()
+	usr, err := get.GetUserByID(eclient, usrID)
+	if err != nil {
+		return err
+	}
 
 	usr.SearchHist = append(usr.SearchHist, newSearch)
 
-	_,err =  eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+	_, err = eclient.Update().
+		Index(esUserIndex).
+		Type(esUserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"SearchHist": usr.SearchHist}).
 		Do(ctx)
-	
+
 	return err
 
-	
 }
