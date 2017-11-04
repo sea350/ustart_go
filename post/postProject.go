@@ -227,7 +227,7 @@ func DeleteProjectLink(eclient *elastic.Client, projectID string, link types.Lin
 
 	index := -1
 	for i := range proj.QuickLinks {
-		if proj.QuickLinks[i] == member {
+		if proj.QuickLinks[i] == link {
 			index = i
 			break
 		}
