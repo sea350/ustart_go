@@ -16,7 +16,7 @@ import (
 )
 
 var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-var templates = template.Must(template.ParseFiles("../../../../www/ustart.tech/wallttt.html","../../../../www/ustart.tech/wallload-nil.html","../../../../www/ustart.tech/testimage.html","../../../../www/ustart.tech/ajax-nil.html","../../../../www/ustart.tech/Membership-Nil.html","../../../../www/ustart.tech/settings-Nil.html","../../../../www/ustart.tech/inbox-Nil.html","../../../../www/ustart.tech/createProject-Nil.html","../../../../www/ustart.tech/manageprojects-Nil.html","../../../../www/ustart.tech/projects-Nil.html","../../../../www/ustart.tech/new-reg-nil.html","../../../../www/ustart.tech/loginerror-nil.html","../../../../www/ustart.tech/test.html", "../../../../www/ustart.tech/payment-nil.html","../../../../www/ustart.tech/templateNoUser2.html","../../../../www/ustart.tech/profile-nil.html","../../../../www/ustart.tech/template2-nil.html","../../../../www/ustart.tech/template-footer-nil.html","../../../../www/ustart.tech/nil-index2.html","../../../../www/ustart.tech/regcomplete-nil.html"))
+var templates = template.Must(template.ParseFiles("../../../../www/ustart.tech/followerlist-nil.html","../../../../www/ustart.tech/emTee.html","../../../../www/ustart.tech/wallttt.html","../../../../www/ustart.tech/wallload-nil.html","../../../../www/ustart.tech/testimage.html","../../../../www/ustart.tech/ajax-nil.html","../../../../www/ustart.tech/Membership-Nil.html","../../../../www/ustart.tech/settings-Nil.html","../../../../www/ustart.tech/inbox-Nil.html","../../../../www/ustart.tech/createProject-Nil.html","../../../../www/ustart.tech/manageprojects-Nil.html","../../../../www/ustart.tech/projects-Nil.html","../../../../www/ustart.tech/new-reg-nil.html","../../../../www/ustart.tech/loginerror-nil.html","../../../../www/ustart.tech/test.html", "../../../../www/ustart.tech/payment-nil.html","../../../../www/ustart.tech/templateNoUser2.html","../../../../www/ustart.tech/profile-nil.html","../../../../www/ustart.tech/template2-nil.html","../../../../www/ustart.tech/template-footer-nil.html","../../../../www/ustart.tech/nil-index2.html","../../../../www/ustart.tech/regcomplete-nil.html"))
 var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code 
 
 type ClientSide struct {
@@ -63,7 +63,7 @@ func WallTest (w http.ResponseWriter, r *http.Request){
 */
 func LoggedIn (w http.ResponseWriter, r *http.Request){
 	session, _ := store.Get(r, "session_please")
-//	fmt.Println(session.Values["FirstName"].(string))
+	//	fmt.Println(session.Values["FirstName"].(string))
 	cs := ClientSide{FirstName:session.Values["FirstName"].(string)}
 	session.Save(r, w)
 	renderTemplate(w,"template2-nil",cs)
@@ -83,6 +83,19 @@ func Home (w http.ResponseWriter, r *http.Request){
 	renderTemplate(w,"template-footer-nil",cs)
 }
 
+func Follow (w http.ResponseWriter, r *http.Request){
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+	if (test1 != nil){
+		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound) }
+	session.Save(r, w)
+	cs := ClientSide{}
+	//fmt.Println("helllo")
+	renderTemplate(w,"template2-nil",cs)
+	renderTemplate(w,"followerlist-nil",cs)
+
+}
+
 func ViewProfile (w http.ResponseWriter, r *http.Request){
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -90,30 +103,41 @@ func ViewProfile (w http.ResponseWriter, r *http.Request){
     	http.Redirect(w, r, "/~", http.StatusFound) }
 	fmt.Println("------------------------")
 	fmt.Println(r.URL.Path[9:])
+	fmt.Println("SESSIONS ID IS "+session.Values["DocID"].(string))
 	userstruct,_, followbool,_ := uses.UserPage(eclient,r.URL.Path[9:],session.Values["DocID"].(string))
-// NEED A NEW FUNCTION THAT GIVES US JOURNAL ENTRIES 
-	fmt.Println("gooooooooooooot thiiiiiiiiiiiiiis faaaaaaaaaaaaaaaaaaaar")
 	fmt.Println(userstruct.EntryIDs)
 	jEntries, err5 := uses.LoadEntries(eclient,userstruct.EntryIDs)
 	if (err5 != nil){
 		fmt.Println(err5);
 	}
-	fmt.Println(jEntries)
+	jEntries2 := jEntries 
+//	counter := len(jEntries)-1;
+	/*
+	for i := range jEntries{
+      //  fmt.Println(jEntries[len(jEntries)-1-i].Element.TimeStamp) // Suggestion: do last := len(s)-1 before the loop
+        jEntries2[counter] = jEntries[len(jEntries)-1-i]
+        counter--
+
+}
+*/
+
+
+	
 	fmt.Println(userstruct.FirstName)
 	fmt.Println(userstruct.LastName)
 	fmt.Println(userstruct.Username)
 	followingState := "no"
 	if (followbool == true){
 		followingState = "yes"
-		fmt.Println("is following "+followingState)
-		
+		fmt.Println("is following "+followingState)	
 	}
 	if (followbool == false){
 		fmt.Println("is not following "+followingState)
 	}
-//	for i := 0; i < len(jEntries); i++ {
-		fmt.Println(jEntries[1].Element)
-//	}
+	for i := 0; i < len(jEntries); i++ {
+		fmt.Println(jEntries2[i].Element.TimeStamp)
+	}
+
 	var ClassYear string 
 	if (userstruct.Class == 1){
 		ClassYear = "Freshman"
@@ -159,6 +183,16 @@ func ViewProfile (w http.ResponseWriter, r *http.Request){
 	numberFollowers,errnF2 := uses.NumFollow(eclient, session.Values["DocID"].(string),false)
 	if (errnF2 != nil){
 		fmt.Println(errnF2);
+	}
+
+		test123 := "hello"
+		test1245 := []rune(test123)
+		postactual := "AV7T7n8C22dVORxe2i9O"
+		id := session.Values["DocID"].(string)
+		fmt.Println(id+"is docid 1234")
+		err4 := uses.UserNewReplyEntry(eclient,id,test1245,postactual)
+		if (err4 != nil){
+		fmt.Println(err4)
 	}
 
 	cs = ClientSide{UserInfo:userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string),Birthday: birthdayline,Class:ClassYear, Description:temp,Followers:numberFollowers,Following:numberFollowing, Page:viewingDOC,FollowingStatus:followingState}
@@ -216,7 +250,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
      	// REGISTRATION SHOULD NOT LOG YOU IN 
      http.Redirect(w, r, "/profile/", http.StatusFound)
         }
-//	u.FirstName = r.FormValue("firstName")
+	//	u.FirstName = r.FormValue("firstName")
 	fname := r.FormValue("firstName")
 	lname := r.FormValue("lastName")
 	email := r.FormValue("inputEmail")
@@ -271,7 +305,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
   //  fmt.Println("we are on payment here ")
   //  session.Save(r, w)
  //   renderTemplate(w,"template2-nil",cs)
-//	renderTemplate(w,"profile-nil",cs)
+	//	renderTemplate(w,"profile-nil",cs)
 
 	// <---     --->
 }
@@ -284,14 +318,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
      	fmt.Println(test1)
      http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
        }
-//	u.FirstName = r.FormValue("firstName")
+	//	u.FirstName = r.FormValue("firstName")
 	email := r.FormValue("email")
 	email = strings.ToLower(email)
 	fmt.Println(email)
-//	var password []byte
+	//	var password []byte
 	password := r.FormValue("password")
 	fmt.Println(password)
-//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
 	successful,sessionInfo,err2 :=  uses.Login(eclient, email, passwordb)
 
@@ -310,6 +344,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		session.Values["Email"] = sessionInfo.Email
 		session.Values["Username"] = sessionInfo.Username 
     	expiration := time.Now().Add((30) * time.Hour)
+    	fmt.Println("Doc id is "+sessionInfo.DocID)
     	cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path:"/"}
     	http.SetCookie(w, &cookie)
 		session.Save(r,w)
@@ -390,7 +425,7 @@ func CreateProject(w http.ResponseWriter, r *http.Request){
 }
 
 
-func call(w http.ResponseWriter, r *http.Request)(string){
+func call(w http.ResponseWriter, r *http.Request){
 	// If followingStatus = no 
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -416,20 +451,23 @@ func call(w http.ResponseWriter, r *http.Request)(string){
 	if (err != nil){
 		fmt.Println(err);
 	}
-}else{
+	}else{
 	fmt.Println("called follow in ajax button")
 	err := uses.UserFollow(eclient,session.Values["DocID"].(string),fname)
 	if (err != nil){
 		fmt.Println(err);
 	}	
-}
+	}
 	//params := r.URL.Query()
 	//params.Get('testing123')
-	hello := "hello buddy do you understand the power of the http protocol"
-	return hello
+	//	hello := "<div style='color:red;'>hello {{.UserInfo.FirstName}} do you understand the power of the http protocol</div>"
+	//	fmt.Fprintln(w, hello) 
+	// LINE 430 FEEELS SOOO GOOOOD !!!!!!!!!!!!!!!!!!!!!
 }
 
-func GetComments(w http.ResponseWriter, r *http.Request){
+
+
+func Like(w http.ResponseWriter, r *http.Request){
 	// If followingStatus = no 
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -439,23 +477,144 @@ func GetComments(w http.ResponseWriter, r *http.Request){
     }
 
 	r.ParseForm()
+	fmt.Println(r.Form)
+	fname := r.FormValue("userID")
+	fmt.Println(fname)
+	following := r.FormValue("Following")
+	fmt.Println(following)
 
-	postid := r.FormValue("PostID")
-	postaid := postid[9:]
-	fmt.Println(postaid);
-
-
-
-	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postaid, 0, -1)
+	isLiked, err4 := uses.IsFollowed(eclient, session.Values["DocID"].(string),fname)
 	if (err4 != nil){
 		fmt.Println(err4)
 	}
+	if (isLiked == true){
+	fmt.Println("called unfollow in ajax button")
+	err := uses.UserUnfollow(eclient,session.Values["DocID"].(string),fname)
+	if (err != nil){
+		fmt.Println(err);
+	}
+	}else{
+	fmt.Println("called follow in ajax button")
+	err := uses.UserFollow(eclient,session.Values["DocID"].(string),fname)
+	if (err != nil){
+		fmt.Println(err);
+	}	
+	}
+
+}
+func AddComment(w http.ResponseWriter, r *http.Request){
+	// If followingStatus = no 
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["Username"]
+    if (test1 == nil){
+     	fmt.Println(test1)
+     	fmt.Println("^ is the username?")
+    http.Redirect(w, r, "/~", http.StatusFound)
+    }
+
+    r.ParseForm()
+	//postaid := r.FormValue("followstat")
+	postid := r.FormValue("followstat")
+	postactual := postid[1:]
+	fmt.Println(postid+"is the postid"+postactual)
+	commentz := r.FormValue("commentz")
+	id := r.FormValue("id")
+	fmt.Println(commentz+" is the input")
+	fmt.Println("MADE IT HERE &&&&&&&&&&&&&&")
+	contentarray := []rune(commentz)
+	username := r.FormValue("username")
+	fmt.Println("USERNAME IN ADD COMMENTS IS "+username)
+	// journal entry, err 
+	fmt.Println(contentarray)
+	fmt.Println(id+" is doc id")
+	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~``")
+	err4 := uses.UserNewReplyEntry(eclient,id,contentarray,postactual)
+		if (err4 != nil){
+		fmt.Println(err4)
+	}
+
+   http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+
+
+}
+func getComments(w http.ResponseWriter, r *http.Request){
+	// If followingStatus = no 
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+    if (test1 == nil){
+     	fmt.Println(test1)
+    http.Redirect(w, r, "/~", http.StatusFound)
+    }
+
+	r.ParseForm()
+	postid := r.FormValue("PostID")
+	postaid := postid[9:]
+	postactual := postid[10:]
+	fmt.Println(postaid+" is the post id ")
+	fmt.Println(postactual+" is the actual post id ")
+	pika := r.FormValue("Pikachu")
+	fmt.Println(pika+" is the pika value");
+	// journal entry, err 
+	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
+	if (err4 != nil){
+		fmt.Println(err4)
+	}
+
+	fmt.Println("hello get comments called")
+	fmt.Println(parentPost.FirstName+" is parentpost first name")
 	var sum int 
-	for i := 0; i < len(arrayofComments)-1; i++ {
+	var output string 
+	for i := 0; i < len(arrayofComments); i++ {
+		fmt.Println(arrayofComments[i].FirstName)
 		sum += i
 	}
 	fmt.Println(sum)
+//	id := session.Values["DOCID"].(string)
+	username := session.Values["Username"].(string)
+	fmt.Println("username is "+session.Values["Username"].(string))
+	output += `
+	 <div class="modal fade" id=main-moda`+postaid+` role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <div class="media">
+                                                <a class="pull-left" href="#">
+                                                    <img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
+                                                </a>
+                                                <div class="media-body">
+                                                    <h6 class="pull-right text-muted time">3 hours ago</h6>
+                                                    <h5 class="mt-0" style="color:cadetblue;">Ryan Rozbiani</h5>
+                                                    <p>Hey guys! We're launching UStart! Watch out for us!</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group">
+                                                <form id="commentform" method="POST" action="/AddComment">
+                                                    <input name="commentz" placeholder="Add a comment" type="text">
+                                                      <input type="hidden" name="followstat" value=`+postaid+`>
+                                                      <input type="hidden" name = "id" value=`+pika+`>
+                                                      <input type ="hidden" name="username" value=`+username+`>
+                                                </form>
+                                                <span class="input-group-addon">
+                                                    <a onclick="document.getElementById('commentform').submit();">
+                                                    <script>
+                                                    console.log('inside the its not gonna work because it's just hml stuff so put inside script')
+                                                    </script>
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <br>
 
+
+	`
+
+	//params := r.URL.Query()
+	//params.Get('testing123')
+	fmt.Fprintln(w, output) 
 
 }
 
@@ -523,6 +682,50 @@ func AJAX(w http.ResponseWriter, r *http.Request){
 
 
 }
+
+func WallPostCreation(w http.ResponseWriter, r *http.Request){
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+    if (test1 == nil){
+     	fmt.Println(test1)
+     	http.Redirect(w, r, "/~", http.StatusFound)
+    }
+    r.ParseForm()
+    textb := r.FormValue("block")
+
+    textb2 := []rune(textb)
+    err := uses.UserNewTextEntry(eclient,session.Values["DocID"].(string),textb2)
+    if (err != nil){
+    	fmt.Println(err);
+    }
+
+    http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+
+}
+
+func WallPostComment(w http.ResponseWriter, r *http.Request){
+
+}
+/*
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+    if (test1 == nil){
+     	fmt.Println(test1)
+     	http.Redirect(w, r, "/~", http.StatusFound)
+    }
+    r.ParseForm()
+    textb := r.FormValue("block")
+
+    textb2 := []rune(textb)
+    err := uses.UserNewReplyEntry(eclient,session.Values["DocID"].(string),textb2,<postid>)
+    if (err != nil){
+    	fmt.Println(err);
+    }
+
+    http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+
+}
+*/
 
 func ImageUpload(w http.ResponseWriter, r *http.Request){
 	session, _ := store.Get(r, "session_please")
@@ -706,61 +909,88 @@ func changeLocation(w http.ResponseWriter, r *http.Request){
      	http.Redirect(w, r, "/~", http.StatusFound)
     }
     r.ParseForm()
- //   countryP := r.FormValue("country")
-  //  countryPV := r.FormValue("countryVis")
+    countryP := r.FormValue("country")
+    countryPV := r.FormValue("countryVis")
  //   fmt.Println(countryPV)
-  //  stateP := r.FormValue("state")
-  //  statePV := r.FormValue("stateVis")
-  //  cityP := r.FormValue("city")
-  //  cityPV := r.FormValue("cityVis")
-  //  zipP := r.FormValue("zip")
-   // zipPV := r.FormValue("zipVis")
-  //  sBool := false;
-  //  if (statePV == "on"){
-   // 	sBool = true; 
- //   }
-  //  cBool := false;
-  //  if (cityPV == "on"){
-   // 	cBool = true; 
-  //  }
-   // zBool := false;
-  //  if (zipPV == "on"){
-  //  	zBool = true; 
-  //  }
+    stateP := r.FormValue("state")
+    statePV := r.FormValue("stateVis")
+    cityP := r.FormValue("city")
+    cityPV := r.FormValue("cityVis")
+    zipP := r.FormValue("zip")
+    zipPV := r.FormValue("zipVis")
+    conBool := false;
+    if (countryPV == "on"){
+    	conBool = true; 
+    }
+    sBool := false;
+    if (statePV == "on"){
+    	sBool = true; 
+    }
+    cBool := false;
+    if (cityPV == "on"){
+   	cBool = true; 
+    }
+    zBool := false;
+    if (zipPV == "on"){
+    	zBool = true; 
+    }
 
-//    err := uses.ChangeLocation(eclient, session.Values["DocID"].(string),countryP,stateP,sBool,cityP,cBool,zipP,zBool);
-  //  if (err != nil){
- //  		fmt.Println(err);
-  //  }
+    err := uses.ChangeLocation(eclient, session.Values["DocID"].(string),countryP,conBool,stateP,sBool,cityP,cBool,zipP,zBool);
+   if (err != nil){
+   		fmt.Println(err);
+   }
    http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
 
 }
 
 func changeEDU(w http.ResponseWriter, r *http.Request){
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+    if (test1 == nil){
+     	fmt.Println(test1)
+     	http.Redirect(w, r, "/~", http.StatusFound)
+    }
+	r.ParseForm()
+	typeAcc := r.FormValue("type_select")
+	i,err2 := strconv.Atoi(typeAcc)
+	if (err2 != nil){
+		fmt.Println(err2);
+	}
+	highschoolName := r.FormValue("schoolname")
+	highschoolGrad := r.FormValue("highSchoolGradDate")
+	uniName := r.FormValue("universityName")
+	var major []string
+	major = append(major,r.FormValue("majors"))
+	//	Year := r.FormValue("year")
+	gradDate := r.FormValue("uniGradDate")
+
+	var minor []string
+
+	err := uses.ChangeEducation(eclient, session.Values["DocID"].(string), i, highschoolName, highschoolGrad, uniName, gradDate, major, minor)
+	if (err != nil){
+		fmt.Println(err);
+	}
 }
 
 func deleteAccount(w http.ResponseWriter, r *http.Request){
 }
 
 func LoginError(w http.ResponseWriter, r *http.Request){	
-		session, _ := store.Get(r, "session_please")
+	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
      if (test1 != nil){
      	fmt.Println(test1)
      http.Redirect(w, r, "/profile/"+session.Values["DocID"].(string), http.StatusFound)
        }
-//	u.FirstName = r.FormValue("firstName")
+	//	u.FirstName = r.FormValue("firstName")
 	email := r.FormValue("email")
 	fmt.Println(email)
-//	var password []byte
+	//	var password []byte
 	password := r.FormValue("password")
 	fmt.Println(password)
-//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
 	successful,sessionInfo,err2 :=  uses.Login(eclient, email, passwordb)
-
-	// doc ID can be retrieved here! 
-	//cs := &ClientSide{}
  	if (err2 != nil){
 		fmt.Println(err2)
 	
@@ -817,8 +1047,16 @@ func LogOut(w http.ResponseWriter, r *http.Request){
 //	t.Execute(w,u)
 
 func renderTemplate(w http.ResponseWriter, tmpl string, cs ClientSide) {
-//  	fmt.Println("rT called")
+	//  	fmt.Println("rT called")
   	err := templates.ExecuteTemplate(w, tmpl+".html", cs)
+  	if err != nil {
+  		http.Error(w, err.Error(), http.StatusInternalServerError)
+  	}
+  }
+
+  func renderTemplate2(w http.ResponseWriter, tmpl string, name string) {
+	//  	fmt.Println("rT called")
+  	err := templates.ExecuteTemplate(w, tmpl+".html", name)
   	if err != nil {
   		http.Error(w, err.Error(), http.StatusInternalServerError)
   	}
@@ -835,20 +1073,6 @@ func renderTemplate(w http.ResponseWriter, tmpl string, cs ClientSide) {
 
 
 func main() {
-//	r := mux.NewRouter()
-//	r.HandleFunc("/test/",Test )
-//	fs := http.FileServer(http.Dir("../../../../www/"))
-//	r.Handle("/www/", http.StripPrefix("/www/", http.FileServer(http.Dir("../../../../www/"))))
-//	r.Handle("/www/", http.StripPrefix("/www/", fs))
-//	r.HandleFunc("/signup/", Signup)
-
-//	r.HandleFunc("/welcome/", Registration)
-//	r.HandleFunc("/profile/", Login)
-//	r.HandleFunc("/profile/{username}", ViewProfile)
-//	r.HandleFunc("/loggedin/", Login)
-//	r.HandleFunc("/imagetest/",imageEx)
-//	r.HandleFunc("/logout/",LogOut)
-
 	http.HandleFunc("/test/",Test )
 	fs := http.FileServer(http.Dir("../../../../www/"))
 //	r.Handle("/www/", http.StripPrefix("/www/", http.FileServer(http.Dir("../../../../www/"))))
@@ -862,7 +1086,7 @@ func main() {
 	http.HandleFunc("/imagetest/",imageEx)
 	http.HandleFunc("/logout/",LogOut)
 	http.HandleFunc("/Inbox/",Inbox)
-	http.HandleFunc("/Project/",ProjectsPage)
+	http.HandleFunc("/Projects/",ProjectsPage)
 	http.HandleFunc("/MyProjects/",MyProjects)
 	http.HandleFunc("/Settings/",Settings)
 	http.HandleFunc("/ImageUpload/",ImageUpload)
@@ -872,18 +1096,21 @@ func main() {
 	http.HandleFunc("/changeEDU/",changeEDU)
 	http.HandleFunc("/deleteAccount/",deleteAccount)
 	http.HandleFunc("/UpdateDescription/",ChangeContactAndDescription)
-	//http.HandleFunc("/Update/",SettingOptions1);
-	//http.HandleFunc("/Update/",SettingOptions2);
-	//http.HandleFunc("/Update/",SettingOptions3);
-	//http.HandleFunc("/Update/",SettingOptions4);
 	http.HandleFunc("/CreateProject/",CreateProject)
 	http.HandleFunc("/loginerror/",LoginError)
 //	http.HandleFunc("/WallTest/",WallTest)
 	http.HandleFunc("/~",Home)
 	http.HandleFunc("/Registration/Type/",RegisterType)
-	//http.HandleFunc("/callme/",call)
+	http.HandleFunc("/callme/",call)
 //	http.HandleFunc("/hellomoto/",GetComments)
 	http.HandleFunc("/callme2/",call2)
+	http.HandleFunc("/follow/",Follow)
+	http.HandleFunc("/unfollow/",Follow)
+	http.HandleFunc("/New/Post/",WallPostCreation)
+	http.HandleFunc("/New/Comment/",WallPostComment)
+	http.HandleFunc("/getComments/",getComments)
+	http.HandleFunc("/AddComment",AddComment)
+
 	http.HandleFunc("/ajax/",AJAX)
 
 //	fmt.Println("testing")
