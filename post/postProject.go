@@ -5,10 +5,9 @@ import (
 	"errors"
 	"sync"
 
-	"src/github.com/sea350/ustart_go/universal"
-
 	get "github.com/sea350/ustart_go/get"
 	"github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/universal"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
