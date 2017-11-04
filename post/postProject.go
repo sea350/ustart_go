@@ -248,3 +248,7 @@ func DeleteProjectLink(eclient *elastic.Client, projectID string, link types.Lin
 	return err
 
 }
+
+func AppendMemberReqSent(eclient *elastic.Client, projectID string, userID string) error { return nil }
+
+//FIX THIS SHSHSHSHITITITTIT
