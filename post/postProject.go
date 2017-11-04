@@ -7,7 +7,6 @@ import (
 
 	get "github.com/sea350/ustart_go/get"
 	"github.com/sea350/ustart_go/types"
-	"github.com/sea350/ustart_go/universal"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -168,18 +167,24 @@ func DeleteMember(eclient *elastic.Client, projID string, member types.Member) e
 		return errors.New("Project does not exist")
 	}
 
-	arr := proj.Members
-	index := universal.FindIndex(arr, member)
-	newMems, err := universal.RemoveByIndex(arr, index)
-	if err != nil {
-		return err
+	index := -1
+	for i := range proj.Members {
+		if proj.Members[i] == member {
+			index = i
+			break
+		}
 	}
+	if index == -1 {
+		return errors.New("Member not found")
+	}
+
+	proj.Members = append(proj.Members[:index], proj.Members[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(projectIndex).
 		Type(projectType).
 		Id(projID).
-		Doc(map[string]interface{}{"Members": newMems}).
+		Doc(map[string]interface{}{"Members": proj.Members}).
 		Do(ctx)
 
 	return err
@@ -220,7 +225,18 @@ func DeleteProjectLink(eclient *elastic.Client, projectID string, link types.Lin
 		return errors.New("Project does not exist")
 	}
 
-	//proj.QuickLinks = append(proj.QuickLinks[:idx], proj.QuickLinks[idx+1:]...) //append all elements BUT element at idx, maintains order
+	index := -1
+	for i := range proj.QuickLinks {
+		if proj.QuickLinks[i] == member {
+			index = i
+			break
+		}
+	}
+	if index == -1 {
+		return errors.New("link not found")
+	}
+
+	proj.QuickLinks = append(proj.QuickLinks[:index], proj.QuickLinks[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(projectIndex).
