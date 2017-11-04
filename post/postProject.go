@@ -176,8 +176,8 @@ func DeleteMember(eclient *elastic.Client, projID string, member types.Member) e
 	}
 
 	_, err = eclient.Update().
-		Index(USER_INDEX).
-		Type(USER_TYPE).
+		Index(projectIndex).
+		Type(projectType).
 		Id(projID).
 		Doc(map[string]interface{}{"Members": newMems}).
 		Do(ctx)
@@ -220,7 +220,7 @@ func DeleteProjectLink(eclient *elastic.Client, projectID string, link types.Lin
 		return errors.New("Project does not exist")
 	}
 
-	proj.QuickLinks = append(proj.QuickLinks[:idx], proj.QuickLinks[idx+1:]...) //append all elements BUT element at idx, maintains order
+	//proj.QuickLinks = append(proj.QuickLinks[:idx], proj.QuickLinks[idx+1:]...) //append all elements BUT element at idx, maintains order
 
 	_, err = eclient.Update().
 		Index(projectIndex).
