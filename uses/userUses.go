@@ -394,41 +394,6 @@ func IsLiked(eclient *elastic.Client, entryID string, viewerID string) (bool, er
 	return isLiked, err
 }
 
-/*
-func ToggleUserLike (eclient *elastic.Client, likerID string, entryID string) error {
-	//FIX THIS INEFFICENT BULLSHIT
-	//JONDKJDBSKJLASLND;LBJGAD
-	//WARNING THIS FUNCTION IS IN SHAMBLES
-	//REPAIR BEFORE REMOVINGE WARNING
-	//DO NOT USE
-	liker, err := get.GetUserByID(eclient, likerID)
-	if (err != nil) {return err}
-
-	for idx,element := range liker.LikedEntryIDs{
-		if (element == entryID){
-			followErr := post.DeleteFollow(eclient, likerID, entryID, true, idx)
-			if (followErr!=nil){return followErr}
-			liked, err := get.GetUserByID(eclient, entryID)
-			if (err!=nil){return err}
-			for idx2, element := range liked.LikedEntryIDs{
-				if (element == likerID){
-				followingErr := post.DeleteFollow(eclient,entryID,likerID,false, idx2)
-				if (followingErr!=nil){return followingErr}
-				}
-			}
-			return nil
-		}
-	}
-
-	followErr := post.AppendFollow(eclient, likerID, entryID, true)
-	if (followErr!=nil){return followErr}
-	followingErr := post.AppendFollow(eclient,entryID,likerID,false)
-	if (followingErr!=nil){return followingErr}
-
-	return nil
-}
-*/
-
 //RequestColleague ... SENDS A COLLEGUE REQUEST FROM ONE USER TO ANOTHER
 //NOTE: This function checks if a request has already been sent and if the users are allready colleagues
 //WARNING: needs to be revised

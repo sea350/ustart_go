@@ -1,21 +1,23 @@
 package uses
 
-import(
+import (
 	elastic "gopkg.in/olivere/elastic.v5"
 	//types "github.com/sea350/ustart_go/types"
-	post "github.com/sea350/ustart_go/post"
 	get "github.com/sea350/ustart_go/get"
+	post "github.com/sea350/ustart_go/post"
 	//"fmt"
 	"errors"
 	//"time"
 )
 
-func NukeUser(eclient *elastic.Client, userID string, areYouSure bool) (bool, []error){
-
-	//designed to continue functionality despite encountering errors uncless core gets are intereupted
+//NukeUser ... SETS ALL REACHABLE DATA OF USER TO INVISIBLE
+//Requires the user's docID and a confirmation that this function needs to be used
+//Returns a confirmation of whether the function went all the way through, and stack of errors ecountered along the process
+//NOTE: this func is designed to continue functionality despite encountering errors uncless core gets are intereupted
+func NukeUser(eclient *elastic.Client, userID string, areYouSure bool) (bool, []error) {
 	nukeSucess := false
 	var errorStack []error
-	if (!areYouSure){
+	if !areYouSure {
 		return nukeSucess, append(errorStack, errors.New("You are not sure, make a decision and come back"))
 	}
 
