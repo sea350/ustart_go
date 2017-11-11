@@ -56,7 +56,7 @@ func IndexUser(eclient *elastic.Client, newAcc types.User) error {
 		if !createIndex.Acknowledged {
 		}
 
-		// Return an error saying ti doesn't exist
+		// Return an error saying it doesn't exist
 		return errors.New("Index does not exist")
 	}
 
@@ -210,9 +210,10 @@ func DeleteCollReq(eclient *elastic.Client, usrID string, whichOne bool, idx int
 	return err
 }
 
+//AppendColleague ... appends to collegue array within user
+//takes in eclient, user ID, and collegue ID
 func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string) error {
-	//appends to collegue array within user
-	//takes in eclient, user ID, and collegue ID
+
 	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 
@@ -233,9 +234,29 @@ func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string) 
 
 }
 
-func DeleteColleague(eclient *elastic.Client, usrID string, idx int) error {
+//DeleteColleague ... deletes from collegue array within user
+//takes in eclient, user ID, and collegue ID
+func DeleteColleague(eclient *elastic.Client, usrID string, deleteID string) error {
 	ctx := context.Background()
+	procLock.Lock()
+	defer procLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
+	//idx, err := universal.FindIndex(usr.Colleagues, deleteID) UNIVERSAL PKG
+	//temp for-loop:
+
+	idx := -1
+	for i := range usr.Colleagues {
+		if usr.Colleagues[i] == deleteID {
+			idx = i
+		}
+	}
+
+	if idx < 0 {
+		return errors.New("Index non-existent")
+	}
+	//temp solution stops here
+
 	if err != nil {
 		return errors.New("User does not exist")
 	}
@@ -253,11 +274,15 @@ func DeleteColleague(eclient *elastic.Client, usrID string, idx int) error {
 
 }
 
-func AppendMajorMinor(eclient *elastic.Client, usrID string, major_minor string, whichOne bool) error {
+func AppendMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, whichOne bool) error {
 	//appends to either sent or received collegue request arrays within user
 	//takes in eclient, user ID, the major or minor, and a bool
 	//true = major, false = minor
 	ctx := context.Background()
+
+	procLock.Lock()
+	defer procLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -265,7 +290,7 @@ func AppendMajorMinor(eclient *elastic.Client, usrID string, major_minor string,
 	}
 
 	if whichOne == true {
-		usr.Majors = append(usr.Majors, major_minor)
+		usr.Majors = append(usr.Majors, majorMinor)
 
 		_, err = eclient.Update().
 			Index(esUserIndex).
@@ -276,7 +301,7 @@ func AppendMajorMinor(eclient *elastic.Client, usrID string, major_minor string,
 
 		return err
 	}
-	usr.Minors = append(usr.Minors, major_minor)
+	usr.Minors = append(usr.Minors, majorMinor)
 
 	_, err = eclient.Update().
 		Index(esUserIndex).
@@ -289,10 +314,11 @@ func AppendMajorMinor(eclient *elastic.Client, usrID string, major_minor string,
 
 }
 
-func DeleteMajorMinor(eclient *elastic.Client, usrID string, major_minor string, whichOne bool, idx int) error {
-	//appends to either sent or received collegue request arrays within user
-	//takes in eclient, user ID, the major or minor, an index of the element within the array, and a bool
-	//true = major, false = minor
+//DeleteMajorMinor ... appends to either sent or received collegue request arrays within user
+//takes in eclient, user ID, the major or minor, an index of the element within the array, and a bool
+//true = major, false = minor
+func DeleteMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, whichOne bool, idx int) error {
+
 	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
@@ -323,11 +349,15 @@ func DeleteMajorMinor(eclient *elastic.Client, usrID string, major_minor string,
 	return err
 }
 
+//AppendFollow ... appends to either sent or received collegue request arrays within user
+//takes in eclient, user ID, the follower ID, and a bool
+//true = append to following, false = append to followers
 func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichOne bool) error {
-	//appends to either sent or received collegue request arrays within user
-	//takes in eclient, user ID, the follower ID, and a bool
-	//true = append to following, false = append to followers
+
 	ctx := context.Background()
+
+	procLock.Lock()
+	defer procLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -358,11 +388,14 @@ func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichO
 	return err
 }
 
+//DeleteFollow ... whichOne: true = following
+//whichOne: false = followers
+//followID does nothing
 func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int) error {
-	//whichOne: true = following
-	//whichOne: false = followers
-	//followID does nothing
+
 	ctx := context.Background()
+	procLock.Lock()
+	defer procLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -393,6 +426,9 @@ func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int)
 	return err
 }
 
+//AppendProjReq ... appends to either sent or received project request arrays within user
+//takes in eclient, user ID, the project ID, and a bool
+//true = append to following, false = append to followers
 func AppendProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool) error {
 	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
@@ -425,8 +461,14 @@ func AppendProjReq(eclient *elastic.Client, usrID string, projID string, whichOn
 	return err
 }
 
+//DeleteProjReq ... whichOne: true = following
+//whichOne: false = followers
+//followID does nothing
 func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool, idx int) error {
 	ctx := context.Background()
+
+	procLock.Lock()
+	defer procLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
