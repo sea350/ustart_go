@@ -225,6 +225,7 @@ func DeleteProjectLink(eclient *elastic.Client, projectID string, link types.Lin
 		return errors.New("Project does not exist")
 	}
 
+	//replace with universal.FindIndex when it works
 	index := -1
 	for i := range proj.QuickLinks {
 		if proj.QuickLinks[i] == link {
@@ -249,6 +250,119 @@ func DeleteProjectLink(eclient *elastic.Client, projectID string, link types.Lin
 
 }
 
-func AppendMemberReqSent(eclient *elastic.Client, projectID string, userID string) error { return nil }
+//AppendMemberReqSent ... APPENDS A USER ID TO A PROJECTS MemberReqSent ARRAY
+//Requires project's docID and the user's docID
+//Returns an error
+func AppendMemberReqSent(eclient *elastic.Client, projectID string, userID string) error {
 
-//FIX THIS SHSHSHSHITITITTIT
+	ctx := context.Background()
+
+	proj, err := get.GetProjectByID(eclient, projectID)
+	if err != nil {
+		return errors.New("Project does not exist")
+	} //return error if nonexistent
+
+	proj.MemberReqSent = append(proj.MemberReqSent, userID) //retreive project
+
+	_, err = eclient.Update().
+		Index(projectIndex).
+		Type(projectType).
+		Id(projectID).
+		Doc(map[string]interface{}{"MemberReqSent": proj.MemberReqSent}). //update project doc with new link appended to array
+		Do(ctx)
+
+	return err
+}
+
+//DeleteMemberReqSent ... DELETES A USER ID IN A PROJECT'S MemberReqSent ARRAY
+//Requires project's docID and the user's docID
+//Returns an error
+func DeleteMemberReqSent(eclient *elastic.Client, projectID string, userID string) error {
+	ctx := context.Background()
+	proj, err := get.GetProjectByID(eclient, projectID)
+	if err != nil {
+		return errors.New("Project does not exist")
+	}
+
+	//replace with universal.FindIndex when it works
+	index := -1
+	for i := range proj.MemberReqSent {
+		if proj.MemberReqSent[i] == userID {
+			index = i
+			break
+		}
+	}
+	if index == -1 {
+		return errors.New("link not found")
+	}
+
+	proj.MemberReqSent = append(proj.MemberReqSent[:index], proj.MemberReqSent[index+1:]...)
+
+	_, err = eclient.Update().
+		Index(projectIndex).
+		Type(projectType).
+		Id(projectID).
+		Doc(map[string]interface{}{"MemberReqSent": proj.MemberReqSent}).
+		Do(ctx)
+
+	return err
+}
+
+//AppendMemberReqReceived ... APPENDS A USER ID TO A PROJECTS MemberReqReceived ARRAY
+//Requires project's docID and the user's docID
+//Returns an error
+func AppendMemberReqReceived(eclient *elastic.Client, projectID string, userID string) error {
+
+	ctx := context.Background()
+
+	proj, err := get.GetProjectByID(eclient, projectID)
+	if err != nil {
+		return errors.New("Project does not exist")
+	} //return error if nonexistent
+
+	proj.MemberReqReceived = append(proj.MemberReqReceived, userID) //retreive project
+
+	_, err = eclient.Update().
+		Index(projectIndex).
+		Type(projectType).
+		Id(projectID).
+		Doc(map[string]interface{}{"MemberReqReceived": proj.MemberReqReceived}). //update project doc with new link appended to array
+		Do(ctx)
+
+	return err
+}
+
+//DeleteMemberReqReceived ... DELETES A USER ID IN A PROJECT'S MemberReqReceived ARRAY
+//Requires project's docID and the user's docID
+//Returns an error
+func DeleteMemberReqReceived(eclient *elastic.Client, projectID string, userID string) error {
+	ctx := context.Background()
+	proj, err := get.GetProjectByID(eclient, projectID)
+	if err != nil {
+		return errors.New("Project does not exist")
+	}
+
+	//replace with universal.FindIndex when it works
+	index := -1
+	for i := range proj.MemberReqReceived {
+		if proj.MemberReqReceived[i] == userID {
+			index = i
+			break
+		}
+	}
+	if index == -1 {
+		return errors.New("link not found")
+	}
+
+	proj.MemberReqReceived = append(proj.MemberReqReceived[:index], proj.MemberReqReceived[index+1:]...)
+
+	_, err = eclient.Update().
+		Index(projectIndex).
+		Type(projectType).
+		Id(projectID).
+		Doc(map[string]interface{}{"MemberReqReceived": proj.MemberReqReceived}).
+		Do(ctx)
+
+	return err
+
+}
