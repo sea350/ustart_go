@@ -17,6 +17,7 @@ const entryType = "ENTRY"
 var genericEntryUpdateLock sync.Mutex
 var likeArrayLock sync.Mutex
 var shareArrayLock sync.Mutex
+var replyArrayLock sync.Mutex
 
 //IndexEntry ... ADDS NEW ENTRY TO ES RECORDS
 //Needs a type entry struct
@@ -239,8 +240,8 @@ func DeleteShareID(eclient *elastic.Client, entryID string, shareID string) erro
 func AppendReplyID(eclient *elastic.Client, entryID string, replyID string) error {
 	ctx := context.Background()
 
-	shareArrayLock.Lock()
-	defer shareArrayLock.Unlock()
+	replyArrayLock.Lock()
+	defer replyArrayLock.Unlock()
 
 	anEntry, err := get.GetEntryByID(eclient, entryID)
 	if err != nil {
@@ -265,8 +266,8 @@ func AppendReplyID(eclient *elastic.Client, entryID string, replyID string) erro
 func DeleteReplyID(eclient *elastic.Client, entryID string, replyID string) error {
 	ctx := context.Background()
 
-	shareArrayLock.Lock()
-	defer shareArrayLock.Unlock()
+	replyArrayLock.Lock()
+	defer replyArrayLock.Unlock()
 
 	anEntry, err := get.GetEntryByID(eclient, entryID)
 	if err != nil {
@@ -294,5 +295,4 @@ func DeleteReplyID(eclient *elastic.Client, entryID string, replyID string) erro
 		Do(ctx)
 
 	return err
-
 }
