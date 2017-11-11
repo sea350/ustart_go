@@ -13,7 +13,7 @@ import (
 const projectIndex = "test-project_data"
 const projectType = "PROJECT"
 
-var genericUpdateLock sync.Mutex
+var genericProjectUpdateLock sync.Mutex
 var modifyMemberLock sync.Mutex
 
 const projMapping = `
@@ -105,8 +105,8 @@ func UpdateProject(eclient *elastic.Client, projectID string, field string, newC
 		return errors.New("Index does not exist")
 	}
 
-	genericUpdateLock.Lock()
-	defer genericUpdateLock.Unlock()
+	genericProjectUpdateLock.Lock()
+	defer genericProjectUpdateLock.Unlock()
 
 	_, err = get.GetProjectByID(eclient, projectID)
 	if err != nil {

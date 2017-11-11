@@ -5,7 +5,7 @@ import (
 	post "github.com/sea350/ustart_go/post"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
-	//uses "github.com/sea350/ustart_go/uses"
+
 	"errors"
 	"fmt"
 	"time"
@@ -13,17 +13,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+//SignUpBasic ... A basic user signup process
+//Requires all basic signup feilds (email, password ...)
+//Returns an error if there was a problem with database submission
 func SignUpBasic(eclient *elastic.Client, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
-	//A basic user signup process
-	//Returns an error if there was a problem with database submission
-	//Or if email is in use
 
 	inUse, err := get.EmailInUse(eclient, email)
 	if err != nil {
 		return err
 	}
 	if inUse {
-		return errors.New("Email is in use.")
+		return errors.New("email is in use")
 	}
 
 	newUsr := types.User{}
@@ -66,13 +66,12 @@ func SignUpBasic(eclient *elastic.Client, email string, password []byte, fname s
 	return retErr
 }
 
+//Login ... Checks username/password combo
+//Requires username and password
+//Returns whether or not username and password match, a type SessionUser, and an error
 func Login(eclient *elastic.Client, userEmail string, password []byte) (bool, types.SessionUser, error) {
-	//Contains all logic for a user login including email and password check
-	//Returns a bool if the login was sucessful,
-	//the user information required by a session
-	//and an error
 
-	var loginSucessful bool = false
+	var loginSucessful = false
 	var userSession types.SessionUser
 
 	inUse, err := get.EmailInUse(eclient, userEmail)
@@ -88,8 +87,6 @@ func Login(eclient *elastic.Client, userEmail string, password []byte) (bool, ty
 	if err != nil {
 		return loginSucessful, userSession, err
 	}
-	//if(!bytes.Equal(password, usr.Password)){return loginSucessful, userSession, errors.New(
-	//	"Email And Password Do Not Match")}
 
 	passErr := bcrypt.CompareHashAndPassword(usr.Password, password)
 
@@ -116,8 +113,10 @@ func Login(eclient *elastic.Client, userEmail string, password []byte) (bool, ty
 
 }
 
+//UserPage ... Loads relevant information for the User page
+//Requires username and the docID of the person viewing the page
+//Returns a typer User, the user's docID, whether or not the viewer is following the person and an error
 func UserPage(eclient *elastic.Client, username string, viewerID string) (types.User, string, bool, error) {
-	//Returns all information relevant to the user page given a username
 
 	var usr types.User
 
@@ -148,6 +147,9 @@ func UserPage(eclient *elastic.Client, username string, viewerID string) (types.
 	return usr, userID, isFollowed, err
 }
 
+//LoadEntries ... Loads a list of entries as journal entries, if an entry is invisible it is skipped
+//Requires an array of entry ids
+//Returns an of the data for those ids as journal entries, and an error
 func LoadEntries(eclient *elastic.Client, loadList []string) ([]types.JournalEntry, error) {
 
 	var entries []types.JournalEntry
@@ -168,8 +170,12 @@ func LoadEntries(eclient *elastic.Client, loadList []string) ([]types.JournalEnt
 	return entries, nil
 }
 
+//LoadComments ... Loads the replies to a specific entry limited by limits
+//Requires the parent entry id, the position of the first comment desired to load and the last comment wanted to load
+//NOTE set uppper bound to -1 to pull to the end of the array
+//Returns the parent entry as a JournalEntry, an array of replies, and an error
+//NOTE, if the entry is set to invisible it is skipped
 func LoadComments(eclient *elastic.Client, entryID string, lowerBound int, upperBound int) (types.JournalEntry, []types.JournalEntry, error) {
-	// set upperBound to -1 to pull infinitely
 	var entries []types.JournalEntry
 	var parent types.JournalEntry
 	var start int
@@ -209,6 +215,9 @@ func LoadComments(eclient *elastic.Client, entryID string, lowerBound int, upper
 	return parent, entries, err
 }
 
+//ConvertEntryToJournalEntry ... load all relevant data of a single entry into a journal entry struct
+//Requires entry docID
+//Returns entry as a type JournalEntry and an error
 func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string) (types.JournalEntry, error) {
 	var newJournalEntry types.JournalEntry
 
@@ -238,6 +247,9 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string) (types.
 	return newJournalEntry, err
 }
 
+//ModifyDescription ... CHANGES A SPECIFIC USER'S DESCRIPTION
+//Requires the target user's docID and the new description
+//Returns an error
 func ModifyDescription(eclient *elastic.Client, userID string, newDescription string) error {
 
 	usr, err := get.GetUserByID(eclient, userID)
@@ -253,15 +265,16 @@ func ModifyDescription(eclient *elastic.Client, userID string, newDescription st
 
 }
 
-func UserCreatesEntry(eclient *elastic.Client, userID string, newContent []rune) error {
+//UserNewEntry ... CREATES AN ORIGINAL POST FROM A USER
+//Requires the user's docID and the content of the post
+//Returns an error
+func UserNewEntry(eclient *elastic.Client, userID string, newContent []rune) error {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = userID
 	createdEntry.Classification = 0
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
-
-	//usr, err := get.GetUserByID(eclient,userID)
 
 	entryID, err := post.IndexEntry(eclient, createdEntry)
 	if err != nil {
@@ -273,13 +286,68 @@ func UserCreatesEntry(eclient *elastic.Client, userID string, newContent []rune)
 
 }
 
-func UserLikePost(eclient *elastic.Client, entryID string, likerID string) error {
-	//AppendLike appends to post
+//UserReplyEntry ... CREATES A REPLY ENTRY FROM A USER
+//Requires the user's docID, the parent entry docID and the content of the post
+//Returns an error
+func UserReplyEntry(eclient *elastic.Client, userID string, entryID string, content []rune) error {
+
+	var newReply types.Entry
+	newReply.PosterID = userID
+	newReply.Content = content
+	newReply.ReferenceEntry = entryID
+	newReply.TimeStamp = time.Now()
+	newReply.Classification = 2
+
+	replyID, err := post.IndexEntry(eclient, newReply)
+	if err != nil {
+		return err
+	}
+
+	err = post.AppendEntryID(eclient, userID, replyID)
+	if err != nil {
+		return err
+	}
+
+	err = post.AppendReplyID(eclient, entryID, replyID)
+	return err
+}
+
+//UserShareEntry ... CREATES A SHARED ENTRY FROM A USER
+//Requires the user's docID, the parent entry docID and the content of the post
+//Returns an error
+func UserShareEntry(eclient *elastic.Client, userID string, entryID string, content []rune) error {
+
+	var newReply types.Entry
+	newReply.PosterID = userID
+	newReply.Content = content
+	newReply.ReferenceEntry = entryID
+	newReply.TimeStamp = time.Now()
+	newReply.Classification = 1
+
+	replyID, err := post.IndexEntry(eclient, newReply)
+	if err != nil {
+		return err
+	}
+
+	err = post.AppendEntryID(eclient, userID, replyID)
+	if err != nil {
+		return err
+	}
+
+	err = post.AppendShareID(eclient, entryID, replyID)
+	return err
+}
+
+//UserLikeEntry ... ALLOWS A USER TO LIKE AN ENTRY
+//Requires the entry's docID, and docID of the person who is liking the entry
+//Returns an error
+func UserLikeEntry(eclient *elastic.Client, entryID string, likerID string) error {
+
 	err := post.AppendLike(eclient, entryID, likerID)
 	if err != nil {
 		return err
 	}
-	//AppendLikedEntryID appends too user
+
 	err = post.AppendLikedEntryID(eclient, likerID, entryID)
 	if err != nil {
 		return err
@@ -288,7 +356,10 @@ func UserLikePost(eclient *elastic.Client, entryID string, likerID string) error
 	return nil
 }
 
-func UserUnlikePost(eclient *elastic.Client, entryID string, likerID string) error {
+//UserUnlikeEntry ... ALLOWS A USER TO UNLIKE AN ENTRY
+//Requires the entry's docID, and docID of the person who is unliking the entry
+//Returns an error
+func UserUnlikeEntry(eclient *elastic.Client, entryID string, likerID string) error {
 
 	//DeleteLike deletes from post
 	err := post.DeleteLike(eclient, entryID, likerID)
@@ -305,24 +376,9 @@ func UserUnlikePost(eclient *elastic.Client, entryID string, likerID string) err
 	return nil
 }
 
-func UserReplies(eclient *elastic.Client, entryID string, content []rune) error {
-	_, err := get.GetEntryByID(eclient, entryID)
-	if err != nil {
-		return err
-	}
-
-	var newReply types.Entry
-	newReply.Content = content
-	newReply.TimeStamp = time.Now()
-	newReply.Classification = 2
-
-	replyID, err := post.IndexEntry(eclient, newReply)
-
-	post.AppendReplyID(eclient, entryID, replyID)
-
-	return nil
-}
-
+//IsLiked ... CHECKS IF AN ENTRY IS ALREADY LIKED BY A USER
+//Requires the entry's docID, the user's docID
+//Returns true if the entry is liked and false if not, and an error
 func IsLiked(eclient *elastic.Client, entryID string, viewerID string) (bool, error) {
 	isLiked := false
 	entry, err := get.GetEntryByID(eclient, entryID)
@@ -338,238 +394,72 @@ func IsLiked(eclient *elastic.Client, entryID string, viewerID string) (bool, er
 	return isLiked, err
 }
 
+//RequestColleague ... SENDS A COLLEGUE REQUEST FROM ONE USER TO ANOTHER
+//NOTE: This function checks if a request has already been sent and if the users are allready colleagues
+//WARNING: needs to be revised
+//Requires the sender's docID and the request receiver's docID
+//Returns an error
 func RequestColleague(eclient *elastic.Client, usrID string, requestedUserID string) error {
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return err
 	}
-	//_, errRequest := get.GetUserByID(eclient,requestedUserID)
 
-	alreadyRequested := false
-	for _, element := range usr.ReceivedCollReq {
+	for _, element := range usr.SentCollReq {
 		if element == usrID {
-			alreadyRequested = true
+			return errors.New("You have already requested this user")
 		}
-		if alreadyRequested {
+
+	}
+
+	for _, element := range usr.Colleagues {
+		if element == requestedUserID {
 			return errors.New("You have already requested this user")
 		}
 	}
 
-	usr.Colleagues = append(usr.Colleagues, requestedUserID)
+	//CONFUSING, REVISE!!!!!!!!!!!!!!!!!!!!1111
+	err = post.AppendCollReq(eclient, usrID, requestedUserID, true)
+	if err != nil {
+		return err
+	}
 
-	return post.ReindexUser(eclient, usrID, usr)
+	err = post.AppendCollReq(eclient, requestedUserID, requestedUserID, false)
+	return err
 }
 
+//ReplyToColleagueRequest ... WARNING NEEDS TO BE FIXED
+//ALLOWS A USER TO REPLY TO A COLLEAGUE REQUEST
+//Requires user's docID, the docID of the user who sent the request, and true if they acept the request/ false if declined
+//Returns an error
 func ReplyToColleagueRequest(eclient *elastic.Client, usrID string, requestedUserID string, reply bool) error {
 	if reply == true {
-		usr, err := get.GetUserByID(eclient, usrID)
-		if err != nil {
-			return err
-		}
-		//usrRequest, _ := get.GetUserByID(eclient, requestedUserID)
-		usr.Colleagues = append(usr.Colleagues, requestedUserID)
 
-		return post.ReindexUser(eclient, usrID, usr)
 	}
 
 	return errors.New("Could not reply to colleague request")
 
 }
 
-func UserNewTextEntry(eclient *elastic.Client, userID string, content []rune) (string, error) {
-
-	var placeholder string
-
-	var newEntry types.Entry
-	newEntry.PosterID = userID
-	newEntry.Content = content
-	newEntry.TimeStamp = time.Now()
-	newEntry.Visible = true
-	newEntry.Classification = 0
-
-	//remove this after append is made!!!!!
-	usr, err := get.GetUserByID(eclient, userID)
-	if err != nil {
-		return placeholder, err
-	}
-	//-----------
-
-	id, err := post.IndexEntry(eclient, newEntry)
-	if err != nil {
-		return id, err
-	}
-
-	//modify this after append is made
-	err = post.UpdateUser(eclient, userID, "EntryIDs", append(usr.EntryIDs, id))
-	return id, err
-
-}
-
-func UserNewReplyEntry(eclient *elastic.Client, userID string, content []rune, hostEntryID string) error {
-
-	var newEntry types.Entry
-	newEntry.PosterID = userID
-	newEntry.Content = content
-	newEntry.TimeStamp = time.Now()
-	newEntry.Visible = true
-	newEntry.Classification = 1
-	newEntry.ReferenceEntry = hostEntryID
-
-	//remove this after append is made!!!!!
-	usr, err := get.GetUserByID(eclient, userID)
-	fmt.Println("LINE 375")
-	if err != nil {
-		return err
-	}
-	entry, err := get.GetEntryByID(eclient, hostEntryID)
-	if err != nil {
-		return err
-	}
-	//-----------
-
-	id, err := post.IndexEntry(eclient, newEntry)
-	fmt.Println("LINE 382")
-	if err != nil {
-		return err
-	}
-
-	//modify this after append is made
-	err = post.UpdateUser(eclient, userID, "EntryIDs", append(usr.EntryIDs, id))
-	fmt.Println("LINE 387")
-	if err != nil {
-		return err
-	}
-	err = post.UpdateEntry(eclient, hostEntryID, "ReplyIDs", append(entry.ReplyIDs, id))
-	fmt.Println("YOU'VE REACHED THE END")
-	return err
-
-}
-
-func UserNewShareEntry(eclient *elastic.Client, userID string, content []rune, hostEntryID string) error {
-
-	var newEntry types.Entry
-	newEntry.PosterID = userID
-	newEntry.Content = content
-	newEntry.TimeStamp = time.Now()
-	newEntry.Visible = true
-	newEntry.Classification = 2
-	newEntry.ReferenceEntry = hostEntryID
-
-	//remove this after append is made!!!!!
-	usr, err := get.GetUserByID(eclient, userID)
-	if err != nil {
-		return err
-	}
-	entry, err := get.GetEntryByID(eclient, hostEntryID)
-	if err != nil {
-		return err
-	}
-	//-----------
-
-	id, err := post.IndexEntry(eclient, newEntry)
-	if err != nil {
-		return err
-	}
-
-	//modify this after append is made
-	err = post.UpdateUser(eclient, userID, "EntryIDs", append(usr.EntryIDs, id))
-	if err != nil {
-		return err
-	}
-	err = post.UpdateEntry(eclient, hostEntryID, "ShareIDs", append(entry.ShareIDs, id))
-	return err
-
-}
-
+//UpdateUserLinks ... REPLACES THE ENTIRETY OF A USER'S LINKS WITH AN UPDATED LIST
+//Requires the target user's docID and an updated array of type Link
+//Returns an error
 func UpdateUserLinks(eclient *elastic.Client, userID string, lynx []types.Link) error {
 	err := post.UpdateUser(eclient, userID, "QuickLinks", lynx)
 	return err
 }
 
+//UpdateUserTags ... REPLACES THE ENTIRETY OF A USER'S TAGS WITH AN UPDATED LIST
+//Requires the target user's docID and an updated array of strings
+//Returns an error
 func UpdateUserTags(eclient *elastic.Client, userID string, tags []string) error {
 	err := post.UpdateUser(eclient, userID, "Tags", tags)
 	return err
 }
 
-func ToggleUserFollow(eclient *elastic.Client, followerID string, entryID string) error {
-	//FIX THIS INEFFICENT BULLSHIT
-	//JONDKJDBSKJLASLND;LBJGAD
-
-	follower, err := get.GetUserByID(eclient, followerID)
-	if err != nil {
-		return err
-	}
-	followed, err := get.GetUserByID(eclient, entryID)
-	if err != nil {
-		return err
-	}
-
-	for idx, element := range follower.Following {
-		if element == entryID {
-			followErr := post.DeleteFollow(eclient, entryID, true, idx)
-			if followErr != nil {
-				return followErr
-			}
-
-			for idx2, element := range followed.Followers {
-				if element == followerID {
-					followingErr := post.DeleteFollow(eclient, followerID, false, idx2)
-					if followingErr != nil {
-						return followingErr
-					}
-				}
-			}
-			return nil
-		}
-	}
-
-	followErr := post.AppendFollow(eclient, followerID, entryID, true)
-	if followErr != nil {
-		return followErr
-	}
-	followingErr := post.AppendFollow(eclient, entryID, followerID, false)
-	if followingErr != nil {
-		return followingErr
-	}
-
-	return nil
-}
-
-/*
-func ToggleUserLike (eclient *elastic.Client, likerID string, entryID string) error {
-	//FIX THIS INEFFICENT BULLSHIT
-	//JONDKJDBSKJLASLND;LBJGAD
-	//WARNING THIS FUNCTION IS IN SHAMBLES
-	//REPAIR BEFORE REMOVINGE WARNING
-	//DO NOT USE
-	liker, err := get.GetUserByID(eclient, likerID)
-	if (err != nil) {return err}
-
-	for idx,element := range liker.LikedEntryIDs{
-		if (element == entryID){
-			followErr := post.DeleteFollow(eclient, likerID, entryID, true, idx)
-			if (followErr!=nil){return followErr}
-			liked, err := get.GetUserByID(eclient, entryID)
-			if (err!=nil){return err}
-			for idx2, element := range liked.LikedEntryIDs{
-				if (element == likerID){
-				followingErr := post.DeleteFollow(eclient,entryID,likerID,false, idx2)
-				if (followingErr!=nil){return followingErr}
-				}
-			}
-			return nil
-		}
-	}
-
-	followErr := post.AppendFollow(eclient, likerID, entryID, true)
-	if (followErr!=nil){return followErr}
-	followingErr := post.AppendFollow(eclient,entryID,likerID,false)
-	if (followingErr!=nil){return followingErr}
-
-	return nil
-}
-*/
-
+//UserFollow ... ALLOWS A USER TO FOLLOW SOMEONE ELSE
+//Requires the follower's docID and the followed docID
+//Returns an error
 func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
 	//true = append to following
 	followErr := post.AppendFollow(eclient, usrID, followID, true)
@@ -585,6 +475,9 @@ func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
 	return nil
 }
 
+//UserUnfollow ... ALLOWS A USER TO UNFOLLOW SOMEONE ELSE
+//Requires the follower's docID and the followed docID
+//Returns an error
 func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error {
 	user, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
@@ -614,6 +507,9 @@ func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error 
 	return nil
 }
 
+//IsFollowed ... CHECKS IF A USER IS FOLLWING SOMEONE ELSE
+//Requires the follower's docID and the the potential followed docID
+//Returns an error
 func IsFollowed(eclient *elastic.Client, usrID string, viewerID string) (bool, error) {
 	isFollowed := false
 	user, err := get.GetUserByID(eclient, usrID)
@@ -629,6 +525,9 @@ func IsFollowed(eclient *elastic.Client, usrID string, viewerID string) (bool, e
 	return isFollowed, err
 }
 
+//NumFollow ... FINDS THE NUMBER OF PEOPLE FOLLOWED BY/FOLLOWING SOMEONE
+//Requires the user's docID, and true if you want num people person is following/ false if you want number of followers
+//Returns an error
 func NumFollow(eclient *elastic.Client, usrID string, whichOne bool) (int, error) {
 
 	usr, err := get.GetUserByID(eclient, usrID)
@@ -642,20 +541,3 @@ func NumFollow(eclient *elastic.Client, usrID string, whichOne bool) (int, error
 	return len(usr.Followers), nil
 
 }
-
-/*func UserComment(eclient *elastic.Client, usrID string, entryID string,  newContent string) error {
-	var newEntry types.Entry
-	newEntry.PosterID = usrID
-	newEntry.Classification = 1
-	newEntry.ReferenceEntry = entryID
-	newEntry.Visible = true
-	newEntry.Content = []rune(newContent)
-	newEntry.TimeStamp = time.Now()
-	hostEntry, hostErr := get.GetEntryByID(eclient, entryID)
-	if (hostErr != nil) {return hostErr}
-	err := post.UpdateEntry(eclient, entryID, "ReplyIDs", append(hostEntry.ReplyIDs, usrID))
-	if (err != nil) {return err}
-	_,err = post.IndexEntry(eclient, newEntry)
-
-	return err
-}*/
