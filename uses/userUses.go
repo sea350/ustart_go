@@ -576,20 +576,3 @@ func NumFollow(eclient *elastic.Client, usrID string, whichOne bool) (int, error
 	return len(usr.Followers), nil
 
 }
-
-/*func UserComment(eclient *elastic.Client, usrID string, entryID string,  newContent string) error {
-	var newEntry types.Entry
-	newEntry.PosterID = usrID
-	newEntry.Classification = 1
-	newEntry.ReferenceEntry = entryID
-	newEntry.Visible = true
-	newEntry.Content = []rune(newContent)
-	newEntry.TimeStamp = time.Now()
-	hostEntry, hostErr := get.GetEntryByID(eclient, entryID)
-	if (hostErr != nil) {return hostErr}
-	err := post.UpdateEntry(eclient, entryID, "ReplyIDs", append(hostEntry.ReplyIDs, usrID))
-	if (err != nil) {return err}
-	_,err = post.IndexEntry(eclient, newEntry)
-
-	return err
-}*/
