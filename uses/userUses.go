@@ -265,10 +265,10 @@ func ModifyDescription(eclient *elastic.Client, userID string, newDescription st
 
 }
 
-//UserCreatesEntry ... CREATES AN ORIGINAL POST FROM A USER
+//UserNewEntry ... CREATES AN ORIGINAL POST FROM A USER
 //Requires the user's docID and the content of the post
 //Returns an error
-func UserCreatesEntry(eclient *elastic.Client, userID string, newContent []rune) error {
+func UserNewEntry(eclient *elastic.Client, userID string, newContent []rune) error {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = userID
 	createdEntry.Classification = 0
@@ -286,14 +286,15 @@ func UserCreatesEntry(eclient *elastic.Client, userID string, newContent []rune)
 
 }
 
-//UserCreatesReply ... CREATES A REPLY ENTRY FROM A USER
+//UserReplyEntry ... CREATES A REPLY ENTRY FROM A USER
 //Requires the user's docID, the parent entry docID and the content of the post
 //Returns an error
-func UserCreatesReply(eclient *elastic.Client, userID string, entryID string, content []rune) error {
+func UserReplyEntry(eclient *elastic.Client, userID string, entryID string, content []rune) error {
 
 	var newReply types.Entry
 	newReply.PosterID = userID
 	newReply.Content = content
+	newReply.ReferenceEntry = entryID
 	newReply.TimeStamp = time.Now()
 	newReply.Classification = 2
 
@@ -308,6 +309,32 @@ func UserCreatesReply(eclient *elastic.Client, userID string, entryID string, co
 	}
 
 	err = post.AppendReplyID(eclient, entryID, replyID)
+	return err
+}
+
+//UserShareEntry ... CREATES A SHARED ENTRY FROM A USER
+//Requires the user's docID, the parent entry docID and the content of the post
+//Returns an error
+func UserShareEntry(eclient *elastic.Client, userID string, entryID string, content []rune) error {
+
+	var newReply types.Entry
+	newReply.PosterID = userID
+	newReply.Content = content
+	newReply.ReferenceEntry = entryID
+	newReply.TimeStamp = time.Now()
+	newReply.Classification = 1
+
+	replyID, err := post.IndexEntry(eclient, newReply)
+	if err != nil {
+		return err
+	}
+
+	err = post.AppendEntryID(eclient, userID, replyID)
+	if err != nil {
+		return err
+	}
+
+	err = post.AppendShareID(eclient, entryID, replyID)
 	return err
 }
 
@@ -367,234 +394,6 @@ func IsLiked(eclient *elastic.Client, entryID string, viewerID string) (bool, er
 	return isLiked, err
 }
 
-//RequestColleague ... SENDS A COLLEGUE REQUEST FROM ONE USER TO ANOTHER
-//NOTE: This function checks if a request has already been sent and if the users are allready colleagues
-//Requires the sender's docID and the request receiver's docID
-//Returns an error
-func RequestColleague(eclient *elastic.Client, usrID string, requestedUserID string) error {
-	usr, err := get.GetUserByID(eclient, usrID)
-	if err != nil {
-		return err
-	}
-
-	for _, element := range usr.SentCollReq {
-		if element == usrID {
-			return errors.New("You have already requested this user")
-		}
-
-	}
-
-	for _, element := range usr.Colleagues {
-		if element == requestedUserID {
-			return errors.New("You have already requested this user")
-		}
-	}
-
-	//CONFUSING, REVISE!!!!!!!!!!!!!!!!!!!!1111
-	err = post.AppendCollReq(eclient, usrID, requestedUserID, true)
-	if err != nil {
-		return err
-	}
-
-	err = post.AppendCollReq(eclient, requestedUserID, requestedUserID, false)
-	return err
-}
-
-//ModifyDescription ... changes a specific user's description
-//Requires the target user's docID and the new description
-//Returns an error
-func ReplyToColleagueRequest(eclient *elastic.Client, usrID string, requestedUserID string, reply bool) error {
-	if reply == true {
-		usr, err := get.GetUserByID(eclient, usrID)
-		if err != nil {
-			return err
-		}
-		//usrRequest, _ := get.GetUserByID(eclient, requestedUserID)
-		usr.Colleagues = append(usr.Colleagues, requestedUserID)
-
-		return post.ReindexUser(eclient, usrID, usr)
-	}
-
-	return errors.New("Could not reply to colleague request")
-
-}
-
-//ModifyDescription ... changes a specific user's description
-//Requires the target user's docID and the new description
-//Returns an error
-func UserNewTextEntry(eclient *elastic.Client, userID string, content []rune) (string, error) {
-
-	var placeholder string
-
-	var newEntry types.Entry
-	newEntry.PosterID = userID
-	newEntry.Content = content
-	newEntry.TimeStamp = time.Now()
-	newEntry.Visible = true
-	newEntry.Classification = 0
-
-	//remove this after append is made!!!!!
-	usr, err := get.GetUserByID(eclient, userID)
-	if err != nil {
-		return placeholder, err
-	}
-	//-----------
-
-	id, err := post.IndexEntry(eclient, newEntry)
-	if err != nil {
-		return id, err
-	}
-
-	//modify this after append is made
-	err = post.UpdateUser(eclient, userID, "EntryIDs", append(usr.EntryIDs, id))
-	return id, err
-
-}
-
-//ModifyDescription ... changes a specific user's description
-//Requires the target user's docID and the new description
-//Returns an error
-func UserNewReplyEntry(eclient *elastic.Client, userID string, content []rune, hostEntryID string) error {
-
-	var newEntry types.Entry
-	newEntry.PosterID = userID
-	newEntry.Content = content
-	newEntry.TimeStamp = time.Now()
-	newEntry.Visible = true
-	newEntry.Classification = 1
-	newEntry.ReferenceEntry = hostEntryID
-
-	//remove this after append is made!!!!!
-	usr, err := get.GetUserByID(eclient, userID)
-	fmt.Println("LINE 375")
-	if err != nil {
-		return err
-	}
-	entry, err := get.GetEntryByID(eclient, hostEntryID)
-	if err != nil {
-		return err
-	}
-	//-----------
-
-	id, err := post.IndexEntry(eclient, newEntry)
-	fmt.Println("LINE 382")
-	if err != nil {
-		return err
-	}
-
-	//modify this after append is made
-	err = post.UpdateUser(eclient, userID, "EntryIDs", append(usr.EntryIDs, id))
-	fmt.Println("LINE 387")
-	if err != nil {
-		return err
-	}
-	err = post.UpdateEntry(eclient, hostEntryID, "ReplyIDs", append(entry.ReplyIDs, id))
-	fmt.Println("YOU'VE REACHED THE END")
-	return err
-}
-
-//ModifyDescription ... changes a specific user's description
-//Requires the target user's docID and the new description
-//Returns an error
-func UserNewShareEntry(eclient *elastic.Client, userID string, content []rune, hostEntryID string) error {
-
-	var newEntry types.Entry
-	newEntry.PosterID = userID
-	newEntry.Content = content
-	newEntry.TimeStamp = time.Now()
-	newEntry.Visible = true
-	newEntry.Classification = 2
-	newEntry.ReferenceEntry = hostEntryID
-
-	//remove this after append is made!!!!!
-	usr, err := get.GetUserByID(eclient, userID)
-	if err != nil {
-		return err
-	}
-	entry, err := get.GetEntryByID(eclient, hostEntryID)
-	if err != nil {
-		return err
-	}
-	//-----------
-
-	id, err := post.IndexEntry(eclient, newEntry)
-	if err != nil {
-		return err
-	}
-
-	//modify this after append is made
-	err = post.UpdateUser(eclient, userID, "EntryIDs", append(usr.EntryIDs, id))
-	if err != nil {
-		return err
-	}
-	err = post.UpdateEntry(eclient, hostEntryID, "ShareIDs", append(entry.ShareIDs, id))
-	return err
-
-}
-
-//ModifyDescription ... changes a specific user's description
-//Requires the target user's docID and the new description
-//Returns an error
-func UpdateUserLinks(eclient *elastic.Client, userID string, lynx []types.Link) error {
-	err := post.UpdateUser(eclient, userID, "QuickLinks", lynx)
-	return err
-}
-
-//ModifyDescription ... changes a specific user's description
-//Requires the target user's docID and the new description
-//Returns an error
-func UpdateUserTags(eclient *elastic.Client, userID string, tags []string) error {
-	err := post.UpdateUser(eclient, userID, "Tags", tags)
-	return err
-}
-
-//ModifyDescription ... changes a specific user's description
-//Requires the target user's docID and the new description
-//Returns an error
-func ToggleUserFollow(eclient *elastic.Client, followerID string, entryID string) error {
-	//FIX THIS INEFFICENT BULLSHIT
-	//JONDKJDBSKJLASLND;LBJGAD
-
-	follower, err := get.GetUserByID(eclient, followerID)
-	if err != nil {
-		return err
-	}
-	followed, err := get.GetUserByID(eclient, entryID)
-	if err != nil {
-		return err
-	}
-
-	for idx, element := range follower.Following {
-		if element == entryID {
-			followErr := post.DeleteFollow(eclient, entryID, true, idx)
-			if followErr != nil {
-				return followErr
-			}
-
-			for idx2, element := range followed.Followers {
-				if element == followerID {
-					followingErr := post.DeleteFollow(eclient, followerID, false, idx2)
-					if followingErr != nil {
-						return followingErr
-					}
-				}
-			}
-			return nil
-		}
-	}
-
-	followErr := post.AppendFollow(eclient, followerID, entryID, true)
-	if followErr != nil {
-		return followErr
-	}
-	followingErr := post.AppendFollow(eclient, entryID, followerID, false)
-	if followingErr != nil {
-		return followingErr
-	}
-
-	return nil
-}
-
 /*
 func ToggleUserLike (eclient *elastic.Client, likerID string, entryID string) error {
 	//FIX THIS INEFFICENT BULLSHIT
@@ -630,6 +429,72 @@ func ToggleUserLike (eclient *elastic.Client, likerID string, entryID string) er
 }
 */
 
+//RequestColleague ... SENDS A COLLEGUE REQUEST FROM ONE USER TO ANOTHER
+//NOTE: This function checks if a request has already been sent and if the users are allready colleagues
+//WARNING: needs to be revised
+//Requires the sender's docID and the request receiver's docID
+//Returns an error
+func RequestColleague(eclient *elastic.Client, usrID string, requestedUserID string) error {
+	usr, err := get.GetUserByID(eclient, usrID)
+	if err != nil {
+		return err
+	}
+
+	for _, element := range usr.SentCollReq {
+		if element == usrID {
+			return errors.New("You have already requested this user")
+		}
+
+	}
+
+	for _, element := range usr.Colleagues {
+		if element == requestedUserID {
+			return errors.New("You have already requested this user")
+		}
+	}
+
+	//CONFUSING, REVISE!!!!!!!!!!!!!!!!!!!!1111
+	err = post.AppendCollReq(eclient, usrID, requestedUserID, true)
+	if err != nil {
+		return err
+	}
+
+	err = post.AppendCollReq(eclient, requestedUserID, requestedUserID, false)
+	return err
+}
+
+//ReplyToColleagueRequest ... WARNING NEEDS TO BE FIXED
+//ALLOWS A USER TO REPLY TO A COLLEAGUE REQUEST
+//Requires user's docID, the docID of the user who sent the request, and true if they acept the request/ false if declined
+//Returns an error
+func ReplyToColleagueRequest(eclient *elastic.Client, usrID string, requestedUserID string, reply bool) error {
+	if reply == true {
+
+	}
+
+	return errors.New("Could not reply to colleague request")
+
+}
+
+//UpdateUserLinks ... REPLACES THE ENTIRETY OF A USER'S LINKS WITH AN UPDATED LIST
+//Requires the target user's docID and an updated array of type Link
+//Returns an error
+func UpdateUserLinks(eclient *elastic.Client, userID string, lynx []types.Link) error {
+	err := post.UpdateUser(eclient, userID, "QuickLinks", lynx)
+	return err
+}
+
+//UpdateUserTags ... REPLACES THE ENTIRETY OF A USER'S TAGS WITH AN UPDATED LIST
+//Requires the target user's docID and an updated array of strings
+//Returns an error
+func UpdateUserTags(eclient *elastic.Client, userID string, tags []string) error {
+	err := post.UpdateUser(eclient, userID, "Tags", tags)
+	return err
+}
+
+//UserFollow ... ALLOWS A USER TO FOLLOW SOMEONE ELSE
+//Requires the follower's docID and the followed docID
+//Returns an error
 func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
 	//true = append to following
 	followErr := post.AppendFollow(eclient, usrID, followID, true)
@@ -645,6 +510,9 @@ func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
 	return nil
 }
 
+//UserUnfollow ... ALLOWS A USER TO UNFOLLOW SOMEONE ELSE
+//Requires the follower's docID and the followed docID
+//Returns an error
 func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error {
 	user, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
@@ -674,6 +542,9 @@ func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error 
 	return nil
 }
 
+//IsFollowed ... CHECKS IF A USER IS FOLLWING SOMEONE ELSE
+//Requires the follower's docID and the the potential followed docID
+//Returns an error
 func IsFollowed(eclient *elastic.Client, usrID string, viewerID string) (bool, error) {
 	isFollowed := false
 	user, err := get.GetUserByID(eclient, usrID)
@@ -689,6 +560,9 @@ func IsFollowed(eclient *elastic.Client, usrID string, viewerID string) (bool, e
 	return isFollowed, err
 }
 
+//NumFollow ... FINDS THE NUMBER OF PEOPLE FOLLOWED BY/FOLLOWING SOMEONE
+//Requires the user's docID, and true if you want num people person is following/ false if you want number of followers
+//Returns an error
 func NumFollow(eclient *elastic.Client, usrID string, whichOne bool) (int, error) {
 
 	usr, err := get.GetUserByID(eclient, usrID)
