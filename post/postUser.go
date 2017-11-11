@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"sync"
 
 	get "github.com/sea350/ustart_go/get"
 	types "github.com/sea350/ustart_go/types"
@@ -32,6 +33,15 @@ const mapping = `
         }
     }
 }`
+
+var procLock sync.Mutex
+var likeLock sync.Mutex
+var colleagueLock sync.Mutex
+var followLock sync.Mutex
+var projectLock sync.Mutex
+var blockLock sync.Mutex
+var tagLock sync.Mutex
+var entryLock sync.Mutex
 
 /*TODO: Make this function much better*/
 
@@ -133,19 +143,16 @@ func UpdateUser(eclient *elastic.Client, userID string, field string, newContent
 	return err
 }
 
-func AppendToUser(eclient *elastic.Client, usrID string, field string, data interface{}) error {
-	return nil
-} //RETURN HERE
-func RemoveFromUser(eclient *elastic.Client, usrID string, field string, idx int, data interface{}) error {
-	return nil
-}
-
 //AppendCollReq ...
 //  Appends to either sent or received collegue, based on whichOne
 //  True = sent; False = received.
 func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whichOne bool) error {
 
 	ctx := context.Background()
+
+	colleagueLock.Lock()
+	defer colleagueLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -180,6 +187,10 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 //  True = sent; false = received
 func DeleteCollReq(eclient *elastic.Client, usrID string, whichOne bool, idx int) error {
 	ctx := context.Background()
+
+	followLock.Lock()
+	defer followLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -215,6 +226,10 @@ func DeleteCollReq(eclient *elastic.Client, usrID string, whichOne bool, idx int
 func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string) error {
 
 	ctx := context.Background()
+
+	colleagueLock.Lock()
+	defer colleagueLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -238,8 +253,9 @@ func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string) 
 //takes in eclient, user ID, and collegue ID
 func DeleteColleague(eclient *elastic.Client, usrID string, deleteID string) error {
 	ctx := context.Background()
-	procLock.Lock()
-	defer procLock.Unlock()
+
+	colleagueLock.Lock()
+	defer colleagueLock.Unlock()
 
 	usr, err := get.GetUserByID(eclient, usrID)
 	//idx, err := universal.FindIndex(usr.Colleagues, deleteID) UNIVERSAL PKG
@@ -320,6 +336,10 @@ func AppendMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, 
 func DeleteMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, whichOne bool, idx int) error {
 
 	ctx := context.Background()
+
+	procLock.Lock()
+	defer procLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -356,8 +376,9 @@ func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichO
 
 	ctx := context.Background()
 
-	procLock.Lock()
-	defer procLock.Unlock()
+	followLock.Lock()
+	defer followLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -394,8 +415,10 @@ func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichO
 func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int) error {
 
 	ctx := context.Background()
-	procLock.Lock()
-	defer procLock.Unlock()
+
+	followLock.Lock()
+	defer followLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -431,6 +454,10 @@ func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int)
 //true = append to following, false = append to followers
 func AppendProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool) error {
 	ctx := context.Background()
+
+	projectLock.Lock()
+	defer procLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -461,20 +488,31 @@ func AppendProjReq(eclient *elastic.Client, usrID string, projID string, whichOn
 	return err
 }
 
-//DeleteProjReq ... whichOne: true = following
-//whichOne: false = followers
-//followID does nothing
-func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool, idx int) error {
+//DeleteProjReq ... whichOne: true = sent
+//whichOne: false = received
+func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool) error {
 	ctx := context.Background()
 
-	procLock.Lock()
-	defer procLock.Unlock()
+	projectLock.Lock()
+	defer projectLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
 	}
 
 	if whichOne == true {
+		//universal.FindIndex(usr.SentProjReq, projID)
+		//temp solution
+		idx := 0
+		for i := range usr.SentProjReq {
+			if usr.SentProjReq[i] == projID {
+				idx = i
+				break
+			}
+		}
+		//end of temp solution
+
 		usr.SentProjReq = append(usr.SentProjReq[:idx], usr.SentProjReq[idx+1:]...)
 
 		_, err = eclient.Update().
@@ -486,6 +524,16 @@ func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOn
 
 		return err
 	}
+	//universal.FindIndex(usr.ReceivedProjReq, projID)
+	//temp solution
+	idx := 0
+	for i := range usr.ReceivedProjReq {
+		if usr.ReceivedProjReq[i] == projID {
+			idx = i
+			break
+		}
+	}
+	//end of temp solution
 	usr.ReceivedProjReq = append(usr.ReceivedProjReq[:idx], usr.ReceivedProjReq[idx+1:]...)
 
 	_, err = eclient.Update().
@@ -498,8 +546,14 @@ func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOn
 	return err
 }
 
+//AppendLikedEntryID ... appends to either sent or received project request arrays within user
+//takes in eclient, user ID, the project ID, and a bool
+//true = append to following, false = append to followers
 func AppendLikedEntryID(eclient *elastic.Client, usrID string, entryID string) error {
 	ctx := context.Background()
+
+	likeLock.Lock()
+	defer likeLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -519,8 +573,14 @@ func AppendLikedEntryID(eclient *elastic.Client, usrID string, entryID string) e
 
 }
 
+//DeleteLikedEntryID ... whichOne: true = following
+//whichOne: false = followers
+//followID does nothing
 func DeleteLikedEntryID(eclient *elastic.Client, usrID string, likerID string) error {
 	ctx := context.Background()
+
+	likeLock.Lock()
+	defer likeLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -545,8 +605,14 @@ func DeleteLikedEntryID(eclient *elastic.Client, usrID string, likerID string) e
 
 }
 
+//AppendProject ... appends new project to user
+//takes in eclient, user ID, the project ID, and a bool
 func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo) error {
 	ctx := context.Background()
+
+	projectLock.Lock()
+	defer projectLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -568,6 +634,9 @@ func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo
 
 func AppendLink(eclient *elastic.Client, usrID string, link types.Link) error {
 	ctx := context.Background()
+
+	procLock.Lock()
+	defer procLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -589,6 +658,9 @@ func AppendLink(eclient *elastic.Client, usrID string, link types.Link) error {
 
 func DeleteLink(eclient *elastic.Client, usrID string, link types.Link, idx int) error {
 	ctx := context.Background()
+
+	procLock.Lock()
+	defer procLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -607,8 +679,12 @@ func DeleteLink(eclient *elastic.Client, usrID string, link types.Link, idx int)
 
 }
 
+//AppendTag ... appends a new tag
 func AppendTag(eclient *elastic.Client, usrID string, tag string) error {
 	ctx := context.Background()
+
+	tagLock.Lock()
+	defer tagLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -628,8 +704,12 @@ func AppendTag(eclient *elastic.Client, usrID string, tag string) error {
 
 }
 
+//DeleteTag ... deletes a tag
 func DeleteTag(eclient *elastic.Client, usrID string, tag string, idx int) error {
 	ctx := context.Background()
+
+	tagLock.Lock()
+	defer tagLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -648,8 +728,12 @@ func DeleteTag(eclient *elastic.Client, usrID string, tag string, idx int) error
 
 }
 
+//AppendBlock ... appends to the blocked users array
 func AppendBlock(eclient *elastic.Client, usrID string, blockID string, whichOne bool) error {
 	ctx := context.Background()
+
+	blockLock.Lock()
+	defer blockLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -682,14 +766,29 @@ func AppendBlock(eclient *elastic.Client, usrID string, blockID string, whichOne
 
 }
 
-func DeleteBlock(eclient *elastic.Client, usrID string, blockID string, idx int, whichOne bool) error {
+//DeleteBlock ... unblocks a user by deleting from the blocked array
+func DeleteBlock(eclient *elastic.Client, usrID string, blockID string, whichOne bool) error {
 	ctx := context.Background()
+
+	blockLock.Lock()
+	defer blockLock.Unlock()
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
 	}
 
 	if whichOne == true {
+		//idx, err := universal.FindIndex(usr.BlockedUsers, blockID)
+		//temp solution
+		idx := 0
+		for i := range usr.BlockedUsers {
+			if usr.BlockedUsers[i] == blockID {
+				idx = i
+				break
+			}
+		}
+		//temp solution end
+
 		usr.BlockedUsers = append(usr.BlockedUsers[:idx], usr.BlockedUsers[idx+1:]...)
 
 		_, err = eclient.Update().
@@ -701,6 +800,16 @@ func DeleteBlock(eclient *elastic.Client, usrID string, blockID string, idx int,
 
 		return err
 	} else {
+		//idx, err := universal.FindIndex(usr.BlockedBy, blockID)
+		//temp solution
+		idx := 0
+		for i := range usr.BlockedBy {
+			if usr.BlockedBy[i] == blockID {
+				idx = i
+				break
+			}
+		}
+		//temp solution end
 		usr.BlockedBy = append(usr.BlockedBy[:idx], usr.BlockedBy[idx+1:]...)
 
 		_, err = eclient.Update().
@@ -716,8 +825,13 @@ func DeleteBlock(eclient *elastic.Client, usrID string, blockID string, idx int,
 
 }
 
+//AppendEntryID ... appends a created entry ID to user
 func AppendEntryID(eclient *elastic.Client, usrID string, entryID string) error {
 	ctx := context.Background()
+
+	entryLock.Lock()
+	defer entryLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
@@ -737,6 +851,7 @@ func AppendEntryID(eclient *elastic.Client, usrID string, entryID string) error 
 
 }
 
+//DeleteEntryID ...deletes entry ID from user array
 func DeleteEntryID(eclient *elastic.Client, usrID string, entryID string, idx int) error {
 	ctx := context.Background()
 	usr, err := get.GetUserByID(eclient, usrID)
