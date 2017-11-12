@@ -33,7 +33,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	var addProj types.ProjectInfo
 	addProj.ProjectID = id
 	addProj.Visible = true
-	err = post.AppendToUser(eclient, makerID, "Projects", addProj)
+	err = post.AppendProject(eclient, makerID, addProj)
 
 	return err
 
@@ -80,6 +80,8 @@ func ManageMembers(eclient *elastic.Client, projectID string, newMemberConfig []
 	return err
 }
 
+//NEEDS TO BE REPAIRED
+/*
 func RemoveMember(eclient *elastic.Client, projectID string, userID string) error {
 	usr, err := get.GetUserByID(eclient, userID)
 	if err != nil {
@@ -90,7 +92,8 @@ func RemoveMember(eclient *elastic.Client, projectID string, userID string) erro
 		return projErr
 	}
 
-	var usrIdx, projIdx int
+	var projIdx int
+	var usrIdx int
 	var infoProj types.ProjectInfo
 	for idx := range usr.Projects {
 		if usr.Projects[idx].ProjectID == projectID {
@@ -120,9 +123,10 @@ func RemoveMember(eclient *elastic.Client, projectID string, userID string) erro
 	return nil
 
 }
+*/
 
 func RequestMember(eclient *elastic.Client, projectID string, userID string) error {
-	err := post.AppendToUser(eclient, userID, "ReceivedProjReq", projectID)
+	err := post.AppendProjReq(eclient, userID, projectID, false)
 	if err != nil {
 		return err
 	}
