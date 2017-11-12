@@ -267,8 +267,10 @@ func ModifyDescription(eclient *elastic.Client, userID string, newDescription st
 
 //UserNewEntry ... CREATES AN ORIGINAL POST FROM A USER
 //Requires the user's docID and the content of the post
-//Returns an error
-func UserNewEntry(eclient *elastic.Client, userID string, newContent []rune) error {
+//Returns a the new entry's docID, and an error
+func UserNewEntry(eclient *elastic.Client, userID string, newContent []rune) (string, error) {
+	var entryID string
+
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = userID
 	createdEntry.Classification = 0
@@ -278,11 +280,11 @@ func UserNewEntry(eclient *elastic.Client, userID string, newContent []rune) err
 
 	entryID, err := post.IndexEntry(eclient, createdEntry)
 	if err != nil {
-		return err
+		return entryID, err
 	}
 	err = post.AppendEntryID(eclient, userID, entryID)
 
-	return err
+	return entryID, err
 
 }
 
