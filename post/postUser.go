@@ -185,19 +185,30 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 //DeleteCollReq ...
 //  Deletes from sent or received collegue request arrays depending on whichOne
 //  True = sent; false = received
-func DeleteCollReq(eclient *elastic.Client, usrID string, whichOne bool, idx int) error {
+func DeleteCollReq(eclient *elastic.Client, usrID string, reqID string, whichOne bool) error {
 	ctx := context.Background()
 
 	followLock.Lock()
 	defer followLock.Unlock()
 
 	usr, err := get.GetUserByID(eclient, usrID)
+
 	if err != nil {
 		return errors.New("User does not exist")
 	}
 
 	if whichOne == true {
-		usr.SentCollReq = append(usr.SentCollReq[:idx], usr.SentCollReq[idx+1:]...)
+		index := -1
+		for i := range usr.SentCollReq {
+			if usr.SentCollReq[i] == reqID {
+				index = i
+			}
+		}
+		if index < 0 {
+			return errors.New("Index not found")
+		}
+
+		usr.SentCollReq = append(usr.SentCollReq[:index], usr.SentCollReq[index+1:]...)
 
 		_, err = eclient.Update().
 			Index(esUserIndex).
@@ -209,7 +220,16 @@ func DeleteCollReq(eclient *elastic.Client, usrID string, whichOne bool, idx int
 		return err
 	}
 
-	usr.ReceivedCollReq = append(usr.ReceivedCollReq[:idx], usr.ReceivedCollReq[idx+1:]...)
+	index := -1
+	for i := range usr.ReceivedCollReq {
+		if usr.SentCollReq[i] == reqID {
+			index = i
+		}
+	}
+	if index < 0 {
+		return errors.New("Index not found")
+	}
+	usr.ReceivedCollReq = append(usr.ReceivedCollReq[:index], usr.ReceivedCollReq[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(esUserIndex).
@@ -261,14 +281,14 @@ func DeleteColleague(eclient *elastic.Client, usrID string, deleteID string) err
 	//idx, err := universal.FindIndex(usr.Colleagues, deleteID) UNIVERSAL PKG
 	//temp for-loop:
 
-	idx := -1
+	index := -1
 	for i := range usr.Colleagues {
 		if usr.Colleagues[i] == deleteID {
-			idx = i
+			index = i
 		}
 	}
 
-	if idx < 0 {
+	if index < 0 {
 		return errors.New("Index non-existent")
 	}
 	//temp solution stops here
@@ -333,7 +353,7 @@ func AppendMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, 
 //DeleteMajorMinor ... appends to either sent or received collegue request arrays within user
 //takes in eclient, user ID, the major or minor, an index of the element within the array, and a bool
 //true = major, false = minor
-func DeleteMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, whichOne bool, idx int) error {
+func DeleteMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, whichOne bool) error {
 
 	ctx := context.Background()
 
@@ -346,7 +366,16 @@ func DeleteMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, 
 	}
 
 	if whichOne == true {
-		usr.Majors = append(usr.Majors[:idx], usr.Majors[idx+1:]...)
+		index := -1
+		for i := range usr.Majors {
+			if usr.Majors[i] == majorMinor {
+				index = i
+			}
+		}
+		if index < 0 {
+			return errors.New("Index not found")
+		}
+		usr.Majors = append(usr.Majors[:index], usr.Majors[index+1:]...)
 
 		_, err = eclient.Update().
 			Index(esUserIndex).
@@ -357,7 +386,16 @@ func DeleteMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, 
 
 		return err
 	}
-	usr.Minors = append(usr.Minors[:idx], usr.Minors[idx+1:]...)
+	index := -1
+	for i := range usr.Minors {
+		if usr.Minors[i] == majorMinor {
+			index = i
+		}
+	}
+	if index < 0 {
+		return errors.New("Index not found")
+	}
+	usr.Minors = append(usr.Minors[:index], usr.Minors[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(esUserIndex).
@@ -412,7 +450,7 @@ func AppendFollow(eclient *elastic.Client, usrID string, followID string, whichO
 //DeleteFollow ... whichOne: true = following
 //whichOne: false = followers
 //followID does nothing
-func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int) error {
+func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichOne bool) error {
 
 	ctx := context.Background()
 
@@ -425,7 +463,16 @@ func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int)
 	}
 
 	if whichOne == true {
-		usr.Following = append(usr.Following[:idx], usr.Following[idx+1:]...)
+		index := -1
+		for i := range usr.Following {
+			if usr.Following[i] == followID {
+				index = i
+			}
+		}
+		if index < 0 {
+			return errors.New("Index not found")
+		}
+		usr.Following = append(usr.Following[:index], usr.Following[index+1:]...)
 
 		_, err = eclient.Update().
 			Index(esUserIndex).
@@ -437,7 +484,16 @@ func DeleteFollow(eclient *elastic.Client, usrID string, whichOne bool, idx int)
 		return err
 
 	}
-	usr.Followers = append(usr.Followers[:idx], usr.Followers[idx+1:]...)
+	index := -1
+	for i := range usr.Followers {
+		if usr.Followers[i] == reqID {
+			index = i
+		}
+	}
+	if index < 0 {
+		return errors.New("Index not found")
+	}
+	usr.Followers = append(usr.Followers[:index], usr.Followers[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(esUserIndex).
@@ -504,16 +560,20 @@ func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOn
 	if whichOne == true {
 		//universal.FindIndex(usr.SentProjReq, projID)
 		//temp solution
-		idx := 0
+		index := -1
 		for i := range usr.SentProjReq {
 			if usr.SentProjReq[i] == projID {
-				idx = i
+				index = i
 				break
 			}
 		}
+
+		if index < 0 {
+			return errors.New("index does not exist")
+		}
 		//end of temp solution
 
-		usr.SentProjReq = append(usr.SentProjReq[:idx], usr.SentProjReq[idx+1:]...)
+		usr.SentProjReq = append(usr.SentProjReq[:index], usr.SentProjReq[index+1:]...)
 
 		_, err = eclient.Update().
 			Index(esUserIndex).
@@ -526,15 +586,18 @@ func DeleteProjReq(eclient *elastic.Client, usrID string, projID string, whichOn
 	}
 	//universal.FindIndex(usr.ReceivedProjReq, projID)
 	//temp solution
-	idx := 0
+	index := 0
 	for i := range usr.ReceivedProjReq {
 		if usr.ReceivedProjReq[i] == projID {
-			idx = i
+			index = i
 			break
 		}
 	}
+	if index < 0 {
+		return errors.New("index does not exist")
+	}
 	//end of temp solution
-	usr.ReceivedProjReq = append(usr.ReceivedProjReq[:idx], usr.ReceivedProjReq[idx+1:]...)
+	usr.ReceivedProjReq = append(usr.ReceivedProjReq[:index], usr.ReceivedProjReq[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(esUserIndex).
@@ -586,13 +649,16 @@ func DeleteLikedEntryID(eclient *elastic.Client, usrID string, likerID string) e
 		return errors.New("User does not exist")
 	}
 
-	idx := 0
+	index := -1
 	for i := range usr.LikedEntryIDs {
 		if usr.LikedEntryIDs[i] == likerID {
-			idx = i
+			index = i
 		}
 	}
-	usr.LikedEntryIDs = append(usr.LikedEntryIDs[:idx], usr.LikedEntryIDs[idx+1:]...)
+	if index < 0 {
+		return errors.New("index does not exist")
+	}
+	usr.LikedEntryIDs = append(usr.LikedEntryIDs[:index], usr.LikedEntryIDs[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(esUserIndex).
@@ -632,6 +698,7 @@ func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo
 
 }
 
+//AppendLink ... appends new link to QuickLinks
 func AppendLink(eclient *elastic.Client, usrID string, link types.Link) error {
 	ctx := context.Background()
 
@@ -656,7 +723,8 @@ func AppendLink(eclient *elastic.Client, usrID string, link types.Link) error {
 
 }
 
-func DeleteLink(eclient *elastic.Client, usrID string, link types.Link, idx int) error {
+//DeleteLink ... deletes QuickLink
+func DeleteLink(eclient *elastic.Client, usrID string, link types.Link) error {
 	ctx := context.Background()
 
 	procLock.Lock()
@@ -666,7 +734,17 @@ func DeleteLink(eclient *elastic.Client, usrID string, link types.Link, idx int)
 		return errors.New("User does not exist")
 	}
 
-	usr.QuickLinks = append(usr.QuickLinks[:idx], usr.QuickLinks[idx+1:]...)
+	index := -1
+	for i := range usr.QuickLinks {
+		if usr.QuickLinks[i] == link {
+			index = i
+		}
+	}
+	if index < 0 {
+		return errors.New("index does not exist")
+	}
+
+	usr.QuickLinks = append(usr.QuickLinks[:index], usr.QuickLinks[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(esUserIndex).
@@ -715,6 +793,15 @@ func DeleteTag(eclient *elastic.Client, usrID string, tag string, idx int) error
 		return errors.New("User does not exist")
 	}
 
+	index := -1
+	for i := range usr.Tags {
+		if usr.Tags[i] == tag {
+			index = i
+		}
+	}
+	if index < 0 {
+		return errors.New("index does not exist")
+	}
 	usr.Tags = append(usr.Tags[:idx], usr.Tags[idx+1:]...)
 
 	_, err = eclient.Update().
@@ -780,16 +867,19 @@ func DeleteBlock(eclient *elastic.Client, usrID string, blockID string, whichOne
 	if whichOne == true {
 		//idx, err := universal.FindIndex(usr.BlockedUsers, blockID)
 		//temp solution
-		idx := 0
+		index := 0
 		for i := range usr.BlockedUsers {
 			if usr.BlockedUsers[i] == blockID {
-				idx = i
+				index = i
 				break
 			}
 		}
+		if index < 0 {
+			return errors.New("index does not exist")
+		}
 		//temp solution end
 
-		usr.BlockedUsers = append(usr.BlockedUsers[:idx], usr.BlockedUsers[idx+1:]...)
+		usr.BlockedUsers = append(usr.BlockedUsers[:index], usr.BlockedUsers[index+1:]...)
 
 		_, err = eclient.Update().
 			Index(esUserIndex).
@@ -802,15 +892,18 @@ func DeleteBlock(eclient *elastic.Client, usrID string, blockID string, whichOne
 	} else {
 		//idx, err := universal.FindIndex(usr.BlockedBy, blockID)
 		//temp solution
-		idx := 0
+		index := 0
 		for i := range usr.BlockedBy {
 			if usr.BlockedBy[i] == blockID {
-				idx = i
+				index = i
 				break
 			}
 		}
+		if index < 0 {
+			return errors.New("index does not exist")
+		}
 		//temp solution end
-		usr.BlockedBy = append(usr.BlockedBy[:idx], usr.BlockedBy[idx+1:]...)
+		usr.BlockedBy = append(usr.BlockedBy[:index], usr.BlockedBy[index+1:]...)
 
 		_, err = eclient.Update().
 			Index(esUserIndex).
