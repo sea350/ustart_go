@@ -298,7 +298,7 @@ func UserReplyEntry(eclient *elastic.Client, userID string, entryID string, cont
 	newReply.Content = content
 	newReply.ReferenceEntry = entryID
 	newReply.TimeStamp = time.Now()
-	newReply.Classification = 2
+	newReply.Classification = 1
 
 	replyID, err := post.IndexEntry(eclient, newReply)
 	if err != nil {
@@ -324,7 +324,7 @@ func UserShareEntry(eclient *elastic.Client, userID string, entryID string, cont
 	newReply.Content = content
 	newReply.ReferenceEntry = entryID
 	newReply.TimeStamp = time.Now()
-	newReply.Classification = 1
+	newReply.Classification = 2
 
 	replyID, err := post.IndexEntry(eclient, newReply)
 	if err != nil {
