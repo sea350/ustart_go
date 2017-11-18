@@ -156,8 +156,7 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 
 	ctx := context.Background()
 
-	colleagueLock.Lock()
-	defer colleagueLock.Unlock()
+	//colleagueLock.Lock()
 
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
@@ -165,6 +164,7 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 	}
 
 	if whichOne == true {
+		colleagueLock.Lock()
 		usr.SentCollReq = append(usr.SentCollReq, collegueID)
 
 		_, err = eclient.Update().
@@ -173,9 +173,10 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 			Id(usrID).
 			Doc(map[string]interface{}{"SentCollReq": usr.SentCollReq}).
 			Do(ctx)
-
+		colleagueLock.Unlock()
 		return err
 	}
+	colleagueLock.Lock()
 	usr.ReceivedCollReq = append(usr.ReceivedCollReq, collegueID)
 
 	_, err = eclient.Update().
@@ -184,7 +185,7 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 		Id(usrID).
 		Doc(map[string]interface{}{"ReceivedCollReq": usr.ReceivedCollReq}).
 		Do(ctx)
-
+	colleagueLock.Unlock()
 	return err
 }
 
@@ -303,7 +304,7 @@ func DeleteColleague(eclient *elastic.Client, usrID string, deleteID string) err
 		return errors.New("User does not exist")
 	}
 
-	usr.Colleagues = append(usr.Colleagues[:idx], usr.Colleagues[idx+1:]...)
+	usr.Colleagues = append(usr.Colleagues[:index], usr.Colleagues[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(esUserIndex).
@@ -324,7 +325,7 @@ func AppendMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, 
 
 	procLock.Lock()
 	defer procLock.Unlock()
-
+	//
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
