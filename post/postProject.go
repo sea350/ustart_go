@@ -14,7 +14,9 @@ const projectIndex = "test-project_data"
 const projectType = "PROJECT"
 
 var genericProjectUpdateLock sync.Mutex
-var modifyMemberLock sync.Mutex
+
+//ModifyMemberLock ... PLEASE USE IF MODIFYING MEMBERS USING GENERIC UPDATE
+var ModifyMemberLock sync.Mutex
 
 const projMapping = `
 {
@@ -133,8 +135,8 @@ func AppendMember(eclient *elastic.Client, projectID string, member types.Member
 
 	ctx := context.Background()
 
-	modifyMemberLock.Lock()
-	defer modifyMemberLock.Unlock()
+	ModifyMemberLock.Lock()
+	defer ModifyMemberLock.Unlock()
 
 	proj, err := get.GetProjectByID(eclient, projectID)
 	if err != nil {
@@ -161,8 +163,8 @@ func DeleteMember(eclient *elastic.Client, projID string, member types.Member) e
 
 	ctx := context.Background()
 
-	modifyMemberLock.Lock()
-	defer modifyMemberLock.Unlock()
+	ModifyMemberLock.Lock()
+	defer ModifyMemberLock.Unlock()
 
 	proj, err := get.GetProjectByID(eclient, projID)
 	if err != nil {
