@@ -303,7 +303,7 @@ func DeleteColleague(eclient *elastic.Client, usrID string, deleteID string) err
 		return errors.New("User does not exist")
 	}
 
-	usr.Colleagues = append(usr.Colleagues[:idx], usr.Colleagues[idx+1:]...)
+	usr.Colleagues = append(usr.Colleagues[:index], usr.Colleagues[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(esUserIndex).
