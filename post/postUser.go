@@ -156,13 +156,12 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 
 	ctx := context.Background()
 
-	colleagueLock.Lock()
-
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
 	}
-	colleagueLock.Unlock()
+	colleagueLock.Lock()
+	//colleagueLock.Unlock()
 
 	if whichOne == true {
 
@@ -174,10 +173,10 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 			Id(usrID).
 			Doc(map[string]interface{}{"SentCollReq": usr.SentCollReq}).
 			Do(ctx)
-
+		colleagueLock.Unlock()
 		return err
 	}
-	colleagueLock.Lock()
+
 	usr.ReceivedCollReq = append(usr.ReceivedCollReq, collegueID)
 
 	_, err = eclient.Update().
