@@ -10,6 +10,9 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
+//CreateProject ... CREATE A NORMAL PROJECT
+//Requires all fundamental information for the new project (title, creator docID, etc ...)
+//Returns an error if there was a problem with database submission
 func CreateProject(eclient *elastic.Client, title string, description []rune, makerID string) error {
 	var newProj types.Project
 	newProj.Name = title
@@ -39,6 +42,10 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 
 }
 
+//ChangeProjectNameAndDescription ... CHANGES BOTH A PROJECT NAME AND DESCRIPTION
+//Requires the target project's docID, new name and description
+//Returns an error if there was a problem with database submission
+//NOTE: it is possible Name change goes through but not Description
 func ChangeProjectNameAndDescription(eclient *elastic.Client, projectID string, newName string, newDescription []rune) error {
 	err := post.UpdateProject(eclient, projectID, "Name", newName)
 	if err != nil {
@@ -48,6 +55,9 @@ func ChangeProjectNameAndDescription(eclient *elastic.Client, projectID string, 
 	return err
 }
 
+//ChangeProjectLocation ... CHANGES PROJECT THE PROJECT'S LISTED LOCATION
+//Requires the atarget project's docID all aspects of a types.LocStruct
+//Returns an error if there was a problem with database submission
 func ChangeProjectLocation(eclient *elastic.Client, projectID string, country string, state string, city string, zip string) error {
 	var newLoc types.LocStruct
 	newLoc.Country = country
@@ -60,11 +70,17 @@ func ChangeProjectLocation(eclient *elastic.Client, projectID string, country st
 
 }
 
+//ChangeProjectCategory ... CHANGES PROJECT THE PROJECT'S CATEGORY
+//Requires the target project's docID, all aspects of a types.LocStruct
+//Returns an error if there was a problem with database submission
 func ChangeProjectCategory(eclient *elastic.Client, projectID string, category string) error {
 	err := post.UpdateProject(eclient, projectID, "Category", category)
 	return err
 }
 
+//ChangeProjectURL ... CHANGES PROJECT THE PROJECT'S URL EXTENTION
+//Requires the target projects docID and the potential new url
+//Returns an error if the url is taken or a databse error
 func ChangeProjectURL(eclient *elastic.Client, projectID string, newURL string) error {
 	_, err := get.GetProjectByURL(eclient, newURL)
 	//if (err != nil){ return err}
@@ -75,7 +91,12 @@ func ChangeProjectURL(eclient *elastic.Client, projectID string, newURL string) 
 	return err
 }
 
+//ManageMembers ... UPDATES THE FULL MEMBER'S ARRAY
+//Requires the target projects docID and the potential new url
+//Returns an error if the url is taken or a databse error
 func ManageMembers(eclient *elastic.Client, projectID string, newMemberConfig []types.Member) error {
+	post.ModifyMemberLock.Lock()
+	defer post.ModifyMemberLock.Unlock()
 	err := post.UpdateProject(eclient, projectID, "Members", newMemberConfig)
 	return err
 }
