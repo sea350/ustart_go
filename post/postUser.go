@@ -26,7 +26,13 @@ const mapping = `
                 },
                 "AccCreation":{
                 	"type": date"
-                }
+				},
+				"FirstName":{
+					"type": "keyword"
+				},
+				"LastName":{
+					"type":"keyword"
+				}
 
                 
             }

@@ -23,8 +23,10 @@ const projMapping = `
             "properties":{
                 "URLName":{
                     "type":"keyword"
-                }
-                
+				},
+				"Member":{
+					"type":"keyword"
+				}
             }
         }
     }
