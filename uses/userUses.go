@@ -481,32 +481,12 @@ func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
 //Requires the follower's docID and the followed docID
 //Returns an error
 func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error {
-	user, err := get.GetUserByID(eclient, usrID)
+	err := post.DeleteFollow(eclient, usrID, followID, true)
 	if err != nil {
 		return err
 	}
-	target, err := get.GetUserByID(eclient, followID)
-	if err != nil {
-		return err
-	}
-
-	for idx, element := range user.Following {
-		if element == followID {
-			err = post.DeleteFollow(eclient, usrID, true, idx)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	for idx2, element := range target.Followers {
-		if element == usrID {
-			err := post.DeleteFollow(eclient, followID, false, idx2)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	return nil
+	err = post.DeleteFollow(eclient, followID, usrID, false)
+	return err
 }
 
 //IsFollowed ... CHECKS IF A USER IS FOLLWING SOMEONE ELSE
