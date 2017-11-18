@@ -325,7 +325,7 @@ func AppendMajorMinor(eclient *elastic.Client, usrID string, majorMinor string, 
 
 	procLock.Lock()
 	defer procLock.Unlock()
-
+	//
 	usr, err := get.GetUserByID(eclient, usrID)
 
 	if err != nil {
