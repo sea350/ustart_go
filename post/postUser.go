@@ -165,7 +165,7 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 	colleagueLock.Lock()
 
 	if whichOne == true {
-		colleagueLock.Lock()
+		colleagueLock.Unlock()
 		usr.SentCollReq = append(usr.SentCollReq, collegueID)
 
 		_, err = eclient.Update().
