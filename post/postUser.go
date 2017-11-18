@@ -154,13 +154,14 @@ func UpdateUser(eclient *elastic.Client, userID string, field string, newContent
 //  True = sent; False = received.
 func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whichOne bool) error {
 
+	colleagueLock.Lock()
 	ctx := context.Background()
 
 	usr, err := get.GetUserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
 	}
-	colleagueLock.Lock()
+
 	//colleagueLock.Unlock()
 
 	if whichOne == true {
