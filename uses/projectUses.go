@@ -2,6 +2,7 @@ package uses
 
 import (
 	"errors"
+	"sync"
 	"time"
 
 	get "github.com/sea350/ustart_go/get"
@@ -9,6 +10,8 @@ import (
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
+
+var memberModLock sync.Mutex
 
 //CreateProject ... CREATE A NORMAL PROJECT
 //Requires all fundamental information for the new project (title, creator docID, etc ...)
@@ -102,8 +105,15 @@ func ManageMembers(eclient *elastic.Client, projectID string, newMemberConfig []
 }
 
 //NEEDS TO BE REPAIRED
-/*
+
+//RemoveMember ... CHANGES NECESSARY DATA FROM USER AND PROJECT FOR REMOVING A MEMBER
+//Requires
+//Returns an error
 func RemoveMember(eclient *elastic.Client, projectID string, userID string) error {
+
+	memberModLock.Lock()
+	defer memberModLock.Unlock()
+
 	usr, err := get.GetUserByID(eclient, userID)
 	if err != nil {
 		return err
@@ -115,18 +125,16 @@ func RemoveMember(eclient *elastic.Client, projectID string, userID string) erro
 
 	var projIdx int
 	var usrIdx int
-	var infoProj types.ProjectInfo
 	for idx := range usr.Projects {
 		if usr.Projects[idx].ProjectID == projectID {
 			usrIdx = idx
-			infoProj = usr.Projects[idx]
 			break
 		}
 	}
 
-	usrErr := post.RemoveFromUser(eclient, userID, "Projects", usrIdx, infoProj)
-	if usrErr != nil {
-		return usrErr
+	err = post.UpdateUser(eclient, userID, "Projects", append(usr.Projects[:idx], usr.Projects[idx+1:]...))
+	if err != nil {
+		return err
 	}
 
 	for index := range proj.Members {
@@ -144,7 +152,6 @@ func RemoveMember(eclient *elastic.Client, projectID string, userID string) erro
 	return nil
 
 }
-*/
 
 func RequestMember(eclient *elastic.Client, projectID string, userID string) error {
 	err := post.AppendProjReq(eclient, userID, projectID, false)
@@ -203,7 +210,7 @@ func ProjectPage(eclient *elastic.Client, projectURL string, viewerID string) (t
 
 		//check if invis
 		entries = append(entries, newEntry)
-		counter += 1
+		counter ++ 1
 		if counter > maxPull {
 			break
 		}

@@ -492,7 +492,7 @@ func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error 
 
 	for idx, element := range user.Following {
 		if element == followID {
-			err = post.DeleteFollow(eclient, usrID, true, idx)
+			err = post.DeleteFollow(eclient, usrID, idx, true)
 			if err != nil {
 				return err
 			}
@@ -500,7 +500,7 @@ func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error 
 	}
 	for idx2, element := range target.Followers {
 		if element == usrID {
-			err := post.DeleteFollow(eclient, followID, false, idx2)
+			err := post.DeleteFollow(eclient, followID, idx2, false)
 			if err != nil {
 				return err
 			}
