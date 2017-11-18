@@ -210,7 +210,7 @@ func ProjectPage(eclient *elastic.Client, projectURL string, viewerID string) (t
 
 		//check if invis
 		entries = append(entries, newEntry)
-		counter ++ 1
+		counter++
 		if counter > maxPull {
 			break
 		}
