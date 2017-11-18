@@ -162,10 +162,10 @@ func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whi
 	if err != nil {
 		return errors.New("User does not exist")
 	}
-	colleagueLock.Lock()
+	colleagueLock.Unlock()
 
 	if whichOne == true {
-		colleagueLock.Unlock()
+		colleagueLock.Lock()
 		usr.SentCollReq = append(usr.SentCollReq, collegueID)
 
 		_, err = eclient.Update().
