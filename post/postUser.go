@@ -26,7 +26,13 @@ const mapping = `
                 },
                 "AccCreation":{
                 	"type": date"
-                }
+				},
+				"FirstName":{
+					"type": "keyword"
+				},
+				"LastName":{
+					"type":"keyword"
+				}
 
                 
             }
@@ -486,7 +492,7 @@ func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichO
 	}
 	index := -1
 	for i := range usr.Followers {
-		if usr.Followers[i] == reqID {
+		if usr.Followers[i] == followID {
 			index = i
 		}
 	}
