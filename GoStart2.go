@@ -16,7 +16,7 @@ import (
 )
 
 var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-var templates = template.Must(template.ParseFiles("../../../../www/ustart.tech/followerlist-nil.html","../../../../www/ustart.tech/emTee.html","../../../../www/ustart.tech/wallttt.html","../../../../www/ustart.tech/wallload-nil.html","../../../../www/ustart.tech/testimage.html","../../../../www/ustart.tech/ajax-nil.html","../../../../www/ustart.tech/Membership-Nil.html","../../../../www/ustart.tech/settings-Nil.html","../../../../www/ustart.tech/inbox-Nil.html","../../../../www/ustart.tech/createProject-Nil.html","../../../../www/ustart.tech/manageprojects-Nil.html","../../../../www/ustart.tech/projects-Nil.html","../../../../www/ustart.tech/new-reg-nil.html","../../../../www/ustart.tech/loginerror-nil.html","../../../../www/ustart.tech/test.html", "../../../../www/ustart.tech/payment-nil.html","../../../../www/ustart.tech/templateNoUser2.html","../../../../www/ustart.tech/profile-nil.html","../../../../www/ustart.tech/template2-nil.html","../../../../www/ustart.tech/template-footer-nil.html","../../../../www/ustart.tech/nil-index2.html","../../../../www/ustart.tech/regcomplete-nil.html"))
+var templates = template.Must(template.ParseFiles("../../../../www/ustart.tech/followerlist-nil.html","../../../../www/ustart.tech/emTee.html","../../../../www/ustart.tech/wallttt.html","../../../../www/ustart.tech/wallload-nil.html","../../../../www/ustart.tech/testimage.html","../../../../www/ustart.tech/ajax-nil.html","../../../../www/ustart.tech/Membership-Nil.html","../../../../www/ustart.tech/settings-Nil.html","../../../../www/ustart.tech/inbox-Nil.html","../../../../www/ustart.tech/createProject-Nil.html","../../../../www/ustart.tech/manageprojects-Nil.html","../../../../www/ustart.tech/projectsF.html","../../../../www/ustart.tech/new-reg-nil.html","../../../../www/ustart.tech/loginerror-nil.html","../../../../www/ustart.tech/test.html", "../../../../www/ustart.tech/payment-nil.html","../../../../www/ustart.tech/templateNoUser2.html","../../../../www/ustart.tech/profile-nil.html","../../../../www/ustart.tech/template2-nil.html","../../../../www/ustart.tech/template-footer-nil.html","../../../../www/ustart.tech/nil-index2.html","../../../../www/ustart.tech/regcomplete-nil.html"))
 var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code 
 
 type ClientSide struct {
@@ -184,17 +184,6 @@ func ViewProfile (w http.ResponseWriter, r *http.Request){
 	if (errnF2 != nil){
 		fmt.Println(errnF2);
 	}
-
-		test123 := "hello"
-		test1245 := []rune(test123)
-		postactual := "AV7T7n8C22dVORxe2i9O"
-		id := session.Values["DocID"].(string)
-		fmt.Println(id+"is docid 1234")
-		err4 := uses.UserNewReplyEntry(eclient,id,test1245,postactual)
-		if (err4 != nil){
-		fmt.Println(err4)
-	}
-
 	cs = ClientSide{UserInfo:userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string),Birthday: birthdayline,Class:ClassYear, Description:temp,Followers:numberFollowers,Following:numberFollowing, Page:viewingDOC,FollowingStatus:followingState}
 
 
@@ -376,7 +365,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request){
        }
     cs := ClientSide{} 
 	renderTemplate(w,"template2-nil",cs)
-	renderTemplate(w,"projects-Nil",cs)
+	renderTemplate(w,"projectsF",cs)
 }
 
 
@@ -389,7 +378,7 @@ func MyProjects(w http.ResponseWriter, r *http.Request){
 	userstruct, _, _,_ := uses.UserPage(eclient,session.Values["Username"].(string),session.Values["DocID"].(string))
 	cs := ClientSide{UserInfo:userstruct, DOCID:session.Values["DocID"].(string)} 	
 	renderTemplate(w,"template2-nil",cs)
-	renderTemplate(w,"manageprojects-Nil",cs)
+	renderTemplate(w,"manageprojectsF",cs)
 }
 
 /*
@@ -424,6 +413,725 @@ func CreateProject(w http.ResponseWriter, r *http.Request){
 	renderTemplate(w,"createProject-Nil",cs)
 }
 
+func wallLoad(w http.ResponseWriter, r *http.Request){
+	// If followingStatus = no 
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+    if (test1 == nil){
+     	fmt.Println(test1)
+    http.Redirect(w, r, "/~", http.StatusFound)
+    }
+
+	r.ParseForm()
+	entryIDs := r.FormValue("entryIDs")
+	fmt.Println(entryIDs)
+	var jEntries []types.JournalEntry
+//	fmt.Println(jEntries[0].FirstName);
+	pageID := r.FormValue("pageID")
+	if (strings.Compare("null",entryIDs) != 0 ){
+
+		
+	
+	actualIDs := strings.Split(entryIDs,",")
+	fmt.Println("DID I MAKE IT HERE? ")
+	fmt.Println(actualIDs)
+	fmt.Println(" ARE THE ACTUAL IDS ")
+	//jEntriesPointer := &jEntries 
+	jEntries, _ = uses.LoadEntries(eclient,actualIDs)
+	fmt.Println(jEntries[0].FirstName);
+
+	//if (err5 != nil){
+	//	fmt.Println(err5);
+//	}
+}
+	var output string 
+		DocID := session.Values["DocID"].(string)
+
+	output += 
+	`
+	<script>
+							 $(".comment-btn").hover(function (e) {
+                                                    var cmtBtnImg = $(this).find('img');
+                                                    cmtBtnImg.attr('src', "/www/ustart.tech/ico/comment.png");     
+                                                 },function (e) {
+                                                    var cmtBtnImg = $(this).find('img');
+                                                    cmtBtnImg.attr('src', "/www/ustart.tech/ico/no comment.png");     
+                                                 });   
+                                                $(".share-btn").hover(function (e) {
+                                                    var shrBtnImg = $(this).find('img');
+                                                    shrBtnImg.attr('src', "/www/ustart.tech/ico/share.png");     
+                                                 },function (e) {
+                                                    var shrBtnImg = $(this).find('img');
+                                                    shrBtnImg.attr('src', "/www/ustart.tech/ico/not share.png");     
+                                                 });
+                                                  $(".like-btn").hover(function (e) {
+                                                    var likeBtnImg = $(this).find('img');
+                                                    if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
+                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+                                                    } else {
+                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+                                                    }
+                                                    return false;
+                                                });
+                                                $(".comment-like").click(function (e) {
+                                                    if ($(this).html() == "Like") {
+                                                        $(this).html('Liked');
+                                                    } else {
+                                                        $(this).html('Like');
+                                                    }
+                                                    return false;
+                                                });
+                                                  $('body').on('click', '.odom-submit', function (e) {
+                                                        $('#shareCommentForm').submit();
+                                                    });
+                              $('.comment-btn').click(function(e) {
+                                        var postId= $(this).attr("id");
+                                        var modified ="#"+postId;
+                                   //     console.log(modified);
+                                        var Pikachu = "`+DocID+`";
+                                        //e.preventDefault();
+                                        $.ajax({
+                                            type: 'GET',  
+                                            url: 'http://ustart.today:5000/getComments/',
+                                            contentType: "application/json; charset=utf-8",
+                                            data: {userID:"`+pageID+`", PostID:postId,Pikachu:Pikachu},
+                                            success: function(data) {
+                                            	$("#commentnil").html(data);
+                                             //   console.log(data);
+                                                $(modified).modal('show');
+                                            }
+                                        });
+                                    });
+
+                                    $('.share-btn').click(function(e) {
+                                        var postId= $(this).attr("id");
+                                        var modified ="#"+postId;
+                                        console.log(modified);
+                                        var Pikachu = "`+DocID+`";
+                                        //e.preventDefault();
+                                        $.ajax({
+                                            type: 'GET',  
+                                            url: 'http://ustart.today:5000/shareComments/',
+                                            contentType: "application/json; charset=utf-8",
+                                            data: {userID:"`+pageID+`", PostID:postId,Pikachu:Pikachu},
+                                            success: function(data) {
+                                                $("#sharenil").html(data);
+                                                console.log("share clicked");
+                                                $(modified).modal('show');
+                                            }
+                                        });
+                                    });    
+
+                                        $('.like-btn').click(function(e) {
+                                        var postId= $(this).attr("id");
+                                        var modified ="#"+postId;
+                                        console.log(modified);
+                                        var selfDoc = "`+DocID+`";
+                                        //e.preventDefault();
+                                        $.ajax({
+                                            type: 'GET',  
+                                            url: 'http://ustart.today:5000/Like',
+                                            contentType: "application/json; charset=utf-8",
+                                            data: {userID:"`+pageID+`", PostID:postId,selfDoc:selfDoc},
+                                            success: function(data) {
+                                                    var likeBtnImg = $(this).find('img');
+                                                    if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
+                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+                                                    } else {
+                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+                                                    }
+                                                console.log("like clicked");
+                                            }
+                                        });
+                                    }); 
+
+      
+
+	</script>
+	`
+	// output += ` <div id="main">
+ //                                <!-- new post -->
+ //                                <div class="panel panel-default">
+ //                                    <div class="panel-body">
+ //                                        <div class="media">
+ //                                            <a class="pull-left" href="#">
+ //                                                <img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
+ //                                            </a>
+ //                                            <div class="media-body">
+ //                                                <div class="form-group">
+ //                                                   <!-- <form id="New-Post-Form" method="POST" action="http://ustart.today:5000/New/Post/" > -->
+ //                                                        <textarea class="form-control" id="post-msg" name="block" style="resize:none;" placeholder="Share what's new"></textarea>
+
+ //                                                        <button id="new-postSubmit" type="submit" class="btn btn-primary pull-right">Post</button>
+ //                                                <!--    </form> -->
+ //                                                </div>
+ //                                            <!--    <button id="new-postSubmit" class="btn btn-primary pull-right">Post</button> -->
+ //                                            </div>
+ //                                        </div>
+ //                                    </div>
+ //                                </div>
+ //                                 <!-- end new post -->
+ //                                 `
+
+		if (strings.Compare("null",entryIDs) != 0 ){
+			fmt.Println("ROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAR")
+                                 sum := 0
+                                 class0 := `<div class="panel panel-default wallAppend">` 
+
+	for i := len(jEntries)-1; i >= 0; i-- {
+		sum += 1;
+	//	fmt.Println("ENTRY ")
+	//		fmt.Println(len(jEntries))
+		bodyText := string(jEntries[i].Element.Content)
+		fmt.Println(jEntries[i].Element.Classification)
+		if(jEntries[i].Element.Classification == 0){
+			fmt.Println("classifcation is 0")
+			likes := string(jEntries[i].NumLikes)
+			fmt.Println("this post has"+string(jEntries[i].NumLikes)+" likes")
+			class0 += `<div id="wallPosts" class="panel-body">
+                                            <!-- regular post sample -->
+                                            <div class="media">
+                                                <a class="pull-left" href="#">
+                                                    <img style="height:40px;" class="media-object img-rounded" src=d`+jEntries[i].Image+`>
+                                                </a>
+                                                <!--edit dropdown -->
+                                                <div class="dropdown pull-right">
+                                                    <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" style="min-width: 0px !important; padding:0px !important;">
+                                                        <li>
+                                                            <a class="dropdown-item " data-toggle="modal" data-target="#EditModal">
+                                                                <H6>Edit</H6>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item " data-toggle="modal" data-target="#confirm-delete">
+                                                                <H6>Delete</H6>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <!--end edit dropdown -->
+                                            <div class="media-body">
+                                                <h6 class="post-time pull-right text-muted time" style="padding-right:4px;"> X minutes ago`+/*jEntries[i].Element.TimeStamp+*/`</h6>
+                                                <h5 class="post-name mt-0" style="color:cadetblue;"><a href="#">`+jEntries[i].FirstName+`</a></h5>
+                                                <p class="post-message" style="word-spacing: 0px;">`+bodyText+`</p>
+                                                                            </div>
+                                                <ul>
+                                                    <li>
+                                                         <a class="btn btn-sm like-btn" id =main-modal`+jEntries[i].ElementID+`><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">`+likes+`</p></a>
+                                                    </li>
+                                                    <li>
+                                                         <a class="btn btn-sm comment-btn" id =main-modal`+jEntries[i].ElementID+`><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">`+string(jEntries[i].NumReplies)+`</p></a>
+                                                    </li>
+                                                    <li>
+                                                         <a class="btn btn-sm share-btn" id=share-modal`+jEntries[i].ElementID+`><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">`+string(jEntries[i].NumShares)+`</p></span></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!-- end regular post -->
+                                            
+                                            <hr>
+                                            </div>
+                                            `
+
+
+
+		}
+			if(jEntries[i].Element.Classification == 2){
+			postIDArray := []string{jEntries[i].Element.ReferenceEntry} // just an array with 1 entry 
+			fmt.Println("MADE IT HERE")
+    		jEntry, err5 := uses.LoadEntries(eclient,postIDArray)
+			if (err5 != nil){
+				fmt.Println(err5);
+			}
+			bodyText := string(jEntry[0].Element.Content)
+			comment := string(jEntries[i].Element.Content)
+			fmt.Println(jEntries[i].Element.ReferenceEntry)
+			fmt.Println(" ARE THE REFERENCE ENTRIES ")
+
+			fmt.Println(jEntries[i].Element.Content)
+			fmt.Println(jEntry[0].Element.Content)
+
+
+						class0 += `
+						 <div class="dropdown pull-right">
+                                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                                <span class="glyphicon glyphicon-cog"></span>
+                                                <span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu" style="min-width: 0px !important; padding:0px !important;">
+                                                <li>
+                                                    <a class="dropdown-item " data-toggle="modal" data-target="#EditModal">
+                                                        <H6>Edit</H6>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" data-toggle="modal" data-target="#confirm-delete">
+                                                        <H6>Delete</H6>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!--end edit dropdown -->
+                                        <h6 class="pull-right text-muted time" style="padding-right:4px;">X hours ago</h6>
+                                        <h5 class="mt-0" style="color:cadetblue">You shared a post:</h5>
+                                           <p style="margin-left:2em">`+comment+`</p>
+                                        <div class="media">
+                                            <div class="panel panel-default">
+                                                <div class="panel-body">
+                                                    <div class="media">
+                                                        <a class="pull-left" href="#">
+                                                            <img class="media-object img-rounded" src=d`+jEntry[0].Image+` alt="40x40">
+                                                        </a>
+                                                        <div class="media-body">
+                                                            <h6 class="pull-right text-muted time">X hours ago</h6>
+                                                            <h5 class="mt-0" style="color:cadetblue;">`+jEntry[0].FirstName+" "+jEntry[0].LastName+`</h5>
+                                                            <p>`+bodyText+`</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                <ul>
+                                                    <li>
+                                                         <a class="btn btn-sm like-btn" id =main-modal`+jEntry[0].ElementID+`><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">`+string(jEntry[0].NumLikes)+`</p></a>
+                                                    </li>
+                                                    <li>
+                                                         <a class="btn btn-sm comment-btn" id =main-modal`+jEntry[0].ElementID+`><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">`+string(jEntry[0].NumReplies)+`</p></a>
+                                                    </li>
+                                                    <li>
+                                                         <a class="btn btn-sm share-btn" id=share-modal`+jEntry[0].ElementID+`><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">`+string(jEntry[0].NumShares)+`</p></span></a>
+                                                    </li>
+                                                </ul>
+                                        </div>
+
+
+
+`
+
+		}
+
+}
+	class0 += "</div>"
+	output += class0
+}
+//	output += "</div>" // should be last line, closes main id
+	output += `
+								<script>
+	                                 $('#new-postSubmit').click(function(e) {
+                                        //e.preventDefault();
+                                        var docID = "`+DocID+`";
+                                        var text = $("#post-msg").val();
+                                        console.log(text);
+                                        $.ajax({
+                                            type: 'GET',  
+                                            url: 'http://ustart.today:5000/addPost/',
+                                            contentType: "application/json; charset=utf-8",
+                                            data: {docID:docID,text:text},
+                                            success: function(data) {
+                                            //	console.log(data);
+                                                $(".wallAppend").prepend(data);
+
+                                                console.log('hello m8');
+
+                                                							 $(".comment-btn").hover(function (e) {
+                                                    var cmtBtnImg = $(this).find('img');
+                                                    cmtBtnImg.attr('src', "/www/ustart.tech/ico/comment.png");     
+                                                 },function (e) {
+                                                    var cmtBtnImg = $(this).find('img');
+                                                    cmtBtnImg.attr('src', "/www/ustart.tech/ico/no comment.png");     
+                                                 });   
+                                                $(".share-btn").hover(function (e) {
+                                                    var shrBtnImg = $(this).find('img');
+                                                    shrBtnImg.attr('src', "/www/ustart.tech/ico/share.png");     
+                                                 },function (e) {
+                                                    var shrBtnImg = $(this).find('img');
+                                                    shrBtnImg.attr('src', "/www/ustart.tech/ico/not share.png");     
+                                                 });
+                                                  $(".like-btn").hover(function (e) {
+                                                    var likeBtnImg = $(this).find('img');
+                                                    if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
+                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+                                                    } else {
+                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+                                                    }
+                                                    return false;
+                                                });
+                                                $(".comment-like").click(function (e) {
+                                                    if ($(this).html() == "Like") {
+                                                        $(this).html('Liked');
+                                                    } else {
+                                                        $(this).html('Like');
+                                                    }
+                                                    return false;
+                                                });
+                                                  $('body').on('click', '.odom-submit', function (e) {
+                                                        $('#shareCommentForm').submit();
+                                                    });
+                              $('.comment-btn').click(function(e) {
+                                        var postId= $(this).attr("id");
+                                        var modified ="#"+postId;
+                                        console.log(modified);
+                                        var Pikachu = "`+DocID+`";
+                                        //e.preventDefault();
+                                        $.ajax({
+                                            type: 'GET',  
+                                            url: 'http://ustart.today:5000/getComments/',
+                                            contentType: "application/json; charset=utf-8",
+                                            data: {userID:"`+pageID+`", PostID:postId,Pikachu:Pikachu},
+                                            success: function(data) {
+                                            	$("#commentnil").html(data);
+                                                console.log(data);
+                                                $(modified).modal('show');
+                                            }
+                                        });
+                                    });
+
+                                         
+                                        $('.share-btn').click(function(e) {
+                                        var postId= $(this).attr("id");
+                                        var modified ="#"+postId;
+                                        console.log(modified);
+                                        var Pikachu = "`+DocID+`";
+                                        //e.preventDefault();
+                                        $.ajax({
+                                            type: 'GET',  
+                                            url: 'http://ustart.today:5000/shareComments/',
+                                            contentType: "application/json; charset=utf-8",
+                                            data: {userID:"`+pageID+`", PostID:postId,Pikachu:Pikachu},
+                                            success: function(data) {
+                                                $("#sharenil").html(data);
+                                                console.log("share clicked ");
+                                                $(modified).modal('show');
+                                            }
+                                        });
+                                    });  
+
+                                        $('.like-btn').click(function(e) {
+                                        var postId= $(this).attr("id");
+                                        var modified ="#"+postId;
+                                        console.log(modified);
+                                        var selfDoc = "`+DocID+`";
+                                        //e.preventDefault();
+                                        $.ajax({
+                                            type: 'GET',  
+                                            url: 'http://ustart.today:5000/Like',
+                                            contentType: "application/json; charset=utf-8",
+                                            data: {userID:"`+pageID+`", PostID:postId,selfDoc:selfDoc},
+                                            success: function(data) {
+                                                    var likeBtnImg = $(this).find('img');
+                                                    if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
+                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+                                                    } else {
+                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+                                                    }
+                                                console.log("like clicked");
+                                            }
+                                        });
+                                    }); 
+
+                                           }
+                                        });
+                                    });      
+
+
+      
+                                </script> `
+//	fmt.Println(sum)
+
+	//fmt.Println(output)
+	//var responseHtml string 
+	fmt.Fprintln(w, output) 
+}
+
+func wallAdd(w http.ResponseWriter, r *http.Request){
+	// If followingStatus = no 
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+    if (test1 == nil){
+     	fmt.Println(test1)
+    http.Redirect(w, r, "/~", http.StatusFound)
+    }
+
+	r.ParseForm()
+	docID := r.FormValue("docID")
+	text := r.FormValue("text")
+	textRunes := []rune(text)
+    postID, err := uses.UserNewEntry(eclient,docID,textRunes)
+    if (err != nil){
+    	fmt.Println(err);
+    }
+    postIDArray := []string{postID} // just an array with 1 entry 
+    jEntry, err5 := uses.LoadEntries(eclient,postIDArray)
+	if (err5 != nil){
+		fmt.Println(err5);
+	}
+
+
+	var output string 
+	// output += ` <div id="main"> `
+                                  //class0 := `<div class="panel panel-default">` 
+
+		bodyText := string(jEntry[0].Element.Content)
+			class0 := `<div id="wallPosts" class="panel-body">
+                                            <!-- regular post sample -->
+                                            <div class="media">
+                                                <a class="pull-left" href="#">
+                                                    <img style="height:40px;" class="media-object img-rounded" src=d`+jEntry[0].Image+`>
+                                                </a>
+                                                <!--edit dropdown -->
+                                                <div class="dropdown pull-right">
+                                                    <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" style="min-width: 0px !important; padding:0px !important;">
+                                                        <li>
+                                                            <a class="dropdown-item " data-toggle="modal" data-target="#EditModal">
+                                                                <H6>Edit</H6>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item " data-toggle="modal" data-target="#confirm-delete">
+                                                                <H6>Delete</H6>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <!--end edit dropdown -->
+                                            <div class="media-body">
+                                                <h6 class="post-time pull-right text-muted time" style="padding-right:4px;"> X minutes ago`+/*jEntries[i].Element.TimeStamp+*/`</h6>
+                                                <h5 class="post-name mt-0" style="color:cadetblue;"><a href="#">`+jEntry[0].FirstName+`</a></h5>
+                                                <p class="post-message" style="word-spacing: 0px;">`+bodyText+`</p>
+                                                                            </div>
+                                                <ul>
+                                                    <li>
+                                                         <a class="btn btn-sm like-btn" id =main-modal`+jEntry[0].ElementID+`><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">`+string(jEntry[0].NumLikes)+`</p></a>
+                                                    </li>
+                                                    <li>
+                                                         <a class="btn btn-sm comment-btn" id =main-modal`+jEntry[0].ElementID+`><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">`+string(jEntry[0].NumReplies)+`</p></a>
+                                                    </li>
+                                                    <li>
+                                                         <a class="btn btn-sm share-btn" id=share-modal`+jEntry[0].ElementID+`><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">`+string(jEntry[0].NumShares)+`</p></span></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!-- end regular post -->
+                                            
+                                            <hr>
+                                            </div>
+                                            `
+
+
+
+		
+//	class0 += "</div>"
+	output += class0
+
+//	output += "</div>" // should be last line, closes main id
+
+
+
+	fmt.Println(output)
+	//var responseHtml string 
+	fmt.Fprintln(w, output) 
+}
+
+// func wallAdd(w http.ResponseWriter, r *http.Request){
+// 	// If followingStatus = no 
+// 	session, _ := store.Get(r, "session_please")
+// 	test1, _ := session.Values["DocID"]
+//     if (test1 == nil){
+//      	fmt.Println(test1)
+//     http.Redirect(w, r, "/~", http.StatusFound)
+//     }
+
+// 	r.ParseForm()
+// 	docID := r.FormValue("docID")
+// 	text := r.FormValue("text")
+// 	textRunes := []rune(text)
+//     postID, err := uses.UserNewTextEntry(eclient,docID,textRunes)
+//     if (err != nil){
+//     	fmt.Println(err);
+//     }
+//  //    postIDArray := []string{postID} // just an array with 1 entry 
+//  //    _, err5 := uses.LoadEntries(eclient,postIDArray)
+// 	// if (err5 != nil){
+// 	// 	fmt.Println(err5);
+// 	// }
+
+// 	entryIDs := r.FormValue("entryIDs")+","+postID
+// 	fmt.Println(entryIDs)
+// 	actualIDs := strings.Split(entryIDs,",")
+// 	fmt.Println("DID I MAKE IT HERE? ")
+//  	fmt.Println(actualIDs[1])
+// 	jEntries, err5 := uses.LoadEntries(eclient,actualIDs)
+// 	if (err5 != nil){
+// 		fmt.Println(err5);
+// 	}
+// 	var output string 
+
+// 	output += ` <div id="main">
+//                                 <!-- new post -->
+//                                 <div class="panel panel-default">
+//                                     <div class="panel-body">
+//                                         <div class="media">
+//                                             <a class="pull-left" href="#">
+//                                                 <img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
+//                                             </a>
+//                                             <div class="media-body">
+//                                                 <div class="form-group">
+//                                                    <!-- <form id="New-Post-Form" method="POST" action="http://ustart.today:5000/New/Post/" > -->
+//                                                         <textarea class="form-control" id="post-msg" name="block" style="resize:none;" placeholder="Share what's new"></textarea>
+
+//                                                         <button id="new-postSubmit" type="submit" class="btn btn-primary pull-right">Post</button>
+//                                                 <!--    </form> -->
+//                                                 </div>
+//                                             <!--    <button id="new-postSubmit" class="btn btn-primary pull-right">Post</button> -->
+//                                             </div>
+//                                         </div>
+//                                     </div>
+//                                 </div>
+//                                  <!-- end new post -->
+//                                  `
+//                                  sum := 0
+//                                  class0 := `<div class="panel panel-default">` 
+// 	for i := len(jEntries)-1; i >= 0; i-- {
+// 		sum += 1;
+// 		bodyText := string(jEntries[i].Element.Content)
+// 		if(jEntries[i].Element.Classification == 0){
+// 			fmt.Println("classifcation is 0")
+// 			class0 += `<div id="wallPosts" class="panel-body">
+//                                             <!-- regular post sample -->
+//                                             <div class="media">
+//                                                 <a class="pull-left" href="#">
+//                                                     <img style="height:40px;" class="media-object img-rounded" src=d`+jEntries[i].Image+`>
+//                                                 </a>
+//                                                 <!--edit dropdown -->
+//                                                 <div class="dropdown pull-right">
+//                                                     <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><span class="caret"></span></a>
+//                                                     <ul class="dropdown-menu" style="min-width: 0px !important; padding:0px !important;">
+//                                                         <li>
+//                                                             <a class="dropdown-item " data-toggle="modal" data-target="#EditModal">
+//                                                                 <H6>Edit</H6>
+//                                                             </a>
+//                                                         </li>
+//                                                         <li>
+//                                                             <a class="dropdown-item " data-toggle="modal" data-target="#confirm-delete">
+//                                                                 <H6>Delete</H6>
+//                                                             </a>
+//                                                         </li>
+//                                                     </ul>
+//                                                 </div>
+//                                                 <!--end edit dropdown -->
+//                                             <div class="media-body">
+//                                                 <h6 class="post-time pull-right text-muted time" style="padding-right:4px;"> X minutes ago`+/*jEntries[i].Element.TimeStamp+*/`</h6>
+//                                                 <h5 class="post-name mt-0" style="color:cadetblue;"><a href="#">`+jEntries[i].FirstName+`</a></h5>
+//                                                 <p class="post-message" style="word-spacing: 0px;">`+bodyText+`</p>
+//                                                                             </div>
+//                                                 <ul>
+//                                                     <li>
+//                                                          <a class="btn btn-sm like-btn"><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">13k</p></a>
+//                                                     </li>
+//                                                     <li>
+//                                                          <a class="btn btn-sm comment-btn" id =main-modal`+jEntries[i].ElementID+`><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">13k</p></a>
+//                                                     </li>
+//                                                     <li>
+//                                                          <a class="btn btn-sm share-btn" id=share-modal`+jEntries[i].ElementID+`><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">1</p></span></a>
+//                                                     </li>
+//                                                 </ul>
+//                                             </div>
+//                                             <!-- end regular post -->
+                                            
+//                                             <hr>
+//                                             </div>
+//                                             `
+
+
+
+// 		}
+// 	}
+// 	class0 += "</div>"
+// 	output += class0
+// 	DocID := session.Values["DocID"].(string)
+// 	output += "</div>" // should be last line, closes main id
+// 	output += `
+// 								<script>
+// 	                                 $('#new-postSubmit').click(function(e) {
+//                                         //e.preventDefault();
+//                                         var docID = "`+DocID+`";
+//                                         var entryIDs = "`+entryIDs+`";
+//                                         var text = $("#post-msg").val();
+//                                         $.ajax({
+//                                             type: 'GET',  
+//                                             url: 'http://ustart.today:5000/addPost/',
+//                                             contentType: "application/json; charset=utf-8",
+//                                             data: {docID:docID,text:text,entryIDs:entryIDs},
+//                                             success: function(data) {
+//                                             	console.log(data);
+//                                                 $("#wall-dataF").html(data);
+//                                                 console.log('hello m8');
+//                                                                                                 $(".comment-btn").hover(function (e) {
+//                                                     var cmtBtnImg = $(this).find('img');
+//                                                     cmtBtnImg.attr('src', "/www/ustart.tech/ico/comment.png");     
+//                                                  },function (e) {
+//                                                     var cmtBtnImg = $(this).find('img');
+//                                                     cmtBtnImg.attr('src', "/www/ustart.tech/ico/no comment.png");     
+//                                                  });   
+//                                                 $(".share-btn").hover(function (e) {
+//                                                     var shrBtnImg = $(this).find('img');
+//                                                     shrBtnImg.attr('src', "/www/ustart.tech/ico/share.png");     
+//                                                  },function (e) {
+//                                                     var shrBtnImg = $(this).find('img');
+//                                                     shrBtnImg.attr('src', "/www/ustart.tech/ico/not share.png");     
+//                                                  });
+//                                                   $(".like-btn").click(function (e) {
+//                                                     var likeBtnImg = $(this).find('img');
+//                                                     if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
+//                                                         likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+//                                                     } else {
+//                                                         likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+//                                                     }
+//                                                     return false;
+//                                                 });
+//                                                 $(".comment-like").click(function (e) {
+//                                                     if ($(this).html() == "Like") {
+//                                                         $(this).html('Liked');
+//                                                     } else {
+//                                                         $(this).html('Like');
+//                                                     }
+//                                                     return false;
+//                                                 });
+//                                                   $('body').on('click', '.odom-submit', function (e) {
+//                                                         $('#shareCommentForm').submit();
+//                                                     });
+//                                                      $('.comment-btn').click(function(e) {
+//                                                         var postId= $(this).attr("id");
+//                                                         var modified ="#"+postId;
+//                                                         console.log(modified);
+//                                                         var Pikachu = "`+DocID+`";
+//                                                         //e.preventDefault();
+//                                                         $.ajax({
+//                                                             type: 'GET',  
+//                                                             url: 'http://ustart.today:5000/getComments/',
+//                                                             contentType: "application/json; charset=utf-8",
+//                                                             data: {userID:pageID, PostID:postId,Pikachu:Pikachu},
+//                                                             success: function(data) {
+//                                                                 $("#commentnil").html(data);
+//                                                                 console.log(data);
+//                                                                 $(modified).modal('show');
+//                                                             }
+//                                                         });
+//                                                  });
+//                                                 }
+//                                             });
+//                                     });
+//                                 </script> `
+// 	fmt.Println(sum)
+
+// //	fmt.Println(output)
+// 	//var responseHtml string 
+// 	fmt.Fprintln(w, output) 
+// }
+
+
+	
 
 func call(w http.ResponseWriter, r *http.Request){
 	// If followingStatus = no 
@@ -477,25 +1185,25 @@ func Like(w http.ResponseWriter, r *http.Request){
     }
 
 	r.ParseForm()
-	fmt.Println(r.Form)
-	fname := r.FormValue("userID")
-	fmt.Println(fname)
-	following := r.FormValue("Following")
-	fmt.Println(following)
-
-	isLiked, err4 := uses.IsFollowed(eclient, session.Values["DocID"].(string),fname)
+//	fmt.Println(r.Form)
+	postid := r.FormValue("PostID")
+	postactual := postid[10:]
+	docid := r.FormValue("selfDoc")
+	likeStatus, err4 := uses.IsLiked(eclient,postactual,docid)
 	if (err4 != nil){
 		fmt.Println(err4)
 	}
-	if (isLiked == true){
-	fmt.Println("called unfollow in ajax button")
-	err := uses.UserUnfollow(eclient,session.Values["DocID"].(string),fname)
+	fmt.Println("LIKE STATUS IS ")
+	fmt.Println(likeStatus)
+	if (likeStatus == true){
+	fmt.Println("called unlike in ajax button")
+	err := uses.UserUnlikeEntry(eclient,postactual,docid)
 	if (err != nil){
 		fmt.Println(err);
 	}
 	}else{
-	fmt.Println("called follow in ajax button")
-	err := uses.UserFollow(eclient,session.Values["DocID"].(string),fname)
+	fmt.Println("called like in ajax button")
+	err := uses.UserLikeEntry(eclient,postactual,docid)
 	if (err != nil){
 		fmt.Println(err);
 	}	
@@ -528,12 +1236,208 @@ func AddComment(w http.ResponseWriter, r *http.Request){
 	fmt.Println(contentarray)
 	fmt.Println(id+" is doc id")
 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~``")
-	err4 := uses.UserNewReplyEntry(eclient,id,contentarray,postactual)
+	err4 := uses.UserReplyEntry(eclient,id,postactual,contentarray)
 		if (err4 != nil){
 		fmt.Println(err4)
 	}
 
    http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+
+
+}
+
+
+func shareComments(w http.ResponseWriter, r *http.Request){
+	// If followingStatus = no 
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+    if (test1 == nil){
+     	fmt.Println(test1)
+    http.Redirect(w, r, "/~", http.StatusFound)
+    }
+	r.ParseForm()
+	postid := r.FormValue("PostID")
+	postaid := postid[9:]
+	postactual := postid[11:]
+	fmt.Println(postaid+" is the post id ")
+	fmt.Println(postactual+" is the actual post id ")
+	pika := r.FormValue("Pikachu")
+	fmt.Println(pika+" is the pika value");
+	// journal entry, err 
+	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
+	if (err4 != nil){
+		fmt.Println(err4)
+	}
+
+	fmt.Println("hello get comments called")
+	fmt.Println(parentPost.FirstName+" is parentpost first name")
+	var sum int 
+	var output string 
+	var commentoutputs string 
+
+	for i := 0; i < len(arrayofComments); i++ {
+		commentBody := string(arrayofComments[i].Element.Content)
+		commentoutputs += `    <div class="media">
+                                                    <h6 class="pull-right text-muted time">2 hours ago</h6>
+                                                    <a class="media-left" href="#">
+                                                        <img style="height:40px;" class="img-rounded" src=d`+arrayofComments[i].Image+`>
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <h5 class="media-heading user_name" style="color:cadetblue;">`+arrayofComments[i].FirstName+" "+arrayofComments[i].LastName+`</h5>
+                                                        <p>`+commentBody+`</p>
+                                                        <p>
+                                                            <small>
+                                                                <a class="comment-like">Like</a>
+                                                            </small> -
+                                                            <small>
+                                                                <a class="confirmation-callback">Remove</a>
+                                                            </small>
+                                                        </p>
+                                                        <p>
+                                                             <small>
+                                                                <a class="view-replies" onclick="document.getElementById('replies').style.display = 'block'; this.style.display = 'none'">View 2 Replies</a>
+                                                            </small>
+                                                            <script>
+                                                               $(document).ready(function (){
+                                                                   $(".commentOfComment").css("display","none");
+                                                                });
+                                                            </script>
+                                                        </p>
+                                                         <div class="commentOfComment" id="replies">
+                                                             <!-- first reply of comment-->
+                                                             <div class="media">
+                                                                 <a class="media-left" href="#">
+                                                                    <img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
+                                                                </a>
+                                                                <div class="media-body">
+                                                                    <h5 class="media-heading user_name" style="color:cadetblue;">Bryan Brosbyani</h5>
+                                                                    <p> Hell No!</p>
+                                                                </div>
+                                                            </div>
+                                                             <!-- second reply of comment-->
+                                                             <div class="media">
+                                                                <a class="media-left" href="#">
+                                                                    <img class="media-object img-rounded" src="http://engineering.nyu.edu/files/imagecache/img_col_3_140/pictures/picture-310.jpg">
+                                                                </a>
+                                                                <div class="media-body">
+                                                                    <h5 class="media-heading user_name" style="color:cadetblue;">Phyllis Frankyl</h5>
+                                                                    <p> Naughty boii</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group pull-right">
+                                                        <form id="innercommentform">
+                                                            <input class="form-control" placeholder="Add a reply" type="text">
+                                                        </form>
+                                                        <span class="input-group-addon">
+                                                            <a onclick="document.getElementById('innercommentform').submit();">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        </span>
+                                                        </div>
+                                                    </div>`
+		fmt.Println(arrayofComments[i].FirstName)
+		sum += i
+	}
+	fmt.Println(sum)
+//	id := session.Values["DOCID"].(string)
+	username := session.Values["Username"].(string)
+	fmt.Println("username is "+session.Values["Username"].(string))
+	s := string(parentPost.Element.Content)
+	//t := parentPost.Element.TimeStamp
+
+	output += `
+	 <div class="modal fade" id=share-modal`+postactual+` role="dialog">
+                                <div class="modal-dialog">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Share On Your Profile</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                            <div class="media">
+                                                <a class="pull-left" href="#">
+                                                    <img class="media-object img-rounded" src=d`+parentPost.Image+`>
+                                                </a>
+                                                <div class="media-body">
+                                                    <h6 class="pull-right text-muted time"></h6>
+                                                    <h5 class="mt-0" style="color:cadetblue;">`+parentPost.FirstName +" "+parentPost.LastName+`</h5>
+                                                    <p>`+s+`</p> </div>
+                                                      <div class="form-group">
+                                                <form id="shareCommentForm" method="POST" action="/ShareComment">
+                                                    <input type="text" class="form-control" id="comment-msg" name="msg" placeholder="Say Something about this..."></input>
+                                                    <!--What is 'odom-submit'? If it's not used, remove it-->
+                                                    <input type="hidden" name="postid" value=`+postactual+`>
+                                                      <input type="hidden" name = "id" value=`+pika+`>
+                                                      <input type ="hidden" name="username" value=`+username+`>
+                                                    <button class="btn btn-primary odom-submit">Post</button>
+                                                </form>
+ 
+                                                </div>
+                                            </div>
+                                        </div>
+                                         
+                                           </div> </div> </div> </div>
+                                            </div>
+                                                                    <!-- delete confirmation modal -->
+                            <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <span style="font-size:20px;">Confirm Deletion</span>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span style="font-size:15px;">Are you sure you want to delete this post?</span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <a class="btn btn-danger btn-ok">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+  
+
+
+	`
+
+	//params := r.URL.Query()
+	//params.Get('testing123')
+	fmt.Println("actual post is"+postactual)
+	fmt.Fprintln(w, output) 
+
+}
+
+
+func ShareComment(w http.ResponseWriter, r *http.Request){
+	// If followingStatus = no 
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+    if (test1 == nil){
+     	fmt.Println(test1)
+    http.Redirect(w, r, "/~", http.StatusFound)
+    }
+
+	r.ParseForm()
+	docid := r.FormValue("id") 
+	fmt.Println("docid is "+docid);
+	fmt.Println(session.Values["DocID"].(string))
+	postid := r.FormValue("postid") 
+	fmt.Println("actual post is now"+postid)
+	msg := r.FormValue("msg")
+	username := r.FormValue("username")
+	content := []rune(msg)
+	fmt.Println("msg is "+msg)
+
+
+	err := uses.UserShareEntry(eclient,docid,postid,content)
+	if (err != nil){
+		fmt.Println("SHARECOMMENT");
+		fmt.Println(err);
+	}
+
+	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 
 
 }
@@ -564,7 +1468,69 @@ func getComments(w http.ResponseWriter, r *http.Request){
 	fmt.Println(parentPost.FirstName+" is parentpost first name")
 	var sum int 
 	var output string 
+	var commentoutputs string 
+
 	for i := 0; i < len(arrayofComments); i++ {
+		commentBody := string(arrayofComments[i].Element.Content)
+		commentoutputs += `    <div class="media">
+                                                    <h6 class="pull-right text-muted time">2 hours ago</h6>
+                                                    <a class="media-left" href="#">
+                                                        <img style="height:40px;" class="img-rounded" src=d`+arrayofComments[i].Image+`>
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <h5 class="media-heading user_name" style="color:cadetblue;">`+arrayofComments[i].FirstName+" "+arrayofComments[i].LastName+`</h5>
+                                                        <p>`+commentBody+`</p>
+                                                        <p>
+                                                            <small>
+                                                                <a class="comment-like">Like</a>
+                                                            </small> -
+                                                            <small>
+                                                                <a class="confirmation-callback">Remove</a>
+                                                            </small>
+                                                        </p>
+                                                        <p>
+                                                             <small>
+                                                                <a class="view-replies" onclick="document.getElementById('replies').style.display = 'block'; this.style.display = 'none'">View 2 Replies</a>
+                                                            </small>
+                                                            <script>
+                                                               $(document).ready(function (){
+                                                                   $(".commentOfComment").css("display","none");
+                                                                });
+                                                            </script>
+                                                        </p>
+                                                         <div class="commentOfComment" id="replies">
+                                                             <!-- first reply of comment-->
+                                                             <div class="media">
+                                                                 <a class="media-left" href="#">
+                                                                    <img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
+                                                                </a>
+                                                                <div class="media-body">
+                                                                    <h5 class="media-heading user_name" style="color:cadetblue;">Bryan Brosbyani</h5>
+                                                                    <p> Hell No!</p>
+                                                                </div>
+                                                            </div>
+                                                             <!-- second reply of comment-->
+                                                             <div class="media">
+                                                                <a class="media-left" href="#">
+                                                                    <img class="media-object img-rounded" src="http://engineering.nyu.edu/files/imagecache/img_col_3_140/pictures/picture-310.jpg">
+                                                                </a>
+                                                                <div class="media-body">
+                                                                    <h5 class="media-heading user_name" style="color:cadetblue;">Phyllis Frankyl</h5>
+                                                                    <p> Naughty boii</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group pull-right">
+                                                        <form id="innercommentform">
+                                                            <input class="form-control" placeholder="Add a reply" type="text">
+                                                        </form>
+                                                        <span class="input-group-addon">
+                                                            <a onclick="document.getElementById('innercommentform').submit();">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        </span>
+                                                        </div>
+                                                    </div>`
 		fmt.Println(arrayofComments[i].FirstName)
 		sum += i
 	}
@@ -572,6 +1538,9 @@ func getComments(w http.ResponseWriter, r *http.Request){
 //	id := session.Values["DOCID"].(string)
 	username := session.Values["Username"].(string)
 	fmt.Println("username is "+session.Values["Username"].(string))
+	s := string(parentPost.Element.Content)
+	//t := parentPost.Element.TimeStamp
+
 	output += `
 	 <div class="modal fade" id=main-moda`+postaid+` role="dialog">
                                 <div class="modal-dialog">
@@ -581,25 +1550,25 @@ func getComments(w http.ResponseWriter, r *http.Request){
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             <div class="media">
                                                 <a class="pull-left" href="#">
-                                                    <img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
+                                                    <img class="media-object img-rounded" src=d`+parentPost.Image+`>
                                                 </a>
                                                 <div class="media-body">
-                                                    <h6 class="pull-right text-muted time">3 hours ago</h6>
-                                                    <h5 class="mt-0" style="color:cadetblue;">Ryan Rozbiani</h5>
-                                                    <p>Hey guys! We're launching UStart! Watch out for us!</p>
+                                                    <h6 class="pull-right text-muted time"></h6>
+                                                    <h5 class="mt-0" style="color:cadetblue;">`+parentPost.FirstName +" "+parentPost.LastName+`</h5>
+                                                    <p>`+s+`</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="modal-body">
                                             <div class="input-group">
-                                                <form id="commentform" method="POST" action="/AddComment">
-                                                    <input name="commentz" placeholder="Add a comment" type="text">
+                                                <form class="commentform" method="POST" action="/AddComment">
+                                                    <input name="commentz" class="form-control" placeholder="Add a comment" type="text">
                                                       <input type="hidden" name="followstat" value=`+postaid+`>
                                                       <input type="hidden" name = "id" value=`+pika+`>
                                                       <input type ="hidden" name="username" value=`+username+`>
                                                 </form>
                                                 <span class="input-group-addon">
-                                                    <a onclick="document.getElementById('commentform').submit();">
+                                                    <a onclick="document.getElementByClass('commentform').submit();">
                                                     <script>
                                                     console.log('inside the its not gonna work because it's just hml stuff so put inside script')
                                                     </script>
@@ -608,6 +1577,9 @@ func getComments(w http.ResponseWriter, r *http.Request){
                                                 </span>
                                             </div>
                                             <br>
+                                            <div class="comments-list">
+                                                `+commentoutputs+`
+                                                </div>    
 
 
 	`
@@ -682,7 +1654,7 @@ func AJAX(w http.ResponseWriter, r *http.Request){
 
 
 }
-
+/*
 func WallPostCreation(w http.ResponseWriter, r *http.Request){
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -694,7 +1666,7 @@ func WallPostCreation(w http.ResponseWriter, r *http.Request){
     textb := r.FormValue("block")
 
     textb2 := []rune(textb)
-    err := uses.UserNewTextEntry(eclient,session.Values["DocID"].(string),textb2)
+    message, err := uses.UserNewTextEntry(eclient,session.Values["DocID"].(string),textb2)
     if (err != nil){
     	fmt.Println(err);
     }
@@ -702,6 +1674,7 @@ func WallPostCreation(w http.ResponseWriter, r *http.Request){
     http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
 
 }
+*/
 
 func WallPostComment(w http.ResponseWriter, r *http.Request){
 
@@ -1106,10 +2079,15 @@ func main() {
 	http.HandleFunc("/callme2/",call2)
 	http.HandleFunc("/follow/",Follow)
 	http.HandleFunc("/unfollow/",Follow)
-	http.HandleFunc("/New/Post/",WallPostCreation)
+	// http.HandleFunc("/New/Post/",WallPostCreation)
+	http.HandleFunc("/Like",Like)
 	http.HandleFunc("/New/Comment/",WallPostComment)
 	http.HandleFunc("/getComments/",getComments)
+	http.HandleFunc("/shareComments/",shareComments)
+	http.HandleFunc("/ShareComment",ShareComment)
 	http.HandleFunc("/AddComment",AddComment)
+	http.HandleFunc("/loadWall/",wallLoad)
+	http.HandleFunc("/addPost/",wallAdd)
 
 	http.HandleFunc("/ajax/",AJAX)
 
