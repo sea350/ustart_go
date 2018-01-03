@@ -21,7 +21,7 @@ func NukeUser(eclient *elastic.Client, userID string, areYouSure bool) (bool, []
 		return nukeSucess, append(errorStack, errors.New("You are not sure, make a decision and come back"))
 	}
 
-	usr, err := get.GetUserByID(eclient, userID)
+	usr, err := get.UserByID(eclient, userID)
 	if err != nil {
 		errorStack = append(errorStack, err)
 		errorStack = append(errorStack, errors.New("Problem getting user, no changes were made"))

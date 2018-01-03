@@ -83,7 +83,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte) (bool, ty
 		return loginSucessful, userSession, err
 	}
 
-	usr, err := get.GetUserByEmail(eclient, userEmail)
+	usr, err := get.UserByEmail(eclient, userEmail)
 	if err != nil {
 		return loginSucessful, userSession, err
 	}
@@ -94,7 +94,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte) (bool, ty
 		return false, userSession, passErr
 	}
 
-	uID, err := get.GetUserIDByEmail(eclient, userEmail)
+	uID, err := get.UserIDByEmail(eclient, userEmail)
 	if err != nil {
 		return loginSucessful, userSession, err
 	}
@@ -122,17 +122,17 @@ func UserPage(eclient *elastic.Client, username string, viewerID string) (types.
 
 	var isFollowed bool
 
-	userID, err := get.GetIDByUsername(eclient, username)
+	userID, err := get.IDByUsername(eclient, username)
 	if err != nil {
 		return usr, userID, isFollowed, err
 	}
 
-	usr, err = get.GetUserByID(eclient, userID)
+	usr, err = get.UserByID(eclient, userID)
 	if err != nil {
 		return usr, userID, isFollowed, err
 	}
 
-	viewer, err := get.GetUserByID(eclient, viewerID)
+	viewer, err := get.UserByID(eclient, viewerID)
 	if err != nil {
 		return usr, userID, isFollowed, err
 	}
@@ -223,7 +223,7 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string) (types.
 
 	newJournalEntry.ElementID = entryID
 
-	entry, err := get.GetEntryByID(eclient, entryID)
+	entry, err := get.EntryByID(eclient, entryID)
 	if err != nil {
 		return newJournalEntry, err
 	}
@@ -232,7 +232,7 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string) (types.
 	newJournalEntry.NumLikes = len(entry.Likes)
 	newJournalEntry.NumReplies = len(entry.ReplyIDs)
 
-	usr, err := get.GetUserByID(eclient, entry.PosterID)
+	usr, err := get.UserByID(eclient, entry.PosterID)
 	if err != nil {
 		return newJournalEntry, err
 	}
@@ -252,7 +252,7 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string) (types.
 //Returns an error
 func ModifyDescription(eclient *elastic.Client, userID string, newDescription string) error {
 
-	usr, err := get.GetUserByID(eclient, userID)
+	usr, err := get.UserByID(eclient, userID)
 
 	if err != nil {
 		return err
@@ -385,7 +385,7 @@ func UserUnlikeEntry(eclient *elastic.Client, entryID string, likerID string) er
 //Returns true if the entry is liked and false if not, and an error
 func IsLiked(eclient *elastic.Client, entryID string, viewerID string) (bool, error) {
 	isLiked := false
-	entry, err := get.GetEntryByID(eclient, entryID)
+	entry, err := get.EntryByID(eclient, entryID)
 	if err != nil {
 		return isLiked, err
 	}
@@ -496,7 +496,7 @@ func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error 
 //Returns an error
 func IsFollowed(eclient *elastic.Client, usrID string, viewerID string) (bool, error) {
 	isFollowed := false
-	user, err := get.GetUserByID(eclient, usrID)
+	user, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return isFollowed, err
 	}
@@ -514,7 +514,7 @@ func IsFollowed(eclient *elastic.Client, usrID string, viewerID string) (bool, e
 //Returns an error
 func NumFollow(eclient *elastic.Client, usrID string, whichOne bool) (int, error) {
 
-	usr, err := get.GetUserByID(eclient, usrID)
+	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return -1, err
 	}
