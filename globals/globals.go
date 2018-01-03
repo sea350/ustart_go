@@ -1,0 +1,19 @@
+package get
+
+//ProjectIndex ...
+const ProjectIndex = "test-project_data"
+
+//ProjectType ...
+const ProjectType = "PROJECT"
+
+//EntryIndex ...
+const EntryIndex = "test-entry_data"
+
+//EntryType ...
+const EntryType = "ENTRY"
+
+//UserIndex ...
+const UserIndex = "test-user_data"
+
+//UserType ...
+const UserType = "USER"
