@@ -409,5 +409,5 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
 
 	//fmt.Println(output)
 	//var responseHtml string 
-	fmt.Fprintln(w, output) 
+	fmt.Fprintln(w, output) // this line sends data back to the ajax call on the front end side 
 }
