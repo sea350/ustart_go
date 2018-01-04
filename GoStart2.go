@@ -12,8 +12,19 @@ import (
 )
 
 func main() {
+	/*
+	Lines 18-19 handle the static file locating 
+	If we wanted to reorganize file/folder locations, this is one of 3 things that would have to change
+	In executeTemplates you will need to make the same changes
+	The other being the relative link on the actual html pages 
+	*/
 	fs := http.FileServer(http.Dir("../../../../../www/"))
 	http.Handle("/www/", http.StripPrefix("/www/", fs))
+
+	/*
+	The following are all the handlers we have so far. 
+	*/
+
 	http.HandleFunc("/Inbox/",inbox.Inbox)
 
 	http.HandleFunc("/loginerror/",login.LoginError)
