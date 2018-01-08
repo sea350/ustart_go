@@ -1,0 +1,278 @@
+package uses
+
+import (
+	getEntry "github.com/sea350/ustart_go/get/entry"
+	getUser "github.com/sea350/ustart_go/get/user"
+	postEntry "github.com/sea350/ustart_go/post/entry"
+	postUser "github.com/sea350/ustart_go/post/user"
+	types "github.com/sea350/ustart_go/types"
+	elastic "gopkg.in/olivere/elastic.v5"
+
+	"errors"
+	"fmt"
+	"time"
+)
+
+//SignUpBasic ... A basic user signup process
+//Requires all basic signup feilds (email, password ...)
+//Returns an error if there was a problem with database submission
+func SignUpBasic(eclient *elastic.Client, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
+
+	inUse, err := getUser.EmailInUse(eclient, email)
+	if err != nil {
+		return err
+	}
+	if inUse {
+		return errors.New("email is in use")
+	}
+
+	newUsr := types.User{}
+	newUsr.FirstName = fname
+	newUsr.LastName = lname
+	newUsr.Email = email
+	newUsr.Username = getUser.EmailToUsername(email)
+	fmt.Println(newUsr.Username)
+
+	//hashPass := bcrypt.GenerateFromPassword(password,10)
+	newUsr.Password = password
+	newUsr.University = school
+	newUsr.Majors = major
+	newUsr.Dob = bday
+
+	newLoc := types.LocStruct{}
+	newLoc.Country = country
+	newLoc.State = state
+	newLoc.City = city
+	newLoc.Zip = zip
+	newUsr.Location = newLoc
+	newUsr.Visible = true
+	newUsr.AccCreation = time.Now()
+	if currYear == "Freshman" {
+		newUsr.Class = 0
+	} else if currYear == "Sophomore" {
+		newUsr.Class = 1
+	} else if currYear == "Junior" {
+		newUsr.Class = 2
+	} else if currYear == "Senior" {
+		newUsr.Class = 3
+	} else if currYear == "Graduate" {
+		newUsr.Class = 4
+	} else {
+		newUsr.Class = 5
+	}
+
+	retErr := postUser.IndexUser(eclient, newUsr)
+
+	return retErr
+}
+
+//UserShareEntry ... CREATES A SHARED ENTRY FROM A USER
+//Requires the user's docID, the parent entry docID and the content of the post
+//Returns an error
+func UserShareEntry(eclient *elastic.Client, userID string, entryID string, content []rune) error {
+
+	var newReply types.Entry
+	newReply.PosterID = userID
+	newReply.Content = content
+	newReply.ReferenceEntry = entryID
+	newReply.TimeStamp = time.Now()
+	newReply.Classification = 2
+	newReply.Visible = true
+
+	replyID, err := postEntry.IndexEntry(eclient, newReply)
+	if err != nil {
+		return err
+	}
+
+	err = postUser.AppendEntryID(eclient, userID, replyID)
+	if err != nil {
+		return err
+	}
+
+	err = postEntry.AppendShareID(eclient, entryID, replyID)
+	return err
+}
+
+//UserLikeEntry ... ALLOWS A USER TO LIKE AN ENTRY
+//Requires the entry's docID, and docID of the person who is liking the entry
+//Returns an error
+func UserLikeEntry(eclient *elastic.Client, entryID string, likerID string) error {
+
+	err := postEntry.AppendLike(eclient, entryID, likerID)
+	if err != nil {
+		return err
+	}
+
+	err = postUser.AppendLikedEntryID(eclient, likerID, entryID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+//UserUnlikeEntry ... ALLOWS A USER TO UNLIKE AN ENTRY
+//Requires the entry's docID, and docID of the person who is unliking the entry
+//Returns an error
+func UserUnlikeEntry(eclient *elastic.Client, entryID string, likerID string) error {
+
+	//DeleteLike deletes from post
+	err := postEntry.DeleteLike(eclient, entryID, likerID)
+	if err != nil {
+		return err
+	}
+
+	//DeleteLikedEntryID deletes from usr
+	err = postUser.DeleteLikedEntryID(eclient, likerID, entryID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+//IsLiked ... CHECKS IF AN ENTRY IS ALREADY LIKED BY A USER
+//Requires the entry's docID, the user's docID
+//Returns true if the entry is liked and false if not, and an error
+func IsLiked(eclient *elastic.Client, entryID string, viewerID string) (bool, error) {
+	isLiked := false
+	entry, err := getEntry.EntryByID(eclient, entryID)
+	if err != nil {
+		return isLiked, err
+	}
+	for _, element := range entry.Likes {
+		if element.UserID == viewerID {
+			isLiked = true
+			return isLiked, err
+		}
+	}
+	return isLiked, err
+}
+
+//RequestColleague ... SENDS A COLLEGUE REQUEST FROM ONE USER TO ANOTHER
+//NOTE: This function checks if a request has already been sent and if the users are allready colleagues
+//WARNING: needs to be revised
+//Requires the sender's docID and the request receiver's docID
+//Returns an error
+func RequestColleague(eclient *elastic.Client, usrID string, requestedUserID string) error {
+	usr, err := getUser.UserByID(eclient, usrID)
+	if err != nil {
+		return err
+	}
+
+	for _, element := range usr.SentCollReq {
+		if element == usrID {
+			return errors.New("You have already requested this user")
+		}
+
+	}
+
+	for _, element := range usr.Colleagues {
+		if element == requestedUserID {
+			return errors.New("You have already requested this user")
+		}
+	}
+
+	//CONFUSING, REVISE!!!!!!!!!!!!!!!!!!!!1111
+	err = postUser.AppendCollReq(eclient, usrID, requestedUserID, true)
+	if err != nil {
+		return err
+	}
+
+	err = postUser.AppendCollReq(eclient, requestedUserID, requestedUserID, false)
+	return err
+}
+
+//ReplyToColleagueRequest ... WARNING NEEDS TO BE FIXED
+//ALLOWS A USER TO REPLY TO A COLLEAGUE REQUEST
+//Requires user's docID, the docID of the user who sent the request, and true if they acept the request/ false if declined
+//Returns an error
+func ReplyToColleagueRequest(eclient *elastic.Client, usrID string, requestedUserID string, reply bool) error {
+	if reply == true {
+
+	}
+
+	return errors.New("Could not reply to colleague request")
+
+}
+
+//UpdateUserLinks ... REPLACES THE ENTIRETY OF A USER'S LINKS WITH AN UPDATED LIST
+//Requires the target user's docID and an updated array of type Link
+//Returns an error
+func UpdateUserLinks(eclient *elastic.Client, userID string, lynx []types.Link) error {
+	err := postUser.UpdateUser(eclient, userID, "QuickLinks", lynx)
+	return err
+}
+
+//UpdateUserTags ... REPLACES THE ENTIRETY OF A USER'S TAGS WITH AN UPDATED LIST
+//Requires the target user's docID and an updated array of strings
+//Returns an error
+func UpdateUserTags(eclient *elastic.Client, userID string, tags []string) error {
+	err := postUser.UpdateUser(eclient, userID, "Tags", tags)
+	return err
+}
+
+//UserFollow ... ALLOWS A USER TO FOLLOW SOMEONE ELSE
+//Requires the follower's docID and the followed docID
+//Returns an error
+func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
+	//true = append to following
+	followErr := postUser.AppendFollow(eclient, usrID, followID, true)
+	if followErr != nil {
+		return followErr
+	}
+	//false = append to followers
+	followingErr := postUser.AppendFollow(eclient, followID, usrID, false)
+	if followingErr != nil {
+		return followingErr
+	}
+
+	return nil
+}
+
+//UserUnfollow ... ALLOWS A USER TO UNFOLLOW SOMEONE ELSE
+//Requires the follower's docID and the followed docID
+//Returns an error
+func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error {
+	err := postUser.DeleteFollow(eclient, usrID, followID, true)
+	if err != nil {
+		return err
+	}
+	err = postUser.DeleteFollow(eclient, followID, usrID, false)
+	return err
+}
+
+//IsFollowed ... CHECKS IF A USER IS FOLLWING SOMEONE ELSE
+//Requires the follower's docID and the the potential followed docID
+//Returns an error
+func IsFollowed(eclient *elastic.Client, usrID string, viewerID string) (bool, error) {
+	isFollowed := false
+	user, err := getUser.UserByID(eclient, usrID)
+	if err != nil {
+		return isFollowed, err
+	}
+	for _, element := range user.Followers {
+		if element == viewerID {
+			isFollowed = true
+			return isFollowed, err
+		}
+	}
+	return isFollowed, err
+}
+
+//NumFollow ... FINDS THE NUMBER OF PEOPLE FOLLOWED BY/FOLLOWING SOMEONE
+//Requires the user's docID, and true if you want num people person is following/ false if you want number of followers
+//Returns an error
+func NumFollow(eclient *elastic.Client, usrID string, whichOne bool) (int, error) {
+
+	usr, err := getUser.UserByID(eclient, usrID)
+	if err != nil {
+		return -1, err
+	}
+	if whichOne {
+		return len(usr.Following), nil
+	}
+
+	return len(usr.Followers), nil
+
+}
