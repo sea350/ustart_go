@@ -8,7 +8,6 @@ import (
 
 
 func AddComment(w http.ResponseWriter, r *http.Request){
-	// If followingStatus = no 
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
     if (test1 == nil){

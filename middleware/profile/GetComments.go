@@ -19,6 +19,7 @@ func GetComments(w http.ResponseWriter, r *http.Request){
 	postID := r.FormValue("PostID")
 	postaid := postID[9:]
 	postactual := postID[10:]
+    // need to trim beginning of postID
 	pika := r.FormValue("Pikachu")
 	// journal entry, err 
 	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
@@ -31,6 +32,10 @@ func GetComments(w http.ResponseWriter, r *http.Request){
 	var output string 
 	var commentoutputs string 
 
+
+/* 
+The following is how AJAX for loading comments is handled on the server side.
+*/
 	for i := 0; i < len(arrayofComments); i++ {
 		commentBody := string(arrayofComments[i].Element.Content)
 		commentoutputs += `    <div class="media">

@@ -144,29 +144,7 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
 
 	</script>
 	`
-	// output += ` <div id="main">
- //                                <!-- new post -->
- //                                <div class="panel panel-default">
- //                                    <div class="panel-body">
- //                                        <div class="media">
- //                                            <a class="pull-left" href="#">
- //                                                <img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
- //                                            </a>
- //                                            <div class="media-body">
- //                                                <div class="form-group">
- //                                                   <!-- <form id="New-Post-Form" method="POST" action="http://ustart.today:5000/New/Post/" > -->
- //                                                        <textarea class="form-control" id="post-msg" name="block" style="resize:none;" placeholder="Share what's new"></textarea>
 
- //                                                        <button id="new-postSubmit" type="submit" class="btn btn-primary pull-right">Post</button>
- //                                                <!--    </form> -->
- //                                                </div>
- //                                            <!--    <button id="new-postSubmit" class="btn btn-primary pull-right">Post</button> -->
- //                                            </div>
- //                                        </div>
- //                                    </div>
- //                                </div>
- //                                 <!-- end new post -->
- //                                 `
 
 		if (strings.Compare("null",entryIDs) != 0 ){
 			fmt.Println("ROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAR")
@@ -175,10 +153,7 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
 
 	for i := len(jEntries)-1; i >= 0; i-- {
 		sum += 1;
-	//	fmt.Println("ENTRY ")
-	//		fmt.Println(len(jEntries))
 		bodyText := string(jEntries[i].Element.Content)
-		fmt.Println(jEntries[i].Element.Classification)
 		if(jEntries[i].Element.Classification == 0){
 			fmt.Println("classifcation is 0")
 			likes := string(jEntries[i].NumLikes)
@@ -234,18 +209,17 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
 		}
 			if(jEntries[i].Element.Classification == 2){
 			postIDArray := []string{jEntries[i].Element.ReferenceEntry} // just an array with 1 entry 
-			fmt.Println("MADE IT HERE")
     		jEntry, err5 := uses.LoadEntries(eclient,postIDArray)
 			if (err5 != nil){
 				fmt.Println(err5);
 			}
 			bodyText := string(jEntry[0].Element.Content)
 			comment := string(jEntries[i].Element.Content)
-			fmt.Println(jEntries[i].Element.ReferenceEntry)
-			fmt.Println(" ARE THE REFERENCE ENTRIES ")
+			// fmt.Println(jEntries[i].Element.ReferenceEntry)
+			// fmt.Println(" ARE THE REFERENCE ENTRIES ")
 
-			fmt.Println(jEntries[i].Element.Content)
-			fmt.Println(jEntry[0].Element.Content)
+			// fmt.Println(jEntries[i].Element.Content)
+			// fmt.Println(jEntry[0].Element.Content)
 
 
 						class0 += `
@@ -435,5 +409,5 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
 
 	//fmt.Println(output)
 	//var responseHtml string 
-	fmt.Fprintln(w, output) 
+	fmt.Fprintln(w, output) // this line sends data back to the ajax call on the front end side 
 }

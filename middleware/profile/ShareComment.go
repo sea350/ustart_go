@@ -150,6 +150,8 @@ func ShareComments(w http.ResponseWriter, r *http.Request){
 	fmt.Fprintln(w, output) 
 
 }
+
+/* This function might not be used anymore. */
 func ShareComment2(w http.ResponseWriter, r *http.Request){
 	// If followingStatus = no 
 	session, _ := store.Get(r, "session_please")

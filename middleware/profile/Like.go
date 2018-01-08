@@ -15,8 +15,8 @@ func Like(w http.ResponseWriter, r *http.Request){
 
 	r.ParseForm()
 	postid := r.FormValue("PostID")
-	postactual := postid[10:]
-	docid := r.FormValue("selfDoc")
+	postactual := postid[10:] // postid has to be trimmed 
+	docid := r.FormValue("selfDoc") // docid of the doc you are viewing double check 
 	likeStatus, err4 := uses.IsLiked(eclient,postactual,docid)
 	if (err4 != nil){
 		fmt.Println(err4)

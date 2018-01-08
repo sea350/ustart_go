@@ -5,13 +5,14 @@ import (
 )
 
 func Logout(w http.ResponseWriter, r *http.Request){
-		session, _ := store.Get(r, "session_please")
-			test1, _ := session.Values["DocID"]
-     if (test1 != nil){
-     	session.Options.MaxAge = -1
-     	session.Save(r,w)
-     	http.Redirect(w, r, "/~", http.StatusFound)
-
-       }
+	// Session called session_please is retreived if it exists
+	session, _ := store.Get(r, "session_please")
+	// check if docid exists within the session note: there is inconsistency with checking docid/username. 
+	test1, _ := session.Values["DocID"]
+	if (test1 != nil){ // if logged in 
+		session.Options.MaxAge = -1 // kills session 
+		session.Save(r,w) // save changes to session 
+		http.Redirect(w, r, "/~", http.StatusFound) // bring back to homepage 
+	}
 }
 
