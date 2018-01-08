@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -13,10 +14,9 @@ import (
 func DeleteColleague(eclient *elastic.Client, usrID string, deleteID string) error {
 	ctx := context.Background()
 
-	colleagueLock.Lock()
-	defer colleagueLock.Unlock()
+	ColleagueLock.Lock()
 
-	usr, err := get.GetUserByID(eclient, usrID)
+	usr, err := get.UserByID(eclient, usrID)
 	//idx, err := universal.FindIndex(usr.Colleagues, deleteID) UNIVERSAL PKG
 	//temp for-loop:
 
@@ -45,6 +45,7 @@ func DeleteColleague(eclient *elastic.Client, usrID string, deleteID string) err
 		Doc(map[string]interface{}{"Colleagues": usr.Colleagues}).
 		Do(ctx)
 
+	defer ColleagueLock.Unlock()
 	return err
 
 }

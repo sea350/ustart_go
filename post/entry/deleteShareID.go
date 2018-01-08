@@ -15,8 +15,7 @@ import (
 func DeleteShareID(eclient *elastic.Client, entryID string, shareID string) error {
 	ctx := context.Background()
 
-	shareArrayLock.Lock()
-	defer shareArrayLock.Unlock()
+	ShareArrayLock.Lock()
 
 	anEntry, err := get.EntryByID(eclient, entryID)
 	if err != nil {
@@ -38,11 +37,12 @@ func DeleteShareID(eclient *elastic.Client, entryID string, shareID string) erro
 
 	_, err = eclient.Update().
 		Index(globals.EntryIndex).
-		Type(gloabls.EntryType).
+		Type(globals.EntryType).
 		Id(entryID).
 		Doc(map[string]interface{}{"ShareIDs": anEntry.ShareIDs}).
 		Do(ctx)
 
+	defer ShareArrayLock.Unlock()
 	return err
 
 }

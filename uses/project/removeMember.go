@@ -1,6 +1,12 @@
 package uses
 
-import elastic "gopkg.in/olivere/elastic.v5"
+import (
+	getProject "github.com/sea350/ustart_go/get/project"
+	getUser "github.com/sea350/ustart_go/get/user"
+	postProject "github.com/sea350/ustart_go/post/project"
+	postUser "github.com/sea350/ustart_go/post/user"
+	elastic "gopkg.in/olivere/elastic.v5"
+)
 
 //NEEDS TO BE REPAIRED
 
@@ -9,14 +15,14 @@ import elastic "gopkg.in/olivere/elastic.v5"
 //Returns an error
 func RemoveMember(eclient *elastic.Client, projectID string, userID string) error {
 
-	memberModLock.Lock()
-	defer memberModLock.Unlock()
+	postProject.ModifyMemberLock.Lock()
+	defer postProject.ModifyMemberLock.Unlock()
 
-	usr, err := get.GetUserByID(eclient, userID)
+	usr, err := getUser.UserByID(eclient, userID)
 	if err != nil {
 		return err
 	}
-	proj, projErr := get.GetProjectByID(eclient, projectID)
+	proj, projErr := getProject.ProjectByID(eclient, projectID)
 	if err != nil {
 		return projErr
 	}
@@ -30,7 +36,7 @@ func RemoveMember(eclient *elastic.Client, projectID string, userID string) erro
 		}
 	}
 
-	err = post.UpdateUser(eclient, userID, "Projects", append(usr.Projects[:usrIdx], usr.Projects[usrIdx+1:]...))
+	err = postUser.UpdateUser(eclient, userID, "Projects", append(usr.Projects[:usrIdx], usr.Projects[usrIdx+1:]...))
 	if err != nil {
 		return err
 	}
@@ -42,7 +48,7 @@ func RemoveMember(eclient *elastic.Client, projectID string, userID string) erro
 		}
 	}
 
-	projErr = post.DeleteMember(eclient, projectID, proj.Members[projIdx])
+	projErr = postProject.DeleteMember(eclient, projectID, proj.Members[projIdx])
 	if projErr != nil {
 		return projErr
 	}

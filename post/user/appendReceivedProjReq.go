@@ -2,36 +2,30 @@ package post
 
 import (
 	"context"
-	"errors"
 
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
-	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//AppendLink ... appends new link to QuickLinks
-func AppendLink(eclient *elastic.Client, usrID string, link types.Link) error {
+//AppendProjReq ... appends to either sent or received project request arrays within user
+//takes in eclient, user ID, the project ID
+func AppendReceivedProjReq(eclient *elastic.Client, usrID string, projID string) error {
 	ctx := context.Background()
 
-	procLock.Lock()
+	projectLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
-	if err != nil {
-		return errors.New("User does not exist")
-	}
-
-	usr.QuickLinks = append(usr.QuickLinks, link)
+	usr.ReceivedProjReq = append(usr.ReceivedProjReq, projID)
 
 	_, err = eclient.Update().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		Id(usrID).
-		Doc(map[string]interface{}{"QuickLinks": usr.QuickLinks}).
+		Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
 		Do(ctx)
 
 	defer procLock.Unlock()
 	return err
-
 }

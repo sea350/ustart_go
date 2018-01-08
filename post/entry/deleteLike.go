@@ -15,8 +15,7 @@ import (
 func DeleteLike(eclient *elastic.Client, entryID string, likerID string) error {
 	ctx := context.Background()
 
-	likeArrayLock.Lock()
-	defer likeArrayLock.Unlock()
+	LikeArrayLock.Lock()
 
 	anEntry, err := get.EntryByID(eclient, entryID)
 
@@ -40,5 +39,6 @@ func DeleteLike(eclient *elastic.Client, entryID string, likerID string) error {
 		Doc(map[string]interface{}{"Likes": anEntry.Likes}).
 		Do(ctx)
 
+	defer LikeArrayLock.Unlock()
 	return err
 }

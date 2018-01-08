@@ -16,7 +16,7 @@ func ReindexProject(eclient *elastic.Client, projectID string, projectPage types
 
 	ctx := context.Background()
 
-	exists, err := eclient.IndexExists(projectIndex).Do(ctx)
+	exists, err := eclient.IndexExists(globals.ProjectIndex).Do(ctx)
 
 	if err != nil {
 		return err

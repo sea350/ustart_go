@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	get "github.com/sea350/ustart_go/get/user"
+	get "github.com/sea350/ustart_go/get/project"
 	globals "github.com/sea350/ustart_go/globals"
-	postEntry "github.com/sea350/ustart_go/post/entry"
+	entryPost "github.com/sea350/ustart_go/post/entry"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -14,24 +14,24 @@ import (
 func AppendEntryID(eclient *elastic.Client, usrID string, entryID string) error {
 	ctx := context.Background()
 
-	postEntry.EntryLock.Lock()
+	entryPost.EntryLock.Lock()
 
-	usr, err := get.UserByID(eclient, usrID)
+	usr, err := get.ProjectByID(eclient, usrID)
 
 	if err != nil {
-		return errors.New("User does not exist")
+		return errors.New("Project does not exist")
 	}
 
 	usr.EntryIDs = append(usr.EntryIDs, entryID)
 
 	_, err = eclient.Update().
-		Index(globals.UserIndex).
-		Type(globals.UserType).
+		Index(globals.ProjectIndex).
+		Type(globals.ProjectType).
 		Id(usrID).
 		Doc(map[string]interface{}{"EntryIDs": usr.EntryIDs}).
 		Do(ctx)
 
-	defer postEntry.EntryLock.Unlock()
+	defer entryPost.EntryLock.Unlock()
 	return err
 
 }

@@ -15,7 +15,7 @@ import (
 func UpdateProject(eclient *elastic.Client, projectID string, field string, newContent interface{}) error {
 	ctx := context.Background()
 
-	exists, err := eclient.IndexExists(projectIndex).Do(ctx)
+	exists, err := eclient.IndexExists(globals.ProjectIndex).Do(ctx)
 	if err != nil {
 		return err
 	}
@@ -23,8 +23,7 @@ func UpdateProject(eclient *elastic.Client, projectID string, field string, newC
 		return errors.New("Index does not exist")
 	}
 
-	genericProjectUpdateLock.Lock()
-	defer genericProjectUpdateLock.Unlock()
+	GenericProjectUpdateLock.Lock()
 
 	_, err = get.ProjectByID(eclient, projectID)
 	if err != nil {
@@ -37,7 +36,7 @@ func UpdateProject(eclient *elastic.Client, projectID string, field string, newC
 		Id(projectID).
 		Doc(map[string]interface{}{field: newContent}).
 		Do(ctx)
-	//if err != nil {return err}
 
-	return nil
+	defer GenericProjectUpdateLock.Unlock()
+	return err
 }

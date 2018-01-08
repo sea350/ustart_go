@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -14,10 +15,9 @@ import (
 func DeleteCollReq(eclient *elastic.Client, usrID string, reqID string, whichOne bool) error {
 	ctx := context.Background()
 
-	followLock.Lock()
-	defer followLock.Unlock()
+	ColleagueLock.Lock()
 
-	usr, err := get.GetUserByID(eclient, usrID)
+	usr, err := get.UserByID(eclient, usrID)
 
 	if err != nil {
 		return errors.New("User does not exist")
@@ -64,5 +64,6 @@ func DeleteCollReq(eclient *elastic.Client, usrID string, reqID string, whichOne
 		Doc(map[string]interface{}{"ReceivedCollReq": usr.ReceivedCollReq}).
 		Do(ctx)
 
+	defer ColleagueLock.Unlock()
 	return err
 }

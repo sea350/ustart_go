@@ -4,14 +4,16 @@ import (
 	"context"
 	"errors"
 
+	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-func GetIDByUsername(eclient *elastic.Client, username string) (string, error) {
+//IDByUsername ...
+func IDByUsername(eclient *elastic.Client, username string) (string, error) {
 	ctx := context.Background()
 	termQuery := elastic.NewTermQuery("Username", username)
 	searchResult, err := eclient.Search().
-		Index(USER_INDEX).
+		Index(globals.UserIndex).
 		Query(termQuery).
 		Do(ctx)
 

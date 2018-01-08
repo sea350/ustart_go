@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	get "github.com/sea350/ustart_go/get/entry"
+	getEntry "github.com/sea350/ustart_go/get/entry"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -16,10 +16,9 @@ import (
 func AppendLike(eclient *elastic.Client, entryID string, likerID string) error {
 	ctx := context.Background()
 
-	likeArrayLock.Lock()
-	defer likeArrayLock.Unlock()
+	LikeArrayLock.Lock()
 
-	anEntry, err := get.EntryByID(eclient, entryID)
+	anEntry, err := getEntry.EntryByID(eclient, entryID)
 	if err != nil {
 		return nil
 	}
@@ -34,6 +33,8 @@ func AppendLike(eclient *elastic.Client, entryID string, likerID string) error {
 		Id(entryID).
 		Doc(map[string]interface{}{"Likes": anEntry.Likes}).
 		Do(ctx)
+
+	defer LikeArrayLock.Unlock()
 
 	return err
 

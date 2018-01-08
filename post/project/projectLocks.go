@@ -6,4 +6,4 @@ import "sync"
 var ModifyMemberLock sync.Mutex
 
 //genericProjectUpdateLock ...
-var genericProjectUpdateLock sync.Mutex
+var GenericProjectUpdateLock sync.Mutex

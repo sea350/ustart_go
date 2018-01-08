@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	post "github.com/sea350/ustart_go/post/user"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -11,7 +12,7 @@ import (
 //ChangePassword ...
 func ChangePassword(eclient *elastic.Client, userID string, oldPass []byte, newPass []byte) error {
 
-	usr, err := get.GetUserByID(eclient, userID)
+	usr, err := get.UserByID(eclient, userID)
 	if err != nil {
 		return err
 	}

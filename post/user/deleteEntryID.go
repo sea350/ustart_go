@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -11,7 +12,7 @@ import (
 //DeleteEntryID ...deletes entry ID from user array
 func DeleteEntryID(eclient *elastic.Client, usrID string, entryID string, idx int) error {
 	ctx := context.Background()
-	usr, err := get.GetUserByID(eclient, usrID)
+	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
 	}

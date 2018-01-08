@@ -3,25 +3,25 @@ package post
 import "sync"
 
 //procLock ...
-var procLock sync.Mutex
+var ProcLock sync.Mutex
 
 //likeLock ...
-var likeLock sync.Mutex
+var LikeLock sync.Mutex
 
 //colleagueLock ...
-var colleagueLock sync.Mutex
+var ColleagueLock sync.Mutex
 
 //followLock ...
-var followLock sync.Mutex
+var FollowLock sync.Mutex
 
 //projectLock ...
-var projectLock sync.Mutex
+var ProjectLock sync.Mutex
 
 //blockLock ...
-var blockLock sync.Mutex
+var BlockLock sync.Mutex
 
 //tagLock ...
-var tagLock sync.Mutex
+var TagLock sync.Mutex
 
 //entryLock ...
-var entryLock sync.Mutex
+var EntryLock sync.Mutex

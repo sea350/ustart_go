@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -10,7 +11,7 @@ import (
 //AppendSearch ...
 func AppendSearch(eclient *elastic.Client, usrID string, newSearch string) error {
 	ctx := context.Background()
-	usr, err := get.GetUserByID(eclient, usrID)
+	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return err
 	}

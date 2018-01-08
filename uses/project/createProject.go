@@ -4,7 +4,8 @@ import (
 	"sync"
 	"time"
 
-	post "github.com/sea350/ustart_go/post/project"
+	projPost "github.com/sea350/ustart_go/post/project"
+	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -30,14 +31,14 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 
 	newProj.Members = append(newProj.Members, maker)
 
-	id, err := post.IndexProject(eclient, newProj)
+	id, err := projPost.IndexProject(eclient, newProj)
 	if err != nil {
 		return err
 	}
 	var addProj types.ProjectInfo
 	addProj.ProjectID = id
 	addProj.Visible = true
-	err = post.AppendProject(eclient, makerID, addProj)
+	err = userPost.AppendProject(eclient, makerID, addProj)
 
 	return err
 

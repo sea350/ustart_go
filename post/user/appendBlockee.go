@@ -9,23 +9,28 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//DeleteConvoID ...
-func DeleteConvoID(eclient *elastic.Client, usrID string, convoID string, idx int) error {
+//AppendBlockee ... puts user on a blocked list
+func AppendBlockee(eclient *elastic.Client, usrID string, blockID string) error {
 	ctx := context.Background()
+
+	BlockLock.Lock()
+
 	usr, err := get.UserByID(eclient, usrID)
+
 	if err != nil {
 		return errors.New("User does not exist")
 	}
 
-	usr.ConversationIDs = append(usr.ConversationIDs[:idx], usr.ConversationIDs[idx+1:]...)
+	usr.BlockedUsers = append(usr.BlockedUsers, blockID)
 
 	_, err = eclient.Update().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		Id(usrID).
-		Doc(map[string]interface{}{"ConversationIDs": usr.ConversationIDs}).
+		Doc(map[string]interface{}{"BlockedUsers": usr.BlockedUsers}).
 		Do(ctx)
 
+	defer BlockLock.Unlock()
 	return err
 
 }

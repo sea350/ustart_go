@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	//get "github.com/sea350/ustart_go/get/entry"
 	get "github.com/sea350/ustart_go/get/entry"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -24,8 +25,7 @@ func UpdateEntry(eclient *elastic.Client, entryID string, field string, newConte
 		return errors.New("Index does not exist")
 	}
 
-	genericEntryUpdateLock.Lock()
-	defer genericEntryUpdateLock.Unlock()
+	GenericEntryUpdateLock.Lock()
 
 	_, err = get.EntryByID(eclient, entryID)
 	if err != nil {
@@ -39,8 +39,7 @@ func UpdateEntry(eclient *elastic.Client, entryID string, field string, newConte
 		Doc(map[string]interface{}{field: newContent}).
 		Do(ctx)
 
-	if err != nil {
-		return err
-	}
-	return nil
+	defer GenericEntryUpdateLock.Unlock()
+
+	return err
 }

@@ -18,7 +18,6 @@ func DeleteMember(eclient *elastic.Client, projID string, member types.Member) e
 	ctx := context.Background()
 
 	ModifyMemberLock.Lock()
-	defer ModifyMemberLock.Unlock()
 
 	proj, err := get.ProjectByID(eclient, projID)
 	if err != nil {
@@ -45,6 +44,7 @@ func DeleteMember(eclient *elastic.Client, projID string, member types.Member) e
 		Doc(map[string]interface{}{"Members": proj.Members}).
 		Do(ctx)
 
+	defer ModifyMemberLock.Unlock()
 	return err
 
 }

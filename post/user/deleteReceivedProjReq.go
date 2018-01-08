@@ -6,40 +6,40 @@ import (
 
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
-	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//DeleteLink ... deletes QuickLink
-func DeleteLink(eclient *elastic.Client, usrID string, link types.Link) error {
+//DeleteReceivedProjReq ...
+func DeleteReceivedProjReq(eclient *elastic.Client, usrID string, projID string) error {
 	ctx := context.Background()
 
-	procLock.Lock()
-	defer procLock.Unlock()
+	ProjectLock.Lock()
+	defer ProjectLock.Unlock()
+
 	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
 	}
 
-	index := -1
-	for i := range usr.QuickLinks {
-		if usr.QuickLinks[i] == link {
+	index := 0
+	for i := range usr.ReceivedProjReq {
+		if usr.ReceivedProjReq[i] == projID {
 			index = i
+			break
 		}
 	}
 	if index < 0 {
 		return errors.New("index does not exist")
 	}
-
-	usr.QuickLinks = append(usr.QuickLinks[:index], usr.QuickLinks[index+1:]...)
+	//end of temp solution
+	usr.ReceivedProjReq = append(usr.ReceivedProjReq[:index], usr.ReceivedProjReq[index+1:]...)
 
 	_, err = eclient.Update().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		Id(usrID).
-		Doc(map[string]interface{}{"Quicklinks": usr.QuickLinks}).
+		Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
 		Do(ctx)
 
 	return err
-
 }

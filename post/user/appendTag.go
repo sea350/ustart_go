@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -12,9 +13,9 @@ import (
 func AppendTag(eclient *elastic.Client, usrID string, tag string) error {
 	ctx := context.Background()
 
-	tagLock.Lock()
-	defer tagLock.Unlock()
-	usr, err := get.GetUserByID(eclient, usrID)
+	TagLock.Lock()
+
+	usr, err := get.UserByID(eclient, usrID)
 
 	if err != nil {
 		return errors.New("User does not exist")
@@ -29,6 +30,7 @@ func AppendTag(eclient *elastic.Client, usrID string, tag string) error {
 		Doc(map[string]interface{}{"Tags": usr.Tags}).
 		Do(ctx)
 
+	defer TagLock.Unlock()
 	return err
 
 }

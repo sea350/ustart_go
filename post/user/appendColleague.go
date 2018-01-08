@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -15,9 +16,8 @@ func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string) 
 	ctx := context.Background()
 
 	colleagueLock.Lock()
-	defer colleagueLock.Unlock()
 
-	usr, err := get.GetUserByID(eclient, usrID)
+	usr, err := get.UserByID(eclient, usrID)
 
 	if err != nil {
 		return errors.New("User does not exist")
@@ -32,6 +32,7 @@ func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string) 
 		Doc(map[string]interface{}{"Colleagues": usr.Colleagues}).
 		Do(ctx)
 
+	defer colleagueLock.Unlock()
 	return err
 
 }

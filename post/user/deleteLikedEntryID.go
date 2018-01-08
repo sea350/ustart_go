@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -14,9 +15,9 @@ import (
 func DeleteLikedEntryID(eclient *elastic.Client, usrID string, likerID string) error {
 	ctx := context.Background()
 
-	likeLock.Lock()
-	defer likeLock.Unlock()
-	usr, err := get.GetUserByID(eclient, usrID)
+	LikeLock.Lock()
+
+	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
 	}
@@ -39,6 +40,7 @@ func DeleteLikedEntryID(eclient *elastic.Client, usrID string, likerID string) e
 		Doc(map[string]interface{}{"LikedEntryIDs": usr.LikedEntryIDs}).
 		Do(ctx)
 
+	defer LikeLock.Unlock()
 	return err
 
 }

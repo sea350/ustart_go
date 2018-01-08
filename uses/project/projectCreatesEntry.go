@@ -3,6 +3,8 @@ package uses
 import (
 	"time"
 
+	entryPost "github.com/sea350/ustart_go/post/entry"
+	post "github.com/sea350/ustart_go/post/project"
 	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -18,7 +20,7 @@ func ProjectCreatesEntry(eclient *elastic.Client, projID string, newContent []ru
 
 	//usr, err := get.GetUserByID(eclient,userID)
 
-	entryID, err := post.IndexEntry(eclient, createdEntry)
+	entryID, err := entryPost.IndexEntry(eclient, createdEntry)
 	if err != nil {
 		return err
 	}

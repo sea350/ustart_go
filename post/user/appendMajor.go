@@ -9,23 +9,31 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//DeleteConvoID ...
-func DeleteConvoID(eclient *elastic.Client, usrID string, convoID string, idx int) error {
+//AppendMajor ...
+func AppendMajor(eclient *elastic.Client, usrID string, major string) error {
+	//appends to either sent or received collegue request arrays within user
+
 	ctx := context.Background()
+
+	procLock.Lock()
+
+	//
 	usr, err := get.UserByID(eclient, usrID)
+
 	if err != nil {
 		return errors.New("User does not exist")
 	}
 
-	usr.ConversationIDs = append(usr.ConversationIDs[:idx], usr.ConversationIDs[idx+1:]...)
+	usr.Majors = append(usr.Majors, major)
 
 	_, err = eclient.Update().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		Id(usrID).
-		Doc(map[string]interface{}{"ConversationIDs": usr.ConversationIDs}).
+		Doc(map[string]interface{}{"Majors": usr.Majors}).
 		Do(ctx)
 
+	defer procLock.Unlock()
 	return err
 
 }

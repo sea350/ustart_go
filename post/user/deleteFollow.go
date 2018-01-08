@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -15,10 +16,9 @@ func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichO
 
 	ctx := context.Background()
 
-	followLock.Lock()
-	defer followLock.Unlock()
+	FollowLock.Lock()
 
-	usr, err := get.GetUserByID(eclient, usrID)
+	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
 	}
@@ -63,5 +63,6 @@ func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichO
 		Doc(map[string]interface{}{"Followers": usr.Followers}).
 		Do(ctx)
 
+	defer FollowLock.Unlock()
 	return err
 }

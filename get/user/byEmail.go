@@ -4,7 +4,7 @@ import (
 	"context"
 
 	globals "github.com/sea350/ustart_go/globals"
-	"github.com/sea350/ustart_go/types"
+	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 

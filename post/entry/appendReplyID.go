@@ -14,8 +14,7 @@ import (
 func AppendReplyID(eclient *elastic.Client, entryID string, replyID string) error {
 	ctx := context.Background()
 
-	replyArrayLock.Lock()
-	defer replyArrayLock.Unlock()
+	ReplyArrayLock.Lock()
 
 	anEntry, err := get.EntryByID(eclient, entryID)
 	if err != nil {
@@ -30,6 +29,7 @@ func AppendReplyID(eclient *elastic.Client, entryID string, replyID string) erro
 		Doc(map[string]interface{}{"ReplyIDs": anEntry.ReplyIDs}).
 		Do(ctx)
 
+	defer ReplyArrayLock.Unlock()
 	return err
 
 }

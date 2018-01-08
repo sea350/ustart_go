@@ -18,7 +18,6 @@ func AppendMember(eclient *elastic.Client, projectID string, member types.Member
 	ctx := context.Background()
 
 	ModifyMemberLock.Lock()
-	defer ModifyMemberLock.Unlock()
 
 	proj, err := get.ProjectByID(eclient, projectID)
 	if err != nil {
@@ -33,6 +32,8 @@ func AppendMember(eclient *elastic.Client, projectID string, member types.Member
 		Id(projectID).
 		Doc(map[string]interface{}{"Members": proj.Members}).
 		Do(ctx)
+
+	defer ModifyMemberLock.Unlock()
 
 	return err
 

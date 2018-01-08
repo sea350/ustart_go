@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -15,8 +16,8 @@ func AppendLikedEntryID(eclient *elastic.Client, usrID string, entryID string) e
 	ctx := context.Background()
 
 	likeLock.Lock()
-	defer likeLock.Unlock()
-	usr, err := get.GetUserByID(eclient, usrID)
+
+	usr, err := get.UserByID(eclient, usrID)
 
 	if err != nil {
 		return errors.New("User does not exist")
@@ -31,6 +32,7 @@ func AppendLikedEntryID(eclient *elastic.Client, usrID string, entryID string) e
 		Doc(map[string]interface{}{"LikedEntryIDs": usr.LikedEntryIDs}).
 		Do(ctx)
 
+	defer likeLock.Unlock()
 	return err
 
 }

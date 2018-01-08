@@ -2,7 +2,8 @@ package post
 
 import "sync"
 
-var genericEntryUpdateLock sync.Mutex
-var likeArrayLock sync.Mutex
-var shareArrayLock sync.Mutex
-var replyArrayLock sync.Mutex
+var GenericEntryUpdateLock sync.Mutex
+var LikeArrayLock sync.Mutex
+var ShareArrayLock sync.Mutex
+var ReplyArrayLock sync.Mutex
+var EntryLock sync.Mutex

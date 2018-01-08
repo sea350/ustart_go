@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -23,7 +24,7 @@ func UpdateUser(eclient *elastic.Client, userID string, field string, newContent
 		return errors.New("Index does not exist")
 	}
 
-	_, err = get.GetUserByID(eclient, userID)
+	_, err = get.UserByID(eclient, userID)
 	if err != nil {
 		return err
 	}
