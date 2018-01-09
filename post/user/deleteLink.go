@@ -14,8 +14,8 @@ import (
 func DeleteLink(eclient *elastic.Client, usrID string, link types.Link) error {
 	ctx := context.Background()
 
-	procLock.Lock()
-	defer procLock.Unlock()
+	ProcLock.Lock()
+
 	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -40,6 +40,7 @@ func DeleteLink(eclient *elastic.Client, usrID string, link types.Link) error {
 		Doc(map[string]interface{}{"Quicklinks": usr.QuickLinks}).
 		Do(ctx)
 
+	defer ProcLock.Unlock()
 	return err
 
 }

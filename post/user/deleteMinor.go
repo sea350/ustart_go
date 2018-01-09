@@ -15,7 +15,7 @@ func DeleteMinor(eclient *elastic.Client, usrID string, minor string) error {
 
 	ctx := context.Background()
 
-	procLock.Lock()
+	ProcLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
@@ -40,7 +40,7 @@ func DeleteMinor(eclient *elastic.Client, usrID string, minor string) error {
 		Doc(map[string]interface{}{"Minors": usr.Minors}).
 		Do(ctx)
 
-	defer procLock.Unlock()
+	defer ProcLock.Unlock()
 	return err
 
 }
