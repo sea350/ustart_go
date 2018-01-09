@@ -13,7 +13,7 @@ import (
 func DeleteBlockee(eclient *elastic.Client, usrID string, blockID string) error {
 	ctx := context.Background()
 
-	blockLock.Lock()
+	BlockLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
@@ -41,7 +41,7 @@ func DeleteBlockee(eclient *elastic.Client, usrID string, blockID string) error 
 		Doc(map[string]interface{}{"BlockedUsers": usr.BlockedUsers}).
 		Do(ctx)
 
-	defer blockLock.Unlock()
+	defer BlockLock.Unlock()
 	return err
 
 }

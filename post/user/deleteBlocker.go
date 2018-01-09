@@ -13,7 +13,7 @@ import (
 func DeleteBlocker(eclient *elastic.Client, usrID string, blockID string, whichOne bool) error {
 	ctx := context.Background()
 
-	blockLock.Lock()
+	BlockLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
@@ -41,7 +41,7 @@ func DeleteBlocker(eclient *elastic.Client, usrID string, blockID string, whichO
 		Doc(map[string]interface{}{"BlockedBy": usr.BlockedBy}).
 		Do(ctx)
 
-	defer blockLock.Unlock()
+	defer BlockLock.Unlock()
 	return err
 
 }

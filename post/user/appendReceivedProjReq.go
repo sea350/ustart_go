@@ -8,12 +8,12 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//AppendProjReq ... appends to either sent or received project request arrays within user
+//AppendReceivedProjReq ... appends to either sent or received project request arrays within user
 //takes in eclient, user ID, the project ID
 func AppendReceivedProjReq(eclient *elastic.Client, usrID string, projID string) error {
 	ctx := context.Background()
 
-	projectLock.Lock()
+	ProcLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
@@ -26,6 +26,6 @@ func AppendReceivedProjReq(eclient *elastic.Client, usrID string, projID string)
 		Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
 		Do(ctx)
 
-	defer procLock.Unlock()
+	defer ProcLock.Unlock()
 	return err
 }

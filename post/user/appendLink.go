@@ -14,7 +14,7 @@ import (
 func AppendLink(eclient *elastic.Client, usrID string, link types.Link) error {
 	ctx := context.Background()
 
-	procLock.Lock()
+	ProcLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
@@ -31,7 +31,7 @@ func AppendLink(eclient *elastic.Client, usrID string, link types.Link) error {
 		Doc(map[string]interface{}{"QuickLinks": usr.QuickLinks}).
 		Do(ctx)
 
-	defer procLock.Unlock()
+	defer ProcLock.Unlock()
 	return err
 
 }
