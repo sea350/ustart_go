@@ -5,7 +5,7 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
 	// types "github.com/sea350/ustart_go/types"
-	get "github.com/sea350/ustart_go/get"
+	get "github.com/sea350/ustart_go/get/user"
 	"fmt"
 	"github.com/gorilla/sessions"
 	client "github.com/sea350/ustart_go/middleware/clientstruct"
@@ -61,7 +61,7 @@ func ViewProfile (w http.ResponseWriter, r *http.Request){
 	year := bday[0:4]
 	birthdayline := month+"/"+day+"/"+year
 	cs := client.ClientSide{UserInfo:userstruct, DOCID: session.Values["DocID"].(string),Birthday: birthdayline,Class:ClassYear} //Class:ClassYear}
-	viewingDOC, errID := get.GetIDByUsername(eclient, r.URL.Path[9:])
+	viewingDOC, errID := get.IDByUsername(eclient, r.URL.Path[9:])
 	if (errID != nil){
 		fmt.Println(errID);
 	}

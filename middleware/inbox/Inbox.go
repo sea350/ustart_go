@@ -4,7 +4,6 @@ import (
 	"net/http"
 	uses "github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
-	"fmt"
     "github.com/gorilla/sessions"
     client "github.com/sea350/ustart_go/middleware/clientstruct"
 
