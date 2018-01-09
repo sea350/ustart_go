@@ -9,7 +9,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//DeleteMajor ... deletes form majpr array
+//DeleteMajor ... deletes from major array
 //takes in eclient, user ID, the major or minor, an index of the element within the array
 func DeleteMajor(eclient *elastic.Client, usrID string, major string) error {
 	ctx := context.Background()
