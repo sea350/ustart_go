@@ -14,7 +14,6 @@ func DeleteReceivedProjReq(eclient *elastic.Client, usrID string, projID string)
 	ctx := context.Background()
 
 	ProjectLock.Lock()
-	defer ProjectLock.Unlock()
 
 	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
@@ -41,5 +40,6 @@ func DeleteReceivedProjReq(eclient *elastic.Client, usrID string, projID string)
 		Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
 		Do(ctx)
 
+	defer ProjectLock.Unlock()
 	return err
 }

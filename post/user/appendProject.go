@@ -15,7 +15,7 @@ import (
 func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo) error {
 	ctx := context.Background()
 
-	projectLock.Lock()
+	ProjectLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
@@ -32,7 +32,7 @@ func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo
 		Doc(map[string]interface{}{"Projects": usr.Projects}).
 		Do(ctx)
 
-	defer projectLock.Unlock()
+	defer ProjectLock.Unlock()
 	return err
 
 }

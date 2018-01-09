@@ -15,7 +15,7 @@ import (
 func AppendProjReq(eclient *elastic.Client, usrID string, projID string, whichOne bool) error {
 	ctx := context.Background()
 
-	ProcLock.Lock()
+	ProjectLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
@@ -32,7 +32,7 @@ func AppendProjReq(eclient *elastic.Client, usrID string, projID string, whichOn
 		Doc(map[string]interface{}{"SentProjReq": usr.SentProjReq}).
 		Do(ctx)
 
-	defer ProcLock.Unlock()
+	defer ProjectLock.Unlock()
 	return err
 
 }

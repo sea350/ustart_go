@@ -13,7 +13,7 @@ import (
 func AppendReceivedProjReq(eclient *elastic.Client, usrID string, projID string) error {
 	ctx := context.Background()
 
-	ProcLock.Lock()
+	ProjectLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
@@ -26,6 +26,6 @@ func AppendReceivedProjReq(eclient *elastic.Client, usrID string, projID string)
 		Doc(map[string]interface{}{"ReceivedProjReq": usr.ReceivedProjReq}).
 		Do(ctx)
 
-	defer ProcLock.Unlock()
+	defer ProjectLock.Unlock()
 	return err
 }
