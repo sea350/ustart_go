@@ -3,7 +3,7 @@ package post
 import(
 	elastic "gopkg.in/olivere/elastic.v5"
 	"github.com/sea350/ustart_go/types"
-	get "github.com/sea350/ustart_go/get"
+	get "github.com/sea350/ustart_go/get/monologue"
 	"context"
 	"errors"
 	//"fmt"
