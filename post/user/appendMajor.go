@@ -15,7 +15,7 @@ func AppendMajor(eclient *elastic.Client, usrID string, major string) error {
 
 	ctx := context.Background()
 
-	procLock.Lock()
+	ProcLock.Lock()
 
 	//
 	usr, err := get.UserByID(eclient, usrID)
@@ -33,7 +33,7 @@ func AppendMajor(eclient *elastic.Client, usrID string, major string) error {
 		Doc(map[string]interface{}{"Majors": usr.Majors}).
 		Do(ctx)
 
-	defer procLock.Unlock()
+	defer ProcLock.Unlock()
 	return err
 
 }

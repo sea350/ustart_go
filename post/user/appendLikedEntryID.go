@@ -15,7 +15,7 @@ import (
 func AppendLikedEntryID(eclient *elastic.Client, usrID string, entryID string) error {
 	ctx := context.Background()
 
-	likeLock.Lock()
+	LikeLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
@@ -32,7 +32,7 @@ func AppendLikedEntryID(eclient *elastic.Client, usrID string, entryID string) e
 		Doc(map[string]interface{}{"LikedEntryIDs": usr.LikedEntryIDs}).
 		Do(ctx)
 
-	defer likeLock.Unlock()
+	defer LikeLock.Unlock()
 	return err
 
 }

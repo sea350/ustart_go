@@ -16,7 +16,7 @@ func AppendMinor(eclient *elastic.Client, usrID string, minor string) error {
 	//true = major, false = minor
 	ctx := context.Background()
 
-	procLock.Lock()
+	ProcLock.Lock()
 
 	//
 	usr, err := get.UserByID(eclient, usrID)
@@ -34,7 +34,7 @@ func AppendMinor(eclient *elastic.Client, usrID string, minor string) error {
 		Doc(map[string]interface{}{"Minors": usr.Minors}).
 		Do(ctx)
 
-	defer procLock.Unlock()
+	defer ProcLock.Unlock()
 
 	return err
 

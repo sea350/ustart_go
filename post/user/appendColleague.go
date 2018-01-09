@@ -15,7 +15,7 @@ func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string) 
 
 	ctx := context.Background()
 
-	colleagueLock.Lock()
+	ColleagueLock.Lock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
@@ -32,7 +32,7 @@ func AppendColleague(eclient *elastic.Client, usrID string, colleagueID string) 
 		Doc(map[string]interface{}{"Colleagues": usr.Colleagues}).
 		Do(ctx)
 
-	defer colleagueLock.Unlock()
+	defer ColleagueLock.Unlock()
 	return err
 
 }
