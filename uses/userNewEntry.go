@@ -3,7 +3,8 @@ package uses
 import (
 	"time"
 
-	post "github.com/sea350/ustart_go/post/user"
+	postEntry "github.com/sea350/ustart_go/post/entry"
+	postUser "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -21,11 +22,11 @@ func UserNewEntry(eclient *elastic.Client, userID string, newContent []rune) (st
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
 
-	entryID, err := post.IndexEntry(eclient, createdEntry)
+	entryID, err := postEntry.IndexEntry(eclient, createdEntry)
 	if err != nil {
 		return entryID, err
 	}
-	err = post.AppendEntryID(eclient, userID, entryID)
+	err = postUser.AppendEntryID(eclient, userID, entryID)
 
 	return entryID, err
 
