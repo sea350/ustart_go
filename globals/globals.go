@@ -17,3 +17,9 @@ const UserIndex = "test-user_data"
 
 //UserType ...
 const UserType = "USER"
+
+//ChatIndex ...
+const ChatIndex = "test-chat_data"
+
+//ChatType ...
+const ChatType  = "CHAT"
