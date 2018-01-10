@@ -18,7 +18,7 @@ func main() {
 	In executeTemplates you will need to make the same changes
 	The other being the relative link on the actual html pages 
 	*/
-	fs := http.FileServer(http.Dir("../../../../../www/"))
+	fs := http.FileServer(http.Dir("/home/rr2396/www/"))
 	http.Handle("/www/", http.StripPrefix("/www/", fs))
 
 	/*
@@ -26,9 +26,8 @@ func main() {
 	*/
 
 	http.HandleFunc("/Inbox/",inbox.Inbox)
-
 	http.HandleFunc("/loginerror/",login.LoginError)
-	http.HandleFunc("/~",login.Home)
+	http.HandleFunc("/",login.Home)
 	http.HandleFunc("/profilelogin/", login.Login)
 	http.HandleFunc("/logout/",login.Logout)
 
@@ -57,6 +56,5 @@ func main() {
 	http.HandleFunc("/Registration/Type/",registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.RegistrationComplete)
 	http.HandleFunc("/welcome/", registration.Registration)
-
 	http.ListenAndServe(":5000", nil)
 }
