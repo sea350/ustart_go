@@ -30,36 +30,29 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// doc ID can be retrieved here!
 	//cs := &ClientSide{}
 
-	if !successful {
-		fmt.Println(successful)
-		fmt.Println("This is an error, LoginFile.go: 35")
-	}
-
 	if err2 != nil {
 		fmt.Println(err2)
 		fmt.Println("This is an error, LoginFile.go: 40")
 	}
 
-	if successful == true {
+	if successful {
 		session.Values["DocID"] = sessionInfo.DocID
 		session.Values["FirstName"] = sessionInfo.FirstName
 		session.Values["LastName"] = sessionInfo.LastName
 		session.Values["Email"] = sessionInfo.Email
 		session.Values["Username"] = sessionInfo.Username
 		expiration := time.Now().Add((30) * time.Hour)
-		fmt.Println("Doc id is " + sessionInfo.DocID)
+		fmt.Println(sessionInfo)
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 		http.SetCookie(w, &cookie)
 		session.Save(r, w)
 		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
 	}
 
-	if successful == false {
-		var errorL bool
-		errorL = true
-		cs := client.ClientSide{ErrorLogin: errorL}
-		fmt.Println("errorL is ")
-		fmt.Print(errorL)
+	if !successful {
+		cs := client.ClientSide{ErrorLogin: true}
+		fmt.Println(successful)
+		fmt.Println("This is an error, LoginFile.go: 55")
 		client.RenderTemplate(w, "templateNoUser2", cs)
 		client.RenderTemplate(w, "loginerror-nil", cs)
 
