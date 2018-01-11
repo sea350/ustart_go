@@ -18,6 +18,8 @@ func ShareComments(w http.ResponseWriter, r *http.Request) {
 	//postaid := postid[9:]
 	postactual := postid[11:]
 	pika := r.FormValue("Pikachu")
+	fmt.Println("This is debug text, ShareComment.go: 21")
+	fmt.Println(pika)
 	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
 	if err4 != nil {
 		fmt.Println(err4)
