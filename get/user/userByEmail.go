@@ -3,6 +3,7 @@ package get
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -34,7 +35,8 @@ func UserIDByEmail(eclient *elastic.Client, email string) (string, error) {
 
 	for _, element := range searchResult.Hits.Hits { //interate through hits, get the element id
 		result = element.Id
-
+		fmt.Println(result)
+		break
 	}
 
 	return result, err //return id
