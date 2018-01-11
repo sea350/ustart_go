@@ -1,49 +1,48 @@
-package profile 
+package profile
 
 import (
-    "net/http"
-    uses "github.com/sea350/ustart_go/uses"
-    types "github.com/sea350/ustart_go/types"
-    "fmt"
-    "strings"
+	"fmt"
+	"net/http"
+	"strings"
+
+	types "github.com/sea350/ustart_go/types"
+	uses "github.com/sea350/ustart_go/uses"
 )
 
-func WallLoad(w http.ResponseWriter, r *http.Request){
-	// If followingStatus = no 
+func WallLoad(w http.ResponseWriter, r *http.Request) {
+	// If followingStatus = no
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-    if (test1 == nil){
-     	fmt.Println(test1)
-    http.Redirect(w, r, "/~", http.StatusFound)
-    }
+	if test1 == nil {
+		fmt.Println(test1)
+		http.Redirect(w, r, "/~", http.StatusFound)
+	}
 
 	r.ParseForm()
 	entryIDs := r.FormValue("entryIDs")
 	fmt.Println(entryIDs)
 	var jEntries []types.JournalEntry
-//	fmt.Println(jEntries[0].FirstName);
+	//	fmt.Println(jEntries[0].FirstName);
 	pageID := r.FormValue("pageID")
-	if (strings.Compare("null",entryIDs) != 0 ){
+	if strings.Compare("null", entryIDs) != 0 {
 
-		
-	
-	actualIDs := strings.Split(entryIDs,",")
-	fmt.Println("DID I MAKE IT HERE? ")
-	fmt.Println(actualIDs)
-	fmt.Println(" ARE THE ACTUAL IDS ")
-	//jEntriesPointer := &jEntries 
-	jEntries, _ = uses.LoadEntries(eclient,actualIDs)
-	fmt.Println(jEntries[0].FirstName);
+		actualIDs := strings.Split(entryIDs, ",")
+		fmt.Println("DID I MAKE IT HERE? ")
+		fmt.Println(actualIDs)
+		fmt.Println(" ARE THE ACTUAL IDS ")
+		//jEntriesPointer := &jEntries
+		jEntries, _ = uses.LoadEntries(eclient, actualIDs)
+		fmt.Println(jEntries[0].FirstName)
 
-	//if (err5 != nil){
-	//	fmt.Println(err5);
-//	}
-}
-	var output string 
-		DocID := session.Values["DocID"].(string)
+		//if (err5 != nil){
+		//	fmt.Println(err5);
+		//	}
+	}
+	var output string
+	DocID := session.Values["DocID"].(string)
 
-	output += 
-	`
+	output +=
+		`
 	<script>
 							 $(".comment-btn").hover(function (e) {
                                                     var cmtBtnImg = $(this).find('img');
@@ -83,13 +82,13 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
                                         var postId= $(this).attr("id");
                                         var modified ="#"+postId;
                                    //     console.log(modified);
-                                        var Pikachu = "`+DocID+`";
+                                        var Pikachu = "` + DocID + `";
                                         //e.preventDefault();
                                         $.ajax({
                                             type: 'GET',  
                                             url: 'http://ustart.today:5000/getComments/',
                                             contentType: "application/json; charset=utf-8",
-                                            data: {userID:"`+pageID+`", PostID:postId,Pikachu:Pikachu},
+                                            data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
                                             success: function(data) {
                                             	$("#commentnil").html(data);
                                              //   console.log(data);
@@ -102,13 +101,13 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
                                         var postId= $(this).attr("id");
                                         var modified ="#"+postId;
                                         console.log(modified);
-                                        var Pikachu = "`+DocID+`";
+                                        var Pikachu = "` + DocID + `";
                                         //e.preventDefault();
                                         $.ajax({
                                             type: 'GET',  
                                             url: 'http://ustart.today:5000/shareComments/',
                                             contentType: "application/json; charset=utf-8",
-                                            data: {userID:"`+pageID+`", PostID:postId,Pikachu:Pikachu},
+                                            data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
                                             success: function(data) {
                                                 $("#sharenil").html(data);
                                                 console.log("share clicked");
@@ -121,13 +120,13 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
                                         var postId= $(this).attr("id");
                                         var modified ="#"+postId;
                                         console.log(modified);
-                                        var selfDoc = "`+DocID+`";
+                                        var selfDoc = "` + DocID + `";
                                         //e.preventDefault();
                                         $.ajax({
                                             type: 'GET',  
                                             url: 'http://ustart.today:5000/Like',
                                             contentType: "application/json; charset=utf-8",
-                                            data: {userID:"`+pageID+`", PostID:postId,selfDoc:selfDoc},
+                                            data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
                                             success: function(data) {
                                                     var likeBtnImg = $(this).find('img');
                                                     if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
@@ -145,24 +144,23 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
 	</script>
 	`
 
+	if strings.Compare("null", entryIDs) != 0 {
+		fmt.Println("ROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAR")
+		sum := 0
+		class0 := `<div class="panel panel-default wallAppend">`
 
-		if (strings.Compare("null",entryIDs) != 0 ){
-			fmt.Println("ROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAR")
-                                 sum := 0
-                                 class0 := `<div class="panel panel-default wallAppend">` 
-
-	for i := len(jEntries)-1; i >= 0; i-- {
-		sum += 1;
-		bodyText := string(jEntries[i].Element.Content)
-		if(jEntries[i].Element.Classification == 0){
-			fmt.Println("classifcation is 0")
-			likes := string(jEntries[i].NumLikes)
-			fmt.Println("this post has"+string(jEntries[i].NumLikes)+" likes")
-			class0 += `<div id="wallPosts" class="panel-body">
+		for i := len(jEntries) - 1; i >= 0; i-- {
+			sum += 1
+			bodyText := string(jEntries[i].Element.Content)
+			if jEntries[i].Element.Classification == 0 {
+				fmt.Println("classifcation is 0")
+				likes := string(jEntries[i].NumLikes)
+				fmt.Println("this post has" + string(jEntries[i].NumLikes) + " likes")
+				class0 += `<div id="wallPosts" class="panel-body">
                                             <!-- regular post sample -->
                                             <div class="media">
                                                 <a class="pull-left" href="#">
-                                                    <img style="height:40px;" class="media-object img-rounded" src=d`+jEntries[i].Image+`>
+                                                    <img style="height:40px;" class="media-object img-rounded" src=d` + jEntries[i].Image + `>
                                                 </a>
                                                 <!--edit dropdown -->
                                                 <div class="dropdown pull-right">
@@ -182,19 +180,19 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
                                                 </div>
                                                 <!--end edit dropdown -->
                                             <div class="media-body">
-                                                <h6 class="post-time pull-right text-muted time" style="padding-right:4px;"> X minutes ago`+/*jEntries[i].Element.TimeStamp+*/`</h6>
-                                                <h5 class="post-name mt-0" style="color:cadetblue;"><a href="#">`+jEntries[i].FirstName+`</a></h5>
-                                                <p class="post-message" style="word-spacing: 0px;">`+bodyText+`</p>
+                                                <h6 class="post-time pull-right text-muted time" style="padding-right:4px;"> X minutes ago` + /*jEntries[i].Element.TimeStamp+*/ `</h6>
+                                                <h5 class="post-name mt-0" style="color:cadetblue;"><a href="#">` + jEntries[i].FirstName + `</a></h5>
+                                                <p class="post-message" style="word-spacing: 0px;">` + bodyText + `</p>
                                                                             </div>
                                                 <ul>
                                                     <li>
-                                                         <a class="btn btn-sm like-btn" id =main-modal`+jEntries[i].ElementID+`><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">`+likes+`</p></a>
+                                                         <a class="btn btn-sm like-btn" id =main-modal` + jEntries[i].ElementID + `><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">` + likes + `</p></a>
                                                     </li>
                                                     <li>
-                                                         <a class="btn btn-sm comment-btn" id =main-modal`+jEntries[i].ElementID+`><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">`+string(jEntries[i].NumReplies)+`</p></a>
+                                                         <a class="btn btn-sm comment-btn" id =main-modal` + jEntries[i].ElementID + `><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">` + string(jEntries[i].NumReplies) + `</p></a>
                                                     </li>
                                                     <li>
-                                                         <a class="btn btn-sm share-btn" id=share-modal`+jEntries[i].ElementID+`><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">`+string(jEntries[i].NumShares)+`</p></span></a>
+                                                         <a class="btn btn-sm share-btn" id=share-modal` + jEntries[i].ElementID + `><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">` + string(jEntries[i].NumShares) + `</p></span></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -204,25 +202,22 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
                                             </div>
                                             `
 
-
-
-		}
-			if(jEntries[i].Element.Classification == 2){
-			postIDArray := []string{jEntries[i].Element.ReferenceEntry} // just an array with 1 entry 
-    		jEntry, err5 := uses.LoadEntries(eclient,postIDArray)
-			if (err5 != nil){
-				fmt.Println(err5);
 			}
-			bodyText := string(jEntry[0].Element.Content)
-			comment := string(jEntries[i].Element.Content)
-			// fmt.Println(jEntries[i].Element.ReferenceEntry)
-			// fmt.Println(" ARE THE REFERENCE ENTRIES ")
+			if jEntries[i].Element.Classification == 2 {
+				postIDArray := []string{jEntries[i].Element.ReferenceEntry} // just an array with 1 entry
+				jEntry, err5 := uses.LoadEntries(eclient, postIDArray)
+				if err5 != nil {
+					fmt.Println(err5)
+				}
+				bodyText := string(jEntry[0].Element.Content)
+				comment := string(jEntries[i].Element.Content)
+				// fmt.Println(jEntries[i].Element.ReferenceEntry)
+				// fmt.Println(" ARE THE REFERENCE ENTRIES ")
 
-			// fmt.Println(jEntries[i].Element.Content)
-			// fmt.Println(jEntry[0].Element.Content)
+				// fmt.Println(jEntries[i].Element.Content)
+				// fmt.Println(jEntry[0].Element.Content)
 
-
-						class0 += `
+				class0 += `
 						 <div class="dropdown pull-right">
                                             <a class="dropdown-toggle" data-toggle="dropdown">
                                                 <span class="glyphicon glyphicon-cog"></span>
@@ -244,31 +239,31 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
                                         <!--end edit dropdown -->
                                         <h6 class="pull-right text-muted time" style="padding-right:4px;">X hours ago</h6>
                                         <h5 class="mt-0" style="color:cadetblue">You shared a post:</h5>
-                                           <p style="margin-left:2em">`+comment+`</p>
+                                           <p style="margin-left:2em">` + comment + `</p>
                                         <div class="media">
                                             <div class="panel panel-default">
                                                 <div class="panel-body">
                                                     <div class="media">
                                                         <a class="pull-left" href="#">
-                                                            <img class="media-object img-rounded" src=d`+jEntry[0].Image+` alt="40x40">
+                                                            <img class="media-object img-rounded" src=d` + jEntry[0].Image + ` alt="40x40">
                                                         </a>
                                                         <div class="media-body">
                                                             <h6 class="pull-right text-muted time">X hours ago</h6>
-                                                            <h5 class="mt-0" style="color:cadetblue;">`+jEntry[0].FirstName+" "+jEntry[0].LastName+`</h5>
-                                                            <p>`+bodyText+`</p>
+                                                            <h5 class="mt-0" style="color:cadetblue;">` + jEntry[0].FirstName + " " + jEntry[0].LastName + `</h5>
+                                                            <p>` + bodyText + `</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                                 <ul>
                                                     <li>
-                                                         <a class="btn btn-sm like-btn" id =main-modal`+jEntry[0].ElementID+`><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">`+string(jEntry[0].NumLikes)+`</p></a>
+                                                         <a class="btn btn-sm like-btn" id =main-modal` + jEntry[0].ElementID + `><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">` + string(jEntry[0].NumLikes) + `</p></a>
                                                     </li>
                                                     <li>
-                                                         <a class="btn btn-sm comment-btn" id =main-modal`+jEntry[0].ElementID+`><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">`+string(jEntry[0].NumReplies)+`</p></a>
+                                                         <a class="btn btn-sm comment-btn" id =main-modal` + jEntry[0].ElementID + `><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">` + string(jEntry[0].NumReplies) + `</p></a>
                                                     </li>
                                                     <li>
-                                                         <a class="btn btn-sm share-btn" id=share-modal`+jEntry[0].ElementID+`><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">`+string(jEntry[0].NumShares)+`</p></span></a>
+                                                         <a class="btn btn-sm share-btn" id=share-modal` + jEntry[0].ElementID + `><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">` + string(jEntry[0].NumShares) + `</p></span></a>
                                                     </li>
                                                 </ul>
                                         </div>
@@ -277,18 +272,18 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
 
 `
 
-		}
+			}
 
-}
-	class0 += "</div>"
-	output += class0
-}
-//	output += "</div>" // should be last line, closes main id
+		}
+		class0 += "</div>"
+		output += class0
+	}
+	//	output += "</div>" // should be last line, closes main id
 	output += `
 								<script>
 	                                 $('#new-postSubmit').click(function(e) {
                                         //e.preventDefault();
-                                        var docID = "`+DocID+`";
+                                        var docID = "` + DocID + `";
                                         var text = $("#post-msg").val();
                                         console.log(text);
                                         $.ajax({
@@ -340,13 +335,13 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
                                         var postId= $(this).attr("id");
                                         var modified ="#"+postId;
                                         console.log(modified);
-                                        var Pikachu = "`+DocID+`";
+                                        var Pikachu = "` + DocID + `";
                                         //e.preventDefault();
                                         $.ajax({
                                             type: 'GET',  
                                             url: 'http://ustart.today:5000/getComments/',
                                             contentType: "application/json; charset=utf-8",
-                                            data: {userID:"`+pageID+`", PostID:postId,Pikachu:Pikachu},
+                                            data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
                                             success: function(data) {
                                             	$("#commentnil").html(data);
                                                 console.log(data);
@@ -360,13 +355,13 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
                                         var postId= $(this).attr("id");
                                         var modified ="#"+postId;
                                         console.log(modified);
-                                        var Pikachu = "`+DocID+`";
+                                        var Pikachu = "` + DocID + `";
                                         //e.preventDefault();
                                         $.ajax({
                                             type: 'GET',  
                                             url: 'http://ustart.today:5000/shareComments/',
                                             contentType: "application/json; charset=utf-8",
-                                            data: {userID:"`+pageID+`", PostID:postId,Pikachu:Pikachu},
+                                            data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
                                             success: function(data) {
                                                 $("#sharenil").html(data);
                                                 console.log("share clicked ");
@@ -379,13 +374,13 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
                                         var postId= $(this).attr("id");
                                         var modified ="#"+postId;
                                         console.log(modified);
-                                        var selfDoc = "`+DocID+`";
+                                        var selfDoc = "` + DocID + `";
                                         //e.preventDefault();
                                         $.ajax({
                                             type: 'GET',  
                                             url: 'http://ustart.today:5000/Like',
                                             contentType: "application/json; charset=utf-8",
-                                            data: {userID:"`+pageID+`", PostID:postId,selfDoc:selfDoc},
+                                            data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
                                             success: function(data) {
                                                     var likeBtnImg = $(this).find('img');
                                                     if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
@@ -405,9 +400,9 @@ func WallLoad(w http.ResponseWriter, r *http.Request){
 
       
                                 </script> `
-//	fmt.Println(sum)
+	//	fmt.Println(sum)
 
 	//fmt.Println(output)
-	//var responseHtml string 
-	fmt.Fprintln(w, output) // this line sends data back to the ajax call on the front end side 
+	//var responseHtml string
+	fmt.Fprintln(w, output) // this line sends data back to the ajax call on the front end side
 }

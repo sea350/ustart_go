@@ -1,40 +1,41 @@
-package profile 
+package profile
 
 import (
-    "net/http"
-    uses "github.com/sea350/ustart_go/uses"
-    "fmt"
+	"fmt"
+	"net/http"
+
+	uses "github.com/sea350/ustart_go/uses"
 )
 
-func ShareComments(w http.ResponseWriter, r *http.Request){
+func ShareComments(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-    if (test1 == nil){
-        http.Redirect(w, r, "/~", http.StatusFound)
-    }
+	if test1 == nil {
+		http.Redirect(w, r, "/~", http.StatusFound)
+	}
 	r.ParseForm()
 	postid := r.FormValue("PostID")
 	//postaid := postid[9:]
 	postactual := postid[11:]
 	pika := r.FormValue("Pikachu")
 	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
-	if (err4 != nil){
+	if err4 != nil {
 		fmt.Println(err4)
 	}
-	var sum int 
-	var output string 
-	var commentoutputs string 
+	var sum int
+	var output string
+	var commentoutputs string
 
 	for i := 0; i < len(arrayofComments); i++ {
 		commentBody := string(arrayofComments[i].Element.Content)
 		commentoutputs += `    <div class="media">
                                                     <h6 class="pull-right text-muted time">2 hours ago</h6>
                                                     <a class="media-left" href="#">
-                                                        <img style="height:40px;" class="img-rounded" src=d`+arrayofComments[i].Image+`>
+                                                        <img style="height:40px;" class="img-rounded" src=d` + arrayofComments[i].Image + `>
                                                     </a>
                                                     <div class="media-body">
-                                                        <h5 class="media-heading user_name" style="color:cadetblue;">`+arrayofComments[i].FirstName+" "+arrayofComments[i].LastName+`</h5>
-                                                        <p>`+commentBody+`</p>
+                                                        <h5 class="media-heading user_name" style="color:cadetblue;">` + arrayofComments[i].FirstName + " " + arrayofComments[i].LastName + `</h5>
+                                                        <p>` + commentBody + `</p>
                                                         <p>
                                                             <small>
                                                                 <a class="comment-like">Like</a>
@@ -92,7 +93,7 @@ func ShareComments(w http.ResponseWriter, r *http.Request){
 	s := string(parentPost.Element.Content)
 
 	output += `
-	 <div class="modal fade" id=share-modal`+postactual+` role="dialog">
+	 <div class="modal fade" id=share-modal` + postactual + ` role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->
                                     <div class="modal-content">
@@ -103,19 +104,19 @@ func ShareComments(w http.ResponseWriter, r *http.Request){
                                             <div class="modal-body">
                                             <div class="media">
                                                 <a class="pull-left" href="#">
-                                                    <img class="media-object img-rounded" src=d`+parentPost.Image+`>
+                                                    <img class="media-object img-rounded" src=d` + parentPost.Image + `>
                                                 </a>
                                                 <div class="media-body">
                                                     <h6 class="pull-right text-muted time"></h6>
-                                                    <h5 class="mt-0" style="color:cadetblue;">`+parentPost.FirstName +" "+parentPost.LastName+`</h5>
-                                                    <p>`+s+`</p> </div>
+                                                    <h5 class="mt-0" style="color:cadetblue;">` + parentPost.FirstName + " " + parentPost.LastName + `</h5>
+                                                    <p>` + s + `</p> </div>
                                                       <div class="form-group">
                                                 <form id="shareCommentForm" method="POST" action="/ShareComment">
                                                     <input type="text" class="form-control" id="comment-msg" name="msg" placeholder="Say Something about this..."></input>
                                                     <!--What is 'odom-submit'? If it's not used, remove it-->
-                                                    <input type="hidden" name="postid" value=`+postactual+`>
-                                                      <input type="hidden" name = "id" value=`+pika+`>
-                                                      <input type ="hidden" name="username" value=`+username+`>
+                                                    <input type="hidden" name="postid" value=` + postactual + `>
+                                                      <input type="hidden" name = "id" value=` + pika + `>
+                                                      <input type ="hidden" name="username" value=` + username + `>
                                                     <button class="btn btn-primary odom-submit">Post</button>
                                                 </form>
  
@@ -147,33 +148,31 @@ func ShareComments(w http.ResponseWriter, r *http.Request){
 
 	`
 
-	fmt.Fprintln(w, output) 
+	fmt.Fprintln(w, output)
 
 }
 
 /* This function might not be used anymore. */
-func ShareComment2(w http.ResponseWriter, r *http.Request){
-	// If followingStatus = no 
+func ShareComment2(w http.ResponseWriter, r *http.Request) {
+	// If followingStatus = no
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-    if (test1 == nil){
-        http.Redirect(w, r, "/~", http.StatusFound)
-    }
+	if test1 == nil {
+		http.Redirect(w, r, "/~", http.StatusFound)
+	}
 
 	r.ParseForm()
-	docid := r.FormValue("id") 
-	postid := r.FormValue("postid") 
+	docid := r.FormValue("id")
+	postid := r.FormValue("postid")
 	msg := r.FormValue("msg")
 	username := r.FormValue("username")
 	content := []rune(msg)
 
-
-	err := uses.UserShareEntry(eclient,docid,postid,content)
-	if (err != nil){
-		fmt.Println(err);
+	err := uses.UserShareEntry(eclient, docid, postid, content)
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
-
 
 }

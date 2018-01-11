@@ -1,51 +1,49 @@
-package profile 
+package profile
 
 import (
-    "net/http"
-    uses "github.com/sea350/ustart_go/uses"
-    "fmt"
+	"fmt"
+	"net/http"
+
+	uses "github.com/sea350/ustart_go/uses"
 )
 
-
-func GetComments(w http.ResponseWriter, r *http.Request){
+func GetComments(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-    if (test1 == nil){
-        //No docid in session
-        http.Redirect(w, r, "/~", http.StatusFound)
-    }
+	if test1 == nil {
+		//No docid in session
+		http.Redirect(w, r, "/~", http.StatusFound)
+	}
 
 	r.ParseForm()
 	postID := r.FormValue("PostID")
 	postaid := postID[9:]
 	postactual := postID[10:]
-    // need to trim beginning of postID
+	// need to trim beginning of postID
 	pika := r.FormValue("Pikachu")
-	// journal entry, err 
+	// journal entry, err
 	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
-	if (err4 != nil){
+	if err4 != nil {
 		fmt.Println(err4)
 	}
 
+	var sum int
+	var output string
+	var commentoutputs string
 
-	var sum int 
-	var output string 
-	var commentoutputs string 
-
-
-/* 
-The following is how AJAX for loading comments is handled on the server side.
-*/
+	/*
+	   The following is how AJAX for loading comments is handled on the server side.
+	*/
 	for i := 0; i < len(arrayofComments); i++ {
 		commentBody := string(arrayofComments[i].Element.Content)
 		commentoutputs += `    <div class="media">
                                                     <h6 class="pull-right text-muted time">2 hours ago</h6>
                                                     <a class="media-left" href="#">
-                                                        <img style="height:40px;" class="img-rounded" src=d`+arrayofComments[i].Image+`>
+                                                        <img style="height:40px;" class="img-rounded" src=d` + arrayofComments[i].Image + `>
                                                     </a>
                                                     <div class="media-body">
-                                                        <h5 class="media-heading user_name" style="color:cadetblue;">`+arrayofComments[i].FirstName+" "+arrayofComments[i].LastName+`</h5>
-                                                        <p>`+commentBody+`</p>
+                                                        <h5 class="media-heading user_name" style="color:cadetblue;">` + arrayofComments[i].FirstName + " " + arrayofComments[i].LastName + `</h5>
+                                                        <p>` + commentBody + `</p>
                                                         <p>
                                                             <small>
                                                                 <a class="comment-like">Like</a>
@@ -104,7 +102,7 @@ The following is how AJAX for loading comments is handled on the server side.
 	s := string(parentPost.Element.Content)
 
 	output += `
-	 <div class="modal fade" id=main-moda`+postaid+` role="dialog">
+	 <div class="modal fade" id=main-moda` + postaid + ` role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->
                                     <div class="modal-content">
@@ -112,12 +110,12 @@ The following is how AJAX for loading comments is handled on the server side.
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             <div class="media">
                                                 <a class="pull-left" href="#">
-                                                    <img class="media-object img-rounded" src=d`+parentPost.Image+`>
+                                                    <img class="media-object img-rounded" src=d` + parentPost.Image + `>
                                                 </a>
                                                 <div class="media-body">
                                                     <h6 class="pull-right text-muted time"></h6>
-                                                    <h5 class="mt-0" style="color:cadetblue;">`+parentPost.FirstName +" "+parentPost.LastName+`</h5>
-                                                    <p>`+s+`</p>
+                                                    <h5 class="mt-0" style="color:cadetblue;">` + parentPost.FirstName + " " + parentPost.LastName + `</h5>
+                                                    <p>` + s + `</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -125,9 +123,9 @@ The following is how AJAX for loading comments is handled on the server side.
                                             <div class="input-group">
                                                 <form class="commentform" method="POST" action="/AddComment">
                                                     <input name="commentz" class="form-control" placeholder="Add a comment" type="text">
-                                                      <input type="hidden" name="followstat" value=`+postaid+`>
-                                                      <input type="hidden" name = "id" value=`+pika+`>
-                                                      <input type ="hidden" name="username" value=`+username+`>
+                                                      <input type="hidden" name="followstat" value=` + postaid + `>
+                                                      <input type="hidden" name = "id" value=` + pika + `>
+                                                      <input type ="hidden" name="username" value=` + username + `>
                                                 </form>
                                                 <span class="input-group-addon">
                                                     <a onclick="document.getElementByClass('commentform').submit();">
@@ -140,9 +138,9 @@ The following is how AJAX for loading comments is handled on the server side.
                                             </div>
                                             <br>
                                             <div class="comments-list">
-                                                `+commentoutputs+`
+                                                ` + commentoutputs + `
                                                 </div>    `
 
-	fmt.Fprintln(w, output) 
+	fmt.Fprintln(w, output)
 
 }
