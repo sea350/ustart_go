@@ -22,6 +22,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
+	fmt.Println(session.Values["DocID"])
 
 	userstruct, _, followbool, _ := uses.UserPage(eclient, r.URL.Path[9:], session.Values["DocID"].(string))
 	jEntries, err5 := uses.LoadEntries(eclient, userstruct.EntryIDs)
