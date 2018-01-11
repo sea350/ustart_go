@@ -26,6 +26,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	// journal entry, err
 	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
 	if err4 != nil {
+		fmt.Println("This is debug text, GetComments.go: 29")
 		fmt.Println(err4)
 	}
 

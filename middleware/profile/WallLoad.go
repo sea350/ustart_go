@@ -14,29 +14,26 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-
+	fmt.Println(test1)
+	fmt.Println("This is debug text, WallLoad.go: 20")
 	r.ParseForm()
 	entryIDs := r.FormValue("entryIDs")
 	fmt.Println(entryIDs)
 	var jEntries []types.JournalEntry
-	//	fmt.Println(jEntries[0].FirstName);
+
 	pageID := r.FormValue("pageID")
 	if strings.Compare("null", entryIDs) != 0 {
 
 		actualIDs := strings.Split(entryIDs, ",")
-		fmt.Println("DID I MAKE IT HERE? ")
-		fmt.Println(actualIDs)
-		fmt.Println(" ARE THE ACTUAL IDS ")
 		//jEntriesPointer := &jEntries
-		jEntries, _ = uses.LoadEntries(eclient, actualIDs)
-		fmt.Println(jEntries[0].FirstName)
-
-		//if (err5 != nil){
-		//	fmt.Println(err5);
-		//	}
+		jEntries, err5 := uses.LoadEntries(eclient, actualIDs)
+		fmt.Println(jEntries[0].ElementID)
+		if err5 != nil {
+			fmt.Println(err5)
+			fmt.Println("This is an error, WallLoad.go: 34")
+		}
 	}
 	var output string
 	DocID := session.Values["DocID"].(string)
@@ -145,15 +142,15 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 	`
 
 	if strings.Compare("null", entryIDs) != 0 {
-		fmt.Println("ROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAR")
+		//fmt.Println("ROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAR")
 		sum := 0
 		class0 := `<div class="panel panel-default wallAppend">`
 
 		for i := len(jEntries) - 1; i >= 0; i-- {
-			sum += 1
+			sum++
 			bodyText := string(jEntries[i].Element.Content)
 			if jEntries[i].Element.Classification == 0 {
-				fmt.Println("classifcation is 0")
+				//fmt.Println("classifcation is 0")
 				likes := string(jEntries[i].NumLikes)
 				fmt.Println("this post has" + string(jEntries[i].NumLikes) + " likes")
 				class0 += `<div id="wallPosts" class="panel-body">
@@ -208,14 +205,10 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 				jEntry, err5 := uses.LoadEntries(eclient, postIDArray)
 				if err5 != nil {
 					fmt.Println(err5)
+					fmt.Println("This is an error, WallLoad.go: 207")
 				}
 				bodyText := string(jEntry[0].Element.Content)
 				comment := string(jEntries[i].Element.Content)
-				// fmt.Println(jEntries[i].Element.ReferenceEntry)
-				// fmt.Println(" ARE THE REFERENCE ENTRIES ")
-
-				// fmt.Println(jEntries[i].Element.Content)
-				// fmt.Println(jEntry[0].Element.Content)
 
 				class0 += `
 						 <div class="dropdown pull-right">
@@ -400,9 +393,7 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 
       
                                 </script> `
-	//	fmt.Println(sum)
 
-	//fmt.Println(output)
 	//var responseHtml string
 	fmt.Fprintln(w, output) // this line sends data back to the ajax call on the front end side
 }
