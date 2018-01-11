@@ -77,6 +77,7 @@ func LoginError(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	//	var password []byte
 	password := r.FormValue("password")
+	fmt.Println("DEBUG: middleware/LoginFile.go line: 80-81")
 	fmt.Println(password)
 	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
