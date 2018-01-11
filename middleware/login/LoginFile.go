@@ -42,7 +42,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		session.Values["Email"] = sessionInfo.Email
 		session.Values["Username"] = sessionInfo.Username
 		expiration := time.Now().Add((30) * time.Hour)
-		fmt.Println(sessionInfo)
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 		http.SetCookie(w, &cookie)
 		session.Save(r, w)

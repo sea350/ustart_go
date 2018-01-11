@@ -2,7 +2,6 @@ package uses
 
 import (
 	"errors"
-	"fmt"
 
 	get "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
@@ -49,7 +48,6 @@ func Login(eclient *elastic.Client, userEmail string, password []byte) (bool, ty
 	userSession.Email = userEmail
 	userSession.DocID = uID
 	userSession.Username = usr.Username
-	fmt.Println(userSession.Username)
 
 	return loginSucessful, userSession, err
 

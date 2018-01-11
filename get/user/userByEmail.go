@@ -32,6 +32,10 @@ func UserIDByEmail(eclient *elastic.Client, email string) (string, error) {
 		return result, errors.New("More than one user found")
 	}
 
+	if searchResult.TotalHits() < 1 {
+		return result, errors.New("No hits, check your index or search criteria")
+	}
+
 	for _, element := range searchResult.Hits.Hits { //interate through hits, get the element id
 		result = element.Id
 		break
