@@ -54,7 +54,7 @@ func main() {
 
 	http.HandleFunc("/Signup/", registration.Signup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
-	http.HandleFunc("/registrationcomplete/", registration.RegistrationComplete)
+	http.HandleFunc("/registrationcomplete/", registration.Complete)
 	http.HandleFunc("/welcome/", registration.Registration)
 	http.ListenAndServe(":5000", nil)
 }

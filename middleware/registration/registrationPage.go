@@ -7,31 +7,29 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gorilla/sessions"
 	client "github.com/sea350/ustart_go/middleware/clientstruct"
 	uses "github.com/sea350/ustart_go/uses"
 	"golang.org/x/crypto/bcrypt"
-	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-var Eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-var Store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
-
-func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
+//Complete ...
+func Complete(w http.ResponseWriter, r *http.Request) {
 	cs := client.ClientSide{}
 	client.RenderTemplate(w, "templateNoUser2", cs)
 	client.RenderTemplate(w, "regcomplete-nil", cs)
 }
 
+//RegisterType ...
 func RegisterType(w http.ResponseWriter, r *http.Request) {
 	cs := client.ClientSide{}
 	client.RenderTemplate(w, "templateNoUser2", cs)
 	client.RenderTemplate(w, "Membership-Nil", cs)
 }
 
+//Registration ...
 func Registration(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	// check DOCID instead
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
@@ -64,12 +62,10 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	city := r.FormValue("city")
 	zip := r.FormValue("zip")
 	currYear := r.FormValue("year")
-	if err != nil {
-		fmt.Println(err)
 
-	}
-	err2 := uses.SignUpBasic(eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear)
+	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear)
 	if err2 != nil {
+		fmt.Println("This is an error: registrationPage.go, 65")
 		fmt.Println(err2)
 		cs := client.ClientSide{ErrorR: true}
 		client.RenderTemplate(w, "templateNoUser2", cs)
@@ -83,14 +79,16 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//Signup ...
 func Signup(w http.ResponseWriter, r *http.Request) {
-	store.MaxAge(8640 * 7)
-	session, _ := store.Get(r, "session_please")
+	client.Store.MaxAge(8640 * 7)
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 
 	if test1 != nil {
 		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
 	}
+
 	session.Save(r, w)
 	cs := client.ClientSide{ErrorR: false, ErrorLogin: false}
 	client.RenderTemplate(w, "templateNoUser2", cs)
