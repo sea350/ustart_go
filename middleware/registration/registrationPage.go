@@ -41,7 +41,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	lname := r.FormValue("lastName")
 	email := r.FormValue("inputEmail")
 	email = strings.ToLower(email)
-	username := r.FormValue("userName")
+	username := r.FormValue("username")
 
 	password := r.FormValue("inputPassword")
 	passwordb := []byte(password)
