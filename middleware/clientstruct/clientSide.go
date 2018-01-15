@@ -4,8 +4,14 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/gorilla/sessions"
 	types "github.com/sea350/ustart_go/types"
+	elastic "gopkg.in/olivere/elastic.v5"
 )
+
+var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
+
+var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
 /* This struct represents a user state after he/she has logged in. Some fields may no longer be needed
 or are unnecessary.  */

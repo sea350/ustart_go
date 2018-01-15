@@ -25,12 +25,12 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		return errors.New("email is in use")
 	}
 
-	inUse, err = getUser.EmailInUse(eclient, username)
+	inUse, err = getUser.UsernameInUse(eclient, username)
 	if err != nil {
 		return err
 	}
 	if inUse {
-		return errors.New("email is in use")
+		return errors.New("username is in use")
 	}
 	newUsr := types.User{}
 	newUsr.FirstName = fname
