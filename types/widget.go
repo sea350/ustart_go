@@ -1,8 +1,8 @@
 package types
 
-type Widget struct{
-	WidgetType	string	`json:WidgetType`
-	Position	int		`json:Position`
-	Content		string	`json:Content`
-
+type Widget struct {
+	UserID         string `json:UserID`
+	Link           string `json:Link`
+	Position       int    `json:Position`
+	Classification string `json:Classification`
 }
