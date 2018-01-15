@@ -66,7 +66,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	if err2 != nil {
 		fmt.Println("This is an error: registrationPage.go, 65")
 		fmt.Println(err2)
-		cs := client.ClientSide{ErrorR: true}
+		cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
 		client.RenderTemplate(w, "templateNoUser2", cs)
 		client.RenderTemplate(w, "new-reg-nil", cs)
 
@@ -89,7 +89,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session.Save(r, w)
-	cs := client.ClientSide{ErrorR: false, ErrorLogin: false}
+	cs := client.ClientSide{ErrorStatus: false}
 	client.RenderTemplate(w, "templateNoUser2", cs)
 	client.RenderTemplate(w, "new-reg-nil", cs)
 }

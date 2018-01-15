@@ -9,19 +9,21 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
+//Eclient ... Reference to the ElasticSearch
 var Eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 
+//Store ...
 var Store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
-/* This struct represents a user state after he/she has logged in. Some fields may no longer be needed
-or are unnecessary.  */
+//ClientSide ... This struct represents a user state after he/she has logged in. Some fields may no longer be needed
+//or are unnecessary.
 type ClientSide struct {
 	DOCID           string
 	FirstName       string
 	LastName        string
 	Username        string
-	ErrorR          bool // registration error likely
-	ErrorLogin      bool
+	ErrorOutput     error
+	ErrorStatus     bool
 	UserInfo        types.User
 	Class           string
 	Birthday        string
@@ -48,8 +50,8 @@ var templates = template.Must(template.ParseFiles("/home/rr2396/www/ustart.tech/
 	"/home/rr2396/www/ustart.tech/template-footer-nil.html", "/home/rr2396/www/ustart.tech/nil-index2.html",
 	"/home/rr2396/www/ustart.tech/regcomplete-nil.html"))
 
-/* This function does the actual rendering of HTML pages. Note it takes in a struct (type ClientSide).
-You will need to continually send data to the pages and this is accomplished via the struct. */
+//RenderTemplate ... This function does the actual rendering of HTML pages. Note it takes in a struct (type ClientSide).
+//You will need to continually send data to the pages and this is accomplished via the struct.
 func RenderTemplate(w http.ResponseWriter, tmpl string, cs ClientSide) {
 	err := templates.ExecuteTemplate(w, tmpl+".html", cs)
 	if err != nil {
