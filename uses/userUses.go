@@ -9,14 +9,13 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 
 	"errors"
-	"fmt"
 	"time"
 )
 
 //SignUpBasic ... A basic user signup process
 //Requires all basic signup feilds (email, password ...)
 //Returns an error if there was a problem with database submission
-func SignUpBasic(eclient *elastic.Client, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
+func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
 
 	inUse, err := getUser.EmailInUse(eclient, email)
 	if err != nil {
@@ -26,12 +25,18 @@ func SignUpBasic(eclient *elastic.Client, email string, password []byte, fname s
 		return errors.New("email is in use")
 	}
 
+	inUse, err = getUser.EmailInUse(eclient, username)
+	if err != nil {
+		return err
+	}
+	if inUse {
+		return errors.New("email is in use")
+	}
 	newUsr := types.User{}
 	newUsr.FirstName = fname
 	newUsr.LastName = lname
 	newUsr.Email = email
-	newUsr.Username = getUser.EmailToUsername(email)
-	fmt.Println(newUsr.Username)
+	newUsr.Username = username
 
 	//hashPass := bcrypt.GenerateFromPassword(password,10)
 	newUsr.Password = password

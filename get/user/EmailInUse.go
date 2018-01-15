@@ -7,7 +7,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//EmailInUse ...
+//EmailInUse ... checks if email is in use
 func EmailInUse(eclient *elastic.Client, theEmail string) (bool, error) {
 	ctx := context.Background()
 	//username:=EmailToUsername(theEmail)
