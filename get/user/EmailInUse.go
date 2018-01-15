@@ -10,8 +10,6 @@ import (
 //EmailInUse ... checks if email is in use
 func EmailInUse(eclient *elastic.Client, theEmail string) (bool, error) {
 	ctx := context.Background()
-	//username:=EmailToUsername(theEmail)
-	//termQuery := elastic.NewTermQuery("Username",username)
 	termQuery := elastic.NewTermQuery("Email", theEmail)
 	searchResult, err := eclient.Search().
 		Index(globals.UserIndex).

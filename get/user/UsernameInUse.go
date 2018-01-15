@@ -10,7 +10,6 @@ import (
 //UsernameInUse ... checks if username is in use
 func UsernameInUse(eclient *elastic.Client, username string) (bool, error) {
 	ctx := context.Background()
-
 	termQuery := elastic.NewTermQuery("Username", username)
 	searchResult, err := eclient.Search().
 		Index(globals.UserIndex).

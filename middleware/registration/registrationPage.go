@@ -33,7 +33,6 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	// check DOCID instead
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
-		//	fmt.Println(test1)
 		// REGISTRATION SHOULD NOT LOG YOU IN
 		http.Redirect(w, r, "/profile/", http.StatusFound)
 	}
