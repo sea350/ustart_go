@@ -6,22 +6,27 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//LoadWidgetd ... Loads a list of widgets
+//LoadWidgets ... Loads a list of widgets
 //Requires an array of widget ids
 //Returns an array/slice of the data for those ids as types.Widget, and an error
 func LoadWidgets(eclient *elastic.Client, loadList []string) ([]types.Widget, error) {
 
 	var widgets []types.Widget
-
+	var errStrings []error
 	for _, widgetID := range loadList {
 		nextWidget, err := get.WidgetByID(eclient, widgetID)
 
 		if err == nil {
 			widgets = append(widgets, nextWidget)
 
+		} else {
+			errStrings = append(errStrings, err)
 		}
 
 	}
 
+	if len(errStrings > 0) {
+		return widgets, errStrings
+	}
 	return widgets, nil
 }
