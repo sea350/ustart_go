@@ -8,8 +8,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//WidgetByLink ...
-func WidgetIDByLink(eclient *elastic.Client, link string) (types.Widget, error) {
+//WidgetIDByLink ...
+func WidgetIDByLink(eclient *elastic.Client, link string) (string, error) {
 
 	ctx := context.Background()
 
@@ -32,8 +32,6 @@ func WidgetIDByLink(eclient *elastic.Client, link string) (types.Widget, error) 
 		break
 	}
 
-	widget, err = WidgetByID(eclient, result)
-
-	return widget, err
+	return result, err
 
 }
