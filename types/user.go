@@ -70,5 +70,5 @@ type User struct {
 	SentProjReq     []string      `json:SentProjReq`
 	ReceivedProjReq []string      `json:ReceivedProjReq`
 	FirstLogin      bool          `json:FirstLogin`
-	UserWidgets     []Widget      `json:UserWidgets`
+	UserWidgets     []string      `json:UserWidgets`
 }
