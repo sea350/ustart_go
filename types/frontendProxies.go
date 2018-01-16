@@ -33,3 +33,11 @@ type JournalEntry struct {
 	NumShares        int         `json:NumShares`
 	ReferenceElement interface{} `json:ReferenceElement`
 }
+
+//ProjectSubWidgets ... data specific to each project being displayed on the projects widget
+type ProjectSubWidgets struct {
+	Name   string `json:Name`
+	Link   string `json:Link`
+	Avatar string `json:Avatar`
+	ID     string `json:ID`
+}
