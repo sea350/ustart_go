@@ -34,9 +34,8 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 
 	var sum int
 	var commentoutputs string
-
 	/*
-	   The following is how AJAX for loading comments is handled on the server side.
+		The following is how AJAX for loading comments is handled on the server side.
 	*/
 	for i := 0; i < len(arrayofComments); i++ {
 		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content))
