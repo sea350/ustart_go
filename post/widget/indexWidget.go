@@ -33,7 +33,7 @@ const widgetMapping = `
 //IndexWidget ...
 // adds a new widget document to the ES cluster
 // returns err, nil if successful.
-func IndexUser(eclient *elastic.Client, newWidget types.Widget) error {
+func IndexWidget(eclient *elastic.Client, newWidget types.Widget) error {
 	// Check if the index exists
 	ctx := context.Background()
 	exists, err := eclient.IndexExists(globals.WidgetIndex).Do(ctx)
