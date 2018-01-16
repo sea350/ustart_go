@@ -1,6 +1,6 @@
 package stringHTML
 
-//Comment ... creates a string of html that displays a comment
+//CommentEntry ... creates a string of html that displays a comment
 func CommentEntry(image string, fName string, lName string, content string) string {
 	return `
 	<div class="media">

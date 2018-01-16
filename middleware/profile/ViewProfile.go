@@ -3,11 +3,11 @@ package profile
 import (
 	"net/http"
 
+	"fmt"
+
 	sessions "github.com/gorilla/sessions"
 	uses "github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
-	// types "github.com/sea350/ustart_go/types"
-	"fmt"
 
 	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/clientstruct"
@@ -16,6 +16,7 @@ import (
 var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
+//ViewProfile ... Iunno
 func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
