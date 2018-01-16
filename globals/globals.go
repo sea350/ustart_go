@@ -22,4 +22,10 @@ const UserType = "USER"
 const ChatIndex = "test-chat_data"
 
 //ChatType ...
-const ChatType  = "CHAT"
+const ChatType = "CHAT"
+
+//ChatIndex ...
+const WidgetIndex = "test-widget_data"
+
+//ChatType ...
+const WidgetType = "WIDGET"
