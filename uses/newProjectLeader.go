@@ -11,7 +11,7 @@ import (
 func NewProjectLeader(eclient *elastic.Client, currentLeaderID string, projectID string, newLeaderID string) error {
 	proj, err := get.ProjectByID(eclient, projectID)
 
-	isLeader, idx := IsLeader(eclient, currentLeaderID)
+	isLeader, idx := IsLeader(eclient, projectID, currentLeaderID)
 
 	for i := range proj.Members {
 		if proj.Members[i].MemberID == newLeaderID && isLeader {

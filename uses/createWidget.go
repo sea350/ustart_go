@@ -6,7 +6,7 @@ import (
 )
 
 //CreateWidget ...
-func CreateWidget(eclient *elastic.Client, userID string, newLink string, newPos int, newClass int) (types.Widget, error) {
+func CreateWidget(eclient *elastic.Client, userID string, newLink string, newPos int, newClass int) types.Widget {
 	var newWidget types.Widget
 
 	newWidget.UserID = userID

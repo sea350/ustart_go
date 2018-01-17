@@ -9,7 +9,7 @@ import (
 //LoadWidgets ... Loads a list of widgets
 //Requires an array of widget ids
 //Returns an array/slice of the data for those ids as types.Widget, and an error
-func LoadWidgets(eclient *elastic.Client, loadList []string) ([]types.Widget, error) {
+func LoadWidgets(eclient *elastic.Client, loadList []string) ([]types.Widget, []error) {
 
 	var widgets []types.Widget
 	var errStrings []error
@@ -25,7 +25,7 @@ func LoadWidgets(eclient *elastic.Client, loadList []string) ([]types.Widget, er
 
 	}
 
-	if len(errStrings > 0) {
+	if len(errStrings) > 0 {
 		return widgets, errStrings
 	}
 	return widgets, nil
