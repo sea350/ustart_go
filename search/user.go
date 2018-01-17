@@ -25,4 +25,9 @@ func User(eclient *elastic.Client, field string, searchTerm string) ([]types.Use
 		Pretty(true).             // pretty print request and response JSON
 		Do(ctx)                   // execute
 
+	nResults := searchResults.TotalHits
+
+	var ret []types.User
+	return ret, err
+
 }
