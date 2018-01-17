@@ -78,7 +78,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//Signup ...
+//Signup ... tests for an existing docId in sesson, if no id then render signup, if there is id redirect to profile
 func Signup(w http.ResponseWriter, r *http.Request) {
 	client.Store.MaxAge(8640 * 7)
 	session, _ := client.Store.Get(r, "session_please")
