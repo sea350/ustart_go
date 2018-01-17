@@ -4,7 +4,6 @@ import (
 	"context"
 
 	globals "github.com/sea350/ustart_go/globals"
-	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -20,9 +19,8 @@ func WidgetIDByLink(eclient *elastic.Client, link string) (string, error) {
 		Query(termQuery).
 		Do(ctx)
 
-	var widget types.Widget
 	if err != nil {
-		return widget, err
+		return "", err
 	}
 	var result string
 
