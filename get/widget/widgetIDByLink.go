@@ -22,7 +22,7 @@ func WidgetIDByLink(eclient *elastic.Client, link string) (string, error) {
 
 	var widget types.Widget
 	if err != nil {
-		return widget, err
+		return "", err
 	}
 	var result string
 
