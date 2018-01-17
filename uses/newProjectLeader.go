@@ -10,7 +10,9 @@ import (
 //Enables current leader to set a new leader
 func NewProjectLeader(eclient *elastic.Client, currentLeaderID string, projectID string, newLeaderID string) error {
 	proj, err := get.ProjectByID(eclient, projectID)
-
+	if err != nil {
+		panic(err)
+	}
 	isLeader, idx := IsLeader(eclient, projectID, currentLeaderID)
 
 	for i := range proj.Members {

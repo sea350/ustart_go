@@ -10,6 +10,9 @@ import (
 //ALso returns index of member
 func IsLeader(eclient *elastic.Client, projectID string, memberID string) (bool, int) {
 	proj, err := get.ProjectByID(eclient, projectID)
+	if err != nil {
+		panic(err)
+	}
 	var idx int
 	for i := range proj.Members {
 		idx = i
