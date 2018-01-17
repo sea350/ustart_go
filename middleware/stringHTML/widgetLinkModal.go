@@ -1,6 +1,6 @@
 package stringHTML
 
-//WidgetLinkModal ... strigifies HTML for links
+//WidgetLinkModal ... strigifies HTML for links WARNING INCOMPLETE
 func WidgetLinkModal(skills []string) string {
 	output := `
 <li class="ui-state-default widgetListItem sortable">
@@ -47,7 +47,7 @@ func WidgetLinkModal(skills []string) string {
 				</div>
 			</div>
 		</div>
-		 <!-- End of add link Modal -->
+		<!-- End of add link Modal -->
 		<script src="js/jquery.validate.min.js"></script>
 		<script src="js/layout_links.js"></script>
 	</div>
