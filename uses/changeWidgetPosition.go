@@ -4,7 +4,9 @@ import (
 	"errors"
 
 	getUser "github.com/sea350/ustart_go/get/user"
+	getWidget "github.com/sea350/ustart_go/get/widget"
 	postUser "github.com/sea350/ustart_go/post/user"
+	postWidget "github.com/sea350/ustart_go/post/widget"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -36,15 +38,40 @@ func ChangeWidgetPosition(eclient *elastic.Client, userID string, oldPos int, ne
 
 	if newPos > oldPos { //if the new position is later in the array, move everything within the bounds of the new and old positions back one spot
 		for i := oldPos; i < newPos; i++ {
-			widgets[i+1].Position = widgets[i].Position - 1
+			currWidget, err := getWidget.WidgetByID(eclient, widgets[i])
+			if err != nil {
+				panic(err)
+			}
+			updateErr := postWidget.UpdateWidget(eclient, widgets[i], "Position", currWidget.Position-1)
+
+			if updateErr != nil {
+				panic(updateErr)
+			}
+			widgets[i+1] = widgets[i-1]
 		}
-		movedWidget.Position = newPos
+		currWidget, err := getWidget.WidgetByID(eclient, movedWidget)
+		if err != nil {
+			panic(nil)
+		}
+		currWidget.Position = newPos
 		widgets[newPos] = movedWidget
 	} else if newPos < oldPos { //if new position is earlier, move everything in the range forward
 		for i := oldPos; i < newPos; i-- {
-			widgets[i-1].Position = widgets[i].Position + 1
+			currWidget, err := getWidget.WidgetByID(eclient, widgets[i])
+			if err != nil {
+				panic(err)
+			}
+			updateErr := postWidget.UpdateWidget(eclient, widgets[i], "Position", currWidget.Position-1)
+			if updateErr != nil {
+				panic(updateErr)
+			}
+			widgets[i-1] = widgets[i+1]
 		}
-		movedWidget.Position = newPos
+		currWidget, err := getWidget.WidgetByID(eclient, movedWidget)
+		if err != nil {
+			panic(nil)
+		}
+		currWidget.Position = newPos
 		widgets[newPos] = movedWidget
 	}
 

@@ -13,7 +13,7 @@ func UserLeavesProject(eclient *elastic.Client, leaverID string, projectID strin
 
 	for i := range proj.Members {
 		if proj.Members[i].MemberID == leaverID && proj.Members[i].Role == 0 {
-			err = NewProjectLeader(eclient, newLeaderID)
+			err = NewProjectLeader(eclient, leaverID, projectID, newLeaderID)
 			if err != nil {
 				panic(err)
 			}
