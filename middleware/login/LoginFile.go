@@ -49,7 +49,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !successful {
-		cs := client.ClientSide{ErrorLogin: true}
+		cs := client.ClientSide{ErrorStatus: true}
 		fmt.Println(successful)
 		fmt.Println("This is an error, LoginFile.go: 55")
 		client.RenderTemplate(w, "templateNoUser2", cs)
@@ -104,7 +104,6 @@ func LoginError(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("did not login successful")
 		var errorL bool
 		errorL = true
-		//	cs := ClientSide{ErrorLogin: errorL}
 		fmt.Println("errorL is ")
 		fmt.Print(errorL)
 		http.Redirect(w, r, "/loginerror-nil/", http.StatusFound)
