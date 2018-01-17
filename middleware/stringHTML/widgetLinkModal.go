@@ -1,7 +1,9 @@
 package stringHTML
 
-//WidgetLinkModal ... strigifies HTML for links WARNING INCOMPLETE
-func WidgetLinkModal(skills []string) string {
+import "github.com/sea350/ustart_go/types"
+
+//WidgetLinkModal ... strigifies HTML for links
+func WidgetLinkModal(links []types.Link) string {
 	output := `
 <li class="ui-state-default widgetListItem sortable">
 	<div id="linksWidget" class="projectsWidgetCont">
@@ -11,7 +13,17 @@ func WidgetLinkModal(skills []string) string {
 			<h4>Links</h4>
 		</div>
 		<div class="widgetBody">
-			<div class="links-container"></div>
+			<div class="links-container">`
+	for _, link := range links {
+		output += `
+				<a target="_blank" href="` + link.URL + `" data-toggle="tooltip" data-placement="top" title="" data-original-title="` + link.URL + `">
+					<span class="cross-mark">x</span>
+					<img src="//logo.clearbit.com/` + link.URL + `">
+					<div class="links-website-title">` + link.Name + `</div>
+				</a>`
+	}
+	output += `
+			</div>
 			<div class="numLinks">
 				<span id="linkCountIndicator">16 Links Remaining</span>
 			</div>
