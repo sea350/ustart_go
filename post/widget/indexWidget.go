@@ -33,12 +33,13 @@ const widgetMapping = `
 //IndexWidget ...
 // adds a new widget document to the ES cluster
 // returns err, nil if successful.
-func IndexWidget(eclient *elastic.Client, newWidget types.Widget) error {
+func IndexWidget(eclient *elastic.Client, newWidget types.Widget) (string, error) {
 	// Check if the index exists
 	ctx := context.Background()
+	var id string
 	exists, err := eclient.IndexExists(globals.WidgetIndex).Do(ctx)
 	if err != nil {
-		return err
+		return id, err
 	}
 	// If the index doesn't exist, create it and return error.
 	if !exists {
@@ -52,19 +53,19 @@ func IndexWidget(eclient *elastic.Client, newWidget types.Widget) error {
 		}
 
 		// Return an error saying it doesn't exist
-		return errors.New("Index does not exist")
+		return id, errors.New("Index does not exist")
 	}
 
 	// Index the document.
-	_, Err := eclient.Index().
+	newWidg, Err := eclient.Index().
 		Index(globals.WidgetIndex).
 		Type(globals.WidgetType).
 		BodyJson(newWidget).
 		Do(ctx)
 
 	if Err != nil {
-		return Err
+		return id, Err
 	}
 
-	return nil
+	return newWidg.Id, nil
 }

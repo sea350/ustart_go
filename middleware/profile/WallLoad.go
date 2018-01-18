@@ -18,11 +18,9 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	fmt.Println(test1)
-	fmt.Println("This is debug text, WallLoad.go: 20")
+
 	r.ParseForm()
 	entryIDs := r.FormValue("entryIDs")
-	fmt.Println(entryIDs)
 	var jEntries []types.JournalEntry
 
 	pageID := r.FormValue("pageID")

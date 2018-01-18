@@ -10,7 +10,7 @@ func CreateWidget(eclient *elastic.Client, userID string, newLink string, newPos
 	var newWidget types.Widget
 
 	newWidget.UserID = userID
-	newWidget.Link = newLink
+	//newWidget.Link = newLink
 	newWidget.Position = newPos
 	newWidget.Classification = newClass
 

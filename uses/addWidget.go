@@ -2,8 +2,8 @@ package uses
 
 import (
 	getUser "github.com/sea350/ustart_go/get/user"
-	getWidget "github.com/sea350/ustart_go/get/widget"
 	postUser "github.com/sea350/ustart_go/post/user"
+	post "github.com/sea350/ustart_go/post/widget"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -17,7 +17,7 @@ func AddWidget(eclient *elastic.Client, userID string, newWidget types.Widget) e
 		panic(err)
 	}
 
-	widgetID, err := getWidget.WidgetIDByLink(eclient, newWidget.Link)
+	widgetID, err := post.IndexWidget(eclient, newWidget)
 	updatedWidgets := append(usr.UserWidgets, widgetID)
 	updateErr := postUser.UpdateUser(eclient, userID, "UserWidgets", updatedWidgets)
 

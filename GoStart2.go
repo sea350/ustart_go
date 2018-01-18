@@ -39,6 +39,7 @@ func main() {
 	http.HandleFunc("/AddComment", profile.AddComment)
 	http.HandleFunc("/loadWall/", profile.WallLoad)
 	http.HandleFunc("/addPost/", profile.WallAdd)
+	http.HandleFunc("/addWidget/", profile.AddWidget)
 	http.HandleFunc("/profile/", profile.ViewProfile)
 
 	http.HandleFunc("/Projects/", project.ProjectsPage)
