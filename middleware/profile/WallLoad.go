@@ -30,6 +30,7 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 		//jEntriesPointer := &jEntries
 		jEntries, err5 := uses.LoadEntries(eclient, actualIDs)
 		fmt.Println(jEntries[0].ElementID)
+		fmt.Println(len(jEntries))
 		if err5 != nil {
 			fmt.Println(err5)
 			fmt.Println("This is an error, WallLoad.go: 34")
