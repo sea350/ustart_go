@@ -15,17 +15,17 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 	// If followingStatus = no
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
+	var output string
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
 	r.ParseForm()
 	entryIDs := r.FormValue("entryIDs")
-	var jEntries []types.JournalEntry
 
 	pageID := r.FormValue("pageID")
 	if strings.Compare("null", entryIDs) != 0 {
-
+		var jEntries []types.JournalEntry
 		actualIDs := strings.Split(entryIDs, ",")
 		//jEntriesPointer := &jEntries
 		jEntries, err5 := uses.LoadEntries(eclient, actualIDs)
@@ -35,13 +35,6 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err5)
 			fmt.Println("This is an error, WallLoad.go: 34")
 		}
-	}
-	var output string
-	DocID := session.Values["DocID"].(string)
-
-	output += stringHTML.WallLoadStart(DocID, pageID)
-
-	if strings.Compare("null", entryIDs) != 0 {
 		sum := 0
 		class0 := `<div class="panel panel-default wallAppend">`
 
@@ -84,6 +77,10 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 		class0 += "</div>"
 		output += class0
 	}
+
+	DocID := session.Values["DocID"].(string)
+
+	output += stringHTML.WallLoadStart(DocID, pageID)
 
 	output += stringHTML.WallLoadEnd(DocID, pageID)
 
