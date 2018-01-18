@@ -24,10 +24,14 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	userstruct, _, followbool, _ := uses.UserPage(eclient, r.URL.Path[9:], session.Values["DocID"].(string))
-	jEntries, err5 := uses.LoadEntries(eclient, userstruct.EntryIDs)
+	userstruct, _, followbool, err5 := uses.UserPage(eclient, r.URL.Path[9:], session.Values["DocID"].(string))
 	if err5 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 29)")
+		fmt.Println(err5)
+	}
+	jEntries, err5 := uses.LoadEntries(eclient, userstruct.EntryIDs)
+	if err5 != nil {
+		fmt.Println("this is an error (ViewProfile.go: 34)")
 		fmt.Println(err5)
 	}
 	followingState := "no"
