@@ -37,7 +37,7 @@ func main() {
 	http.HandleFunc("/shareComments/", profile.ShareComments)
 	http.HandleFunc("/ShareComment", profile.ShareComment2)
 	http.HandleFunc("/AddComment", profile.AddComment)
-	http.HandleFunc("/loadWall/", profile.OldWallLoad)
+	http.HandleFunc("/loadWall/", profile.WallLoad)
 	http.HandleFunc("/addPost/", profile.WallAdd)
 	http.HandleFunc("/addWidget/", profile.AddWidget)
 	http.HandleFunc("/profile/", profile.ViewProfile)

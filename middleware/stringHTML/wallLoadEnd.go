@@ -4,8 +4,8 @@ package stringHTML
 func WallLoadEnd(docID string, pageID string) string {
 	return `
 	<script>
-		$('#new-postSubmit').click(function(e) {
-	    	//e.preventDefault();
+		 $('#new-postSubmit').click(function(e) {
+			//e.preventDefault();
 			var docID = "` + docID + `";
 			var text = $("#post-msg").val();
 			console.log(text);
@@ -15,107 +15,105 @@ func WallLoadEnd(docID string, pageID string) string {
 				contentType: "application/json; charset=utf-8",
 				data: {docID:docID,text:text},
 				success: function(data) {
-					//console.log(data);
+				//	console.log(data);
 					$(".wallAppend").prepend(data);
 					console.log('hello m8');
-					$(".comment-btn").hover(function (e) {
+												 $(".comment-btn").hover(function (e) {
 						var cmtBtnImg = $(this).find('img');
-						cmtBtnImg.attr('src', "/www/ustart.tech/ico/comment.png");  
-					},function (e) {
+						cmtBtnImg.attr('src', "/www/ustart.tech/ico/comment.png");     
+					 },function (e) {
 						var cmtBtnImg = $(this).find('img');
-						cmtBtnImg.attr('src', "/www/ustart.tech/ico/no comment.png");  
-					});
+						cmtBtnImg.attr('src', "/www/ustart.tech/ico/no comment.png");     
+					 });   
 					$(".share-btn").hover(function (e) {
 						var shrBtnImg = $(this).find('img');
-						shrBtnImg.attr('src', "/www/ustart.tech/ico/share.png");  
-					},function (e) {
+						shrBtnImg.attr('src', "/www/ustart.tech/ico/share.png");     
+					 },function (e) {
 						var shrBtnImg = $(this).find('img');
-						shrBtnImg.attr('src', "/www/ustart.tech/ico/not share.png");  
-					});
-					$(".like-btn").hover(function (e) {
-					var likeBtnImg = $(this).find('img');
-					if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
+						shrBtnImg.attr('src', "/www/ustart.tech/ico/not share.png");     
+					 });
+					  $(".like-btn").hover(function (e) {
+						var likeBtnImg = $(this).find('img');
+						if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
 							likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
-					} else {
-						likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
-					}
-					return false;
-				});
-				$(".comment-like").click(function (e) {
-					if ($(this).html() == "Like") {
-						$(this).html('Liked');
-					} else {
-						$(this).html('Like');
-					}
-					return false;
-				});
-				 $('body').on('click', '.odom-submit', function (e) {
-					$('#shareCommentForm').submit();
-				});
-				$('.comment-btn').click(function(e) {
-					var postId= $(this).attr("id");
-					var modified ="#"+postId;
-					console.log(modified);
-					var Pikachu = "` + docID + `";
-					//e.preventDefault();
-					$.ajax({
-						type: 'GET',  
-						url: 'http://ustart.today:5000/getComments/',
-						contentType: "application/json; charset=utf-8",
-						data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
-						success: function(data) {
-							$("#commentnil").html(data);
-							console.log(data);
-							$(modified).modal('show');
+						} else {
+							likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
 						}
+						return false;
 					});
-				});
-
-		
-				$('.share-btn').click(function(e) {
-					var postId= $(this).attr("id");
-					var modified ="#"+postId;
-					console.log(modified);
-					var Pikachu = "` + docID + `";
-					//e.preventDefault();
-					$.ajax({
-						type: 'GET',  
-						url: 'http://ustart.today:5000/shareComments/',
-						contentType: "application/json; charset=utf-8",
-						data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
-						success: function(data) {
-							$("#sharenil").html(data);
-							console.log("share clicked ");
-							$(modified).modal('show');
+					$(".comment-like").click(function (e) {
+						if ($(this).html() == "Like") {
+							$(this).html('Liked');
+						} else {
+							$(this).html('Like');
 						}
+						return false;
 					});
-				});  
-
-				$('.like-btn').click(function(e) {
-					var postId= $(this).attr("id");
-					var modified ="#"+postId;
-					console.log(modified);
-					var selfDoc = "` + docID + `";
-					//e.preventDefault();
-					$.ajax({
-						type: 'GET',  
-						url: 'http://ustart.today:5000/Like',
-						contentType: "application/json; charset=utf-8",
-						data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
-						success: function(data) {
-								var likeBtnImg = $(this).find('img');
-								if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
-									likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
-								} else {
-									likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
-								}
-							console.log("like clicked");
-						}
-					});
-				}); 
-			 }
+					  $('body').on('click', '.odom-submit', function (e) {
+							$('#shareCommentForm').submit();
+						});
+  $('.comment-btn').click(function(e) {
+			var postId= $(this).attr("id");
+			var modified ="#"+postId;
+			console.log(modified);
+			var Pikachu = "` + docID + `";
+			//e.preventDefault();
+			$.ajax({
+				type: 'GET',  
+				url: 'http://ustart.today:5000/getComments/',
+				contentType: "application/json; charset=utf-8",
+				data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
+				success: function(data) {
+					$("#commentnil").html(data);
+					console.log(data);
+					$(modified).modal('show');
+				}
+			});
 		});
-	});
-	</script>
-	`
+			 
+			$('.share-btn').click(function(e) {
+			var postId= $(this).attr("id");
+			var modified ="#"+postId;
+			console.log(modified);
+			var Pikachu = "` + docID + `";
+			//e.preventDefault();
+			$.ajax({
+				type: 'GET',  
+				url: 'http://ustart.today:5000/shareComments/',
+				contentType: "application/json; charset=utf-8",
+				data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
+				success: function(data) {
+					$("#sharenil").html(data);
+					console.log("share clicked ");
+					$(modified).modal('show');
+				}
+			});
+		});  
+			$('.like-btn').click(function(e) {
+			var postId= $(this).attr("id");
+			var modified ="#"+postId;
+			console.log(modified);
+			var selfDoc = "` + docID + `";
+			//e.preventDefault();
+			$.ajax({
+				type: 'GET',  
+				url: 'http://ustart.today:5000/Like',
+				contentType: "application/json; charset=utf-8",
+				data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
+				success: function(data) {
+						var likeBtnImg = $(this).find('img');
+						if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
+							likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+						} else {
+							likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+						}
+					console.log("like clicked");
+				}
+			});
+		}); 
+			   }
+			});
+		});      
+
+	</script> `
 }
