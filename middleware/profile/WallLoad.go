@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/sea350/ustart_go/middleware/stringHTML"
+	stringHTML "github.com/sea350/ustart_go/middleware/stringHTML"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 )
