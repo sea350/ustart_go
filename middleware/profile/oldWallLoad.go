@@ -9,7 +9,8 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-func wallLoad(w http.ResponseWriter, r *http.Request) {
+//OldWallLoad ... wall load but old
+func OldWallLoad(w http.ResponseWriter, r *http.Request) {
 	// If followingStatus = no
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
