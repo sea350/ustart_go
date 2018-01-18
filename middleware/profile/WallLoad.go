@@ -35,12 +35,9 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err5)
 			fmt.Println("This is an error, WallLoad.go: 34")
 		}
-		sum := 0
 		class0 := `<div class="panel panel-default wallAppend">`
 
 		for i := len(jEntries) - 1; i >= 0; i-- {
-			sum++
-			fmt.Println(sum)
 			if jEntries[i].Element.Classification == 0 {
 
 				class0 += stringHTML.AddClass0Entry(
