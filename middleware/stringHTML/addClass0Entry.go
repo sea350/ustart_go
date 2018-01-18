@@ -14,7 +14,7 @@ func AddClass0Entry(image string, fName string, content string, elementID string
 				<a class="dropdown-toggle" data-toggle="dropdown">
 					<span class="glyphicon glyphicon-cog">
 					</span>
-					span class="caret">
+					<span class="caret">
 					</span>
 				</a>
 				<ul class="dropdown-menu" style="min-width: 0px !important; padding:0px !important;">
@@ -29,7 +29,7 @@ func AddClass0Entry(image string, fName string, content string, elementID string
 						</a>
 					</li>
 				</ul>
-			/div>
+			</div>
 			<!--end edit dropdown -->
 			<div class="media-body">
 				<h6 class="post-time pull-right text-muted time" style="padding-right:4px;"> X minutes ago` + /*jEntries[i].Element.TimeStamp+*/ `</h6>
