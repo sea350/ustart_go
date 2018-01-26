@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"src/github.com/sea350/ustart_go/types"
-	"src/github.com/sea350/ustart_go/uses"
+	"github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/uses"
 )
 
 //AddWidget ... After widget form submission adds a widget to database
