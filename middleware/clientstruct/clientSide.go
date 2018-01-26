@@ -34,6 +34,8 @@ type ClientSide struct {
 	Page            string
 	FollowingStatus string
 	Wall            []types.JournalEntry
+	Widgets         []types.Widget
+	Nonsense        []int
 }
 
 /* The following line is how HTML is loaded by our application. Note we need the relative link from the location of GoStart2. */

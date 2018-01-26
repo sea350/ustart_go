@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sea350/ustart_go/middleware/stringHTML"
 	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//AddWidget ... Iunno
+//AddWidget ... After widget form submission adds a widget to database
 func AddWidget(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
@@ -20,15 +19,18 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	username := test1.(string)
 
 	r.ParseForm()
-	if r.FormValue("formValue") == `0` {
-		title := r.FormValue("title")
-		description := r.FormValue("description")
-		newWidget := types.Widget{UserID: session.Values["DocID"].(string), Title: title, Position: 0, Description: description, Classification: 0}
+	if r.FormValue("widgetSubmit") == `0` {
+		title := r.FormValue("customHeader")
+		description := r.FormValue("customContent")
+		var data []string
+		data = append(data, title)
+		data = append(data, description)
+		//call fuction that gets the next available slot in user's widgets
+		//position == len(user.widgets)
+		newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Position: 0, Classification: 0}
 		err := uses.AddWidget(eclient, session.Values["DocID"].(string), newWidget)
 		fmt.Println(err)
-		fmt.Println("this is an error: middleware/profile/addWidget.go 27")
-		output := stringHTML.WidgetText(title, description)
-		fmt.Fprintln(w, output)
+		fmt.Println("this is an error: middleware/profile/addWidget.go 34")
 	}
 
 	//contentArray := []rune(comment)
