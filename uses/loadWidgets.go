@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"fmt"
+
 	get "github.com/sea350/ustart_go/get/widget"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -14,6 +16,7 @@ func LoadWidgets(eclient *elastic.Client, loadList []string) ([]types.Widget, []
 	var widgets []types.Widget
 	var errStrings []error
 	for _, widgetID := range loadList {
+		fmt.Println(widgetID)
 		nextWidget, err := get.WidgetByID(eclient, widgetID)
 
 		if err == nil {
