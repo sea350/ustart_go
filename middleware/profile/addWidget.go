@@ -19,6 +19,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	username := test1.(string)
 	fmt.Println("this is debug text: middleware/profile/addWidget.go 20")
 	r.ParseForm()
+	fmt.Println(r.FormValue("widgetSubmit"))
 	if r.FormValue("widgetSubmit") == `0` {
 		title := r.FormValue("customHeader")
 		description := r.FormValue("customContent")
