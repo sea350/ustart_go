@@ -39,6 +39,8 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		retHTML = append(retHTML, render)
 	}
 
+	fmt.Printf(retHTML)
+
 	if len(errors) != 0 {
 		fmt.Println("this is an error (ViewProfile.go: 35)")
 		fmt.Println("one or more errors have occured in loading widgets")
