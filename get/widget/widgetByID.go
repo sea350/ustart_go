@@ -15,8 +15,8 @@ func WidgetByID(eclient *elastic.Client, widgetID string) (types.Widget, error) 
 	ctx := context.Background()         //intialize context background
 	var widget types.Widget             //initialize type widget
 	searchResult, err := eclient.Get(). //Get returns doc type, index, etc.
-						Index(globals.UserIndex).
-						Type(globals.UserType).
+						Index(globals.WidgetIndex).
+						Type(globals.WidgetType).
 						Id(widgetID).
 						Do(ctx)
 
