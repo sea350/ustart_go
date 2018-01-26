@@ -3,6 +3,9 @@ package profile
 import (
 	"fmt"
 	"net/http"
+
+	"src/github.com/sea350/ustart_go/types"
+	"src/github.com/sea350/ustart_go/uses"
 )
 
 //AddWidget ... After widget form submission adds a widget to database
@@ -15,21 +18,19 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	username := test1.(string)
 	r.ParseForm()
-	fmt.Println(r.Form)
-	/*
-		if r.FormValue("widgetSubmit") == `` {
-			title := r.FormValue("customHeader")
-			description := r.FormValue("customContent")
-			data := []string{title, description}
-			//call fuction that gets the next available slot in user's widgets
-			//position == len(user.widgets)
-			newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Position: 0, Classification: 0}
-			err := uses.AddWidget(eclient, session.Values["DocID"].(string), newWidget)
-			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 34")
-			fmt.Println("this is debug text: middleware/profile/addWidget.go 32, add widget executed")
-		}
-	*/
+
+	if r.FormValue("widgetSubmit") == `0` {
+		title := r.FormValue("customHeader")
+		description := r.FormValue("customContent")
+		data := []string{title, description}
+		//call fuction that gets the next available slot in user's widgets
+		//position == len(user.widgets)
+		newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Position: 0, Classification: 0}
+		err := uses.AddWidget(eclient, session.Values["DocID"].(string), newWidget)
+		fmt.Println(err)
+		fmt.Println("this is an error: middleware/profile/addWidget.go 34")
+		fmt.Println("this is debug text: middleware/profile/addWidget.go 32, add widget executed")
+	}
 
 	//contentArray := []rune(comment)
 	//username := r.FormValue("username")
