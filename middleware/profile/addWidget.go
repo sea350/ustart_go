@@ -17,7 +17,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	username := test1.(string)
-
+	fmt.Println("this is debug text: middleware/profile/addWidget.go 20")
 	r.ParseForm()
 	if r.FormValue("widgetSubmit") == `0` {
 		title := r.FormValue("customHeader")
@@ -29,6 +29,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		err := uses.AddWidget(eclient, session.Values["DocID"].(string), newWidget)
 		fmt.Println(err)
 		fmt.Println("this is an error: middleware/profile/addWidget.go 34")
+		fmt.Println("this is debug text: middleware/profile/addWidget.go 32, add widget executed")
 	}
 
 	//contentArray := []rune(comment)
