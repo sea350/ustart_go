@@ -92,8 +92,8 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an error (ViewProfile.go: 79)")
 		fmt.Println(errnF2)
 	}
-	nonsense := []int{1, 2, 3}
-	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets, Nonsense: nonsense}
+
+	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets}
 
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "profile-nil", cs)
