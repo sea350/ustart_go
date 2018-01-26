@@ -30,10 +30,12 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err5)
 	}
 
+	fmt.Println(userstruct.UserWidgets)
 	widgets, errors := uses.LoadWidgets(eclient, userstruct.UserWidgets)
 	if len(errors) != 0 {
 		fmt.Println("this is an error (ViewProfile.go: 35)")
 		fmt.Println("one or more errors have occured in loading widgets")
+		fmt.Println(errors)
 	}
 
 	jEntries, err5 := uses.LoadEntries(eclient, userstruct.EntryIDs)
