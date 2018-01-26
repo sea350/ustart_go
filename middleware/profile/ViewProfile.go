@@ -39,7 +39,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		retHTML = append(retHTML, render)
 	}
 
-	fmt.Printf(retHTML)
+	fmt.Println(retHTML)
 
 	if len(errors) != 0 {
 		fmt.Println("this is an error (ViewProfile.go: 35)")
