@@ -22,9 +22,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("widgetSubmit") == `0` {
 		title := r.FormValue("customHeader")
 		description := r.FormValue("customContent")
-		var data []string
-		data = append(data, title)
-		data = append(data, description)
+		data := []string{title, description}
 		//call fuction that gets the next available slot in user's widgets
 		//position == len(user.widgets)
 		newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Position: 0, Classification: 0}
