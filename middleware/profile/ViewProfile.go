@@ -1,9 +1,9 @@
 package profile
 
 import (
-	"net/http"
-
 	"fmt"
+	temp "html/template"
+	"net/http"
 
 	sessions "github.com/gorilla/sessions"
 	uses "github.com/sea350/ustart_go/uses"
@@ -31,6 +31,14 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	widgets, errors := uses.LoadWidgets(eclient, userstruct.UserWidgets)
+
+	var retHTML []temp.HTML
+
+	for _, element := range widgets {
+		render := temp.HTML(element.Data[1])
+		retHTML = append(retHTML, render)
+	}
+
 	if len(errors) != 0 {
 		fmt.Println("this is an error (ViewProfile.go: 35)")
 		fmt.Println("one or more errors have occured in loading widgets")
