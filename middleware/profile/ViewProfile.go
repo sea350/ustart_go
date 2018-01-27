@@ -33,7 +33,6 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	widgets, errors := uses.LoadWidgets(eclient, userstruct.UserWidgets)
 
 	var retHTML []temp.HTML
-
 	for _, element := range widgets {
 		render := temp.HTML(element.Data[1])
 		retHTML = append(retHTML, render)
@@ -103,7 +102,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(errnF2)
 	}
 
-	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets}
+	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets, WidgetsHTML: retHTML}
 
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "profile-nil", cs)
