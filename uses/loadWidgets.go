@@ -17,6 +17,7 @@ func LoadWidgets(eclient *elastic.Client, loadList []string) ([]types.Widget, []
 		nextWidget, err := get.WidgetByID(eclient, widgetID)
 
 		if err == nil {
+			nextWidget.ID = widgetID
 			widgets = append(widgets, nextWidget)
 
 		} else {
