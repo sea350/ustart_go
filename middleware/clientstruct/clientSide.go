@@ -1,7 +1,7 @@
 package client
 
 import (
-	"html/template"
+	htype "html/template"
 	"net/http"
 
 	"github.com/gorilla/sessions"
@@ -35,10 +35,11 @@ type ClientSide struct {
 	FollowingStatus string
 	Wall            []types.JournalEntry
 	Widgets         []types.Widget
+	WidgetsHTML     []htype.HTML
 }
 
 /* The following line is how HTML is loaded by our application. Note we need the relative link from the location of GoStart2. */
-var templates = template.Must(template.ParseFiles("/home/rr2396/www/ustart.tech/followerlist-nil.html",
+var templates = htype.Must(htype.ParseFiles("/home/rr2396/www/ustart.tech/followerlist-nil.html",
 	"/home/rr2396/www/ustart.tech/emTee.html", "/home/rr2396/www/ustart.tech/wallttt.html",
 	"/home/rr2396/www/ustart.tech/wallload-nil.html", "/home/rr2396/www/ustart.tech/testimage.html",
 	"/home/rr2396/www/ustart.tech/ajax-nil.html", "/home/rr2396/www/ustart.tech/Membership-Nil.html",
