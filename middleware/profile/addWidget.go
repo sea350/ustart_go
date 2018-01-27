@@ -2,6 +2,7 @@ package profile
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 
 	"github.com/sea350/ustart_go/types"
@@ -20,9 +21,9 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	if r.FormValue("widgetSubmit") == `0` {
-		title := r.FormValue("customHeader")
-		description := r.FormValue("customContent")
-		data := []string{title, description}
+		title := template.HTML(r.FormValue("customHeader"))
+		description := template.HTML(r.FormValue("customContent"))
+		data := []template.HTML{title, description}
 		//call fuction that gets the next available slot in user's widgets
 		//position == len(user.widgets)
 		newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Position: 0, Classification: 0}

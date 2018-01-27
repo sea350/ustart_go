@@ -2,7 +2,6 @@ package profile
 
 import (
 	"fmt"
-	temp "html/template"
 	"net/http"
 
 	sessions "github.com/gorilla/sessions"
@@ -31,8 +30,6 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	widgets, errors := uses.LoadWidgets(eclient, userstruct.UserWidgets)
-
-	retHTML := temp.HTML("<p> WORK ALREADY U CUNT &nbsp </p>")
 
 	if len(errors) != 0 {
 		fmt.Println("this is an error (ViewProfile.go: 35)")
@@ -96,7 +93,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(errnF2)
 	}
 
-	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets, WidgetsHTML: retHTML}
+	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets}
 
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "profile-nil", cs)
