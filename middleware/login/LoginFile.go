@@ -6,10 +6,11 @@ import (
 	"strings"
 	"time"
 
-	client "github.com/sea350/ustart_go/middleware/clientstruct"
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
+//Login ... logs you in duh
 func Login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm() // represents form data from html
 	session, _ := store.Get(r, "session_please")
@@ -67,8 +68,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 // 	renderTemplate(w,"profile-nil",cs)
 // }
 
-/* This isn't used anymore I think*/
-func LoginError(w http.ResponseWriter, r *http.Request) {
+//Error ... This isn't used anymore I think
+func Error(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
