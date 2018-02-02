@@ -124,6 +124,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 
 	if r.FormValue("editID") == `0` {
 		err := uses.AddWidget(eclient, session.Values["DocID"].(string), newWidget)
+		fmt.Println("Widget added. Classification:")
+		fmt.Println(newWidget.Classification)
 		if err != nil {
 			fmt.Println(err)
 			fmt.Println("this is an error: middleware/profile/addWidget.go 128")
