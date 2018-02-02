@@ -9,7 +9,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 
 	get "github.com/sea350/ustart_go/get/user"
-	client "github.com/sea350/ustart_go/middleware/clientstruct"
+	client "github.com/sea350/ustart_go/middleware/client"
 )
 
 var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
