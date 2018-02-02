@@ -18,6 +18,9 @@ func AddWidget(eclient *elastic.Client, userID string, newWidget types.Widget) e
 	}
 	newWidget.Position = len(usr.UserWidgets)
 	widgetID, err := post.IndexWidget(eclient, newWidget)
+	if err != nil {
+		panic(err)
+	}
 	updatedWidgets := append(usr.UserWidgets, widgetID)
 	updateErr := postUser.UpdateUser(eclient, userID, "UserWidgets", updatedWidgets)
 
