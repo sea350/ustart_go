@@ -9,6 +9,7 @@ import (
 	project "github.com/sea350/ustart_go/middleware/project"
 	registration "github.com/sea350/ustart_go/middleware/registration"
 	settings "github.com/sea350/ustart_go/middleware/settings"
+	widget "github.com/sea350/ustart_go/middleware/widget"
 )
 
 func main() {
@@ -39,9 +40,11 @@ func main() {
 	http.HandleFunc("/AddComment", profile.AddComment)
 	http.HandleFunc("/loadWall/", profile.WallLoad)
 	http.HandleFunc("/addPost/", profile.WallAdd)
-	http.HandleFunc("/addWidget/", profile.AddWidget)
 	http.HandleFunc("/profile/", profile.ViewProfile)
-	http.HandleFunc("/deleteWidget/", profile.DeleteWidgetProfile)
+
+	http.HandleFunc("/addWidget/", widget.AddWidget)
+	http.HandleFunc("/deleteWidget/", widget.DeleteWidgetProfile)
+	http.HandleFunc("/addToIntagramWidget/", widget.EditWidgetInstaAdd)
 
 	http.HandleFunc("/Projects/", project.ProjectsPage)
 	http.HandleFunc("/MyProjects/", project.MyProjects)

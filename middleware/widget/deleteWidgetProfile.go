@@ -1,4 +1,4 @@
-package profile
+package widget
 
 import (
 	"fmt"
