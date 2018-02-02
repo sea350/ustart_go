@@ -44,7 +44,7 @@ func main() {
 
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/deleteWidget/", widget.DeleteWidgetProfile)
-	http.HandleFunc("/addToIntagramWidget/", widget.EditWidgetInstaAdd)
+	http.HandleFunc("/addToInstagramWidget/", widget.EditWidgetInstaAdd)
 
 	http.HandleFunc("/Projects/", project.ProjectsPage)
 	http.HandleFunc("/MyProjects/", project.MyProjects)

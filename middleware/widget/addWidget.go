@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/widget"
 	"github.com/sea350/ustart_go/types"
@@ -53,7 +54,17 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("widgetSubmit") == `4` {
 		//instagram
 		input := template.HTML(r.FormValue("instagramInput"))
-		data = []template.HTML{input}
+		if r.FormValue("editID") != `0` {
+			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println("this is an err, editInstaAdd line 24")
+			}
+
+			data = append(widget.Data, input)
+		} else {
+			data = []template.HTML{input}
+		}
 		classification = 4
 	}
 	if r.FormValue("widgetSubmit") == `5` {
