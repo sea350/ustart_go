@@ -10,7 +10,7 @@ import (
 
 //DeleteWidgetProfile ... Deletes a widget and redirects to profile or projects page page
 func DeleteWidgetProfile(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
 		// No username in session

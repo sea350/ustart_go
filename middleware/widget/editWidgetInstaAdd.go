@@ -12,7 +12,7 @@ import (
 
 //EditWidgetInstaAdd ... adds a new link to an instagram widget
 func EditWidgetInstaAdd(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
 		// No username in session

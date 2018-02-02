@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/widget"
 	"github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
@@ -12,7 +13,7 @@ import (
 
 //AddWidget ... After widget form submission adds a widget to database
 func AddWidget(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
 		// No username in session
@@ -123,7 +124,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}
 
 	if r.FormValue("editID") == `0` {
-		err := uses.AddWidget(eclient, session.Values["DocID"].(string), newWidget)
+		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget)
 		fmt.Println("Widget added. Classification:")
 		fmt.Println(newWidget.Classification)
 		if err != nil {
@@ -131,7 +132,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("this is an error: middleware/profile/addWidget.go 128")
 		}
 	} else {
-		err := post.ReindexWidget(eclient, r.FormValue("editID"), newWidget)
+		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 		if err != nil {
 			fmt.Println(err)
 			fmt.Println("this is an error: middleware/profile/addWidget.go 134")
