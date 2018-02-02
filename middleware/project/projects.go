@@ -15,6 +15,7 @@ import (
 var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
+//ProjectsPage ... Displays the projects page
 func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -27,6 +28,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	client.RenderTemplate(w, "projectsF", cs)
 }
 
+//MyProjects ...
 func MyProjects(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -39,6 +41,7 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 	client.RenderTemplate(w, "manageprojectsF", cs)
 }
 
+//CreateProject ...
 func CreateProject(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]

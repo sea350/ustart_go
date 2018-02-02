@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	client "github.com/sea350/ustart_go/middleware/clientstruct"
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 	"golang.org/x/crypto/bcrypt"
 )
