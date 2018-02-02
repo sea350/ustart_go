@@ -25,6 +25,7 @@ func EditWidgetInstaAdd(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		fmt.Println("this is an err, editInstaAdd line 24")
 	}
+
 	newArr := append(widget.Data, newURL)
 	err = uses.EditWidget(client.Eclient, r.FormValue("editID"), newArr)
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
