@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	post "github.com/sea350/ustart_go/post/widget"
 	"github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
 )
@@ -120,10 +121,19 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}
-	err := uses.AddWidget(eclient, session.Values["DocID"].(string), newWidget)
-	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an error: middleware/profile/addWidget.go 34")
+
+	if r.FormValue("editID") == `0` {
+		err := uses.AddWidget(eclient, session.Values["DocID"].(string), newWidget)
+		if err != nil {
+			fmt.Println(err)
+			fmt.Println("this is an error: middleware/profile/addWidget.go 128")
+		}
+	} else {
+		err := post.ReindexWidget(eclient, r.FormValue("editID"), newWidget)
+		if err != nil {
+			fmt.Println(err)
+			fmt.Println("this is an error: middleware/profile/addWidget.go 134")
+		}
 	}
 
 	//contentArray := []rune(comment)
