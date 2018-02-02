@@ -33,8 +33,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `1` {
 		//gallery
-		image := template.HTML(r.FormValue("UNKNOWN"))
-		data = []template.HTML{image}
+		input := template.HTML(r.FormValue("instagramInput"))
+		data = []template.HTML{input}
 		classification = 1
 	}
 	if r.FormValue("widgetSubmit") == `2` {
@@ -50,9 +50,9 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 3
 	}
 	if r.FormValue("widgetSubmit") == `4` {
-		//poll WIP
-		image := template.HTML(r.FormValue("UNKNOWN"))
-		data = []template.HTML{image}
+		//instagram
+		input := template.HTML(r.FormValue("instagramInput"))
+		data = []template.HTML{input}
 		classification = 4
 	}
 	if r.FormValue("widgetSubmit") == `5` {

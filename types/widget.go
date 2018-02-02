@@ -19,7 +19,7 @@ type Widget struct {
 	//class 3 = poll
 	//	Data = WIP
 	//class 4 = instagram
-	//	Data[0] = url
+	//	Data[] = all urls
 	//class 5 = soundcloud
 	//	Data[0] = url
 	//class 6 = youtube
