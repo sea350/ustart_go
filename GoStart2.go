@@ -26,7 +26,7 @@ func main() {
 	*/
 
 	http.HandleFunc("/Inbox/", inbox.Inbox)
-	http.HandleFunc("/loginerror/", login.LoginError)
+	http.HandleFunc("/loginerror/", login.Error)
 	http.HandleFunc("/", login.Home)
 	http.HandleFunc("/profilelogin/", login.Login)
 	http.HandleFunc("/logout/", login.Logout)
