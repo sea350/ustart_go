@@ -75,7 +75,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `6` {
 		//youtube
-		url := template.HTML(r.FormValue("UNKNOWN"))
+		url := template.HTML(r.FormValue("ytInput"))
 		data = []template.HTML{url}
 		classification = 6
 	}
