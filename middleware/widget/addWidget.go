@@ -99,8 +99,18 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `10` {
 		//spoofy
-		spotifyEmbedCode := template.HTML(r.FormValue("UNKNOWN"))
-		data = []template.HTML{spotifyEmbedCode}
+		spotifyEmbedCode := template.HTML(r.FormValue("spotInput"))
+		if r.FormValue("editID") != `0` {
+			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println("this is an err, addwidget 61")
+			}
+
+			data = append(widget.Data, spotifyEmbedCode)
+		} else {
+			data = []template.HTML{spotifyEmbedCode}
+		}
 		classification = 10
 	}
 	if r.FormValue("widgetSubmit") == `11` {
