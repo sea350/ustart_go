@@ -10,8 +10,8 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//EditWidgetInstaAdd ... adds a new link to an instagram widget
-func EditWidgetInstaAdd(w http.ResponseWriter, r *http.Request) {
+//EditWidgetInstaDelete ... deletes a link on an instagram widget
+func EditWidgetInstaDelete(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
@@ -19,14 +19,28 @@ func EditWidgetInstaAdd(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	username := test1.(string)
-	newURL := template.HTML(r.FormValue("UNKNOWN"))
+	deletedURL := template.HTML(r.FormValue("instaURL"))
 	widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("this is an err, editInstaAdd line 24")
 	}
 
-	newArr := append(widget.Data, newURL)
+	var target int
+	for index, link := range widget.Data {
+		if link == deletedURL {
+			target = index
+			break
+		}
+	}
+
+	var newArr []template.HTML
+	if target+1 < len(widget.Data) {
+		newArr = append(widget.Data[:target], widget.Data[target+1:]...)
+	} else {
+		newArr = widget.Data[:target]
+	}
+
 	err = uses.EditWidget(client.Eclient, r.FormValue("editID"), newArr)
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 }
