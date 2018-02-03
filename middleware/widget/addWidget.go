@@ -93,7 +93,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `9` {
 		//tumblr
-		tumblrEmbedCode := template.HTML(r.FormValue("UNKNOWN"))
+		tumblrEmbedCode := template.HTML(r.FormValue("tumblrInput"))
 		data = []template.HTML{tumblrEmbedCode}
 		classification = 9
 	}
@@ -104,7 +104,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 10
 	}
 	if r.FormValue("widgetSubmit") == `11` {
-		//spoofy
+		//anchor
 		spotifyEmbedCode := template.HTML(r.FormValue("UNKNOWN"))
 		data = []template.HTML{spotifyEmbedCode}
 		classification = 11
