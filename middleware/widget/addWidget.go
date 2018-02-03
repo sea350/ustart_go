@@ -126,8 +126,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 13
 	}
 	if r.FormValue("widgetSubmit") == `14` {
-		//devianart
-		username := template.HTML(r.FormValue("UNKNOWN"))
+		//twitch.tv :)
+		username := template.HTML(r.FormValue("twitchInput"))
 		data = []template.HTML{username}
 		classification = 14
 	}
