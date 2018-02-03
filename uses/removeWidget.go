@@ -49,7 +49,7 @@ func RemoveWidget(eclient *elastic.Client, widgetID string) error {
 
 	//delete the widget from ES
 	_, err = eclient.Delete().
-		Index(globals.WidgetType).
+		Index(globals.WidgetIndex).
 		Type(globals.WidgetType).
 		Id(widgetID).
 		Do(ctx)
