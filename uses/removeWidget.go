@@ -26,8 +26,21 @@ func RemoveWidget(eclient *elastic.Client, widgetID string) error {
 		panic(err)
 	}
 
+	var pos int
+	var updatedWidgets []string
+	for index, ID := range usr.UserWidgets {
+		if ID == widgetID {
+			pos = index
+			break
+		}
+	}
 	//update the user widgets array
-	updatedWidgets := append(usr.UserWidgets[:widget.Position], usr.UserWidgets[widget.Position+1:]...)
+	if pos+1 < len(usr.UserWidgets) {
+		updatedWidgets = append(usr.UserWidgets[:pos], usr.UserWidgets[pos+1:]...)
+	} else {
+		updatedWidgets = usr.UserWidgets[:pos]
+	}
+
 	updateErr := postUser.UpdateUser(eclient, userID, "UserWidgets", updatedWidgets)
 
 	if updateErr != nil {
