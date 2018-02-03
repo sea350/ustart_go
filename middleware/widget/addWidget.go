@@ -58,7 +58,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 			if err != nil {
 				fmt.Println(err)
-				fmt.Println("this is an err, editInstaAdd line 24")
+				fmt.Println("this is an err, addwidget 61")
 			}
 
 			data = append(widget.Data, input)
@@ -69,8 +69,18 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `5` {
 		//soundcloud
-		url := template.HTML(r.FormValue("UNKNOWN"))
-		data = []template.HTML{url}
+		url := template.HTML(r.FormValue("scInput"))
+		if r.FormValue("editID") != `0` {
+			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println("this is an err, addwidget 77")
+			}
+
+			data = append(widget.Data, url)
+		} else {
+			data = []template.HTML{url}
+		}
 		classification = 5
 	}
 	if r.FormValue("widgetSubmit") == `6` {
