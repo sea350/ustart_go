@@ -10,8 +10,8 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//EditWidgetInstaDelete ... deletes a link on an instagram widget
-func EditWidgetInstaDelete(w http.ResponseWriter, r *http.Request) {
+//EditWidgetDataDelete ... deletes a link in a class 4 or 5 widget widget
+func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
