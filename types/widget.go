@@ -21,7 +21,7 @@ type Widget struct {
 	//class 4 = instagram
 	//	Data[] = all urls
 	//class 5 = soundcloud
-	//	Data[0] = url
+	//	Data[0] = embed code
 	//class 6 = youtube
 	//	data[0] = url
 	//class 7 = codepen
