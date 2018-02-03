@@ -81,7 +81,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `7` {
 		//codepen
-		codepenID := template.HTML(r.FormValue("UNKNOWN"))
+		codepenID := template.HTML(r.FormValue("codepenInput"))
 		data = []template.HTML{codepenID}
 		classification = 7
 	}
