@@ -19,15 +19,26 @@ func EditWidgetInstaDelete(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	username := test1.(string)
+
 	deletedURL := template.HTML(r.FormValue("instaURL"))
-	widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
+	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println("this is an err, editInstaAdd line 24")
+		fmt.Println("this is an err, editInstaAdd line 26")
+	}
+
+	if len(oldWidget.Data) == 1 {
+		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"))
+		if err != nil {
+			fmt.Println(err)
+			fmt.Println("this is an err, editInstaAdd line 34")
+		}
+		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+		return
 	}
 
 	var target int
-	for index, link := range widget.Data {
+	for index, link := range oldWidget.Data {
 		if link == deletedURL {
 			target = index
 			break
@@ -35,12 +46,16 @@ func EditWidgetInstaDelete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var newArr []template.HTML
-	if target+1 < len(widget.Data) {
-		newArr = append(widget.Data[:target], widget.Data[target+1:]...)
+	if target+1 < len(oldWidget.Data) {
+		newArr = append(oldWidget.Data[:target], oldWidget.Data[target+1:]...)
 	} else {
-		newArr = widget.Data[:target]
+		newArr = oldWidget.Data[:target]
 	}
 
 	err = uses.EditWidget(client.Eclient, r.FormValue("editID"), newArr)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("this is an err, editInstaAdd line 58")
+	}
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 }
