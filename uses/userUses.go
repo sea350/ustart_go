@@ -7,7 +7,6 @@ import (
 	postUser "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
-	"src/github.com/sea350/ustart_go/uses"
 
 	"errors"
 	"time"
@@ -73,7 +72,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	}
 
 	skillsWidget := types.Widget{UserID: newID, Classification: 15}
-	err := uses.AddWidget(eclient, newID, skillsWidget)
+	err = AddWidget(eclient, newID, skillsWidget)
 	return err
 }
 
