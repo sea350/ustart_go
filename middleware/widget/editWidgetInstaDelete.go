@@ -20,7 +20,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	}
 	username := test1.(string)
 
-	deletedURL := template.HTML(r.FormValue("instaURL"))
+	deletedURL := template.HTML(r.FormValue("deleteURL"))
 	fmt.Println(deletedURL)
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
