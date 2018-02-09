@@ -160,7 +160,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 			if err != nil {
 				fmt.Println(err)
-				fmt.Println("this is an error: middleware/profile/addWidget.go 151")
+				fmt.Println("this is an error: middleware/profile/addWidget.go 164")
 			}
 			data = widget.Data
 			for _, tag := range tags {
@@ -173,6 +173,27 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		}
 		classification = 15
 	}
+	if r.FormValue("widgetSubmit") == `16` {
+		//links
+		//special class
+		links := strings.Split(",", r.FormValue("UNKNOWN"))
+		if r.FormValue("editID") != `0` {
+			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println("this is an error: middleware/profile/addWidget.go 184")
+			}
+			data = widget.Data
+			for _, tag := range links {
+				data = append(data, template.HTML(tag))
+			}
+		} else {
+			for _, tag := range links {
+				data = append(data, template.HTML(tag))
+			}
+		}
+		classification = 16
+	}
 
 	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}
 
@@ -182,13 +203,13 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(newWidget.Classification)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 169")
+			fmt.Println("this is an error: middleware/profile/addWidget.go 206")
 		}
 	} else {
 		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 175")
+			fmt.Println("this is an error: middleware/profile/addWidget.go 212")
 		}
 	}
 

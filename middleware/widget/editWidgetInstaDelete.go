@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -20,7 +21,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	}
 	username := test1.(string)
 
-	deletedURL := template.HTML(r.FormValue("deleteURL"))
+	deletedURL := r.FormValue("deleteURL")
 	fmt.Println(deletedURL)
 	fmt.Println(r.FormValue("editID"))
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
@@ -42,7 +43,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	target := -1
 	for index, link := range oldWidget.Data {
 		fmt.Println(link)
-		if link == deletedURL {
+		if strings.Contains(string(link), deletedURL) {
 			target = index
 			break
 		}
