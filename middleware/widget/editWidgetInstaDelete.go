@@ -45,7 +45,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(link)
 		if strings.Contains(string(link), deletedURL) || strings.Contains(deletedURL, string(link)) {
 			target = index
-			fmt.Prinln(target)
+			fmt.Println(target)
 			break
 		}
 	}
