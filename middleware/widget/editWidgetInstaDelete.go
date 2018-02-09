@@ -40,6 +40,9 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	var target int
 	for index, link := range oldWidget.Data {
 		if link == deletedURL {
+			fmt.Println(link)
+			fmt.Println(index)
+			fmt.Println("debug text: middleware/widget/editWidgetDelete line 45")
 			target = index
 			break
 		}
