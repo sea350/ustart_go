@@ -19,8 +19,10 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	username := test1.(string)
-
+	//r.ParseForm()
 	deletedURL := template.HTML(r.FormValue("instaURL"))
+	fmt.Println(deletedURL)
+	fmt.Println("this is the deleted url")
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
 		fmt.Println(err)
@@ -39,10 +41,10 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	var target int
 	for index, link := range oldWidget.Data {
+		fmt.Println(link)
+		fmt.Println(index)
+		fmt.Println("debug text: middleware/widget/editWidgetDelete line 44")
 		if link == deletedURL {
-			fmt.Println(link)
-			fmt.Println(index)
-			fmt.Println("debug text: middleware/widget/editWidgetDelete line 45")
 			target = index
 			break
 		}
