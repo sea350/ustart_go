@@ -89,7 +89,17 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("widgetSubmit") == `8` {
 		//pinterest
 		url := template.HTML(r.FormValue("pinInput"))
-		data = []template.HTML{url}
+		if r.FormValue("editID") != `0` {
+			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println("this is an err, addwidget 96")
+			}
+
+			data = append(widget.Data, url)
+		} else {
+			data = []template.HTML{url}
+		}
 		classification = 8
 	}
 	if r.FormValue("widgetSubmit") == `9` {
