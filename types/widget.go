@@ -27,7 +27,7 @@ type Widget struct {
 	//class 7 = codepen
 	//	Data[0] = codepenID
 	//class 8 = pinterest
-	//	Data[0] = url
+	//	Data[] = urls
 	//class 9 = tumblr
 	//	Data[0] = tumblrEmbedCode
 	//class 10 = spotify
