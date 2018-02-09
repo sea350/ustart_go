@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -87,7 +88,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `8` {
 		//pinterest
-		url := template.HTML(r.FormValue("UNKNOWN"))
+		url := template.HTML(r.FormValue("pinInput"))
 		data = []template.HTML{url}
 		classification = 8
 	}
@@ -143,17 +144,21 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `15` {
 		//skills
-		tagInput := template.HTML(r.FormValue("tagInput"))
+		tags := strings.Split(",", r.FormValue("tagInput"))
 		if r.FormValue("editID") != `0` {
 			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 			if err != nil {
 				fmt.Println(err)
 				fmt.Println("this is an error: middleware/profile/addWidget.go 151")
 			}
-
-			data = append(widget.Data, tagInput)
+			data = widget.Data
+			for _, tag := range tags {
+				data = append(data, template.HTML(tag))
+			}
 		} else {
-			data = []template.HTML{tagInput}
+			for _, tag := range tags {
+				data = append(data, template.HTML(tag))
+			}
 		}
 		classification = 15
 	}
