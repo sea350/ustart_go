@@ -30,7 +30,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err, editInstaAdd line 26")
 	}
 
-	if len(oldWidget.Data) == 1 {
+	if len(oldWidget.Data) == 1 && (oldWidget.Classification != 15 || oldWidget.Classification != 16) {
 		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"))
 		if err != nil {
 			fmt.Println(err)
@@ -45,6 +45,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(link)
 		if strings.Contains(string(link), deletedURL) || strings.Contains(deletedURL, string(link)) {
 			target = index
+			fmt.Prinln(target)
 			break
 		}
 	}
@@ -54,8 +55,8 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("deleted object not found")
 		fmt.Println("this is an err, editInstaAdd line 51")
 		newArr = oldWidget.Data
-	} else if target+1 < len(oldWidget.Data) {
-		newArr = append(oldWidget.Data[:target], oldWidget.Data[target+1:]...)
+	} else if (target + 1) < len(oldWidget.Data) {
+		newArr = append(oldWidget.Data[:target], oldWidget.Data[(target+1):]...)
 	} else {
 		newArr = oldWidget.Data[:target]
 	}
