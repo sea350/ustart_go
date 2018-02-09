@@ -141,6 +141,22 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		data = []template.HTML{username}
 		classification = 14
 	}
+	if r.FormValue("widgetSubmit") == `15` {
+		//skills
+		tagInput := template.HTML(r.FormValue("tagInput"))
+		if r.FormValue("editID") != `0` {
+			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println("this is an error: middleware/profile/addWidget.go 151")
+			}
+
+			data = append(widget.Data, tagInput)
+		} else {
+			data = []template.HTML{tagInput}
+		}
+		classification = 15
+	}
 
 	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}
 
@@ -150,13 +166,13 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(newWidget.Classification)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 128")
+			fmt.Println("this is an error: middleware/profile/addWidget.go 169")
 		}
 	} else {
 		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 134")
+			fmt.Println("this is an error: middleware/profile/addWidget.go 175")
 		}
 	}
 
