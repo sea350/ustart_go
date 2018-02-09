@@ -7,6 +7,7 @@ import (
 	postUser "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
+	"src/github.com/sea350/ustart_go/uses"
 
 	"errors"
 	"time"
@@ -66,9 +67,14 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		newUsr.Class = 5
 	}
 
-	retErr := postUser.IndexUser(eclient, newUsr)
+	retErr, newID := postUser.IndexUser(eclient, newUsr)
+	if retErr != nil {
+		return retErr
+	}
 
-	return retErr
+	skillsWidget := types.Widget{UserID: newID, Classification: 15}
+	err := uses.AddWidget(eclient, newID, skillsWidget)
+	return err
 }
 
 //UserShareEntry ... CREATES A SHARED ENTRY FROM A USER

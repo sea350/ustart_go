@@ -40,13 +40,14 @@ const mapping = `
 
 //IndexUser ...
 // adds a new user document to the ES cluster
-// returns err, nil if successful.
-func IndexUser(eclient *elastic.Client, newAcc types.User) error {
+// returns err,string. nil, newID if successful.
+func IndexUser(eclient *elastic.Client, newAcc types.User) (error, string) {
 	// Check if the index exists
 	ctx := context.Background()
+	var ID string
 	exists, err := eclient.IndexExists(globals.UserIndex).Do(ctx)
 	if err != nil {
-		return err
+		return err, ID
 	}
 	// If the index doesn't exist, create it and return error.
 	if !exists {
@@ -60,19 +61,19 @@ func IndexUser(eclient *elastic.Client, newAcc types.User) error {
 		}
 
 		// Return an error saying it doesn't exist
-		return errors.New("Index does not exist")
+		return errors.New("Index does not exist"), ID
 	}
 
 	// Index the document.
-	_, Err := eclient.Index().
+	newUsr, Err := eclient.Index().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		BodyJson(newAcc).
 		Do(ctx)
 
 	if Err != nil {
-		return Err
+		return Err, ID
 	}
 
-	return nil
+	return nil, newUsr.Id
 }
