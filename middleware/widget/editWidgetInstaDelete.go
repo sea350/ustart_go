@@ -22,6 +22,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	deletedURL := template.HTML(r.FormValue("deleteURL"))
 	fmt.Println(deletedURL)
+	fmt.Println(r.FormValue("editID"))
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
 		fmt.Println(err)
