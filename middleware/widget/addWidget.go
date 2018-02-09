@@ -154,6 +154,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `15` {
 		//skills
+		//special class
 		tags := strings.Split(",", r.FormValue("tagInput"))
 		if r.FormValue("editID") != `0` {
 			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
