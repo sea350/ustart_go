@@ -29,7 +29,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err: middleware/profile/addTag line 25")
 	}
 
-	usr.Tags = append(usr.Tags)
+	usr.Tags = append(usr.Tags, tags[0:]...)
 
 	err = post.UpdateUser(client.Eclient, ID, "Tags", usr.Tags)
 	if err != nil {
