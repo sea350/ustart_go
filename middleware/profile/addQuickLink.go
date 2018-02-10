@@ -18,8 +18,7 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	username := test1.(string)
-	ID, _ := session.Values["DOCID"].(string)
+	ID := session.Values["DocID"].(string)
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
@@ -27,7 +26,7 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err: middleware/profile/addQuickLink line 25")
 	}
 
-	usr.QuickLinks = append(usr.QuickLinks, types.Link{r.FormValue("UNKNOWN"), r.FormValue("UNKNOWN")})
+	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: r.FormValue("userLinkDesc"), URL: r.FormValue("userLink")})
 
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", usr.QuickLinks)
 	if err != nil {
@@ -35,5 +34,4 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err: middleware/profile/addQuickLink line 31")
 	}
 
-	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 }
