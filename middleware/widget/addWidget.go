@@ -141,10 +141,10 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `12` {
 		//medium
-		username := template.HTML(r.FormValue("UNKNOWN"))
-		publication := template.HTML(r.FormValue("UNKNOWN"))
-		publicationTag := template.HTML(r.FormValue("UNKNOWN"))
-		count := template.HTML(r.FormValue("UNKNOWN"))
+		username := template.HTML(r.FormValue("medInput"))
+		publication := template.HTML(r.FormValue("medInput2"))
+		publicationTag := template.HTML(r.FormValue("medInput3"))
+		count := template.HTML(r.FormValue("medInput4"))
 		data = []template.HTML{username, publication, publicationTag, count}
 		classification = 12
 	}

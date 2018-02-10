@@ -1,0 +1,38 @@
+package profile
+
+import (
+	"fmt"
+	"net/http"
+
+	get "github.com/sea350/ustart_go/get/user"
+	"github.com/sea350/ustart_go/middleware/client"
+	post "github.com/sea350/ustart_go/post/user"
+)
+
+//AddTag ...
+func AddTag(w http.ResponseWriter, r *http.Request) {
+	session, _ := client.Store.Get(r, "session_please")
+	test1, _ := session.Values["Username"]
+	if test1 == nil {
+		// No username in session
+		http.Redirect(w, r, "/~", http.StatusFound)
+	}
+	username := test1.(string)
+	ID, _ := session.Values["DOCID"].(string)
+
+	usr, err := get.UserByID(client.Eclient, ID)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("this is an err: middleware/profile/addTag line 25")
+	}
+
+	usr.Tags = append(usr.Tags, r.FormValue("UNKNOWN"))
+
+	err = post.UpdateUser(client.Eclient, ID, "Tags", usr.Tags)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("this is an err: middleware/profile/addTag line 31")
+	}
+
+	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+}
