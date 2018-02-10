@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
+	post "github.com/sea350/ustart_go/post/user"
 )
 
 //AddTag ...
@@ -16,24 +18,21 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	//ID := session.Values["DocID"].(string)
+	ID := session.Values["DocID"].(string)
 
-	/*
-		usr, err := get.UserByID(client.Eclient, ID)
-		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an err: middleware/profile/addTag line 25")
-		}
-	*/
-	fmt.Println(r.FormValue("skillArray"))
-	/*
-		usr.Tags = append(usr.Tags, r.FormValue("skillArray"))
+	usr, err := get.UserByID(client.Eclient, ID)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("this is an err: middleware/profile/addTag line 25")
+	}
 
-		err = post.UpdateUser(client.Eclient, ID, "Tags", usr.Tags)
-		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an err: middleware/profile/addTag line 31")
-		}
-	*/
+	usr.Tags = append(usr.Tags, r.FormValue("skillArray"))
+
+	err = post.UpdateUser(client.Eclient, ID, "Tags", usr.Tags)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("this is an err: middleware/profile/addTag line 31")
+	}
+
 	fmt.Fprintln(w, "minhazaur")
 }
