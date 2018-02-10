@@ -16,8 +16,8 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	ID := session.Values["DocID"].(string)
-	fmt.Println(ID)
+	//ID := session.Values["DocID"].(string)
+
 	/*
 		usr, err := get.UserByID(client.Eclient, ID)
 		if err != nil {
@@ -25,7 +25,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("this is an err: middleware/profile/addTag line 25")
 		}
 	*/
-	fmt.Println(r.FormValue("skillArray"))
+	fmt.Fprintln(w, r.FormValue("skillArray"))
 	/*
 		usr.Tags = append(usr.Tags, r.FormValue("skillArray"))
 
