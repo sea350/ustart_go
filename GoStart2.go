@@ -41,8 +41,8 @@ func main() {
 	http.HandleFunc("/loadWall/", profile.WallLoad)
 	http.HandleFunc("/addPost/", profile.WallAdd)
 	http.HandleFunc("/profile/", profile.ViewProfile)
-	http.HandleFunc("/addTag/", profile.AddTag)
-	http.HandleFunc("/delteTag/", profile.DeleteTag)
+	http.HandleFunc("/addSkill/", profile.AddTag)
+	http.HandleFunc("/delteSkill/", profile.DeleteTag)
 	http.HandleFunc("/addLink/", profile.AddQuickLink)
 	http.HandleFunc("/delteLink/", profile.DeleteQuickLink)
 
