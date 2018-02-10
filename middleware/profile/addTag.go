@@ -36,6 +36,4 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		fmt.Println("this is an err: middleware/profile/addTag line 31")
 	}
-
-	fmt.Fprintln(w, "minhazaur")
 }
