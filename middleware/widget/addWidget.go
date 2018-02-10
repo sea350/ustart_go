@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"strings"
 
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -126,8 +125,18 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `11` {
 		//anchor
-		spotifyEmbedCode := template.HTML(r.FormValue("UNKNOWN"))
-		data = []template.HTML{spotifyEmbedCode}
+		input := template.HTML(r.FormValue("arInput"))
+		if r.FormValue("editID") != `0` {
+			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println("this is an err, addwidget 134")
+			}
+
+			data = append(widget.Data, input)
+		} else {
+			data = []template.HTML{input}
+		}
 		classification = 11
 	}
 	if r.FormValue("widgetSubmit") == `12` {
@@ -151,48 +160,6 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		username := template.HTML(r.FormValue("twitchInput"))
 		data = []template.HTML{username}
 		classification = 14
-	}
-	if r.FormValue("widgetSubmit") == `15` {
-		//skills
-		//special class
-		tags := strings.Split(r.FormValue("tagInput"), ",")
-		if r.FormValue("editID") != `0` {
-			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
-			if err != nil {
-				fmt.Println(err)
-				fmt.Println("this is an error: middleware/profile/addWidget.go 164")
-			}
-			data = widget.Data
-			for _, tag := range tags {
-				data = append(data, template.HTML(tag))
-			}
-		} else {
-			for _, tag := range tags {
-				data = append(data, template.HTML(tag))
-			}
-		}
-		classification = 15
-	}
-	if r.FormValue("widgetSubmit") == `16` {
-		//links
-		//special class
-		links := strings.Split(",", r.FormValue("UNKNOWN"))
-		if r.FormValue("editID") != `0` {
-			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
-			if err != nil {
-				fmt.Println(err)
-				fmt.Println("this is an error: middleware/profile/addWidget.go 184")
-			}
-			data = widget.Data
-			for _, tag := range links {
-				data = append(data, template.HTML(tag))
-			}
-		} else {
-			for _, tag := range links {
-				data = append(data, template.HTML(tag))
-			}
-		}
-		classification = 16
 	}
 
 	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}

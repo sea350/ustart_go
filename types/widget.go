@@ -44,8 +44,5 @@ type Widget struct {
 	//	Data[1] = articlecount
 	//class 14 = twitch
 	//	Data[0] = username
-	//class 15 = skills
-	//	Data[] = list of tags
-	//class 16 = links
-	//	Data[] = list of urls
+
 }
