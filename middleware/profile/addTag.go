@@ -3,6 +3,7 @@ package profile
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -19,14 +20,16 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := session.Values["DocID"].(string)
-
+	tags := strings.Split(r.FormValue("skillArray"), `","`)
+	tags[0] = strings.Trim(tags[1], `["`)
+	tags[len(tags)-1] = strings.Trim(tags[1], `"]`)
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("this is an err: middleware/profile/addTag line 25")
 	}
 
-	usr.Tags = append(usr.Tags, r.FormValue("skillArray"))
+	usr.Tags = append(usr.Tags)
 
 	err = post.UpdateUser(client.Eclient, ID, "Tags", usr.Tags)
 	if err != nil {
