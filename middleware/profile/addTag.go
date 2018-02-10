@@ -19,9 +19,12 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := session.Values["DocID"].(string)
+
 	tags := strings.Split(r.FormValue("skillArray"), `","`)
-	tags[0] = strings.Trim(tags[1], `["`)
-	tags[len(tags)-1] = strings.Trim(tags[1], `"]`)
+	if len(tags) > 0 {
+		tags[0] = strings.Trim(tags[0], `["`)
+		tags[len(tags)-1] = strings.Trim(tags[len(tags)-1], `"]`)
+	}
 
 	err = post.UpdateUser(client.Eclient, ID, "Tags", tags)
 	if err != nil {
