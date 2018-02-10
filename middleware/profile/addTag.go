@@ -25,7 +25,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("this is an err: middleware/profile/addTag line 25")
 		}
 	*/
-	fmt.Fprintln(w, r.FormValue("skillArray"))
+	fmt.Println(w, r.FormValue("skillArray"))
 	/*
 		usr.Tags = append(usr.Tags, r.FormValue("skillArray"))
 
