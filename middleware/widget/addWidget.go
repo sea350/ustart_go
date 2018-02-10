@@ -150,8 +150,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `13` {
 		//devianart
-		username := template.HTML(r.FormValue("UNKNOWN"))
-		count := template.HTML(r.FormValue("UNKNOWN"))
+		username := template.HTML(r.FormValue("daInput"))
+		count := template.HTML(r.FormValue("daInput2"))
 		data = []template.HTML{username, count}
 		classification = 13
 	}
