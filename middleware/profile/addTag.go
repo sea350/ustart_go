@@ -18,7 +18,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	username := test1.(string)
-	ID, _ := session.Values["DOCID"].(string)
+	ID := session.Values["DocID"].(string)
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
