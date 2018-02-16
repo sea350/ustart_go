@@ -20,24 +20,24 @@ func WallLoadEnd(docID string, pageID string) string {
 					console.log('hello m8');
 												 $(".comment-btn").hover(function (e) {
 						var cmtBtnImg = $(this).find('img');
-						cmtBtnImg.attr('src', "/www/ustart.tech/ico/comment.png");     
+						cmtBtnImg.attr('src', "/ustart/ustart_front/ico/comment.png");     
 					 },function (e) {
 						var cmtBtnImg = $(this).find('img');
-						cmtBtnImg.attr('src', "/www/ustart.tech/ico/no comment.png");     
+						cmtBtnImg.attr('src', "/ustart/ustart_front/ico/no comment.png");     
 					 });   
 					$(".share-btn").hover(function (e) {
 						var shrBtnImg = $(this).find('img');
-						shrBtnImg.attr('src', "/www/ustart.tech/ico/share.png");     
+						shrBtnImg.attr('src', "/ustart/ustart_front/ico/share.png");     
 					 },function (e) {
 						var shrBtnImg = $(this).find('img');
-						shrBtnImg.attr('src', "/www/ustart.tech/ico/not share.png");     
+						shrBtnImg.attr('src', "/ustart/ustart_front/ico/not share.png");     
 					 });
 					  $(".like-btn").hover(function (e) {
 						var likeBtnImg = $(this).find('img');
-						if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
-							likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+						if (likeBtnImg.attr('src') === "/ustart/ustart_front/ico/like.png") {
+							likeBtnImg.attr('src', "/ustart/ustart_front/ico/liked.png");
 						} else {
-							likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+							likeBtnImg.attr('src', "/ustart/ustart_front/ico/like.png");
 						}
 						return false;
 					});
@@ -102,10 +102,10 @@ func WallLoadEnd(docID string, pageID string) string {
 				data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
 				success: function(data) {
 						var likeBtnImg = $(this).find('img');
-						if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
-							likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+						if (likeBtnImg.attr('src') === "/ustart/ustart_front/ico/like.png") {
+							likeBtnImg.attr('src', "/ustart/ustart_front/ico/liked.png");
 						} else {
-							likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+							likeBtnImg.attr('src', "/ustart/ustart_front/ico/like.png");
 						}
 					console.log("like clicked");
 				}

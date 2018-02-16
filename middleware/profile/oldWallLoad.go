@@ -44,24 +44,24 @@ func OldWallLoad(w http.ResponseWriter, r *http.Request) {
 	<script>
 							 $(".comment-btn").hover(function (e) {
                                                     var cmtBtnImg = $(this).find('img');
-                                                    cmtBtnImg.attr('src', "/www/ustart.tech/ico/comment.png");     
+                                                    cmtBtnImg.attr('src', "/ustart/ustart_front/ico/comment.png");     
                                                  },function (e) {
                                                     var cmtBtnImg = $(this).find('img');
-                                                    cmtBtnImg.attr('src', "/www/ustart.tech/ico/no comment.png");     
+                                                    cmtBtnImg.attr('src', "/ustart/ustart_front/ico/no comment.png");     
                                                  });   
                                                 $(".share-btn").hover(function (e) {
                                                     var shrBtnImg = $(this).find('img');
-                                                    shrBtnImg.attr('src', "/www/ustart.tech/ico/share.png");     
+                                                    shrBtnImg.attr('src', "/ustart/ustart_front/ico/share.png");     
                                                  },function (e) {
                                                     var shrBtnImg = $(this).find('img');
-                                                    shrBtnImg.attr('src', "/www/ustart.tech/ico/not share.png");     
+                                                    shrBtnImg.attr('src', "/ustart/ustart_front/ico/not share.png");     
                                                  });
                                                   $(".like-btn").hover(function (e) {
                                                     var likeBtnImg = $(this).find('img');
-                                                    if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
-                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+                                                    if (likeBtnImg.attr('src') === "/ustart/ustart_front/ico/like.png") {
+                                                        likeBtnImg.attr('src', "/ustart/ustart_front/ico/liked.png");
                                                     } else {
-                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+                                                        likeBtnImg.attr('src', "/ustart/ustart_front/ico/like.png");
                                                     }
                                                     return false;
                                                 });
@@ -125,10 +125,10 @@ func OldWallLoad(w http.ResponseWriter, r *http.Request) {
                                             data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
                                             success: function(data) {
                                                     var likeBtnImg = $(this).find('img');
-                                                    if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
-                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+                                                    if (likeBtnImg.attr('src') === "/ustart/ustart_front/ico/like.png") {
+                                                        likeBtnImg.attr('src', "/ustart/ustart_front/ico/liked.png");
                                                     } else {
-                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+                                                        likeBtnImg.attr('src', "/ustart/ustart_front/ico/like.png");
                                                     }
                                                 console.log("like clicked");
                                             }
@@ -203,13 +203,13 @@ func OldWallLoad(w http.ResponseWriter, r *http.Request) {
                                                                             </div>
                                                 <ul>
                                                     <li>
-                                                         <a class="btn btn-sm like-btn" id =main-modal` + jEntries[i].ElementID + `><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">` + likes + `</p></a>
+                                                         <a class="btn btn-sm like-btn" id =main-modal` + jEntries[i].ElementID + `><img class="like-btn-ico" src="/ustart/ustart_front/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">` + likes + `</p></a>
                                                     </li>
                                                     <li>
-                                                         <a class="btn btn-sm comment-btn" id =main-modal` + jEntries[i].ElementID + `><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">` + string(jEntries[i].NumReplies) + `</p></a>
+                                                         <a class="btn btn-sm comment-btn" id =main-modal` + jEntries[i].ElementID + `><img class="coment-btn-ico" src="/ustart/ustart_front/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">` + string(jEntries[i].NumReplies) + `</p></a>
                                                     </li>
                                                     <li>
-                                                         <a class="btn btn-sm share-btn" id=share-modal` + jEntries[i].ElementID + `><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">` + string(jEntries[i].NumShares) + `</p></span></a>
+                                                         <a class="btn btn-sm share-btn" id=share-modal` + jEntries[i].ElementID + `><span><img class="share-btn-ico" src="/ustart/ustart_front/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">` + string(jEntries[i].NumShares) + `</p></span></a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -272,13 +272,13 @@ func OldWallLoad(w http.ResponseWriter, r *http.Request) {
                                             </div>
                                                 <ul>
                                                     <li>
-                                                         <a class="btn btn-sm like-btn" id =main-modal` + jEntry[0].ElementID + `><img class="like-btn-ico" src="/www/ustart.tech/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">` + string(jEntry[0].NumLikes) + `</p></a>
+                                                         <a class="btn btn-sm like-btn" id =main-modal` + jEntry[0].ElementID + `><img class="like-btn-ico" src="/ustart/ustart_front/ico/like.png">  <p class="mt-0" style="color:cadetblue; display:inline;">` + string(jEntry[0].NumLikes) + `</p></a>
                                                     </li>
                                                     <li>
-                                                         <a class="btn btn-sm comment-btn" id =main-modal` + jEntry[0].ElementID + `><img class="coment-btn-ico" src="/www/ustart.tech/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">` + string(jEntry[0].NumReplies) + `</p></a>
+                                                         <a class="btn btn-sm comment-btn" id =main-modal` + jEntry[0].ElementID + `><img class="coment-btn-ico" src="/ustart/ustart_front/ico/no comment.png">  <p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">` + string(jEntry[0].NumReplies) + `</p></a>
                                                     </li>
                                                     <li>
-                                                         <a class="btn btn-sm share-btn" id=share-modal` + jEntry[0].ElementID + `><span><img class="share-btn-ico" src="/www/ustart.tech/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">` + string(jEntry[0].NumShares) + `</p></span></a>
+                                                         <a class="btn btn-sm share-btn" id=share-modal` + jEntry[0].ElementID + `><span><img class="share-btn-ico" src="/ustart/ustart_front/ico/not share.png"> <p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">` + string(jEntry[0].NumShares) + `</p></span></a>
                                                     </li>
                                                 </ul>
                                         </div>
@@ -307,24 +307,24 @@ func OldWallLoad(w http.ResponseWriter, r *http.Request) {
                                                 console.log('hello m8');
                                                 							 $(".comment-btn").hover(function (e) {
                                                     var cmtBtnImg = $(this).find('img');
-                                                    cmtBtnImg.attr('src', "/www/ustart.tech/ico/comment.png");     
+                                                    cmtBtnImg.attr('src', "/ustart/ustart_front/ico/comment.png");     
                                                  },function (e) {
                                                     var cmtBtnImg = $(this).find('img');
-                                                    cmtBtnImg.attr('src', "/www/ustart.tech/ico/no comment.png");     
+                                                    cmtBtnImg.attr('src', "/ustart/ustart_front/ico/no comment.png");     
                                                  });   
                                                 $(".share-btn").hover(function (e) {
                                                     var shrBtnImg = $(this).find('img');
-                                                    shrBtnImg.attr('src', "/www/ustart.tech/ico/share.png");     
+                                                    shrBtnImg.attr('src', "/ustart/ustart_front/ico/share.png");     
                                                  },function (e) {
                                                     var shrBtnImg = $(this).find('img');
-                                                    shrBtnImg.attr('src', "/www/ustart.tech/ico/not share.png");     
+                                                    shrBtnImg.attr('src', "/ustart/ustart_front/ico/not share.png");     
                                                  });
                                                   $(".like-btn").hover(function (e) {
                                                     var likeBtnImg = $(this).find('img');
-                                                    if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
-                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+                                                    if (likeBtnImg.attr('src') === "/ustart/ustart_front/ico/like.png") {
+                                                        likeBtnImg.attr('src', "/ustart/ustart_front/ico/liked.png");
                                                     } else {
-                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+                                                        likeBtnImg.attr('src', "/ustart/ustart_front/ico/like.png");
                                                     }
                                                     return false;
                                                 });
@@ -389,10 +389,10 @@ func OldWallLoad(w http.ResponseWriter, r *http.Request) {
                                             data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
                                             success: function(data) {
                                                     var likeBtnImg = $(this).find('img');
-                                                    if (likeBtnImg.attr('src') === "/www/ustart.tech/ico/like.png") {
-                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/liked.png");
+                                                    if (likeBtnImg.attr('src') === "/ustart/ustart_front/ico/like.png") {
+                                                        likeBtnImg.attr('src', "/ustart/ustart_front/ico/liked.png");
                                                     } else {
-                                                        likeBtnImg.attr('src', "/www/ustart.tech/ico/like.png");
+                                                        likeBtnImg.attr('src', "/ustart/ustart_front/ico/like.png");
                                                     }
                                                 console.log("like clicked");
                                             }
