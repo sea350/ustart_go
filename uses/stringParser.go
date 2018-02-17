@@ -4,7 +4,8 @@ import (
 	"strings"
 )
 
-func StringChecker(entryCode string, website string) bool { //all 3 in one, checks iframe embed, div class embed, regular URL check
+//StringChecker ...
+func StringChecker(entryCode string, website string) bool {
 	ifValidWebsite := strings.Contains(entryCode, website)
 	if !ifValidWebsite {
 		return false
