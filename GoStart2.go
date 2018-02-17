@@ -45,9 +45,9 @@ func main() {
 	http.HandleFunc("/addPost/", profile.WallAdd)
 	http.HandleFunc("/profile/", profile.ViewProfile)
 	http.HandleFunc("/addSkill/", profile.AddTag)
-	http.HandleFunc("/delteSkill/", profile.DeleteTag)
+	http.HandleFunc("/deleteSkill/", profile.DeleteTag)
 	http.HandleFunc("/addLink/", profile.AddQuickLink)
-	http.HandleFunc("/delteLink/", profile.DeleteQuickLink)
+	http.HandleFunc("/deleteLink/", profile.DeleteQuickLink)
 
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/deleteWidget/", widget.DeleteWidgetProfile)

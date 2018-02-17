@@ -28,7 +28,7 @@ type ClientSide struct {
 }
 
 var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-var templates = template.Must(template.ParseFiles("../../../../www/ustart.tech/new-reg-nil.html", "../../../../www/ustart.tech/templateNoUser2.html", "../../../../www/ustart.tech/regcomplete-nil.html"))
+var templates = template.Must(template.ParseFiles("../../../../ustart/ustart_front/new-reg-nil.html", "../../../../ustart/ustart_front/templateNoUser2.html", "../../../../ustart/ustart_front/regcomplete-nil.html"))
 var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
 func RegistrationComplete(w http.ResponseWriter, r *http.Request) {
