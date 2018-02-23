@@ -20,7 +20,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	fmt.Println("this is  test1 = session.Values[DocID]")
-	fmt.Println(test1)
+	fmt.Println(test1.(string))
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
