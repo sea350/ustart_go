@@ -19,7 +19,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	username := test1.(string)
-	ID, _ := session.Values["DocID"].(string)
+	ID := session.Values["DocID"].(string)
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
@@ -36,7 +36,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		err := post.UpdateUser(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Println("this is an err: middleware/profile/deleteQuickLink line 35")
+			fmt.Println("this is an err: middleware/profile/deleteQuickLink line 39")
 		}
 		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 		return
@@ -54,7 +54,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	if target == -1 {
 		fmt.Println("deleted object not found")
-		fmt.Println("this is an err, middleware/profile/deleteQuickLink line 54")
+		fmt.Println("this is an err, middleware/profile/deleteQuickLink line 57")
 		newArr = usr.QuickLinks
 	} else if (target + 1) < len(usr.QuickLinks) {
 		newArr = append(usr.QuickLinks[:target], usr.QuickLinks[(target+1):]...)
@@ -65,7 +65,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println("this is an err: middleware/profile/deleteQuickLink line 31")
+		fmt.Println("this is an err: middleware/profile/deleteQuickLink line 68")
 	}
 
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
