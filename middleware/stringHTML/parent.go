@@ -2,7 +2,8 @@ package stringHTML
 
 //ParentEntry ... creates a string of html that displays a comment WARNING: has some unknown variables
 func ParentEntry(postaid string, image string, fName string, lName string, content string, pika string, username string, commentOutputs string) string {
-	return `
+	modal := EditModal(postaid, image, content)
+	return modal + `
 	<div class="modal fade" id=main-moda` + postaid + ` role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->

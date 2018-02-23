@@ -38,7 +38,12 @@ func WallLoadStart(docID string, pageID string) string {
                                                   $('body').on('click', '.odom-submit', function (e) {
                                                         $('#shareCommentForm').submit();
                                                     });
-                              $('.comment-btn').click(function(e) {
+                             $('.editEntry').click(function(e) {
+                                var postId= $(this).attr("id");
+                                var modified ="#"+postId;
+                                $(modified).modal('show');
+                             });
+                            $('.comment-btn').click(function(e) {
                                         var postId= $(this).attr("id");
                                         var modified ="#"+postId;
                                    //     console.log(modified);

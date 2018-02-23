@@ -13,7 +13,7 @@ func AddClass0Entry(image string, fName string, content string, elementID string
 			<a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span><span class="caret"></span></a>
 			<ul class="dropdown-menu" style="min-width: 0px !important; padding:0px !important;">
 				<li>
-					<a class="dropdown-item " data-toggle="modal" data-target="#EditModal">
+					<a class="dropdown-item editEntry" id=EditModal` + elementID + `>
 						<H6>Edit</H6>
 					</a>
 				</li>
