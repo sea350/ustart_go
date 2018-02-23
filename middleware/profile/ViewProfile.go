@@ -23,8 +23,9 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	userstruct, _, followbool, err5 := uses.UserPage(eclient, r.URL.Path[9:], test1.(string))
+	userstruct, pass, followbool, err5 := uses.UserPage(eclient, r.URL.Path[9:], test1.(string))
 	fmt.Println(test1.(string))
+	fmt.Println(pass)
 	if err5 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 29)")
 		fmt.Println(err5)
