@@ -4,7 +4,13 @@ package stringHTML
 func WallLoadStart(docID string, pageID string) string {
 	return `
 	<script>
-							 $(".comment-btn").hover(function (e) {
+    $('.editEntry').click(function(e) {
+        var postId= $(this).attr("id");
+        var modified ="#"+postId;
+        console.log(modified);
+        $(modified).modal('show');
+     });         
+                                                $(".comment-btn").hover(function (e) {
                                                     var cmtBtnImg = $(this).find('img');
                                                     cmtBtnImg.attr('src', "/ustart_front/ico/comment.png");     
                                                  },function (e) {
@@ -38,12 +44,6 @@ func WallLoadStart(docID string, pageID string) string {
                                                   $('body').on('click', '.odom-submit', function (e) {
                                                         $('#shareCommentForm').submit();
                                                     });
-                             $('.editEntry').click(function(e) {
-                                var postId= $(this).attr("id");
-                                var modified ="#"+postId;
-                                console.log(modified);
-                                $(modified).modal('show');
-                             });
                             $('.comment-btn').click(function(e) {
                                         var postId= $(this).attr("id");
                                         var modified ="#"+postId;
