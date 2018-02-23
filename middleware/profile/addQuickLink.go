@@ -34,4 +34,7 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err: middleware/profile/addQuickLink line 31")
 	}
 
+	fmt.Fprint(w, r.FormValue("userLinkDesc"))
+	fmt.Fprint(w, r.FormValue("userLink"))
+
 }
