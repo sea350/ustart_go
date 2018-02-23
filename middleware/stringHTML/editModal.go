@@ -3,7 +3,7 @@ package stringHTML
 //EditModal ... creates a string of html that displays a comment WARNING: has some unknown variables
 func EditModal(postDocID string, image string, content string) string {
 	return `
-<div class="modal fade" id="EditModal` + postDocID + `" role="dialog">
+<div class="modal fade" id="EditModa` + postDocID + `" role="dialog">
 <div class="modal-dialog">
 	<!-- Modal content-->
 	<div class="modal-content">
