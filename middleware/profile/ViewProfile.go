@@ -25,7 +25,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	userstruct, _, followbool, err5 := uses.UserPage(eclient, r.URL.Path[9:], session.Values["DocID"].(string))
 	fmt.Println("ViewProfile line 28 will print a DocID:")
-	fmt.Println(session.Values["DocID"])
+	fmt.Println(session.Values["DocID"].(string))
 	if err5 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 29)")
 		fmt.Println(err5)
