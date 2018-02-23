@@ -27,8 +27,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err: middleware/profile/deleteQuickLink line 25")
 	}
 
-	deleteTitle := r.FormValue("UNKNOWN")
-	deleteURL := r.FormValue("UNKNOWN")
+	deleteTitle := r.FormValue("userLinkDesc")
+	deleteURL := r.FormValue("userLink")
 
 	var newArr []types.Link
 
