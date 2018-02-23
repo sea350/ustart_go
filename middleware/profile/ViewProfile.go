@@ -19,13 +19,13 @@ var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-	fmt.Println("this is  test1 = session.Values[DocID]")
 	fmt.Println(test1.(string))
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
 	userstruct, _, followbool, err5 := uses.UserPage(eclient, r.URL.Path[9:], test1.(string))
+	fmt.Println(test1.(string))
 	if err5 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 29)")
 		fmt.Println(err5)
