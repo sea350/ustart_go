@@ -19,8 +19,9 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	username := test1.(string)
-	ID := session.Values["DocID"].(string)
-	fmt.Println(ID)
+	placeholderID, _ := session.Values["DocID"]
+	fmt.Println(placeholderID)
+	ID := placeholderID.(string)
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
