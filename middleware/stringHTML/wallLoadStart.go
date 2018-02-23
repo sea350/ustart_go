@@ -41,6 +41,7 @@ func WallLoadStart(docID string, pageID string) string {
                              $('.editEntry').click(function(e) {
                                 var postId= $(this).attr("id");
                                 var modified ="#"+postId;
+                                console.log(modified);
                                 $(modified).modal('show');
                              });
                             $('.comment-btn').click(function(e) {
