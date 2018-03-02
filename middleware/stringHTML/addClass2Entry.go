@@ -43,20 +43,20 @@ func AddClass2Entry(comment string, image string, fName string, lName string, co
 		<ul>
 			<li>
 			<a class="btn btn-sm like-btn" id =main-modal` + elementID + `>
-				<img class="like-btn-ico" src="/ustart/ustart_front/ico/like.png">
+				<img class="like-btn-ico" src="/ustart_front/ico/like.png">
 				<p class="mt-0" style="color:cadetblue; display:inline;">` + numLikes + `</p>
 			</a>
 			</li>
 			<li>
 				<a class="btn btn-sm comment-btn" id =main-modal` + elementID + `>
-					<img class="coment-btn-ico" src="/ustart/ustart_front/ico/no comment.png">
+					<img class="coment-btn-ico" src="/ustart_front/ico/no comment.png">
 					<p class="mt-0" style="color:cadetblue; margin-left:1px; display:inline;">` + numReplies + `</p>
 				</a>
 			</li>
 			<li>
 				<a class="btn btn-sm share-btn" id=share-modal` + elementID + `>
 					<span>
-						<img class="share-btn-ico" src="/ustart/ustart_front/ico/not share.png">
+						<img class="share-btn-ico" src="/ustart_front/ico/not share.png">
 						<p class="mt-0" style="margin-left:1px; color:cadetblue; display:inline;">` + numShares + `</p>
 					</span>
 				</a>

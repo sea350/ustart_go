@@ -38,6 +38,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	if successful {
 		session.Values["DocID"] = sessionInfo.DocID
+		fmt.Println("user logged in: " + sessionInfo.DocID)
 		session.Values["FirstName"] = sessionInfo.FirstName
 		session.Values["LastName"] = sessionInfo.LastName
 		session.Values["Email"] = sessionInfo.Email

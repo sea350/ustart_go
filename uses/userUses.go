@@ -32,7 +32,10 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	if inUse {
 		return errors.New("username is in use")
 	}
+
 	newUsr := types.User{}
+	newUsr.Avatar = "https://i.imgur.com/TYFKsdi.png"
+
 	newUsr.FirstName = fname
 	newUsr.LastName = lname
 	newUsr.Email = email
