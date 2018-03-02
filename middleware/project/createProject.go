@@ -17,8 +17,8 @@ func CreateProject(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	r.ParseForm()
-	title := r.FormValue("UNKOWN")
-	description := []rune(r.FormValue("UNKNOWN"))
+	title := r.FormValue("project_title")
+	description := []rune(r.FormValue("project_desc"))
 
 	err := uses.CreateProject(eclient, title, description, session.Values["DocID"].(string))
 	if err != nil {
