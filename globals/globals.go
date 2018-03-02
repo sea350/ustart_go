@@ -4,7 +4,7 @@ package get
 const ProjectIndex = "test-project_data"
 
 //ProjectType ...
-const ProjectType = "PROJECT"
+const ProjectType = "Project"
 
 //EntryIndex ...
 const EntryIndex = "test-entry_data"
