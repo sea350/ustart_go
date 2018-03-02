@@ -6,7 +6,7 @@ import (
 )
 
 //ChangeContactAndDescription ...
-func ChangeContactAndDescription(eclient *elastic.Client, userID string, phone string, phoneVis bool, gender string, genderVis bool, email string, emailVis bool, description []rune) error {
+func ChangeContactAndDescription(eclient *elastic.Client, userID string, phone string, phoneVis bool, gender string, genderVis bool, emailVis bool, description []rune) error {
 
 	err := post.UpdateUser(eclient, userID, "Phone", phone)
 	if err != nil {
@@ -21,10 +21,6 @@ func ChangeContactAndDescription(eclient *elastic.Client, userID string, phone s
 		return err
 	}
 	err = post.UpdateUser(eclient, userID, "GenderVis", genderVis)
-	if err != nil {
-		return err
-	}
-	err = post.UpdateUser(eclient, userID, "Email", email)
 	if err != nil {
 		return err
 	}
