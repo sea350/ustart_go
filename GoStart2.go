@@ -61,6 +61,7 @@ func main() {
 	http.HandleFunc("/changeLoc/", settings.ChangeLocation)
 	http.HandleFunc("/changeEDU/", settings.ChangeEDU)
 	http.HandleFunc("/UpdateDescription/", settings.ChangeContactAndDescription)
+	http.HandleFunc("/BannerUpload/", settings.BannerUpload)
 
 	http.HandleFunc("/Signup/", registration.Signup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
