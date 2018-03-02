@@ -39,7 +39,7 @@ func IndexProject(eclient *elastic.Client, newProj types.Project) (string, error
 	}
 
 	if !exists {
-		createIndex, Err := eclient.CreateIndex(globals.ProjectIndex).BodyString(projMapping).Do(ctx)
+		createIndex, Err := eclient.CreateIndex(globals.ProjectIndex).Do(ctx)
 		if Err != nil {
 			_, _ = eclient.IndexExists(globals.ProjectIndex).Do(ctx)
 			panic(Err)
