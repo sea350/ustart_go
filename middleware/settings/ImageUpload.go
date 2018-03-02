@@ -17,6 +17,8 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	}
 	r.ParseForm()
 	blob := r.FormValue("image-data")
+	fmt.Println(blob)
+	fmt.Println("this is debug text, middlware/projects/imageupload line 21")
 
 	err := uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, "hello", "Avatar")
 	if err != nil {
