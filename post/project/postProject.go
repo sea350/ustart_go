@@ -2,7 +2,6 @@ package post
 
 import (
 	"context"
-	"errors"
 
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
@@ -40,7 +39,14 @@ func IndexProject(eclient *elastic.Client, newProj types.Project) (string, error
 	}
 
 	if !exists {
-		return tempString, errors.New("Index does not exist")
+		createIndex, Err := eclient.CreateIndex(globals.ProjectIndex).BodyString(projMapping).Do(ctx)
+		if Err != nil {
+			_, _ = eclient.IndexExists(globals.ProjectIndex).Do(ctx)
+			panic(Err)
+		}
+		// TODO fix this.
+		if !createIndex.Acknowledged {
+		}
 	}
 
 	storedProj, err := eclient.Index().
