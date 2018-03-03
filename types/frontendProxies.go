@@ -42,7 +42,7 @@ type ProjectSubWidgets struct {
 	ID     string `json:ID`
 }
 
-//ProjectAggregate ... a compiled strict of all relevant project data
+//ProjectAggregate ... a compiled struct of all relevant project data
 type ProjectAggregate struct {
 	DocID       string         `json:DocID`
 	ProjectData Project        `json:ProjectData`
