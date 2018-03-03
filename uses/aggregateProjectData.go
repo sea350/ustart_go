@@ -26,5 +26,4 @@ func AggregateProjectData(eclient *elastic.Client, url string) (types.ProjectAgg
 	//Remember to load widgets seperately
 
 	return projectData, err
-
 }
