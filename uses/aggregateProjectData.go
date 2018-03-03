@@ -24,6 +24,16 @@ func AggregateProjectData(eclient *elastic.Client, url string) (types.ProjectAgg
 	projectData.DocID = id
 
 	//Remember to load widgets seperately
+	//Remember to load wall posts seperately
+
+	for _, member := range data.Members {
+		id := member.MemberID
+		mem, err := ConvertToFloatingHead(eclient, id)
+		if err != nil {
+			panic(err)
+		}
+		projectData.MemberData = append(projectData.MemberData, mem)
+	}
 
 	return projectData, err
 }
