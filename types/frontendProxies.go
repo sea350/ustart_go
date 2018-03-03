@@ -14,7 +14,7 @@ type SessionUser struct {
 
 //FloatingHead ... All data needed for a generic user icon
 type FloatingHead struct {
-	UserID    string `json:UserID`
+	Username  string `json:Username`
 	FirstName string `json:FirstName`
 	LastName  string `json:LastName`
 	Image     string `json:Image`
