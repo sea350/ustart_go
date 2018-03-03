@@ -5,7 +5,9 @@ import (
 
 	"fmt"
 
+	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
+	get "src/github.com/sea350/ustart_go/get/user"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 )
@@ -32,8 +34,11 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(eror)
 		}
 	}
-
-	cs := client.ClientSide{Project: project, Widgets: widgets}
+	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+	if err != nil {
+		panic(err)
+	}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Project: project, Widgets: widgets}
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "projectsF", cs)
 }
@@ -45,8 +50,21 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	userstruct, _, _, _ := uses.UserPage(client.Eclient, session.Values["Username"].(string), session.Values["DocID"].(string))
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string)}
+
+	var heads []types.FloatingHead
+
+	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+	if err != nil {
+		panic(err)
+	}
+	for _, projectInfo := range userstruct.Projects {
+		head, err := ConvertProjectToFloatingHead(client.Eclient, projectInfo.ProjectID)
+		if err != nil {
+			panic(err)
+		}
+		heads = append(heads, head)
+	}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), ListOfHeads: heads}
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "manageprojects-Nil", cs)
 }
@@ -58,7 +76,10 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	userstruct, _, _, _ := uses.UserPage(client.Eclient, session.Values["Username"].(string), session.Values["DocID"].(string))
+	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+	if err != nil {
+		panic(err)
+	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string)}
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "createProject-Nil", cs)

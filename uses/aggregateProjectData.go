@@ -1,7 +1,7 @@
 package uses
 
 import (
-	get "github.com/sea350/ustart_go/get/project"
+	getProject "github.com/sea350/ustart_go/get/project"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -11,13 +11,13 @@ import (
 func AggregateProjectData(eclient *elastic.Client, url string) (types.ProjectAggregate, error) {
 	var projectData types.ProjectAggregate
 
-	data, err := get.ProjectByURL(eclient, url)
+	data, err := getProject.ProjectByURL(eclient, url)
 	if err != nil {
 		panic(err)
 	}
 	projectData.ProjectData = data
 
-	id, err := get.ProjectIDByURL(eclient, url)
+	id, err := getProject.ProjectIDByURL(eclient, url)
 	if err != nil {
 		panic(err)
 	}
@@ -28,7 +28,7 @@ func AggregateProjectData(eclient *elastic.Client, url string) (types.ProjectAgg
 
 	for _, member := range data.Members {
 		id := member.MemberID
-		mem, err := ConvertToFloatingHead(eclient, id)
+		mem, err := ConvertUserToFloatingHead(eclient, id)
 		if err != nil {
 			panic(err)
 		}

@@ -33,6 +33,7 @@ type ClientSide struct {
 	Following       int
 	Page            string
 	FollowingStatus string
+	ListOfHeads     []types.FloatingHead
 	Wall            []types.JournalEntry
 	Widgets         []types.Widget
 	Project         types.ProjectAggregate
