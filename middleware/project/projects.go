@@ -38,7 +38,7 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 	userstruct, _, _, _ := uses.UserPage(eclient, session.Values["Username"].(string), session.Values["DocID"].(string))
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string)}
 	client.RenderTemplate(w, "template2-nil", cs)
-	client.RenderTemplate(w, "manageprojectsF", cs)
+	client.RenderTemplate(w, "manageprojects-Nil", cs)
 }
 
 //CreateProjectPage ...
