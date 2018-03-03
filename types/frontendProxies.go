@@ -19,6 +19,7 @@ type FloatingHead struct {
 	LastName  string `json:LastName`
 	Image     string `json:Image`
 	Followed  bool   `json:Followed`
+	Bio       []rune `json:Bio`
 }
 
 //JournalEntry ... All data needed to display an entry

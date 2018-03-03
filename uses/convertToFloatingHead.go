@@ -34,6 +34,7 @@ func ConvertProjectToFloatingHead(eclient *elastic.Client, projectID string) (ty
 	}
 
 	head.FirstName = proj.Name
+	head.Bio = proj.Description
 	head.Image = proj.Avatar
 	head.Username = proj.URLName
 
