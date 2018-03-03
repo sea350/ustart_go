@@ -14,11 +14,12 @@ type SessionUser struct {
 
 //FloatingHead ... All data needed for a generic user icon
 type FloatingHead struct {
-	UserID    string `json:UserID`
+	Username  string `json:Username`
 	FirstName string `json:FirstName`
 	LastName  string `json:LastName`
 	Image     string `json:Image`
 	Followed  bool   `json:Followed`
+	Bio       []rune `json:Bio`
 }
 
 //JournalEntry ... All data needed to display an entry
@@ -40,4 +41,12 @@ type ProjectSubWidgets struct {
 	Link   string `json:Link`
 	Avatar string `json:Avatar`
 	ID     string `json:ID`
+}
+
+//ProjectAggregate ... a compiled struct of all relevant project data
+type ProjectAggregate struct {
+	DocID       string         `json:DocID`
+	ProjectData Project        `json:ProjectData`
+	MemberData  []FloatingHead `json:MemberData`
+	Editable    bool           `json:Editable`
 }

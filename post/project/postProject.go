@@ -2,7 +2,6 @@ package post
 
 import (
 	"context"
-	"errors"
 
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
@@ -17,9 +16,6 @@ const projMapping = `
                 "URLName":{
                     "type":"keyword"
 				},
-				"Member":{
-					"type":"keyword"
-				}
             }
         }
     }
@@ -30,28 +26,38 @@ const projMapping = `
 //returns the new project's id and an error
 func IndexProject(eclient *elastic.Client, newProj types.Project) (string, error) {
 
-	tempString := "Project has not been indexed"
+	// Check if the index exists
 	ctx := context.Background()
-
+	var ID string
 	exists, err := eclient.IndexExists(globals.ProjectIndex).Do(ctx)
-
 	if err != nil {
-		return tempString, err
+		return ID, err
 	}
-
+	// If the index doesn't exist, create it and return error.
 	if !exists {
-		return tempString, errors.New("Index does not exist")
+		createIndex, Err := eclient.CreateIndex(globals.ProjectIndex).BodyString(projMapping).Do(ctx)
+		if Err != nil {
+			_, _ = eclient.IndexExists(globals.ProjectIndex).Do(ctx)
+			panic(Err)
+		}
+		// TODO fix this.
+		if !createIndex.Acknowledged {
+		}
+
+		// Return an error saying it doesn't exist
+		//return ID, errors.New("Index does not exist")
 	}
 
-	storedProj, err := eclient.Index().
+	// Index the document.
+	createdProj, Err := eclient.Index().
 		Index(globals.ProjectIndex).
-		Type(globals.ProjectType).
+		Type("Project").
 		BodyJson(newProj).
 		Do(ctx)
 
-	if err != nil {
-		return tempString, err
+	if Err != nil {
+		return ID, Err
 	}
 
-	return storedProj.Id, nil
+	return createdProj.Id, nil
 }
