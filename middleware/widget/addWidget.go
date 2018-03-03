@@ -56,6 +56,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker := uses.StringChecker(r.FormValue("instagramInput"), "instagram.com") //Check valid URL
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 
 		input := template.HTML(r.FormValue("instagramInput"))
@@ -77,6 +79,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker := uses.StringChecker(r.FormValue("scInput"), "soundcloud.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 		url := template.HTML(r.FormValue("scInput"))
 		data = []template.HTML{url}
@@ -88,6 +92,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker2 := uses.StringChecker(r.FormValue("ytinput"), "youtu.be")
 		if !(checker1 || checker2) {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 		url := template.HTML(r.FormValue("ytInput"))
 		data = []template.HTML{url}
@@ -99,6 +105,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker := uses.StringChecker(r.FormValue("codepenInput"), "codepen.io") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 
 		codepenID := template.HTML(r.FormValue("codepenInput"))
@@ -110,6 +118,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker := uses.StringChecker(r.FormValue("pinInput"), "pinterest.com")
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 
 		url := template.HTML(r.FormValue("pinInput"))
@@ -131,6 +141,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker := uses.StringChecker(r.FormValue("tumblrInput"), "tumblr.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 
 		tumblrEmbedCode := template.HTML(r.FormValue("tumblrInput"))
@@ -142,6 +154,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker := uses.StringChecker(r.FormValue("spotInput"), "spotify.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 
 		spotifyEmbedCode := template.HTML(r.FormValue("spotInput"))
@@ -163,6 +177,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker := uses.StringChecker(r.FormValue("arInpus"), "anchor.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 
 		input := template.HTML(r.FormValue("arInput"))
@@ -193,6 +209,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker := uses.StringChecker(r.FormValue("daInput"), "deviantart.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 		username := template.HTML(r.FormValue("daInput"))
 		count := template.HTML(r.FormValue("daInput2"))
@@ -204,6 +222,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		checker := uses.StringChecker(r.FormValue("twitchInput"), "twitch.tv") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
 		}
 
 		username := template.HTML(r.FormValue("twitchInput"))
