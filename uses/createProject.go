@@ -39,6 +39,11 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	addProj.ProjectID = id
 	addProj.Visible = true
 	err = userPost.AppendProject(eclient, makerID, addProj)
+	if err != nil {
+		panic(err)
+	}
+
+	err = projPost.UpdateProject(eclient, id, "URLName", id)
 
 	return err
 
