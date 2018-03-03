@@ -41,3 +41,11 @@ type ProjectSubWidgets struct {
 	Avatar string `json:Avatar`
 	ID     string `json:ID`
 }
+
+//ProjectAggregate ... a compiled strict of all relevant project data
+type ProjectAggregate struct {
+	DocID       string         `json:DocID`
+	ProjectData Project        `json:ProjectData`
+	MemberData  []FloatingHead `json:MemberData`
+	Editable    bool           `json:Editable`
+}
