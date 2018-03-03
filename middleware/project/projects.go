@@ -5,9 +5,9 @@ import (
 
 	"fmt"
 
+	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
-	get "src/github.com/sea350/ustart_go/get/user"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 )
@@ -58,7 +58,7 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	for _, projectInfo := range userstruct.Projects {
-		head, err := ConvertProjectToFloatingHead(client.Eclient, projectInfo.ProjectID)
+		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projectInfo.ProjectID)
 		if err != nil {
 			panic(err)
 		}
