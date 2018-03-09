@@ -27,6 +27,10 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(pika)
 	// journal entry, err
 	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
+		fmt.Println(parentPost);
+
+	fmt.Println("ARRAY OF COMMENTS");
+	fmt.Println(arrayofComments);
 	if err4 != nil {
 		fmt.Println("This is debug text, GetComments.go: 29")
 		fmt.Println(err4)
@@ -39,6 +43,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	*/
 	for i := 0; i < len(arrayofComments); i++ {
 		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content))
+		fmt.Println(arrayofComments[i].Element.Content);
 		sum += i
 	}
 	username := session.Values["Username"].(string)

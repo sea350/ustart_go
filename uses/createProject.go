@@ -15,7 +15,7 @@ var memberModLock sync.Mutex
 //CreateProject ... CREATE A NORMAL PROJECT
 //Requires all fundamental information for the new project (title, creator docID, etc ...)
 //Returns an error if there was a problem with database submission
-func CreateProject(eclient *elastic.Client, title string, description []rune, makerID string) error {
+func CreateProject(eclient *elastic.Client, title string, description []rune, makerID string) (string, error) {
 	var newProj types.Project
 	newProj.Name = title
 	newProj.Description = description
@@ -33,7 +33,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 
 	id, err := projPost.IndexProject(eclient, newProj)
 	if err != nil {
-		return err
+		return id, err
 	}
 	var addProj types.ProjectInfo
 	addProj.ProjectID = id
@@ -45,6 +45,6 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 
 	err = projPost.UpdateProject(eclient, id, "URLName", id)
 
-	return err
+	return id, err
 
 }

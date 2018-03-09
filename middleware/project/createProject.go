@@ -21,12 +21,12 @@ func CreateProject(w http.ResponseWriter, r *http.Request) {
 	title := r.FormValue("project_title")
 	description := []rune(r.FormValue("project_desc"))
 
-	err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string))
+	id, err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string))
 	if err != nil {
 		fmt.Println("This is an error middleware/project/createproject")
 		fmt.Println(err)
 	}
 
-	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+id, http.StatusFound)
 
 }
