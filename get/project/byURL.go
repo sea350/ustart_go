@@ -18,6 +18,7 @@ func ProjectByURL(eclient *elastic.Client, projectURL string) (types.Project, er
 	termQuery := elastic.NewTermQuery("URL", projectURL)
 	searchResult, err := eclient.Search().
 		Index(globals.ProjectIndex).
+		Type(globals.ProjectType).
 		Query(termQuery).
 		Do(ctx)
 
