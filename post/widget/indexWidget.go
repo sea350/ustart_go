@@ -17,9 +17,6 @@ const widgetMapping = `
                 "UserID":{
                     "type":"keyword"
                 },
-                "Link":{
-                	"type":"keyword"
-                },
 				"Classification":{
 					"type":"keyword"
 				}
