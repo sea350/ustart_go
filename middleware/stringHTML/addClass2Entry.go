@@ -16,7 +16,7 @@ func AddClass2Entry(comment string, image string, fName string, lName string, co
 			</li>
 			<li>
 				<a class="dropdown-item" data-toggle="modal" data-target=#confirm-delete` + elementID + `>
-					<H6>Delete</H6>
+					<H6>Delete1</H6>
 				</a>
 			</li>
 		</ul>
