@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"fmt"
+
 	getProj "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
 	postProj "github.com/sea350/ustart_go/post/project"
@@ -33,7 +35,8 @@ func AddWidget(eclient *elastic.Client, docID string, newWidget types.Widget, is
 	proj, err := getProj.ProjectByID(eclient, docID)
 
 	if err != nil {
-		panic(err)
+		fmt.Println("this is an err uses/addwidget 37")
+		fmt.Println(err)
 	}
 	newWidget.Position = len(proj.Widgets)
 	widgetID, err := post.IndexWidget(eclient, newWidget)
