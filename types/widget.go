@@ -3,7 +3,7 @@ package types
 import "html/template"
 
 type Widget struct {
-	ID             string          `json:UserID`
+	ID             string          `json:ID`
 	UserID         string          `json:UserID`
 	Data           []template.HTML `json:Data`
 	Position       int             `json:Position`
