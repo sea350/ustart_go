@@ -69,13 +69,11 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		newUsr.Class = 5
 	}
 
-	retErr, newID := postUser.IndexUser(eclient, newUsr)
+	retErr, _ := postUser.IndexUser(eclient, newUsr)
 	if retErr != nil {
 		return retErr
 	}
 
-	skillsWidget := types.Widget{UserID: newID, Classification: 15}
-	err = AddWidget(eclient, newID, skillsWidget)
 	return err
 }
 
