@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	getProj "github.com/sea350/ustart_go/get/project"
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/widget"
@@ -232,12 +233,25 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}
-
+	var isProject bool
+	if r.FormValue("projectWidget") != `` {
+		isProject = true
+	}
 	if r.FormValue("editID") == `0` {
-		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget)
-		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 206")
+		if isProject {
+			fmt.Println("this is debug text middeware/widget/addwidget.go")
+			fmt.Println(r.FormValue("projectWidget"))
+			err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, isProject)
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println("this is an error: middleware/profile/addWidget.go 206")
+			}
+		} else {
+			err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget, isProject)
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println("this is an error: middleware/profile/addWidget.go 206")
+			}
 		}
 	} else {
 		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
@@ -249,6 +263,15 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 
 	//contentArray := []rune(comment)
 	//username := r.FormValue("username")
-
-	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+	if !isProject {
+		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+	} else {
+		proj, err := getProj.ProjectByID(client.Eclient, r.FormValue("projectWidget"))
+		if err != nil {
+			panic(err)
+			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			return
+		}
+		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+	}
 }
