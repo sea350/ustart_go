@@ -24,6 +24,8 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("this is debug text: middleware/projects/projects.go line 27")
+	fmt.Println(r.URL.Path[10:])
 	//WIP
 	//numFollowers:=len(project.ProjectData.Followers)
 
