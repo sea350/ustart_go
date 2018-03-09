@@ -38,6 +38,8 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("this is debug text: middleware/projects/projects.go line 41")
+	fmt.Println(project)
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Project: project, Widgets: widgets}
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "projectsF", cs)
