@@ -18,9 +18,9 @@ func AddClass0Entry(image string, fName string, content string, elementID string
 					</a>
 				</li>
 				<li>
-					<a class="dropdown-item " data-toggle="modal" data-target="#confirm-delete">
+					<button class="dropdown-item " data-toggle="modal" data-target="#confirm-delete">
 						<H6>Delete addClass0Entry.go</H6>
-					</a>
+					</button>
 				</li>
 			</ul>
 		</div>
