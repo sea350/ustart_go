@@ -1,10 +1,8 @@
 package post
 
 import (
-	"context"
-
 	get "github.com/sea350/ustart_go/get/entry"
-	globals "github.com/sea350/ustart_go/globals"
+	//post "github.com/sea350/ustart_go/post/entry"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -12,7 +10,6 @@ import (
 //Requires the shared entry docID and the docID of the new post
 //Returns an error
 func AppendReplyID(eclient *elastic.Client, entryID string, replyID string) error {
-	ctx := context.Background()
 
 	ReplyArrayLock.Lock()
 
@@ -20,14 +17,9 @@ func AppendReplyID(eclient *elastic.Client, entryID string, replyID string) erro
 	if err != nil {
 		return err
 	}
-	anEntry.ShareIDs = append(anEntry.ReplyIDs, replyID)
+	anEntry.ReplyIDs = append(anEntry.ReplyIDs, replyID)
 
-	_, err = eclient.Update().
-		Index(globals.EntryIndex).
-		Type(globals.EntryType).
-		Id(entryID).
-		Doc(map[string]interface{}{"ReplyIDs": anEntry.ReplyIDs}).
-		Do(ctx)
+	err = UpdateEntry(eclient, entryID, "ReplyIDs", anEntry.ReplyIDs)
 
 	defer ReplyArrayLock.Unlock()
 	return err

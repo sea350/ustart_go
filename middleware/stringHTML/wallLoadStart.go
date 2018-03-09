@@ -3,7 +3,27 @@ package stringHTML
 //WallLoadStart ... unknown
 func WallLoadStart(docID string, pageID string) string {
 	return `
-	<script>
+    <script>
+    $('#confirm-delete').click(function(e) {
+        //e.preventDefault();
+        $.ajax({
+            type: 'GET',  
+            url: 'http://ustart.today:5000/deleteModal/',
+            contentType: "application/json; charset=utf-8",
+            data: {},
+            success: function(data) {
+                $("#post-delete").html(data);
+                
+                  // $('.editEntry').click(function(e) {
+                  //       var postId= $(this).attr("id");
+                  //       var modified ="#"+postId;
+                  //       console.log(modified);
+                  //       $(modified).modal('show');
+                  //   });
+         
+            }//end success
+        });
+    });
     $('.editEntry').click(function(e) {
         var postId= $(this).attr("id");
         var modified ="#"+postId;
