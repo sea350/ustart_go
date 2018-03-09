@@ -51,7 +51,7 @@ func IndexProject(eclient *elastic.Client, newProj types.Project) (string, error
 	// Index the document.
 	createdProj, Err := eclient.Index().
 		Index(globals.ProjectIndex).
-		Type("Project").
+		Type(globals.ProjectType).
 		BodyJson(newProj).
 		Do(ctx)
 
