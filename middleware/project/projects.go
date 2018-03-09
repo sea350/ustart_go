@@ -38,7 +38,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Project: project, Widgets: widgets}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Project: project, Widgets: widgets}
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "projectsF", cs)
 }
@@ -64,7 +64,7 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 		}
 		heads = append(heads, head)
 	}
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), ListOfHeads: heads}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "manageprojects-Nil", cs)
 }
@@ -80,7 +80,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string)}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "createProject-Nil", cs)
 }

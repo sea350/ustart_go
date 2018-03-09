@@ -73,7 +73,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	day := bday[8:10]
 	year := bday[0:4]
 	birthdayline := month + "/" + day + "/" + year
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Birthday: birthdayline, Class: ClassYear} //Class:ClassYear}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Birthday: birthdayline, Class: ClassYear} //Class:ClassYear}
 	viewingDOC, errID := get.IDByUsername(eclient, r.URL.Path[9:])
 	if errID != nil {
 		fmt.Println("this is an error (ViewProfile.go: 66)")
@@ -93,7 +93,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(errnF2)
 	}
 
-	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets}
+	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets}
 
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "profile-nil", cs)
