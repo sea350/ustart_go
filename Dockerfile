@@ -2,4 +2,6 @@ FROM golang
 
 WORKDIR /home/dev/
 
-CMD ["/bin/sh"]
+ADD . ./
+
+CMD ["/bin/bash"]

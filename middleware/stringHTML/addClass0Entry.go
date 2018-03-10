@@ -6,7 +6,7 @@ func AddClass0Entry(image string, fName string, content string, elementID string
 	<!-- regular post sample -->
 	<div class="media">
 		<a class="pull-left" href="#">
-			<img style="height:40px;" class="media-object img-rounded" src=d` + image + `>
+			<img style="height:40px;" class="media-object img-rounded" src=` + image + `>
 		</a>
 		<!--edit dropdown -->
 		<div class="dropdown pull-right">
