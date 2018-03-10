@@ -248,5 +248,5 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	http.Redirect(w, r, "/profile/"+r.FormValue("projectWidget"), http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+r.FormValue("projectWidget"), http.StatusFound)
 }
