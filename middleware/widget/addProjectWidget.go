@@ -233,12 +233,12 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}
 
 	if r.FormValue("editID") == `0` {
-		fmt.Println("this is debug text middeware/widget/addwidget.go")
+		fmt.Println("this is debug text middeware/widget/addprojectidget.go")
 		fmt.Println(r.FormValue("projectWidget"))
 		err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 206")
+			fmt.Println("this is an error: middleware/profile/addProjectWidget.go 206")
 		}
 	} else {
 		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)

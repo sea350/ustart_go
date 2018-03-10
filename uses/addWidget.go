@@ -16,35 +16,34 @@ import (
 //Adds a new widget to the UserWidgets array
 func AddWidget(eclient *elastic.Client, docID string, newWidget types.Widget, isProject bool) error {
 
-	if !isProject {
-		usr, err := getUser.UserByID(eclient, docID)
+	if isProject {
+		proj, err := getProj.ProjectByID(eclient, docID)
 
 		if err != nil {
-			panic(err)
+			fmt.Println("this is an err uses/addwidget 37")
+			fmt.Println(err)
 		}
-		newWidget.Position = len(usr.UserWidgets)
+		newWidget.Position = len(proj.Widgets)
 		widgetID, err := post.IndexWidget(eclient, newWidget)
 		if err != nil {
 			panic(err)
 		}
-
-		updatedWidgets := append(usr.UserWidgets, widgetID)
-		updateErr := postUser.UpdateUser(eclient, docID, "UserWidgets", updatedWidgets)
+		updatedWidgets := append(proj.Widgets, widgetID)
+		updateErr := postProj.UpdateProject(eclient, docID, "Widgets", updatedWidgets)
 		return updateErr
 	}
-	proj, err := getProj.ProjectByID(eclient, docID)
+	usr, err := getUser.UserByID(eclient, docID)
 
 	if err != nil {
-		fmt.Println("this is an err uses/addwidget 37")
-		fmt.Println(err)
+		panic(err)
 	}
-	newWidget.Position = len(proj.Widgets)
+	newWidget.Position = len(usr.UserWidgets)
 	widgetID, err := post.IndexWidget(eclient, newWidget)
 	if err != nil {
 		panic(err)
 	}
-	updatedWidgets := append(proj.Widgets, widgetID)
-	updateErr := postProj.UpdateProject(eclient, docID, "Widgets", updatedWidgets)
-	return updateErr
 
+	updatedWidgets := append(usr.UserWidgets, widgetID)
+	updateErr := postUser.UpdateUser(eclient, docID, "UserWidgets", updatedWidgets)
+	return updateErr
 }
