@@ -33,8 +33,9 @@ func ProjectByID(eclient *elastic.Client, projectID string) (types.Project, erro
 
 	err = json.Unmarshal(*searchResult.Source, &proj)
 	//if (err!=nil){return proj,err}
-
-	fmt.Printf("Err: %s\n", err.Error())
+	if err != nil {
+		fmt.Printf("Err: %s\n", err.Error())
+	}
 
 	return proj, err
 
