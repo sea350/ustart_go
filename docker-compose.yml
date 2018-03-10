@@ -1,10 +1,29 @@
 version: '3'
 services:
-  go_dev:
+  go_monolith:
     build: ./
     environment:
       - ELASTIC_HOST=elastic
-    tty: true
-    stdin_open: true
+    networks:
+      - es
+  
   elastic:
     image: elasticsearch
+    environment:
+      ES_JAVA_OPTS: '-Xms256m -Xmx256m'
+      xpack.security.enabled: 'false'
+      xpack.monitoring.enabled: 'false'
+      xpack.graph.enabled: 'false'
+      xpack.watcher.enabled: 'false'
+      http.host: '0.0.0.0'
+    volumes:
+      - esVol:/usr/share/elasticsearch/data
+    ports:
+      - '9200:9200'
+
+networks:
+  es:
+    driver: local
+
+volumes:
+  esVol:
