@@ -13,7 +13,7 @@ func ProjectIDByURL(eclient *elastic.Client, projectURL string) (string, error) 
 	//		PROJECT URL)
 	//RETURNS A types.Project AND AN error
 	ctx := context.Background()
-	termQuery := elastic.NewTermQuery("URL", projectURL)
+	termQuery := elastic.NewTermQuery("URLName", projectURL)
 	searchResult, err := eclient.Search().
 		Index(globals.ProjectIndex).
 		Query(termQuery).
