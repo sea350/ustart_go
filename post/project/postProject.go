@@ -14,7 +14,8 @@ const projMapping = `
         "Project":{
             "properties":{
                 "URLName":{
-                    "type":"keyword"
+					"type":"keyword",
+					"analyze":"caseSensitive"
 				},
             }
         }
