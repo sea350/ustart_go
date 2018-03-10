@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"fmt"
+
 	getProject "github.com/sea350/ustart_go/get/project"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -13,13 +15,15 @@ func AggregateProjectData(eclient *elastic.Client, url string) (types.ProjectAgg
 
 	data, err := getProject.ProjectByURL(eclient, url)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		fmt.Println("error aggregateProjectData.go 17")
 	}
 	projectData.ProjectData = data
 
 	id, err := getProject.ProjectIDByURL(eclient, url)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		fmt.Println("error aggregateProjectData.go 24")
 	}
 	projectData.DocID = id
 

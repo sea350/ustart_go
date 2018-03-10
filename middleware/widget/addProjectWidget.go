@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	getProj "github.com/sea350/ustart_go/get/project"
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/widget"
@@ -12,15 +13,14 @@ import (
 	"github.com/sea350/ustart_go/uses"
 )
 
-//AddWidget ... After widget form submission adds a widget to database
-func AddWidget(w http.ResponseWriter, r *http.Request) {
+//AddProjectWidget ... After widget form submission adds a widget to database
+func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	username := test1.(string)
 	r.ParseForm()
 
 	var data []template.HTML
@@ -234,10 +234,12 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}
 
 	if r.FormValue("editID") == `0` {
-		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget, false)
+		fmt.Println("this is debug text middeware/widget/addprojectidget.go")
+		fmt.Println(r.FormValue("projectWidget"))
+		err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 206")
+			fmt.Println("this is an error: middleware/profile/addProjectWidget.go 206")
 		}
 	} else {
 		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
@@ -246,9 +248,9 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("this is an error: middleware/profile/addWidget.go 212")
 		}
 	}
+	project, err := getProj.ProjectByID(client.Eclient, r.FormValue("projectWidget"))
+	fmt.Println(err)
+	fmt.Println("this is an error: middleware/profile/addProjectWidget.go 2252")
 
-	//contentArray := []rune(comment)
-	//username := r.FormValue("username")
-
-	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 }

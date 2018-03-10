@@ -49,6 +49,7 @@ func main() {
 	http.HandleFunc("/deletePost/", profile.DeleteWallPost)
 
 	http.HandleFunc("/addWidget/", widget.AddWidget)
+	http.HandleFunc("/addProjectWidget/", widget.AddProjectWidget)
 	http.HandleFunc("/deleteWidget/", widget.DeleteWidgetProfile)
 	http.HandleFunc("/deleteLinkFromWidget/", widget.EditWidgetDataDelete)
 
