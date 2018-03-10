@@ -30,7 +30,7 @@ func ProjectByURL(eclient *elastic.Client, projectURL string) (types.Project, er
 		break
 	}
 
-	proj, _ = ProjectByID(eclient, result)
+	proj, err = ProjectByID(eclient, result)
 
 	return proj, err
 
