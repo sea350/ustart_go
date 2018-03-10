@@ -29,25 +29,26 @@ func IndexProject(eclient *elastic.Client, newProj types.Project) (string, error
 	// Check if the index exists
 	ctx := context.Background()
 	var ID string
-	exists, err := eclient.IndexExists(globals.ProjectIndex).Do(ctx)
-	if err != nil {
-		return ID, err
-	}
-	// If the index doesn't exist, create it and return error.
-	if !exists {
-		createIndex, Err := eclient.CreateIndex(globals.ProjectIndex).BodyString(projMapping).Do(ctx)
-		if Err != nil {
-			_, _ = eclient.IndexExists(globals.ProjectIndex).Do(ctx)
-			panic(Err)
+	/*
+		exists, err := eclient.IndexExists(globals.ProjectIndex).Do(ctx)
+		if err != nil {
+			return ID, err
 		}
-		// TODO fix this.
-		if !createIndex.Acknowledged {
+		// If the index doesn't exist, create it and return error.
+		if !exists {
+			createIndex, Err := eclient.CreateIndex(globals.ProjectIndex).BodyString(projMapping).Do(ctx)
+			if Err != nil {
+				_, _ = eclient.IndexExists(globals.ProjectIndex).Do(ctx)
+				panic(Err)
+			}
+			// TODO fix this.
+			if !createIndex.Acknowledged {
+			}
+
+			// Return an error saying it doesn't exist
+			//return ID, errors.New("Index does not exist")
 		}
-
-		// Return an error saying it doesn't exist
-		//return ID, errors.New("Index does not exist")
-	}
-
+	*/
 	// Index the document.
 	createdProj, Err := eclient.Index().
 		Index(globals.ProjectIndex).
