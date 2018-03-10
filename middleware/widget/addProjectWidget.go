@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
+	getProj "github.com/sea350/ustart_go/get/project"
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/widget"
@@ -247,6 +248,9 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("this is an error: middleware/profile/addWidget.go 212")
 		}
 	}
+	project, err := getProj.ProjectByID(client.Eclient, r.FormValue("projectWidget"))
+	fmt.Println(err)
+	fmt.Println("this is an error: middleware/profile/addProjectWidget.go 2252")
 
-	http.Redirect(w, r, "/Projects/"+r.FormValue("projectWidget"), http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 }
