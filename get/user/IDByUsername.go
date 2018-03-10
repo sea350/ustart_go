@@ -11,7 +11,7 @@ import (
 //IDByUsername ...
 func IDByUsername(eclient *elastic.Client, username string) (string, error) {
 	ctx := context.Background()
-	termQuery := elastic.NewTermQuery("Username", username)
+	termQuery := elastic.NewMatchQuery("Username", username)
 	searchResult, err := eclient.Search().
 		Index(globals.UserIndex).
 		Query(termQuery).
