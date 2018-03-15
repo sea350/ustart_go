@@ -10,6 +10,13 @@ import (
 
 const projMapping = `
 {
+	"analyzer" : {
+		"casesensitive_text":{
+			"type" : "custom",
+			"tokenizer": "standard"
+		}
+	}
+	
     "mappings":{
         "Project":{
             "properties":{
@@ -20,6 +27,7 @@ const projMapping = `
 					"type":"keyword",
 					
 					"index": "not_analyzed"
+					"analyzer": "casesensitive_text"
 				},
             }
         }
