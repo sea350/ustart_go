@@ -22,6 +22,11 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	username := test1.(string)
 
 	deletedURL := r.FormValue("deleteURL")
+	projectURL := r.FormValue("editProjectURL")
+	var isProject = false
+	if projectURL != `` {
+		isProject = true
+	}
 
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
@@ -30,10 +35,14 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(oldWidget.Data) == 1 && (oldWidget.Classification != 15 || oldWidget.Classification != 16) {
-		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"), false)
+		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"), isProject)
 		if err != nil {
 			fmt.Println(err)
 			fmt.Println("this is an err, editInstaAdd line 34")
+		}
+		if isProject {
+			http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
+			return
 		}
 		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 		return
@@ -64,6 +73,10 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("this is an err, editInstaAdd line 62")
+	}
+	if isProject {
+		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
+		return
 	}
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 }
