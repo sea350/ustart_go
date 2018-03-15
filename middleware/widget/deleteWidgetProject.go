@@ -18,7 +18,7 @@ func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	r.ParseForm()
-	projectURL := r.FormValue("UNKOWN")
+	projectURL := r.FormValue("deleteProjectURL")
 
 	widg, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
 	if widg.Classification == 15 {
