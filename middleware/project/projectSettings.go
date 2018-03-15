@@ -17,14 +17,17 @@ func Settings(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:])
+
+	project, err := uses.AggregateProjectData(client.Eclient, r.FormValue("ProjectURL"))
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		fmt.Println("error: middleware/project/projectsettings line 23")
 	}
 
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		fmt.Println("error: middleware/project/projectsettings line 29")
 	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Project: project}
 	client.RenderTemplate(w, "template2-nil", cs)
