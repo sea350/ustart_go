@@ -22,8 +22,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	username := test1.(string)
 
 	deletedURL := r.FormValue("deleteURL")
-	fmt.Println(deletedURL)
-	fmt.Println(r.FormValue("editID"))
+
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
 		fmt.Println(err)
