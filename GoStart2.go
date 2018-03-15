@@ -51,6 +51,7 @@ func main() {
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/addProjectWidget/", widget.AddProjectWidget)
 	http.HandleFunc("/deleteWidget/", widget.DeleteWidgetProfile)
+	http.HandleFunc("/deleteProjectWidget/", widget.DeleteWidgetProject)
 	http.HandleFunc("/deleteLinkFromWidget/", widget.EditWidgetDataDelete)
 
 	http.HandleFunc("/Projects/", project.ProjectsPage)
