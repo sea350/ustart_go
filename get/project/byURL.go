@@ -1,6 +1,7 @@
 package get
 
 import (
+import "strings"
 	"context"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -15,7 +16,7 @@ func ProjectByURL(eclient *elastic.Client, projectURL string) (types.Project, er
 	//		PROJECT URL)
 	//RETURNS A types.Project AND AN error
 	ctx := context.Background()
-	termQuery := elastic.NewTermQuery("URLName", projectURL)
+	termQuery := elastic.NewTermQuery("URLName", strings.ToLower(projectURL))
 	searchResult, err := eclient.Search().
 		Index(globals.ProjectIndex).
 		Type(globals.ProjectType).
