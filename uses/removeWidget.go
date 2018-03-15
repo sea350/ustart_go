@@ -2,7 +2,9 @@ package uses
 
 import (
 	"context"
+	"fmt"
 
+	getProj "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
 	getWidget "github.com/sea350/ustart_go/get/widget"
 	globals "github.com/sea350/ustart_go/globals"
@@ -21,38 +23,49 @@ func RemoveWidget(eclient *elastic.Client, widgetID string, isProject bool) erro
 	userID := widget.UserID
 
 	//get the user
-	usr, err := getUser.UserByID(eclient, userID)
-
-	if err != nil {
-		panic(err)
+	var oldArray []string
+	if isProject {
+		proj, err := getProj.ProjectByID(eclient, userID)
+		if err != nil {
+			panic(err)
+		}
+		oldArray = proj.Widgets
+	} else {
+		usr, err := getUser.UserByID(eclient, userID)
+		if err != nil {
+			panic(err)
+		}
+		oldArray = usr.UserWidgets
 	}
 
 	var pos int
 	var updatedWidgets []string
-	for index, ID := range usr.UserWidgets {
+	for index, ID := range oldArray {
 		if ID == widgetID {
 			pos = index
 			break
 		}
 	}
 	//update the user widgets array
-	if pos+1 < len(usr.UserWidgets) {
-		updatedWidgets = append(usr.UserWidgets[:pos], usr.UserWidgets[pos+1:]...)
+	if pos+1 < len(oldArray) {
+		updatedWidgets = append(oldArray[:pos], oldArray[pos+1:]...)
 	} else {
-		updatedWidgets = usr.UserWidgets[:pos]
+		updatedWidgets = oldArray[:pos]
 	}
 
 	if isProject {
 		updateErr := postProj.UpdateProject(eclient, userID, "Widgets", updatedWidgets)
 
 		if updateErr != nil {
-			panic(updateErr)
+			fmt.Println(updateErr)
+			fmt.Println("this is an error, uses/removeWidget line 50")
 		}
 	} else {
 		updateErr := postUser.UpdateUser(eclient, userID, "UserWidgets", updatedWidgets)
 
 		if updateErr != nil {
-			panic(updateErr)
+			fmt.Println(updateErr)
+			fmt.Println("this is an error, uses/removeWidget line 57")
 		}
 	}
 
