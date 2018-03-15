@@ -1,8 +1,8 @@
 package get
 
 import (
-import "strings"
 	"context"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
