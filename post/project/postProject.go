@@ -16,7 +16,7 @@ const projMapping = `
 			"tokenizer": "standard"
 		}
 	}
-	
+
     "mappings":{
         "Project":{
             "properties":{
@@ -26,7 +26,7 @@ const projMapping = `
                 "URLName":{
 					"type":"keyword",
 					
-					"index": "not_analyzed"
+					
 					"analyzer": "casesensitive_text"
 				},
             }
