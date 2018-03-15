@@ -6,13 +6,14 @@ import (
 	getUser "github.com/sea350/ustart_go/get/user"
 	getWidget "github.com/sea350/ustart_go/get/widget"
 	globals "github.com/sea350/ustart_go/globals"
+	postProj "github.com/sea350/ustart_go/post/project"
 	postUser "github.com/sea350/ustart_go/post/user"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 //RemoveWidget ...
 //Removes widget ID from UserWidgets array/slice and widget struct from ES
-func RemoveWidget(eclient *elastic.Client, widgetID string) error {
+func RemoveWidget(eclient *elastic.Client, widgetID string, isProject bool) error {
 	ctx := context.Background()
 
 	//get widget to use its data
@@ -41,10 +42,18 @@ func RemoveWidget(eclient *elastic.Client, widgetID string) error {
 		updatedWidgets = usr.UserWidgets[:pos]
 	}
 
-	updateErr := postUser.UpdateUser(eclient, userID, "UserWidgets", updatedWidgets)
+	if isProject {
+		updateErr := postProj.UpdateProject(eclient, userID, "Widgets", updatedWidgets)
 
-	if updateErr != nil {
-		panic(updateErr)
+		if updateErr != nil {
+			panic(updateErr)
+		}
+	} else {
+		updateErr := postUser.UpdateUser(eclient, userID, "UserWidgets", updatedWidgets)
+
+		if updateErr != nil {
+			panic(updateErr)
+		}
 	}
 
 	//delete the widget from ES

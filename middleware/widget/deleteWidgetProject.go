@@ -9,26 +9,26 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//DeleteWidgetProfile ... Deletes a widget and redirects to profile page
-func DeleteWidgetProfile(w http.ResponseWriter, r *http.Request) {
+//DeleteWidgetProject ... Deletes a widget and redirects to projects page
+func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	username := test1.(string)
 	r.ParseForm()
+	projectURL := r.FormValue("UNKOWN")
 
 	widg, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
 	if widg.Classification == 15 {
-		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
 	}
-	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false)
+	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), true)
 	if err != nil {
-		fmt.Println("This is an err, deleteWidgetProfile line24")
+		fmt.Println("This is an err, deleteWidgetProject line29")
 		fmt.Println(err)
 	}
 
-	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
 }
