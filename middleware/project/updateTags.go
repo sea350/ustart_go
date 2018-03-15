@@ -19,8 +19,6 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("projectWidget")
-	fmt.Println(session.Values)
-	fmt.Println("/middleware/project/updatetags.go attempting to print out full session project data struct")
 
 	tags := strings.Split(r.FormValue("skillArray"), `","`)
 	if len(tags) > 0 {
