@@ -231,8 +231,10 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 14
 	}
 
-	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}
+	newWidget := types.Widget{UserID: r.FormValue("projectWidget"), Data: data, Classification: classification}
 
+	fmt.Println("this is debug text middleware/widget/addProjectwidget")
+	fmt.Println(session.Values["Project"])
 	if r.FormValue("editID") == `0` {
 		fmt.Println("this is debug text middeware/widget/addprojectidget.go")
 		fmt.Println(r.FormValue("projectWidget"))
