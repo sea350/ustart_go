@@ -58,6 +58,7 @@ func main() {
 	http.HandleFunc("/MyProjects/", project.MyProjects)
 	http.HandleFunc("/CreateProjectPage/", project.CreateProjectPage)
 	http.HandleFunc("/CreateProject/", project.CreateProject)
+	http.HandleFunc("/ProjectSettings/", project.Settings)
 
 	http.HandleFunc("/Settings/", settings.Settings)
 	http.HandleFunc("/ImageUpload/", settings.ImageUpload)
