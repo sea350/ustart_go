@@ -13,9 +13,13 @@ const projMapping = `
     "mappings":{
         "Project":{
             "properties":{
+				"exact_value":{
+					"type" : "keyboard"
+				},
                 "URLName":{
 					"type":"keyword",
 					
+					"index": "not_analyzed"
 				},
             }
         }
