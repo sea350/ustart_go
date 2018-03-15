@@ -1,4 +1,4 @@
-package project
+package settings
 
 import (
 	"fmt"
@@ -9,8 +9,8 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//Settings ...
-func Settings(w http.ResponseWriter, r *http.Request) {
+//Project ...
+func Project(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
