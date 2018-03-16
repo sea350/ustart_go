@@ -12,7 +12,7 @@ func ProjectNameAndDescription(eclient *elastic.Client, projID string, name stri
 	if err != nil {
 		return err
 	}
-	err = post.UpdateProject(eclient, proj, "Description", desc)
+	err = post.UpdateProject(eclient, projID, "Description", desc)
 	return err
 
 }
