@@ -25,7 +25,6 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 
 	var data []template.HTML
 	var classification int
-	uses.Widgetwhatever(r.FormValue("widgetSubmit"))
 
 	if r.FormValue("widgetSubmit") == `0` {
 		// text
