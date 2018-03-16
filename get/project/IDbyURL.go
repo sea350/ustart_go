@@ -14,6 +14,7 @@ func ProjectIDByURL(eclient *elastic.Client, projectURL string) (string, error) 
 	//		PROJECT URL)
 	//RETURNS A types.Project AND AN error
 	ctx := context.Background()
+	//Need to lowercase to query
 	termQuery := elastic.NewTermQuery("URLName", strings.ToLower(projectURL))
 	searchResult, err := eclient.Search().
 		Index(globals.ProjectIndex).
