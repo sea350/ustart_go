@@ -76,7 +76,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Birthday: birthdayline, Class: ClassYear} //Class:ClassYear}
 	viewingDOC, errID := get.IDByUsername(eclient, r.URL.Path[9:])
 	if errID != nil {
-		fmt.Println("this is an error (ViewProfile.go: 66)")
+		fmt.Println("this is an error (ViewProfile.go: 79)")
 		fmt.Println(errID)
 	}
 
@@ -84,12 +84,12 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	numberFollowing, errnF := uses.NumFollow(eclient, session.Values["DocID"].(string), true)
 	if errnF != nil {
-		fmt.Println("this is an error (ViewProfile.go: 74)")
+		fmt.Println("this is an error (ViewProfile.go: 87)")
 		fmt.Println(errnF)
 	}
 	numberFollowers, errnF2 := uses.NumFollow(eclient, session.Values["DocID"].(string), false)
 	if errnF2 != nil {
-		fmt.Println("this is an error (ViewProfile.go: 79)")
+		fmt.Println("this is an error (ViewProfile.go: 92)")
 		fmt.Println(errnF2)
 	}
 
