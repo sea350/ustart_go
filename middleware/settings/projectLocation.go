@@ -24,14 +24,15 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	zip := r.FormValue("zip")
 	//   fmt.Println(blob)
 
-	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
+	projID := r.FormValue("projectID")
+	proj, err := get.ProjectByID(eclient, projID)
 	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
-	err = uses.ChangeProjectLocation(eclient, ountry, state, city, zip)
+	err = uses.ChangeProjectLocation(eclient, projID, country, state, city, zip)
 	if err != nil {
 		fmt.Println(err)
 	}
 	//TODO: Add in right URL
-	http.Redirect(w, r, "/project/"+proj.URL, http.StatusFound)
+	http.Redirect(w, r, "/project/"+proj.URLName, http.StatusFound)
 
 }

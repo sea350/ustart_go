@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	get "github.com/sea350/ustart_go/get/project"
 	post "github.com/sea350/ustart_go/post/project"
 )
 
@@ -17,6 +18,11 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	}
 	r.ParseForm()
 	blob := r.FormValue("banner-data")
+
+	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	err := post.UpdateProject(eclient, r.FormValue("projectID"), "Banner", blob)
 	if err != nil {
