@@ -21,6 +21,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	newProj.Description = description
 	newProj.Visible = true
 	newProj.CreationDate = time.Now()
+	newProj.Avatar = "https://i.imgur.com/TYFKsdi.png"
 
 	var maker types.Member
 	maker.JoinDate = time.Now()
