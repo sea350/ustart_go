@@ -1,6 +1,7 @@
 package uses
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -55,33 +56,27 @@ func StringChecker(entryCode string, website string) bool {
 			return false
 		}
 	}
-
-	//The following are based on the specifications made from the google doc link listed above
-	//If the EntryCodes are URLs, they will have specific structures based on their website
-	//Pinterest has a /pin/<code> where <code> can be of legnth 18, 55, or 87
-	//Instagram has /p/<code> where <code> is of length 10
-	//Youtube has youtube.com/<keyword> where the keyword is "watch?v=<code>" where <code> is a combination of nums,letters,symbols
 	if website == "pinterest.com" {
 		blockPoint := strings.Split(entryCode, "/")
-		if !(len(blockPoint[4]) == 18 || len(blockPoint[4]) == 55 || len(blockPoint) == 87) {
+		if !(len(blockPoint[3]) == 18 || len(blockPoint[3]) == 55 || len(blockPoint[3]) == 87) {
 			return false
 		}
 	}
 
 	if website == "instagram.com" {
 		blockPoint := strings.Split(entryCode, "/")
-		if len(blockPoint[4]) != 10 {
+		if len(blockPoint[3]) != 11 {
 			return false
 		}
 	}
 
 	if website == "youtube.com" {
 		blockPoint := strings.Split(entryCode, "/")
-		if strings.Contains(blockPoint[3], "watch?v=") == false {
+		if strings.Contains(blockPoint[1], "watch?v=") == false {
+			fmt.Println("here")
 			return false
 		}
 	}
-
 	return true
 
 }
