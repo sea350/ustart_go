@@ -18,8 +18,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	username := test1.(string)
-	ID := r.FormValue("UNKNOWN")
+
+	ID := r.FormValue("projectID")
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
@@ -27,8 +27,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err: middleware/project/deleteQuickLink line 25")
 	}
 
-	deleteTitle := r.FormValue("UNKNOWN")
-	deleteURL := r.FormValue("UNKNOWN")
+	deleteTitle := r.FormValue("deleteProjectLinkDesc")
+	deleteURL := r.FormValue("deleteProjectLink")
 
 	var newArr []types.Link
 

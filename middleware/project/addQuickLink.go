@@ -18,7 +18,7 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	ID := r.FormValue("UNKOWN")
+	ID := r.FormValue("projectID")
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
@@ -26,7 +26,7 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err: middleware/project/addQuickLink line 25")
 	}
 
-	proj.QuickLinks = append(proj.QuickLinks, types.Link{Name: r.FormValue("UNKNOWN"), URL: r.FormValue("UNKNOWN")})
+	proj.QuickLinks = append(proj.QuickLinks, types.Link{Name: r.FormValue("projectLinkDesc"), URL: r.FormValue("projectLink")})
 
 	err = post.UpdateProject(client.Eclient, ID, "QuickLinks", proj.QuickLinks)
 	if err != nil {
