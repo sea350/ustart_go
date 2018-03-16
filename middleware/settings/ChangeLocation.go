@@ -46,6 +46,6 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+	http.Redirect(w, r, "/Settings/#loccollapse", http.StatusFound)
 
 }
