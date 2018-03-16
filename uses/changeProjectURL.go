@@ -12,9 +12,9 @@ import (
 //Requires the target projects docID and the potential new url
 //Returns an error if the url is taken or a databse error
 func ChangeProjectURL(eclient *elastic.Client, projectID string, newURL string) error {
-	_, err := get.ProjectByURL(eclient, newURL)
+	inUse, err := get.URLInUse(eclient, newURL)
 	//if (err != nil){ return err}
-	if err != nil {
+	if inUse {
 		return errors.New("That url is already taken")
 	}
 	err = post.UpdateProject(eclient, projectID, "URLName", newURL)
