@@ -1,0 +1,37 @@
+package settings
+
+import (
+	"fmt"
+	"net/http"
+
+	get "github.com/sea350/ustart_go/get/project"
+	uses "github.com/sea350/ustart_go/uses"
+)
+
+//ProjectLocation ...
+//For Projects Location
+func ProjectLocation(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["projectID"]
+	if test1 == nil {
+		fmt.Println(test1)
+		http.Redirect(w, r, "/~", http.StatusFound)
+	}
+	r.ParseForm()
+	country := r.FormValue("country")
+	state := r.FormValue("state")
+	city := r.FormValue("city")
+	zip := r.FormValue("zip")
+	//   fmt.Println(blob)
+
+	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
+	//fmt.Println(reflect.TypeOf(blob))
+	//TODO: DocID
+	err = uses.ChangeProjectLocation(eclient, ountry, state, city, zip)
+	if err != nil {
+		fmt.Println(err)
+	}
+	//TODO: Add in right URL
+	http.Redirect(w, r, "/project/"+proj.URL, http.StatusFound)
+
+}

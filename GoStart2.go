@@ -71,6 +71,9 @@ func main() {
 	http.HandleFunc("/UpdateDescription/", settings.ChangeContactAndDescription)
 	http.HandleFunc("/BannerUpload/", settings.BannerUpload)
 	http.HandleFunc("/ProjectSettings/", settings.Project)
+	http.HandleFunc("/projectBannerUpload/", settings.ProjectBannerUpload)
+	http.HandleFunc("/projectName/", settings.ChangeNameAndDescription)
+	http.HandleFunc("/projectLocation/", settings.ProjectLocation)
 
 	http.HandleFunc("/Signup/", registration.Signup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
