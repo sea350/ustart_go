@@ -24,7 +24,7 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	err := post.UpdateProject(eclient, r.FormValue("projectID"), "Banner", blob)
+	err = post.UpdateProject(eclient, r.FormValue("projectID"), "Banner", blob)
 	if err != nil {
 		fmt.Println(err)
 	}

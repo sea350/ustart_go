@@ -19,7 +19,7 @@ func ChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 	}
 	r.ParseForm()
 	projName := r.FormValue("pname")
-	projDesc := r.FormValue("inputDesc")
+	projDesc := []rune(r.FormValue("inputDesc"))
 	//   fmt.Println(blob)
 	fmt.Println(projName, projName)
 
