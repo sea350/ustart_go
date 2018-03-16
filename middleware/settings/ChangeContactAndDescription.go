@@ -47,6 +47,6 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 	if err2 != nil {
 		fmt.Println(err2)
 	} else {
-		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+		http.Redirect(w, r, "/Settings/#desccollapse", http.StatusFound)
 	}
 }

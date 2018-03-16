@@ -4,28 +4,46 @@ package stringHTML
 func WallLoadEnd(docID string, pageID string) string {
 	return `
 	<script>
-	$('#confirm-delete').click(function(e) {
-		//e.preventDefault();
-		$.ajax({
-			type: 'GET',  
-			url: 'http://ustart.today:5000/deleteModal/',
-			contentType: "application/json; charset=utf-8",
-			data: {},
-			success: function(data) {
-				$("#post-delete").html(data);
-				
-				  // $('.editEntry').click(function(e) {
-				  //       var postId= $(this).attr("id");
-				  //       var modified ="#"+postId;
-				  //       console.log(modified);
-				  //       $(modified).modal('show');
-				  //   });
-		 
-			}//end success
+		$('#confirm-delete').click(function(e) {
+			//e.preventDefault();
+			$.ajax({
+				type: 'GET',  
+				url: 'http://ustart.today:5000/deleteModal/',
+				contentType: "application/json; charset=utf-8",
+				data: {},
+				success: function(data) {
+					$("#post-delete").html(data);
+					
+					// $('.editEntry').click(function(e) {
+					//       var postId= $(this).attr("id");
+					//       var modified ="#"+postId;
+					//       console.log(modified);
+					//       $(modified).modal('show');
+					//   });
+			
+				}//end success
+			});
 		});
-	});
+		
+		$('#commentform').submit(function(e) {
+			//e.preventDefault();
+			var $form = $(this);
+			var docID = "` + docID + `";
+			var text = $form.find('input[name=commentz]').val();
+			console.log(text);
+			$.ajax({
+				type: 'GET',  
+				url: 'http://ustart.today:5000/AddComment/',
+				contentType: "application/json; charset=utf-8",
+				data: {docID:docID,text:text},
+				success: function(data) {
+				//	console.log(data);
+					$('.comments-list').append(data);
+				}
+			});
+		});
 
-		 $('#new-postSubmit').click(function(e) {
+		$('#new-postSubmit').click(function(e) {
 			//e.preventDefault();
 			var docID = "` + docID + `";
 			var text = $("#post-msg").val();
@@ -70,69 +88,69 @@ func WallLoadEnd(docID string, pageID string) string {
 						}
 						return false;
 					});
-					  $('body').on('click', '.odom-submit', function (e) {
-							$('#shareCommentForm').submit();
+					$('body').on('click', '.odom-submit', function (e) {
+						$('#shareCommentForm').submit();
+					});
+					$('.comment-btn').click(function(e) {
+						var postId= $(this).attr("id");
+						var modified ="#"+postId;
+						console.log(modified);
+						var Pikachu = "` + docID + `";
+						//e.preventDefault();
+						$.ajax({
+							type: 'GET',  
+							url: 'http://ustart.today:5000/getComments/',
+							contentType: "application/json; charset=utf-8",
+							data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
+							success: function(data) {
+								$("#commentnil").html(data);
+								console.log(data);
+								$(modified).modal('show');
+							}
 						});
-  $('.comment-btn').click(function(e) {
-			var postId= $(this).attr("id");
-			var modified ="#"+postId;
-			console.log(modified);
-			var Pikachu = "` + docID + `";
-			//e.preventDefault();
-			$.ajax({
-				type: 'GET',  
-				url: 'http://ustart.today:5000/getComments/',
-				contentType: "application/json; charset=utf-8",
-				data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
-				success: function(data) {
-					$("#commentnil").html(data);
-					console.log(data);
-					$(modified).modal('show');
-				}
-			});
-		});
+					});
 			 
-			$('.share-btn').click(function(e) {
-			var postId= $(this).attr("id");
-			var modified ="#"+postId;
-			console.log(modified);
-			var Pikachu = "` + docID + `";
-			//e.preventDefault();
-			$.ajax({
-				type: 'GET',  
-				url: 'http://ustart.today:5000/shareComments/',
-				contentType: "application/json; charset=utf-8",
-				data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
-				success: function(data) {
-					$("#sharenil").html(data);
-					console.log("share clicked ");
-					$(modified).modal('show');
-				}
-			});
-		});  
-			$('.like-btn').click(function(e) {
-			var postId= $(this).attr("id");
-			var modified ="#"+postId;
-			console.log(modified);
-			var selfDoc = "` + docID + `";
-			//e.preventDefault();
-			$.ajax({
-				type: 'GET',  
-				url: 'http://ustart.today:5000/Like',
-				contentType: "application/json; charset=utf-8",
-				data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
-				success: function(data) {
-						var likeBtnImg = $(this).find('img');
-						if (likeBtnImg.attr('src') === "/ustart_front/ico/like.png") {
-							likeBtnImg.attr('src', "/ustart_front/ico/liked.png");
-						} else {
-							likeBtnImg.attr('src', "/ustart_front/ico/like.png");
-						}
-					console.log("like clicked");
-				}
-			});
-		}); 
-			   }
+					$('.share-btn').click(function(e) {
+						var postId= $(this).attr("id");
+						var modified ="#"+postId;
+						console.log(modified);
+						var Pikachu = "` + docID + `";
+						//e.preventDefault();
+						$.ajax({
+							type: 'GET',  
+							url: 'http://ustart.today:5000/shareComments/',
+							contentType: "application/json; charset=utf-8",
+							data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
+							success: function(data) {
+								$("#sharenil").html(data);
+								console.log("share clicked ");
+								$(modified).modal('show');
+							}
+						});
+					});  
+					$('.like-btn').click(function(e) {
+						var postId= $(this).attr("id");
+						var modified ="#"+postId;
+						console.log(modified);
+						var selfDoc = "` + docID + `";
+						//e.preventDefault();
+						$.ajax({
+							type: 'GET',  
+							url: 'http://ustart.today:5000/Like',
+							contentType: "application/json; charset=utf-8",
+							data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
+							success: function(data) {
+									var likeBtnImg = $(this).find('img');
+									if (likeBtnImg.attr('src') === "/ustart_front/ico/like.png") {
+										likeBtnImg.attr('src', "/ustart_front/ico/liked.png");
+									} else {
+										likeBtnImg.attr('src', "/ustart_front/ico/like.png");
+									}
+								console.log("like clicked");
+							}
+						});
+					}); 
+			   	}
 			});
 		});      
 

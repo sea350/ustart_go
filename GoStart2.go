@@ -58,6 +58,9 @@ func main() {
 	http.HandleFunc("/MyProjects/", project.MyProjects)
 	http.HandleFunc("/CreateProjectPage/", project.CreateProjectPage)
 	http.HandleFunc("/CreateProject/", project.CreateProject)
+	http.HandleFunc("/UpdateProjectTags/", project.UpdateTags)
+	http.HandleFunc("/AddProjectLink/", project.AddQuickLink)
+	http.HandleFunc("/DeleteProjectLink/", project.DeleteQuickLink)
 
 	http.HandleFunc("/Settings/", settings.Settings)
 	http.HandleFunc("/ImageUpload/", settings.ImageUpload)
@@ -67,6 +70,7 @@ func main() {
 	http.HandleFunc("/changeEDU/", settings.ChangeEDU)
 	http.HandleFunc("/UpdateDescription/", settings.ChangeContactAndDescription)
 	http.HandleFunc("/BannerUpload/", settings.BannerUpload)
+	http.HandleFunc("/ProjectSettings/", settings.Project)
 
 	http.HandleFunc("/Signup/", registration.Signup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)

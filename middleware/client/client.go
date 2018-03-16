@@ -51,7 +51,7 @@ var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/followerlist-n
 	"/ustart/ustart_front/payment-nil.html", "/ustart/ustart_front/templateNoUser2.html",
 	"/ustart/ustart_front/profile-nil.html", "/ustart/ustart_front/template2-nil.html",
 	"/ustart/ustart_front/template-footer-nil.html", "/ustart/ustart_front/nil-index2.html",
-	"/ustart/ustart_front/regcomplete-nil.html"))
+	"/ustart/ustart_front/regcomplete-nil.html", "/ustart/ustart_front/project_settings_F.html"))
 
 //RenderTemplate ... This function does the actual rendering of HTML pages. Note it takes in a struct (type ClientSide).
 //You will need to continually send data to the pages and this is accomplished via the struct.

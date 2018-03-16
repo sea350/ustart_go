@@ -53,12 +53,12 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `4` {
 		//instagram
-		/*checker := uses.StringChecker(r.FormValue("instagramInput"), "instagram.com") //Check valid URL
+		checker := uses.StringChecker(r.FormValue("instagramInput"), "instagram.com") //Check valid URL
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 
 		input := template.HTML(r.FormValue("instagramInput"))
 		if r.FormValue("editID") != `0` {
@@ -76,25 +76,26 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `5` {
 		//soundcloud
-		/*checker := uses.StringChecker(r.FormValue("scInput"), "soundcloud.com") //Check valid Embed
+		checker := uses.StringChecker(r.FormValue("scInput"), "soundcloud.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
+
 		url := template.HTML(r.FormValue("scInput"))
 		data = []template.HTML{url}
 		classification = 5
 	}
 	if r.FormValue("widgetSubmit") == `6` {
 		//youtube
-		/*checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
+		checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
 		checker2 := uses.StringChecker(r.FormValue("ytinput"), "youtu.be")
 		if !(checker1 || checker2) {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 		url := template.HTML(r.FormValue("ytInput"))
 		data = []template.HTML{url}
 		classification = 6
@@ -102,12 +103,12 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("widgetSubmit") == `7` {
 		//codepen
 
-		/*checker := uses.StringChecker(r.FormValue("codepenInput"), "codepen.io") //Check valid Embed
+		checker := uses.StringChecker(r.FormValue("codepenInput"), "codepen.io") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 
 		codepenID := template.HTML(r.FormValue("codepenInput"))
 		data = []template.HTML{codepenID}
@@ -115,12 +116,12 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `8` {
 		//pinterest
-		/*checker := uses.StringChecker(r.FormValue("pinInput"), "pinterest.com")
+		checker := uses.StringChecker(r.FormValue("pinInput"), "pinterest.com")
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 		url := template.HTML(r.FormValue("pinInput"))
 		if r.FormValue("editID") != `0` {
 			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
@@ -138,12 +139,12 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `9` {
 		//tumblr
-		/*checker := uses.StringChecker(r.FormValue("tumblrInput"), "tumblr.com") //Check valid Embed
+		checker := uses.StringChecker(r.FormValue("tumblrInput"), "tumblr.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 
 		tumblrEmbedCode := template.HTML(r.FormValue("tumblrInput"))
 		data = []template.HTML{tumblrEmbedCode}
@@ -151,12 +152,12 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `10` {
 		//spoofy
-		/*checker := uses.StringChecker(r.FormValue("spotInput"), "spotify.com") //Check valid Embed
+		checker := uses.StringChecker(r.FormValue("spotInput"), "spotify.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 
 		spotifyEmbedCode := template.HTML(r.FormValue("spotInput"))
 		if r.FormValue("editID") != `0` {
@@ -174,12 +175,12 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `11` {
 		//anchor
-		// checker := uses.StringChecker(r.FormValue("arInpus"), "anchor.com") //Check valid Embed
-		// if !checker {
-		// 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
-		// 	fmt.Println("invalid widget embed code")
-		// 	return
-		// }
+		checker := uses.StringChecker(r.FormValue("arInpus"), "anchor.com") //Check valid Embed
+		if !checker {
+			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
+		}
 
 		input := template.HTML(r.FormValue("arInput"))
 		if r.FormValue("editID") != `0` {
@@ -206,12 +207,12 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `13` {
 		//devianart
-		// checker := uses.StringChecker(r.FormValue("daInput"), "deviantart.com") //Check valid Embed
-		// if !checker {
-		// 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
-		// 	fmt.Println("invalid widget embed code")
-		// 	return
-		// }
+		checker := uses.StringChecker(r.FormValue("daInput"), "deviantart.com") //Check valid Embed
+		if !checker {
+			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
+		}
 		username := template.HTML(r.FormValue("daInput"))
 		count := template.HTML(r.FormValue("daInput2"))
 		data = []template.HTML{username, count}
@@ -219,12 +220,12 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `14` {
 		//twitch.tv :)
-		// checker := uses.StringChecker(r.FormValue("twitchInput"), "twitch.tv") //Check valid Embed
-		// if !checker {
-		// 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
-		// 	fmt.Println("invalid widget embed code")
-		// 	return
-		// }
+		checker := uses.StringChecker(r.FormValue("twitchInput"), "twitch.tv") //Check valid Embed
+		if !checker {
+			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
+		}
 
 		username := template.HTML(r.FormValue("twitchInput"))
 		data = []template.HTML{username}
