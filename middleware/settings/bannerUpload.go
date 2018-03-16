@@ -23,6 +23,6 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
 
 }
