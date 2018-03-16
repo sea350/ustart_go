@@ -8,11 +8,11 @@ import (
 //ProjectNameAndDescription ...
 func ProjectNameAndDescription(eclient *elastic.Client, projID string, name string, desc []rune) error {
 
-	err := post.UpdateProject(eclient, userID, "Name", name)
+	err := post.UpdateProject(eclient, projID, "Name", name)
 	if err != nil {
 		return err
 	}
-	err = post.UpdateProject(eclient, userID, "Description", desc)
+	err = post.UpdateProject(eclient, proj, "Description", desc)
 	return err
 
 }
