@@ -3,6 +3,8 @@ package uses
 import (
 	"time"
 
+	projPost "github.com/sea350/ustart_go/post/project"
+
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
