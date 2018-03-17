@@ -9,7 +9,7 @@ import (
 )
 
 //ProjectCustomURL ... pushes a new banner image into ES
-func ProjectCategory(w http.ResponseWriter, r *http.Request) {
+func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {

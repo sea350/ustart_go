@@ -12,7 +12,7 @@ import (
 
 //LeaveProject ... lets a user leave a project
 //If Rol
-func ProjectCategory(w http.ResponseWriter, r *http.Request) {
+func ProjectRequest(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {

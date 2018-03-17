@@ -76,6 +76,9 @@ func main() {
 	http.HandleFunc("/projectLocation/", settings.ProjectLocation)
 	http.HandleFunc("/projectCategory/", settings.ProjectCategory)
 	http.HandleFunc("/projectCustomURL/", settings.ProjectCustomURL)
+	http.HandleFunc("/leaveProject/", settings.LeaveProject)
+	http.HandleFunc("/projectRequest/", settings.ProjectRequest)
+	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
 
 	http.HandleFunc("/Signup/", registration.Signup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
