@@ -3,8 +3,6 @@ package uses
 import (
 	"time"
 
-	projGet "github.com/sea350/ustart_go/get/project"
-	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -16,7 +14,7 @@ func AcceptRequest(eclient *elastic.Client, projectInfo types.ProjectInfo, userI
 	if err != nil {
 		return err
 	}
-	proj, err := projGet.ProjectByID(eclient, projectInfo.ProjectID)
+	//	proj, err := projGet.ProjectByID(eclient, projectInfo.ProjectID)
 
 	if err != nil {
 		return err
