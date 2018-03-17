@@ -26,8 +26,8 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	newLeader = ""
-	err = uses.UserLeavesProject(eclient, leavingUser, projID)
+	newLeader := " "
+	err = uses.UserLeavesProject(eclient, leavingUser, projID, newLeader)
 	if err != nil {
 		fmt.Println(err)
 	}
