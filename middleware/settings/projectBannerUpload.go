@@ -10,7 +10,7 @@ import (
 
 //BannerUpload ... pushes a new banner image into ES
 func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	//session, _ := store.Get(r, "session_please")
 	/*test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
