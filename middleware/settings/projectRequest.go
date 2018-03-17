@@ -5,9 +5,8 @@ import (
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/project"
-	uses "github.com/sea350/ustart_go/uses"
 	types "github.com/sea350/ustart_go/types"
-
+	uses "github.com/sea350/ustart_go/uses"
 )
 
 //LeaveProject ... lets a user leave a project
@@ -35,10 +34,10 @@ func ProjectRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isAccepted {
-		var newInfo types.ProjectInfo{}
+		var newInfo types.ProjectInfo
 		newInfo.ProjectID = projID
 		newInfo.Visible = true
-		err = uses.AcceptRequest(eclient, newInfo, "" )
+		err = uses.AcceptRequest(eclient, newInfo, "")
 	}
 
 	if err != nil {
