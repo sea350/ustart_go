@@ -33,6 +33,6 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 	//TODO: Add in right URL
-	http.Redirect(w, r, "/project/"+proj.URLName, http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 
 }

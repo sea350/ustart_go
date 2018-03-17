@@ -30,6 +30,6 @@ func ProjectCategory(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	http.Redirect(w, r, "/project/"+proj.URLName, http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 
 }
