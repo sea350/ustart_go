@@ -14,5 +14,4 @@ func HideEntry(eclient *elastic.Client, entryID string) error {
 	//it is maintained just in case more things need to be executed when a post is deleted in the future
 
 	return err
-
 }
