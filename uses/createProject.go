@@ -60,8 +60,10 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	}
 	if customURL == `` {
 		err = projPost.UpdateProject(eclient, id, "URLName", strings.ToLower(id))
+		id = strings.ToLower(id)
 	} else {
-		err = projPost.UpdateProject(eclient, id, "URLName", strings.ToLower(customURL))
+		err = projPost.UpdateProject(eclient, id, "URLName", customURL)
+		id = customURL
 	}
 
 	return id, err
