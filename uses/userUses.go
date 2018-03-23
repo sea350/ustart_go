@@ -228,14 +228,14 @@ func UpdateUserTags(eclient *elastic.Client, userID string, tags []string) error
 //Returns an error
 func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
 	//true = append to following
-	followErr := postUser.AppendFollow(eclient, usrID, followID, true)
-	if followErr != nil {
-		return followErr
-	}
-	//false = append to followers
-	followingErr := postUser.AppendFollow(eclient, followID, usrID, false)
+	followingErr := postUser.AppendFollowing(eclient, usrID, followID)
 	if followingErr != nil {
 		return followingErr
+	}
+	//false = append to followers
+	followErr := postUser.AppendFollower(eclient, usrID, followID)
+	if followErr != nil {
+		return followErr
 	}
 
 	return nil

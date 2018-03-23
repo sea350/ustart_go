@@ -7,9 +7,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//AppendFollow ... appends to either sent or received collegue request arrays within user
-//takes in eclient, user ID, the follower ID, and a bool
-//true = append to following, false = append to followers
+//AppendFollower ... appends to either sent or received collegue request arrays within user
+//takes in eclient, user ID, the follower ID
 func AppendFollower(eclient *elastic.Client, usrID string, followID string) error {
 
 	FollowLock.Lock()
