@@ -18,8 +18,8 @@ func RemoveEntry(eclient *elastic.Client, usrID, entryID string) error {
 	usr, errGetUser := getUser.UserByID(eclient, usrID)
 	//entry, errGet := getEntry.EntryByID(eclient, entryID)
 
-	if errGet != nil {
-		panic(errGet)
+	if errGetUser != nil {
+		panic(errGetUser)
 	}
 
 	removeIdx := -1
