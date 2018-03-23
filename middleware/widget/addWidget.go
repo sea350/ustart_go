@@ -53,6 +53,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `4` {
 		//instagram
+		
 		checker := uses.StringChecker(r.FormValue("instagramInput"), "instagram.com") //Check valid URL
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
@@ -76,6 +77,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `5` {
 		//soundcloud
+		
 		checker := uses.StringChecker(r.FormValue("scInput"), "soundcloud.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
@@ -89,13 +91,15 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `6` {
 		//youtube
+		/*
 		checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
 		checker2 := uses.StringChecker(r.FormValue("ytinput"), "youtu.be")
-		if !(checker1 || checker2) {
+		if !(checker1 && checker2) {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
 		}
+		*/
 		url := template.HTML(r.FormValue("ytInput"))
 		data = []template.HTML{url}
 		classification = 6
@@ -116,12 +120,14 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `8` {
 		//pinterest
+		/*
 		checker := uses.StringChecker(r.FormValue("pinInput"), "pinterest.com")
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
 		}
+		*/
 		url := template.HTML(r.FormValue("pinInput"))
 		if r.FormValue("editID") != `0` {
 			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
@@ -139,13 +145,14 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `9` {
 		//tumblr
+		/*
 		checker := uses.StringChecker(r.FormValue("tumblrInput"), "tumblr.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
 		}
-
+*/
 		tumblrEmbedCode := template.HTML(r.FormValue("tumblrInput"))
 		data = []template.HTML{tumblrEmbedCode}
 		classification = 9
@@ -175,13 +182,14 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `11` {
 		//anchor
+		/*
 		checker := uses.StringChecker(r.FormValue("arInpus"), "anchor.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
 		}
-
+*/
 		input := template.HTML(r.FormValue("arInput"))
 		if r.FormValue("editID") != `0` {
 			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
