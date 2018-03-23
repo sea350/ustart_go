@@ -1,9 +1,8 @@
 package uses
 
 import (
-import "strings"
-import "strings"
-import "strings"
+	"strings"
+
 	"errors"
 	"sync"
 	"time"
