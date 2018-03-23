@@ -31,7 +31,7 @@ func ParentEntry(postaid string, image string, fName string, lName string, conte
 								<span class="input-group-addon">
 									<a onclick="document.getElementByClass('commentform').submit();">
 										<script>
-											console.log('inside the its not gonna work because it's just hml stuff so put inside script')
+											console.log('inside the its not gonna work because its just hml stuff so put inside script')
 										</script>
 										<i class="fa fa-edit"></i>
 									</a>

@@ -13,7 +13,7 @@ func WallLoadStart(docID string, pageID string) string {
             type: 'GET',  
             url: 'http://ustart.today:5000/deleteModal/',
             contentType: "application/json; charset=utf-8",
-            data: {},
+            data: {PostID:postId},
             success: function(data) {
                 console.log("reached here");
                 $("#deletenil").html(data);

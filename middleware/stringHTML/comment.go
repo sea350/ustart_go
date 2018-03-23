@@ -1,7 +1,7 @@
 package stringHTML
 
 //CommentEntry ... creates a string of html that displays a comment
-func CommentEntry(image string, fName string, lName string, content string) string {
+func CommentEntry(image string, fName string, lName string, content string, postID string) string {
 	return `
 	<div class="media">
 		<h6 class="pull-right text-muted time">2 hours ago</h6>
@@ -9,7 +9,7 @@ func CommentEntry(image string, fName string, lName string, content string) stri
 			<img style="height:40px;" class="img-rounded" src=d` + image + `>
 		</a>
 		<div class="media-body">
-			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName + " " + lName + `</h5>
+			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName+`comment.go` + " " + lName + `</h5>
 			<p>` + content + `</p>
 			<p>
 				<small>
@@ -27,6 +27,23 @@ func CommentEntry(image string, fName string, lName string, content string) stri
 				$(document).ready(function (){
 				$(".commentOfComment").css("display","none");
 				});
+			$('.view-replies').click(function(e) {
+        e.preventDefault();
+        var postId = "`+postID+`"
+        var modified ="#`+postID+`"
+        console.log(modified);
+        $.ajax({
+            type: 'GET',  
+            url: 'http://ustart.today:5000/getPostComments/',
+            contentType: "application/json; charset=utf-8",
+            data: {PostID:postId},
+            success: function(data) {
+            	console.log("succcerosed");
+         	   $(".commentOfComment").html(data);
+
+            }//end success
+        });
+    }); // end view-replies click 
 			</script>
 			</p>
 				<div class="commentOfComment" id="replies">
@@ -52,8 +69,9 @@ func CommentEntry(image string, fName string, lName string, content string) stri
 				</div>
 			</div>
 			<div class="input-group pull-right">
-				<form id="innercommentform">
-					<input class="form-control" placeholder="Add a reply" type="text">
+				<form id="innercommentform" method="POST" action="/AddComment2">
+				    <input type = "hidden" name="postID" value= "`+postID+`">
+					<input class="form-control" placeholder="Add a reply" type="text" name="body">
 				</form>
 				<span class="input-group-addon">
 					<a onclick="document.getElementById('innercommentform').submit();">

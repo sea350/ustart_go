@@ -1,7 +1,6 @@
 package uses
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -65,7 +64,7 @@ func StringChecker(entryCode string, website string) bool {
 
 	if website == "instagram.com" {
 		blockPoint := strings.Split(entryCode, "/")
-		if len(blockPoint[3]) != 11 {
+		if len(blockPoint[4]) != 11 {
 			return false
 		}
 	}
@@ -73,7 +72,6 @@ func StringChecker(entryCode string, website string) bool {
 	if website == "youtube.com" {
 		blockPoint := strings.Split(entryCode, "/")
 		if strings.Contains(blockPoint[1], "watch?v=") == false {
-			fmt.Println("here")
 			return false
 		}
 	}

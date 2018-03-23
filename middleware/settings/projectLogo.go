@@ -17,7 +17,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	r.ParseForm()
-	newCategory := r.FormValue("type_select")
+	blob := r.FormValue("image-data")
 
 	projID := r.FormValue("projectID")
 	proj, err := get.ProjectByID(eclient, projID)
@@ -25,11 +25,11 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	err = uses.ChangeProjectLogo(eclient, projID, newCategory)
+	err = uses.ChangeProjectLogo(eclient, projID, blob)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	http.Redirect(w, r, "/project/"+proj.URLName, http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 
 }

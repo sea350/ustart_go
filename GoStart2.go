@@ -39,6 +39,7 @@ func main() {
 	http.HandleFunc("/shareComments/", profile.ShareComments)
 	http.HandleFunc("/ShareComment", profile.ShareComment2)
 	http.HandleFunc("/AddComment", profile.AddComment)
+	http.HandleFunc("/AddComment2", profile.AddComment2)
 	http.HandleFunc("/loadWall/", profile.WallLoad)
 	http.HandleFunc("/addPost/", profile.WallAdd)
 	http.HandleFunc("/profile/", profile.ViewProfile)
@@ -48,6 +49,7 @@ func main() {
 	http.HandleFunc("/deleteLink/", profile.DeleteQuickLink)
 	http.HandleFunc("/deletePost/", profile.DeleteWallPost)
 	http.HandleFunc("/deleteModal/", profile.GenerateDeleteModal)
+	http.HandleFunc("/getPostComments/",profile.PostComments)
 
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/addProjectWidget/", widget.AddProjectWidget)

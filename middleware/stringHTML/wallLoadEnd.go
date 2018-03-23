@@ -4,7 +4,6 @@ package stringHTML
 func WallLoadEnd(docID string, pageID string) string {
 	return `
 	<script>
-	// write new deleteEntry here after it works 
     // $('.deleteEntry').click(function(e) {
     //     //e.preventDefault();
     //     var postId= $(this).attr("id");
@@ -14,7 +13,7 @@ func WallLoadEnd(docID string, pageID string) string {
     //         type: 'GET',  
     //         url: 'http://ustart.today:5000/deleteModal/',
     //         contentType: "application/json; charset=utf-8",
-    //         data: {},
+    //         data: {PostID:postId},
     //         success: function(data) {
     //             console.log("reached here");
     //             $("#deletenil").html(data);
@@ -23,7 +22,6 @@ func WallLoadEnd(docID string, pageID string) string {
     //         }//end success
     //     });
     // });
-
 		
 		$('#commentform').submit(function(e) {
 			//e.preventDefault();

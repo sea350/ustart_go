@@ -3,6 +3,7 @@ package profile
 import (
 	"fmt"
 	"net/http"
+	uses "github.com/sea350/ustart_go/uses"
 
 	// "github.com/sea350/ustart_go/middleware/stringHTML"
 
@@ -16,8 +17,16 @@ func DeleteWallPost(w http.ResponseWriter, r *http.Request){
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
+	r.ParseForm()
+	postid := r.FormValue("postid")
+	postactual := postid[14:]
+	err := uses.HideEntry(eclient,postactual)
+	if (err != nil){
+		fmt.Println(err);
+	}
 
-	//err := uses.RemoveEntry(eclient,session.Values["DocID"].(string),)
+		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+
 
 }
 
@@ -28,8 +37,15 @@ func GenerateDeleteModal(w http.ResponseWriter, r *http.Request){
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
+	r.ParseForm()
+	postid := r.FormValue("PostID")
+	//postaid := postid[9:]
+	postactual := postid[14:]
 	// IF I change output to <p> LOOOOOOL </p>, it works. problem finding modal shit 
-	output := `                              <div class="modal fade" id="confirm-delete" role="dialog" >
+	output := `                              
+
+							<p> postactual nani`+postactual+` </p>
+							<div class="modal fade" id=confirm-delete` + postactual + `  role="dialog" >
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -38,13 +54,13 @@ func GenerateDeleteModal(w http.ResponseWriter, r *http.Request){
                                         <div class="modal-body">
                                             <span style="font-size:15px;">Are you sure you want to delete this post?</span>
                                         </div>
-<!--                                         <div class="modal-footer">
+                                        <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                            <form action ="http://ustart.today:5000/deletePost" method ="POST"> 
-                                                 <input type="text" name="postid" value=(this).attr("id")>  
+                                            <form action ="http://ustart.today:5000/deletePost" method ="GET"> 
+                                                 <input type="hidden" name="postid" value=(this).attr("id")>  
                                              <button type="submit"><a class="btn btn-danger btn-ok">Delete</a></button>
                                         </form>
-                                        </div> -->
+                                        </div> 
                                     </div>
                                 </div>
                             </div>`

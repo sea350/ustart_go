@@ -32,7 +32,7 @@ func ShareComments(w http.ResponseWriter, r *http.Request) {
 
 	for i := 0; i < len(arrayofComments); i++ {
 
-		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content))
+		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content),postactual)
 		sum += i
 	}
 	username := session.Values["Username"].(string)
