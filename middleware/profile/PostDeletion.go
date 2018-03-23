@@ -28,25 +28,25 @@ func GenerateDeleteModal(w http.ResponseWriter, r *http.Request){
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-
-	output := `                            <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<span style="font-size:20px;">Confirm Deletion</span>
-			</div>
-			<div class="modal-body">
-				<span style="font-size:15px;">Are you sure you want to delete this post?</span>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<form action ="http://ustart.today:5000/deletePost" method ="POST"> 
-<!--                                                 <input type="text" name="postid" value=(this).attr("id")>  
--->                                            <button type="submit"><a class="btn btn-danger btn-ok">Delete</a></button>
-			</form>
-			</div>
-		</div>
-	</div>
-</div>`
+	// IF I change output to <p> LOOOOOOL </p>, it works. problem finding modal shit 
+	output := `                              <div class="modal fade" id="confirm-delete" role="dialog" >
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <span style="font-size:20px;">Confirm Deletion</span>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span style="font-size:15px;">Are you sure you want to delete this post?</span>
+                                        </div>
+<!--                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <form action ="http://ustart.today:5000/deletePost" method ="POST"> 
+                                                 <input type="text" name="postid" value=(this).attr("id")>  
+                                             <button type="submit"><a class="btn btn-danger btn-ok">Delete</a></button>
+                                        </form>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>`
 fmt.Fprintln(w, output)
 }

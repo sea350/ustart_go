@@ -47,6 +47,7 @@ func main() {
 	http.HandleFunc("/addLink/", profile.AddQuickLink)
 	http.HandleFunc("/deleteLink/", profile.DeleteQuickLink)
 	http.HandleFunc("/deletePost/", profile.DeleteWallPost)
+	http.HandleFunc("/deleteModal/", profile.GenerateDeleteModal)
 
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/addProjectWidget/", widget.AddProjectWidget)
