@@ -80,6 +80,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}
 
 	title := r.FormValue("project_title")
 	description := []rune(r.FormValue("project_desc"))
@@ -87,13 +88,19 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	college := r.FormValue("universityName")
 	customURL := r.FormValue("curl")
 
-	_, err = uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string), category, college, customURL)
-	if err != nil {
-		fmt.Println("This is an error middleware/project/createproject")
-		fmt.Println(err)
+	if title != `` {
+		url, err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string), category, college, customURL)
+		if err != nil {
+			fmt.Println("This is an error middleware/project/createproject")
+			fmt.Println(err)
+			cs.ErrorStatus = true
+			cs.ErrorOutput = err
+		} else {
+			http.Redirect(w, r, "/Projects/"+url, http.StatusFound)
+			return
+		}
 	}
 
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "createProject-Nil", cs)
 }
