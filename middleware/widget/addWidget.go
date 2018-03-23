@@ -89,15 +89,13 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `6` {
 		//youtube
-		/*
-			checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
-			checker2 := uses.StringChecker(r.FormValue("ytinput"), "youtu.be")
-			if !(checker1 && checker2) {
-				http.Redirect(w, r, "/profile/"+username, http.StatusFound)
-				fmt.Println("invalid widget embed code")
-				return
-			}
-		*/
+		checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
+		checker2 := uses.StringChecker(r.FormValue("ytinput"), "youtu.be")
+		if !(checker1 && checker2) {
+			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
+		}
 		url := template.HTML(r.FormValue("ytInput"))
 		data = []template.HTML{url}
 		classification = 6

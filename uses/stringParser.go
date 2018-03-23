@@ -71,7 +71,7 @@ func StringChecker(entryCode string, website string) bool {
 
 	if website == "youtube.com" {
 		blockPoint := strings.Split(entryCode, "/")
-		if strings.Contains(blockPoint[1], "watch?v=") == false {
+		if strings.Contains(blockPoint[3], "watch?v=") == false {
 			return false
 		}
 	}
