@@ -53,14 +53,14 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `4` {
 		//instagram
-
-		checker := uses.StringChecker(r.FormValue("instagramInput"), "instagram.com") //Check valid URL
-		if !checker {
-			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
-			fmt.Println("invalid widget embed code")
-			return
-		}
-
+		/*
+			checker := uses.StringChecker(r.FormValue("instagramInput"), "instagram.com") //Check valid URL
+			if !checker {
+				http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+				fmt.Println("invalid widget embed code")
+				return
+			}
+		*/
 		input := template.HTML(r.FormValue("instagramInput"))
 		if r.FormValue("editID") != `0` {
 			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
