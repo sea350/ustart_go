@@ -1,6 +1,9 @@
 package uses
 
 import (
+import "strings"
+import "strings"
+import "strings"
 	"errors"
 	"sync"
 	"time"
@@ -48,13 +51,13 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		panic(err)
 	}
 
-	if projGet.URLInUse(eclient, customURL) {
+	if projGet.URLInUse(eclient, strings.ToLower(customURL)) {
 		return "", errors.New("URL is taken")
 	}
 	if customURL == `` {
-		err = projPost.UpdateProject(eclient, id, "URLName", id)
+		err = projPost.UpdateProject(eclient, id, "URLName", strings.ToLower(id))
 	} else {
-		err = projPost.UpdateProject(eclient, id, "URLName", customURL)
+		err = projPost.UpdateProject(eclient, id, "URLName", strings.ToLower(customURL))
 	}
 
 	return id, err
