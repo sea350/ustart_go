@@ -1,9 +1,11 @@
 package uses
 
 import (
+	"errors"
 	"sync"
 	"time"
 
+	projGet "github.com/sea350/ustart_go/get/project"
 	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
@@ -44,6 +46,10 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	err = userPost.AppendProject(eclient, makerID, addProj)
 	if err != nil {
 		panic(err)
+	}
+
+	if projGet.URLInUse(eclient, customURL) {
+		return "", errors.New("URL is taken")
 	}
 	if customURL == `` {
 		err = projPost.UpdateProject(eclient, id, "URLName", id)
