@@ -33,5 +33,6 @@ type Project struct {
 	ConversationIDs   []string  `json:ConversationIDs`
 	MemberReqSent     []string  `json:MemberReqSent`
 	MemberReqReceived []string  `json:MemberReqReceived`
+	Organization      string    `json:organization`
 	Widgets           []string  `json:Widgets`
 }

@@ -20,8 +20,11 @@ func CreateProject(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	title := r.FormValue("project_title")
 	description := []rune(r.FormValue("project_desc"))
+	category := r.FormValue("category")
+	college := r.FormValue("universityName")
+	customURL := r.FormValue("curl")
 
-	id, err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string))
+	id, err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string), category, college, customURL)
 	if err != nil {
 		fmt.Println("This is an error middleware/project/createproject")
 		fmt.Println(err)

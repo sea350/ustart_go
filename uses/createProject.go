@@ -15,13 +15,15 @@ var memberModLock sync.Mutex
 //CreateProject ... CREATE A NORMAL PROJECT
 //Requires all fundamental information for the new project (title, creator docID, etc ...)
 //Returns an error if there was a problem with database submission
-func CreateProject(eclient *elastic.Client, title string, description []rune, makerID string) (string, error) {
+func CreateProject(eclient *elastic.Client, title string, description []rune, makerID string, category string, college string, customURL string) (string, error) {
 	var newProj types.Project
 	newProj.Name = title
 	newProj.Description = description
 	newProj.Visible = true
 	newProj.CreationDate = time.Now()
 	newProj.Avatar = "https://i.imgur.com/TYFKsdi.png"
+	newProj.Category = category
+	newProj.Organization = college
 
 	var maker types.Member
 	maker.JoinDate = time.Now()
@@ -43,8 +45,11 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	if err != nil {
 		panic(err)
 	}
-
-	err = projPost.UpdateProject(eclient, id, "URLName", id)
+	if customURL == `` {
+		err = projPost.UpdateProject(eclient, id, "URLName", id)
+	} else {
+		err = projPost.UpdateProject(eclient, id, "URLName", customURL)
+	}
 
 	return id, err
 
