@@ -7,7 +7,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//AppendFollower ... appends to either sent or received collegue request arrays within user
+//AppendFollower ...
 //takes in eclient, user ID, the follower ID
 func AppendFollower(eclient *elastic.Client, usrID string, followID string) error {
 

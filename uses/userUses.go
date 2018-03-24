@@ -230,7 +230,7 @@ func UpdateUserTags(eclient *elastic.Client, userID string, tags []string) error
 //Returns an error
 func UserFollow(eclient *elastic.Client, hostID string, viewerID string) error {
 	//true = append to following
-	followingErr := postUser.AppendFollowing(eclient, hostID, viewerID)
+	followingErr := postUser.AppendFollowing(eclient, viewerID, hostID)
 	if followingErr != nil {
 		return followingErr
 	}
