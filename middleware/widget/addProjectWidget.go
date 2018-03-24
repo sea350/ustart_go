@@ -22,6 +22,11 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	r.ParseForm()
+	project, err := getProj.ProjectByID(client.Eclient, r.FormValue("projectWidget"))
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("this is an error: middleware/profile/addProjectWidget.go 2252")
+	}
 
 	var data []template.HTML
 	var classification int
@@ -53,12 +58,12 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `4` {
 		//instagram
-		/*checker := uses.StringChecker(r.FormValue("instagramInput"), "instagram.com") //Check valid URL
+		checker := uses.StringChecker(r.FormValue("instagramInput"), "instagram.com") //Check valid URL
 		if !checker {
-			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 
 		input := template.HTML(r.FormValue("instagramInput"))
 		if r.FormValue("editID") != `0` {
@@ -76,25 +81,26 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `5` {
 		//soundcloud
-		/*checker := uses.StringChecker(r.FormValue("scInput"), "soundcloud.com") //Check valid Embed
+		checker := uses.StringChecker(r.FormValue("scInput"), "soundcloud.com") //Check valid Embed
 		if !checker {
-			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 		url := template.HTML(r.FormValue("scInput"))
 		data = []template.HTML{url}
 		classification = 5
 	}
 	if r.FormValue("widgetSubmit") == `6` {
 		//youtube
-		/*checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
+		checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
 		checker2 := uses.StringChecker(r.FormValue("ytinput"), "youtu.be")
 		if !(checker1 || checker2) {
-			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
+
 		url := template.HTML(r.FormValue("ytInput"))
 		data = []template.HTML{url}
 		classification = 6
@@ -102,12 +108,12 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("widgetSubmit") == `7` {
 		//codepen
 
-		/*checker := uses.StringChecker(r.FormValue("codepenInput"), "codepen.io") //Check valid Embed
+		checker := uses.StringChecker(r.FormValue("codepenInput"), "codepen.io") //Check valid Embed
 		if !checker {
-			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 
 		codepenID := template.HTML(r.FormValue("codepenInput"))
 		data = []template.HTML{codepenID}
@@ -117,7 +123,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		//pinterest
 		/*checker := uses.StringChecker(r.FormValue("pinInput"), "pinterest.com")
 		if !checker {
-			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
 		}*/
@@ -140,7 +146,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		//tumblr
 		/*checker := uses.StringChecker(r.FormValue("tumblrInput"), "tumblr.com") //Check valid Embed
 		if !checker {
-			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
 		}*/
@@ -151,12 +157,12 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `10` {
 		//spoofy
-		/*checker := uses.StringChecker(r.FormValue("spotInput"), "spotify.com") //Check valid Embed
+		checker := uses.StringChecker(r.FormValue("spotInput"), "spotify.com") //Check valid Embed
 		if !checker {
-			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 
 		spotifyEmbedCode := template.HTML(r.FormValue("spotInput"))
 		if r.FormValue("editID") != `0` {
@@ -176,7 +182,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		//anchor
 		// checker := uses.StringChecker(r.FormValue("arInpus"), "anchor.com") //Check valid Embed
 		// if !checker {
-		// 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+		// 	http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 		// 	fmt.Println("invalid widget embed code")
 		// 	return
 		// }
@@ -208,7 +214,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		//devianart
 		// checker := uses.StringChecker(r.FormValue("daInput"), "deviantart.com") //Check valid Embed
 		// if !checker {
-		// 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+		// 	http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 		// 	fmt.Println("invalid widget embed code")
 		// 	return
 		// }
@@ -219,12 +225,12 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `14` {
 		//twitch.tv :)
-		// checker := uses.StringChecker(r.FormValue("twitchInput"), "twitch.tv") //Check valid Embed
-		// if !checker {
-		// 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
-		// 	fmt.Println("invalid widget embed code")
-		// 	return
-		// }
+		checker := uses.StringChecker(r.FormValue("twitchInput"), "twitch.tv") //Check valid Embed
+		if !checker {
+			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
+		}
 
 		username := template.HTML(r.FormValue("twitchInput"))
 		data = []template.HTML{username}
@@ -248,9 +254,6 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("this is an error: middleware/profile/addWidget.go 212")
 		}
 	}
-	project, err := getProj.ProjectByID(client.Eclient, r.FormValue("projectWidget"))
-	fmt.Println(err)
-	fmt.Println("this is an error: middleware/profile/addProjectWidget.go 2252")
 
 	http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 }
