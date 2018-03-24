@@ -10,6 +10,65 @@ import (
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))
 
+const usrMapping = `
+{
+    "mappings":{
+        "User":{
+            "properties":{
+                "Email":{
+                    "type":"keyword"
+                },
+                "Username":{
+                	"type":"keyword"
+                },
+                "AccCreation":{
+                	"type": date"
+				},
+				"FirstName":{
+					"type": "keyword"
+				},
+				"LastName":{
+					"type":"keyword"
+				}
+
+                
+            }
+        }
+    }
+}`
+
+const widgetMapping = `
+{
+    "mappings":{
+        "User":{
+            "properties":{
+                "UserID":{
+                    "type":"keyword"
+                },
+				"Classification":{
+					"type":"keyword"
+				}
+
+                
+            }
+        }
+    }
+}`
+
+const projMapping = `
+{
+    "mappings":{
+        "Project":{
+            "properties":{
+                "URLName":{
+					"type":"keyword",
+					
+				},
+            }
+        }
+    }
+}`
+
 func main() {
 
 	ctx := context.Background()
