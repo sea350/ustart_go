@@ -17,8 +17,8 @@ func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichO
 
 	ctx := context.Background()
 
-	//FollowLock.Lock()
-	//defer FollowLock.Unlock()
+	FollowLock.Lock()
+	defer FollowLock.Unlock()
 	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")

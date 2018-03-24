@@ -11,8 +11,8 @@ import (
 //takes in eclient, user ID, the follower ID
 func AppendFollower(eclient *elastic.Client, usrID string, followID string) error {
 
-	//FollowLock.Lock()
-	//defer FollowLock.Unlock()
+	FollowLock.Lock()
+	defer FollowLock.Unlock()
 	usr, err := get.UserByID(eclient, usrID)
 
 	if err != nil {
