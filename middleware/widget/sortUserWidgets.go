@@ -20,5 +20,5 @@ func SortUserWidgets(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	sortedWidgets := r.FormValue("sortedWidgets")
 
-	fmt.Println(sortedWidgets[0])
+	fmt.Println(sortedWidgets)
 }
