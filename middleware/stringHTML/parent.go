@@ -28,7 +28,7 @@ func ParentEntry(postaid string, image string, fName string, lName string, conte
 									<input type="hidden" name = "id" value=` + pika + `>
 									<input type ="hidden" name="username" value=` + username + `>
 								<span class="input-group-addon">
-									<a onclick="this.submit();">
+									<a onclick="document.getElementById("commentform").submit();">
 										<script>
 											console.log('inside the its not gonna work because its just hml stuff so put inside script')
 										</script>
