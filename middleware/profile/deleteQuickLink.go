@@ -32,7 +32,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	var newArr []types.Link
 
-	if len(usr.QuickLinks) == 1 {
+	if len(usr.QuickLinks) <= 1 {
 		err := post.UpdateUser(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
 			fmt.Println(err)
