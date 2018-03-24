@@ -37,7 +37,7 @@ func ProjectRequest(w http.ResponseWriter, r *http.Request) {
 		var newInfo types.ProjectInfo
 		newInfo.ProjectID = projID
 		newInfo.Visible = true
-		err = uses.AcceptRequest(eclient, newInfo, "")
+		err = uses.AcceptRequest(eclient, newInfo, requestUser)
 	}
 
 	if err != nil {
