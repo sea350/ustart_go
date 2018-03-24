@@ -49,13 +49,14 @@ func main() {
 	http.HandleFunc("/deleteLink/", profile.DeleteQuickLink)
 	http.HandleFunc("/deletePost/", profile.DeleteWallPost)
 	http.HandleFunc("/deleteModal/", profile.GenerateDeleteModal)
-	http.HandleFunc("/getPostComments/",profile.PostComments)
+	http.HandleFunc("/getPostComments/", profile.PostComments)
 
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/addProjectWidget/", widget.AddProjectWidget)
 	http.HandleFunc("/deleteWidget/", widget.DeleteWidgetProfile)
 	http.HandleFunc("/deleteProjectWidget/", widget.DeleteWidgetProject)
 	http.HandleFunc("/deleteLinkFromWidget/", widget.EditWidgetDataDelete)
+	http.HandleFunc("/sortUserWidgets/", widget.SortUserWidgets)
 
 	http.HandleFunc("/Projects/", project.ProjectsPage)
 	http.HandleFunc("/MyProjects/", project.MyProjects)

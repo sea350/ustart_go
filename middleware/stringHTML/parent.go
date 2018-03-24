@@ -22,14 +22,14 @@ func ParentEntry(postaid string, image string, fName string, lName string, conte
 					</div>
 						<div class="modal-body">
 							<div class="input-group">
-								<form class="commentform" method="POST" action="/AddComment">
+								<form id="commentform" method="POST" action="/AddComment">
 									<input name="commentz" class="form-control" placeholder="Add a comment" type="text">
 									<input type="hidden" name="followstat" value=` + postaid + `>
 									<input type="hidden" name = "id" value=` + pika + `>
 									<input type ="hidden" name="username" value=` + username + `>
 								</form>
 								<span class="input-group-addon">
-									<a onclick="document.getElementByClass('commentform').submit();">
+									<a onclick="document.getElementById("commentform").submit();">
 										<script>
 											console.log('inside the its not gonna work because its just hml stuff so put inside script')
 										</script>

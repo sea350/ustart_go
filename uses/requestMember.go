@@ -9,7 +9,7 @@ import (
 
 //RequestMember ...
 func RequestMember(eclient *elastic.Client, projectID string, userID string) error {
-	err := userPost.AppendProjReq(eclient, userID, projectID, false)
+	err := userPost.AppendSentProjReq(eclient, userID, projectID)
 	if err != nil {
 		return err
 	}
