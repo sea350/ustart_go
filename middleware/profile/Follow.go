@@ -17,12 +17,8 @@ func Follow(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fname := r.FormValue("userID")
-	fmt.Println("debug text middleware/profile/follow, this is fname:")
-	fmt.Println(fname)
-	fmt.Println("debug text middleware/profile/follow, this is docID:")
-	fmt.Println(session.Values["DocID"].(string))
 
-	isFollowed, err4 := uses.IsFollowed(eclient, session.Values["DocID"].(string), fname)
+	isFollowed, err4 := uses.IsFollowed(eclient, fname, session.Values["DocID"].(string))
 	if err4 != nil {
 		fmt.Println("this is an error (Follow.go: 24)")
 		fmt.Println(err4)

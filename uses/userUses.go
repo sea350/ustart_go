@@ -247,14 +247,14 @@ func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
 //Requires the follower's docID and the followed docID
 //Returns an error
 func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error {
-	err := postUser.DeleteFollow(eclient, usrID, followID, false)
+	err := postUser.DeleteFollow(eclient, usrID, followID, true)
 	if err != nil {
-		fmt.Println("userUses line 250")
+		fmt.Println("userUses line 252")
 		return err
 	}
-	err = postUser.DeleteFollow(eclient, followID, usrID, true)
+	err = postUser.DeleteFollow(eclient, followID, usrID, false)
 	if err != nil {
-		fmt.Println("userUses line 250")
+		fmt.Println("userUses line 257")
 	}
 	return err
 }
