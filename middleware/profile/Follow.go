@@ -24,13 +24,13 @@ func Follow(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err4)
 	}
 	if isFollowed == true {
-		err := uses.UserUnfollow(eclient, session.Values["DocID"].(string), fname)
+		err := uses.UserUnfollow(eclient, fname, session.Values["DocID"].(string))
 		if err != nil {
 			fmt.Println("this is an error (Follow.go: 30)")
 			fmt.Println(err)
 		}
 	} else {
-		err := uses.UserFollow(eclient, session.Values["DocID"].(string), fname)
+		err := uses.UserFollow(eclient, fname, session.Values["DocID"].(string))
 		if err != nil {
 			fmt.Println("this is an error (Follow.go: 36)")
 			fmt.Println(err)

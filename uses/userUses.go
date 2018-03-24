@@ -228,14 +228,14 @@ func UpdateUserTags(eclient *elastic.Client, userID string, tags []string) error
 //UserFollow ... ALLOWS A USER TO FOLLOW SOMEONE ELSE
 //Requires the follower's docID and the followed docID
 //Returns an error
-func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
+func UserFollow(eclient *elastic.Client, hostID string, viewerID string) error {
 	//true = append to following
-	followingErr := postUser.AppendFollowing(eclient, usrID, followID)
+	followingErr := postUser.AppendFollowing(eclient, hostID, viewerID)
 	if followingErr != nil {
 		return followingErr
 	}
 	//false = append to followers
-	followErr := postUser.AppendFollower(eclient, usrID, followID)
+	followErr := postUser.AppendFollower(eclient, hostID, viewerID)
 	if followErr != nil {
 		return followErr
 	}
@@ -244,15 +244,14 @@ func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
 }
 
 //UserUnfollow ... ALLOWS A USER TO UNFOLLOW SOMEONE ELSE
-//Requires the follower's docID and the followed docID
 //Returns an error
-func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error {
-	err := postUser.DeleteFollow(eclient, usrID, followID, true)
+func UserUnfollow(eclient *elastic.Client, hostID string, viewerID string) error {
+	err := postUser.DeleteFollow(eclient, hostID, viewerID, false)
 	if err != nil {
 		fmt.Println("userUses line 252")
 		return err
 	}
-	err = postUser.DeleteFollow(eclient, followID, usrID, false)
+	err = postUser.DeleteFollow(eclient, viewerID, hostID, true)
 	if err != nil {
 		fmt.Println("userUses line 257")
 	}
@@ -260,7 +259,6 @@ func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error 
 }
 
 //IsFollowed ... CHECKS IF A USER IS FOLLWING SOMEONE ELSE
-//Requires the follower's docID and the the potential followed docID
 //Returns an error
 func IsFollowed(eclient *elastic.Client, usrID string, viewerID string) (bool, error) {
 	isFollowed := false
