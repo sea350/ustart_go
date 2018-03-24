@@ -87,7 +87,7 @@ func main() {
 		// Not acknowledged
 	}
 
-	ctx := context.Background()
+	//ctx = context.Background()
 	createIndex, err := eclient.CreateIndex(globals.UserIndex).BodyString(usrMapping).Do(ctx)
 	createIndex, err = eclient.CreateIndex(globals.ProjectIndex).BodyString(projMapping).Do(ctx)
 	createIndex, err = eclient.CreateIndex(globals.WidgetIndex).BodyString(widgetMapping).Do(ctx)
