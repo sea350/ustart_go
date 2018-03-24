@@ -2,6 +2,7 @@ package get
 
 import (
 	"context"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -10,7 +11,7 @@ import (
 //EmailInUse ... checks if email is in use
 func EmailInUse(eclient *elastic.Client, theEmail string) (bool, error) {
 	ctx := context.Background()
-	termQuery := elastic.NewTermQuery("Email", theEmail)
+	termQuery := elastic.NewTermQuery("Email", strings.ToLower(theEmail))
 	searchResult, err := eclient.Search().
 		Index(globals.UserIndex).
 		Query(termQuery).
