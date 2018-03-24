@@ -3,8 +3,10 @@ package widget
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	client "github.com/sea350/ustart_go/middleware/client"
+	post "github.com/sea350/ustart_go/post/user"
 )
 
 //SortUserWidgets ... gets new array of widget ids from user page and updates user struct in ES
@@ -20,5 +22,15 @@ func SortUserWidgets(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	sortedWidgets := r.FormValue("sortedWidgets")
 
-	fmt.Println(sortedWidgets[0])
+	ids := strings.Split(sortedWidgets, `","`)
+	if len(ids) > 0 {
+		ids[0] = strings.Trim(ids[0], `["`)
+		ids[len(ids)-1] = strings.Trim(ids[len(ids)-1], `"]`)
+	}
+
+	err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "UserWidgets", ids)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("this is an err: middleware/widget/sortUserWidgets line 32")
+	}
 }
