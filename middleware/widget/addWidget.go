@@ -91,7 +91,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		//youtube
 		checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
 		checker2 := uses.StringChecker(r.FormValue("ytinput"), "youtu.be")
-		if !(checker1 && checker2) {
+		if (!checker1 && !checker2) {
 			http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
