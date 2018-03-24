@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
@@ -27,6 +28,7 @@ func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichO
 		index := -1
 		for i := range usr.Following {
 			if usr.Following[i] == followID {
+				fmt.Println("current ID:", usr.Following[i])
 				index = i
 			}
 		}
