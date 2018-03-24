@@ -27,7 +27,6 @@ func ParentEntry(postaid string, image string, fName string, lName string, conte
 									<input type="hidden" name="followstat" value=` + postaid + `>
 									<input type="hidden" name = "id" value=` + pika + `>
 									<input type ="hidden" name="username" value=` + username + `>
-								</form>
 								<span class="input-group-addon">
 									<a onclick="document.getElementById("commentform").submit();">
 										<script>
@@ -36,6 +35,7 @@ func ParentEntry(postaid string, image string, fName string, lName string, conte
 										<i class="fa fa-edit"></i>
 									</a>
 								</span>
+								</form>
 							</div>
 							<br>
 							<div class="comments-list">

@@ -96,5 +96,6 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets}
 
 	client.RenderTemplate(w, "template2-nil", cs)
+	client.RenderTemplate(w, "leftnav-nil", cs)
 	client.RenderTemplate(w, "profile-nil", cs)
 }

@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"fmt"
+
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
 	postEntry "github.com/sea350/ustart_go/post/entry"
@@ -247,9 +249,13 @@ func UserFollow(eclient *elastic.Client, usrID string, followID string) error {
 func UserUnfollow(eclient *elastic.Client, usrID string, followID string) error {
 	err := postUser.DeleteFollow(eclient, usrID, followID, true)
 	if err != nil {
+		fmt.Println("userUses line 250")
 		return err
 	}
 	err = postUser.DeleteFollow(eclient, followID, usrID, false)
+	if err != nil {
+		fmt.Println("userUses line 250")
+	}
 	return err
 }
 
