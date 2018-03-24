@@ -1,7 +1,7 @@
 package uses
 
-//indexAssigneNewPosition ...
-func indexAssignNewPosition(workArray []int, oldIndex int, newIndex int) []int {
+//IndexAssignNewPosition ...
+func IndexAssignNewPosition(workArray []int, oldIndex int, newIndex int) []int {
 	//Given a slice and an index (old and new), allow a value define by arr[oldIndex] to be assigneda new position at newIndex
 	//(0123, from [1] to [3] makes it 0231)
 	workSize := len(workArray)
