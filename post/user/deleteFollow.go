@@ -17,8 +17,8 @@ func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichO
 
 	ctx := context.Background()
 
-	FollowLock.Lock()
-
+	//FollowLock.Lock()
+	//defer FollowLock.Unlock()
 	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return errors.New("User does not exist")
@@ -65,6 +65,5 @@ func DeleteFollow(eclient *elastic.Client, usrID string, followID string, whichO
 		Doc(map[string]interface{}{"Followers": usr.Followers}).
 		Do(ctx)
 
-	defer FollowLock.Unlock()
 	return err
 }
