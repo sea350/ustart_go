@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sea350/ustart_go/middleware/stringHTML"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
@@ -43,8 +42,15 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 		The following is how AJAX for loading comments is handled on the server side.
 	*/
 	for i := 0; i < len(arrayofComments); i++ {
-		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content),postID)
-		fmt.Println(arrayofComments[i].Element.Content);
+		commentoutputs += `					<div class="media">
+		 			<a class="media-left" href="#">
+						<img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
+					</a>
+					<div class="media-body">
+						<h5 class="media-heading user_name" style="color:cadetblue;">`+arrayofComments[i].FirstName+`</h5>
+						<p> `+string(arrayofComments[i].Element.Content)+`</p>
+					</div>
+				</div>`
 		sum += i
 	}
 	// username := session.Values["Username"].(string)
