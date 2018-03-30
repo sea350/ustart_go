@@ -20,14 +20,14 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	postID := r.FormValue("PostID")
 	// postaid := postID[9:]
-	postactual := postID[10:]
-	fmt.Println(postactual+" IS THE POST 3 23 2018")
+	// postactual := postID[10:]
+	fmt.Println(postID+" IS THE POST 3 23 2018")
 	// need to trim beginning of postID
 //	pika := r.FormValue("Pikachu")
 	// fmt.Println("This is debug text, GetComments.go: 23")
 	// fmt.Println(pika) // pika is your own doc id 
 	// journal entry, err
-	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
+	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postID, 0, -1)
 		fmt.Println(parentPost);
 
 	fmt.Println("ARRAY OF COMMENTS");
@@ -43,7 +43,7 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 		The following is how AJAX for loading comments is handled on the server side.
 	*/
 	for i := 0; i < len(arrayofComments); i++ {
-		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content),postactual)
+		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content),postID)
 		fmt.Println(arrayofComments[i].Element.Content);
 		sum += i
 	}

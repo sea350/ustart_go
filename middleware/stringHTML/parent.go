@@ -15,7 +15,7 @@ func ParentEntry(postaid string, image string, fName string, lName string, conte
 							</a>
 							<div class="media-body">
 								<h6 class="pull-right text-muted time"></h6>
-								<h5 class="mt-0" style="color:cadetblue;">` + fName + " " + lName + `</h5>
+								<h5 class="mt-0" style="color:cadetblue;">` + fName + " " + lName +postaid+ `</h5>
 								<p>` + content + `</p>
 							</div>
 						</div>

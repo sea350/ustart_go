@@ -47,6 +47,8 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println(arrayofComments[i].Element.Content)
 		sum += i
 	}
+
+	fmt.Println("COMMENT OUTPUT:", commentoutputs)
 	username := session.Values["Username"].(string)
 
 	output := stringHTML.ParentEntry(postaid, parentPost.Image, parentPost.FirstName, parentPost.LastName, string(parentPost.Element.Content), pika, username, commentoutputs)
