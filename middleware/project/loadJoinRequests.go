@@ -20,7 +20,7 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	ID := r.FormValue("UNKNOWN") //projectID
+	ID := r.FormValue("projID") //projectID
 	var heads []types.FloatingHead
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
@@ -37,5 +37,7 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 		}
 		heads = append(heads, head)
 	}
+
+	fmt.Fprintln(w, heads)
 
 }
