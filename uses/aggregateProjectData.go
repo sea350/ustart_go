@@ -10,8 +10,9 @@ import (
 
 //AggregateProjectData ...
 //Adds a new widget to the UserWidgets array
-func AggregateProjectData(eclient *elastic.Client, url string) (types.ProjectAggregate, error) {
+func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) (types.ProjectAggregate, error) {
 	var projectData types.ProjectAggregate
+	projectData.RequestAllowed = true
 
 	data, err := getProject.ProjectByURL(eclient, url)
 	if err != nil {
@@ -37,6 +38,14 @@ func AggregateProjectData(eclient *elastic.Client, url string) (types.ProjectAgg
 			panic(err)
 		}
 		projectData.MemberData = append(projectData.MemberData, mem)
+		if viewerID == member.MemberID {
+			projectData.RequestAllowed = false
+		}
+	}
+	for _, receivedReq := range projectData.ProjectData.MemberReqReceived {
+		if receivedReq == viewerID {
+			projectData.RequestAllowed = false
+		}
 	}
 
 	return projectData, err

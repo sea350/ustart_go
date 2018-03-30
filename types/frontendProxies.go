@@ -49,8 +49,9 @@ type ProjectSubWidgets struct {
 
 //ProjectAggregate ... a compiled struct of all relevant project data
 type ProjectAggregate struct {
-	DocID       string         `json:DocID`
-	ProjectData Project        `json:ProjectData`
-	MemberData  []FloatingHead `json:MemberData`
-	Editable    bool           `json:Editable`
+	DocID          string         `json:DocID`
+	ProjectData    Project        `json:ProjectData`
+	MemberData     []FloatingHead `json:MemberData`
+	Editable       bool           `json:Editable`
+	RequestAllowed bool           `json:RequestAllowed`
 }
