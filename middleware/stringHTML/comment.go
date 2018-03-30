@@ -9,7 +9,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
 			<img style="height:40px;" class="img-rounded" src=d` + image + `>
 		</a>
 		<div class="media-body">
-			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName+`comment.go` + " " + lName + `</h5>
+			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName+`comment.go` + " " + lName +postID+ `</h5>
 			<p>` + content + `</p>
 			<p>
 				<small>
