@@ -19,8 +19,9 @@ func DeleteWallPost(w http.ResponseWriter, r *http.Request){
 	}
 	r.ParseForm()
 	postid := r.FormValue("postid")
-	postactual := postid[14:]
-	err := uses.HideEntry(eclient,postactual)
+
+	fmt.Println(postid+"IS THE DELETE")
+	err := uses.HideEntry(eclient,postid)
 	if (err != nil){
 		fmt.Println(err);
 	}
@@ -57,7 +58,7 @@ func GenerateDeleteModal(w http.ResponseWriter, r *http.Request){
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                             <form action ="http://ustart.today:5000/deletePost" method ="GET"> 
-                                                 <input type="hidden" name="postid" value=(this).attr("id")>  
+                                                 <input type="hidden" name="postid" value=`+postactual+`>  
                                              <button type="submit"><a class="btn btn-danger btn-ok">Delete</a></button>
                                         </form>
                                         </div> 
