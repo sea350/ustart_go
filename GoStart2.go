@@ -52,6 +52,7 @@ func main() {
 	http.HandleFunc("/deletePost/", profile.DeleteWallPost)
 	http.HandleFunc("/deleteModal/", profile.GenerateDeleteModal)
 	http.HandleFunc("/getPostComments/", profile.PostComments)
+	http.HandleFunc("/followers/", profile.FollowersPage)
 
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)

@@ -17,7 +17,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	userstruct, err := get.UserByID(client.Eclient, r.URL.Path[9:])
+	userstruct, err := get.UserByID(client.Eclient, r.URL.Path[11:])
 	if err != nil {
 		fmt.Println("err middleware/profile/followerspage: line 20")
 		fmt.Println(err)
