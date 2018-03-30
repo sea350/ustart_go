@@ -18,7 +18,7 @@ func Project(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	project, err := uses.AggregateProjectData(client.Eclient, r.FormValue("ProjectURL"))
+	project, err := uses.AggregateProjectData(client.Eclient, r.FormValue("ProjectURL"), test1.(string))
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("error: middleware/project/projectsettings line 23")

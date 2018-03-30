@@ -20,7 +20,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:])
+	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 	if err != nil {
 		panic(err)
 	}
