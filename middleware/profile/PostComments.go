@@ -43,7 +43,7 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 		The following is how AJAX for loading comments is handled on the server side.
 	*/
 	for i := 0; i < len(arrayofComments); i++ {
-		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content),postactual)
+		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content),postID)
 		fmt.Println(arrayofComments[i].Element.Content);
 		sum += i
 	}
