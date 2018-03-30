@@ -26,11 +26,11 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println("This is debug text, GetComments.go: 23")
 	// fmt.Println(pika) // pika is your own doc id 
 	// journal entry, err
-	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postID, 0, -1)
-		fmt.Println(parentPost);
+	_, arrayofComments, err4 := uses.LoadComments(eclient, postID, 0, -1)
+	//	fmt.Println(parentPost);
 
 	fmt.Println("ARRAY OF COMMENTS");
-	fmt.Println(arrayofComments);
+//	fmt.Println(arrayofComments);
 	if err4 != nil {
 		fmt.Println("This is debug text, POSTComments.go: 29")
 		fmt.Println(err4)
