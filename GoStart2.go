@@ -70,7 +70,7 @@ func main() {
 	http.HandleFunc("/AddProjectLink/", project.AddQuickLink)
 	http.HandleFunc("/DeleteProjectLink/", project.DeleteQuickLink)
 	http.HandleFunc("/NewMembers/", project.ManageProjects)
-	http.HandleFunc("/LoadJoinRequests/", project.ManageProjects)
+	http.HandleFunc("/LoadJoinRequests/", project.LoadJoinRequests)
 
 	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)
