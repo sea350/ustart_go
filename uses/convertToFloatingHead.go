@@ -20,6 +20,7 @@ func ConvertUserToFloatingHead(eclient *elastic.Client, userDocID string) (types
 	head.LastName = usr.LastName
 	head.Image = usr.Avatar
 	head.Username = usr.Username
+	head.DocID = userDocID
 
 	return head, err
 }
@@ -37,6 +38,7 @@ func ConvertProjectToFloatingHead(eclient *elastic.Client, projectID string) (ty
 	head.Bio = proj.Description
 	head.Image = proj.Avatar
 	head.Username = proj.URLName
+	head.DocID = projectID
 
 	return head, err
 }

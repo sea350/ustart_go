@@ -14,12 +14,16 @@ type SessionUser struct {
 
 //FloatingHead ... All data needed for a generic user icon
 type FloatingHead struct {
-	Username  string `json:Username`
+	Username string `json:Username`
+	//for projects Username = project URLName
 	FirstName string `json:FirstName`
-	LastName  string `json:LastName`
-	Image     string `json:Image`
-	Followed  bool   `json:Followed`
-	Bio       []rune `json:Bio`
+	//for projects Firstname = project Name
+	LastName string `json:LastName`
+	Image    string `json:Image`
+	Followed bool   `json:Followed`
+	Bio      []rune `json:Bio`
+	//for projects Bio = project Description
+	DocID string `json:DocID`
 }
 
 //JournalEntry ... All data needed to display an entry
