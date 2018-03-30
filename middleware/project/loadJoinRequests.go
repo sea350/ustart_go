@@ -21,6 +21,8 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("projID") //projectID
+	fmt.Println("debug text middlware/project/loadjoinrequests line 24")
+	fmt.Println(ID)
 	var heads []types.FloatingHead
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
