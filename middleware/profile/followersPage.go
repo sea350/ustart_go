@@ -17,9 +17,14 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	userstruct, err := get.UserByID(client.Eclient, r.URL.Path[11:])
+	docID, err := get.IDByUsername(client.Eclient, r.URL.Path[11:])
 	if err != nil {
-		fmt.Println("err middleware/profile/followerspage: line 20")
+		fmt.Println("err middleware/profile/followerspage: line 22")
+		fmt.Println(err)
+	}
+	userstruct, err := get.UserByID(client.Eclient, docID)
+	if err != nil {
+		fmt.Println("err middleware/profile/followerspage: line 27")
 		fmt.Println(err)
 	}
 
@@ -28,7 +33,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	for index, followerID := range userstruct.Followers {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, followerID)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 31, index %d", index))
+			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", index))
 			fmt.Println(err)
 			continue
 		}
