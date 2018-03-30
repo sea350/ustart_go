@@ -1,6 +1,7 @@
 package project
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -40,6 +41,12 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 		heads = append(heads, head)
 	}
 
-	fmt.Fprintln(w, heads)
+	data, err := json.Marshal(heads)
+	if err != nil {
+		fmt.Println("err: middleware/project/loadjoinrequest, Line 45")
+		fmt.Println(err)
+	}
+
+	fmt.Fprintln(w, data)
 
 }
