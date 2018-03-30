@@ -19,6 +19,8 @@ func RequestToJoin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("projID") //project docID
+	fmt.Println(ID)
+	fmt.Println("debug text requesttojoin line 23")
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
