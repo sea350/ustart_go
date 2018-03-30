@@ -10,7 +10,8 @@ import (
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))
 
-func main() {
+//DeleteAll ... nukes all indexes in ES
+func DeleteAll() {
 
 	ctx := context.Background()
 	deleteIndex, err := eclient.DeleteIndex(globals.ChatIndex).Do(ctx)

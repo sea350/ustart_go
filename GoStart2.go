@@ -27,12 +27,14 @@ func main() {
 		The following are all the handlers we have so far.
 	*/
 
+	//LOGIN & LOGOUT
 	http.HandleFunc("/Inbox/", inbox.Inbox)
 	http.HandleFunc("/loginerror/", login.Error)
 	http.HandleFunc("/", login.Home)
 	http.HandleFunc("/profilelogin/", login.Login)
 	http.HandleFunc("/logout/", login.Logout)
 
+	// USER PROFILE AND INTERACTIONS
 	http.HandleFunc("/callme/", profile.Follow)
 	http.HandleFunc("/Like", profile.Like)
 	http.HandleFunc("/getComments/", profile.GetComments)
@@ -51,6 +53,7 @@ func main() {
 	http.HandleFunc("/deleteModal/", profile.GenerateDeleteModal)
 	http.HandleFunc("/getPostComments/", profile.PostComments)
 
+	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/addProjectWidget/", widget.AddProjectWidget)
 	http.HandleFunc("/deleteWidget/", widget.DeleteWidgetProfile)
@@ -58,6 +61,7 @@ func main() {
 	http.HandleFunc("/deleteLinkFromWidget/", widget.EditWidgetDataDelete)
 	http.HandleFunc("/sortUserWidgets/", widget.SortUserWidgets)
 
+	//PROJECT INTERACTIONS
 	http.HandleFunc("/Projects/", project.ProjectsPage)
 	http.HandleFunc("/MyProjects/", project.MyProjects)
 	http.HandleFunc("/CreateProjectPage/", project.CreateProjectPage)
@@ -65,7 +69,10 @@ func main() {
 	http.HandleFunc("/UpdateProjectTags/", project.UpdateTags)
 	http.HandleFunc("/AddProjectLink/", project.AddQuickLink)
 	http.HandleFunc("/DeleteProjectLink/", project.DeleteQuickLink)
+	http.HandleFunc("/NewMembers/", project.ManageProjects)
+	http.HandleFunc("/LoadJoinRequests/", project.ManageProjects)
 
+	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)
 	http.HandleFunc("/ImageUpload/", settings.ImageUpload)
 	http.HandleFunc("/changeName/", settings.ChangeName)
@@ -84,6 +91,7 @@ func main() {
 	http.HandleFunc("/projectRequest/", settings.ProjectRequest)
 	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
 
+	//REGISTRATIONS
 	http.HandleFunc("/Signup/", registration.Signup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)

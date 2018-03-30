@@ -28,31 +28,34 @@ func ManageProjects(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err: middleware/project/manageprojects Line 26")
 	}
 	for _, projectInfo := range userstruct.Projects {
-		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projectInfo.ProjectID)
-		if err != nil {
-			fmt.Println(err)
-			fmt.Println("err: middleware/project/manageprojects Line 32")
-		}
-
+		var isAdmin = false
 		proj, err := getProj.ProjectByID(client.Eclient, projectInfo.ProjectID)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Println("err: middleware/project/manageprojects Line 39")
+			fmt.Println("err: middleware/project/manageprojects Line 35")
 		}
 
 		for _, memberInfo := range proj.Members {
 			if memberInfo.MemberID == test1.(string) && memberInfo.Role == 0 {
 				//finds user in the list of members and also checks if they have creator rank
-				head.Followed = true
+				isAdmin = true
 				//head.Followed in this case expresses whether or not they have edit permissions
 			}
 		}
-		if !head.Followed {
+		if !isAdmin {
 			continue
+		}
+		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projectInfo.ProjectID)
+		if err != nil {
+			fmt.Println(err)
+			fmt.Println("err: middleware/project/manageprojects Line 51")
 		}
 		heads = append(heads, head)
 	}
+
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
+
 	client.RenderTemplate(w, "template2-nil", cs)
-	//client.RenderTemplate(w, "manageprojects-Nil", cs)
+	client.RenderTemplate(w, "leftnav-nil", cs)
+	client.RenderTemplate(w, "ManageProjectMembersF", cs)
 }
