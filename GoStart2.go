@@ -53,6 +53,7 @@ func main() {
 	http.HandleFunc("/deleteModal/", profile.GenerateDeleteModal)
 	http.HandleFunc("/getPostComments/", profile.PostComments)
 	http.HandleFunc("/followers/", profile.FollowersPage)
+	http.HandleFunc("/following/", profile.FollowersPage)
 
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
@@ -72,6 +73,7 @@ func main() {
 	http.HandleFunc("/DeleteProjectLink/", project.DeleteQuickLink)
 	http.HandleFunc("/NewMembers/", project.ManageProjects)
 	http.HandleFunc("/LoadJoinRequests/", project.LoadJoinRequests)
+	http.HandleFunc("/RequestToJoin/", project.RequestToJoin)
 
 	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)

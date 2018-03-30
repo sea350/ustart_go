@@ -34,6 +34,7 @@ type ClientSide struct {
 	Page            string
 	FollowingStatus string
 	ListOfHeads     []types.FloatingHead
+	ListOfHeads2    []types.FloatingHead
 	Wall            []types.JournalEntry
 	Widgets         []types.Widget
 	Project         types.ProjectAggregate

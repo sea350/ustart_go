@@ -10,8 +10,8 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//FollowersPage ... Shows the page for followers
-func FollowersPage(w http.ResponseWriter, r *http.Request) {
+//FollowingPage ... Shows the page for people the user is following
+func FollowingPage(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
@@ -30,23 +30,6 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 
 	heads := []types.FloatingHead{}
 
-	for index, followerID := range userstruct.Followers {
-		head, err := uses.ConvertUserToFloatingHead(client.Eclient, followerID)
-		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", index))
-			fmt.Println(err)
-			continue
-		}
-		for _, element := range userstruct.Following {
-			if element == followerID {
-				head.Followed = true
-				break
-			}
-		}
-		heads = append(heads, head)
-	}
-
-	heads2 := []types.FloatingHead{}
 	for index, following := range userstruct.Following {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, following)
 		if err != nil {
@@ -54,10 +37,10 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			continue
 		}
-		heads2 = append(heads2, head)
+		heads = append(heads, head)
 	}
 
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads, ListOfHeads2: heads2}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
 
 	client.RenderTemplate(w, "template2-nil", cs)
 	client.RenderTemplate(w, "leftnav-nil", cs)
