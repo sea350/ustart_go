@@ -48,5 +48,5 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	fmt.Fprintln(w, projID)
+	fmt.Fprintln(w, newMemberID)
 }
