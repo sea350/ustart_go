@@ -25,14 +25,20 @@ func Project(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("error: middleware/project/projectsettings line 23")
 	}
 
+	var isAdmin = false
 	for _, member := range project.ProjectData.Members {
 		if member.MemberID == session.Values["DocID"].(string) && member.Role <= 0 {
-			cs := client.ClientSide{Project: project}
-			client.RenderTemplate(w, "template2-nil", cs)
-			client.RenderTemplate(w, "project_settings_F", cs)
-			return
+			isAdmin = true
+			break
 		}
 	}
+	if isAdmin {
+		cs := client.ClientSide{Project: project}
+		client.RenderTemplate(w, "template2-nil", cs)
+		client.RenderTemplate(w, "project_settings_F", cs)
 
-	http.Redirect(w, r, "/404/", http.StatusFound)
+	} else {
+		http.Redirect(w, r, "/404/", http.StatusFound)
+	}
+
 }
