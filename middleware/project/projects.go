@@ -98,7 +98,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		} else {
-			time.Sleep(500)
+			time.Sleep(1000)
 			http.Redirect(w, r, "/Projects/"+url, http.StatusFound)
 			return
 		}
