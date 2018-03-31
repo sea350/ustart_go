@@ -36,17 +36,17 @@ func CommentEntry(image string, fName string, lName string, content string, post
             type: 'GET',  
             url: 'http://ustart.today:5000/getPostComments/',
             contentType: "application/json; charset=utf-8",
-            data: {PostID:postID},
+            data: {PostID:postId},
             success: function(data) {
             	console.log("succcerosed");
-         	   $(".commentOfComment").html(data);
+         	   $(".commentOfComment` + postID + `").html(data);
 
             }//end success
         });
     }); // end view-replies click 
 			</script>
 			</p>
-				<div class="commentOfComment" id="replies">
+				<div class="commentOfComment` + postID + `" id="replies">
 
 					<div class="media">
 						<a class="media-left" href="#">
