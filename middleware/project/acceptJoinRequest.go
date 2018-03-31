@@ -48,5 +48,7 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
+	fmt.Println("debug text acceptjoinrequest line 51")
+	fmt.Println(projID)
 	fmt.Fprintln(w, projID)
 }
