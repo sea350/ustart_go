@@ -38,7 +38,8 @@ func CommentEntry(image string, fName string, lName string, content string, post
             contentType: "application/json; charset=utf-8",
             data: {PostID:postId},
             success: function(data) {
-            	console.log("succcerosed");
+				console.log("succcerosed");
+				console.log(PostID);
          	   $(".` + postID + `").html(data);
 
             }//end success
