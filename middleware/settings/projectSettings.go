@@ -17,6 +17,8 @@ func Project(w http.ResponseWriter, r *http.Request) {
 	}
 
 	projID := r.URL.Path[17:]
+	fmt.Println(projID)
+	fmt.Println("debug text projectsettings line 21")
 	project, err := uses.AggregateProjectData(client.Eclient, projID, test1.(string))
 	if err != nil {
 		fmt.Println(err)
