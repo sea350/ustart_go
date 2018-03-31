@@ -9,6 +9,7 @@ import (
 	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
+	uses "github.com/sea350/ustart_go/uses"
 )
 
 //AcceptJoinRequest ...
@@ -22,9 +23,15 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 	projID := r.FormValue("UNKNOWN")
 	newMemberID := r.FormValue("userID")
 
-	err := userPost.AppendProject(client.Eclient, newMemberID, types.ProjectInfo{ProjectID: projID, Visible: true})
+	err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
 	if err != nil {
-		fmt.Println("err middleware/project/acceptjoinrequest line 21")
+		fmt.Println("err middleware/project/acceptjoinrequest line 27")
+		fmt.Println(err)
+	}
+
+	err = userPost.AppendProject(client.Eclient, newMemberID, types.ProjectInfo{ProjectID: projID, Visible: true})
+	if err != nil {
+		fmt.Println("err middleware/project/acceptjoinrequest line 34")
 		fmt.Println(err)
 	}
 
@@ -37,7 +44,7 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	err = projPost.AppendMember(client.Eclient, projID, newMember)
 	if err != nil {
-		fmt.Println("err middleware/project/acceptjoinrequest line 21")
+		fmt.Println("err middleware/project/acceptjoinrequest line 48")
 		fmt.Println(err)
 	}
 
