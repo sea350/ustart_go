@@ -2,6 +2,7 @@ package get
 
 import (
 	"context"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -13,7 +14,7 @@ func URLInUse(eclient *elastic.Client, projectURL string) (bool, error) {
 	//		PROJECT URL)
 	//RETURNS A types.Project AND AN error
 	ctx := context.Background()
-	termQuery := elastic.NewTermQuery("URL", projectURL)
+	termQuery := elastic.NewTermQuery("URL", strings.ToLower(projectURL))
 	searchResult, err := eclient.Search().
 		Index(globals.ProjectIndex).
 		Query(termQuery).
