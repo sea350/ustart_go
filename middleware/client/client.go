@@ -4,7 +4,7 @@ import (
 	htype "html/template"
 	"net/http"
 
-	"github.com/gorilla/sessions"
+	sessions "github.com/gorilla/sessions"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
