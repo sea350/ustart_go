@@ -55,7 +55,7 @@ func ManageProjects(w http.ResponseWriter, r *http.Request) {
 
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
 
-	client.RenderTemplate(w, "template2-nil", cs)
-	client.RenderTemplate(w, "leftnav-nil", cs)
-	client.RenderTemplate(w, "ManageProjectMembersF", cs)
+	client.RenderTemplate(w, r, "template2-nil", cs)
+	client.RenderTemplate(w, r, "leftnav-nil", cs)
+	client.RenderTemplate(w, r, "ManageProjectMembersF", cs)
 }

@@ -15,15 +15,15 @@ import (
 //Complete ...
 func Complete(w http.ResponseWriter, r *http.Request) {
 	cs := client.ClientSide{}
-	client.RenderTemplate(w, "templateNoUser2", cs)
-	client.RenderTemplate(w, "regcomplete-nil", cs)
+	client.RenderTemplate(w, r, "templateNoUser2", cs)
+	client.RenderTemplate(w, r, "regcomplete-nil", cs)
 }
 
 //RegisterType ...
 func RegisterType(w http.ResponseWriter, r *http.Request) {
 	cs := client.ClientSide{}
-	client.RenderTemplate(w, "templateNoUser2", cs)
-	client.RenderTemplate(w, "Membership-Nil", cs)
+	client.RenderTemplate(w, r, "templateNoUser2", cs)
+	client.RenderTemplate(w, r, "Membership-Nil", cs)
 }
 
 //Registration ...
@@ -67,8 +67,8 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("This is an error: registrationPage.go, 65")
 		fmt.Println(err2)
 		cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
-		client.RenderTemplate(w, "templateNoUser2", cs)
-		client.RenderTemplate(w, "new-reg-nil", cs)
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-reg-nil", cs)
 
 	}
 
@@ -92,6 +92,6 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	session.Save(r, w)
 	cs := client.ClientSide{ErrorStatus: false}
-	client.RenderTemplate(w, "templateNoUser2", cs)
-	client.RenderTemplate(w, "new-reg-nil", cs)
+	client.RenderTemplate(w, r, "templateNoUser2", cs)
+	client.RenderTemplate(w, r, "new-reg-nil", cs)
 }

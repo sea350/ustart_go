@@ -9,6 +9,6 @@ import (
 //Fail ... draws 404 page
 func Fail(w http.ResponseWriter, r *http.Request) {
 	cs := client.ClientSide{}
-	client.RenderTemplate(w, "template2-nil", cs)
-	client.RenderTemplate(w, "404", cs)
+	client.RenderTemplate(w, r, "template2-nil", cs)
+	client.RenderTemplate(w, r, "404", cs)
 }

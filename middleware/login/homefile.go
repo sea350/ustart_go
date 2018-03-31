@@ -24,7 +24,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	}
 	session.Save(r, w)
 	cs := client.ClientSide{}
-	client.RenderTemplate(w, "templateNoUser2", cs)
-	client.RenderTemplate(w, "nil-index2", cs)
-	client.RenderTemplate(w, "template-footer-nil", cs)
+	client.RenderTemplate(w, r, "templateNoUser2", cs)
+	client.RenderTemplate(w, r, "nil-index2", cs)
+	client.RenderTemplate(w, r, "template-footer-nil", cs)
 }

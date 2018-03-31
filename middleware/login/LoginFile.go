@@ -54,8 +54,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		cs := client.ClientSide{ErrorStatus: true}
 		fmt.Println(successful)
 		fmt.Println("This is an error, LoginFile.go: 55")
-		client.RenderTemplate(w, "templateNoUser2", cs)
-		client.RenderTemplate(w, "loginerror-nil", cs)
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "loginerror-nil", cs)
 
 	}
 }

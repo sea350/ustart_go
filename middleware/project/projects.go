@@ -39,8 +39,8 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Project: project, Widgets: widgets}
-	client.RenderTemplate(w, "template2-nil", cs)
-	client.RenderTemplate(w, "projectsF", cs)
+	client.RenderTemplate(w, r, "template2-nil", cs)
+	client.RenderTemplate(w, r, "projectsF", cs)
 }
 
 //MyProjects ...
@@ -65,9 +65,9 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 		heads = append(heads, head)
 	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
-	client.RenderTemplate(w, "template2-nil", cs)
-	client.RenderTemplate(w, "leftnav-nil", cs)
-	client.RenderTemplate(w, "manageprojects-Nil", cs)
+	client.RenderTemplate(w, r, "template2-nil", cs)
+	client.RenderTemplate(w, r, "leftnav-nil", cs)
+	client.RenderTemplate(w, r, "manageprojects-Nil", cs)
 }
 
 //CreateProjectPage ...
@@ -102,7 +102,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	client.RenderTemplate(w, "template2-nil", cs)
-	client.RenderTemplate(w, "leftnav-nil", cs)
-	client.RenderTemplate(w, "createProject-Nil", cs)
+	client.RenderTemplate(w, r, "template2-nil", cs)
+	client.RenderTemplate(w, r, "leftnav-nil", cs)
+	client.RenderTemplate(w, r, "createProject-Nil", cs)
 }

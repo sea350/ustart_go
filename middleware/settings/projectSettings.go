@@ -33,8 +33,8 @@ func Project(w http.ResponseWriter, r *http.Request) {
 	}
 	if isAdmin {
 		cs := client.ClientSide{Project: project}
-		client.RenderTemplate(w, "template2-nil", cs)
-		client.RenderTemplate(w, "project_settings_F", cs)
+		client.RenderTemplate(w, r, "template2-nil", cs)
+		client.RenderTemplate(w, r, "project_settings_F", cs)
 
 	} else {
 		http.Redirect(w, r, "/404/", http.StatusFound)
