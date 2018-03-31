@@ -36,7 +36,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
             type: 'GET',  
             url: 'http://ustart.today:5000/getPostComments/',
             contentType: "application/json; charset=utf-8",
-            data: {PostID:postId},
+            data: {PostID:postID},
             success: function(data) {
             	console.log("succcerosed");
          	   $(".commentOfComment").html(data);
