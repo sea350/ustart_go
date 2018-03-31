@@ -16,21 +16,17 @@ func Project(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	projID := r.URL.Path[17:]
-	fmt.Println(projID)
-	fmt.Println("debug text projectsettings line 21")
-	project, err := uses.AggregateProjectData(client.Eclient, projID, test1.(string))
+	projURL := r.URL.Path[17:]
+
+	project, err := uses.AggregateProjectData(client.Eclient, projURL, test1.(string))
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("error: middleware/project/projectsettings line 23")
 	}
 
 	var isAdmin = false
-	fmt.Println(session.Values["DocID"].(string))
 	for _, member := range project.ProjectData.Members {
-		fmt.Println(member.MemberID)
-		fmt.Println(member.Role)
-		if member.MemberID == session.Values["DocID"].(string) && member.Role <= 0 {
+		if member.MemberID == test1.(string) && member.Role <= 0 {
 			isAdmin = true
 			break
 		}
