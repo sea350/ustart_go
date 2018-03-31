@@ -38,15 +38,18 @@ func CommentEntry(image string, fName string, lName string, content string, post
             contentType: "application/json; charset=utf-8",
             data: {PostID:postId},
             success: function(data) {
-            	console.log("succcerosed");
-         	   $(".commentOfComment").html(data);
+				console.log("succcerosed");
+				console.log(PostID);
+         	   $(".` + postID + `").html(data);
 
             }//end success
         });
     }); // end view-replies click 
 			</script>
+
+
 			</p>
-				<div class="commentOfComment" id="replies">
+				<div class="commentOfComment ` + postID + `" id="replies">
 
 					<div class="media">
 						<a class="media-left" href="#">
