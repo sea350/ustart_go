@@ -1,9 +1,9 @@
 package project
 
 import (
-	"net/http"
-
 	"fmt"
+	"net/http"
+	"time"
 
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/types"
@@ -98,6 +98,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		} else {
+			time.Sleep(1000)
 			http.Redirect(w, r, "/Projects/"+url, http.StatusFound)
 			return
 		}

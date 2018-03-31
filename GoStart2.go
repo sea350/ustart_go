@@ -70,7 +70,6 @@ func main() {
 	http.HandleFunc("/Projects/", project.ProjectsPage)
 	http.HandleFunc("/MyProjects/", project.MyProjects)
 	http.HandleFunc("/CreateProjectPage/", project.CreateProjectPage)
-	http.HandleFunc("/CreateProject/", project.CreateProject)
 	http.HandleFunc("/UpdateProjectTags/", project.UpdateTags)
 	http.HandleFunc("/AddProjectLink/", project.AddQuickLink)
 	http.HandleFunc("/DeleteProjectLink/", project.DeleteQuickLink)

@@ -50,7 +50,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		panic(err)
 	}
 
-	inUse, err := projGet.URLInUse(eclient, strings.ToLower(customURL))
+	inUse, err := projGet.URLInUse(eclient, customURL)
 	if err != nil {
 		return "", err
 	}

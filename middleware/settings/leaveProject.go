@@ -49,15 +49,22 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 
 	if newCreator == `` {
 		err = uses.RemoveMember(client.Eclient, projID, leavingUser)
+		if err != nil {
+
+		}
 		fmt.Println("err middleware/settings/leaveproject line 34")
 		fmt.Println(err)
 	} else {
 		err = uses.NewProjectLeader(client.Eclient, projID, leavingUser, newCreator)
-		fmt.Println("err middleware/settings/leaveproject line 38")
-		fmt.Println(err)
+		if err != nil {
+			fmt.Println("err middleware/settings/leaveproject line 38")
+			fmt.Println(err)
+		}
 		err = uses.RemoveMember(client.Eclient, projID, leavingUser)
-		fmt.Println("err middleware/settings/leaveproject line 41")
-		fmt.Println(err)
+		if err != nil {
+			fmt.Println("err middleware/settings/leaveproject line 41")
+			fmt.Println(err)
+		}
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
