@@ -25,7 +25,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
 			</small>
 			<script>
 				$(document).ready(function (){
-				$(".commentOfComment").css("display","none");
+				$(".` + postID + `").css("display","none");
 				});
 			$('.view-replies').click(function(e) {
         e.preventDefault();
