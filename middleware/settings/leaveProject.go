@@ -19,9 +19,9 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	leavingUser := r.FormValue("UNKOWN")
-	projID := r.FormValue("UNKNOWN")
-	newLeader := r.FormValue("UNKNOWN")
+	leavingUser := r.FormValue("leaverID")
+	projID := r.FormValue("projectID")
+	newCreator := r.FormValue("newCreator")
 
 	proj, err := get.ProjectByID(eclient, projID)
 	if err != nil {
@@ -29,18 +29,30 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	isLeader, _ := uses.IsLeader(eclient, projID, test1.(string))
-	if isLeader {
+	var canLeave = false
+	if leavingUser == test1.(string) {
+		//if the current active user wants to leave, they can
+		canLeave = true
+	} else {
+		for _, mem := range proj.Members {
+			if mem.MemberID == test1.(string) && mem.Role == 0 {
+				//if the current acessing user is creator, they can do whatever they want
+				canLeave = true
+				break
+			}
+		}
+	}
+	if !canLeave {
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
 
-	if newLeader != `` {
+	if newCreator != `` {
 		err = uses.RemoveMember(client.Eclient, projID, leavingUser)
 		fmt.Println("err middleware/settings/leaveproject line 34")
 		fmt.Println(err)
 	} else {
-		err = uses.NewProjectLeader(client.Eclient, projID, leavingUser, newLeader)
+		err = uses.NewProjectLeader(client.Eclient, projID, leavingUser, newCreator)
 		fmt.Println("err middleware/settings/leaveproject line 38")
 		fmt.Println(err)
 		err = uses.RemoveMember(client.Eclient, projID, leavingUser)
