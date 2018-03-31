@@ -77,6 +77,7 @@ func main() {
 	http.HandleFunc("/NewMembers/", project.ManageProjects)
 	http.HandleFunc("/LoadJoinRequests/", project.LoadJoinRequests)
 	http.HandleFunc("/RequestToJoin/", project.RequestToJoin)
+	http.HandleFunc("/AcceptJoinRequest/", project.AcceptJoinRequest)
 
 	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)

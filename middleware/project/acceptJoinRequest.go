@@ -16,7 +16,7 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	projId := r.FormValue("UNKNOWN")
-	newMemberID := r.FormValue("UNKNOWN")
+	newMemberID := r.FormValue("userID")
 
 	err := userPost.AppendProject(client.Eclient, newMemberID, types.projectInfo{ID: projId, Visible: true})
 	if err != nil {
