@@ -16,21 +16,25 @@ func Follow(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	fname := r.FormValue("userID")
+	userID := r.FormValue("userID")
 
-	isFollowed, err4 := uses.IsFollowed(eclient, fname, session.Values["DocID"].(string))
+	if test1.(string) == userID {
+		return
+	}
+
+	isFollowed, err4 := uses.IsFollowed(eclient, userID, session.Values["DocID"].(string))
 	if err4 != nil {
 		fmt.Println("this is an error (Follow.go: 24)")
 		fmt.Println(err4)
 	}
 	if isFollowed == true {
-		err := uses.UserUnfollow(eclient, fname, session.Values["DocID"].(string))
+		err := uses.UserUnfollow(eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
 			fmt.Println("this is an error (Follow.go: 30)")
 			fmt.Println(err)
 		}
 	} else {
-		err := uses.UserFollow(eclient, fname, session.Values["DocID"].(string))
+		err := uses.UserFollow(eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
 			fmt.Println("this is an error (Follow.go: 36)")
 			fmt.Println(err)
