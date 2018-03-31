@@ -26,7 +26,10 @@ func Project(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var isAdmin = false
+	fmt.Println(session.Values["DocID"].(string))
 	for _, member := range project.ProjectData.Members {
+		fmt.Println(member.MemberID)
+		fmt.Println(member.Role)
 		if member.MemberID == session.Values["DocID"].(string) && member.Role <= 0 {
 			isAdmin = true
 			break
