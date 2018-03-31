@@ -39,7 +39,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
             data: {PostID:postId},
             success: function(data) {
 				console.log("succcerosed");
-				console.log(data.PostID);
+				console.log(` + postID + `);
          	   $(".` + postID + `").html(data);
 
             }//end success
