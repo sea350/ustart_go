@@ -40,7 +40,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
             success: function(data) {
 				console.log("succcerosed");
 				console.log(` + postID + `);
-         	   $("#` + postID + `").html(data);
+         	   $(".` + postID + `").show(data);
 
             }//end success
         });
@@ -49,7 +49,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
 
 
 			</p>
-				<div class="commentOfComment id="` + postID + `">
+				<div class="commentOfComment ` + postID + `" id="replies">
 
 					<div class="media">
 						<a class="media-left" href="#">
