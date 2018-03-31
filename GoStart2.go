@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/sea350/ustart_go/middleware/fail"
 	inbox "github.com/sea350/ustart_go/middleware/inbox"
 	login "github.com/sea350/ustart_go/middleware/login"
 	profile "github.com/sea350/ustart_go/middleware/profile"
@@ -26,6 +27,8 @@ func main() {
 	/*
 		The following are all the handlers we have so far.
 	*/
+
+	http.HandleFunc("/404/", fail.Fail)
 
 	//LOGIN & LOGOUT
 	http.HandleFunc("/Inbox/", inbox.Inbox)
@@ -74,6 +77,7 @@ func main() {
 	http.HandleFunc("/NewMembers/", project.ManageProjects)
 	http.HandleFunc("/LoadJoinRequests/", project.LoadJoinRequests)
 	http.HandleFunc("/RequestToJoin/", project.RequestToJoin)
+	http.HandleFunc("/AcceptJoinRequest/", project.AcceptJoinRequest)
 
 	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)

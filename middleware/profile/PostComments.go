@@ -20,17 +20,17 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("PostID")
 	// postaid := postID[9:]
 	// postactual := postID[10:]
-	fmt.Println(postID+" IS THE POST 3 23 2018")
+	fmt.Println(postID + " IS THE POST 3 23 2018")
 	// need to trim beginning of postID
-//	pika := r.FormValue("Pikachu")
+	//	pika := r.FormValue("Pikachu")
 	// fmt.Println("This is debug text, GetComments.go: 23")
-	// fmt.Println(pika) // pika is your own doc id 
+	// fmt.Println(pika) // pika is your own doc id
 	// journal entry, err
 	_, arrayofComments, err4 := uses.LoadComments(eclient, postID, 0, -1)
 	//	fmt.Println(parentPost);
 
-	fmt.Println("ARRAY OF COMMENTS");
-//	fmt.Println(arrayofComments);
+	fmt.Println("ARRAY OF COMMENTS")
+	//	fmt.Println(arrayofComments);
 	if err4 != nil {
 		fmt.Println("This is debug text, POSTComments.go: 29")
 		fmt.Println(err4)
@@ -47,8 +47,8 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 						<img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
 					</a>
 					<div class="media-body">
-						<h5 class="media-heading user_name" style="color:cadetblue;">`+arrayofComments[i].FirstName+`</h5>
-						<p> `+string(arrayofComments[i].Element.Content)+`</p>
+						<h5 class="media-heading user_name" style="color:cadetblue;">` + arrayofComments[i].FirstName + `</h5>
+						<p> ` + string(arrayofComments[i].Element.Content) + `</p>
 					</div>
 				</div>`
 		sum += i
