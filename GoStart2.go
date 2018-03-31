@@ -27,6 +27,8 @@ func main() {
 		The following are all the handlers we have so far.
 	*/
 
+	http.HandleFunc("/404/", inbox.Inbox)
+
 	//LOGIN & LOGOUT
 	http.HandleFunc("/Inbox/", inbox.Inbox)
 	http.HandleFunc("/loginerror/", login.Error)
