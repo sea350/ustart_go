@@ -18,9 +18,9 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	memberID := r.FormValue("UNKNOWN")
-	projectID := r.FormValue("UNKNOWN")
-	newRank := r.FormValue("UNKNOWN")
+	memberID := r.FormValue("memberID")
+	projectID := r.FormValue("projectID")
+	newRank := r.FormValue("newRank")
 
 	project, err := get.ProjectByID(client.Eclient, projectID)
 	if err != nil {

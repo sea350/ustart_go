@@ -40,6 +40,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Project: project, Widgets: widgets}
 	client.RenderTemplate(w, r, "template2-nil", cs)
+	client.RenderTemplate(w, r, "leftnav-nil", cs)
 	client.RenderTemplate(w, r, "projectsF", cs)
 }
 
