@@ -46,17 +46,17 @@ func CommentEntry(image string, fName string, lName string, content string, post
     }); // end view-replies click 
 			</script>
 			</p>
-				<div class="commentOfComment" id="replies">
+				<div class="commentOfComment ` + postID + `" id="replies">
 
 					<div class="media">
-		 			<a class="media-left" href="#">
-						<img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
-					</a>
-					<div class="media-body">
-						<h5 class="media-heading user_name" style="color:cadetblue;">Bryan Brosbyani</h5>
-						<p> Hell No!</p>
+						<a class="media-left" href="#">
+							<img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
+						</a>
+						<div class="media-body">
+							<h5 class="media-heading user_name" style="color:cadetblue;">Bryan Brosbyani</h5>
+							<p> Hell No!</p>
+						</div>
 					</div>
-				</div>
 
 					<div class="media">
 					<a class="media-left" href="#">

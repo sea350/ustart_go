@@ -47,7 +47,7 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 						<img class="media-object img-rounded" src="https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/12514060_499384470233859_6798591731419500290_o.jpg?oh=329ea2ff03ab981dad7b19d9172152b7&oe=5A2D7F0D">
 					</a>
 					<div class="media-body">
-						<h5 class="media-heading user_name ` + postID + `" style="color:cadetblue;">` + arrayofComments[i].FirstName + `</h5>
+						<h5 class="media-heading user_name" style="color:cadetblue;">` + arrayofComments[i].FirstName + `</h5>
 						<p> ` + string(arrayofComments[i].Element.Content) + `</p>
 					</div>
 				</div>`
