@@ -57,21 +57,36 @@ func StringChecker(entryCode string, website string) bool {
 	}
 	if website == "pinterest.com" {
 		blockPoint := strings.Split(entryCode, "/")
-		if !(len(blockPoint[3]) == 18 || len(blockPoint[3]) == 55 || len(blockPoint[3]) == 87) {
-			return false
+		for i := 0; i < len(blockPoint); i++ {
+			if blockPoint[i] == "pin" {
+				if !(len(blockPoint[i+1]) == 18 || len(blockPoint[i+1]) == 55 || len(blockPoint[i+1]) == 87) {
+					return false
+				}
+			}
 		}
+
 	}
 
 	if website == "instagram.com" {
 		blockPoint := strings.Split(entryCode, "/")
-		if len(blockPoint[4]) != 11 {
-			return false
+		for i := 0; i < len(blockPoint); i++ {
+			if blockPoint[i] == "p" {
+				if len(blockPoint[i+1]) != 11 {
+					return false
+				}
+			}
 		}
 	}
 
 	if website == "youtube.com" {
 		blockPoint := strings.Split(entryCode, "/")
-		if strings.Contains(blockPoint[3], "watch?v=") == false {
+		watchChecker := false
+		for i := 0; i < len(blockPoint); i++ {
+			if strings.Contains(blockPoint[i], "watch?v=") == true {
+				watchChecker = true
+			}
+		}
+		if !(watchChecker) {
 			return false
 		}
 	}

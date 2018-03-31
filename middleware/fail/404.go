@@ -3,7 +3,7 @@ package fail
 import (
 	"net/http"
 
-	"src/github.com/sea350/ustart_go/middleware/client"
+	"github.com/sea350/ustart_go/middleware/client"
 )
 
 //Fail ... draws 404 page

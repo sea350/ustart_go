@@ -77,6 +77,7 @@ func main() {
 	http.HandleFunc("/NewMembers/", project.ManageProjects)
 	http.HandleFunc("/LoadJoinRequests/", project.LoadJoinRequests)
 	http.HandleFunc("/RequestToJoin/", project.RequestToJoin)
+	http.HandleFunc("/AcceptJoinRequest/", project.AcceptJoinRequest)
 
 	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)
@@ -94,7 +95,6 @@ func main() {
 	http.HandleFunc("/projectCategory/", settings.ProjectCategory)
 	http.HandleFunc("/projectCustomURL/", settings.ProjectCustomURL)
 	http.HandleFunc("/leaveProject/", settings.LeaveProject)
-	http.HandleFunc("/projectRequest/", settings.ProjectRequest)
 	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
 
 	//REGISTRATIONS
