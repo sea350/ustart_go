@@ -97,6 +97,7 @@ func main() {
 	http.HandleFunc("/projectCustomURL/", settings.ProjectCustomURL)
 	http.HandleFunc("/leaveProject/", settings.LeaveProject)
 	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
+	http.HandleFunc("/changeMemberClass/", settings.ChangeMemberClass)
 
 	//REGISTRATIONS
 	http.HandleFunc("/Signup/", registration.Signup)

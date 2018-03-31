@@ -23,7 +23,8 @@ type FloatingHead struct {
 	Followed bool   `json:Followed`
 	Bio      []rune `json:Bio`
 	//for projects Bio = project Description
-	DocID string `json:DocID`
+	DocID          string `json:DocID`
+	Classification int    `json:Classification`
 }
 
 //JournalEntry ... All data needed to display an entry

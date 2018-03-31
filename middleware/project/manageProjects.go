@@ -36,7 +36,7 @@ func ManageProjects(w http.ResponseWriter, r *http.Request) {
 		}
 
 		for _, memberInfo := range proj.Members {
-			if memberInfo.MemberID == test1.(string) && memberInfo.Role == 0 {
+			if memberInfo.MemberID == test1.(string) && memberInfo.Role <= 1 {
 				//finds user in the list of members and also checks if they have creator rank
 				isAdmin = true
 				//head.Followed in this case expresses whether or not they have edit permissions

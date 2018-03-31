@@ -37,6 +37,7 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 		if err != nil {
 			panic(err)
 		}
+		mem.Classification = member.Role
 		projectData.MemberData = append(projectData.MemberData, mem)
 		if viewerID == member.MemberID {
 			projectData.RequestAllowed = false
