@@ -47,7 +47,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if newCreator != `` {
+	if newCreator == `` {
 		err = uses.RemoveMember(client.Eclient, projID, leavingUser)
 		fmt.Println("err middleware/settings/leaveproject line 34")
 		fmt.Println(err)
