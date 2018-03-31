@@ -47,6 +47,6 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	fmt.Fprintln(w, data)
+	fmt.Fprintln(w, string(data))
 
 }
