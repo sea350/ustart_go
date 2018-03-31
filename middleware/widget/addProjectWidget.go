@@ -95,7 +95,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		//youtube
 		checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
 		checker2 := uses.StringChecker(r.FormValue("ytinput"), "youtu.be")
-		if(!checker1 && !checker2){
+		if !checker1 && !checker2 {
 			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
@@ -128,17 +128,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 			return
 		}*/
 		url := template.HTML(r.FormValue("pinInput"))
-		if r.FormValue("editID") != `0` {
-			widget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
-			if err != nil {
-				fmt.Println(err)
-				fmt.Println("this is an err, addwidget 108")
-			}
-
-			data = append(widget.Data, url)
-		} else {
-			data = []template.HTML{url}
-		}
+		data = []template.HTML{url}
 
 		classification = 8
 	}
