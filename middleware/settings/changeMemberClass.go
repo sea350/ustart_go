@@ -46,8 +46,10 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 	}
 	if isCreator {
 		err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
-		fmt.Println("error: middleware/project/changememberclass line 49")
-		fmt.Println(err)
+		if err != nil {
+			fmt.Println("error: middleware/project/changememberclass line 49")
+			fmt.Println(err)
+		}
 	}
 
 }
