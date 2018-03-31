@@ -13,7 +13,7 @@ func ConvertUserToFloatingHead(eclient *elastic.Client, userDocID string) (types
 
 	usr, err := getUser.UserByID(eclient, userDocID)
 	if err != nil {
-		panic(err)
+		return head, err
 	}
 
 	head.FirstName = usr.FirstName
