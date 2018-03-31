@@ -57,7 +57,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		heads2 = append(heads2, head)
 	}
 
-	cs := client.ClientSide{UserInfo: userstruct, ListOfHeads: heads, ListOfHeads2: heads2}
+	cs := client.ClientSide{UserInfo: userstruct, Page: docID, ListOfHeads: heads, ListOfHeads2: heads2}
 
 	client.RenderTemplate(w, r, "template2-nil", cs)
 	client.RenderTemplate(w, r, "leftnav-nil", cs)
