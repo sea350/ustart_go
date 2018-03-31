@@ -20,7 +20,7 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
-	projID := r.FormValue("UNKNOWN")
+	projID := r.FormValue("projectID")
 	newMemberID := r.FormValue("userID")
 
 	err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
