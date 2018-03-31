@@ -29,7 +29,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var isCreator = false
-	for _, member := range project.Members {
+	for i, member := range project.Members {
 		if member.MemberID == test1.(string) && member.Role <= 0 {
 			isCreator = true
 		}
@@ -40,7 +40,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("error: middleware/project/changememberclass line 38")
 				fmt.Println(err)
 			} else if member.Role != 0 && rankInt != 0 {
-				member.Role = rankInt
+				project.Members[i].Role = rankInt
 			}
 		}
 	}
