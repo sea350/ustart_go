@@ -9,7 +9,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
 			<img style="height:40px;" class="img-rounded" src=d` + image + `>
 		</a>
 		<div class="media-body">
-			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName+`comment.go` + " " + lName +postID+ `</h5>
+			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName + `comment.go` + " " + lName + postID + `</h5>
 			<p>` + content + `</p>
 			<p>
 				<small>
@@ -29,8 +29,8 @@ func CommentEntry(image string, fName string, lName string, content string, post
 				});
 			$('.view-replies').click(function(e) {
         e.preventDefault();
-        var postId = "`+postID+`"
-        var modified ="#`+postID+`"
+        var postId = "` + postID + `"
+        var modified ="#` + postID + `"
         console.log(modified);
         $.ajax({
             type: 'GET',  
@@ -39,7 +39,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
             data: {PostID:postId},
             success: function(data) {
             	console.log("succcerosed");
-         	   $(".commentOfComment").html(data);
+         	   $("` + postID + `").html(data);
 
             }//end success
         });
@@ -70,7 +70,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
 			</div>
 			<div class="input-group pull-right">
 				<form id="innercommentform" method="POST" action="/AddComment2">
-				    <input type = "hidden" name="postID" value= "`+postID+`">
+				    <input type = "hidden" name="postID" value= "` + postID + `">
 					<input class="form-control" placeholder="Add a reply" type="text" name="body">
 				</form>
 				<span class="input-group-addon">
