@@ -8,7 +8,7 @@ import (
 //EditWidget ...
 //Edits an existing widget in the UserWidgets array
 func EditEntry(eclient *elastic.Client, entryID string, field string, newVal interface{}) error {
-	updateErr := post.UpdateEntry(elastic, entryID)
+	updateErr := post.UpdateEntry(eclient, entryID, field, newVal)
 
 	if updateErr != nil {
 		panic(updateErr)
