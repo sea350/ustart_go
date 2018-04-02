@@ -1,4 +1,4 @@
-package login
+package app_middleware
 
 import (
 	"encoding/json"
@@ -58,6 +58,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		fmt.Println("Valid login")
-		resp.updateResp(session.Create(data.Username))
+		//resp.updateResp(session.Create(data.Username))
 	}
 }

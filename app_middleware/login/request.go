@@ -1,6 +1,6 @@
-package login
+package app_middleware
 
 type form struct {
-	Username string `json:Username`
-	Email    string `json:Email`
+	Email    string `json:"Email"`
+	Passowrd string `json:"Password"`
 }

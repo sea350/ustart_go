@@ -36,7 +36,15 @@ func RemoveMember(eclient *elastic.Client, projectID string, userID string) erro
 		}
 	}
 
-	err = postUser.UpdateUser(eclient, userID, "Projects", append(usr.Projects[:usrIdx], usr.Projects[usrIdx+1:]...))
+	if usrIdx < len(usr.Projects)-1 {
+
+		err = postUser.UpdateUser(eclient, userID, "Projects", append(usr.Projects[:usrIdx], usr.Projects[usrIdx+1:]...))
+
+	}
+	if usrIdx == len(usr.Projects) {
+		err = postUser.UpdateUser(eclient, userID, "Projects", nil)
+	}
+
 	if err != nil {
 		return err
 	}

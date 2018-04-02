@@ -1,4 +1,4 @@
-package login
+package app_middleware
 
 import (
 	"errors"
@@ -6,8 +6,8 @@ import (
 )
 
 type response struct {
-	Token  string `json:Token`
-	ErrMsg error  `json:ErrMsg`
+	Token  string `json:"Token"`
+	ErrMsg error  `json:"ErrMsg"`
 }
 
 func setupResp() *response {
