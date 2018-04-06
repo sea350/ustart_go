@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"errors"
-	"sync"
 	"time"
 
 	projGet "github.com/sea350/ustart_go/get/project"
@@ -14,12 +13,18 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-var memberModLock sync.Mutex
-
 //CreateProject ... CREATE A NORMAL PROJECT
 //Requires all fundamental information for the new project (title, creator docID, etc ...)
 //Returns an error if there was a problem with database submission
 func CreateProject(eclient *elastic.Client, title string, description []rune, makerID string, category string, college string, customURL string) (string, error) {
+	inUse, err := projGet.URLInUse(eclient, customURL)
+	if err != nil {
+		return "", err
+	}
+	if inUse {
+		return "", errors.New("URL is taken")
+	}
+
 	var newProj types.Project
 	newProj.Name = title
 	newProj.Description = description
@@ -50,14 +55,6 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		panic(err)
 	}
 
-	inUse, err := projGet.URLInUse(eclient, customURL)
-	if err != nil {
-		return "", err
-	}
-
-	if inUse {
-		return "", errors.New("URL is taken")
-	}
 	if customURL == `` {
 		err = projPost.UpdateProject(eclient, id, "URLName", strings.ToLower(id))
 		id = strings.ToLower(id)
