@@ -14,7 +14,7 @@ func URLInUse(eclient *elastic.Client, projectURL string) (bool, error) {
 	//		PROJECT URL)
 	//RETURNS A types.Project AND AN error
 	ctx := context.Background()
-	termQuery := elastic.NewTermQuery("URL", strings.ToLower(projectURL))
+	termQuery := elastic.NewTermQuery("URLName", strings.ToLower(projectURL))
 	searchResult, err := eclient.Search().
 		Index(globals.ProjectIndex).
 		Query(termQuery).
