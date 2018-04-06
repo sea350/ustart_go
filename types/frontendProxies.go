@@ -25,6 +25,7 @@ type FloatingHead struct {
 	//for projects Bio = project Description
 	DocID          string `json:DocID`
 	Classification int    `json:Classification`
+	Notifications  int    `json:Notifications`
 }
 
 //JournalEntry ... All data needed to display an entry
