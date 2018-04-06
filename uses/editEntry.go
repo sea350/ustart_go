@@ -5,7 +5,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//EditWidget ...
+//EditEntry ...
 //Edits an existing widget in the UserWidgets array
 func EditEntry(eclient *elastic.Client, entryID string, field string, newVal interface{}) error {
 	updateErr := post.UpdateEntry(eclient, entryID, field, newVal)
