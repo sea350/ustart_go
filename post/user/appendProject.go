@@ -16,6 +16,7 @@ func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo
 	ctx := context.Background()
 
 	ProjectLock.Lock()
+	defer ProjectLock.Unlock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
@@ -32,7 +33,6 @@ func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo
 		Doc(map[string]interface{}{"Projects": usr.Projects}).
 		Do(ctx)
 
-	defer ProjectLock.Unlock()
 	return err
 
 }

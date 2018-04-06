@@ -15,6 +15,7 @@ func DeleteSentProjReq(eclient *elastic.Client, usrID string, projID string) err
 	ctx := context.Background()
 
 	ProjectLock.Lock()
+	defer ProjectLock.Unlock()
 
 	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
@@ -43,7 +44,6 @@ func DeleteSentProjReq(eclient *elastic.Client, usrID string, projID string) err
 		Doc(map[string]interface{}{"SentProjReq": usr.SentProjReq}).
 		Do(ctx)
 
-	defer ProjectLock.Unlock()
 	return err
 
 }
