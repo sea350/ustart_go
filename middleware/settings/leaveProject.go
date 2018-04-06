@@ -6,6 +6,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
+	post "github.com/sea350/ustart_go/post/project"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
@@ -48,7 +49,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if newCreator == `` {
-		err = uses.RemoveMember(client.Eclient, projID, leavingUser)
+		err = post.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
 
 		}
@@ -60,7 +61,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("err middleware/settings/leaveproject line 38")
 			fmt.Println(err)
 		}
-		err = uses.RemoveMember(client.Eclient, projID, leavingUser)
+		err = uses.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
 			fmt.Println("err middleware/settings/leaveproject line 41")
 			fmt.Println(err)
