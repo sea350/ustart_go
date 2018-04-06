@@ -61,7 +61,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("err middleware/settings/leaveproject line 38")
 			fmt.Println(err)
 		}
-		err = uses.DeleteMember(client.Eclient, projID, leavingUser)
+		err = post.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
 			fmt.Println("err middleware/settings/leaveproject line 41")
 			fmt.Println(err)
