@@ -6,7 +6,7 @@ import (
 )
 
 type response struct {
-	Success bool  `json:"Successful"`
+	Success bool  `json:"Success"`
 	ErrMsg  error `json:"ErrMsg"`
 }
 
