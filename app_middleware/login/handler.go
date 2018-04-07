@@ -19,7 +19,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//resp := response{}
 	resp := setupResp()
 
-	if acrh, ok := r.Header["Access-Control-Request-Headers:"]; ok {
+	/*if acrh, ok := r.Header["Access-Control-Request-Headers:"]; ok {
 		w.Header().Set("Access-Control-Allow-Headers", acrh[0])
 
 	}
@@ -38,7 +38,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
-	w.Header().Set("Connection", "Close")
+	w.Header().Set("Connection", "Close")*/
 
 	defer json.NewEncoder(w).Encode(resp)
 
@@ -55,7 +55,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//Get pass from DB
 	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
 
-	fmt.Println(sessUsr)
+	fmt.Println("SESSION USER USERNAME:", sessUsr.Username)
 
 	if !succ {
 		fmt.Println("Invalid login")
