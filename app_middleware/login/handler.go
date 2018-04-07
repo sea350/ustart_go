@@ -64,7 +64,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//Get pass from DB
 	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
 
-	fmt.Println("SESSION USER USERNAME:", sessUsr.Username)
+	fmt.Println("Success?", succ)
+	//fmt.Println("SESSION USER USERNAME:", sessUsr.Username)
 
 	if !succ {
 		fmt.Println("Invalid login")
