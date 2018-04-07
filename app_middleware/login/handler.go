@@ -54,7 +54,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	byteData, err := ioutil.ReadAll(r.Body)
 	err = json.Unmarshal(byteData, &data)
 
-	fmt.Println("Print request:")
+	fmt.Println("Print request UPDATED:")
 	fmt.Println(data)
 
 	resp.updateResp("", err)
