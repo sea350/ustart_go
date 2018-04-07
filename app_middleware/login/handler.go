@@ -61,8 +61,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("LINE 55, next is err")
 	//fmt.Println(err)
 	fmt.Println("BEFORE LOGIN")
-	succ, _, err := uses.Login(eclient, "np1310@nyu.edu", []byte("Ilikedogs1"))
+	succ, sessUsr, err := uses.Login(eclient, "np1310@nyu.edu", []byte("Ilikedogs1"))
 
+	fmt.Println("SESSUSR", sessUsr)
 	fmt.Println(err)
 	fmt.Println("AFTER!--Success?", succ)
 	//fmt.Println("SESSION USER USERNAME:", sessUsr.Username)
