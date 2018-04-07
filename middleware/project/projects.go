@@ -19,11 +19,11 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
-		return
 	}
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		fmt.Println("this is an err: middleware/project/projects.go line 23")
 	}
 	//WIP
 	//numFollowers:=len(project.ProjectData.Followers)
@@ -51,7 +51,6 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
-		return
 	}
 
 	var heads []types.FloatingHead
@@ -79,7 +78,6 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
-		return
 	}
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
