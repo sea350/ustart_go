@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	uses "github.com/sea350/ustart_go/uses"
+
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -19,12 +20,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//resp = setupResp()
 
 	if acrh, ok := r.Header["Access-Control-Request-Headers:"]; ok {
-		w.Header().Set("Access-Control-Allow-Origin", acrh[0])
+		w.Header().Set("Access-Control-Allow-Headers", acrh[0])
 
 	}
 
 	w.Header().Set("Access-Control-Allow-Credentials", "True")
-	if acao, ok := r.Header["Access-Ctonrol-Allow-Origin"]; ok {
+	if acao, ok := r.Header["Access-Control-Allow-Origin"]; ok {
+		w.Header().Set("Access-Control-Allow-Origin", acao[0])
 	} else {
 		if _, oko := r.Header["Origin"]; oko {
 			w.Header().Set("Access-Control-Allow-Origin", r.Header["Origin"][0])
@@ -38,7 +40,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
 	w.Header().Set("Connection", "Close")
 
-	defer json.NewDecoder(r).Encode(resp)
+	defer json.NewEncoder(w).Encode(resp)
 
 	//Parse request
 	data := form{}
@@ -53,12 +55,15 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//Get pass from DB
 	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
 
+	fmt.Println(sessUsr)
+
 	if !succ {
 		fmt.Println("Invalid login")
 		resp.updateResp("", errors.New("Password mismatch"))
 
 	} else {
 		fmt.Println("Valid login")
-		//resp.updateResp(session.Create(data.Username))
+
+		resp.updateResp(sessUsr.Username, nil)
 	}
 }
