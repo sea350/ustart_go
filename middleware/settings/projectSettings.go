@@ -22,7 +22,7 @@ func Project(w http.ResponseWriter, r *http.Request) {
 	project, err := uses.AggregateProjectData(client.Eclient, projURL, test1.(string))
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println("error: middleware/project/projectsettings line 23")
+		fmt.Println("error: middleware/settings/projectsettings line 23")
 	}
 
 	var isAdmin = false
