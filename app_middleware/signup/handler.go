@@ -7,6 +7,7 @@ import (
 	"time"
 
 	uses "github.com/sea350/ustart_go/uses"
+	"golang.org/x/crypto/bcrypt"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -43,9 +44,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&data)
 
 	resp.updateResp(false, err)
+	passwordb := []byte(data.Password)
+	hashedPassword, _ := bcrypt.GenerateFromPassword(passwordb, bcrypt.DefaultCost)
 
 	//func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
-	err = uses.SignUpBasic(eclient, data.Username, data.Email, []byte(data.Password), data.Fname, data.Lname, "", "", "", "", data.University, nil, time.Now(), "")
+	err = uses.SignUpBasic(eclient, data.Username, data.Email, hashedPassword, data.Fname, data.Lname, "", "", "", "", data.University, nil, time.Now(), "")
 	if err == nil {
 		fmt.Println("Valid signup")
 	} else {
