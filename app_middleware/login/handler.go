@@ -50,7 +50,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&data)
 
-	err = r.Body.Close()
+	defer r.Body.Close()
 	//byteData, err := ioutil.ReadAll(r.Body)
 	//err = json.Unmarshal(byteData, &data)
 
