@@ -9,6 +9,7 @@ import (
 	profile "github.com/sea350/ustart_go/middleware/profile"
 	project "github.com/sea350/ustart_go/middleware/project"
 	registration "github.com/sea350/ustart_go/middleware/registration"
+	search "github.com/sea350/ustart_go/middleware/search"
 	settings "github.com/sea350/ustart_go/middleware/settings"
 	widget "github.com/sea350/ustart_go/middleware/widget"
 )
@@ -103,5 +104,9 @@ func main() {
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
 	http.HandleFunc("/welcome/", registration.Registration)
+
+	//REGISTRATIONS
+	http.HandleFunc("/search", search.Page)
+
 	http.ListenAndServe(":5002", nil)
 }
