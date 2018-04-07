@@ -1,6 +1,9 @@
 package signup
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type response struct {
 	Successful bool  `json:"Successful"`
@@ -19,6 +22,6 @@ func (resp *response) updateResp(successful bool, err error) {
 	resp.Successful = successful
 	resp.ErrMsg = err
 	if err != nil {
-		panic(err)
+		fmt.Println("Error in response for Signup")
 	}
 }
