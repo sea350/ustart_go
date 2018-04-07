@@ -50,8 +50,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Print request:")
 	fmt.Println(data)
 
-	resp.updateResp("", err)
+	//resp.updateResp("", err)
 
+	fmt.Println("LINE 55, next is err")
+	fmt.Println(err)
 	//Get pass from DB
 	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
 
