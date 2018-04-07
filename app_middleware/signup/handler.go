@@ -51,6 +51,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	err = uses.SignUpBasic(eclient, data.Username, data.Email, hashedPassword, data.Fname, data.Lname, "", "", "", "", data.University, nil, time.Now(), "")
 	if err == nil {
 		fmt.Println("Valid signup")
+		resp.updateResp(true, err)
 	} else {
 		fmt.Println("Invalid signup")
 		resp.updateResp(false, err)
