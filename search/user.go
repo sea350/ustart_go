@@ -2,22 +2,16 @@ package search
 
 import (
 	"context"
+	"fmt"
 
-	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
 	//get "github.com/sea350/ustart_go/get"
 	//"encoding/json"
 	//"errors"
 )
-
-type UserResult struct {
-	FirstName string `json:"FirstName"`
-	LastName  string `json:"LastName"`
-	Avatar    string `json:"Avatar"`
-	Username  string `json:"Username"`
-}
 
 //User ...
 //basic user search
@@ -26,7 +20,7 @@ func User(eclient *elastic.Client, field string, searchTerm string) ([]types.Use
 
 	newMatchQuery := elastic.NewMatchQuery(field, searchTerm)
 
-	var results []UserResult
+	var results []types.FloatingHead
 	searchResults, err := eclient.Search().
 		Index(globals.UserIndex). // search in index "twitter"
 		Query(newMatchQuery).     // specify the query
@@ -34,18 +28,14 @@ func User(eclient *elastic.Client, field string, searchTerm string) ([]types.Use
 		Pretty(true).             // pretty print request and response JSON
 		Do(ctx)                   // execute
 
-	nResults := searchResults.TotalHits
+	//nResults := searchResults.TotalHits
 
-	for _, element := range searchResults.Hits.Hits {
-		var newResult UserResult
-		usr, err := get.UserByID(eclient, element.Id)
-
-		newResult.FirstName = usr.FirstName
-		newResult.LastName = usr.LastName
-		newResult.Avatar = usr.Avatar
-		newResult.Username = usr.Username
-
-		results = append(results, newResult)
+	for i, element := range searchResults.Hits.Hits {
+		head, err := uses.ConvertUserToFloatingHead(eclient, element.Id)
+		if err != nil {
+			fmt.Println("err: search/user line 43 index ", i)
+		}
+		results = append(results, head)
 	}
 
 	var ret []types.User

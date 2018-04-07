@@ -2,28 +2,24 @@ package search
 
 import (
 	"context"
+	"fmt"
 
-	get "github.com/sea350/ustart_go/get/project"
 	globals "github.com/sea350/ustart_go/globals"
+	"github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
 	//get "github.com/sea350/ustart_go/get"
 	//"encoding/json"
 	//"errors"
 )
 
-type ProjectResult struct {
-	Name    string `json:"Name"`
-	Avatar  string `json:"Avatar"`
-	URLName string `json:"URLName"`
-}
-
-//Project ...
+//ProjectBasic ...
 //basic project search
-func Project(eclient *elastic.Client, field string, searchTerm string) ([]ProjectResult, func() int64, error) {
+func ProjectBasic(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, func() int64, error) {
 	ctx := context.Background()
 
-	var results []ProjectResult
-	newMatchQuery := elastic.NewMatchQuery(field, searchTerm)
+	var results []types.FloatingHead
+	newMatchQuery := elastic.NewMatchQuery("Name", searchTerm)
 
 	searchResults, err := eclient.Search().
 		Index(globals.ProjectIndex). // search in index "twitter"
@@ -36,18 +32,14 @@ func Project(eclient *elastic.Client, field string, searchTerm string) ([]Projec
 
 	if err != nil {
 		return results, nHits, err
-
 	}
 
-	for _, element := range searchResults.Hits.Hits {
-		var newResult ProjectResult
-		proj, err := get.ProjectByID(eclient, element.Id)
-
-		newResult.Name = proj.Name
-		newResult.Avatar = proj.Avatar
-		newResult.URLName = proj.URLName
-
-		results = append(results, newResult)
+	for i, element := range searchResults.Hits.Hits {
+		head, err := uses.ConvertProjectToFloatingHead(eclient, element.Id)
+		if err != nil {
+			fmt.Println("err: search/project line 47 index ", i)
+		}
+		results = append(results, head)
 	}
 
 	return results, nHits, err

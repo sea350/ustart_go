@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/sea350/ustart_go/middleware/client"
+	"github.com/sea350/ustart_go/search"
 )
 
 //Page ... draws search page
@@ -17,9 +18,16 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	}
 	cs := client.ClientSide{}
 
-	//query := r.FormValue("query")
+	query := r.FormValue("query")
 	filter := r.FormValue("searchFilterGroup") //can be: all,users,projects
-	fmt.Println(filter)
+
+	if filter == `projects` {
+		results, _, err := search.ProjectBasic(client.Eclient, query)
+		if err != nil {
+			fmt.Println("err: middleware/search/search line 26")
+		}
+		cs.ListOfHeads = results
+	}
 
 	client.RenderTemplate(w, r, "template2-nil", cs)
 	client.RenderTemplate(w, r, "leftnav-nil", cs)
