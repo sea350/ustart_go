@@ -252,4 +252,5 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	//username := r.FormValue("username")
 
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+	return
 }

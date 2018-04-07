@@ -38,4 +38,5 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request){
 		fmt.Println(err);
 	}
 	http.Redirect(w, r, "/Settings/#educollapse", http.StatusFound)
+	return
 }

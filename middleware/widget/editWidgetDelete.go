@@ -80,4 +80,5 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+	return
 }

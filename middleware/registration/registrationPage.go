@@ -35,6 +35,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	if test1 != nil {
 		// REGISTRATION SHOULD NOT LOG YOU IN
 		http.Redirect(w, r, "/profile/", http.StatusFound)
+		return
 	}
 	//	u.FirstName = r.FormValue("firstName")
 	fname := r.FormValue("firstName")
@@ -74,6 +75,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	if err2 == nil {
 		http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
+		return
 	}
 
 }
@@ -88,6 +90,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(test1)
 		fmt.Println("this is debug code: registrationPage.go 89")
 		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
+		return
 	}
 
 	session.Save(r, w)

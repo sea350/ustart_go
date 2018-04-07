@@ -24,6 +24,7 @@ func DeleteWidgetProfile(w http.ResponseWriter, r *http.Request) {
 	widg, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
 	if widg.Classification == 15 {
 		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+		return
 	}
 	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false)
 	if err != nil {
@@ -32,4 +33,5 @@ func DeleteWidgetProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+	return
 }

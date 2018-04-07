@@ -27,5 +27,6 @@ func ChangeName(w http.ResponseWriter, r *http.Request){
     	fmt.Println(err);
     }
     http.Redirect(w, r, "/Settings/#namecollapse", http.StatusFound)
+    return
 
 }

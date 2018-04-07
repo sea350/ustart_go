@@ -39,6 +39,7 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 	if inUse {
 		fmt.Println("URL IS IN USE, ERROR NOT PROPERLY HANDLED REDIRECTING TO PROJECT PAGE")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		return
 	}
 
 	err = uses.ChangeProjectURL(eclient, projID, newURL)
@@ -48,5 +49,6 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+	return
 
 }
