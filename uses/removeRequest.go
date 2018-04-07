@@ -7,11 +7,12 @@ import (
 )
 
 //RemoveRequest ...
-func RemoveRequest(eclient *elastic.Client, projectID string, userID string) error {
+func RemoveRequest(eclient *elastic.Client, projectID string, userID string) (error, int) {
+	var newNumRequests int
 	err := userPost.DeleteSentProjReq(eclient, userID, projectID)
 	if err != nil {
-		return err
+		return err, newNumRequests
 	}
-	err = projPost.DeleteMemberReqReceived(eclient, projectID, userID)
-	return err
+	err, newNumRequests = projPost.DeleteMemberReqReceived(eclient, projectID, userID)
+	return err, newNumRequests
 }
