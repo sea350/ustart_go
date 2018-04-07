@@ -1,8 +1,6 @@
 package app_middleware
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -17,7 +15,7 @@ var eclient, err = elastic.NewClient(elastic.SetURL("localhost:9200"))
 //Login handler
 func Handler(w http.ResponseWriter, r *http.Request) {
 	//resp := response{}
-	resp := setupResp()
+	//resp := setupResp()
 
 	/*if acrh, ok := r.Header["Access-Control-Request-Headers:"]; ok {
 		w.Header().Set("Access-Control-Allow-Headers", acrh[0])
@@ -40,41 +38,41 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
 	w.Header().Set("Connection", "Close")*/
 
-	defer json.NewEncoder(w).Encode(resp)
+	//defer json.NewEncoder(w).Encode(resp)
 
 	//Parse request
 
 	//byteData := []byte(r.Body)
 
-	data := form{}
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&data)
+	//data := form{}
+	//decoder := json.NewDecoder(r.Body)
+	//err := decoder.Decode(&data)
 
-	defer r.Body.Close()
+	//defer r.Body.Close()
 	//byteData, err := ioutil.ReadAll(r.Body)
 	//err = json.Unmarshal(byteData, &data)
 
 	fmt.Println("Print request UPDATED:")
-	fmt.Println(data.Email)
-	fmt.Println(data.Password)
+	//fmt.Println(data.Email)
+	//fmt.Println(data.Password)
 
-	resp.updateResp("", err)
+	//resp.updateResp("", err)
 
 	fmt.Println("LINE 55, next is err")
-	fmt.Println(err)
+	//fmt.Println(err)
 	fmt.Println("BEFORE LOGIN")
-	succ, _, err := uses.Login(eclient, "np1310@nyu.edu", []byte("Ilikedogs1"))
+	succ, sessUsr, err := uses.Login(eclient, "np1310@nyu.edu", []byte("Ilikedogs1"))
 
 	fmt.Println("AFTER!--Success?", succ)
 	//fmt.Println("SESSION USER USERNAME:", sessUsr.Username)
 
 	if !succ {
 		fmt.Println("Invalid login")
-		resp.updateResp("", errors.New("Password mismatch"))
+		//resp.updateResp("", errors.New("Password mismatch"))
 
 	} else {
 		fmt.Println("Valid login")
 
-		resp.updateResp("np1310@nyu.edu", nil)
+		//resp.updateResp("np1310@nyu.edu", nil)
 	}
 }
