@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	uses "github.com/sea350/ustart_go/uses"
@@ -43,14 +44,20 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	defer json.NewEncoder(w).Encode(resp)
 
 	//Parse request
+
+	//byteData := []byte(r.Body)
+
 	data := form{}
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&data)
+	//decoder := json.NewDecoder(r.Body)
+	//err := decoder.Decode(&data)
+
+	byteData, err := ioutil.ReadAll(r.Body)
+	err = json.Unmarshal(byteData, &data)
 
 	fmt.Println("Print request:")
 	fmt.Println(data)
 
-	//resp.updateResp("", err)
+	resp.updateResp("", err)
 
 	fmt.Println("LINE 55, next is err")
 	fmt.Println(err)
