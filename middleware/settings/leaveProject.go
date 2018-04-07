@@ -18,6 +18,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 
 	leavingUser := r.FormValue("leaverID")

@@ -19,6 +19,7 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 
 	ID := r.FormValue("projID") //projectID

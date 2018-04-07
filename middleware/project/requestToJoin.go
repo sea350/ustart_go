@@ -16,6 +16,7 @@ func RequestToJoin(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 
 	ID := r.FormValue("projID") //project docID

@@ -16,6 +16,7 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 	docID, err := get.IDByUsername(client.Eclient, r.URL.Path[11:])
 	if err != nil {

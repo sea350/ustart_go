@@ -19,6 +19,7 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 	var output string
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 
 	r.ParseForm()
