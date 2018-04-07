@@ -28,6 +28,7 @@ func DeleteWallPost(w http.ResponseWriter, r *http.Request){
 	}
 
 		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+		return
 
 
 }

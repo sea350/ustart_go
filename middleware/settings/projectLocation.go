@@ -35,5 +35,6 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	}
 	//TODO: Add in right URL
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+	return
 
 }

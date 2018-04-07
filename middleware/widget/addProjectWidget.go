@@ -247,4 +247,5 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
+	return
 }

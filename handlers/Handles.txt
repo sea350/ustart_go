@@ -46,6 +46,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		//	fmt.Println(test1)
 		//  	cs = &ClientSide{FirstName:session.Values["username"].(string)}
 		http.Redirect(w, r, "/profile/", http.StatusFound)
+		return
 	}
 
 	session.Save(r, w)
@@ -61,6 +62,7 @@ func Paypal(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["username"]
 	if test1 != nil {
 		http.Redirect(w, r, "/profile/", http.StatusFound)
+		return
 	}
 	fname := r.FormValue("firstName")
 	lname := r.FormValue("lastName")
@@ -120,10 +122,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if successful == true {
 		fmt.Println("login successful")
 		http.Redirect(w, r, "/signup/", http.StatusFound)
+		return
 	}
 	if successful == false {
 		fmt.Println("did not login successful")
 		http.Redirect(w, r, "/signup/", http.StatusFound)
+		return
 	}
 
 }

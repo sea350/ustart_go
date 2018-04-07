@@ -31,6 +31,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err4)
 	}
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+	return
 }
 
 func AddComment2(w http.ResponseWriter, r *http.Request) {
@@ -54,4 +55,5 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err4)
 	}
 	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+	return
 }

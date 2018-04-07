@@ -32,5 +32,6 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+	return
 
 }

@@ -30,5 +30,6 @@ func ChangePassword(w http.ResponseWriter, r *http.Request){
     	fmt.Println(err);
     }
     http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+    return
 
 }

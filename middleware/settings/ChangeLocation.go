@@ -48,5 +48,6 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 	http.Redirect(w, r, "/Settings/#loccollapse", http.StatusFound)
+	return
 
 }

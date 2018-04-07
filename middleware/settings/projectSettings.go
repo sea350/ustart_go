@@ -40,6 +40,7 @@ func Project(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
 	}
 
 }
