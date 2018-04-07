@@ -1,6 +1,7 @@
 package app_middleware
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -46,24 +47,20 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	//byteData := []byte(r.Body)
 
-	//data := form{}
-	//decoder := json.NewDecoder(r.Body)
-	//err := decoder.Decode(&data)
+	data := form{}
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&data)
 
 	//defer r.Body.Close()
 	//byteData, err := ioutil.ReadAll(r.Body)
 	//err = json.Unmarshal(byteData, &data)
 
-	fmt.Println("Print request UPDATED:")
 	//fmt.Println(data.Email)
 	//fmt.Println(data.Password)
 
 	//resp.updateResp("", err)
 
-	fmt.Println("LINE 55, next is err")
-	//fmt.Println(err)
-	fmt.Println("BEFORE LOGIN")
-	succ, sessUsr, err := uses.Login(eclient, "np1310@nyu.edu", []byte("Ilikedogs1"))
+	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
 
 	fmt.Println("SESSUSR", sessUsr)
 	fmt.Println(err)
@@ -77,6 +74,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("Valid login")
 
-		//resp.updateResp("np1310@nyu.edu", nil)
 	}
 }
