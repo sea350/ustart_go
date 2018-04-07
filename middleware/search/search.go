@@ -36,7 +36,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		cs.ListOfHeads = results
 	}
 
-	client.RenderTemplate(w, r, "template2-nil", cs)
-	client.RenderTemplate(w, r, "leftnav-nil", cs)
+	client.RenderSidebar(w, r, "template2-nil")
+	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "search-nil", cs)
 }

@@ -30,6 +30,6 @@ func Inbox(w http.ResponseWriter, r *http.Request) {
 	// if docid exists then data is retreived from the uses.UserPage function and rendered accordingly
 	userstruct, _, _, _ := uses.UserPage(eclient, session.Values["Username"].(string), session.Values["DocID"].(string))
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string)}
-	client.RenderTemplate(w, r, "template2-nil", cs)
+	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderTemplate(w, r, "inbox-Nil", cs)
 }

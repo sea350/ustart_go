@@ -24,7 +24,7 @@ func Settings(w http.ResponseWriter, r *http.Request) {
 	}
 	userstruct, _, _, _ := uses.UserPage(eclient, session.Values["Username"].(string), session.Values["DocID"].(string))
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string)}
-	client.RenderTemplate(w, r, "template2-nil", cs)
+	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderTemplate(w, r, "settings-Nil", cs)
 
 }

@@ -43,7 +43,7 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
 
-	client.RenderTemplate(w, r, "template2-nil", cs)
-	client.RenderTemplate(w, r, "leftnav-nil", cs)
+	client.RenderSidebar(w, r, "template2-nil")
+	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "followerlist-nil", cs)
 }
