@@ -17,9 +17,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	}
 	cs := client.ClientSide{}
 
-	query := r.FormValue("query")
-
-	fmt.Fprintln(w, query)
+	//query := r.FormValue("query")
+	filter := r.FormValue("searchFilterGroup") //can be: all,users,projects
+	fmt.Println(filter)
 
 	client.RenderTemplate(w, r, "template2-nil", cs)
 	client.RenderTemplate(w, r, "leftnav-nil", cs)
