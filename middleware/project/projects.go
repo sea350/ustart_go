@@ -17,7 +17,6 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
