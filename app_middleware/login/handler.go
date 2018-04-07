@@ -2,6 +2,7 @@ package app_middleware
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -18,7 +19,7 @@ var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 func Handler(w http.ResponseWriter, r *http.Request) {
 
 	//resp := response{}
-	//resp := setupResp()
+	resp := setupResp()
 
 	/*if acrh, ok := r.Header["Access-Control-Request-Headers:"]; ok {
 		w.Header().Set("Access-Control-Allow-Headers", acrh[0])
@@ -58,7 +59,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println(data.Email)
 	//fmt.Println(data.Password)
 
-	//resp.updateResp("", err)
+	resp.updateResp("", err, false)
 
 	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
 
@@ -69,10 +70,15 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	if !succ {
 		fmt.Println("Invalid login")
-		//resp.updateResp("", errors.New("Password mismatch"))
+		resp.updateResp("", errors.New("Password mismatch"), succ)
 
 	} else {
 		fmt.Println("Valid login")
+		w.Header().Set("Content-type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		resp.updateResp(sessUsr.Username, err, succ)
+		resJson, _ := json.Marshal(resp)
 
+		w.Write(resJson)
 	}
 }
