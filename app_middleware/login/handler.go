@@ -9,11 +9,14 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-var eclient, err = elastic.NewClient(elastic.SetURL("localhost:9200"))
-
 //Handler ...
 //Login handler
 func Handler(w http.ResponseWriter, r *http.Request) {
+
+	var eclient, err = elastic.NewClient(elastic.SetURL("localhost:9200"))
+	if err != nil {
+		fmt.Println("ECLIENT SUX")
+	}
 	//resp := response{}
 	//resp := setupResp()
 
