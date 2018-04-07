@@ -15,7 +15,8 @@ var eclient, err = elastic.NewClient(elastic.SetURL("localhost:9200"))
 //Handler ...
 //Login handler
 func Handler(w http.ResponseWriter, r *http.Request) {
-	resp := setupResp()
+	resp := response{}
+	//resp = setupResp()
 
 	if acrh, ok := r.Header["Access-Control-Request-Headers:"]; ok {
 		w.Header().Set("Access-Control-Allow-Origin", acrh[0])
@@ -37,7 +38,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
 	w.Header().Set("Connection", "Close")
 
-	defer json.NewDecoder(w).Encode(resp)
+	defer json.NewDecoder(r).Encode(resp)
 
 	//Parse request
 	data := form{}
@@ -47,14 +48,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Print request:")
 	fmt.Println("%v\n", data)
 
-	resp.updateResp("", 0, err)
+	resp.updateResp("", err)
 
 	//Get pass from DB
-	succ, sessUsr, err := uses.Login(eclient, data.Email, data.Password)
+	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
 
 	if !succ {
 		fmt.Println("Invalid login")
-		resp.updateResp("", 0, errors.New("Password mismatch"))
+		resp.updateResp("", errors.New("Password mismatch"))
 
 	} else {
 		fmt.Println("Valid login")
