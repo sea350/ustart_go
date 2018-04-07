@@ -16,8 +16,8 @@ var eclient, err = elastic.NewClient(elastic.SetURL("localhost:9200"))
 //Handler ...
 //Login handler
 func Handler(w http.ResponseWriter, r *http.Request) {
-	resp := response{}
-	//resp = setupResp()
+	//resp := response{}
+	resp := setupResp()
 
 	if acrh, ok := r.Header["Access-Control-Request-Headers:"]; ok {
 		w.Header().Set("Access-Control-Allow-Headers", acrh[0])
@@ -48,7 +48,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&data)
 
 	fmt.Println("Print request:")
-	fmt.Println("%v\n", data)
+	fmt.Println(data)
 
 	resp.updateResp("", err)
 
