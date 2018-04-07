@@ -5,7 +5,8 @@ import (
 
 	//"github.com/sea350/ustart_go/middleware/fail"
 	//inbox "github.com/mrb721/ustart_app/ustartapp/middleware/inbox"
-	login "github.com/sea350/ustart_go/app_middleware/login" //"github.com/mrb721/ustart_app/ustartapp/middleware/login"
+	login "github.com/sea350/ustart_go/app_middleware/login"
+	signup "github.com/sea350/ustart_go/app_middleware/signup"
 	/*profile "github.com/sea350/ustart_go/middleware/profile"
 	project "github.com/sea350/ustart_go/middleware/project"
 	registration "github.com/sea350/ustart_go/middleware/registration"
@@ -34,6 +35,7 @@ func main() {
 	//http.HandleFunc("/loginerror/", login.Error)
 	//http.HandleFunc("/", login.Home)
 	http.HandleFunc("/login/", login.Handler)
+	http.HandleFunc("/Signup/", signup.Handler)
 	//http.HandleFunc("/logout/", login.Logout)
 
 	// USER PROFILE AND INTERACTIONS
@@ -99,7 +101,7 @@ func main() {
 	http.HandleFunc("/changeMemberClass/", settings.ChangeMemberClass)
 
 	//REGISTRATIONS
-	http.HandleFunc("/Signup/", registration.Signup)
+
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
 	http.HandleFunc("/welcome/", registration.Registration)*/

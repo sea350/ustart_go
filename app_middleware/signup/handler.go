@@ -1,12 +1,16 @@
-package register
+package signup
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	uses "github.com/sea350/ustart_go/uses"
+	elastic "gopkg.in/olivere/elastic.v5"
 )
+
+var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 
 //Handler ...
 //  Handles registration requests.
@@ -34,22 +38,23 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	defer json.NewEncoder(w).Encode(resp)
 
 	// Parse the request, make sure it's A-OK
-	data, err := parseRequest(r.Body)
+	data := form{}
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&data)
+
 	resp.updateResp(false, err)
 
 	//func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
-	err := uses.SignUpBasic(eclient, data.U)
-	// Create a new Person row!
-	newPerson := tables.Person{
-		Username:       data.Username,
-		HashedPassword: hashedPassword,
-		Salt:           salt,
-		Fname:          data.Fname,
-		Lname:          data.Lname,
-		ColorPalette:   "ffffff",
+	err = uses.SignUpBasic(eclient, data.Username, data.Email, []byte(data.Password), data.Fname, data.Lname, "", "", "", "", data.University, nil, time.Now(), "")
+	if err == nil {
+		fmt.Println("Valid signup")
+		w.Header().Set("Content-type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		resp.updateResp(true, err)
+		resJson, _ := json.Marshal(resp)
+		w.Write(resJson)
+	} else {
+		fmt.Println("Invalid signup")
+		resp.updateResp(false, err)
 	}
-
-	// Insert this row into our database, make sure we're good!
-	err = insert.User(newPerson)
-	resp.updateResp(err == nil, err)
 }

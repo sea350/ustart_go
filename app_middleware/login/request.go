@@ -1,4 +1,4 @@
-package app_middleware
+package login
 
 type form struct {
 	Email    string `json:"Email"`

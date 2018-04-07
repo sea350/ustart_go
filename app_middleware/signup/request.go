@@ -1,3 +1,5 @@
+package signup
+
 import (
 	"encoding/json"
 	"io"

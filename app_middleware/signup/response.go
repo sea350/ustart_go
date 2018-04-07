@@ -17,7 +17,7 @@ func setupResp() *response {
 
 func (resp *response) updateResp(successful bool, err error) {
 	resp.Successful = successful
-	resp.ErrMs g = err
+	resp.ErrMsg = err
 	if err != nil {
 		panic(err)
 	}
