@@ -28,6 +28,13 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		cs.ListOfHeads = results
 	}
+	if filter == `users` {
+		results, err := search.UserBasic(client.Eclient, query)
+		if err != nil {
+			fmt.Println("err: middleware/search/search line 34")
+		}
+		cs.ListOfHeads = results
+	}
 
 	client.RenderTemplate(w, r, "template2-nil", cs)
 	client.RenderTemplate(w, r, "leftnav-nil", cs)

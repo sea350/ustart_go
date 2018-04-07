@@ -15,10 +15,10 @@ import (
 
 //UserBasic ...
 //basic user search
-func UserBasic(eclient *elastic.Client, field string, searchTerm string) ([]types.User, error) {
+func UserBasic(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
 	ctx := context.Background()
 
-	newMatchQuery := elastic.NewMatchQuery(field, searchTerm)
+	newMatchQuery := elastic.NewMatchQuery("FirstName", searchTerm)
 
 	var results []types.FloatingHead
 	searchResults, err := eclient.Search().
@@ -33,12 +33,10 @@ func UserBasic(eclient *elastic.Client, field string, searchTerm string) ([]type
 	for i, element := range searchResults.Hits.Hits {
 		head, err := uses.ConvertUserToFloatingHead(eclient, element.Id)
 		if err != nil {
-			fmt.Println("err: search/user line 43 index ", i)
+			fmt.Println("err: search/userBasic line 36 index ", i)
 		}
 		results = append(results, head)
 	}
 
-	var ret []types.User
-	return ret, err
-
+	return results, err
 }
