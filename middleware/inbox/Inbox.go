@@ -24,6 +24,7 @@ func Inbox(w http.ResponseWriter, r *http.Request) {
 	// if no docid then redirect to main page
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 	// if conditions of redirect are met, the next 4 lines do not execute
 	// if docid exists then data is retreived from the uses.UserPage function and rendered accordingly

@@ -14,6 +14,7 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		//No docid in session
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 
 	r.ParseForm()

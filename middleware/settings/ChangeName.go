@@ -14,6 +14,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request){
     if (test1 == nil){
      	fmt.Println(test1)
      	http.Redirect(w, r, "/~", http.StatusFound)
+		return
     }
     r.ParseForm()
     first := r.FormValue("fname")

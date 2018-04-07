@@ -16,6 +16,7 @@ func DeleteWallPost(w http.ResponseWriter, r *http.Request){
 	if test1 == nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 	r.ParseForm()
 	postid := r.FormValue("postid")
@@ -37,6 +38,7 @@ func GenerateDeleteModal(w http.ResponseWriter, r *http.Request){
 	if test1 == nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 	r.ParseForm()
 	postid := r.FormValue("PostID")

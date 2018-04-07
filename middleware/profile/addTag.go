@@ -16,6 +16,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 
 	ID := session.Values["DocID"].(string)

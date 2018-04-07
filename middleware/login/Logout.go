@@ -12,7 +12,8 @@ func Logout(w http.ResponseWriter, r *http.Request){
 	if (test1 != nil){ // if logged in 
 		session.Options.MaxAge = -1 // kills session 
 		session.Save(r,w) // save changes to session 
-		http.Redirect(w, r, "/~", http.StatusFound) // bring back to homepage 
+		http.Redirect(w, r, "/~", http.StatusFound)
+		return // bring back to homepage 
 	}
 }
 

@@ -12,6 +12,7 @@ func EditModal(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		//No docID in session
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 
 	fmt.Fprintln(w, "nothing")
