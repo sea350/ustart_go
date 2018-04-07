@@ -48,13 +48,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	err = uses.SignUpBasic(eclient, data.Username, data.Email, []byte(data.Password), data.Fname, data.Lname, "", "", "", "", data.University, nil, time.Now(), "")
 	if err == nil {
 		fmt.Println("Valid signup")
-		w.Header().Set("Content-type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		resp.updateResp(true, err)
-		resJson, _ := json.Marshal(resp)
-		w.Write(resJson)
 	} else {
 		fmt.Println("Invalid signup")
 		resp.updateResp(false, err)
 	}
+	w.Header().Set("Content-type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	resp.updateResp(true, err)
+	resJson, _ := json.Marshal(resp)
+	w.Write(resJson)
 }

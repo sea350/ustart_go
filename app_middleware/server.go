@@ -35,7 +35,7 @@ func main() {
 	//http.HandleFunc("/loginerror/", login.Error)
 	//http.HandleFunc("/", login.Home)
 	http.HandleFunc("/login/", login.Handler)
-	http.HandleFunc("/Signup/", signup.Handler)
+	http.HandleFunc("/signup/", signup.Handler)
 	//http.HandleFunc("/logout/", login.Logout)
 
 	// USER PROFILE AND INTERACTIONS

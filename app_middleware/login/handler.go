@@ -59,6 +59,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if !succ {
 		fmt.Println("Invalid login")
 		resp.updateResp("", errors.New("Password mismatch"), succ)
+		w.Header().Set("Content-type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		resp.updateResp("", err, succ)
+		resJson, _ := json.Marshal(resp)
+		w.Write(resJson)
 
 	} else {
 		fmt.Println("Valid login")
@@ -66,7 +71,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		resp.updateResp(sessUsr.Username, err, succ)
 		resJson, _ := json.Marshal(resp)
-
 		w.Write(resJson)
 	}
 }
