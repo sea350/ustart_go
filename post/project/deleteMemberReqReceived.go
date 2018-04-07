@@ -12,11 +12,12 @@ import (
 //DeleteMemberReqReceived ... DELETES A USER ID IN A PROJECT'S MemberReqReceived ARRAY
 //Requires project's docID and the user's docID
 //Returns an error
-func DeleteMemberReqReceived(eclient *elastic.Client, projectID string, userID string) error {
+func DeleteMemberReqReceived(eclient *elastic.Client, projectID string, userID string) (error, int) {
+	var numRequests int
 	ctx := context.Background()
 	proj, err := get.ProjectByID(eclient, projectID)
 	if err != nil {
-		return errors.New("Project does not exist")
+		return errors.New("Project does not exist"), numRequests
 	}
 
 	//replace with universal.FindIndex when it works
@@ -28,7 +29,7 @@ func DeleteMemberReqReceived(eclient *elastic.Client, projectID string, userID s
 		}
 	}
 	if index == -1 {
-		return errors.New("link not found")
+		return errors.New("link not found"), numRequests
 	}
 
 	proj.MemberReqReceived = append(proj.MemberReqReceived[:index], proj.MemberReqReceived[index+1:]...)
@@ -40,6 +41,6 @@ func DeleteMemberReqReceived(eclient *elastic.Client, projectID string, userID s
 		Doc(map[string]interface{}{"MemberReqReceived": proj.MemberReqReceived}).
 		Do(ctx)
 
-	return err
+	return err, len(proj.MemberReqReceived)
 
 }
