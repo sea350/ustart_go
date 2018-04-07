@@ -58,7 +58,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	resp.updateResp(true, err)
+	//resp.updateResp(true, err)
 	resJson, _ := json.Marshal(resp)
 	w.Write(resJson)
 }
