@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 
 	uses "github.com/sea350/ustart_go/uses"
@@ -48,23 +47,26 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//byteData := []byte(r.Body)
 
 	data := form{}
-	//decoder := json.NewDecoder(r.Body)
-	//err := decoder.Decode(&data)
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&data)
 
-	byteData, err := ioutil.ReadAll(r.Body)
-	err = json.Unmarshal(byteData, &data)
+	defer r.Body.Close()
+	//byteData, err := ioutil.ReadAll(r.Body)
+	//err = json.Unmarshal(byteData, &data)
 
 	fmt.Println("Print request UPDATED:")
-	fmt.Println(data)
+	fmt.Println(data.Email)
+	fmt.Println(data.Password)
 
 	resp.updateResp("", err)
 
 	fmt.Println("LINE 55, next is err")
 	fmt.Println(err)
-	//Get pass from DB
-	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
+	fmt.Println("BEFORE LOGIN")
+	succ, _, err := uses.Login(eclient, "np1310@nyu.edu", []byte("Ilikedogs1"))
 
-	fmt.Println("SESSION USER USERNAME:", sessUsr.Username)
+	fmt.Println("AFTER!--Success?", succ)
+	//fmt.Println("SESSION USER USERNAME:", sessUsr.Username)
 
 	if !succ {
 		fmt.Println("Invalid login")
@@ -73,6 +75,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("Valid login")
 
-		resp.updateResp(sessUsr.Username, nil)
+		resp.updateResp("np1310@nyu.edu", nil)
 	}
 }
