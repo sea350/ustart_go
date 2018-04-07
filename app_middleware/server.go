@@ -20,9 +20,9 @@ func main() {
 		The other being the relative link on the actual html pages
 	*/
 	// fs := http.FileServer(http.Dir("/home/rr2396/www/"))
-	fs := http.FileServer(http.Dir("/ustart/ustart_front/"))
+	//fs := http.FileServer(http.Dir("/ustart/ustart_front/"))
 	// http.Handle("/www/", http.StripPrefix("/www/", fs))
-	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
+	//http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
 	/*
 		The following are all the handlers we have so far.
 	*/
