@@ -56,7 +56,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		resp.updateResp("", errors.New("Password mismatch"), succ)
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		resp.updateResp("", err, succ)
 		resJson, _ := json.Marshal(resp)
 		w.Write(resJson)
 
