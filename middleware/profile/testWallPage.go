@@ -30,7 +30,7 @@ func TestWallPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err middleware/profile/testwallpage line 28")
 		fmt.Println(err)
 	}
-	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs[0:5])
+	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs)
 	if err != nil {
 		fmt.Println("err middleware/profile/testwallpage line 28")
 		fmt.Println(err)
