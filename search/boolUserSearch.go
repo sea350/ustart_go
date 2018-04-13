@@ -11,8 +11,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//Search user with a bool query taking in username and filter
-func boolUserSearch(eclient *elastic.Client, input string) ([]types.FloatingHead, error) {
+//BoolUserSearch ... Search user with a bool query taking in username and filter
+func BoolUserSearch(eclient *elastic.Client, input string) ([]types.FloatingHead, error) {
 
 	//split input
 	inputList := splitInput(input)
