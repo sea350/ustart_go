@@ -2,12 +2,13 @@ package types
 
 import "html/template"
 
+//Widget ... widget data
 type Widget struct {
-	ID             string          `json:ID`
-	UserID         string          `json:UserID`
-	Data           []template.HTML `json:Data`
-	Position       int             `json:Position`
-	Classification int             `json:Classification`
+	ID             string          `json:"ID"`
+	UserID         string          `json:"UserID"`
+	Data           []template.HTML `json:"Data"`
+	Position       int             `json:"Position"`
+	Classification int             `json:"Classification"`
 	//PLS add data configuration for each classification
 	//class 0 = text widget
 	//	Data[0] = title

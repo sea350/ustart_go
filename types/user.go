@@ -12,8 +12,8 @@ type Link struct {
 
 //ProjectInfo ... project info, duh
 type ProjectInfo struct {
-	ProjectID string `"ProjectID"`
-	Visible   bool   `"Visible"`
+	ProjectID string `json:"ProjectID"`
+	Visible   bool   `json:"Visible"`
 }
 
 //Request ... uhm
@@ -39,8 +39,8 @@ type User struct {
 	Username        string        `json:"Username"`
 	Location        LocStruct     `json:"Location"`
 	HighSchool      string        `json:"HighSchool"`
-	HSGradDate      string        `json:"GradDate"`
-	CollegeGradDate string        `json:"GradDate"`
+	HSGradDate      string        `json:"HSGradDate"`
+	CollegeGradDate string        `json:"CollegeGradDate"`
 	University      string        `json:"UndergradSchool"`
 	Majors          []string      `json:"Majors"`
 	Minors          []string      `json:"Minors"`
