@@ -112,7 +112,7 @@ func main() {
 	http.HandleFunc("/search", search.Page)
 
 	//GENERIC LOAD COMMENTS
-	http.HandleFunc("/ajaxLoadComments/", profile.AjaxLoadComments)
+	http.HandleFunc("/AjaxLoadComments/", profile.AjaxLoadComments)
 
 	http.ListenAndServe(":5002", nil)
 }
