@@ -42,7 +42,7 @@ func TestWallPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	cs := client.ClientSide{Page: wallID, Wall: entries, ImageCode: viewer.Avatar}
+	cs := client.ClientSide{UserInfo: user, Page: wallID, Wall: entries, ImageCode: viewer.Avatar}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
