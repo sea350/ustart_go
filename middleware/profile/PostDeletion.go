@@ -9,8 +9,11 @@ import (
 	// "github.com/sea350/ustart_go/middleware/stringHTML"
 )
 
+var port = "5002"
+
 //DeleteWallPost ... Iunno
 func DeleteWallPost(w http.ResponseWriter, r *http.Request) {
+
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
@@ -60,7 +63,7 @@ func GenerateDeleteModal(w http.ResponseWriter, r *http.Request) {
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                            <form action ="http://ustart.today:5000/deletePost" method ="GET"> 
+                                            <form action ="http://ustart.today:` + port + `/deletePost" method ="GET"> 
                                                  <input type="hidden" name="postid" value=` + postactual + `>  
                                              <button type="submit"><a class="btn btn-danger btn-ok">Delete</a></button>
                                         </form>
