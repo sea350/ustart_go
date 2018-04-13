@@ -10,14 +10,14 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//SearchProfile ... Attempt at fully functional profile search, returns Floatinghead
-func SearchProfile(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
+//SearchProject ... Attempt at fully functional project search, returns Floatinghead
+func SearchProject(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
 	ctx := context.Background()
 	var results []types.FloatingHead
 
-	newMatchQuery := elastic.NewMultiMatchQuery(searchTerm, "FirstName", "LastName", "UserName", "Major", "Tags")
+	newMatchQuery := elastic.NewMultiMatchQuery(searchTerm, "Name", "Description", "URLName", "Tags")
 	searchResults, err := eclient.Search().
-		Index(globals.UserIndex).
+		Index(globals.ProjectIndex).
 		Query(newMatchQuery).
 		Pretty(true).
 		Do(ctx)
@@ -25,14 +25,6 @@ func SearchProfile(eclient *elastic.Client, searchTerm string) ([]types.Floating
 	if err != nil {
 		return results, err
 	}
-
-	//Testing outputs
-	// numHits := searchResults.Hits.TotalHits
-	// fmt.Println("Number of Hits: ", numHits)
-	// for _, s := range searchResults.Hits.Hits {
-	// 	u, _ := get.UserByID(eclient, s.Id)
-	// 	// fmt.Println(u.FirstName, u.LastName)
-	// }
 
 	for _, element := range searchResults.Hits.Hits {
 		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
