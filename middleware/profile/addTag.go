@@ -27,7 +27,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		tags[len(tags)-1] = strings.Trim(tags[len(tags)-1], `"]`)
 	}
 
-	err = post.UpdateUser(client.Eclient, ID, "Tags", tags)
+	err := post.UpdateUser(client.Eclient, ID, "Tags", tags)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("this is an err: middleware/profile/addTag line 31")

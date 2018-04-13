@@ -4,33 +4,28 @@ import (
 	"fmt"
 	"net/http"
 
-	sessions "github.com/gorilla/sessions"
 	uses "github.com/sea350/ustart_go/uses"
-	elastic "gopkg.in/olivere/elastic.v5"
 
 	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 )
 
-var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
-
-//ViewProfile ... Iunno
+//ViewProfile ... Loads data relevant to profile page and displays it
 func ViewProfile(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
 
-	userstruct, _, followbool, err5 := uses.UserPage(eclient, r.URL.Path[9:], test1.(string))
+	userstruct, _, followbool, err5 := uses.UserPage(client.Eclient, r.URL.Path[9:], test1.(string))
 	if err5 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 29)")
 		fmt.Println(err5)
 	}
 
-	widgets, errors := uses.LoadWidgets(eclient, userstruct.UserWidgets)
+	widgets, errors := uses.LoadWidgets(client.Eclient, userstruct.UserWidgets)
 
 	if len(errors) != 0 {
 		fmt.Println("this is an error (ViewProfile.go: 35)")
@@ -38,7 +33,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(errors)
 	}
 
-	jEntries, err5 := uses.LoadEntries(eclient, userstruct.EntryIDs)
+	jEntries, err5 := uses.LoadEntries(client.Eclient, userstruct.EntryIDs)
 	if err5 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 41)")
 		fmt.Println(err5)
@@ -74,27 +69,27 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	day := bday[8:10]
 	year := bday[0:4]
 	birthdayline := month + "/" + day + "/" + year
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Birthday: birthdayline, Class: ClassYear} //Class:ClassYear}
-	viewingDOC, errID := get.IDByUsername(eclient, r.URL.Path[9:])
+
+	viewingDOC, errID := get.IDByUsername(client.Eclient, r.URL.Path[9:])
 	if errID != nil {
 		fmt.Println("this is an error (ViewProfile.go: 79)")
 		fmt.Println(errID)
 	}
 
-	temp := string(cs.UserInfo.Description)
+	temp := string(userstruct.Description)
 
-	numberFollowing, errnF := uses.NumFollow(eclient, session.Values["DocID"].(string), true)
+	numberFollowing, errnF := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), true)
 	if errnF != nil {
 		fmt.Println("this is an error (ViewProfile.go: 87)")
 		fmt.Println(errnF)
 	}
-	numberFollowers, errnF2 := uses.NumFollow(eclient, session.Values["DocID"].(string), false)
+	numberFollowers, errnF2 := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), false)
 	if errnF2 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 92)")
 		fmt.Println(errnF2)
 	}
 
-	cs = client.ClientSide{UserInfo: userstruct, Wall: jEntries, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets}
+	cs := client.ClientSide{UserInfo: userstruct, Wall: jEntries, Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")

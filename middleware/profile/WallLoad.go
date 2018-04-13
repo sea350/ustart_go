@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	stringHTML "github.com/sea350/ustart_go/middleware/stringHTML"
 
 	types "github.com/sea350/ustart_go/types"
@@ -14,7 +15,7 @@ import (
 //WallLoad ... Iunno
 func WallLoad(w http.ResponseWriter, r *http.Request) {
 	// If followingStatus = no
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	var output string
 	if test1 == nil {
@@ -30,7 +31,7 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 		var jEntries []types.JournalEntry
 		actualIDs := strings.Split(entryIDs, ",")
 		//jEntriesPointer := &jEntries
-		jEntries, err5 := uses.LoadEntries(eclient, actualIDs)
+		jEntries, err5 := uses.LoadEntries(client.Eclient, actualIDs)
 		fmt.Println(jEntries[0].ElementID)
 		fmt.Println(len(jEntries))
 		if err5 != nil {
@@ -53,7 +54,7 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 			}
 			if jEntries[i].Element.Classification == 2 {
 				postIDArray := []string{jEntries[i].Element.ReferenceEntry} // just an array with 1 entry
-				jEntry, err5 := uses.LoadEntries(eclient, postIDArray)
+				jEntry, err5 := uses.LoadEntries(client.Eclient, postIDArray)
 				if err5 != nil {
 					fmt.Println(err5)
 					fmt.Println("This is an error, WallLoad.go: 207")

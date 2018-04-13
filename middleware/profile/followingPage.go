@@ -12,7 +12,7 @@ import (
 
 //FollowingPage ... Shows the page for people the user is following
 func FollowingPage(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)

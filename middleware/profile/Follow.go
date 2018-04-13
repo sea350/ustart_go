@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
 //Follow ... Iunno
 func Follow(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		//No docID in session
@@ -23,19 +24,19 @@ func Follow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isFollowed, err4 := uses.IsFollowed(eclient, userID, session.Values["DocID"].(string))
+	isFollowed, err4 := uses.IsFollowed(client.Eclient, userID, session.Values["DocID"].(string))
 	if err4 != nil {
 		fmt.Println("this is an error (Follow.go: 24)")
 		fmt.Println(err4)
 	}
 	if isFollowed == true {
-		err := uses.UserUnfollow(eclient, userID, session.Values["DocID"].(string))
+		err := uses.UserUnfollow(client.Eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
 			fmt.Println("this is an error (Follow.go: 30)")
 			fmt.Println(err)
 		}
 	} else {
-		err := uses.UserFollow(eclient, userID, session.Values["DocID"].(string))
+		err := uses.UserFollow(client.Eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
 			fmt.Println("this is an error (Follow.go: 36)")
 			fmt.Println(err)

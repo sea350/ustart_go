@@ -3,11 +3,13 @@ package profile
 import (
 	"fmt"
 	"net/http"
+
+	client "github.com/sea350/ustart_go/middleware/client"
 )
 
 //EditModal ... Iunno
 func EditModal(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		//No docID in session

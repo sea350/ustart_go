@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -12,7 +13,7 @@ import (
 //OldWallLoad ... wall load but old
 func OldWallLoad(w http.ResponseWriter, r *http.Request) {
 	// If followingStatus = no
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -32,7 +33,7 @@ func OldWallLoad(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(actualIDs)
 		fmt.Println(" ARE THE ACTUAL IDS ")
 		//jEntriesPointer := &jEntries
-		jEntries, _ = uses.LoadEntries(eclient, actualIDs)
+		jEntries, _ = uses.LoadEntries(client.Eclient, actualIDs)
 		fmt.Println(jEntries[0].FirstName)
 		//if (err5 != nil){
 		//	fmt.Println(err5);
@@ -223,7 +224,7 @@ func OldWallLoad(w http.ResponseWriter, r *http.Request) {
 			if jEntries[i].Element.Classification == 2 {
 				postIDArray := []string{jEntries[i].Element.ReferenceEntry} // just an array with 1 entry
 				fmt.Println("MADE IT HERE")
-				jEntry, err5 := uses.LoadEntries(eclient, postIDArray)
+				jEntry, err5 := uses.LoadEntries(client.Eclient, postIDArray)
 				if err5 != nil {
 					fmt.Println(err5)
 				}

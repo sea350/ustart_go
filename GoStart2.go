@@ -59,6 +59,8 @@ func main() {
 	http.HandleFunc("/followers/", profile.FollowersPage)
 	http.HandleFunc("/following/", profile.FollowersPage)
 
+	http.HandleFunc("/testWall/", profile.testWallPage)
+
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/addProjectWidget/", widget.AddProjectWidget)

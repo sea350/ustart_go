@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"net/http"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/middleware/stringHTML"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
 //GetComments ... gets comments???
 func GetComments(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		//No docid in session
@@ -27,7 +28,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("This is debug text, GetComments.go: 23")
 	fmt.Println(pika + "IS PIKA") // pika is your own doc id
 	// journal entry, err
-	parentPost, arrayofComments, err4 := uses.LoadComments(eclient, postactual, 0, -1)
+	parentPost, arrayofComments, err4 := uses.LoadComments(client.Eclient, postactual, 0, -1)
 	//fmt.Println(parentPost);
 
 	//fmt.Println("ARRAY OF COMMENTS");
@@ -49,7 +50,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 		sum += i
 	}
 
-//	fmt.Println("COMMENT OUTPUT:", commentoutputs)
+	//	fmt.Println("COMMENT OUTPUT:", commentoutputs)
 	username := session.Values["Username"].(string)
 
 	output := stringHTML.ParentEntry(postaid, parentPost.Image, parentPost.FirstName, parentPost.LastName, string(parentPost.Element.Content), pika, username, commentoutputs)

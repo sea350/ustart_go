@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//GetComments ... gets comments???
+//PostComments ... posts comments???
 func PostComments(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		//No docid in session
@@ -27,7 +28,7 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println("This is debug text, GetComments.go: 23")
 	// fmt.Println(pika) // pika is your own doc id
 	// journal entry, err
-	_, arrayofComments, err4 := uses.LoadComments(eclient, postID, 0, -1)
+	_, arrayofComments, err4 := uses.LoadComments(client.Eclient, postID, 0, -1)
 	//	fmt.Println(parentPost);
 
 	fmt.Println("ARRAY OF COMMENTS")

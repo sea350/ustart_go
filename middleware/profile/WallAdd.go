@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/middleware/stringHTML"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -11,7 +12,7 @@ import (
 //WallAdd ... Iunno
 func WallAdd(w http.ResponseWriter, r *http.Request) {
 	// If followingStatus = no
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -23,12 +24,12 @@ func WallAdd(w http.ResponseWriter, r *http.Request) {
 	docID := r.FormValue("docID")
 	text := r.FormValue("text")
 	textRunes := []rune(text)
-	postID, err := uses.UserNewEntry(eclient, docID, textRunes)
+	postID, err := uses.UserNewEntry(client.Eclient, docID, textRunes)
 	if err != nil {
 		fmt.Println(err)
 	}
 	postIDArray := []string{postID} // just an array with 1 entry
-	jEntry, err5 := uses.LoadEntries(eclient, postIDArray)
+	jEntry, err5 := uses.LoadEntries(client.Eclient, postIDArray)
 	if err5 != nil {
 		fmt.Println(err5)
 	}
@@ -43,4 +44,3 @@ func WallAdd(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintln(w, output)
 }
-
