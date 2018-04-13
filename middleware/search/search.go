@@ -22,7 +22,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	filter := r.FormValue("searchFilterGroup") //can be: all,users,projects
 
 	if filter == `projects` {
-		results, _, err := search.ProjectBasic(client.Eclient, query)
+		results, err := search.SearchProject(client.Eclient, query)
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 26")
 		}
