@@ -39,6 +39,7 @@ func main() {
 	http.HandleFunc("/logout/", login.Logout)
 
 	// USER PROFILE AND INTERACTIONS
+	http.HandleFunc("/profile/", profile.ViewProfile)
 	http.HandleFunc("/callme/", profile.Follow)
 	http.HandleFunc("/Like", profile.Like)
 	http.HandleFunc("/getComments/", profile.GetComments)
@@ -48,7 +49,6 @@ func main() {
 	http.HandleFunc("/AddComment2", profile.AddComment2)
 	http.HandleFunc("/loadWall/", profile.WallLoad)
 	http.HandleFunc("/addPost/", profile.WallAdd)
-	http.HandleFunc("/profile/", profile.ViewProfile)
 	http.HandleFunc("/addSkill/", profile.AddTag)
 	http.HandleFunc("/deleteSkill/", profile.DeleteTag)
 	http.HandleFunc("/addLink/", profile.AddQuickLink)
@@ -59,7 +59,7 @@ func main() {
 	http.HandleFunc("/followers/", profile.FollowersPage)
 	http.HandleFunc("/following/", profile.FollowersPage)
 
-	http.HandleFunc("/testWall/", profile.testWallPage)
+	http.HandleFunc("/testWall/", profile.TestWallPage)
 
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
