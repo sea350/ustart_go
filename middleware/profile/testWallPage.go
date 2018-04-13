@@ -30,13 +30,19 @@ func TestWallPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err middleware/profile/testwallpage line 28")
 		fmt.Println(err)
 	}
-	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs[0:5])
+	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs)
 	if err != nil {
-		fmt.Println("err middleware/profile/testwallpage line 28")
+		fmt.Println("err middleware/profile/testwallpage line 35")
 		fmt.Println(err)
 	}
 
-	cs := client.ClientSide{Page: wallID, Wall: entries}
+	viewer, err := get.UserByID(client.Eclient, test1.(string))
+	if err != nil {
+		fmt.Println("err middleware/profile/testwallpage line 41")
+		fmt.Println(err)
+	}
+
+	cs := client.ClientSide{Page: wallID, Wall: entries, ImageCode: viewer.Avatar}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")

@@ -18,7 +18,7 @@ import (
 func UserBasic(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
 	ctx := context.Background()
 
-	newMatchQuery := elastic.NewMatchQuery("FirstName", searchTerm)
+	newMatchQuery := elastic.NewMatchQuery("Username", searchTerm)
 
 	var results []types.FloatingHead
 	searchResults, err := eclient.Search().
