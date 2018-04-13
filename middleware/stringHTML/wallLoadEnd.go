@@ -22,7 +22,27 @@ func WallLoadEnd(docID string, pageID string) string {
          
     //         }//end success
     //     });
-    // });
+	// });
+	
+		$('.deleteEntry').click(function(e) {
+			//e.preventDefault();
+			var postId= $(this).attr("id");
+			var modified ="#"+postId;
+			console.log(modified);
+			$.ajax({
+				type: 'GET',  
+				url: 'http://ustart.today:` + port + `/deleteModal/',
+				contentType: "application/json; charset=utf-8",
+				data: {PostID:postId},
+				success: function(data) {
+					console.log("reached here");
+					$("#deletenil").html(data);
+					$(modified).modal('show');
+			
+				}//end success
+			});
+		});
+
 		
 		$('#commentform').submit(function(e) {
 			//e.preventDefault();
