@@ -20,7 +20,7 @@ func AjaxLoadComments(w http.ResponseWriter, r *http.Request) {
 	}
 
 	parentID := r.FormValue("postID")
-	parent, entries, err := uses.LoadComments(client.Eclient, parentID, 0, -1)
+	_, entries, err := uses.LoadComments(client.Eclient, parentID, 0, -1)
 	if err != nil {
 		fmt.Println("err middleware/profile/ajaxloadcomments line 25")
 		fmt.Println(err)
@@ -32,12 +32,5 @@ func AjaxLoadComments(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	data2, err := json.Marshal(parent)
-	if err != nil {
-		fmt.Println("err middleware/profile/ajaxloadcomments line 32")
-		fmt.Println(err)
-	}
-
 	fmt.Fprintln(w, string(data))
-	fmt.Fprintln(w, string(data2))
 }
