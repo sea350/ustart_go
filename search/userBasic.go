@@ -24,9 +24,9 @@ func UserBasic(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead
 	searchResults, err := eclient.Search().
 		Index(globals.UserIndex). // search in index "twitter"
 		Query(newMatchQuery).     // specify the query
-		Sort("user", true).       // sort by "user" field, ascending
-		Pretty(true).             // pretty print request and response JSON
-		Do(ctx)                   // execute
+		//Sort("user", true).       // sort by "user" field, ascending
+		Pretty(true). // pretty print request and response JSON
+		Do(ctx)       // execute
 
 	//nResults := searchResults.TotalHits
 

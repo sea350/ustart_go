@@ -2,6 +2,7 @@ package stringHTML
 
 //WallLoadStart ... unknown
 func WallLoadStart(docID string, pageID string) string {
+	port := "5002"
 	return `
     <script>
     $('.deleteEntry').click(function(e) {
@@ -11,7 +12,7 @@ func WallLoadStart(docID string, pageID string) string {
         console.log(modified);
         $.ajax({
             type: 'GET',  
-            url: 'http://ustart.today:5000/deleteModal/',
+            url: 'http://ustart.today:` + port + `/deleteModal/',
             contentType: "application/json; charset=utf-8",
             data: {PostID:postId},
             success: function(data) {
@@ -73,7 +74,7 @@ func WallLoadStart(docID string, pageID string) string {
                                         //e.preventDefault();
                                         $.ajax({
                                             type: 'GET',  
-                                            url: 'http://ustart.today:5000/getComments/',
+                                            url: 'http://ustart.today:` + port + `/getComments/',
                                             contentType: "application/json; charset=utf-8",
                                             data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
                                             success: function(data) {
@@ -91,7 +92,7 @@ func WallLoadStart(docID string, pageID string) string {
                                         //e.preventDefault();
                                         $.ajax({
                                             type: 'GET',  
-                                            url: 'http://ustart.today:5000/shareComments/',
+                                            url: 'http://ustart.today:` + port + `/shareComments/',
                                             contentType: "application/json; charset=utf-8",
                                             data: {userID:"` + pageID + `", PostID:postId,Pikachu:Pikachu},
                                             success: function(data) {
@@ -109,7 +110,7 @@ func WallLoadStart(docID string, pageID string) string {
                                         //e.preventDefault();
                                         $.ajax({
                                             type: 'GET',  
-                                            url: 'http://ustart.today:5000/Like',
+                                            url: 'http://ustart.today:` + port + `/Like',
                                             contentType: "application/json; charset=utf-8",
                                             data: {userID:"` + pageID + `", PostID:postId,selfDoc:selfDoc},
                                             success: function(data) {
