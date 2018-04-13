@@ -60,6 +60,7 @@ func main() {
 	http.HandleFunc("/following/", profile.FollowersPage)
 
 	http.HandleFunc("/testWall/", profile.TestWallPage)
+	http.HandleFunc("/ajaxUserEntries/", profile.AjaxLoadEntries)
 
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
