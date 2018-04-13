@@ -108,8 +108,11 @@ func main() {
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
 	http.HandleFunc("/welcome/", registration.Registration)
 
-	//REGISTRATIONS
+	//SEARCH
 	http.HandleFunc("/search", search.Page)
+
+	//GENERIC LOAD COMMENTS
+	http.HandleFunc("/ajaxLoadComments/", profile.AjaxLoadComments)
 
 	http.ListenAndServe(":5002", nil)
 }
