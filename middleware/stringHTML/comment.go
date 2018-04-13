@@ -87,6 +87,8 @@ func CommentEntry(image string, fName string, lName string, content string, post
 
 package stringHTML
 
+var port = "5002"
+
 //CommentEntry ... creates a string of html that displays a comment
 func CommentEntry(image string, fName string, lName string, content string, postID string) string {
 	return `
@@ -121,7 +123,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
         console.log(modified);
         $.ajax({
             type: 'GET',  
-            url: 'http://ustart.today:5000/getPostComments/',
+            url: 'http://ustart.today:` + port + `/getPostComments/',
             contentType: "application/json; charset=utf-8",
             data: {PostID:postId},
             success: function(data) {
