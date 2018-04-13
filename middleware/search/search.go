@@ -29,7 +29,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		cs.ListOfHeads = results
 	}
 	if filter == `users` {
-		results, err := search.UserBasic(client.Eclient, query)
+		results, err := search.SearchProfile(client.Eclient, query)
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 34")
 		}

@@ -2,9 +2,8 @@ package search
 
 import (
 	"context"
-	"fmt"
+	"errors"
 
-	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
@@ -26,21 +25,22 @@ func SearchProfile(eclient *elastic.Client, searchTerm string) ([]types.Floating
 		Do(ctx)
 
 	if err != nil {
-		fmt.Println("waduhek")
+		return results, err
 	}
 
 	//Testing outputs
-	numHits := searchResults.Hits.TotalHits
-	fmt.Println("Number of Hits: ", numHits)
-	for _, s := range searchResults.Hits.Hits {
-		u, _ := get.UserByID(eclient, s.Id)
-		fmt.Println(u.FirstName, u.LastName)
-	}
+	// numHits := searchResults.Hits.TotalHits
+	// fmt.Println("Number of Hits: ", numHits)
+	// for _, s := range searchResults.Hits.Hits {
+	// 	u, _ := get.UserByID(eclient, s.Id)
+	// 	// fmt.Println(u.FirstName, u.LastName)
+	// }
 
-	for i, element := range searchResults.Hits.Hits {
-		head, err := uses.ConvertUserToFloatingHead(eclient, element.Id)
-		if err != nil {
-			fmt.Println("error search/userBasic line 43 index", i)
+	for _, element := range searchResults.Hits.Hits {
+		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
+		if err1 != nil {
+			err = errors.New("there was one or more problems loading results")
+			continue
 		}
 		results = append(results, head)
 	}
