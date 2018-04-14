@@ -45,7 +45,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	*/
 	for i := 0; i < len(arrayofComments); i++ {
 		// postIDnow := parentPost.ReplyIDS[i]
-		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content), arrayofComments[i].ElementID)
+		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content), string(arrayofComments[i].ElementID))
 		//fmt.Println(arrayofComments[i].Element.Content)
 		sum += i
 	}
