@@ -98,7 +98,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
 			<img style="height:40px;" class="img-rounded" src=d` + image + `>
 		</a>
 		<div class="media-body">
-			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName + `comment.go` + " " + lName + postID + `</h5>
+			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName + postID +`comment.go` + " " + lName + postID + `</h5>
 			<p>` + content + `</p>
 			<p>
 				<small>
@@ -110,7 +110,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
 			</p>
 			<p>
 			<small>
-				<a class="view-replies" onclick="document.getElementById('replies').style.display = 'block'; this.style.display = 'none'">View 2 Replies</a>
+				<a class="view-replies" onclick="document.getElementById('` + postID + `').style.display = 'block'; this.style.display = 'none'">View 2 Replies</a>
 			</small>
 			<script>
 				$(document).ready(function (){
@@ -128,13 +128,13 @@ func CommentEntry(image string, fName string, lName string, content string, post
             data: {PostID:postId},
             success: function(data) {
             	console.log("succcerosed");
-         	   $(".commentOfComment").html(data);
+         	   $("#` + postID + `").html(data);
             }//end success
         });
     }); // end view-replies click 
 			</script>
 			</p>
-				<div class="commentOfComment" id="replies">
+				<div class="commentOfComment" id="` + postID + `">
 					<!-- first reply of comment-->
 					<div class="media">
 		 			<a class="media-left" href="#">

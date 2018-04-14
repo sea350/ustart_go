@@ -7,11 +7,10 @@ import (
 
 	"github.com/sea350/ustart_go/uses"
 
-	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 )
 
-//AjaxLoadEntries ... pulls all entries for a given user and fprints it back as a json array
+//AjaxLoadEntries ... pulls all entries for a given array of entry ids and fprints it back as a json array
 func AjaxLoadEntries(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -20,13 +19,14 @@ func AjaxLoadEntries(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	wallID := r.FormValue("userID")
-	user, err := get.UserByID(client.Eclient, wallID)
-	if err != nil {
-		fmt.Println("err middleware/profile/ajaxloadentries line 25")
-		fmt.Println(err)
-	}
-	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs)
+	entryIDsString := r.FormValue("postIndex")
+	entryIDsArr := uses.ConvertStrToStrArr(entryIDsString)
+
+	fmt.Println("debug text ajaxloadentries line 25")
+	fmt.Println(entryIDsArr)
+	fmt.Println(len(entryIDsArr))
+
+	entries, err := uses.LoadEntries(client.Eclient, entryIDsArr)
 	if err != nil {
 		fmt.Println("err middleware/profile/ajaxloadentries line 30")
 		fmt.Println(err)

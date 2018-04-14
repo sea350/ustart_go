@@ -60,7 +60,7 @@ func main() {
 	http.HandleFunc("/following/", profile.FollowersPage)
 
 	http.HandleFunc("/testWall/", profile.TestWallPage)
-	http.HandleFunc("/ajaxUserEntries/", profile.AjaxLoadEntries)
+	http.HandleFunc("/ajaxUserEntries/", profile.AjaxLoadUserEntries)
 
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
@@ -113,6 +113,7 @@ func main() {
 
 	//GENERIC LOAD COMMENTS
 	http.HandleFunc("/AjaxLoadComments/", profile.AjaxLoadComments)
+	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
 
 	http.ListenAndServe(":5002", nil)
 }

@@ -20,7 +20,7 @@ func RejectJoinRequest(w http.ResponseWriter, r *http.Request) {
 	projID := r.FormValue("projectID")
 	newMemberID := r.FormValue("userID")
 
-	err, newNumRequests := uses.RemoveRequest(client.Eclient, projID, newMemberID)
+	newNumRequests, err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
 	if err != nil {
 		fmt.Println("err middleware/project/acceptjoinrequest line 27")
 		fmt.Println(err)
