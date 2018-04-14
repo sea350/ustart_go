@@ -3,6 +3,7 @@ package search
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/search"
@@ -22,14 +23,14 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	filter := r.FormValue("searchFilterGroup") //can be: all,users,projects
 
 	if filter == `projects` {
-		results, err := search.SearchProject(client.Eclient, query)
+		results, err := search.SearchProject(client.Eclient, strings.ToLower(query))
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 26")
 		}
 		cs.ListOfHeads = results
 	}
 	if filter == `users` {
-		results, err := search.SearchProfile(client.Eclient, query)
+		results, err := search.SearchProfile(client.Eclient, strings.ToLower(query))
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 34")
 		}

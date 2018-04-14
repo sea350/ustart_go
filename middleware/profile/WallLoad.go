@@ -41,7 +41,7 @@ func WallLoad(w http.ResponseWriter, r *http.Request) {
 		class0 := `<div class="panel panel-default wallAppend">`
 
 		for i := len(jEntries) - 1; i >= 0; i-- {
-			fmt.Println("INDEX:", i)
+
 			if jEntries[i].Element.Classification == 0 {
 
 				class0 += stringHTML.AddClass0Entry(
