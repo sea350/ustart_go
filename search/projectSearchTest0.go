@@ -3,7 +3,9 @@ package search
 import (
 	"context"
 	"errors"
+	"fmt"
 
+	get "github.com/sea350/ustart_go/get/project"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
@@ -12,6 +14,7 @@ import (
 
 //SearchProject ... Attempt at fully functional project search, returns Floatinghead
 func SearchProject(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
+	fmt.Println("STARTING\n")
 	ctx := context.Background()
 	var results []types.FloatingHead
 
@@ -24,6 +27,14 @@ func SearchProject(eclient *elastic.Client, searchTerm string) ([]types.Floating
 
 	if err != nil {
 		return results, err
+	}
+
+	//Testing outputs
+	numHits := searchResults.Hits.TotalHits
+	fmt.Println("Number of Hits: ", numHits)
+	for _, s := range searchResults.Hits.Hits {
+		u, _ := get.ProjectByID(eclient, s.Id)
+		fmt.Println(u.Name, u.URLName)
 	}
 
 	for _, element := range searchResults.Hits.Hits {
