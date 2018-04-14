@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	get "github.com/sea350/ustart_go/get/project"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
@@ -18,7 +17,8 @@ func SearchProject(eclient *elastic.Client, searchTerm string) ([]types.Floating
 	ctx := context.Background()
 	var results []types.FloatingHead
 
-	newMatchQuery := elastic.NewMultiMatchQuery(searchTerm, "Name", "Description", "URLName", "Tags")
+	//, "Description", "URLName", "Tags"
+	newMatchQuery := elastic.NewMultiMatchQuery(searchTerm, "Name", "Tags", "URLName")
 	searchResults, err := eclient.Search().
 		Index(globals.ProjectIndex).
 		Query(newMatchQuery).
@@ -28,17 +28,22 @@ func SearchProject(eclient *elastic.Client, searchTerm string) ([]types.Floating
 	if err != nil {
 		return results, err
 	}
+	// //Testing outputs
+	// fmt.Println("ERROR:", err, "\n")
+	// numHits := searchResults.Hits.TotalHits
+	// fmt.Println("Number of Hits: ", numHits)
+	// for _, s := range searchResults.Hits.Hits {
+	// 	u, _ := get.ProjectByID(eclient, s.Id)
+	// 	fmt.Println(u.Name, u.URLName)
+	// }
+	// return results, err
 
-	//Testing outputs
-	numHits := searchResults.Hits.TotalHits
-	fmt.Println("Number of Hits: ", numHits)
-	for _, s := range searchResults.Hits.Hits {
-		u, _ := get.ProjectByID(eclient, s.Id)
-		fmt.Println(u.Name, u.URLName)
-	}
+	// if err != nil {
+	// 	fmt.Println("Waduhek\n")
+	// }
 
 	for _, element := range searchResults.Hits.Hits {
-		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
+		head, err1 := uses.ConvertProjectToFloatingHead(eclient, element.Id)
 		if err1 != nil {
 			err = errors.New("there was one or more problems loading results")
 			continue
