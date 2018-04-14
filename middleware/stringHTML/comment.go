@@ -128,7 +128,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
             data: {PostID:postId},
             success: function(data) {
             	console.log("succcerosed");
-         	   $(".commentOfComment").html(data);
+         	   $("#` + postID + `").html(data);
             }//end success
         });
     }); // end view-replies click 
