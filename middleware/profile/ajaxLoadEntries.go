@@ -22,6 +22,9 @@ func AjaxLoadEntries(w http.ResponseWriter, r *http.Request) {
 	entryIDsString := r.FormValue("postIndex")
 	entryIDsArr := uses.ConvertStrToStrArr(entryIDsString)
 
+	fmt.Println("debug text ajaxloadentries line 25")
+	fmt.Println(entryIDsArr)
+
 	entries, err := uses.LoadEntries(client.Eclient, entryIDsArr)
 	if err != nil {
 		fmt.Println("err middleware/profile/ajaxloadentries line 30")
