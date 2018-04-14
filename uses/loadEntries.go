@@ -25,5 +25,12 @@ func LoadEntries(eclient *elastic.Client, loadList []string) ([]types.JournalEnt
 		entries = append(entries, jEntry)
 	}
 
-	return entries, nil
+	var noClassOnes []types.JournalEntry
+	for _, entry := range entries {
+		if entry.Element.Classification != 1 {
+			noClassOnes = append(noClassOnes, entry)
+
+		}
+	}
+	return noClassOnes, nil
 }
