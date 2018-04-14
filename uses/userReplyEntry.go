@@ -4,7 +4,6 @@ import (
 	"time"
 
 	postEntry "github.com/sea350/ustart_go/post/entry"
-	postUser "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -27,10 +26,10 @@ func UserReplyEntry(eclient *elastic.Client, userID string, entryID string, cont
 		return err
 	}
 
-	err = postUser.AppendEntryID(eclient, userID, replyID)
+	/*err = postUser.AppendEntryID(eclient, userID, replyID)
 	if err != nil {
 		return err
-	}
+	}*/
 
 	err = postEntry.AppendReplyID(eclient, entryID, replyID)
 	return err
