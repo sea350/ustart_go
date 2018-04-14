@@ -24,7 +24,7 @@ func AjaxLoadEntries(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("debug text ajaxloadentries line 25")
 	fmt.Println(entryIDsArr)
-	fmt.Println(len(entryIDsArr[0]))
+	fmt.Println(len(entryIDsArr))
 
 	entries, err := uses.LoadEntries(client.Eclient, entryIDsArr)
 	if err != nil {
