@@ -98,7 +98,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
 			<img style="height:40px;" class="img-rounded" src=d` + image + `>
 		</a>
 		<div class="media-body">
-			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName + `comment.go` + " " + lName + postID + `</h5>
+			<h5 class="media-heading user_name" style="color:cadetblue;">` + fName + postID +`comment.go` + " " + lName + postID + `</h5>
 			<p>` + content + `</p>
 			<p>
 				<small>
@@ -128,7 +128,7 @@ func CommentEntry(image string, fName string, lName string, content string, post
             data: {PostID:postId},
             success: function(data) {
             	console.log("succcerosed");
-         	   $(".commentOfComment").html(data);
+         	   $("#` + postID + `").html(data);
             }//end success
         });
     }); // end view-replies click 
