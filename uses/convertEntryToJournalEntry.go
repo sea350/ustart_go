@@ -31,10 +31,10 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string) (types.
 	newJournalEntry.FirstName = usr.FirstName
 	newJournalEntry.LastName = usr.LastName
 	newJournalEntry.Image = usr.Avatar
-
-	if entry.Classification == 2 {
-		newJournalEntry.ReferenceElement, err = ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry)
-	}
-
+	/*
+		if entry.Classification == 2 {
+			newJournalEntry.ReferenceElement, err = ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry)
+		}
+	*/
 	return newJournalEntry, err
 }
