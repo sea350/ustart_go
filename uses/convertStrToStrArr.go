@@ -8,6 +8,10 @@ func ConvertStrToStrArr(unbrokenString string) []string {
 	if len(stringArray) > 0 {
 		stringArray[0] = strings.Trim(stringArray[0], `["`)
 		stringArray[len(stringArray)-1] = strings.Trim(stringArray[len(stringArray)-1], `"]`)
+		if stringArray[0] == `` && len(stringArray) == 1 {
+			var empty []string
+			stringArray = empty
+		}
 	}
 	return stringArray
 }
