@@ -1,8 +1,6 @@
 package uses
 
 import (
-import "fmt"
-import "fmt"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -27,11 +25,9 @@ func LoadEntries(eclient *elastic.Client, loadList []string) ([]types.JournalEnt
 		entries = append(entries, jEntry)
 	}
 
-	
 	var noClassOnes []types.JournalEntry
 	for _, entry := range entries {
 		if entry.Element.Classification != 1 {
-			fmt.Println(entry.
 			noClassOnes = append(noClassOnes, entry)
 
 		}
