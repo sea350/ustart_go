@@ -6,6 +6,7 @@ import (
 	//"github.com/sea350/ustart_go/middleware/fail"
 	//inbox "github.com/mrb721/ustart_app/ustartapp/middleware/inbox"
 	login "github.com/sea350/ustart_go/app_middleware/login"
+	settings "github.com/sea350/ustart_go/app_middleware/settings"
 	signup "github.com/sea350/ustart_go/app_middleware/signup"
 	/*profile "github.com/sea350/ustart_go/middleware/profile"
 	project "github.com/sea350/ustart_go/middleware/project"
@@ -36,6 +37,7 @@ func main() {
 	//http.HandleFunc("/", login.Home)
 	http.HandleFunc("/login/", login.Handler)
 	http.HandleFunc("/signup/", signup.Handler)
+	http.HandleFunc("/settings/", settings.Handler)
 	//http.HandleFunc("/logout/", login.Logout)
 
 	// USER PROFILE AND INTERACTIONS
