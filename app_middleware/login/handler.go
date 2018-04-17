@@ -83,10 +83,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		expiration := time.Now().Add((30) * time.Hour)
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 
-		fmt.Println("THE RESPONSE:", resJson)
+		fmt.Println("THE RESPONSE:", resp)
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		resp.updateResp(err, succ, session)
+
 		w.Write(resJson)
 		http.SetCookie(w, &cookie)
 		session.Save(r, w)
