@@ -16,8 +16,8 @@ type response struct {
 
 func setupResp() *response {
 	resp := &response{
-
-		ErrMsg: errors.New("Unknown error"),
+		Success: true,
+		ErrMsg:  errors.New("Unknown error"),
 	}
 
 	return resp
