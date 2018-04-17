@@ -71,9 +71,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		fmt.Println("Valid login")
-		w.Header().Set("Content-type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		resp.updateResp(err, succ, session)
+
 		resJson, _ := json.Marshal(resp)
 		session.Values["DocID"] = sessUsr.DocID
 		fmt.Println("user logged in: " + sessUsr.DocID)
@@ -85,6 +83,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 		http.SetCookie(w, &cookie)
 		session.Save(r, w)
+		w.Header().Set("Content-type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		resp.updateResp(err, succ, session)
 		w.Write(resJson)
 	}
 }
