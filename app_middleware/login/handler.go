@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/sessions"
 	uses "github.com/sea350/ustart_go/uses"
@@ -74,6 +75,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		resp.updateResp(err, succ, session)
 		resJson, _ := json.Marshal(resp)
+		session.Values["DocID"] = sessUsr.DocID
+		fmt.Println("user logged in: " + sessUsr.DocID)
+		session.Values["FirstName"] = sessUsr.FirstName
+		session.Values["LastName"] = sessUsr.LastName
+		session.Values["Email"] = sessUsr.Email
+		session.Values["Username"] = sessUsr.Username
+		expiration := time.Now().Add((30) * time.Hour)
+		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
+		http.SetCookie(w, &cookie)
+		session.Save(r, w)
 		w.Write(resJson)
 	}
 }
