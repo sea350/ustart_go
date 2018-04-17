@@ -53,7 +53,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&data)
 
-	resp.updateResp("", err, false)
+	resp.updateResp(err, false, session)
 
 	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
 
@@ -62,7 +62,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	if !succ {
 		fmt.Println("Invalid login")
-		resp.updateResp("", errors.New("Password mismatch"), succ)
+		resp.updateResp(errors.New("Password mismatch"), succ, session)
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		resJson, _ := json.Marshal(resp)
@@ -72,7 +72,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Valid login")
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		resp.updateResp(sessUsr.Username, err, succ)
+		resp.updateResp(err, succ, session)
 		resJson, _ := json.Marshal(resp)
 		w.Write(resJson)
 	}
