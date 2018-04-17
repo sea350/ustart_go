@@ -72,7 +72,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		fmt.Println("Valid login")
-
+		resp.updateResp(err, succ, session)
 		resJson, _ := json.Marshal(resp)
 		session.Values["DocID"] = sessUsr.DocID
 		fmt.Println("user logged in: " + sessUsr.DocID)
