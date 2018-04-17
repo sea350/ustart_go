@@ -64,14 +64,20 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	if !succ {
 		fmt.Println("Invalid login")
-		resp.updateResp(errors.New("Password mismatch"), succ, session)
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
+		resp.updateResp(errors.New("Password mismatch"), succ, session)
+
 		resJson, _ := json.Marshal(resp)
 		w.Write(resJson)
 
 	} else {
 		fmt.Println("Valid login")
+		w.Header().Set("Content-type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		resp.updateResp(err, succ, session)
+		resJson, _ := json.Marshal(resp)
+		w.Write(resJson)
 
 		session.Values["DocID"] = sessUsr.DocID
 		fmt.Println("user logged in: " + sessUsr.DocID)
@@ -83,11 +89,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 
 		fmt.Println("THE RESPONSE:", resp)
-		w.Header().Set("Content-type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		resp.updateResp(err, succ, session)
-		resJson, _ := json.Marshal(resp)
-		w.Write(resJson)
+
 		http.SetCookie(w, &cookie)
 		session.Save(r, w)
 	}
