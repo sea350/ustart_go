@@ -76,7 +76,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		resp.updateResp(err, succ, session)
-		resJson, _ := json.Marshal(resp)
+		resJson, errM := json.Marshal(resp)
+		if errM != nil {
+			fmt.Println(errM)
+		}
 		w.Write(resJson)
 
 		session.Values["DocID"] = sessUsr.DocID
