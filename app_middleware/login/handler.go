@@ -89,6 +89,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 
 		fmt.Println("THE RESPONSE:", resp)
+		fmt.Println("THE RESJSONs:", resJson)
 
 		http.SetCookie(w, &cookie)
 		session.Save(r, w)
