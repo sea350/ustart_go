@@ -23,7 +23,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handling a login request")
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
-	if test1 == nil {
+	if test1 != nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
