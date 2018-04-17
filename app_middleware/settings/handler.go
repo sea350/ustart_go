@@ -32,6 +32,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		Successful: false,
 
 		ErrMsg: errors.New("Unknown failure"),
+
+		Retreived: "",
+
+		SessUsr: session,
 	}
 
 	if acrh, ok := r.Header["Access-Control-Request-Headers"]; ok {
@@ -57,7 +61,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	data := form{}
 
-	resp.update(false, json.NewDecoder(r.Body).Decode(&data), "")
+	resp.update(false, json.NewDecoder(r.Body).Decode(&data), "", session)
 
 	fmt.Println("Obtained following data: ")
 	fmt.Printf("%+v\n", data)
@@ -66,35 +70,35 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//valid := true
 	//valid, err := session.Validate(data.User, data.Token)
 
-	resp.update(false, errors.New("Error"), "")
+	resp.update(false, errors.New("Error"), "", session)
 
 	if test1 != nil {
 		switch data.Intent {
 		case "cu":
 			if session.Values["Username"] == data.Username {
 				err = uses.ChangeUsername(eclient, session.Values["DocID"].(string), data.Username, data.NewUName)
-				resp.update(err == nil, err, "")
+				resp.update(err == nil, err, "", session)
 			}
 		case "cn":
 			if session.Values["Username"] == data.Username {
 				err := uses.ChangeFirstAndLastName(eclient, session.Values["DocID"].(string), data.FirstName, data.LastName)
-				resp.update(err == nil, err, "")
+				resp.update(err == nil, err, "", session)
 			}
 		case "cp":
 			if session.Values["Username"] == data.Username {
 				err = uses.ChangePassword(eclient, session.Values["DocID"].(string), []byte(data.Password), []byte(data.NewPassword))
-				resp.update(err == nil, err, "")
+				resp.update(err == nil, err, "", session)
 			}
 		case "ca":
 			if session.Values["Username"] == data.Username {
 				err = post.UpdateUser(eclient, session.Values["DocID"].(string), "Avatar", data.Avatar)
-				resp.update(err == nil, err, "")
+				resp.update(err == nil, err, "", session)
 			}
 		case "cb":
 			if session.Values["Username"] == data.Username {
 				//blob := r.FormValue("banner-data")
 				err := post.UpdateUser(eclient, session.Values["DocID"].(string), "Banner", data.Banner)
-				resp.update(err == nil, err, "")
+				resp.update(err == nil, err, "", session)
 			}
 		}
 		/*case "gu":
@@ -105,7 +109,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		}*/
 
 	} else {
-		resp.update(false, errors.New("Token invalid"), "")
+		resp.update(false, errors.New("Token invalid"), "", session)
 	}
 
 }
