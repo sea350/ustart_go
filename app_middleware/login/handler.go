@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/sessions"
 	uses "github.com/sea350/ustart_go/uses"
 
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -13,11 +14,19 @@ import (
 
 //var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))
 var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-
+var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 //Handler ...
 //Login handler
 func Handler(w http.ResponseWriter, r *http.Request) {
 
+	fmt.Println("Handling a login request")
+	session, _ := store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+	if test1 == nil {
+		fmt.Println(test1)
+		http.Redirect(w, r, "/~", http.StatusFound)
+		return
+	}
 	resp := setupResp()
 
 	if acrh, ok := r.Header["Access-Control-Request-Headers"]; ok {
