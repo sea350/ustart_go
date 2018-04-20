@@ -64,6 +64,7 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data, err := json.Marshal(cmts)
+	fmt.Println("DATA:", string(data))
 	fmt.Fprintln(w, string(data))
 
 	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
