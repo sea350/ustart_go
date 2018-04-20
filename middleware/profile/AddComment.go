@@ -26,7 +26,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id") // userID
 	fmt.Println("ID IS " + id)
 	contentArray := []rune(comment)
-	username := r.FormValue("username")
+	//username := r.FormValue("username")
 	fmt.Println(postActual + "is the post ID? ")
 	err4 := uses.UserReplyEntry(client.Eclient, id, postActual, contentArray)
 	if err4 != nil {
