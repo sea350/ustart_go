@@ -92,9 +92,6 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	var projHeads []types.FloatingHead
 	for _, projID := range userstruct.Projects {
-		if !projID.Visible {
-			continue
-		}
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projID.ProjectID)
 		if err != nil {
 			fmt.Println("this is an error (ViewProfile.go: 97)")
