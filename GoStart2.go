@@ -14,6 +14,8 @@ import (
 	widget "github.com/sea350/ustart_go/middleware/widget"
 )
 
+var currentPort = "5002"
+
 func main() {
 	/*
 		Lines 18-19 handle the static file locating
@@ -22,6 +24,7 @@ func main() {
 		The other being the relative link on the actual html pages
 	*/
 	// fs := http.FileServer(http.Dir("/home/rr2396/www/"))
+	_, _ = http.Get("http://ustart.today:" + currentPort + "/KillUstartPlsNoUserinoCappucinoDeniro")
 	fs := http.FileServer(http.Dir("/ustart/ustart_front/"))
 	// http.Handle("/www/", http.StripPrefix("/www/", fs))
 	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
@@ -30,6 +33,7 @@ func main() {
 	*/
 
 	http.HandleFunc("/404/", fail.Fail)
+	http.HandleFunc("/KillUstartPlsNoUserinoCappucinoDeniro", fail.KillSwitch)
 
 	//LOGIN & LOGOUT
 	http.HandleFunc("/Inbox/", inbox.Inbox)
@@ -115,5 +119,5 @@ func main() {
 	http.HandleFunc("/AjaxLoadComments/", profile.AjaxLoadComments)
 	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
 
-	http.ListenAndServe(":5002", nil)
+	http.ListenAndServe(":"+currentPort, nil)
 }

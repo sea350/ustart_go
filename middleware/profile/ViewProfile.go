@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -89,7 +90,21 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(errnF2)
 	}
 
-	cs := client.ClientSide{UserInfo: userstruct, Wall: jEntries, Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets}
+	var projHeads []types.FloatingHead
+	for _, projID := range userstruct.Projects {
+		if !projID.Visible {
+			continue
+		}
+		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projID.ProjectID)
+		if err != nil {
+			fmt.Println("this is an error (ViewProfile.go: 97)")
+			fmt.Println(err)
+			continue
+		}
+		projHeads = append(projHeads, head)
+	}
+
+	cs := client.ClientSide{UserInfo: userstruct, Wall: jEntries, Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets, ListOfHeads: projHeads}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
