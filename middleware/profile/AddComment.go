@@ -67,6 +67,6 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("DATA NEXT:", string(data))
 	fmt.Fprintln(w, string(data))
 
-	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
-	return
+	//http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+	//return
 }
