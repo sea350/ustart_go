@@ -22,7 +22,7 @@ func EditPost(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("postid")
 	newContent := r.FormValue("content")
 
-	editedEntry, err := uses.EditEntry(client.Eclient, postID, "Content", newContent)
+	editedEntry, err := uses.EditEntry(client.Eclient, postID, "Content", []rune(newContent))
 
 	if err != nil {
 		fmt.Println(err)
