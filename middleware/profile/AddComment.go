@@ -40,6 +40,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 func AddComment2(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
+	fmt.Println("WE ARE IN ADDCOMMENT.GO")
 	if test1 == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
