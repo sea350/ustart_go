@@ -25,7 +25,8 @@ func DeleteWallPost(w http.ResponseWriter, r *http.Request) {
 	postid := r.FormValue("postid")
 
 	fmt.Println(postid + "IS THE DELETE")
-	err := uses.HideEntry(client.Eclient, postid)
+	//err := uses.HideEntry(client.Eclient, postid)
+	err := uses.RemoveEntry(client.Eclient, session.Values["DocID"].(string), postid)
 	if err != nil {
 		fmt.Println(err)
 	}
