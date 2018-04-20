@@ -1,11 +1,11 @@
 package profile
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
-	"github.com/sea350/ustart_go/middleware/stringHTML"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
@@ -21,14 +21,14 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	postID := r.FormValue("PostID")
-	postaid := postID[9:]
+	//postaid := postID[9:]
 	postactual := postID[10:]
 	// need to trim beginning of postID
 	pika := r.FormValue("Pikachu")
 	fmt.Println("This is debug text, GetComments.go: 23")
 	fmt.Println(pika + "IS PIKA") // pika is your own doc id
 	// journal entry, err
-	parentPost, arrayofComments, err4 := uses.LoadComments(client.Eclient, postactual, 0, -1)
+	_, arrayofComments, err4 := uses.LoadComments(client.Eclient, postactual, 0, -1)
 	//fmt.Println(parentPost);
 
 	//fmt.Println("ARRAY OF COMMENTS");
@@ -38,23 +38,28 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err4)
 	}
 
-	var sum int
-	var commentoutputs string
+	//var sum int
+	//var commentoutputs string
 	/*
 		The following is how AJAX for loading comments is handled on the server side.
 	*/
-	for i := 0; i < len(arrayofComments); i++ {
-		// postIDnow := parentPost.ReplyIDS[i]
-		commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content), string(arrayofComments[i].ElementID))
-		//fmt.Println(arrayofComments[i].Element.Content)
-		sum += i
+	// for i := 0; i < len(arrayofComments); i++ {
+	// 	// postIDnow := parentPost.ReplyIDS[i]
+	// 	commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content), string(arrayofComments[i].ElementID))
+	// 	//fmt.Println(arrayofComments[i].Element.Content)
+	// 	sum += i
+	// }
+
+	data, err := json.Marshal(arrayofComments)
+	if err != nil {
+		fmt.Println(err)
 	}
-
+	fmt.Fprintln(w, string(data))
 	//	fmt.Println("COMMENT OUTPUT:", commentoutputs)
-	username := session.Values["Username"].(string)
+	//	username := session.Values["Username"].(string)
 
-	output := stringHTML.ParentEntry(postaid, parentPost.Image, parentPost.FirstName, parentPost.LastName, string(parentPost.Element.Content), pika, username, commentoutputs)
+	//output := stringHTML.ParentEntry(postaid, parentPost.Image, parentPost.FirstName, parentPost.LastName, string(parentPost.Element.Content), pika, username, commentoutputs)
 
-	fmt.Fprintln(w, output)
+	//fmt.Fprintln(w, output)
 
 }

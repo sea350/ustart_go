@@ -32,8 +32,18 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 	if err4 != nil {
 		fmt.Println(err4)
 	}
-	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
-	return
+
+	_, cmts, err := uses.LoadComments(client.Eclient, postID, 0, -1)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	data, err := json.Marshal(cmts)
+	fmt.Println("DATA NEXT:", string(data))
+	fmt.Fprintln(w, string(data))
+
+	//http.Redirect(w, r, "/profile/"+username, http.StatusFound)
+
 }
 
 //AddComment2 ... Iunno
