@@ -9,8 +9,8 @@ import (
 	"github.com/sea350/ustart_go/uses"
 )
 
-//EditModal ... Iunno
-func EditModal(w http.ResponseWriter, r *http.Request) {
+//EditPosr ... Iunno
+func EditPost(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
