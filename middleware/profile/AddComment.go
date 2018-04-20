@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -56,6 +57,15 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 	if err4 != nil {
 		fmt.Println(err4)
 	}
+
+	_, cmts, err := uses.LoadComments(client.Eclient, postID, 0, -1)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	data, err := json.Marshal(cmts)
+	fmt.Fprintln(w, string(data))
+
 	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
-	return
+	//return
 }
