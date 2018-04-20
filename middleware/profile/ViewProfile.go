@@ -98,6 +98,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			continue
 		}
+		head.Followed = projID.Visible
 		projHeads = append(projHeads, head)
 	}
 

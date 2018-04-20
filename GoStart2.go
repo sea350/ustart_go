@@ -62,6 +62,7 @@ func main() {
 	http.HandleFunc("/getPostComments/", profile.PostComments)
 	http.HandleFunc("/followers/", profile.FollowersPage)
 	http.HandleFunc("/following/", profile.FollowersPage)
+	http.HandleFunc("/toggleProjectInvis/", profile.AjaxChangeProjVisibility)
 
 	http.HandleFunc("/testWall/", profile.TestWallPage)
 	http.HandleFunc("/ajaxUserEntries/", profile.AjaxLoadUserEntries)
