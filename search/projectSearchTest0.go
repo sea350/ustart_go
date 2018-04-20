@@ -13,7 +13,7 @@ import (
 
 //SearchProject ... Attempt at fully functional project search, returns Floatinghead
 func SearchProject(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
-	fmt.Println("STARTING\n")
+	fmt.Println("STARTING")
 	ctx := context.Background()
 	var results []types.FloatingHead
 
