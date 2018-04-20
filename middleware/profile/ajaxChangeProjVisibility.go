@@ -19,7 +19,7 @@ func AjaxChangeProjVisibility(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projID := r.FormValue("UNKWON")
+	projID := r.FormValue("projectID")
 
 	usr, err := get.UserByID(client.Eclient, ID.(string))
 	if err != nil {
