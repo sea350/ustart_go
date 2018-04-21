@@ -61,7 +61,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	data := form{}
 
-	//resp.update(false, json.NewDecoder(r.Body).Decode(&data))
+	resp.update(false, json.NewDecoder(r.Body).Decode(&data))
+	//	marshalledData, err := json.Marshal(data)
 
 	fmt.Println("Obtained following data: ")
 	fmt.Printf("%+v\n", data)
@@ -70,7 +71,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//valid := true
 	//valid, err := session.Validate(data.User, data.Token)
 
-	resp.update(false, errors.New("Error"))
+	//resp.update(false, errors.New("Error"))
 
 	if test1 == test1 {
 		switch data.Intent {
