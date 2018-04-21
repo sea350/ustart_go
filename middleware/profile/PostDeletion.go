@@ -11,29 +11,22 @@ import (
 
 var port = "5002"
 
-//DeleteWallPost ... Iunno
-func DeleteWallPost(w http.ResponseWriter, r *http.Request) {
+//DeletePost ... Can delete any post, meant to be used as an ajax call
+func DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["DocID"]
-	if test1 == nil {
-		fmt.Println(test1)
+	DOCID, _ := session.Values["DocID"]
+	if DOCID == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	r.ParseForm()
+
 	postid := r.FormValue("postid")
 
-	fmt.Println(postid + "IS THE DELETE")
-	//err := uses.HideEntry(client.Eclient, postid)
 	err := uses.RemoveEntry(client.Eclient, postid)
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
-	return
-
 }
 
 //GenerateDeleteModal ...
