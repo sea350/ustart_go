@@ -18,7 +18,7 @@ type form struct {
 	Banner string `json:"Banner"`
 
 	// Fields related to the requestor
-	Token string `json:"Token"`
+	//Token string `json:"Token"`
 	//User  string `json:"User"`
 }
 
