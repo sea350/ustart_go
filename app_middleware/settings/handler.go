@@ -77,7 +77,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		switch data.Intent {
 		case "cu":
 			fmt.Println("RIGHT INTENT")
-			if session.Values["Username"] == data.Username {
+			if data.Username == data.Username {
 				err = uses.ChangeUsername(eclient, session.Values["DocID"].(string), data.Username, data.NewUName)
 				resp.update(err == nil, err)
 			}
