@@ -58,7 +58,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 3
 	}
 	if r.FormValue("widgetSubmit") == `4` {
-		//instagram
+		//instagram -- Takes in an instagram post URL
 		checker := uses.StringChecker(r.FormValue("instagramInput"), "instagram.com") //Check valid URL
 		if !checker {
 			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
@@ -81,7 +81,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 4
 	}
 	if r.FormValue("widgetSubmit") == `5` {
-		//soundcloud
+		//soundcloud -- Takes in a Soundcloud Embed Code
 		checker := uses.StringChecker(r.FormValue("scInput"), "soundcloud.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
@@ -93,10 +93,9 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 5
 	}
 	if r.FormValue("widgetSubmit") == `6` {
-		//youtube
+		//youtube -- Takes in a YouTube URL
 		checker1 := uses.StringChecker(r.FormValue("ytinput"), "youtube.com") //Check valid URL
-		checker2 := uses.StringChecker(r.FormValue("ytinput"), "youtu.be")
-		if !checker1 && !checker2 {
+		if !checker1 {
 			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
@@ -107,7 +106,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 6
 	}
 	if r.FormValue("widgetSubmit") == `7` {
-		//codepen
+		//codepen -- Takes in an Embed code
 
 		checker := uses.StringChecker(r.FormValue("codepenInput"), "codepen.io") //Check valid Embed
 		if !checker {
@@ -121,20 +120,20 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 7
 	}
 	if r.FormValue("widgetSubmit") == `8` {
-		//pinterest
-		/*checker := uses.StringChecker(r.FormValue("pinInput"), "pinterest.com")
+		//pinterest -- Takes in a pinterest USER PROFILE!
+		checker := uses.StringChecker(r.FormValue("pinInput"), "pinterest.com")
 		if !checker {
 			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			fmt.Println("invalid widget embed code")
 			return
-		}*/
+		}
 		url := template.HTML(r.FormValue("pinInput"))
 		data = []template.HTML{url}
 
 		classification = 8
 	}
 	if r.FormValue("widgetSubmit") == `9` {
-		//tumblr
+		//tumblr -- Username
 		/*checker := uses.StringChecker(r.FormValue("tumblrInput"), "tumblr.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
@@ -147,7 +146,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 9
 	}
 	if r.FormValue("widgetSubmit") == `10` {
-		//spoofy
+		//spoofy -- Embed code
 		checker := uses.StringChecker(r.FormValue("spotInput"), "spotify.com") //Check valid Embed
 		if !checker {
 			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
@@ -170,13 +169,13 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 10
 	}
 	if r.FormValue("widgetSubmit") == `11` {
-		//anchor
-		// checker := uses.StringChecker(r.FormValue("arInpus"), "anchor.com") //Check valid Embed
-		// if !checker {
-		// 	http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
-		// 	fmt.Println("invalid widget embed code")
-		// 	return
-		// }
+		//anchor -- Takes in a .fm URL
+		checker := uses.StringChecker(r.FormValue("arInpus"), "anchor.fm") //Check valid Embed
+		if !checker {
+			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
+			fmt.Println("invalid widget embed code")
+			return
+		}
 
 		input := template.HTML(r.FormValue("arInput"))
 		if r.FormValue("editID") != `0` {
@@ -202,7 +201,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 12
 	}
 	if r.FormValue("widgetSubmit") == `13` {
-		//devianart
+		//devianart -- Takes in a username
 		// checker := uses.StringChecker(r.FormValue("daInput"), "deviantart.com") //Check valid Embed
 		// if !checker {
 		// 	http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
@@ -215,13 +214,15 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		classification = 13
 	}
 	if r.FormValue("widgetSubmit") == `14` {
-		//twitch.tv :)
-		checker := uses.StringChecker(r.FormValue("twitchInput"), "twitch.tv") //Check valid Embed
-		if !checker {
-			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
-			fmt.Println("invalid widget embed code")
-			return
-		}
+		//twitch.tv :) -- Takes in a Username
+		/*
+			checker := uses.StringChecker(r.FormValue("twitchInput"), "twitch.tv") //Check valid Embed
+			if !checker {
+				http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
+				fmt.Println("invalid widget embed code")
+				return
+			}
+		*/
 
 		username := template.HTML(r.FormValue("twitchInput"))
 		data = []template.HTML{username}

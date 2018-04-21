@@ -11,12 +11,6 @@ func StringChecker(entryCode string, website string) bool {
 
 	//The Entry Code could be an embed code, a url, or anything else that's related to our website
 
-	//Checks if the website is in our EntryCode
-	ifValidWebsite := strings.Contains(entryCode, website)
-	if !ifValidWebsite {
-		return false
-	}
-
 	//3 following Embed checkers if our EntryCode is an embed code
 	primaryChecker1 := "<iframe"
 	primaryChecker2 := "<div class"
@@ -32,6 +26,7 @@ func StringChecker(entryCode string, website string) bool {
 		if !ifValidSuffix1 {
 			return false
 		}
+		return true
 	}
 	if ifValidPrefix2 { //Divclass checker
 		secondaryChecker2 := "</script>"
@@ -39,6 +34,7 @@ func StringChecker(entryCode string, website string) bool {
 		if !ifValidSuffix2 {
 			return false
 		}
+		return true
 	}
 
 	if ifValidPrefix3 { //P data-height checker
@@ -47,22 +43,42 @@ func StringChecker(entryCode string, website string) bool {
 		if !ifValidSuffix3 {
 			return false
 		}
+		return true
 	}
 
-	//If EntryCode is a url and has "http" or "https", check for the "www" keyword
-	if strings.HasPrefix(entryCode, "http") || strings.HasPrefix(entryCode, "https") { //Regular Chekcer
-		if strings.Contains(entryCode, "www."+website) == false {
-			return false
-		}
+	//Checks if the website is in our EntryCode -- TO BE DONE AFTER EMBED CHECK
+	ifValidWebsite := strings.Contains(entryCode, website)
+	if !ifValidWebsite {
+		return false
 	}
-	if website == "pinterest.com" {
-		blockPoint := strings.Split(entryCode, "/")
-		for i := 0; i < len(blockPoint); i++ {
-			if blockPoint[i] == "pin" {
-				if !(len(blockPoint[i+1]) == 18 || len(blockPoint[i+1]) == 55 || len(blockPoint[i+1]) == 87) {
-					return false
+	/*
+		//Don't ACTUALLY know if we need this
+		//If EntryCode is a url and has "http" or "https", check for the "www" keyword
+		if strings.HasPrefix(entryCode, "http") || strings.HasPrefix(entryCode, "https") { //Regular Chekcer
+			if strings.Contains(entryCode, "www."+website) == false {
+				return false
+			}
+		}
+	*/
+
+	/*
+		--This is for posts, not profiles, will change and modify this jazz later when the jazz is needed
+		if website == "pinterest.com" {
+			blockPoint := strings.Split(entryCode, "/")
+			for i := 0; i < len(blockPoint); i++ {
+				if blockPoint[i] == "pin" {
+					if !(len(blockPoint[i+1]) == 18 || len(blockPoint[i+1]) == 55 || len(blockPoint[i+1]) == 87) {
+						return false
+					}
 				}
 			}
+
+		}
+	*/
+	//Current fix for the above
+	if website == "pinterest.com" {
+		if strings.Contains(entryCode, "/pin/") {
+			return false
 		}
 
 	}
