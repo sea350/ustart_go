@@ -1,8 +1,6 @@
 package uses
 
 import (
-	"fmt"
-
 	delete "github.com/sea350/ustart_go/delete"
 	get "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -54,18 +52,15 @@ func RemoveEntry(eclient *elastic.Client, entryID string) error {
 
 	//if reply, remove reference from parent
 	if entry.Classification == 1 {
-		fmt.Println("debug text: uses/removeentry line 54")
-		fmt.Println("attempting to remove id: " + entryID)
+
 		parent, err := get.EntryByID(eclient, entry.ReferenceEntry)
 		if err != nil {
 			return err
 		}
-		fmt.Println("existing reply array: ")
-		fmt.Println(parent.ReplyIDs)
+
 		removeIdx := -1
 		for idx := range parent.ReplyIDs {
 			if parent.ReplyIDs[idx] == entryID {
-				fmt.Println("attempting to remove index: \t", idx)
 				removeIdx = idx
 			}
 		}
@@ -77,9 +72,8 @@ func RemoveEntry(eclient *elastic.Client, entryID string) error {
 			} else {
 				updatedReplies = parent.ReplyIDs[:removeIdx]
 			}
-			fmt.Println("final reply array: ")
-			fmt.Println(updatedReplies)
-			err = postEntry.UpdateEntry(eclient, entry.ReferenceEntry, "EntryIDs", updatedReplies)
+
+			err = postEntry.UpdateEntry(eclient, entry.ReferenceEntry, "ReplyIDs", updatedReplies)
 			if err != nil {
 				panic(err)
 			}
