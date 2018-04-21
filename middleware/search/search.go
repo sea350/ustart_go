@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/sea350/ustart_go/uses"
-
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/search"
+	"github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/uses"
 )
 
 //Page ... draws search page
@@ -27,11 +27,12 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	filter := r.FormValue("searchFilterGroup") //can be: all,users,projects
 
 	//sortBy := r.FormValue("sortbyfilter")
-	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchmajors"))
-	fmt.Print(searchMajors)
-	//searchSkills := r.FormValue("searchskills") //array,pls test for actual sent data
-	//searchByLocationCountry := r.FormValue("searchbylocationcountry")
-	//searchByLocationState := r.FormValue("searchbylocationstate")
+	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchlistmajors"))
+
+	searchSkills := uses.ConvertStrToStrArr(r.FormValue("searchlistskills")) //array
+
+	//searchByLocationCountry := uses.ConvertStrToStrArr(r.FormValue("searchbylocationcountry"))
+	//searchByLocationState := uses.ConvertStrToStrArr(r.FormValue("searchbylocationstate"))
 
 	if filter == `projects` {
 		if r.FormValue("searchbyprojectname") != `` {
@@ -49,12 +50,12 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		if r.FormValue("searchbytags") != `` {
+		if r.FormValue("searchbyskills") != `` {
 			searchBy = append(searchBy, true)
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		results, err := search.SearchProject(client.Eclient, strings.ToLower(query))
+		results, err := search.PrototypeProjectSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 26")
 		}
@@ -76,7 +77,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		results, err := search.SearchProfile(client.Eclient, strings.ToLower(query))
+		results, err := search.PrototypeUserSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 34")
 		}

@@ -22,7 +22,7 @@ type Entry struct {
 	MediaRef       string    `json:"MediaRef"`
 	TimeStamp      time.Time `json:"TimeStamp"`
 	Likes          []Like    `json:"Likes"`
-	ShareIDs       []string  `json:"Shares"`
+	ShareIDs       []string  `json:"ShareIDs"`
 	ReplyIDs       []string  `json:"ReplyIDs"`
 	Visible        bool      `json:"Visible"`
 }

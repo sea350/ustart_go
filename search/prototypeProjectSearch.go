@@ -10,7 +10,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//PrototypeUserSearch ... Attempt at fully functional project search, returns Floatinghead
+//PrototypeProjectSearch ... Attempt at fully functional project search, returns Floatinghead
 /* Inputs:
 eclient		-> ???
 sortBy 		-> 0: Relevance, 1: Popularity, 2: Newest/Age
@@ -20,7 +20,7 @@ mustTag 	-> Array of Tags that each result must have
 mustLoc 	-> Location that the result must have
 searchTerm 	-> The term user is inputting
 */
-func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int, searchBy []bool, mustMajor []string, mustTag []string, mustLoc []types.LocStruct) ([]types.FloatingHead, error) {
+func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy int, searchBy []bool, mustMajor []string, mustTag []string, mustLoc []types.LocStruct) ([]types.FloatingHead, error) {
 	ctx := context.Background()
 
 	var results []types.FloatingHead
@@ -29,26 +29,29 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 	// newMatchQuery := elastic.NewMultiMatchQuery(searchTerm, "FirstName", "LastName")
 	newMatchQuery := elastic.NewBoolQuery()
 
-	if len(searchBy) >= 3 {
+	if len(searchBy) >= 4 {
 		//Name
 		if searchBy[0] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("FirstName", searchTerm))
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("LastName", searchTerm))
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Name", searchTerm))
 		}
-		//Username
+		//URLName
 		if searchBy[1] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Username", searchTerm))
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("URLName", searchTerm))
 		}
-		//Username
+		//Tags
 		if searchBy[2] {
 			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Tags", searchTerm))
+		}
+		//ListNeeded
+		if searchBy[3] {
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("ListNeeded", searchTerm))
 		}
 	}
 	// Major
 	if len(mustMajor) > 0 {
 		for _, element := range mustMajor {
 			//Check if NewMatchQuery order is correct
-			newMatchQuery = newMatchQuery.Must(elastic.NewMatchQuery("Majors", element))
+			newMatchQuery = newMatchQuery.Must(elastic.NewMatchQuery("ListNeeded", element))
 		}
 	}
 	// Tag

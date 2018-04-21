@@ -31,7 +31,7 @@ type ClientSide struct {
 	Description     string
 	Followers       int
 	Following       int
-	Page            string
+	Page            string //DocID of current page
 	FollowingStatus string
 	ListOfHeads     []types.FloatingHead
 	ListOfHeads2    []types.FloatingHead
