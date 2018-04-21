@@ -81,6 +81,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				err = uses.ChangeUsername(eclient, session.Values["DocID"].(string), data.Username, data.NewUName)
 				resp.update(err == nil, err)
 				respJson, _ := json.Marshal(resp)
+				fmt.Println("About to write")
 				w.Write(respJson)
 			}
 		case "cn":
