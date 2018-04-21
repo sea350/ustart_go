@@ -11,16 +11,16 @@ import (
 
 //RemoveEntry ...
 //Removes entry from ES
-func RemoveEntry(eclient *elastic.Client, entryID string) error {
+func RemoveEntry(eclient *elastic.Client, entryID string) (string, error) {
 
 	entry, err := get.EntryByID(eclient, entryID)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	err = delete.Entry(eclient, entryID)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	//removing refrence to entry in user
@@ -35,44 +35,48 @@ func RemoveEntry(eclient *elastic.Client, entryID string) error {
 			removeIdx = idx
 		}
 	}
+	if removeIdx != -1 {
+		var updatedEntries []string
+		//update the user entries array
+		if removeIdx+1 < len(usr.EntryIDs) {
+			updatedEntries = append(usr.EntryIDs[:removeIdx], usr.EntryIDs[removeIdx+1:]...)
+		} else {
+			updatedEntries = usr.EntryIDs[:removeIdx]
+		}
 
-	var updatedEntries []string
-	//update the user entries array
-	if removeIdx+1 < len(usr.EntryIDs) {
-		updatedEntries = append(usr.EntryIDs[:removeIdx], usr.EntryIDs[removeIdx+1:]...)
-	} else {
-		updatedEntries = usr.EntryIDs[:removeIdx]
-	}
-
-	err = postUser.UpdateUser(eclient, entry.PosterID, "EntryIDs", updatedEntries)
-	if err != nil {
-		panic(err)
+		err = postUser.UpdateUser(eclient, entry.PosterID, "EntryIDs", updatedEntries)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	//if reply, remove reference from parent
 	if entry.Classification == 1 {
+
 		parent, err := get.EntryByID(eclient, entry.ReferenceEntry)
 		if err != nil {
-			return err
+			panic(err)
 		}
+
 		removeIdx := -1
 		for idx := range parent.ReplyIDs {
 			if parent.ReplyIDs[idx] == entryID {
 				removeIdx = idx
 			}
 		}
+		if removeIdx != -1 {
+			var updatedReplies []string
+			//remove from parent
+			if removeIdx+1 < len(parent.ReplyIDs) {
+				updatedReplies = append(parent.ReplyIDs[:removeIdx], parent.ReplyIDs[removeIdx+1:]...)
+			} else {
+				updatedReplies = parent.ReplyIDs[:removeIdx]
+			}
 
-		var updatedReplies []string
-		//remove from parent
-		if removeIdx+1 < len(parent.ReplyIDs) {
-			updatedReplies = append(parent.ReplyIDs[:removeIdx], parent.ReplyIDs[removeIdx+1:]...)
-		} else {
-			updatedReplies = parent.ReplyIDs[:removeIdx]
-		}
-
-		err = postEntry.UpdateEntry(eclient, entry.ReferenceEntry, "EntryIDs", updatedReplies)
-		if err != nil {
-			panic(err)
+			err = postEntry.UpdateEntry(eclient, entry.ReferenceEntry, "ReplyIDs", updatedReplies)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 
@@ -80,7 +84,7 @@ func RemoveEntry(eclient *elastic.Client, entryID string) error {
 	if entry.Classification == 2 {
 		parent, err := get.EntryByID(eclient, entry.ReferenceEntry)
 		if err != nil {
-			return err
+			panic(err)
 		}
 		removeIdx := -1
 		for idx := range parent.ShareIDs {
@@ -88,20 +92,21 @@ func RemoveEntry(eclient *elastic.Client, entryID string) error {
 				removeIdx = idx
 			}
 		}
+		if removeIdx != -1 {
+			var updatedShares []string
+			//remove from parent
+			if removeIdx+1 < len(parent.ShareIDs) {
+				updatedShares = append(parent.ShareIDs[:removeIdx], parent.ShareIDs[removeIdx+1:]...)
+			} else {
+				updatedShares = parent.ShareIDs[:removeIdx]
+			}
 
-		var updatedShares []string
-		//remove from parent
-		if removeIdx+1 < len(parent.ShareIDs) {
-			updatedShares = append(parent.ShareIDs[:removeIdx], parent.ShareIDs[removeIdx+1:]...)
-		} else {
-			updatedShares = parent.ShareIDs[:removeIdx]
-		}
-
-		err = postEntry.UpdateEntry(eclient, entry.ReferenceEntry, "ShareIDs", updatedShares)
-		if err != nil {
-			panic(err)
+			err = postEntry.UpdateEntry(eclient, entry.ReferenceEntry, "ShareIDs", updatedShares)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 
-	return err
+	return entry.ReferenceEntry, err
 }
