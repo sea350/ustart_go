@@ -1,7 +1,7 @@
 package uses
 
 import (
-	"bytes"
+	"bcrypt"
 	"errors"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -16,10 +16,15 @@ func ChangePassword(eclient *elastic.Client, userID string, oldPass []byte, newP
 	if err != nil {
 		return err
 	}
-	if !bytes.Equal(usr.Password, oldPass) {
+
+	if !bcrypt.CompareHashAndPassword(usr.Password, oldPass) {
 		return errors.New("Invalid old password")
 	}
-	err = post.UpdateUser(eclient, userID, "Password", newPass)
+	/*if !bytes.Equal(usr.Password, oldPass) {
+		return errors.New("Invalid old password")
+	}*/
+	newHashedPass, err := bcrypt.GenerateFromPassword(newPass, 10)
+	err = post.UpdateUser(eclient, userID, "Password", newHashedPass)
 	return err
 
 }
