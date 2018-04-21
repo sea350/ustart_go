@@ -17,7 +17,8 @@ func ChangeUsername(eclient *elastic.Client, userID string, oldUsername string, 
 	}
 
 	if !inUse {
-		return post.UpdateUser(eclient, userID, "Username", newUsername)
+		err = post.UpdateUser(eclient, userID, "Username", newUsername)
+		return err
 	}
 
 	return errors.New("Username taken")
