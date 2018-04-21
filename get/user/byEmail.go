@@ -2,6 +2,7 @@ package get
 
 import (
 	"context"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -9,12 +10,13 @@ import (
 )
 
 //UserByEmail ...
+
 func UserByEmail(eclient *elastic.Client, email string) (types.User, error) {
 
 	ctx := context.Background()
 
 	//username:= EmailToUsername(email) //for username query
-	termQuery := elastic.NewTermQuery("Email", email)
+	termQuery := elastic.NewTermQuery("Email", strings.ToLower(email))
 	searchResult, err := eclient.Search().
 		Index(globals.UserIndex).
 		Query(termQuery).

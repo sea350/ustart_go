@@ -112,7 +112,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		}*/
 
 	} else {
-		resp.update(false, errors.New("Token invalid"))
+		resp.update(false, errors.New("Session invalid"))
 	}
 
 }
