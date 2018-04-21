@@ -11,16 +11,16 @@ import (
 
 //RemoveEntry ...
 //Removes entry from ES
-func RemoveEntry(eclient *elastic.Client, entryID string) error {
+func RemoveEntry(eclient *elastic.Client, entryID string) (string, error) {
 
 	entry, err := get.EntryByID(eclient, entryID)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	err = delete.Entry(eclient, entryID)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	//removing refrence to entry in user
@@ -55,7 +55,7 @@ func RemoveEntry(eclient *elastic.Client, entryID string) error {
 
 		parent, err := get.EntryByID(eclient, entry.ReferenceEntry)
 		if err != nil {
-			return err
+			panic(err)
 		}
 
 		removeIdx := -1
@@ -84,7 +84,7 @@ func RemoveEntry(eclient *elastic.Client, entryID string) error {
 	if entry.Classification == 2 {
 		parent, err := get.EntryByID(eclient, entry.ReferenceEntry)
 		if err != nil {
-			return err
+			panic(err)
 		}
 		removeIdx := -1
 		for idx := range parent.ShareIDs {
@@ -108,5 +108,5 @@ func RemoveEntry(eclient *elastic.Client, entryID string) error {
 		}
 	}
 
-	return err
+	return entry.ReferenceEntry, err
 }
