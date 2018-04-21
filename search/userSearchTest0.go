@@ -10,8 +10,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//SearchProfile ... Attempt at fully functional profile search, returns Floatinghead
-func SearchProfile(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
+//ProfileSearch ... Attempt at fully functional profile search, returns Floatinghead
+func ProfileSearch(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
 	ctx := context.Background()
 	var results []types.FloatingHead
 

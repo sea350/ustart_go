@@ -20,7 +20,7 @@ mustTag 	-> Array of Tags that each result must have
 mustLoc 	-> Location that the result must have
 searchTerm 	-> The term user is inputting
 */
-func PrototypeUserSearch(eclient *elastic.Client, sortBy int, searchBy []bool, mustMajor []string, mustTag []string, mustLoc []types.LocStruct, searchTerm string) ([]types.FloatingHead, error) {
+func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int, searchBy []bool, mustMajor []string, mustTag []string, mustLoc []types.LocStruct) ([]types.FloatingHead, error) {
 	ctx := context.Background()
 
 	var results []types.FloatingHead

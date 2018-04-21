@@ -7,6 +7,7 @@ import (
 
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/search"
+	"github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
 )
 
@@ -56,7 +57,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		results, err := search.SearchProject(client.Eclient, strings.ToLower(query))
+		results, err := search.ProjectSearch(client.Eclient, strings.ToLower(query))
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 26")
 		}
@@ -78,7 +79,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		results, err := search.SearchProfile(client.Eclient, strings.ToLower(query))
+		results, err := search.PrototypeUserSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 34")
 		}

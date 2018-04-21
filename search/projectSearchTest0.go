@@ -3,7 +3,6 @@ package search
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -11,9 +10,9 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//SearchProject ... Attempt at fully functional project search, returns Floatinghead
-func SearchProject(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
-	fmt.Println("STARTING")
+//ProjectSearch ... Attempt at fully functional project search, returns Floatinghead
+func ProjectSearch(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, error) {
+	//fmt.Println("STARTING")
 	ctx := context.Background()
 	var results []types.FloatingHead
 
