@@ -21,6 +21,13 @@ func Page(w http.ResponseWriter, r *http.Request) {
 
 	query := r.FormValue("query")
 	filter := r.FormValue("searchFilterGroup") //can be: all,users,projects
+	//sortBy := r.FormValue("sortbyfilter")
+	searchBy := r.FormValue("searchbyfilter") //array,pls test for actual sent data
+	fmt.Println(searchBy)
+	//searchMajors := r.FormValue("searchmajors") //array,pls test for actual sent data
+	//searchSkills := r.FormValue("searchskills") //array,pls test for actual sent data
+	//searchByLocationCountry := r.FormValue("searchbylocationcountry")
+	//searchByLocationState := r.FormValue("searchbylocationstate")
 
 	if filter == `projects` {
 		results, err := search.SearchProject(client.Eclient, strings.ToLower(query))
