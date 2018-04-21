@@ -77,7 +77,7 @@ func RemoveEntry(eclient *elastic.Client, entryID string) error {
 	}
 
 	//if share, remove from reference entry
-	if entry.Classification == 1 {
+	if entry.Classification == 2 {
 		parent, err := get.EntryByID(eclient, entry.ReferenceEntry)
 		if err != nil {
 			return err
