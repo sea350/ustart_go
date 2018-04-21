@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/sea350/ustart_go/uses"
+
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/search"
 )
@@ -23,9 +25,10 @@ func Page(w http.ResponseWriter, r *http.Request) {
 
 	query := r.FormValue("query")
 	filter := r.FormValue("searchFilterGroup") //can be: all,users,projects
-	fmt.Println(r.FormValue("searchbyprojectname"))
+
 	//sortBy := r.FormValue("sortbyfilter")
-	//searchMajors := r.FormValue("searchmajors") //array,pls test for actual sent data
+	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchmajors"))
+	fmt.Print(searchMajors)
 	//searchSkills := r.FormValue("searchskills") //array,pls test for actual sent data
 	//searchByLocationCountry := r.FormValue("searchbylocationcountry")
 	//searchByLocationState := r.FormValue("searchbylocationstate")
@@ -42,6 +45,11 @@ func Page(w http.ResponseWriter, r *http.Request) {
 			searchBy = append(searchBy, false)
 		}
 		if r.FormValue("searchbymembersneeded") != `` {
+			searchBy = append(searchBy, true)
+		} else {
+			searchBy = append(searchBy, false)
+		}
+		if r.FormValue("searchbytags") != `` {
 			searchBy = append(searchBy, true)
 		} else {
 			searchBy = append(searchBy, false)
