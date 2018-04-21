@@ -1,8 +1,9 @@
 package uses
 
 import (
-	"bcrypt"
 	"errors"
+
+	bcrypt "golang.org/x/crypto/bcrypt"
 
 	get "github.com/sea350/ustart_go/get/user"
 	post "github.com/sea350/ustart_go/post/user"
@@ -17,7 +18,7 @@ func ChangePassword(eclient *elastic.Client, userID string, oldPass []byte, newP
 		return err
 	}
 
-	if !bcrypt.CompareHashAndPassword(usr.Password, oldPass) {
+	if bcrypt.CompareHashAndPassword(usr.Password, oldPass) != nil {
 		return errors.New("Invalid old password")
 	}
 	/*if !bytes.Equal(usr.Password, oldPass) {
