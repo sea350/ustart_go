@@ -9,7 +9,7 @@ import (
 	"github.com/sea350/ustart_go/uses"
 )
 
-//EditPosr ... Iunno
+//EditPost ... Iunno
 func EditPost(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
