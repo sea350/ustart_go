@@ -25,8 +25,11 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.RemoveEntry(client.Eclient, postid)
 	if err != nil {
+		fmt.Println("err: middleware/profile/postdeletion line 28")
 		fmt.Println(err)
 	}
+
+	fmt.Fprintln(w, "globgoglabgalab")
 }
 
 //GenerateDeleteModal ...
