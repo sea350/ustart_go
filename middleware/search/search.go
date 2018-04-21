@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/sea350/ustart_go/uses"
-
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/search"
 )
@@ -27,8 +25,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	filter := r.FormValue("searchFilterGroup") //can be: all,users,projects
 
 	//sortBy := r.FormValue("sortbyfilter")
-	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchmajors"))
-	fmt.Print(searchMajors)
+	//searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchmajors"))
+	fmt.Print(r.FormValue("searchmajors"))
 	//searchSkills := r.FormValue("searchskills") //array,pls test for actual sent data
 	//searchByLocationCountry := r.FormValue("searchbylocationcountry")
 	//searchByLocationState := r.FormValue("searchbylocationstate")
