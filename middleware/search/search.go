@@ -24,7 +24,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	var searchBy []bool
 
 	query := r.FormValue("query")
-	filter := r.FormValue("searchFilterGroup") //can be: all,users,projects
+	filter := r.FormValue("searchFilterGroup") //can be: skills,users,projects
 
 	//sortBy := r.FormValue("sortbyfilter")
 	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchlistmajors"))
@@ -57,7 +57,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		results, err := search.PrototypeProjectSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
-			fmt.Println("err: middleware/search/search line 26")
+			fmt.Println("err: middleware/search/search line 60")
 		}
 		cs.ListOfHeads = results
 	}
@@ -82,7 +82,14 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		results, err := search.PrototypeUserSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
-			fmt.Println("err: middleware/search/search line 34")
+			fmt.Println("err: middleware/search/search line 85")
+		}
+		cs.ListOfHeads = results
+	}
+	if filter == `skills` {
+		results, err := search.Skills(client.Eclient, strings.ToLower(query))
+		if err != nil {
+			fmt.Println("err: middleware/search/search line 92")
 		}
 		cs.ListOfHeads = results
 	}
