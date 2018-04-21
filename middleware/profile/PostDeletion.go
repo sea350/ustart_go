@@ -11,13 +11,12 @@ import (
 
 var port = "5002"
 
-//DeleteWallPost ... Can delete any post, meant to be used as an ajax call
-func DeleteWallPost(w http.ResponseWriter, r *http.Request) {
+//DeletePost ... Can delete any post, meant to be used as an ajax call
+func DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["DocID"]
-	if test1 == nil {
-		fmt.Println(test1)
+	DOCID, _ := session.Values["DocID"]
+	if DOCID == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
