@@ -28,11 +28,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 
 	//sortBy := r.FormValue("sortbyfilter")
 	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchlistmajors"))
-	fmt.Println(r.FormValue("searchlistmajors"))
-	fmt.Println(searchMajors)
+
 	searchSkills := uses.ConvertStrToStrArr(r.FormValue("searchlistskills")) //array
-	fmt.Println(r.FormValue("searchlistskills"))
-	fmt.Println(searchSkills)
+
 	//searchByLocationCountry := uses.ConvertStrToStrArr(r.FormValue("searchbylocationcountry"))
 	//searchByLocationState := uses.ConvertStrToStrArr(r.FormValue("searchbylocationstate"))
 
@@ -57,7 +55,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		results, err := search.ProjectSearch(client.Eclient, strings.ToLower(query))
+		results, err := search.PrototypeProjectSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 26")
 		}
