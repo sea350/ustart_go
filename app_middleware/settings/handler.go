@@ -80,6 +80,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			if data.Username == data.Username {
 				err = uses.ChangeUsername(eclient, session.Values["DocID"].(string), data.Username, data.NewUName)
 				resp.update(err == nil, err)
+				respJson, _ := json.Marshal(resp)
+				w.Write(respJson)
 			}
 		case "cn":
 			if session.Values["Username"] == data.Username {
