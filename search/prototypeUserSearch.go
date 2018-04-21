@@ -10,7 +10,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//SearchProject ... Attempt at fully functional project search, returns Floatinghead
+//PrototypeUserSearch ... Attempt at fully functional project search, returns Floatinghead
 /* Inputs:
 eclient		-> ???
 sortBy 		-> 0: Relevance, 1: Popularity, 2: Newest/Age
@@ -29,14 +29,20 @@ func PrototypeUserSearch(eclient *elastic.Client, sortBy int, searchBy []bool, m
 	// newMatchQuery := elastic.NewMultiMatchQuery(searchTerm, "FirstName", "LastName")
 	newMatchQuery := elastic.NewBoolQuery()
 
-	//Name
-	if searchBy[0] == true {
-		newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("FirstName", searchTerm))
-		newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("LastName", searchTerm))
-	}
-	//Username
-	if searchBy[1] == true {
-		newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Username", searchTerm))
+	if len(searchBy) >= 3 {
+		//Name
+		if searchBy[0] {
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("FirstName", searchTerm))
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("LastName", searchTerm))
+		}
+		//Username
+		if searchBy[1] {
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Username", searchTerm))
+		}
+		//Username
+		if searchBy[3] {
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Tags", searchTerm))
+		}
 	}
 	// Major
 	if len(mustMajor) > 0 {
