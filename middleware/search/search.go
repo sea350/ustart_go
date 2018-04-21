@@ -27,8 +27,10 @@ func Page(w http.ResponseWriter, r *http.Request) {
 
 	//sortBy := r.FormValue("sortbyfilter")
 	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchlistmajors"))
+	fmt.Println(r.FormValue("searchlistmajors"))
 	fmt.Println(searchMajors)
 	searchSkills := uses.ConvertStrToStrArr(r.FormValue("searchlistskills")) //array
+	fmt.Println(r.FormValue("searchlistskills"))
 	fmt.Println(searchSkills)
 	//searchByLocationCountry := uses.ConvertStrToStrArr(r.FormValue("searchbylocationcountry"))
 	//searchByLocationState := uses.ConvertStrToStrArr(r.FormValue("searchbylocationstate"))
