@@ -40,7 +40,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Username", searchTerm))
 		}
 		//Username
-		if searchBy[3] {
+		if searchBy[2] {
 			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Tags", searchTerm))
 		}
 	}
