@@ -2,6 +2,14 @@ package types
 
 //WARNING: NOT FOR DATABASE USE
 
+type AppSessionUser struct {
+	FirstName string `json:"FirstName"`
+	LastName  string `json:"LastName"`
+	Username  string `json:"Username"`
+	Email     string `json:"Email"`
+	DocID     string `json:"ID"`
+}
+
 //SessionUser ... All data needed to be stored in session
 type SessionUser struct {
 	FirstName string      `json:"FirstName"`

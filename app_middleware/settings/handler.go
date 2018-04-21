@@ -77,12 +77,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		switch data.Intent {
 		case "cu":
 			fmt.Println("RIGHT INTENT")
-			if data.Username == data.Username {
+			if session.Values["Username"] == data.Username {
 				err = uses.ChangeUsername(eclient, session.Values["DocID"].(string), data.Username, data.NewUName)
 				resp.update(err == nil, err)
-				respJson, _ := json.Marshal(resp)
-				fmt.Println("About to write")
-				w.Write(respJson)
+
 			}
 		case "cn":
 			if session.Values["Username"] == data.Username {

@@ -26,7 +26,6 @@ type form struct {
 Change:
 	cu = change username
 	cn = change name (first/last)
-	ce = change email
 	cp = change password
 	ca = change avatar
 	cb = change banner

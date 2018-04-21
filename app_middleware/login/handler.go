@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gorilla/sessions"
+	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -55,9 +56,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&data)
 
-	resp.updateResp(err, false)
+	var appSessUsr types.AppSessionUser
+	resp.updateResp(err, false, appSessUsr)
 
 	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
+
+	appSessUsr.FirstName = sessUsr.FirstName
+	appSessUsr.LastName = sessUsr.LastName
+	appSessUsr.Username = sessUsr.Username
+	appSessUsr.Email = sessUsr.Email
+	appSessUsr.DocID = sessUsr.DocID
 
 	fmt.Println("SESSUSR", sessUsr)
 	fmt.Println(err)
@@ -66,7 +74,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Invalid login")
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		resp.updateResp(errors.New("Password mismatch"), succ)
+		resp.updateResp(errors.New("Password mismatch"), succ, appSessUsr)
 
 		resJson, _ := json.Marshal(resp)
 		w.Write(resJson)
@@ -75,7 +83,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Valid login")
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		resp.updateResp(err, succ)
+		resp.updateResp(err, succ, appSessUsr)
 		resJson, errM := json.Marshal(resp)
 		if errM != nil {
 			fmt.Println(errM)
