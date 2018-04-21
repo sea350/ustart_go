@@ -107,5 +107,5 @@ func main() {
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
 	http.HandleFunc("/welcome/", registration.Registration)*/
-	http.ListenAndServe(":5001", nil)
+	http.ListenAndServe(":5003", nil)
 }
