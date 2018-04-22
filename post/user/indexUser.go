@@ -29,7 +29,9 @@ const mapping = `
 				"LastName":{
 					"type":"keyword"
 				}
-
+				"Tags":{
+					"type":"keyword"
+				}
                 
             }
         }
