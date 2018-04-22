@@ -5,9 +5,10 @@ import (
 	"fmt"
 
 	globals "github.com/sea350/ustart_go/globals"
+	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))
+var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))
 
 const usrMapping = `
 {
@@ -72,8 +73,8 @@ const projMapping = `
 func RestartDB() {
 
 	ctx := context.Background()
-	deleteIndex, err := eclient.DeleteIndex(globals.ChatIndex).Do(ctx)
-	deleteIndex, err = eclient.DeleteIndex(globals.EntryIndex).Do(ctx)
+	//deleteIndex, err := eclient.DeleteIndex(globals.ChatIndex).Do(ctx)
+	deleteIndex, err := eclient.DeleteIndex(globals.EntryIndex).Do(ctx)
 	deleteIndex, err = eclient.DeleteIndex(globals.ProjectIndex).Do(ctx)
 	deleteIndex, err = eclient.DeleteIndex(globals.WidgetIndex).Do(ctx)
 	deleteIndex, err = eclient.DeleteIndex(globals.UserIndex).Do(ctx)
