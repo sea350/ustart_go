@@ -121,3 +121,7 @@ func RestartDB() {
 	}
 
 }
+
+func main() {
+	RestartDB()
+}
