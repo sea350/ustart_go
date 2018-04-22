@@ -73,6 +73,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	//resp.update(false, errors.New("Error"))
 
+	fmt.Println("THE INTENT:", data.Intent)
 	if test1 == test1 {
 		switch data.Intent {
 		case "cu":

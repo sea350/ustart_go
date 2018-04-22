@@ -61,7 +61,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	// Parse the request.
 	fmt.Println("Parsing request")
 
-	var sessUsr types.AppSessionUser
+	//var sessUsr types.AppSessionUser
 	data := form{}
 
 	err := json.NewDecoder(r.Body).Decode(&data)

@@ -15,7 +15,7 @@ type response struct {
 func (r *response) update(success bool, em error, usr types.User) {
 
 	r.ErrMsg = em
-	r.Success = success
+	r.Successful = success
 	r.User = usr
 
 	if em != nil && em.Error() != "Password is incorrect" {
