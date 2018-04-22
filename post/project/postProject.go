@@ -30,7 +30,11 @@ const projMapping = `
 					
 					"analyzer": "casesensitive_text"
 				},
-            }
+				"Tags":{
+					"type":"keyword"
+				}
+			}
+			
         }
     }
 }`
