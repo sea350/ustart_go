@@ -16,12 +16,11 @@ func Skills(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, e
 	ctx := context.Background()
 	var results []types.FloatingHead
 
-	newMatchQuery := elastic.NewBoolQuery()
-	newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Tags", "*"+searchTerm+"*"))
+	query := elastic.NewWildcardQuery("Tags", "*"+searchTerm+"*")
 	searchResults, err := eclient.Search().
-		Index(globals.ProjectIndex).
-		Query(newMatchQuery).
-		Pretty(true).
+		Index(globals.UserIndex).
+		Type(globals.UserType).
+		Query(query).
 		Do(ctx)
 
 	if err != nil {
