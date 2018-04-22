@@ -63,7 +63,7 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 	}
 
 	searchResults, err := eclient.Search().
-		Index(globals.UserIndex).
+		Index(globals.ProjectIndex).
 		Query(newMatchQuery).
 		Pretty(true).
 		Do(ctx)
