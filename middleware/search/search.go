@@ -58,6 +58,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		results, err := search.PrototypeProjectSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 60")
+			fmt.Println(err)
 		}
 		cs.ListOfHeads = results
 	}
@@ -83,6 +84,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		results, err := search.PrototypeUserSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 85")
+			fmt.Println(err)
 		}
 		cs.ListOfHeads = results
 	}
@@ -90,6 +92,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))
 		if err != nil {
 			fmt.Println("err: middleware/search/search line 92")
+			fmt.Println(err)
 		}
 		cs.ListOfHeads = results
 	}
