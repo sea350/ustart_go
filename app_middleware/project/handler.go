@@ -92,9 +92,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		switch data.Intent {
 		case "join":
 			if data.Username == data.Username {
-				//isMember := get.IsMember(eclient, data.SessUser.DocID, Proj) //session.Values["DocID"].(string))
+				isMember := get.IsMember(eclient, data.SessUser.DocID, Proj) //session.Values["DocID"].(string))
 
-				if index == -1 {
+				if !isMember {
 					fmt.Println("INTENT TO JOIN")
 					err1 := userPost.AppendSentProjReq(eclient, data.SessUser.DocID, data.ProjectID)
 
