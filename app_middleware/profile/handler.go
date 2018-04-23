@@ -99,10 +99,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if test1 == test1 {
 		if data.Intent == "foll" {
 			if session.Values["Username"] != data.Username {
-				isFollowed, err := uses.IsFollowed(eclient, usrID, session.Values["DocID"].(string))
+				isFollowed, err := uses.IsFollowed(eclient, usrID, data.SessUser.DocID) //session.Values["DocID"].(string))
 
 				if !isFollowed {
-					fmt.Println("RIGHT INTENT")
+					//fmt.Println("RIGHT INTENT")
 					err = uses.UserFollow(eclient, usrID, data.SessUser.DocID) // session.Values["DocID"].(string))
 					resp.update(err == nil, err, Usr)
 				} else {
