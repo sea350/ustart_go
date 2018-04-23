@@ -104,6 +104,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 						resp.update(err2 == nil, err2, Proj)
 					}
 
+					resp.update(err2 == nil, err2, Proj)
 				} else if index != -1 && !isLeader {
 					fmt.Println("INTENT TO LEAVE")
 					err = projPost.DeleteMember(eclient, data.ProjectID, data.SessUser.DocID)
