@@ -13,7 +13,7 @@ func IsLeader(eclient *elastic.Client, projectID string, memberID string) (bool,
 	if err != nil {
 		panic(err)
 	}
-	var idx int
+	idx := -1
 	for i := range proj.Members {
 		idx = i
 		if proj.Members[i].MemberID == memberID && proj.Members[i].Role == 0 {
