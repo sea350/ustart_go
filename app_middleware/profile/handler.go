@@ -66,6 +66,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 
+	fmt.Println("THIS IS THE DATA:", data)
 	if err != nil {
 		fmt.Println("error line 70 profile/handler.go")
 	}
