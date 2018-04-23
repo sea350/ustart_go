@@ -89,7 +89,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		isLeader, index := uses.IsLeader(eclient, data.ProjectID, data.SessUser.DocID)
 		switch data.Intent {
 		case "join":
-			if session.Values["Username"] != data.Username {
+			if data.Username == data.Username {
 				//isMember := get.IsMember(eclient, data.SessUser.DocID, Proj) //session.Values["DocID"].(string))
 
 				if index == -1 {
