@@ -106,7 +106,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 					err = uses.UserFollow(eclient, usrID, data.SessUser.DocID) // session.Values["DocID"].(string))
 					resp.update(err == nil, err, Usr)
 				} else {
-					err = uses.UserUnfollow(eclient, usrID, session.Values["DocID"].(string))
+					err = uses.UserUnfollow(eclient, usrID, data.SessUser.DocID)
 					resp.update(err == nil, err, Usr)
 				}
 			}
