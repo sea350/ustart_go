@@ -7,7 +7,7 @@ type AppSessionUser struct {
 	LastName  string `json:"LastName"`
 	Username  string `json:"Username"`
 	Email     string `json:"Email"`
-	DocID     string `json:"ID"`
+	DocID     string `json:"DocID"`
 }
 
 //SessionUser ... All data needed to be stored in session
