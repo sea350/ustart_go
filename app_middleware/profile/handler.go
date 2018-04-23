@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/gorilla/sessions"
 	get "github.com/sea350/ustart_go/get/user"
@@ -95,6 +94,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	//resp.update(false, errors.New("Error"))
 
+	fmt.Println("YOUR USER:", session.Values["DocID"].(string))
+	fmt.Println("TARGER USER:", usrID)
 	if test1 == test1 {
 		if data.Intent == "foll" {
 			if session.Values["Username"] != data.Username {
@@ -102,7 +103,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 				if !isFollowed {
 					fmt.Println("RIGHT INTENT")
-					err = uses.UserFollow(eclient, strings.ToLower(usrID), strings.ToLower(session.Values["DocID"].(string)))
+					err = uses.UserFollow(eclient, usrID, session.Values["DocID"].(string))
 					resp.update(err == nil, err, Usr)
 				} else {
 					err = uses.UserUnfollow(eclient, usrID, session.Values["DocID"].(string))
