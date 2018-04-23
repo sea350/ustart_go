@@ -86,7 +86,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%+v\n", data)
 
 	if test1 == test1 {
+		fmt.Println("PROJECT INFO", Proj)
 		isLeader, index := uses.IsLeader(eclient, data.ProjectID, data.SessUser.DocID)
+		fmt.Println("tHE INDEX IS:", index)
 		switch data.Intent {
 		case "join":
 			if data.Username == data.Username {
@@ -103,7 +105,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 					} else {
 						resp.update(err2 == nil, err2, Proj)
 					}
-					fmt.Println("PROJECT INFO", Proj)
+
 					resp.update(err2 == nil, err2, Proj)
 				} else if index != -1 && !isLeader {
 					fmt.Println("INTENT TO LEAVE")
