@@ -116,7 +116,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			}
 		case "accept":
 			if isLeader {
-				err1 := userPost.AppendProject(eclient, data.SessUser.DocID, types.ProjectInfo{ProjectID: data.ProjectID, Visible: true})
+				err1 := userPost.AppendProject(eclient, data.JoinerID, types.ProjectInfo{ProjectID: data.ProjectID, Visible: true})
 				_, err2 := uses.RemoveRequest(eclient, data.ProjectID, data.JoinerID)
 
 				var newMember types.Member
@@ -141,6 +141,20 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			_, err = uses.RemoveRequest(eclient, data.ProjectID, data.JoinerID)
 			resp.update(err == nil, err, Proj)
 
+		case "leave":
+			if isLeader {
+				err1 := uses.NewProjectLeader(eclient, data.ProjectID, data.SessUser.DocID, data.JoinerID)
+				err2 := projPost.DeleteMember(eclient, data.ProjectID, data.SessUser.DocID)
+
+				if err1 != nil {
+					resp.update(err2 == nil, err2, Proj)
+				} else {
+					resp.update(err2 == nil, err2, Proj)
+				}
+			} else {
+				err = projPost.DeleteMember(eclient, data.ProjectID, data.SessUser.DocID)
+
+			}
 		}
 	} else {
 		resp.update(false, errors.New("Something went wrong"), Proj)
