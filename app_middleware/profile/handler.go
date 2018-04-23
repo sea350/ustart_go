@@ -81,7 +81,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("error line 84 profile/handler.go")
 	}
 
-	resp.update(false, errors.New("Unknown error"), Usr)
+	resp.update(false, errors.New(" This is an unknown error"), Usr)
 	//	marshalledData, err := json.Marshal(data)
 
 	fmt.Println("Obtained following data: ")
