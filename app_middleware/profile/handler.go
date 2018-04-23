@@ -100,6 +100,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				isFollowed, err := uses.IsFollowed(eclient, usrID, session.Values["DocID"].(string))
 
 				if !isFollowed {
+					fmt.Println("RIGHT INTENT")
 					err = uses.UserFollow(eclient, usrID, session.Values["DocID"].(string))
 					resp.update(err == nil, err, Usr)
 				} else {
