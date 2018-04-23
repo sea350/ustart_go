@@ -63,7 +63,7 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 	}
 
 	searchResults, err := eclient.Search().
-		Index(globals.UserIndex).
+		Index(globals.ProjectIndex).
 		Query(newMatchQuery).
 		Pretty(true).
 		Do(ctx)
@@ -81,7 +81,7 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 	// }
 
 	for _, element := range searchResults.Hits.Hits {
-		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
+		head, err1 := uses.ConvertProjectToFloatingHead(eclient, element.Id)
 		if err1 != nil {
 			err = errors.New("there was one or more problems loading results")
 			continue
