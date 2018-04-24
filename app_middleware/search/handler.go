@@ -81,8 +81,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		switch data.Intent {
 		case "usr":
 			results, err = search.PrototypeUserSearch(eclient, strings.ToLower(data.Term), int(0), []bool{true, true, true}, nil, nil, nil)
+			resp.update(err == nil, err, results)
 		case "proj":
 			results, err = search.PrototypeProjectSearch(eclient, strings.ToLower(data.Term), int(0), []bool{true, true, true}, nil, nil, nil)
+			resp.update(err == nil, err, results)
 
 		}
 	} else {
