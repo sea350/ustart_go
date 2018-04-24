@@ -8,6 +8,7 @@ import (
 	login "github.com/sea350/ustart_go/app_middleware/login"
 	profile "github.com/sea350/ustart_go/app_middleware/profile"
 	project "github.com/sea350/ustart_go/app_middleware/project"
+	search "github.com/sea350/ustart_go/app_middleware/search"
 	settings "github.com/sea350/ustart_go/app_middleware/settings"
 	signup "github.com/sea350/ustart_go/app_middleware/signup"
 	/*profile "github.com/sea350/ustart_go/middleware/profile"
@@ -42,6 +43,7 @@ func main() {
 	http.HandleFunc("/settings/", settings.Handler)
 	http.HandleFunc("/profile/", profile.Handler)
 	http.HandleFunc("/project/", project.Handler)
+	http.HandleFunc("/search/", search.Handler)
 
 	//http.HandleFunc("/logout/", login.Logout)
 
