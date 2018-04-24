@@ -85,7 +85,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			resp.update(err == nil, err, results)
 		case "proj":
 			fmt.Println("SEARCH PROJECTS")
-			results, err = search.PrototypeProjectSearch(eclient, strings.ToLower(data.Term), int(0), []bool{true, true, true}, nil, nil, nil)
+			results, err = search.PrototypeProjectSearch(eclient, strings.ToLower(data.Term), int(0), []bool{true, true, true, false}, nil, nil, nil)
 			resp.update(err == nil, err, results)
 			for _, x := range results {
 				fmt.Println(x.Username)
