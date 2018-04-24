@@ -97,7 +97,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("YOUR USER:", session.Values["DocID"].(string))
 	fmt.Println("TARGER USER:", usrID)
 	if test1 == test1 {
-		if data.Intent == "foll" {
+		switch data.Intent {
+		case "foll":
 			if session.Values["Username"] != data.Username {
 				isFollowed, err := uses.IsFollowed(eclient, usrID, data.SessUser.DocID) //session.Values["DocID"].(string))
 
@@ -110,10 +111,15 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 					err = uses.UserUnfollow(eclient, usrID, data.SessUser.DocID)
 					resp.update(err == nil, err, Usr)
 				}
-			}
-		} else {
-			resp.update(false, errors.New("Token invalid"), Usr)
-		}
-	}
 
+			}
+
+		case "proj":
+			_, err = uses.CreateProject(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, "", data.CustomURL)
+
+			resp.update(err == nil, err, Usr)
+		}
+	} else {
+		resp.update(false, errors.New("Token invalid"), Usr)
+	}
 }
