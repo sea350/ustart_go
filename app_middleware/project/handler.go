@@ -155,6 +155,21 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				err = projPost.DeleteMember(eclient, data.ProjectID, data.SessUser.DocID)
 
 			}
+		case "foll":
+			if session.Values["Username"] != data.Username {
+				isFollowed, err := uses.IsFollowed(eclient, data.ProjectID, data.SessUser.DocID) //session.Values["DocID"].(string))
+
+				if !isFollowed {
+					fmt.Println("INTENT TO FOLLOW")
+					err = uses.UserFollow(eclient, data.ProjectID, data.SessUser.DocID) // session.Values["DocID"].(string))
+					resp.update(err == nil, err, Proj)
+				} else {
+					fmt.Println("INTENT TO UNFOLLOW")
+					err = uses.UserUnfollow(eclient, data.ProjectID, data.SessUser.DocID)
+					resp.update(err == nil, err, Proj)
+				}
+
+			}
 		}
 	} else {
 		resp.update(false, errors.New("Something went wrong"), Proj)
