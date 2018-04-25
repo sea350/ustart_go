@@ -2,17 +2,15 @@ package search
 
 import (
 	"fmt"
-
-	types "github.com/sea350/ustart_go/types"
 )
 
 type response struct {
 	Successful bool                 `json:"Successful"`
-	Results    []types.FloatingHead `json:"Results"`
+	Results    []FloatingSearchHead `json:"Results"`
 	ErrMsg     error                `json:"Error"`
 }
 
-func (r *response) update(success bool, em error, res []types.FloatingHead) {
+func (r *response) update(success bool, em error, res []FloatingSearchHead) {
 
 	r.ErrMsg = em
 	r.Successful = success

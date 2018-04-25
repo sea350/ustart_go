@@ -14,6 +14,21 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
+type FloatingSearchHead struct {
+	Username string `json:"Username"`
+	//for projects Username = project URLName
+	FirstName string `json:"FirstName"`
+	//for projects Firstname = project Name
+	LastName string `json:"LastName"`
+	Image    string `json:"Image"`
+	Followed bool   `json:"Followed"`
+	Bio      string `json:"Bio"`
+	//for projects Bio = project Description
+	DocID          string `json:"DocID"`
+	Classification int    `json:"Classification"`
+	Notifications  int    `json:"Notifications"`
+}
+
 var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 
 var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
@@ -77,19 +92,49 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%+v\n", data)
 
 	var results []types.FloatingHead
+	var searchRes []FloatingSearchHead
 	if test1 == test1 {
 		switch data.Intent {
 		case "usr":
 			fmt.Println("SEARCH USERS")
 			results, err = search.PrototypeUserSearch(eclient, strings.ToLower(data.Term), int(0), []bool{true, true, true}, nil, nil, nil)
-			resp.update(err == nil, err, results)
+			for _, res := range results {
+				var newRes FloatingSearchHead
+				newRes.Bio = string(res.Bio)
+				newRes.Classification = res.Classification
+				newRes.DocID = res.DocID
+				newRes.FirstName = res.FirstName
+				newRes.Followed = res.Followed
+				newRes.Image = res.Image
+				newRes.LastName = res.LastName
+				newRes.Notifications = res.Notifications
+				newRes.Username = res.Username
+
+				searchRes = append(searchRes)
+			}
+			resp.update(err == nil, err, searchRes)
 		case "proj":
 			fmt.Println("SEARCH PROJECTS")
 			results, err = search.PrototypeProjectSearch(eclient, strings.ToLower(data.Term), int(0), []bool{true, true, true, false}, nil, nil, nil)
-			resp.update(err == nil, err, results)
+
+			for _, res := range results {
+				var newRes FloatingSearchHead
+				newRes.Bio = string(res.Bio)
+				newRes.Classification = res.Classification
+				newRes.DocID = res.DocID
+				newRes.FirstName = res.FirstName
+				newRes.Followed = res.Followed
+				newRes.Image = res.Image
+				newRes.LastName = res.LastName
+				newRes.Notifications = res.Notifications
+				newRes.Username = res.Username
+
+				searchRes = append(searchRes)
+			}
+			resp.update(err == nil, err, searchRes)
 
 		}
 	} else {
-		resp.update(false, errors.New("Something went wrong"), results)
+		resp.update(false, errors.New("Something went wrong"), searchRes)
 	}
 }
