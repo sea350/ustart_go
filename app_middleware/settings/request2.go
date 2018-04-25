@@ -13,7 +13,7 @@ type form struct {
 	Intent    string `json:"Intent"` //see below
 
 	//Session
-	SessUser types.SessionUser `json:"SessUser"`
+	SessUser types.AppSessionUser `json:"SessUser"`
 	//account fields:
 	Email       string `json:"Email"`
 	Password    string `json:"Password"`
