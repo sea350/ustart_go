@@ -74,32 +74,33 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	//resp.update(false, errors.New("Error"))
 
 	fmt.Println("THE INTENT:", data.Intent)
+	fmt.Println(session.Values["DocID"].(string))
 	if test1 == test1 {
 		switch data.Intent {
 		case "cu":
 			fmt.Println("RIGHT INTENT")
-			if session.Values["Username"] == data.Username {
+			if data.SessUser.Username == data.Username {
 				err = uses.ChangeUsername(eclient, session.Values["DocID"].(string), data.Username, data.NewUName)
 				resp.update(err == nil, err)
 
 			}
 		case "cn":
-			if data.Username == data.Username {
+			if data.SessUser.Username == data.Username {
 				err := uses.ChangeFirstAndLastName(eclient, session.Values["DocID"].(string), data.FirstName, data.LastName)
 				resp.update(err == nil, err)
 			}
 		case "cp":
-			if session.Values["Username"] == data.Username {
+			if data.SessUser.Username == data.Username {
 				err = uses.ChangePassword(eclient, session.Values["DocID"].(string), []byte(data.Password), []byte(data.NewPassword))
 				resp.update(err == nil, err)
 			}
 		case "ca":
-			if session.Values["Username"] == data.Username {
+			if data.SessUser.Username == data.Username {
 				err = post.UpdateUser(eclient, session.Values["DocID"].(string), "Avatar", data.Avatar)
 				resp.update(err == nil, err)
 			}
 		case "cb":
-			if session.Values["Username"] == data.Username {
+			if data.SessUser.Username == data.Username {
 				//blob := r.FormValue("banner-data")
 				err := post.UpdateUser(eclient, session.Values["DocID"].(string), "Banner", data.Banner)
 				resp.update(err == nil, err)

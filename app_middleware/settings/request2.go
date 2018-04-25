@@ -1,5 +1,9 @@
 package settings
 
+import (
+	types "github.com/sea350/ustart_go/types"
+)
+
 type form struct {
 	//Bio fields:
 	Username  string `json:"Username"`
@@ -8,6 +12,8 @@ type form struct {
 	LastName  string `json:"LastName"`
 	Intent    string `json:"Intent"` //see below
 
+	//Session
+	SessUser types.SessionUser `json:"SessUser"`
 	//account fields:
 	Email       string `json:"Email"`
 	Password    string `json:"Password"`
