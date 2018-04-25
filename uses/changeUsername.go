@@ -10,7 +10,7 @@ import (
 
 //ChangeUsername ...
 func ChangeUsername(eclient *elastic.Client, userID string, oldUsername string, newUsername string) error {
-	inUse, err := get.UsernameInUse(eclient, oldUsername)
+	inUse, err := get.UsernameInUse(eclient, newUsername)
 
 	if err != nil {
 		return err
