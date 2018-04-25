@@ -110,7 +110,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				newRes.Notifications = res.Notifications
 				newRes.Username = res.Username
 
-				searchRes = append(searchRes)
+				searchRes = append(searchRes, newRes)
 			}
 			resp.update(err == nil, err, searchRes)
 		case "proj":
@@ -129,7 +129,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				newRes.Notifications = res.Notifications
 				newRes.Username = res.Username
 
-				searchRes = append(searchRes)
+				searchRes = append(searchRes, newRes)
 			}
 			resp.update(err == nil, err, searchRes)
 
