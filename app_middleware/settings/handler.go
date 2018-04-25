@@ -84,7 +84,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 			}
 		case "cn":
-			if session.Values["Username"] == data.Username {
+			if data.Username == data.Username {
 				err := uses.ChangeFirstAndLastName(eclient, session.Values["DocID"].(string), data.FirstName, data.LastName)
 				resp.update(err == nil, err)
 			}
