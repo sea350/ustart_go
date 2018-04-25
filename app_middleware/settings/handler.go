@@ -61,7 +61,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	data := form{}
 
-	resp.update(false, json.NewDecoder(r.Body).Decode(&data))
+	//resp.update(false, json.NewDecoder(r.Body).Decode(&data))
 	//	marshalledData, err := json.Marshal(data)
 
 	fmt.Println("Obtained following data: ")
