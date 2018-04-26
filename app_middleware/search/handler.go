@@ -35,17 +35,17 @@ var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
 // Handler responds to http requests about content.
 func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("HANDLING A PROFILE VIEW REQUEST")
+	fmt.Println("HANDLING A SEARCH REQUEST")
 	session, _ := store.Get(r, "session_please")
 	test1, boo := session.Values["DocID"]
 
 	fmt.Println("LINE 26 bool", boo)
 
-	if test1 == nil {
-		http.Redirect(w, r, "/~", http.StatusFound)
-		return
-	}
-
+	// if test1 == nil {
+	// 	http.Redirect(w, r, "/~", http.StatusFound)
+	// 	return
+	// }
+	fmt.Println(test1)
 	// Setup the response
 	resp := &response{
 		Successful: false,
