@@ -20,8 +20,9 @@ type form struct {
 	NewPassword string `json:"NewPassword"`
 
 	//pic fields:
-	Avatar string `json:"Avatar"`
-	Banner string `json:"Banner"`
+	Avatar      string `json:"Avatar"`
+	Banner      string `json:"Banner"`
+	Description string `json:"Description"`
 
 	// Fields related to the requestor
 	//Token string `json:"Token"`
