@@ -108,6 +108,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				err := post.UpdateUser(eclient, data.SessUser.DocID, "Banner", data.Banner)
 				resp.update(err == nil, err)
 			}
+		case "cd":
+			err = uses.ChangeContactAndDescription(eclient, data.SessUser.DocID, "", false, "", false, false, []rune(data.Description))
+
+			resp.update(err == nil, err)
+
 		}
 		/*case "gu":
 		if session.Values["Username"] == data.Username {
