@@ -19,19 +19,19 @@ var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
 // Handler responds to http requests about content.
 func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("HANDLING A SETTINGS REQUEST")
-	session, _ := store.Get(r, "session_please")
-	test1, boo := session.Values["DocID"]
+	// 	fmt.Println("HANDLING A SETTINGS REQUEST")
+	// 	session, _ := store.Get(r, "session_please")
+	// 	test1, boo := session.Values["DocID"]
 
-	fmt.Println("LINE 26 bool", boo)
+	// 	fmt.Println("LINE 26 bool", boo)
 
-	/*if test1 == nil {
-		fmt.Println("YOU HERE", test1)
-		http.Redirect(w, r, "/~", http.StatusFound)
-		return
-	}*/
+	// 	/*if test1 == nil {
+	// 		fmt.Println("YOU HERE", test1)
+	// 		http.Redirect(w, r, "/~", http.StatusFound)
+	// 		return
+	// 	}*/
 
-	fmt.Println(test1)
+	// 	fmt.Println(test1)
 
 	// Setup the response
 	resp := &response{
@@ -77,7 +77,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("THE INTENT:", data.Intent)
 	fmt.Println("DATA:", data)
-	if test1 == test1 {
+	if 1 == 1 {
 		switch data.Intent {
 		case "cu":
 			fmt.Println("RIGHT INTENT")
