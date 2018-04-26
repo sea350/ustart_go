@@ -73,8 +73,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("error line 70 profile/handler.go")
 	}
 
-	Usr, err = get.UserByUsername(eclient, data.Username)
-	if err != nil {
+	Usr, errUsr := get.UserByUsername(eclient, data.Username)
+	if errUsr != nil {
 		fmt.Println("error line 75 profile/handler.go")
 	}
 
@@ -122,8 +122,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 			resp.update(err == nil, err, Usr)
 
-		}
+		case "get":
+			resp.update(errUsr == nil, errUsr, Usr)
 
+		}
 	} else {
 		resp.update(false, errors.New("Token invalid"), Usr)
 	}
