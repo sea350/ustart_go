@@ -26,10 +26,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("LINE 26 bool", boo)
 
-	if test1 == nil {
-		http.Redirect(w, r, "/~", http.StatusFound)
-		return
-	}
+	// if test1 == nil {
+	// 	http.Redirect(w, r, "/~", http.StatusFound)
+	// 	return
+	// }
 
 	Usr := types.User{}
 	// Setup the response
@@ -117,11 +117,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		case "proj":
 			fmt.Println("INTENT TO CREATE PROJECT")
 			_, err = uses.CreateProject(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, "", data.CustomURL)
-
-			resp.update(err == nil, err, Usr)
-
-		case "cd":
-			err = uses.ChangeContactAndDescription(eclient, data.SessUser.DocID, "", false, "", false, false, []rune(data.Description))
 
 			resp.update(err == nil, err, Usr)
 
