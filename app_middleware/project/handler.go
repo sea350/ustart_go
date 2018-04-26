@@ -76,10 +76,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	projID, err := get.ProjectIDByURL(eclient, data.Username)
 
+	fmt.Println("THE PROJECT ID SHOULD BE:", projID)
 	if err != nil {
 		fmt.Println("error line 79 profile/handler.go")
 	}
-	Proj, err = get.ProjectByID(eclient, data.ProjectID)
+	Proj, err = get.ProjectByID(eclient, projID)
 	if err != nil {
 		fmt.Println("error line 83 profile/handler.go")
 	}
