@@ -117,7 +117,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 		case "proj":
 			fmt.Println("INTENT TO CREATE PROJECT")
-			_, err = uses.CreateProject(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, "", data.CustomURL)
+			_, err = uses.CreateProject(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, "College", data.CustomURL)
 
 			resp.update(err == nil, err, Usr)
 
