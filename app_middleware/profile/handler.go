@@ -30,8 +30,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	// 	http.Redirect(w, r, "/~", http.StatusFound)
 	// 	return
 	// }
-	fmt.Println(test1)
-
+	if 1 == 2 {
+		fmt.Println(test1)
+	}
 	Usr := types.User{}
 	// Setup the response
 	resp := &response{
