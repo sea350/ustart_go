@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gorilla/sessions"
 	get "github.com/sea350/ustart_go/get/project"
 	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
@@ -19,20 +18,11 @@ import (
 
 var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 
-var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
+//var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
 // Handler responds to http requests about content.
 func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("HANDLING A PROFILE VIEW REQUEST")
-	session, _ := store.Get(r, "session_please")
-	test1, boo := session.Values["DocID"]
-
-	fmt.Println("LINE 26 bool", boo)
-
-	if test1 == nil {
-		http.Redirect(w, r, "/~", http.StatusFound)
-		return
-	}
+	fmt.Println("HANDLING A PROJECT VIEW REQUEST")
 
 	Proj := types.Project{}
 	// Setup the response
@@ -91,7 +81,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Obtained following data: ")
 	fmt.Printf("%+v\n", data)
 
-	if test1 == test1 {
+	if 1 == 1 {
 		fmt.Println("PROJECT INFO", Proj)
 		isLeader, index := uses.IsLeader(eclient, projID, data.SessUser.DocID)
 		fmt.Println("tHE INDEX IS:", index)
