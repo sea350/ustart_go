@@ -74,9 +74,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("error line 70 profile/handler.go")
 	}
 
+	projID, err := get.ProjectIDByURL(eclient, data.Username)
+
+	if err != nil {
+		fmt.Println("error line 79 profile/handler.go")
+	}
 	Proj, err = get.ProjectByID(eclient, data.ProjectID)
 	if err != nil {
-		fmt.Println("error line 75 profile/handler.go")
+		fmt.Println("error line 83 profile/handler.go")
 	}
 
 	//resp.update(false, errors.New(" This is an unknown error"), Proj)
@@ -87,7 +92,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	if test1 == test1 {
 		fmt.Println("PROJECT INFO", Proj)
-		isLeader, index := uses.IsLeader(eclient, data.ProjectID, data.SessUser.DocID)
+		isLeader, index := uses.IsLeader(eclient, projID, data.SessUser.DocID)
 		fmt.Println("tHE INDEX IS:", index)
 		switch data.Intent {
 		case "join":
@@ -96,9 +101,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 				if !isMember {
 					fmt.Println("INTENT TO JOIN")
-					err1 := userPost.AppendSentProjReq(eclient, data.SessUser.DocID, data.ProjectID)
+					err1 := userPost.AppendSentProjReq(eclient, data.SessUser.DocID, projID)
 
-					err2 := projPost.AppendMemberReqReceived(eclient, data.ProjectID, data.SessUser.DocID)
+					err2 := projPost.AppendMemberReqReceived(eclient, projID, data.SessUser.DocID)
 
 					if err1 != nil {
 						resp.update(err1 == nil, err1, Proj)
@@ -109,15 +114,15 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 					resp.update(err2 == nil, err2, Proj)
 				} else if index != -1 && !isLeader {
 					fmt.Println("INTENT TO LEAVE")
-					err = projPost.DeleteMember(eclient, data.ProjectID, data.SessUser.DocID)
+					err = projPost.DeleteMember(eclient, projID, data.SessUser.DocID)
 
 					resp.update(err == nil, err, Proj)
 				}
 			}
 		case "accept":
 			if isLeader {
-				err1 := userPost.AppendProject(eclient, data.JoinerID, types.ProjectInfo{ProjectID: data.ProjectID, Visible: true})
-				_, err2 := uses.RemoveRequest(eclient, data.ProjectID, data.JoinerID)
+				err1 := userPost.AppendProject(eclient, data.JoinerID, types.ProjectInfo{ProjectID: projID, Visible: true})
+				_, err2 := uses.RemoveRequest(eclient, projID, data.JoinerID)
 
 				var newMember types.Member
 				newMember.JoinDate = time.Now()
@@ -126,7 +131,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				newMember.Title = "NewMem"
 				newMember.Visible = true
 
-				err3 := projPost.AppendMember(eclient, data.ProjectID, newMember)
+				err3 := projPost.AppendMember(eclient, projID, newMember)
 
 				if err1 != nil {
 					resp.update(err1 == nil, err1, Proj)
@@ -138,13 +143,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 			}
 		case "reject":
-			_, err = uses.RemoveRequest(eclient, data.ProjectID, data.JoinerID)
+			_, err = uses.RemoveRequest(eclient, projID, data.JoinerID)
 			resp.update(err == nil, err, Proj)
 
 		case "leave":
 			if isLeader {
-				err1 := uses.NewProjectLeader(eclient, data.ProjectID, data.SessUser.DocID, data.JoinerID)
-				err2 := projPost.DeleteMember(eclient, data.ProjectID, data.SessUser.DocID)
+				err1 := uses.NewProjectLeader(eclient, projID, data.SessUser.DocID, data.JoinerID)
+				err2 := projPost.DeleteMember(eclient, projID, data.SessUser.DocID)
 
 				if err1 != nil {
 					resp.update(err2 == nil, err2, Proj)
@@ -152,11 +157,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 					resp.update(err2 == nil, err2, Proj)
 				}
 			} else {
-				err = projPost.DeleteMember(eclient, data.ProjectID, data.SessUser.DocID)
+				err = projPost.DeleteMember(eclient, projID, data.SessUser.DocID)
 
 			}
 		case "get":
-			Proj, errGet := get.ProjectByID(eclient, data.ProjectID)
+			Proj, errGet := get.ProjectByID(eclient, projID)
 			resp.update(errGet == nil, errGet, Proj)
 
 		}
