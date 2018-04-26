@@ -115,10 +115,18 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			}
 
 		case "proj":
+			fmt.Println("INTENT TO CREATE PROJECT")
 			_, err = uses.CreateProject(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, "", data.CustomURL)
 
 			resp.update(err == nil, err, Usr)
+
+		case "cd":
+			err = uses.ChangeContactAndDescription(eclient, data.SessUser.DocID, "", false, "", false, false, []rune(data.Description))
+
+			resp.update(err == nil, err, Usr)
+
 		}
+
 	} else {
 		resp.update(false, errors.New("Token invalid"), Usr)
 	}
