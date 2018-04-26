@@ -90,6 +90,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Obtained following data: ")
 	fmt.Printf("%+v\n", data)
 
+	fmt.Println("THE FOLLOWING IS R.BODY:")
+	fmt.Println(r.Body)
 	// Validate requestor token
 	//valid := true
 	//valid, err := session.Validate(data.User, data.Token)
