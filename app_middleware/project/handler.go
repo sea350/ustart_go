@@ -155,6 +155,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				err = projPost.DeleteMember(eclient, data.ProjectID, data.SessUser.DocID)
 
 			}
+		case "get":
+			Proj, errGet := get.ProjectByID(eclient, data.ProjectID)
+			resp.update(errGet == nil, errGet, Proj)
 
 		}
 	} else {
