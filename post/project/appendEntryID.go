@@ -10,7 +10,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//AppendEntryID ... appends a created entry ID to user
+//AppendEntryID ... appends a created entry ID to project
 func AppendEntryID(eclient *elastic.Client, usrID string, entryID string) error {
 	ctx := context.Background()
 

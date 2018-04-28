@@ -10,7 +10,7 @@ import (
 )
 
 //ProjectCreatesEntry ... creates a new entry for projects and handles logic/parallel arrays
-func ProjectCreatesEntry(eclient *elastic.Client, projID string, posterID string, newContent []rune) error {
+func ProjectCreatesEntry(eclient *elastic.Client, projID string, posterID string, newContent []rune) (string, error) {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = posterID
 	createdEntry.Classification = 0
@@ -22,12 +22,12 @@ func ProjectCreatesEntry(eclient *elastic.Client, projID string, posterID string
 
 	entryID, err := postEntry.IndexEntry(eclient, createdEntry)
 	if err != nil {
-		return err
+		return entryID, err
 	}
 
 	err = post.AppendEntryID(eclient, projID, entryID)
 
-	return err
+	return entryID, err
 
 }
 
