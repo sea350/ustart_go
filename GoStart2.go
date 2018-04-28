@@ -59,6 +59,7 @@ func main() {
 	http.HandleFunc("/deleteLink/", profile.DeleteQuickLink)
 	http.HandleFunc("/deletePost/", profile.DeletePost)
 	http.HandleFunc("/editPost/", profile.EditPost)
+	http.HandleFunc("/shareEntry/", profile.ShareEntry)
 	http.HandleFunc("/deleteModal/", profile.GenerateDeleteModal)
 	http.HandleFunc("/getPostComments/", profile.PostComments)
 	http.HandleFunc("/followers/", profile.FollowersPage)

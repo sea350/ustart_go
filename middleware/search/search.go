@@ -24,7 +24,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	var searchBy []bool
 
 	query := r.FormValue("query")
-	fmt.Println("searching for: " + query)
+	//fmt.Println("searching for: " + query)
 	filter := r.FormValue("searchFilterGroup") //can be: skills,users,projects
 
 	//sortBy := r.FormValue("sortbyfilter")
