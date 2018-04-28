@@ -19,8 +19,8 @@ func MakeEntry(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projectID := r.FormValue("UNKOWN")
-	newContent := []rune(r.FormValue("content"))
+	projectID := r.FormValue("docID")
+	newContent := []rune(r.FormValue("text"))
 	err := uses.ProjectCreatesEntry(client.Eclient, projectID, docID.(string), newContent)
 	if err != nil {
 		fmt.Println("err: middleware/project/makeentries line 26")

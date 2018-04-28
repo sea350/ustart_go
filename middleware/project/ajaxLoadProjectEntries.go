@@ -20,7 +20,7 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	wallID := r.FormValue("UNKNOWN")
+	wallID := r.FormValue("userID")
 	proj, err := get.ProjectByID(client.Eclient, wallID)
 	if err != nil {
 		fmt.Println("err middleware/project/AjaxLoadProjectEntries line 25")
