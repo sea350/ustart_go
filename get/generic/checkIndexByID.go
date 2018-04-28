@@ -10,9 +10,10 @@ import (
 func CheckIndexByID(eclient *elastic.Client, docID string) (string, error) {
 	ctx := context.Background() //intialize context background
 	var index string
-	searchResult, err := eclient.Get(). //Get returns doc type, index, etc.
-						Id(docID).
-						Do(ctx)
+	searchResult, err := eclient.Get().
+		Index("*").
+		Id(docID).
+		Do(ctx)
 
 	if err != nil {
 		return index, err
