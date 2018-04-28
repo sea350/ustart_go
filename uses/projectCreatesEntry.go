@@ -10,9 +10,9 @@ import (
 )
 
 //ProjectCreatesEntry ... creates a new entry for projects and handles logic/parallel arrays
-func ProjectCreatesEntry(eclient *elastic.Client, projID string, newContent []rune) error {
+func ProjectCreatesEntry(eclient *elastic.Client, projID string, posterID string, newContent []rune) error {
 	createdEntry := types.Entry{}
-	createdEntry.PosterID = projID
+	createdEntry.PosterID = posterID
 	createdEntry.Classification = 0
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
@@ -32,9 +32,9 @@ func ProjectCreatesEntry(eclient *elastic.Client, projID string, newContent []ru
 }
 
 //ProjectCreatesReply ... creates a new reply entry for projects and handles logic/parallel arrays
-func ProjectCreatesReply(eclient *elastic.Client, projID string, replyID string, newContent []rune) error {
+func ProjectCreatesReply(eclient *elastic.Client, projID string, replyID string, posterID string, newContent []rune) error {
 	createdEntry := types.Entry{}
-	createdEntry.PosterID = projID
+	createdEntry.PosterID = posterID
 	createdEntry.Classification = 1
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
@@ -59,9 +59,9 @@ func ProjectCreatesReply(eclient *elastic.Client, projID string, replyID string,
 }
 
 //ProjectCreatesShare ... creates a new share entry for projects and handles logic/parallel arrays
-func ProjectCreatesShare(eclient *elastic.Client, projID string, replyID string, newContent []rune) error {
+func ProjectCreatesShare(eclient *elastic.Client, projID string, replyID string, posterID string, newContent []rune) error {
 	createdEntry := types.Entry{}
-	createdEntry.PosterID = projID
+	createdEntry.PosterID = posterID
 	createdEntry.Classification = 2
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
