@@ -3,6 +3,7 @@ package search
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
@@ -10,7 +11,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//PrototypeUserSearch ... Attempt at fully functional project search, returns Floatinghead
+//PrototypeUserSearch ... Attempt at fully functional user search, returns Floatinghead
 /* Inputs:
 eclient		-> ???
 sortBy 		-> 0: Relevance, 1: Popularity, 2: Newest/Age
@@ -43,6 +44,8 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 		if searchBy[2] {
 			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Tags", `*`+searchTerm+`*`))
 		}
+	} else {
+		fmt.Println("WANRING: searchBy array is too short")
 	}
 	// Major
 	if len(mustMajor) > 0 {
