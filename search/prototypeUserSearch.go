@@ -45,7 +45,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Tags", `*`+searchTerm+`*`))
 		}
 	} else {
-		fmt.Println("WANRING: searchBy array is too short")
+		fmt.Println("WARNING: searchBy array is too short")
 	}
 	// Major
 	if len(mustMajor) > 0 {

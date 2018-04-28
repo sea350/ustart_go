@@ -3,6 +3,7 @@ package search
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
@@ -25,8 +26,6 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 
 	var results []types.FloatingHead
 
-	//, "Description", "URLName", "Tags"
-	// newMatchQuery := elastic.NewMultiMatchQuery(searchTerm, "FirstName", "LastName")
 	newMatchQuery := elastic.NewBoolQuery()
 
 	if len(searchBy) >= 4 {
@@ -46,6 +45,8 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 		if searchBy[3] {
 			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("ListNeeded", searchTerm))
 		}
+	} else {
+		fmt.Println("WARNING: searchBy array is too short")
 	}
 	// Major
 	if len(mustMajor) > 0 {
