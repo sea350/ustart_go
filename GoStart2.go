@@ -91,6 +91,7 @@ func main() {
 	http.HandleFunc("/RejectJoinRequest/", project.RejectJoinRequest)
 	http.HandleFunc("/ProjectMakeEntry/", project.MakeEntry)
 	http.HandleFunc("/AjaxLoadProjectEntries/", project.AjaxLoadProjectEntries)
+	http.HandleFunc("/AjaxDeleteProjectEntry/", project.AjaxDeleteEntry)
 
 	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)
