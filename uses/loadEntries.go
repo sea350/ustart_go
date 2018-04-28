@@ -13,7 +13,7 @@ func LoadEntries(eclient *elastic.Client, loadList []string) ([]types.JournalEnt
 	var entries []types.JournalEntry
 
 	for _, entryID := range loadList {
-		jEntry, err := ConvertEntryToJournalEntry(eclient, entryID)
+		jEntry, err := ConvertEntryToJournalEntry(eclient, entryID, true)
 		if err != nil {
 			return entries, err
 		}
