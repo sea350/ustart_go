@@ -18,7 +18,7 @@ func Skills(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, e
 	var results []types.FloatingHead
 	query := elastic.NewBoolQuery()
 
-	stringArray := strings.Split(searchTerm, `","`)
+	stringArray := strings.Split(searchTerm, ` `)
 	for _, element := range stringArray {
 		query = query.Should(elastic.NewWildcardQuery("Tags", strings.ToLower(element)))
 	}

@@ -29,7 +29,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 	var searchArr []string
 	query := elastic.NewBoolQuery()
 
-	stringArray := strings.Split(searchTerm, `","`)
+	stringArray := strings.Split(searchTerm, ` `)
 	for _, element := range stringArray {
 		searchArr = append(searchArr, strings.ToLower(element))
 	}
