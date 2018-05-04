@@ -17,6 +17,7 @@ type SessionUser struct {
 	Username  string      `json:"Username"`
 	Email     string      `json:"Email"`
 	DocID     string      `json:"ID"`
+	Avatar    string      `json:"Avatar"`
 	Interface interface{} `json:"Interface"`
 }
 

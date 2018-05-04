@@ -22,6 +22,7 @@ type ClientSide struct {
 	FirstName       string
 	LastName        string
 	Username        string
+	Avatar          string
 	ErrorOutput     error
 	ErrorStatus     bool
 	UserInfo        types.User
@@ -73,6 +74,9 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, cs Clie
 	if session.Values["DocID"] != nil {
 		cs.DOCID = session.Values["DocID"].(string)
 	}
+	if session.Values["Avatar"] != nil {
+		cs.Avatar = session.Values["Avatar"].(string)
+	}
 	err := templates.ExecuteTemplate(w, tmpl+".html", cs)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -94,6 +98,9 @@ func RenderSidebar(w http.ResponseWriter, r *http.Request, tmpl string) {
 	}
 	if session.Values["DocID"] != nil {
 		cs.DOCID = session.Values["DocID"].(string)
+	}
+	if session.Values["Avatar"] != nil {
+		cs.Avatar = session.Values["Avatar"].(string)
 	}
 	err := templates.ExecuteTemplate(w, tmpl+".html", cs)
 	if err != nil {
