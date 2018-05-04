@@ -43,7 +43,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		session.Values["LastName"] = sessionInfo.LastName
 		session.Values["Email"] = sessionInfo.Email
 		session.Values["Username"] = sessionInfo.Username
-		session.Values["Avatar"] = sessionInfo.Avatar
+		//session.Values["Avatar"] = sessionInfo.Avatar
 		expiration := time.Now().Add((30) * time.Hour)
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 		http.SetCookie(w, &cookie)
@@ -97,7 +97,7 @@ func Error(w http.ResponseWriter, r *http.Request) {
 		session.Values["FirstName"] = sessionInfo.FirstName
 		session.Values["LastName"] = sessionInfo.LastName
 		session.Values["Email"] = sessionInfo.Email
-		session.Values["Avatar"] = sessionInfo.Avatar
+		//session.Values["Avatar"] = sessionInfo.Avatar
 		expiration := time.Now().Add((30) * time.Hour)
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 		http.SetCookie(w, &cookie)
