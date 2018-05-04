@@ -6,4 +6,5 @@ func HowToBasic(egg string) string {
 		return egg
 	}
 	return "cracked egg"
+	
 }
