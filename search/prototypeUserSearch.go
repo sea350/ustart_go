@@ -33,8 +33,8 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 	if len(searchBy) >= 3 {
 		//Name
 		if searchBy[0] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("FirstName", `*`+searchTerm+`*`))
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("LastName", `*`+searchTerm+`*`))
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("FirstName", searchTerm))
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("LastName", searchTerm))
 		}
 		//Username
 		if searchBy[1] {
