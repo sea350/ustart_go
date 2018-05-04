@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
@@ -33,16 +34,16 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 	if len(searchBy) >= 3 {
 		//Name
 		if searchBy[0] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("FirstName", searchTerm))
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("LastName", searchTerm))
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("FirstName", strings.ToLower(searchTerm)))
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("LastName", strings.ToLower(searchTerm)))
 		}
 		//Username
 		if searchBy[1] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Username", `*`+searchTerm+`*`))
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Username", strings.ToLower(`*`+searchTerm+`*`)))
 		}
 		//Tags
 		if searchBy[2] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Tags", `*`+searchTerm+`*`))
+			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Tags", strings.ToLower(`*`+searchTerm+`*`)))
 		}
 	} else {
 		fmt.Println("WARNING: searchBy array is too short")
@@ -51,14 +52,14 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 	if len(mustMajor) > 0 {
 		for _, element := range mustMajor {
 			//Check if NewMatchQuery order is correct
-			newMatchQuery = newMatchQuery.Must(elastic.NewMatchQuery("Majors", element))
+			newMatchQuery = newMatchQuery.Must(elastic.NewMatchQuery("Majors", strings.ToLower(element)))
 		}
 	}
 	// Tag
 	if len(mustTag) > 0 {
 		for _, element := range mustTag {
 			//Check if NewMatchQuery order is correct
-			newMatchQuery = newMatchQuery.Must(elastic.NewMatchQuery("Tags", element))
+			newMatchQuery = newMatchQuery.Must(elastic.NewMatchQuery("Tags", strings.ToLower(element)))
 		}
 	}
 
