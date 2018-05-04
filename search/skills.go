@@ -16,8 +16,13 @@ func Skills(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, e
 
 	ctx := context.Background()
 	var results []types.FloatingHead
+	query := elastic.NewBoolQuery()
 
-	query := elastic.NewBoolQuery().Should(elastic.NewWildcardQuery("Tags", strings.ToLower("*"+searchTerm+"*")))
+	stringArray := strings.Split(searchTerm, `","`)
+	for _, element := range stringArray {
+		query = query.Should(elastic.NewWildcardQuery("Tags", strings.ToLower(element)))
+	}
+
 	searchResults, err := eclient.Search().
 		Index(globals.UserIndex).
 		Type(globals.UserType).

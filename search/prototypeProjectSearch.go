@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
@@ -25,25 +26,30 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 	ctx := context.Background()
 
 	var results []types.FloatingHead
+	var searchArr []string
+	query := elastic.NewBoolQuery()
 
-	newMatchQuery := elastic.NewBoolQuery()
+	stringArray := strings.Split(searchTerm, `","`)
+	for _, element := range stringArray {
+		searchArr = append(searchArr, strings.ToLower(element))
+	}
 
 	if len(searchBy) >= 4 {
 		//Name
 		if searchBy[0] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Name", searchTerm))
+			query = uses.MultiWildCardQuery(query, "Name", stringArray, true)
 		}
 		//URLName
 		if searchBy[1] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("URLName", searchTerm))
+			query = uses.MultiWildCardQuery(query, "URLName", stringArray, true)
 		}
 		//Tags
 		if searchBy[2] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("Tags", searchTerm))
+			query = uses.MultiWildCardQuery(query, "Tags", stringArray, true)
 		}
 		//ListNeeded
 		if searchBy[3] {
-			newMatchQuery = newMatchQuery.Should(elastic.NewWildcardQuery("ListNeeded", searchTerm))
+			query = uses.MultiWildCardQuery(query, "ListNeeded", stringArray, true)
 		}
 	} else {
 		fmt.Println("WARNING: searchBy array is too short")
@@ -52,20 +58,20 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 	if len(mustMajor) > 0 {
 		for _, element := range mustMajor {
 			//Check if NewMatchQuery order is correct
-			newMatchQuery = newMatchQuery.Must(elastic.NewMatchQuery("ListNeeded", element))
+			query = query.Must(elastic.NewMatchQuery("ListNeeded", element))
 		}
 	}
 	// Tag
 	if len(mustTag) > 0 {
 		for _, element := range mustTag {
 			//Check if NewMatchQuery order is correct
-			newMatchQuery = newMatchQuery.Must(elastic.NewMatchQuery("Tags", element))
+			query = query.Must(elastic.NewMatchQuery("Tags", element))
 		}
 	}
 
 	searchResults, err := eclient.Search().
 		Index(globals.ProjectIndex).
-		Query(newMatchQuery).
+		Query(query).
 		Pretty(true).
 		Do(ctx)
 
