@@ -13,20 +13,20 @@ import (
 //Login ... logs you in duh
 func Login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm() // represents form data from html
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	// check if docid exists within the session note: there is inconsistency with checking docid/username.
 	test1, _ := session.Values["Username"]
 	if test1 != nil {
 		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
 	}
 	email := r.FormValue("email")
-	email = strings.ToLower(email) // we only store lowercase emails in the db
+	email = strings.ToLower(email) // we only client.Store lowercase emails in the db
 	//	var password []byte
 	password := r.FormValue("password")
 	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
 
-	successful, sessionInfo, err2 := uses.Login(eclient, email, passwordb)
+	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb)
 
 	// doc ID can be retrieved here!
 	//cs := &ClientSide{}
@@ -43,7 +43,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		session.Values["LastName"] = sessionInfo.LastName
 		session.Values["Email"] = sessionInfo.Email
 		session.Values["Username"] = sessionInfo.Username
-		//session.Values["Avatar"] = sessionInfo.Avatar
+		session.Values["Avatar"] = sessionInfo.Avatar
 		expiration := time.Now().Add((30) * time.Hour)
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 		http.SetCookie(w, &cookie)
@@ -63,7 +63,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 // func LoggedIn (w http.ResponseWriter, r *http.Request){
-// 	session, _ := store.Get(r, "session_please")
+// 	session, _ := client.Store.Get(r, "session_please")
 // 	//	fmt.Println(session.Values["FirstName"].(string))
 // 	cs := ClientSide{FirstName:session.Values["FirstName"].(string)}
 // 	session.Save(r, w)
@@ -73,7 +73,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 //Error ... This isn't used anymore I think
 func Error(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
 		http.Redirect(w, r, "/profile/"+session.Values["DocID"].(string), http.StatusFound)
@@ -85,7 +85,7 @@ func Error(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(password)
 	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
-	successful, sessionInfo, err2 := uses.Login(eclient, email, passwordb)
+	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb)
 	if err2 != nil {
 		fmt.Println(err2)
 
@@ -97,6 +97,7 @@ func Error(w http.ResponseWriter, r *http.Request) {
 		session.Values["FirstName"] = sessionInfo.FirstName
 		session.Values["LastName"] = sessionInfo.LastName
 		session.Values["Email"] = sessionInfo.Email
+		session.Values["Avatar"] = sessionInfo.Avatar
 		expiration := time.Now().Add((30) * time.Hour)
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
 		http.SetCookie(w, &cookie)
