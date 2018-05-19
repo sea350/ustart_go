@@ -22,7 +22,7 @@ func LoadComments(eclient *elastic.Client, entryID string, lowerBound int, upper
 		return parent, entries, errors.New("Lower Bound limit is out of bounds")
 	}
 
-	parent, err := ConvertEntryToJournalEntry(eclient, entryID)
+	parent, err := ConvertEntryToJournalEntry(eclient, entryID, true)
 	if err != nil {
 		return parent, entries, err
 	}
@@ -36,7 +36,7 @@ func LoadComments(eclient *elastic.Client, entryID string, lowerBound int, upper
 
 	start = (len(parent.Element.ReplyIDs) - 1) - lowerBound
 	for i := start; i >= finish; i-- {
-		jEntry, err := ConvertEntryToJournalEntry(eclient, parent.Element.ReplyIDs[i])
+		jEntry, err := ConvertEntryToJournalEntry(eclient, parent.Element.ReplyIDs[i], true)
 		if err != nil {
 			return parent, entries, err
 		}

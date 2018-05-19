@@ -10,7 +10,7 @@ import (
 //ConvertEntryToJournalEntry ... load all relevant data of a single entry into a journal entry struct
 //Requires entry docID
 //Returns entry as a type JournalEntry and an error
-func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string) (types.JournalEntry, error) {
+func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, enableRecursion bool) (types.JournalEntry, error) {
 	var newJournalEntry types.JournalEntry
 
 	newJournalEntry.ElementID = entryID
@@ -31,10 +31,9 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string) (types.
 	newJournalEntry.FirstName = usr.FirstName
 	newJournalEntry.LastName = usr.LastName
 	newJournalEntry.Image = usr.Avatar
-	/*
-		if entry.Classification == 2 {
-			newJournalEntry.ReferenceElement, err = ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry)
-		}
-	*/
+	if entry.Classification == 2 && enableRecursion {
+		newJournalEntry.ReferenceElement, err = ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry, false)
+	}
+
 	return newJournalEntry, err
 }

@@ -3,6 +3,7 @@ package search
 import (
 	"context"
 	"errors"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -15,8 +16,13 @@ func Skills(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, e
 
 	ctx := context.Background()
 	var results []types.FloatingHead
+	query := elastic.NewBoolQuery()
 
-	query := elastic.NewWildcardQuery("Tags", "*"+searchTerm+"*")
+	stringArray := strings.Split(searchTerm, ` `)
+	for _, element := range stringArray {
+		query = query.Should(elastic.NewWildcardQuery("Tags", strings.ToLower(element)))
+	}
+
 	searchResults, err := eclient.Search().
 		Index(globals.UserIndex).
 		Type(globals.UserType).

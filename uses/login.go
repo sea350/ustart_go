@@ -48,6 +48,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte) (bool, ty
 	userSession.Email = userEmail
 	userSession.DocID = uID
 	userSession.Username = usr.Username
+	userSession.Avatar = usr.Avatar
 
 	return loginSucessful, userSession, err
 

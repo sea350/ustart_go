@@ -59,6 +59,7 @@ func main() {
 	http.HandleFunc("/deleteLink/", profile.DeleteQuickLink)
 	http.HandleFunc("/deletePost/", profile.DeletePost)
 	http.HandleFunc("/editPost/", profile.EditPost)
+	http.HandleFunc("/shareEntry/", profile.ShareEntry)
 	http.HandleFunc("/deleteModal/", profile.GenerateDeleteModal)
 	http.HandleFunc("/getPostComments/", profile.PostComments)
 	http.HandleFunc("/followers/", profile.FollowersPage)
@@ -88,6 +89,9 @@ func main() {
 	http.HandleFunc("/RequestToJoin/", project.RequestToJoin)
 	http.HandleFunc("/AcceptJoinRequest/", project.AcceptJoinRequest)
 	http.HandleFunc("/RejectJoinRequest/", project.RejectJoinRequest)
+	http.HandleFunc("/ProjectMakeEntry/", project.MakeEntry)
+	http.HandleFunc("/AjaxLoadProjectEntries/", project.AjaxLoadProjectEntries)
+	http.HandleFunc("/AjaxDeleteProjectEntry/", project.AjaxDeleteEntry)
 
 	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)
