@@ -20,9 +20,9 @@ const mapping = `
                 "Username":{
                 	"type":"keyword"
                 },
-                "AccCreation":{
+               <!-- "AccCreation":{
                 	"type": date"
-				},
+				},-->
 				"FirstName":{
 					"type": "keyword"
 				},
