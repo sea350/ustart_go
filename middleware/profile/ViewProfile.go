@@ -21,7 +21,9 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userstruct, _, followbool, err5 := uses.UserPage(client.Eclient, strings.ToLower(r.URL.Path[9:]), test1.(string))
+	pageUserName := strings.ToLower(r.URL.Path[9:])
+
+	userstruct, _, followbool, err5 := uses.UserPage(client.Eclient, pageUserName, test1.(string))
 	if err5 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 29)")
 		fmt.Println(err5)
@@ -72,7 +74,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	year := bday[0:4]
 	birthdayline := month + "/" + day + "/" + year
 
-	viewingDOC, errID := get.IDByUsername(client.Eclient, strings.ToLower(r.URL.Path[9:]))
+	viewingDOC, errID := get.IDByUsername(client.Eclient, strings.ToLower(pageUserName))
 	if errID != nil {
 		fmt.Println("this is an error (ViewProfile.go: 79)")
 		fmt.Println(errID)
