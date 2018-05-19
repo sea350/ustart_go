@@ -21,7 +21,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userstruct, _, followbool, err5 := uses.UserPage(client.Eclient, r.URL.Path[9:], test1.(string))
+	userstruct, _, followbool, err5 := uses.UserPage(client.Eclient, strings.ToLower(r.URL.Path[9:]), test1.(string))
 	if err5 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 29)")
 		fmt.Println(err5)
