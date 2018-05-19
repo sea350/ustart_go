@@ -3,6 +3,7 @@ package profile
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
@@ -71,7 +72,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	year := bday[0:4]
 	birthdayline := month + "/" + day + "/" + year
 
-	viewingDOC, errID := get.IDByUsername(client.Eclient, r.URL.Path[9:])
+	viewingDOC, errID := get.IDByUsername(client.Eclient, strings.ToLower(r.URL.Path[9:]))
 	if errID != nil {
 		fmt.Println("this is an error (ViewProfile.go: 79)")
 		fmt.Println(errID)
