@@ -29,7 +29,7 @@ func main() {
 	// http.Handle("/www/", http.StripPrefix("/www/", fs))
 	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
 	/*
-		The following are all the handlers we have so far.
+		The following are all the handlers we have so fart.
 	*/
 
 	http.HandleFunc("/404/", fail.Fail)
