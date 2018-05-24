@@ -29,11 +29,12 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 	var searchArr []string
 	query := elastic.NewBoolQuery()
 
-	stringArray := strings.Split(searchTerm, ` `)
+	searchArr = strings.Split(searchTerm, ` `)
+	/*
 	for _, element := range stringArray {
 		searchArr = append(searchArr, strings.ToLower(element))
 	}
-
+*/
 	//, "Description", "URLName", "Tags"
 	// query := elastic.NewMultiMatchQuery(searchTerm, "FirstName", "LastName")
 
