@@ -27,6 +27,8 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	if err5 != nil {
 		fmt.Println("this is an error (ViewProfile.go: 29)")
 		fmt.Println(err5)
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
 	}
 
 	widgets, errors := uses.LoadWidgets(client.Eclient, userstruct.UserWidgets)

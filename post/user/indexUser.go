@@ -15,19 +15,23 @@ const mapping = `
         "USER":{
             "properties":{
                 "Email":{
-                    "type":"keyword"
+					"type":"keyword",
+					"index" : "not_analyzed"
                 },
                 "Username":{
-                	"type":"keyword"
+					"type":"keyword",
+					"index" : "not_analyzed"
                 },
                <!-- "AccCreation":{
                 	"type": date"
 				},-->
 				"FirstName":{
-					"type": "keyword"
+					"type": "keyword",
+					"index" : "not_analyzed"
 				},
 				"LastName":{
-					"type":"keyword"
+					"type":"keyword",
+					"index" : "not_analyzed"
 				}
 				<!--"Tags":{
 					"type":"keyword"-->
@@ -43,13 +47,13 @@ const mapping = `
 //IndexUser ...
 // adds a new user document to the ES cluster
 // returns err,string. nil, newID if successful.
-func IndexUser(eclient *elastic.Client, newAcc types.User) (error, string) {
+func IndexUser(eclient *elastic.Client, newAcc types.User) (string, error) {
 	// Check if the index exists
 	ctx := context.Background()
 	var ID string
 	exists, err := eclient.IndexExists(globals.UserIndex).Do(ctx)
 	if err != nil {
-		return err, ID
+		return ID, err
 	}
 	// If the index doesn't exist, create it and return error.
 	if !exists {
@@ -63,7 +67,7 @@ func IndexUser(eclient *elastic.Client, newAcc types.User) (error, string) {
 		}
 
 		// Return an error saying it doesn't exist
-		return errors.New("Index does not exist"), ID
+		return ID, errors.New("Index does not exist")
 	}
 
 	// Index the document.
@@ -74,8 +78,8 @@ func IndexUser(eclient *elastic.Client, newAcc types.User) (error, string) {
 		Do(ctx)
 
 	if Err != nil {
-		return Err, ID
+		return ID, Err
 	}
 
-	return nil, newUsr.Id
+	return newUsr.Id, nil
 }

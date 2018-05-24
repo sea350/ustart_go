@@ -10,7 +10,6 @@ import (
 )
 
 //AppendCollReq ...
-
 func AppendCollReq(eclient *elastic.Client, usrID string, collegueID string, whichOne bool) error {
 
 	ctx := context.Background()
