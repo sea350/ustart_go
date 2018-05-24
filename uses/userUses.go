@@ -71,7 +71,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		newUsr.Class = 5
 	}
 
-	retErr, _ := postUser.IndexUser(eclient, newUsr)
+	_, retErr := postUser.IndexUser(eclient, newUsr)
 	if retErr != nil {
 		return retErr
 	}
