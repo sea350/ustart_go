@@ -12,7 +12,7 @@ import (
 const mapping = `
 {
     "mappings":{
-        "User":{
+        "USER":{
             "properties":{
                 "Email":{
                     "type":"keyword"
@@ -29,8 +29,8 @@ const mapping = `
 				"LastName":{
 					"type":"keyword"
 				}
-				"Tags":{
-					"type":"keyword"
+				<!--"Tags":{
+					"type":"keyword"-->
 				}
                 
             }
