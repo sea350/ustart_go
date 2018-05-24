@@ -59,7 +59,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	var appSessUsr types.AppSessionUser
 	resp.updateResp(err, false, appSessUsr)
 
-	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password))
+	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password), "0")
 
 	appSessUsr.FirstName = sessUsr.FirstName
 	appSessUsr.LastName = sessUsr.LastName

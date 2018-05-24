@@ -26,7 +26,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
 
-	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb)
+	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, "0")
 
 	// doc ID can be retrieved here!
 	//cs := &ClientSide{}
@@ -85,7 +85,7 @@ func Error(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(password)
 	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
-	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb)
+	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, "0")
 	if err2 != nil {
 		fmt.Println(err2)
 

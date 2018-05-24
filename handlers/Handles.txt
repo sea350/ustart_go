@@ -113,7 +113,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("inputPassword")
 	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 
-	successful, _, err2 := uses.Login(eclient, email, password)
+	successful, _, err2 := uses.Login(eclient, email, password, "0")
 	if err2 != nil {
 		//	fmt.Println(err2)
 
