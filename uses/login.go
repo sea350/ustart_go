@@ -14,6 +14,7 @@ import (
 //Requires username and password
 //Returns whether or not username and password match, a type SessionUser, and an error
 func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP string) (bool, types.SessionUser, error) {
+	//addressIP = the user IP, Steven knows how to do this
 
 	var loginSucessful = false
 	var userSession types.SessionUser
@@ -29,9 +30,6 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 		err := errors.New("Invalid Email")
 		return loginSucessful, userSession, err
 	}
-
-	//addressIP = the user IP, Steven knows how to do this
-	//loginWarnings.LoginWarningsIP = append(loginWarnings.LoginWarningsIP, addressIP)
 
 	//Email is valid, we need to check if we are in a login lockout or not from multiple attempts
 	if loginWarnings.LockoutUntil.After(time.Now()) {
@@ -61,6 +59,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 			loginWarnings.LockoutUntil = loginWarnings.LastAttempt.Add(time.Minute * (5 + 5*time.Duration(loginWarnings.LockoutCounter-1)))
 			loginWarnings.NumberAttempts = 0
 		}
+		usr.LoginWarningsIP = append(usr.LoginWarningsIP, addressIP)
 		return loginSucessful, userSession, err
 	}
 

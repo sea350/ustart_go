@@ -24,12 +24,11 @@ type Request struct {
 
 //LoginWarning ... Security countermeasure for checking amount of login attempts and locking out IP address for repeated failures
 type LoginWarning struct {
-	LastAttempt     time.Time `json:"LastAttempt"`      //Time since the Last Failed Login Attempt
-	NumberAttempts  int       `json:"NumberOfAttempts"` //Number of Failed Login Attempts
-	LockoutUntil    time.Time `json:"LockoutUntil"`     //Lockout Until User can attempt again
-	IPAddress       string    `json:"IPAddress"`        //IP address of Failed Login Attempt Offender
-	LockoutCounter  int64     `json:"LockoutCounter"`   //Amount of Lockouts the IP address
-	LoginWarningsIP []string  `json:"LoginWarnings"`    //Records the IP addresses attempting to login to specific account
+	LastAttempt    time.Time `json:"LastAttempt"`      //Time since the Last Failed Login Attempt
+	NumberAttempts int       `json:"NumberOfAttempts"` //Number of Failed Login Attempts
+	LockoutUntil   time.Time `json:"LockoutUntil"`     //Lockout Until User can attempt again
+	IPAddress      string    `json:"IPAddress"`        //IP address of Failed Login Attempt Offender
+	LockoutCounter int64     `json:"LockoutCounter"`   //Amount of Lockouts the IP address
 }
 
 //User ... all user related data
@@ -84,4 +83,5 @@ type User struct {
 	ReceivedProjReq []string      `json:"ReceivedProjReq"`
 	FirstLogin      bool          `json:"FirstLogin"`
 	UserWidgets     []string      `json:"UserWidgets"`
+	LoginWarningsIP []string      `json:"LoginWarnings"` //Records the IP addresses attempting to login to specific account
 }
