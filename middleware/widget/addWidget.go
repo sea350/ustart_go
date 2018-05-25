@@ -246,6 +246,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.FormValue("widgetSubmit") == `15` {
 		//calendar widget
+		fmt.Println("Well, the submit works...")
 
 		calendarInput := template.HTML(r.FormValue("cal-embed-input"))
 		data = []template.HTML{calendarInput}
