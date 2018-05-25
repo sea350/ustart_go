@@ -21,6 +21,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 
 	//We want to keep track of login attempts and lock out users who have too many failed attempts for a period of time
 	var loginWarnings types.LoginWarning
+	loginWarnings.IPAddress = addressIP
 
 	inUse, err := get.EmailInUse(eclient, userEmail)
 	if err != nil {
@@ -39,6 +40,16 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 
 	usr, err := get.UserByEmail(eclient, userEmail)
 	if err != nil {
+		/*
+			loginWarnings.NumberAttempts = loginWarnings.NumberAttempts + 1
+			loginWarnings.LastAttempt = time.Now()
+			if loginWarnings.NumberAttempts > 5 {
+				loginWarnings.LockoutCounter = loginWarnings.LockoutCounter + 1
+				loginWarnings.LockoutUntil = loginWarnings.LastAttempt.Add(time.Minute * (5 + 5*time.Duration(loginWarnings.LockoutCounter-1)))
+				loginWarnings.NumberAttempts = 0
+			}
+			usr.LoginWarningsIP = append(usr.LoginWarningsIP, addressIP)
+		*/
 		return loginSucessful, userSession, err
 	}
 
@@ -53,7 +64,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 			loginWarnings.LockoutUntil = loginWarnings.LastAttempt.Add(time.Minute * (5 + 5*time.Duration(loginWarnings.LockoutCounter-1)))
 			loginWarnings.NumberAttempts = 0
 		}
-		usr.LoginWarningsIP = append(usr.LoginWarningsIP, addressIP)
+		usr.LoginWarningsIP = append(usr.LoginWarningsIP, loginWarnings.IPAddress)
 		return false, userSession, passErr
 	}
 
@@ -71,7 +82,8 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 	userSession.Avatar = usr.Avatar
 
 	//Clear Login Warning struct and the IP array, which I still don't know where to put
-	loginWarnings = types.LoginWarning{}
+	loginWarnings.NumberAttempts = 0
+	loginWarnings.LockoutCounter = 0
 
 	return loginSucessful, userSession, err
 
