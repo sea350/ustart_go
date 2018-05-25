@@ -21,7 +21,7 @@ func DeleteWidgetProfile(w http.ResponseWriter, r *http.Request) {
 	username := test1.(string)
 	r.ParseForm()
 
-	widg, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
+	_, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
 	fmt.Println("LLL")
 	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false)
 	if err != nil {
