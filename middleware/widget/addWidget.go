@@ -254,7 +254,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("widgetSubmit") == `16` {
 		//github widget username
 
-		username := template.HTML(r.FormValue("githubInput"))
+		username := template.HTML(r.FormValue("username"))
 		data = []template.HTML{username}
 		classification = 16
 	}
