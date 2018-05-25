@@ -247,7 +247,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("widgetSubmit") == `15` {
 		//calendar widget
 
-		calendarInput := template.HTML(r.FormValue("cal-embed-input"))
+		calendarInput := template.HTML(r.FormValue("gCalEmbed"))
 		data = []template.HTML{calendarInput}
 		classification = 15
 	}
