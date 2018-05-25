@@ -251,6 +251,13 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		data = []template.HTML{calendarInput}
 		classification = 15
 	}
+	if r.FormValue("widgetSubmit") == `16` {
+		//github widget username
+
+		username := template.HTML(r.FormValue("githubInput"))
+		data = []template.HTML{username}
+		classification = 16
+	}
 
 	newWidget := types.Widget{UserID: session.Values["DocID"].(string), Data: data, Classification: classification}
 

@@ -244,6 +244,20 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		data = []template.HTML{username}
 		classification = 14
 	}
+	if r.FormValue("widgetSubmit") == `15` {
+		//calendar widget
+
+		calendarInput := template.HTML(r.FormValue("gCalEmbed"))
+		data = []template.HTML{calendarInput}
+		classification = 15
+	}
+	if r.FormValue("widgetSubmit") == `16` {
+		//github widget username
+
+		username := template.HTML(r.FormValue("githubInput"))
+		data = []template.HTML{username}
+		classification = 16
+	}
 
 	newWidget := types.Widget{UserID: r.FormValue("projectWidget"), Data: data, Classification: classification}
 
