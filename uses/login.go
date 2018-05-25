@@ -45,12 +45,6 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 	passErr := bcrypt.CompareHashAndPassword(usr.Password, password)
 
 	if passErr != nil {
-		loginWarnings.NumberAttempts++
-		return false, userSession, passErr
-	}
-
-	uID, err := get.UserIDByEmail(eclient, userEmail)
-	if err != nil {
 		//If password incorrect, the following evaluation on login lockout procedure is followed
 		loginWarnings.NumberAttempts = loginWarnings.NumberAttempts + 1
 		loginWarnings.LastAttempt = time.Now()
@@ -60,6 +54,11 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 			loginWarnings.NumberAttempts = 0
 		}
 		usr.LoginWarningsIP = append(usr.LoginWarningsIP, addressIP)
+		return false, userSession, passErr
+	}
+
+	uID, err := get.UserIDByEmail(eclient, userEmail)
+	if err != nil {
 		return loginSucessful, userSession, err
 	}
 
