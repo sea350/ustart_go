@@ -255,10 +255,6 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		//github widget username
 
 		username := template.HTML(r.FormValue("username"))
-		fmt.Println("W")
-		fmt.Println(r.FormValue("username"))
-		fmt.Println("D")
-		fmt.Println(username)
 		data = []template.HTML{username}
 		classification = 16
 	}
