@@ -9,39 +9,6 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-const mapping = `
-{
-    "mappings":{
-        "USER":{
-            "properties":{
-                "Email":{
-					"type":"keyword",
-					"analyzer" : "english"
-                },
-                "Username":{
-					"type":"keyword",
-					"analyzer" : "english"
-                },
-               <!-- "AccCreation":{
-                	"type": date"
-				},-->
-				"FirstName":{
-					"type": "keyword",
-					"analyzer" : "english"
-				},
-				"LastName":{
-					"type":"keyword",
-					"analyzer" : "english"
-				}
-				<!--"Tags":{
-					"type":"keyword"-->
-				}
-                
-            }
-        }
-    }
-}`
-
 /*TODO: Make this function much better*/
 
 //IndexUser ...
@@ -57,7 +24,7 @@ func IndexUser(eclient *elastic.Client, newAcc types.User) (string, error) {
 	}
 	// If the index doesn't exist, create it and return error.
 	if !exists {
-		createIndex, Err := eclient.CreateIndex(globals.UserIndex).BodyString(mapping).Do(ctx)
+		createIndex, Err := eclient.CreateIndex(globals.UserIndex).BodyString(globals.MappingUsr).Do(ctx)
 		if Err != nil {
 			_, _ = eclient.IndexExists(globals.UserIndex).Do(ctx)
 			panic(Err)

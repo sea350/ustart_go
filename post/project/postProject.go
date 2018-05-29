@@ -8,37 +8,6 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-const projMapping = `
-{
-	"settings" :{
-		"analysis":{
-			"analyzer" : {
-				"casesensitive_text":{
-					"type" : "custom",
-					"tokenizer": "standard"
-				}
-			}
-		}
-	},
-
-    "mappings":{
-        "Project":{
-            "properties":{
-                "URLName":{
-					"type":"keyword",
-					
-					
-					"analyzer": "casesensitive_text"
-				},
-				"Tags":{
-					"type":"keyword"
-				}
-			}
-			
-        }
-    }
-}`
-
 //IndexProject ... ADDS NEW PROJECT TO ES RECORDS
 //Needs a type Project struct
 //returns the new project's id and an error
@@ -54,7 +23,7 @@ func IndexProject(eclient *elastic.Client, newProj types.Project) (string, error
 		}
 		// If the index doesn't exist, create it and return error.
 		if !exists {
-			createIndex, Err := eclient.CreateIndex(globals.ProjectIndex).BodyString(projMapping).Do(ctx)
+			createIndex, Err := eclient.CreateIndex(globals.ProjectIndex).BodyString(globals.MAppingProject).Do(ctx)
 			if Err != nil {
 				_, _ = eclient.IndexExists(globals.ProjectIndex).Do(ctx)
 				panic(Err)
