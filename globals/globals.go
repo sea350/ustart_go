@@ -38,19 +38,19 @@ const MappingUsr = `
             "properties":{
                 "Email":{
 					"type":"keyword",
-					"tokenizer":"lowercase"
+					
                 },
                 "Username":{
 					"type":"keyword",
-					"tokenizer":"lowercase"
+					
                 },
 				"FirstName":{
 					"type": "keyword",
-					"tokenizer":"lowercase"
+					
 				},
 				"LastName":{
 					"type":"keyword",
-					"tokenizer":"lowercase"
+					
 				}
 				
                 
