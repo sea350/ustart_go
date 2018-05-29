@@ -16,22 +16,22 @@ const mapping = `
             "properties":{
                 "Email":{
 					"type":"keyword",
-					"index" : "not_analyzed"
+					"analyzer" : "english"
                 },
                 "Username":{
 					"type":"keyword",
-					"index" : "not_analyzed"
+					"analyzer" : "english"
                 },
                <!-- "AccCreation":{
                 	"type": date"
 				},-->
 				"FirstName":{
 					"type": "keyword",
-					"index" : "not_analyzed"
+					"analyzer" : "english"
 				},
 				"LastName":{
 					"type":"keyword",
-					"index" : "not_analyzed"
+					"analyzer" : "english"
 				}
 				<!--"Tags":{
 					"type":"keyword"-->
