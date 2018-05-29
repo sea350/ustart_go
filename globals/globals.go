@@ -98,13 +98,20 @@ const MappingProject = `
 	},
 
     "mappings":{
-        "Project":{
+        "PROJECT":{
             "properties":{
+				"Name":{
+					"type":"keyword"
+
+					 
+
+				},
+
                 "URLName":{
-					"type":"keyword",
+					"type":"keyword"
 					
 					
-					"analyzer": "casesensitive_text"
+					
 				},
 				"Tags":{
 					"type":"keyword"
