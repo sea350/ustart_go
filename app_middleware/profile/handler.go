@@ -96,7 +96,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	//resp.update(false, errors.New("Error"))
 
-	fmt.Println("TARGER USER:", usrID)
+	fmt.Println("TARGET USER:", usrID)
 	if 1 == 1 {
 		switch data.Intent {
 		case "foll":
