@@ -38,22 +38,22 @@ const MappingUsr = `
             "properties":{
                 "Email":{
 					"type":"keyword",
-					"analyzer":"english"
+					"index" : "not_analyzed"
                 },
                 "Username":{
 					"type":"keyword",
-					"analyzer":"english"
+					"index" : "not_analyzed"
                 },
                <!-- "AccCreation":{
                 	"type": date"
 				},-->
 				"FirstName":{
 					"type": "keyword",
-					"analyzer":"english"
+					"index" : "not_analyzed"
 				},
 				"LastName":{
 					"type":"keyword",
-					"analyzer":"english"
+					"index" : "not_analyzed"
 				}
 				<!--"Tags":{
 					"type":"keyword"-->
@@ -98,20 +98,13 @@ const MappingProject = `
 	},
 
     "mappings":{
-        "PROJECT":{
+        "Project":{
             "properties":{
-				"Name":{
-					"type":"keyword"
-
-					 
-
-				},
-
                 "URLName":{
-					"type":"keyword"
+					"type":"keyword",
 					
 					
-					
+					"analyzer": "casesensitive_text"
 				},
 				"Tags":{
 					"type":"keyword"
