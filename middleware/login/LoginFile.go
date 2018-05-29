@@ -2,6 +2,7 @@ package login
 
 import (
 	"fmt"
+	"net"
 	"net/http"
 	"strings"
 	"time"
@@ -21,11 +22,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//attempting to catch client IP
-	ips := strings.Split(r.Header.Get("X-FORWARDED-FOR"), ", ")
-	for _, ip := range ips {
-		fmt.Println("Following IP attempting to log in:")
-		fmt.Println(ip)
+	fmt.Println("The following IP is attempting login:")
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
 	}
+	fmt.Println(ip)
+	userIP := net.ParseIP(ip)
+	if userIP == nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	}
+	fmt.Println(userIP)
 
 	email := r.FormValue("email")
 	email = strings.ToLower(email) // we only client.Store lowercase emails in the db
