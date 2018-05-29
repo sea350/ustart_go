@@ -2,6 +2,7 @@ package uses
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -65,6 +66,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 			loginWarnings.NumberAttempts = 0
 		}
 		usr.LoginWarningsIP = append(usr.LoginWarningsIP, loginWarnings.IPAddress)
+		fmt.Println(loginWarnings.NumberAttempts)
 		return false, userSession, passErr
 	}
 
