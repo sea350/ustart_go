@@ -19,6 +19,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if test1 != nil {
 		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
 	}
+
+	//attempting to catch client IP
+	ips := strings.Split(r.Header.Get("X-FORWARDED-FOR"), ", ")
+	for _, ip := range ips {
+		fmt.Println("Following IP attempting to log in:")
+		fmt.Println(ip)
+	}
+
 	email := r.FormValue("email")
 	email = strings.ToLower(email) // we only client.Store lowercase emails in the db
 	//	var password []byte
