@@ -38,22 +38,22 @@ const MappingUsr = `
             "properties":{
                 "Email":{
 					"type":"keyword",
-					"analyzer":"english"
+					"tokenizer":"lowercase"
                 },
                 "Username":{
 					"type":"keyword",
-					"analyzer":"english"
+					"tokenizer":"lowercase"
                 },
                <!-- "AccCreation":{
                 	"type": date"
 				},-->
 				"FirstName":{
 					"type": "keyword",
-					"analyzer":"english"
+					"tokenizer":"lowercase"
 				},
 				"LastName":{
 					"type":"keyword",
-					"analyzer":"english"
+					"tokenizer":"lowercase"
 				}
 				<!--"Tags":{
 					"type":"keyword"-->
