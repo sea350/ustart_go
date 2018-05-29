@@ -13,6 +13,6 @@ func RemoveRequest(eclient *elastic.Client, projectID string, userID string) (in
 	if err != nil {
 		return newNumRequests, err
 	}
-	err, newNumRequests = projPost.DeleteMemberReqReceived(eclient, projectID, userID)
+	newNumRequests, err = projPost.DeleteMemberReqReceived(eclient, projectID, userID)
 	return newNumRequests, err
 }
