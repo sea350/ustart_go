@@ -44,9 +44,6 @@ const MappingUsr = `
 					"type":"keyword",
 					"tokenizer":"lowercase"
                 },
-               <!-- "AccCreation":{
-                	"type": date"
-				},-->
 				"FirstName":{
 					"type": "keyword",
 					"tokenizer":"lowercase"
@@ -55,9 +52,7 @@ const MappingUsr = `
 					"type":"keyword",
 					"tokenizer":"lowercase"
 				}
-				<!--"Tags":{
-					"type":"keyword"-->
-				}
+				
                 
             }
         }
