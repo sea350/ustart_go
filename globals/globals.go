@@ -63,7 +63,7 @@ const MappingUsr = `
 const MappingWidget = `
 {
     "mappings":{
-        "User":{
+        "WIDGET":{
             "properties":{
                 "UserID":{
                     "type":"keyword"
