@@ -7,6 +7,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/user"
 	post "github.com/sea350/ustart_go/post/user"
+	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -26,6 +27,12 @@ func ChangePassword(eclient *elastic.Client, userID string, oldPass []byte, newP
 	}*/
 	newHashedPass, err := bcrypt.GenerateFromPassword(newPass, 10)
 	err = post.UpdateUser(eclient, userID, "Password", newHashedPass)
+
+	//Clear login lockout counter
+	if err == nil {
+		err = post.UpdateUser(eclient, userID, "LoginWarnings", []types.LoginWarning{})
+	}
+
 	return err
 
 }

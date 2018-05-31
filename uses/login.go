@@ -2,7 +2,6 @@ package uses
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -21,8 +20,9 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 	var userSession types.SessionUser
 
 	//We want to keep track of login attempts and lock out users who have too many failed attempts for a period of time
-	var loginWarnings types.LoginWarning
-	loginWarnings.IPAddress = addressIP
+	//We make this condition integer first for later
+	var condition int
+	var recordWarning int
 
 	inUse, err := get.EmailInUse(eclient, userEmail)
 	if err != nil {
@@ -33,40 +33,45 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 		return loginSucessful, userSession, err
 	}
 
-	//Email is valid, we need to check if we are in a login lockout or not from multiple attempts
-	if loginWarnings.LockoutUntil.After(time.Now()) {
-		err := errors.New("Account in Lockout")
+	usr, err := get.UserByEmail(eclient, userEmail)
+	if err != nil {
 		return loginSucessful, userSession, err
 	}
 
-	usr, err := get.UserByEmail(eclient, userEmail)
-	if err != nil {
-		/*
-			loginWarnings.NumberAttempts = loginWarnings.NumberAttempts + 1
-			loginWarnings.LastAttempt = time.Now()
-			if loginWarnings.NumberAttempts > 5 {
-				loginWarnings.LockoutCounter = loginWarnings.LockoutCounter + 1
-				loginWarnings.LockoutUntil = loginWarnings.LastAttempt.Add(time.Minute * (5 + 5*time.Duration(loginWarnings.LockoutCounter-1)))
-				loginWarnings.NumberAttempts = 0
+	//Email is valid, we need to check if we are in a login lockout or not based on IP address
+	for i := 0; i < len(usr.LoginWarnings); i++ {
+		if usr.LoginWarnings[i].IPAddress == addressIP {
+			if usr.LoginWarnings[i].LockoutUntil.After(time.Now()) {
+				err := errors.New("Account in Lockout")
+				return loginSucessful, userSession, err
 			}
-			usr.LoginWarningsIP = append(usr.LoginWarningsIP, addressIP)
-		*/
-		return loginSucessful, userSession, err
+			condition = 1
+			recordWarning = i
+		}
 	}
 
 	passErr := bcrypt.CompareHashAndPassword(usr.Password, password)
 
 	if passErr != nil {
-		//If password incorrect, the following evaluation on login lockout procedure is followed
-		loginWarnings.NumberAttempts = loginWarnings.NumberAttempts + 1
-		loginWarnings.LastAttempt = time.Now()
-		if loginWarnings.NumberAttempts > 5 {
-			loginWarnings.LockoutCounter = loginWarnings.LockoutCounter + 1
-			loginWarnings.LockoutUntil = loginWarnings.LastAttempt.Add(time.Minute * (5 + 5*time.Duration(loginWarnings.LockoutCounter-1)))
-			loginWarnings.NumberAttempts = 0
+		//If password incorrect, the following evaluation on login lockout procedure is done
+		//If condition is 0, this a New Warning for a New IP Address. Else we are simply updating an existing one in usr
+		if condition == 0 {
+			var newWarning types.LoginWarning
+			newWarning.IPAddress = addressIP
+			newWarning.NumberAttempts = newWarning.NumberAttempts + 1
+			newWarning.LastAttempt = time.Now()
+			usr.LoginWarnings = append(usr.LoginWarnings, newWarning)
 		}
-		usr.LoginWarningsIP = append(usr.LoginWarningsIP, loginWarnings.IPAddress)
-		fmt.Println(loginWarnings.NumberAttempts)
+		if condition == 1 {
+			usr.LoginWarnings[recordWarning].NumberAttempts = usr.LoginWarnings[recordWarning].NumberAttempts + 1
+			usr.LoginWarnings[recordWarning].LastAttempt = time.Now()
+			if usr.LoginWarnings[recordWarning].NumberAttempts > 5 {
+				usr.LoginWarnings[recordWarning].LockoutCounter = usr.LoginWarnings[recordWarning].LockoutCounter + 1
+				usr.LoginWarnings[recordWarning].LockoutUntil = usr.LoginWarnings[recordWarning].LastAttempt.Add(time.Minute * (5 + 5*time.Duration(usr.LoginWarnings[recordWarning].LockoutCounter-1)))
+				usr.LoginWarnings[recordWarning].NumberAttempts = 0
+			}
+
+		}
 		return false, userSession, passErr
 	}
 
@@ -82,10 +87,6 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 	userSession.DocID = uID
 	userSession.Username = usr.Username
 	userSession.Avatar = usr.Avatar
-
-	//Clear Login Warning struct and the IP array, which I still don't know where to put
-	loginWarnings.NumberAttempts = 0
-	loginWarnings.LockoutCounter = 0
 
 	return loginSucessful, userSession, err
 
