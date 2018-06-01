@@ -65,11 +65,15 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 			usr.LoginWarnings = append(usr.LoginWarnings, newWarning)
 		}
 		if condition == 1 {
+			if time.Since(usr.LoginWarnings[recordWarning].LastAttempt) >= (time.Minute * 10080) {
+				usr.LoginWarnings[recordWarning].NumberAttempts = 0
+				usr.LoginWarnings[recordWarning].LockoutCounter = 0
+			}
 			usr.LoginWarnings[recordWarning].NumberAttempts = usr.LoginWarnings[recordWarning].NumberAttempts + 1
 			usr.LoginWarnings[recordWarning].LastAttempt = time.Now()
 			if usr.LoginWarnings[recordWarning].NumberAttempts > 5 {
 				usr.LoginWarnings[recordWarning].LockoutCounter = usr.LoginWarnings[recordWarning].LockoutCounter + 1
-				usr.LoginWarnings[recordWarning].LockoutUntil = usr.LoginWarnings[recordWarning].LastAttempt.Add(time.Minute * (5 + time.Duration(lockoutOP(usr.LoginWarnings[recordWarning].LockoutCounter))))
+				usr.LoginWarnings[recordWarning].LockoutUntil = usr.LoginWarnings[recordWarning].LastAttempt.Add(time.Minute * 5 * time.Duration(lockoutOP(usr.LoginWarnings[recordWarning].LockoutCounter)))
 				usr.LoginWarnings[recordWarning].NumberAttempts = 0
 			}
 
