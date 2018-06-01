@@ -2,6 +2,7 @@ package uses
 
 import (
 	"errors"
+	"math"
 	"time"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -67,7 +68,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 			usr.LoginWarnings[recordWarning].LastAttempt = time.Now()
 			if usr.LoginWarnings[recordWarning].NumberAttempts > 5 {
 				usr.LoginWarnings[recordWarning].LockoutCounter = usr.LoginWarnings[recordWarning].LockoutCounter + 1
-				usr.LoginWarnings[recordWarning].LockoutUntil = usr.LoginWarnings[recordWarning].LastAttempt.Add(time.Minute * (5 + 5*time.Duration(usr.LoginWarnings[recordWarning].LockoutCounter-1)))
+				usr.LoginWarnings[recordWarning].LockoutUntil = usr.LoginWarnings[recordWarning].LastAttempt.Add(time.Minute * (5 + time.Duration(lockoutOP(usr.LoginWarnings[recordWarning].LockoutCounter))))
 				usr.LoginWarnings[recordWarning].NumberAttempts = 0
 			}
 
@@ -90,4 +91,9 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 
 	return loginSucessful, userSession, err
 
+}
+
+func lockoutOP(LockoutCounter int) int {
+	timeOP := int(math.Exp2(float64(LockoutCounter) - 1))
+	return timeOP
 }
