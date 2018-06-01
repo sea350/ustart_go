@@ -18,14 +18,14 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
+	clientFile, _, _ := r.FormFile("raw-image")
 	blob := r.FormValue("image-data")
 
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
-	clientFile, _, _ := r.FormFile("raw-image")
 	buffer := make([]byte, 512)
-	_, error := clientFile.Read(buffer)
-	if error != nil {
-		fmt.Println(error)
+	_, er := clientFile.Read(buffer)
+	if er != nil {
+		fmt.Println(er)
 		return
 	}
 	fmt.Println(http.DetectContentType(buffer))
