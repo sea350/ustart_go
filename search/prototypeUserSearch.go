@@ -43,19 +43,27 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 		if searchBy[0] {
 			query = uses.MultiWildCardQuery(query, "FirstName", searchArr, true)
 			query = uses.MultiWildCardQuery(query, "LastName", searchArr, true)
-			query = query.Must(elastic.NewMatchQuery("FirstName", strings.ToLower(element)).Fuzziness(2))
-			query = query.Must(elastic.NewMatchQuery("LastName", strings.ToLower(element)).Fuzziness(2))
 
+			for _,element  range searchArr{
+				query = query.Must(elastic.NewMatchQuery("FirstName", strings.ToLower(element)).Fuzziness(2))
+				query = query.Must(elastic.NewMatchQuery("LastName", strings.ToLower(element)).Fuzziness(2))
+			}
 		}
 		//Username
 		if searchBy[1] {
 			query = uses.MultiWildCardQuery(query, "Username", searchArr, true)
-			query = query.Must(elastic.NewMatchQuery("Username", strings.ToLower(element)).Fuzziness(2))
+			
+			for _,element := range searchArr{
+				query = query.Must(elastic.NewMatchQuery("Username", strings.ToLower(element)).Fuzziness(2))
+			}
 		}
 		//Tags
 		if searchBy[2] {
 			query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
-			query = query.Must(elastic.NewMatchQuery("Tags", strings.ToLower(element)).Fuzziness(2))
+			
+			for _,element := range searchArr{
+				query = query.Must(elastic.NewMatchQuery("Tags", strings.ToLower(element)).Fuzziness(2))
+			}
 		}
 	} else {
 		fmt.Println("WARNING: searchBy array is too short")
