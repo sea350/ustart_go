@@ -27,6 +27,11 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		return errors.New("email is in use")
 	}
 
+	validEmail := ValidEmail(email)
+	if !validEmail {
+		return errors.New("invalid email")
+	}
+
 	inUse, err = getUser.UsernameInUse(eclient, username)
 	if err != nil {
 		return err
