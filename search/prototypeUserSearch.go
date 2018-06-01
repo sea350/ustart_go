@@ -31,10 +31,10 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 
 	searchArr = strings.Split(searchTerm, ` `)
 	/*
-	for _, element := range stringArray {
-		searchArr = append(searchArr, strings.ToLower(element))
-	}
-*/
+		for _, element := range stringArray {
+			searchArr = append(searchArr, strings.ToLower(element))
+		}
+	*/
 	//, "Description", "URLName", "Tags"
 	// query := elastic.NewMultiMatchQuery(searchTerm, "FirstName", "LastName")
 
@@ -43,15 +43,19 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 		if searchBy[0] {
 			query = uses.MultiWildCardQuery(query, "FirstName", searchArr, true)
 			query = uses.MultiWildCardQuery(query, "LastName", searchArr, true)
+			query = query.Must(elastic.NewMatchQuery("FirstName", strings.ToLower(element)).Fuzziness(2))
+			query = query.Must(elastic.NewMatchQuery("LastName", strings.ToLower(element)).Fuzziness(2))
 
 		}
 		//Username
 		if searchBy[1] {
 			query = uses.MultiWildCardQuery(query, "Username", searchArr, true)
+			query = query.Must(elastic.NewMatchQuery("Username", strings.ToLower(element)).Fuzziness(2))
 		}
 		//Tags
 		if searchBy[2] {
 			query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
+			query = query.Must(elastic.NewMatchQuery("Tags", strings.ToLower(element)).Fuzziness(2))
 		}
 	} else {
 		fmt.Println("WARNING: searchBy array is too short")
@@ -61,6 +65,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 		for _, element := range mustMajor {
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("Majors", strings.ToLower(element)))
+			query = query.Must(elastic.FuzzyQuery("Majors", strings.ToLower(element)).Fuzziness(2))
 		}
 	}
 	// Tag
@@ -68,6 +73,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 		for _, element := range mustTag {
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("Tags", strings.ToLower(element)))
+			query = query.Must(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(2))
 		}
 	}
 
