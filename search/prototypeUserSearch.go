@@ -73,7 +73,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 		for _, element := range mustMajor {
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("Majors", strings.ToLower(element)))
-			query = query.Must(elastic.FuzzyQuery("Majors", strings.ToLower(element)).Fuzziness(2))
+			query = query.Must(elastic.NewFuzzyQuery("Majors", strings.ToLower(element)).Fuzziness(2))
 		}
 	}
 	// Tag
