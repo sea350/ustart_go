@@ -48,6 +48,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 			}
 			condition = 1
 			recordWarning = i
+			break
 		}
 	}
 
