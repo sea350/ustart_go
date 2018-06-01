@@ -22,6 +22,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	blob := r.FormValue("image-data")
 
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
+	defer clientFile.Close()
 	buffer := make([]byte, 512)
 	_, er := clientFile.Read(buffer)
 	if er != nil {
