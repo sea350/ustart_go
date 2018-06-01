@@ -18,18 +18,17 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
+	clientFile, _, _ := r.FormFile("raw-image")
 	blob := r.FormValue("image-data")
-	// infile, header, clientFile := r.FormFile("raw-image")
 
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
-	clientFile, _, _ := r.FormFile("raw-image")
-	// defer clientFile.Close()
-	buff := make([]byte, 512)
-	// if _, err = clientFile.Read(buff); err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
-	fmt.Println(http.DetectContentType(buff))
+	buffer := make([]byte, 512)
+	_, er := clientFile.Read(buffer)
+	if er != nil {
+		fmt.Println(er)
+		return
+	}
+	fmt.Println(http.DetectContentType(buffer))
 
 	err := uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, "hello", "Avatar")
 	if err != nil {
