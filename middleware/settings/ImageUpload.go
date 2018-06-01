@@ -18,9 +18,9 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	clientFile, _, err := r.FormFile("raw-image")
-	if err != nil {
-		fmt.Println("\n\n", err)
+	clientFile, _, er := r.FormFile("raw-image")
+	if er != nil {
+		fmt.Println("\n\n", er)
 		return
 	}
 	fmt.Println("\n\nClientFile", clientFile)
@@ -30,8 +30,8 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	defer clientFile.Close()
 	buffer := make([]byte, 512)
 	fmt.Println("\n\n\n\n\n", blob)
-	_, er := clientFile.Read(buffer)
-	if er != nil {
+	_, er1 := clientFile.Read(buffer)
+	if er1 != nil {
 		fmt.Println(er)
 		return
 	}
