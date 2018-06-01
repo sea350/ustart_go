@@ -23,6 +23,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("\n\n", err)
 		return
 	}
+	fmt.Println("\n\nClientFile", clientFile)
 	blob := r.FormValue("image-data")
 
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
