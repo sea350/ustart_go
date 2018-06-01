@@ -24,6 +24,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
 	defer clientFile.Close()
 	buffer := make([]byte, 512)
+	fmt.Println("\n", buffer, "\n")
 	_, er := clientFile.Read(buffer)
 	if er != nil {
 		fmt.Println(er)
