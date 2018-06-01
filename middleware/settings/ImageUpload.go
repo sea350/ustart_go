@@ -20,6 +20,14 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	blob := r.FormValue("image-data")
 
+	//Checking if image is valid by checking the first 512 bytes for correct image signature
+	// if _, err = blob.Read(clientFile); err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	clientFile := []byte(blob[0:512])
+	fmt.Println(http.DetectContentType(clientFile))
+
 	err := uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, "hello", "Avatar")
 	if err != nil {
 		fmt.Println(err)
