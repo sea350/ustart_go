@@ -25,10 +25,10 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	clientFile, _, _ := r.FormFile("raw-image")
 	// defer clientFile.Close()
 	buff := make([]byte, 512)
-	if _, err = clientFile.Read(buff); err != nil {
-		fmt.Println(err)
-		return
-	}
+	// if _, err = clientFile.Read(buff); err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 	fmt.Println(http.DetectContentType(buff))
 
 	err := uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, "hello", "Avatar")
