@@ -20,7 +20,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	clientFile, _, er := r.FormFile("raw-image")
 	if er != nil {
-		fmt.Println("\n\n", er)
+		fmt.Println("\n\n er", er)
 		return
 	}
 	fmt.Println("\n\nClientFile", clientFile)
@@ -29,10 +29,10 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
 	defer clientFile.Close()
 	buffer := make([]byte, 512)
-	fmt.Println("\n\n\n\n\n", blob)
+	fmt.Println("\n\nblob", blob)
 	_, er1 := clientFile.Read(buffer)
 	if er1 != nil {
-		fmt.Println(er)
+		fmt.Println("\n\n er", er)
 		return
 	}
 	fmt.Println(http.DetectContentType(buffer))
