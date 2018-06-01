@@ -44,7 +44,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 			query = uses.MultiWildCardQuery(query, "FirstName", searchArr, true)
 			query = uses.MultiWildCardQuery(query, "LastName", searchArr, true)
 
-			for _,element  range searchArr{
+			for _, element := range searchArr {
 				query = query.Must(elastic.NewMatchQuery("FirstName", strings.ToLower(element)).Fuzziness(2))
 				query = query.Must(elastic.NewMatchQuery("LastName", strings.ToLower(element)).Fuzziness(2))
 			}
@@ -52,16 +52,16 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 		//Username
 		if searchBy[1] {
 			query = uses.MultiWildCardQuery(query, "Username", searchArr, true)
-			
-			for _,element := range searchArr{
+
+			for _, element := range searchArr {
 				query = query.Must(elastic.NewMatchQuery("Username", strings.ToLower(element)).Fuzziness(2))
 			}
 		}
 		//Tags
 		if searchBy[2] {
 			query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
-			
-			for _,element := range searchArr{
+
+			for _, element := range searchArr {
 				query = query.Must(elastic.NewMatchQuery("Tags", strings.ToLower(element)).Fuzziness(2))
 			}
 		}
