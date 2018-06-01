@@ -2,6 +2,7 @@ package types
 
 //WARNING: NOT FOR DATABASE USE
 
+//AppSessionUser ...
 type AppSessionUser struct {
 	FirstName string `json:"FirstName"`
 	LastName  string `json:"LastName"`
