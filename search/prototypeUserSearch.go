@@ -45,8 +45,8 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 			query = uses.MultiWildCardQuery(query, "LastName", searchArr, true)
 
 			for _, element := range searchArr {
-				query = query.Must(elastic.NewFuzzyQuery("FirstName", strings.ToLower(element)).Fuzziness(2))
-				query = query.Must(elastic.NewFuzzyQuery("LastName", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("FirstName", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("LastName", strings.ToLower(element)).Fuzziness(2))
 			}
 		}
 		//Username
