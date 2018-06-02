@@ -26,11 +26,11 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-	if header.Size == 0 {
-		fmt.Println("warning: middleware/settings/imageupload file not sent")
-		blob = `https://i.imgur.com/TYFKsdi.png`
-	}
-
+	/*
+		if header.Size == 0 {
+			fmt.Println("warning: middleware/settings/imageupload file not sent")
+		}
+	*/
 	fmt.Println("debug text: middleware/settings/imageupload line 33")
 	fmt.Println(clientFile)
 
@@ -45,12 +45,13 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(http.DetectContentType(buffer)[0:5])
 
-	if http.DetectContentType(buffer)[0:5] == "image" {
+	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 		err = uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 		if err != nil {
 			fmt.Println("err: middleware/settings/imageupload line 51")
 			fmt.Println(err)
 		}
+
 	}
 
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
