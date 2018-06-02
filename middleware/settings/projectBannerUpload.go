@@ -8,7 +8,7 @@ import (
 	post "github.com/sea350/ustart_go/post/project"
 )
 
-//BannerUpload ... pushes a new banner image into ES
+//ProjectBannerUpload ... pushes a new banner image into ES
 func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	//session, _ := store.Get(r, "session_please")
 	/*test1, _ := session.Values["DocID"]

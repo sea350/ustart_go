@@ -18,9 +18,9 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	clientFile, _, er := r.FormFile("raw-image")
-	if er != nil {
-		fmt.Println(er)
+	clientFile, _, err := r.FormFile("raw-image")
+	if err != nil {
+		fmt.Println(err)
 		return
 	}
 	blob := r.FormValue("image-data")
@@ -28,16 +28,18 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
 	defer clientFile.Close()
 	buffer := make([]byte, 512)
-	_, er1 := clientFile.Read(buffer)
-	if er1 != nil {
-		fmt.Println(er1)
+	_, err = clientFile.Read(buffer)
+	if err != nil {
+		fmt.Println("err: middleware/settings/imageupload line 33")
+		fmt.Println(err)
 		return
 	}
-	fmt.Println(http.DetectContentType(buffer)[0:5])
+	//fmt.Println(http.DetectContentType(buffer)[0:5])
 
 	if http.DetectContentType(buffer)[0:5] == "image" {
-		err := uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, "hello", "Avatar")
+		err = uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, "hello", "Avatar")
 		if err != nil {
+			fmt.Println("err: middleware/settings/imageupload line 42")
 			fmt.Println(err)
 		}
 	}

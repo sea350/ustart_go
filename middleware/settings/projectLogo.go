@@ -8,7 +8,7 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//ProjectCustomURL ... pushes a new banner image into ES
+//ProjectLogo ...
 func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
