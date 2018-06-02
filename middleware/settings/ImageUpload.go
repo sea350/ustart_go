@@ -18,17 +18,23 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	clientFile, _, err := r.FormFile("raw-image")
+	clientFile, header, err := r.FormFile("raw-image")
+	defer clientFile.Close()
+	blob := r.FormValue("image-data")
 	if err != nil {
+		fmt.Println("err: middleware/settings/imageupload line 23")
 		fmt.Println(err)
 		return
 	}
-	fmt.Println("debug text: middleware/settings/imageupload line 26")
+	if header.Size == 0 {
+		fmt.Println("warning: middleware/settings/imageupload file not sent")
+		blob = `https://i.imgur.com/TYFKsdi.png`
+	}
+
+	fmt.Println("debug text: middleware/settings/imageupload line 33")
 	fmt.Println(clientFile)
-	blob := r.FormValue("image-data")
 
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
-	defer clientFile.Close()
 	buffer := make([]byte, 512)
 	_, err = clientFile.Read(buffer)
 	if err != nil {
@@ -47,6 +53,4 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
-	return
-
 }
