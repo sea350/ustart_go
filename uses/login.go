@@ -6,6 +6,7 @@ import (
 	"time"
 
 	get "github.com/sea350/ustart_go/get/user"
+	post "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	"golang.org/x/crypto/bcrypt"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -22,7 +23,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 
 	//We want to keep track of login attempts and lock out users who have too many failed attempts for a period of time
 	//We make this condition integer first for later
-	var condition int
+	var ipExists bool = false
 	var recordWarning int
 
 	inUse, err := get.EmailInUse(eclient, userEmail)
@@ -46,7 +47,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 				err := errors.New("Account in Lockout")
 				return loginSucessful, userSession, err
 			}
-			condition = 1
+			ipExists = true
 			recordWarning = i
 			break
 		}
@@ -56,15 +57,15 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 
 	if passErr != nil {
 		//If password incorrect, the following evaluation on login lockout procedure is done
-		//If condition is 0, this a New Warning for a New IP Address. Else we are simply updating an existing one in usr
-		if condition == 0 {
+		//If IP doesn't exist, this a New Warning for a New IP Address. Else we are simply updating an existing one our usr
+		if !(ipExists) {
 			var newWarning types.LoginWarning
 			newWarning.IPAddress = addressIP
 			newWarning.NumberAttempts = newWarning.NumberAttempts + 1
 			newWarning.LastAttempt = time.Now()
 			usr.LoginWarnings = append(usr.LoginWarnings, newWarning)
 		}
-		if condition == 1 {
+		if ipExists {
 			if time.Since(usr.LoginWarnings[recordWarning].LastAttempt) >= (time.Minute * 10080) {
 				usr.LoginWarnings[recordWarning].NumberAttempts = 0
 				usr.LoginWarnings[recordWarning].LockoutCounter = 0
@@ -77,6 +78,15 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 				usr.LoginWarnings[recordWarning].NumberAttempts = 0
 			}
 
+		}
+		//Update in Elastic Search Client all of our Login Warning information
+		usrID, err1 := get.UserIDByEmail(eclient, userEmail)
+		if err1 != nil {
+			return false, userSession, err1
+		}
+		err2 := post.UpdateUser(eclient, usrID, "LoginWarnings", usr.LoginWarnings)
+		if err != nil {
+			return false, userSession, err2
 		}
 		return false, userSession, passErr
 	}
@@ -93,6 +103,17 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 	userSession.DocID = uID
 	userSession.Username = usr.Username
 	userSession.Avatar = usr.Avatar
+
+	if ipExists {
+		usrID, err1 := get.UserIDByEmail(eclient, userEmail)
+		if err1 != nil {
+			return false, userSession, err1
+		}
+		err2 := post.UpdateUser(eclient, usrID, "LoginWarnings", []types.LoginWarning{})
+		if err2 != nil {
+			return false, userSession, err
+		}
+	}
 
 	return loginSucessful, userSession, err
 
