@@ -18,6 +18,8 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 	}
 	r.ParseForm()
 	blob := r.FormValue("banner-data")
+	fmt.Println("debug text: middleware/settings/bannerupload line 21")
+	fmt.Println(blob)
 
 	err := post.UpdateUser(eclient, session.Values["DocID"].(string), "Banner", blob)
 	if err != nil {
