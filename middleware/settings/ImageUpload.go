@@ -27,12 +27,13 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	/*
-		if header.Size == 0 {
-			fmt.Println("warning: middleware/settings/imageupload file not sent")
-		}
+			if header.Size == 0 {
+				fmt.Println("warning: middleware/settings/imageupload file not sent")
+			}
+
+		fmt.Println("debug text: middleware/settings/imageupload line 33")
+		fmt.Println(clientFile)
 	*/
-	fmt.Println("debug text: middleware/settings/imageupload line 33")
-	fmt.Println(clientFile)
 
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
 
