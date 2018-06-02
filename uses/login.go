@@ -104,6 +104,17 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 	userSession.Username = usr.Username
 	userSession.Avatar = usr.Avatar
 
+	if ipExists {
+		usrID, err1 := get.UserIDByEmail(eclient, userEmail)
+		if err1 != nil {
+			return false, userSession, err1
+		}
+		err2 := post.UpdateUser(eclient, usrID, "LoginWarnings", []types.LoginWarning{})
+		if err2 != nil {
+			return false, userSession, err
+		}
+	}
+
 	return loginSucessful, userSession, err
 
 }
