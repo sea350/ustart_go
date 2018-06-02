@@ -37,13 +37,15 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
 
 	buffer := make([]byte, 512)
-	_, err = clientFile.Read(buffer)
+	_, _ = clientFile.Read(buffer)
 	defer clientFile.Close()
-	if err != nil {
-		fmt.Println("warning: middleware/settings/imageupload line 42")
-		fmt.Println(err)
-	}
-	fmt.Println(http.DetectContentType(buffer)[0:5])
+	/*
+		if err != nil {
+			fmt.Println("warning: middleware/settings/imageupload line 42")
+			fmt.Println(err)
+		}
+	*/
+	//fmt.Println(http.DetectContentType(buffer)[0:5])
 
 	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 		err = uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
