@@ -3,7 +3,6 @@ package get
 import (
 	"context"
 	"errors"
-	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -12,7 +11,7 @@ import (
 //IDByUsername ...
 func IDByUsername(eclient *elastic.Client, username string) (string, error) {
 	ctx := context.Background()
-	termQuery := elastic.NewTermQuery("Username", strings.ToLower(username))
+	termQuery := elastic.NewTermQuery("Username", username)
 	searchResult, err := eclient.Search().
 		Index(globals.UserIndex).
 		Query(termQuery).
