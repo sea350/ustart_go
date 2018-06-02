@@ -51,7 +51,8 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("err: middleware/settings/imageupload line 51")
 			fmt.Println(err)
 		}
-
+	} else {
+		fmt.Println("Warning: middleware/settings/imageupload invalid file upload")
 	}
 
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
