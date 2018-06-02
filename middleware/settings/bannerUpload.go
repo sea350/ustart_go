@@ -28,6 +28,5 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
-	return
 
 }
