@@ -40,7 +40,7 @@ func ValidDate(date string) bool {
 
 	// 	re := regexp.MustCompile("(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
 
-	if len(date) < 11 {
+	if len(date) < 10 {
 		fmt.Println("length mismatch: 11 vs", len(date))
 		return false
 	}
