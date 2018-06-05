@@ -38,18 +38,30 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 		//Name
 		if searchBy[0] {
 			query = uses.MultiWildCardQuery(query, "Name", stringArray, true)
+			for _, element := range stringArray {
+				query = query.Should(elastic.NewFuzzyQuery("Name", strings.ToLower(element)).Fuzziness(2))
+			}
 		}
 		//URLName
 		if searchBy[1] {
 			query = uses.MultiWildCardQuery(query, "URLName", stringArray, true)
+			for _, element := range stringArray {
+				query = query.Should(elastic.NewFuzzyQuery("URLName", strings.ToLower(element)).Fuzziness(2))
+			}
 		}
 		//Tags
 		if searchBy[2] {
 			query = uses.MultiWildCardQuery(query, "Tags", stringArray, true)
+			for _, element := range stringArray {
+				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(2))
+			}
 		}
 		//ListNeeded
 		if searchBy[3] {
 			query = uses.MultiWildCardQuery(query, "ListNeeded", stringArray, true)
+			for _, element := range stringArray {
+				query = query.Should(elastic.NewFuzzyQuery("ListNeeded", strings.ToLower(element)).Fuzziness(2))
+			}
 		}
 	} else {
 		fmt.Println("WARNING: searchBy array is too short")
@@ -59,6 +71,9 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 		for _, element := range mustMajor {
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("ListNeeded", element))
+			for _, element := range stringArray {
+				query = query.Must(elastic.NewFuzzyQuery("ListNeeded", strings.ToLower(element)).Fuzziness(2))
+			}
 		}
 	}
 	// Tag
@@ -66,6 +81,9 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 		for _, element := range mustTag {
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("Tags", element))
+			for _, element := range stringArray {
+				query = query.Must(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(2))
+			}
 		}
 	}
 
