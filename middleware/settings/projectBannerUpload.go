@@ -8,7 +8,7 @@ import (
 	post "github.com/sea350/ustart_go/post/project"
 )
 
-//BannerUpload ... pushes a new banner image into ES
+//ProjectBannerUpload ... pushes a new banner image into ES
 func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	//session, _ := store.Get(r, "session_please")
 	/*test1, _ := session.Values["DocID"]
@@ -20,13 +20,18 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	blob := r.FormValue("banner-data")
 
+	fmt.Println(`debug text middleware/settings/projectbannerupload line 23`)
+	fmt.Println(blob)
+
 	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
 	if err != nil {
+		fmt.Println("err: middleware/settings/projectbannerupload line 25")
 		fmt.Println(err)
 	}
 
 	err = post.UpdateProject(eclient, r.FormValue("projectID"), "Banner", blob)
 	if err != nil {
+		fmt.Println("err: middleware/settings/projectbannerupload line 31")
 		fmt.Println(err)
 	}
 
