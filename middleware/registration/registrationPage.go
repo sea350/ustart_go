@@ -1,6 +1,7 @@
 package registration
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -37,11 +38,33 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/profile/", http.StatusFound)
 		return
 	}
+
+	if !uses.ValidEmail(r.FormValue("inputEmail")) {
+		fmt.Println("This is an error: registrationPage.go, 45")
+		fmt.Println("Invalid email submitted")
+		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-reg-nil", cs)
+		return
+
+	}
+
+	if !uses.ValidUsername(r.FormValue("username")) {
+		fmt.Println("This is an error: registrationPage.go, 43")
+		fmt.Println("Invalid username submitted")
+		cs := client.ClientSide{ErrorOutput: errors.New("Invalid username submitted"), ErrorStatus: true}
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-reg-nil", cs)
+		return
+
+	}
+
 	//	u.FirstName = r.FormValue("firstName")
 	fname := r.FormValue("firstName")
 	lname := r.FormValue("lastName")
 	email := r.FormValue("inputEmail")
 	email = strings.ToLower(email)
+
 	username := r.FormValue("username")
 
 	password := r.FormValue("inputPassword")
@@ -64,6 +87,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	currYear := r.FormValue("year")
 
 	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear)
+
 	if err2 != nil {
 		fmt.Println("This is an error: registrationPage.go, 65")
 		fmt.Println(err2)
