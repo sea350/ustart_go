@@ -41,6 +41,9 @@ func ValidDate(date string) bool {
 
 	rxDate := regexp.MustCompile("((19|20)\\d\\d)/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])")
 
+	if len(date) < 11 {
+		return false
+	}
 	month, errMonth := strconv.Atoi(date[5:7])
 	if errMonth != nil {
 		return false
