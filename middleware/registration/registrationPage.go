@@ -39,6 +39,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//proper email
 	if !uses.ValidEmail(r.FormValue("inputEmail")) {
 		fmt.Println("This is an error: registrationPage.go, 45")
 		fmt.Println("Invalid email submitted")
@@ -49,6 +50,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	}
 
+	//proper username
 	if !uses.ValidUsername(r.FormValue("username")) {
 		fmt.Println("This is an error: registrationPage.go, 43")
 		fmt.Println("Invalid username submitted")
@@ -59,6 +61,16 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	}
 
+	//proper birth date
+	if !uses.ValidDate(r.FormValue("dob")) {
+		fmt.Println("This is an error: registrationPage.go, 63")
+		fmt.Println("Invalid borth date submitted")
+		cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-reg-nil", cs)
+		return
+
+	}
 	//	u.FirstName = r.FormValue("firstName")
 	fname := r.FormValue("firstName")
 	lname := r.FormValue("lastName")
@@ -73,13 +85,12 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	school := r.FormValue("universityName")
 	var major []string
 	major = append(major, r.FormValue("majors"))
-	fmt.Println(r.FormValue("dob"))
-	bday := time.Now() //r.FormValue("dob")
+
 	year, _ := strconv.Atoi(r.FormValue("dob")[0:4])
 	month, _ := strconv.Atoi(r.FormValue("dob")[5:7])
 	day, _ := strconv.Atoi(r.FormValue("dob")[8:10])
-	bday = time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
-	fmt.Println(bday.Date())
+	bday := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
+
 	country := r.FormValue("country")
 	state := r.FormValue("state")
 	city := r.FormValue("city")

@@ -93,6 +93,15 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	college := r.FormValue("universityName")
 	customURL := r.FormValue("curl")
 
+	//proper URL
+	if !uses.ValidUsername(r.FormValue("curl")) {
+		fmt.Println("line 100: middleware/project/createproject")
+		fmt.Println("invalid custom URL")
+		cs.ErrorStatus = true
+		cs.ErrorOutput = err
+
+	}
+
 	if title != `` {
 		url, err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string), category, college, customURL)
 		if err != nil {
