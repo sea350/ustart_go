@@ -111,7 +111,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 		}
 		err2 := post.UpdateUser(eclient, usrID, "LoginWarnings", []types.LoginWarning{})
 		if err2 != nil {
-			return false, userSession, err
+			return false, userSession, err2
 		}
 	}
 
