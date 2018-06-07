@@ -22,13 +22,22 @@ type Request struct {
 	Timestamp time.Time `json:"Timestamp"`
 }
 
+//SignupWarning ...  Security countermeasure for checking amount of signup attempts and locking out IP address for repeated failures (invalid email)
+type SignupWarning struct {
+	SignLastAttempt      time.Time `json:"SignLastAttempt"`      //Time since the Last Failed Signup Attempt
+	SignNumberofAttempts int       `json:"SignNumberofAttempts"` //Number of Failed Signup Attempts
+	SignLockoutUntil     time.Time `json:"SignLockoutUntil"`     //Lockout Until User can attempt again
+	SignIPAddress        string    `json:"SignIPAddress"`        //IP address of Failed Signup Attempt Offender
+	SignLockoutCounter   int       `json:"SignLockoutCounter"`   //Amount of Lockouts the IP address has
+}
+
 //LoginWarning ... Security countermeasure for checking amount of login attempts and locking out IP address for repeated failures
 type LoginWarning struct {
-	LastAttempt    time.Time `json:"LastAttempt"`      //Time since the Last Failed Login Attempt
-	NumberAttempts int       `json:"NumberOfAttempts"` //Number of Failed Login Attempts
-	LockoutUntil   time.Time `json:"LockoutUntil"`     //Lockout Until User can attempt again
-	IPAddress      string    `json:"IPAddress"`        //IP address of Failed Login Attempt Offender
-	LockoutCounter int       `json:"LockoutCounter"`   //Amount of Lockouts the IP address
+	LastAttempt    time.Time `json:"LastAttempt"`    //Time since the Last Failed Login Attempt
+	NumberAttempts int       `json:"NumberAttempts"` //Number of Failed Login Attempts
+	LockoutUntil   time.Time `json:"LockoutUntil"`   //Lockout Until User can attempt again
+	IPAddress      string    `json:"IPAddress"`      //IP address of Failed Login Attempt Offender
+	LockoutCounter int       `json:"LockoutCounter"` //Amount of Lockouts the IP address has
 }
 
 //User ... all user related data
