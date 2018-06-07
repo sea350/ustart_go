@@ -20,15 +20,15 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	clientFile, header, err := r.FormFile("raw-image")
 	blob := r.FormValue("image-data")
-	fmt.Println("blob\n\n", blob)
 
-	//Getting project ID
+	//Getting projectID
 	projID := r.FormValue("projectID")
 	proj, err := get.ProjectByID(eclient, projID)
 	if err != nil {
 		fmt.Println(err)
 	}
 
+	//Checking if image is valid by checking the first 512 bytes for correct image signature
 	buffer := make([]byte, 512)
 	_, _ = clientFile.Read(buffer)
 	defer clientFile.Close()
@@ -38,7 +38,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 	} else {
-		fmt.Println("Warning: middleware/settings/projectLogo invalid file upload")
+		fmt.Println("Error: middleware/settings/projectLogo invalid file upload")
 	}
 
 	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
