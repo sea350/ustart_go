@@ -11,18 +11,16 @@ import (
 //ProjectBannerUpload ... pushes a new banner image into ES
 func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	clientFile, header, err := r.FormFile("projectBannerUpload")
+	clientFile, header, err := r.FormFile("raw-banner")
 	if err != nil {
-		fmt.Println("PROJECTBANNERUPLOAD ERROR\n\n", err)
+		fmt.Println("err: middleware/settings/projectBannerUpload line 14\n", err)
 	}
 	blob := r.FormValue("banner-data")
-	//	fmt.Println("blob\b\b", blob)
 
 	//Get projectID
 	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
 	if err != nil {
-		fmt.Println("err: middleware/settings/projectbannerupload line 25")
-		fmt.Println(err)
+		fmt.Println("err: middleware/settings/projectbannerupload line 21\n", err)
 	}
 
 	buffer := make([]byte, 512)
@@ -32,11 +30,10 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 		//Update the project banner
 		err = post.UpdateProject(eclient, r.FormValue("projectID"), "Banner", blob)
 		if err != nil {
-			fmt.Println("err: middleware/settings/projectbannerupload line 32")
-			fmt.Println(err)
+			fmt.Println("err: middleware/settings/projectbannerupload line 32\n", err)
 		}
 	} else {
-		fmt.Println("Error: middleware/settings/projectBannerUpload invalid file upload")
+		fmt.Println("err: middleware/settings/projectBannerUpload invalid file upload")
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
