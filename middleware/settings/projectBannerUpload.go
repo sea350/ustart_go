@@ -13,10 +13,9 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	clientFile, header, err := r.FormFile("raw-banner")
 	if err != nil {
-		fmt.Println("PROJECTBANNERUPLOAD ERROR\n\n", err)
+		fmt.Println("err: middleware/settings/projectBannerUpload line 14\n", err)
 	}
 	blob := r.FormValue("banner-data")
-	//	fmt.Println("blob\b\b", blob)
 
 	//Get projectID
 	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
@@ -36,7 +35,7 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 	} else {
-		fmt.Println("Error: middleware/settings/projectBannerUpload invalid file upload")
+		fmt.Println("err: middleware/settings/projectBannerUpload invalid file upload")
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
