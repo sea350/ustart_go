@@ -13,10 +13,10 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	clientFile, header, err := r.FormFile("projectBannerUpload")
 	if err != nil {
-		fmt.Println("PROJECTBANNERUPLOAD ERROR")
+		fmt.Println("PROJECTBANNERUPLOAD ERROR\n\n", err)
 	}
 	blob := r.FormValue("banner-data")
-	//fmt.Println("blob\b\b", blob)
+	//	fmt.Println("blob\b\b", blob)
 
 	//Get projectID
 	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
