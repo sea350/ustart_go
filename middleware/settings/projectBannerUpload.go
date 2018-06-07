@@ -16,7 +16,7 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("PROJECTBANNERUPLOAD ERROR")
 	}
 	blob := r.FormValue("banner-data")
-	fmt.Println("blob\b\b", blob)
+	//fmt.Println("blob\b\b", blob)
 
 	//Get projectID
 	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
