@@ -21,7 +21,7 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	blob := r.FormValue("banner-data")
 
 	fmt.Println(`debug text middleware/settings/projectbannerupload line 23`)
-	fmt.Println(blob)
+	// fmt.Println(blob)
 
 	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
 	if err != nil {
