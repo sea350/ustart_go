@@ -11,7 +11,7 @@ import (
 //ProjectBannerUpload ... pushes a new banner image into ES
 func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	clientFile, header, err := r.FormFile("projectBannerUpload")
+	clientFile, header, err := r.FormFile("raw-banner")
 	if err != nil {
 		fmt.Println("PROJECTBANNERUPLOAD ERROR\n\n", err)
 	}
