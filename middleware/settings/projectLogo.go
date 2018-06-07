@@ -41,7 +41,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Warning: middleware/settings/projectLogo invalid file upload")
 	}
 
-	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 	return
 
 }
