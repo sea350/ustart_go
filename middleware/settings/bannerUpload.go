@@ -31,7 +31,6 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		err := post.UpdateUser(eclient, session.Values["DocID"].(string), "Banner", blob)
 		if err != nil {
 			fmt.Println("err: middleware/settings/bannerUpload line 30\n", err)
-			fmt.Println(err)
 		}
 	}
 
