@@ -22,8 +22,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 
 	blob := r.FormValue("image-data")
 	if err != nil {
-		fmt.Println("err: middleware/settings/imageupload line 23")
-		fmt.Println(err)
+		fmt.Println("err: middleware/settings/imageupload line 23\n", err)
 		return
 	}
 
@@ -34,11 +33,10 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 		err = uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 		if err != nil {
-			fmt.Println("err: middleware/settings/imageupload line 51")
-			fmt.Println(err)
+			fmt.Println("err: middleware/settings/imageupload line 51\n", err)
 		}
 	} else {
-		fmt.Println("Error: middleware/settings/imageupload invalid file upload")
+		fmt.Println("err: middleware/settings/imageupload invalid file upload\n", err)
 	}
 
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)

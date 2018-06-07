@@ -20,8 +20,7 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	//Get projectID
 	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
 	if err != nil {
-		fmt.Println("err: middleware/settings/projectbannerupload line 25")
-		fmt.Println(err)
+		fmt.Println("err: middleware/settings/projectbannerupload line 21\n", err)
 	}
 
 	buffer := make([]byte, 512)
@@ -31,8 +30,7 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 		//Update the project banner
 		err = post.UpdateProject(eclient, r.FormValue("projectID"), "Banner", blob)
 		if err != nil {
-			fmt.Println("err: middleware/settings/projectbannerupload line 32")
-			fmt.Println(err)
+			fmt.Println("err: middleware/settings/projectbannerupload line 32\n", err)
 		}
 	} else {
 		fmt.Println("err: middleware/settings/projectBannerUpload invalid file upload")
