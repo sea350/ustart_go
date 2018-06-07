@@ -20,6 +20,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	blob := r.FormValue("image-data")
 	clientFile, header, err := r.FormFile("raw-image")
+	fmt.Println("blob\n\n", blob)
 
 	//Getting project ID
 	projID := r.FormValue("projectID")
