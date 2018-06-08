@@ -21,10 +21,10 @@ func WallAdd(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-	docID := r.FormValue("docID")
+	// docID := r.FormValue("docID")
 	text := r.FormValue("text")
 	textRunes := []rune(text)
-	postID, err := uses.UserNewEntry(client.Eclient, docID, textRunes)
+	postID, err := uses.UserNewEntry(client.Eclient, session.Values["DocID"].(string), textRunes)
 	if err != nil {
 		fmt.Println(err)
 	}
