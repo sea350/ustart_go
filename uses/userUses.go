@@ -62,7 +62,9 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 			newSignWarning.SignDiscovered = true
 		}
 		postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
+		fmt.Println("Start here")
 		fmt.Println(newSignWarning.SignIPAddress)
+		fmt.Println(newSignWarning.SignNumberofAttempts)
 		return errors.New("email is in use " + string(newSignWarning.SignNumberofAttempts))
 	}
 
