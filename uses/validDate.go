@@ -46,12 +46,14 @@ func ValidDate(date string) bool {
 	}
 	rxDate := regexp.MustCompile("(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])/((19|20)\\d\\d)")
 
-	month, errMonth := strconv.Atoi(date[5:7])
+	// 06/08/2018
+	month, errMonth := strconv.Atoi(date[0:2])
 	if errMonth != nil {
+
 		fmt.Println("month atoi")
 		return false
 	}
-	days, errDays := strconv.Atoi(date[8:10])
+	days, errDays := strconv.Atoi(date[3:5])
 	if errDays != nil {
 		fmt.Println("days atoi")
 		return false
@@ -61,7 +63,7 @@ func ValidDate(date string) bool {
 	// 	return false
 	// }
 
-	if date[5:7] == "2" && days > LeapDays(date[0:4]) {
+	if date[0:2] == "2" && days > LeapDays(date[6:]) {
 		fmt.Println("wrong february days")
 		return false
 	} else if days > nDays[month] {
