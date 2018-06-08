@@ -23,16 +23,15 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	postid := r.FormValue("postid")
 	fmt.Println(session.Values["Username"])
-	fmt.Println(r.URL.Path)
-	if session.Values["Username"].(string) == r.URL.Path[10:] {
+	fmt.Println(r.URL)
 
-		parentID, err := uses.RemoveEntry(client.Eclient, postid)
-		if err != nil {
-			fmt.Println("err: middleware/profile/postdeletion line 28")
-			fmt.Println(err)
-		}
-		fmt.Fprintln(w, parentID)
+	parentID, err := uses.RemoveEntry(client.Eclient, postid)
+	if err != nil {
+		fmt.Println("err: middleware/profile/postdeletion line 28")
+		fmt.Println(err)
 	}
+	fmt.Fprintln(w, parentID)
+
 }
 
 //GenerateDeleteModal ...
