@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	get "github.com/sea350/ustart_go/get/warning"
 	types "github.com/sea350/ustart_go/types"
@@ -69,6 +70,8 @@ func ReIndexSignupWarning(eclient *elastic.Client, signWarning types.SignupWarni
 		ipID = res.Id
 		break
 	}
+
+	fmt.Println("Here is the ID", ipID)
 
 	_, err = eclient.Index().
 		Index("ipindex").
