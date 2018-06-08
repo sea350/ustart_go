@@ -4,12 +4,9 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-<<<<<<< HEAD
-	"math"
-=======
 	"log"
+	"math"
 	"net/smtp"
->>>>>>> 22a90dd096712d8ae99830e5998faed880d366bf
 
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
