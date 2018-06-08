@@ -22,15 +22,17 @@ func EditPost(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("postid")
 	newContent := r.FormValue("content")
 
-	editedEntry, err := uses.EditEntry(client.Eclient, postID, "Content", []rune(newContent))
+	if session.Values["Username"].(string) == r.URL.Path[10:] {
+		editedEntry, err := uses.EditEntry(client.Eclient, postID, "Content", []rune(newContent))
 
-	if err != nil {
-		fmt.Println(err)
-	}
+		if err != nil {
+			fmt.Println(err)
+		}
 
-	data, err := json.Marshal(editedEntry)
-	if err != nil {
-		fmt.Println(err)
+		data, err := json.Marshal(editedEntry)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Fprintln(w, string(data))
 	}
-	fmt.Fprintln(w, string(data))
 }

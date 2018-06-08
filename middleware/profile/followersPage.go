@@ -23,6 +23,8 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err middleware/profile/followerspage: line 22")
 		fmt.Println(err)
 	}
+
+	// docID := session.Values["DocID"].(string)
 	userstruct, err := get.UserByID(client.Eclient, docID)
 	if err != nil {
 		fmt.Println("err middleware/profile/followerspage: line 27")
