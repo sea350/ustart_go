@@ -22,17 +22,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//attempting to catch client IP
-	fmt.Println("The following IP is attempting login:")
+	var clientIP string
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
 	}
-	fmt.Println(ip)
 	userIP := net.ParseIP(ip)
 	if userIP == nil {
 		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	} else {
+		clientIP = userIP.String()
 	}
-	fmt.Println(userIP)
 
 	email := r.FormValue("email")
 	email = strings.ToLower(email) // we only client.Store lowercase emails in the db
@@ -41,7 +41,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
 
-	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, "0")
+	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
 
 	// doc ID can be retrieved here!
 	//cs := &ClientSide{}
