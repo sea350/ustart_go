@@ -35,7 +35,7 @@ func WallAdd(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data, err := json.Marshal(jEntry)
-	fmt.Println("THE DATA:", data)
+
 	if err != nil {
 		fmt.Println(err)
 	}
