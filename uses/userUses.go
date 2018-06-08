@@ -57,12 +57,35 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 			newSignWarning.SignLockoutUntil = newSignWarning.SignLastAttempt.Add(time.Minute * 30 * time.Duration(lockoutOP2(newSignWarning.SignLockoutCounter)))
 			newSignWarning.SignNumberofAttempts = 0
 		}
+		if !(newSignWarning.SignDiscovered) {
+			newSignWarning.SignDiscovered = true
+		}
 		postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
 		return errors.New("email is in use")
 	}
 
 	validEmail := ValidEmail(email)
 	if !validEmail {
+		if newSignWarning.SignDiscovered {
+			newSignWarning.SignIPAddress = addressIP
+			newSignWarning.SignNumberofAttempts = newSignWarning.SignNumberofAttempts + 1
+			if newSignWarning.SignLastAttempt.IsZero() {
+				newSignWarning.SignLastAttempt = time.Now()
+			} else {
+				if time.Since(newSignWarning.SignLastAttempt) >= (time.Hour * 168) {
+					newSignWarning.SignNumberofAttempts = 0
+					newSignWarning.SignLockoutCounter = 0
+				}
+				newSignWarning.SignLastAttempt = time.Now()
+			}
+
+			if newSignWarning.SignNumberofAttempts > 10 {
+				newSignWarning.SignLockoutCounter = newSignWarning.SignLockoutCounter + 1
+				newSignWarning.SignLockoutUntil = newSignWarning.SignLastAttempt.Add(time.Minute * 30 * time.Duration(lockoutOP2(newSignWarning.SignLockoutCounter)))
+				newSignWarning.SignNumberofAttempts = 0
+			}
+			postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
+		}
 		return errors.New("invalid email")
 	}
 
