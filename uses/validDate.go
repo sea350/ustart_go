@@ -53,7 +53,7 @@ func ValidDate(date string) bool {
 		fmt.Println("month atoi")
 		return false
 	}
-	days, errDays := strconv.Atoi(date[3:5])
+	days, errDays := strconv.Atoi(date[8:])
 	if errDays != nil {
 		fmt.Println("days atoi")
 		return false
