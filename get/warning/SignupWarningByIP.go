@@ -30,7 +30,7 @@ const ipMapping = `
 func startIndex(eclient *elastic.Client) error {
 	ctx := context.Background()
 
-	_, err := eclient.CreateIndex("ipIndex").BodyString(ipMapping).Do(ctx)
+	_, err := eclient.CreateIndex("ipindex").BodyString(ipMapping).Do(ctx)
 	if err != nil {
 		fmt.Println("Could not create", ipMapping)
 		return err
@@ -53,7 +53,7 @@ func SingupWarningByIP(eclient *elastic.Client, addressIP string) (types.SignupW
 		return signWarning, err
 	}
 
-	exists, err := eclient.IndexExists("ipIndex").Do(ctx)
+	exists, err := eclient.IndexExists("ipindex").Do(ctx)
 	if err != nil {
 		return signWarning, err
 	}
@@ -74,7 +74,7 @@ func SingupWarningByIP(eclient *elastic.Client, addressIP string) (types.SignupW
 			break
 		}
 
-		initSignWarning, err2 := eclient.Get().Index("ipIndex").Id(ipID).Do(ctx)
+		initSignWarning, err2 := eclient.Get().Index("ipindex").Id(ipID).Do(ctx)
 		if err2 != nil {
 			panic(err2)
 		}

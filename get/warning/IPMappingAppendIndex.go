@@ -10,7 +10,7 @@ import (
 //AppendIndexSignWarning ...
 func AppendIndexSignWarning(eclient *elastic.Client, signUpWarning types.SignupWarning) error {
 	ctx := context.Background()
-	_, err := eclient.Index().Index("ipIndex").Type("IPADDRESS").BodyJson(signUpWarning).Do(ctx)
+	_, err := eclient.Index().Index("ipindex").Type("IPADDRESS").BodyJson(signUpWarning).Do(ctx)
 	return err
 
 }
