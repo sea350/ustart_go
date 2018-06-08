@@ -44,7 +44,7 @@ func ValidDate(date string) bool {
 		fmt.Println("length mismatch: 11 vs", len(date))
 		return false
 	}
-	rxDate := regexp.MustCompile("(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])/((19|20)\\d\\d)")
+	rxDate := regexp.MustCompile("(((19|20)\\d\\d)-0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])")
 
 	// 06/08/2018
 	month, errMonth := strconv.Atoi(date[0:2])
