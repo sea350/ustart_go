@@ -14,7 +14,7 @@ import (
 func UpdateSignUpWarningByIP(eclient *elastic.Client, addressIP string, field string, newContent interface{}) error {
 	//code
 	ctx := context.Background()
-	exists, err := eclient.IndexExists("ipIndex").Do(ctx)
+	exists, err := eclient.IndexExists("ipindex").Do(ctx)
 	if err != nil {
 		return err
 	}
@@ -28,7 +28,7 @@ func UpdateSignUpWarningByIP(eclient *elastic.Client, addressIP string, field st
 	}
 
 	termQuery := elastic.NewTermQuery("IPAddress", addressIP)
-	searchResult, err := eclient.Search().Index("ipIndex").Query(termQuery).Do(ctx)
+	searchResult, err := eclient.Search().Index("ipindex").Query(termQuery).Do(ctx)
 	var ipID string
 	for _, res := range searchResult.Hits.Hits {
 		ipID = res.Id
@@ -36,7 +36,7 @@ func UpdateSignUpWarningByIP(eclient *elastic.Client, addressIP string, field st
 	}
 
 	_, err = eclient.Update().
-		Index("ipIndex").
+		Index("ipindex").
 		Type("IPADDRESS").
 		Id(ipID).
 		Doc(map[string]interface{}{field: newContent}).
@@ -49,7 +49,7 @@ func UpdateSignUpWarningByIP(eclient *elastic.Client, addressIP string, field st
 //Updates ALL fields
 func ReIndexSignupWarning(eclient *elastic.Client, signWarning types.SignupWarning, addressIP string) error {
 	ctx := context.Background()
-	exists, err := eclient.IndexExists("ipIndex").Do(ctx)
+	exists, err := eclient.IndexExists("ipindex").Do(ctx)
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,7 @@ func ReIndexSignupWarning(eclient *elastic.Client, signWarning types.SignupWarni
 	}
 
 	termQuery := elastic.NewTermQuery("IPAddress", addressIP)
-	searchResult, err := eclient.Search().Index("ipIndex").Query(termQuery).Do(ctx)
+	searchResult, err := eclient.Search().Index("ipindex").Query(termQuery).Do(ctx)
 	var ipID string
 	for _, res := range searchResult.Hits.Hits {
 		ipID = res.Id
@@ -71,7 +71,7 @@ func ReIndexSignupWarning(eclient *elastic.Client, signWarning types.SignupWarni
 	}
 
 	_, err = eclient.Index().
-		Index("ipIndex").
+		Index("ipindex").
 		Type("IPADDRESS").
 		Id(ipID).
 		BodyJson(signWarning).
