@@ -1,6 +1,7 @@
 package registration
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -13,10 +14,17 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	emailToken := r.FormValue("verifCode")
 
+	var cs client.ClientSide
+
+	defer client.RenderSidebar(w, r, "template2-nil")
+	defer client.RenderTemplate(w, r, "settings-Nil", cs)
+
 	userID, err := get.UserIDByEmail(client.Eclient, email)
 	if err != nil {
 		fmt.Println("err: middleware/registration/emailVerification line 16")
 		fmt.Println(err)
+		cs.ErrorStatus = true
+		cs.ErrorOutput = err
 		return
 	}
 
@@ -24,6 +32,8 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 	if err1 != nil {
 		fmt.Println("err: middleware/registration/emailVerification line 22")
 		fmt.Println(err1)
+		cs.ErrorStatus = true
+		cs.ErrorOutput = err1
 		return
 	}
 
@@ -32,17 +42,21 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 		if err2 != nil {
 			fmt.Println("err: middleware/registration/emailVerification line 29")
 			fmt.Println(err2)
+			cs.ErrorStatus = true
+			cs.ErrorOutput = err2
 			return
 		}
 		err3 := post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
 		if err3 != nil {
 			fmt.Println("err: middleware/registration/emailVerification line 34")
 			fmt.Println(err3)
-			return
+			cs.ErrorStatus = true
+			cs.ErrorOutput = errors.New("err: middleware/registration/emailVerification line 34")
 		}
 	} else {
 		fmt.Println("Verification code is wrong")
-		return
+		cs.ErrorStatus = true
+		cs.ErrorOutput = errors.New("Verification code is wrong")
 	}
 
 }
