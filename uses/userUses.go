@@ -24,7 +24,7 @@ import (
 //SignUpBasic ... A basic user signup process
 //Requires all basic signup feilds (email, password ...)
 //Returns an error if there was a problem with database submission
-func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string, addressIP string) error {
+func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
 
 	newSignWarning, err := getWarning.SingupWarningByIP(eclient, addressIP)
 	if err != nil {
