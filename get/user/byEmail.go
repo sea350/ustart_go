@@ -10,7 +10,6 @@ import (
 )
 
 //UserByEmail ...
-
 func UserByEmail(eclient *elastic.Client, email string) (types.User, error) {
 
 	ctx := context.Background()
