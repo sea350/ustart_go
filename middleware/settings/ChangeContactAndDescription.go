@@ -17,6 +17,7 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
+
 	var pVIS bool
 	var gVIS bool
 	var eVIS bool

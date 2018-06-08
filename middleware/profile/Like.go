@@ -21,12 +21,12 @@ func Like(w http.ResponseWriter, r *http.Request) {
 	postid := r.FormValue("PostID")
 	postactual := postid[10:]       // postid has to be trimmed
 	docid := r.FormValue("selfDoc") // docid of the doc you are viewing double check
-	likeStatus, err4 := uses.IsLiked(client.Eclient, postactual, docid)
+	likeStatus, err4 := uses.IsLiked(client.Eclient, postactual, session.Values["DocID"].(string))
 	if err4 != nil {
 		fmt.Println(err4)
 	}
 	if likeStatus == true {
-		err := uses.UserUnlikeEntry(client.Eclient, postactual, docid)
+		err := uses.UserUnlikeEntry(client.Eclient, postactual, session.Values["DocID"].(string))
 		if err != nil {
 			fmt.Println(err)
 		}
