@@ -61,7 +61,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 			newSignWarning.SignDiscovered = true
 		}
 		postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
-		return errors.New("email is in use")
+		return errors.New("email is in use " + string(newSignWarning.SignNumberofAttempts))
 	}
 
 	validEmail := ValidEmail(email)
