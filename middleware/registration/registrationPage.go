@@ -63,8 +63,9 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	//proper birth date
 	if !uses.ValidDate(r.FormValue("dob")) {
+		fmt.Println(r.FormValue("dob"))
 		fmt.Println("This is an error: registrationPage.go, 63")
-		fmt.Println("Invalid borth date submitted")
+		fmt.Println("Invalid birth date submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)
