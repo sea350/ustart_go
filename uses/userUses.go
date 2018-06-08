@@ -30,6 +30,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	if err != nil {
 		return err
 	}
+	fmt.Println(newSignWarning.SignIPAddress)
 	if newSignWarning.SignLockoutUntil.After(time.Now()) {
 		err := errors.New("Account in Lockout")
 		return err
@@ -61,12 +62,14 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 			newSignWarning.SignDiscovered = true
 		}
 		postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
+		fmt.Println(newSignWarning.SignIPAddress)
 		return errors.New("email is in use " + string(newSignWarning.SignNumberofAttempts))
 	}
 
 	validEmail := ValidEmail(email)
 	if !validEmail {
 		if newSignWarning.SignDiscovered {
+			fmt.Println(newSignWarning.SignIPAddress)
 			newSignWarning.SignIPAddress = addressIP
 			newSignWarning.SignNumberofAttempts = newSignWarning.SignNumberofAttempts + 1
 			if newSignWarning.SignLastAttempt.IsZero() {
