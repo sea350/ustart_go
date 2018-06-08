@@ -17,17 +17,22 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	blob := r.FormValue("banner-data")
-	/*
-		fmt.Println("debug text: middleware/settings/bannerupload line 21")
-		fmt.Println(blob)
-	*/
-	err := post.UpdateUser(eclient, session.Values["DocID"].(string), "Banner", blob)
+	clientFile, header, err := r.FormFile("raw-banner")
 	if err != nil {
-		fmt.Println("err: middleware/settings/bannerupload line 24")
-		fmt.Println(err)
+		fmt.Println("err: middleware/settings/projectBannerUpload line 14\n", err)
+	}
+
+	blob := r.FormValue("banner-data")
+	buffer := make([]byte, 512)
+	_, _ = clientFile.Read(buffer)
+	defer clientFile.Close()
+	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
+		//Update the user banner
+		err := post.UpdateUser(eclient, session.Values["DocID"].(string), "Banner", blob)
+		if err != nil {
+			fmt.Println("err: middleware/settings/bannerUpload line 30\n", err)
+		}
 	}
 
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
-
 }

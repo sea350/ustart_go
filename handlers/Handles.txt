@@ -82,7 +82,7 @@ func Paypal(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	} // associated with eclient
-	err2 := uses.SignUpBasic(eclient, email, password, fname, lname, country, state, city, zip, school, major, bday, currYear)
+	err2 := uses.SignUpBasic(eclient, email, password, fname, lname, country, state, city, zip, school, major, bday, currYear."0")
 	if err2 != nil {
 		fmt.Println(err2)
 	}

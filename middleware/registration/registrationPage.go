@@ -97,7 +97,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	zip := r.FormValue("zip")
 	currYear := r.FormValue("year")
 
-	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear)
+	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear, "0")
 
 	if err2 != nil {
 		fmt.Println("This is an error: registrationPage.go, 65")
