@@ -23,7 +23,7 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	postid := r.FormValue("postid")
 	fmt.Println(session.Values["Username"])
-	fmt.Println(r.URL.Path[10:])
+	fmt.Println(r.URL.Path)
 	if session.Values["Username"].(string) == r.URL.Path[10:] {
 
 		parentID, err := uses.RemoveEntry(client.Eclient, postid)
