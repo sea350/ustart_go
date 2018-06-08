@@ -117,6 +117,7 @@ func main() {
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
 	http.HandleFunc("/welcome/", registration.Registration)
+	http.HandleFunc("/Activation/", registration.EmailVerification)
 
 	//SEARCH
 	http.HandleFunc("/search", search.Page)
