@@ -23,6 +23,7 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	postid := r.FormValue("postid")
 	if session.Values["DocID"].(string) == r.URL.Path[10:] {
+		fmt.Println(r.URL.Path[10:])
 		parentID, err := uses.RemoveEntry(client.Eclient, postid)
 		if err != nil {
 			fmt.Println("err: middleware/profile/postdeletion line 28")
