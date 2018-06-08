@@ -92,7 +92,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 
 	}
-	err2 := uses.SignUpBasic(eclient, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear)
+	err2 := uses.SignUpBasic(eclient, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear,"0")
 	if err2 != nil {
 		fmt.Println(err2)
 		cs := ClientSide{ErrorR: true}

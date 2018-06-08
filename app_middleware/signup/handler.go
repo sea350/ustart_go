@@ -48,7 +48,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	hashedPassword, _ := bcrypt.GenerateFromPassword(passwordb, bcrypt.DefaultCost)
 
 	//func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
-	err = uses.SignUpBasic(eclient, data.Username, data.Email, hashedPassword, data.Fname, data.Lname, "", "", "", "", data.University, nil, time.Now(), "")
+	err = uses.SignUpBasic(eclient, data.Username, data.Email, hashedPassword, data.Fname, data.Lname, "", "", "", "", data.University, nil, time.Now(), "", "0")
 	if err == nil {
 		fmt.Println("Valid signup")
 		resp.updateResp(true, err)

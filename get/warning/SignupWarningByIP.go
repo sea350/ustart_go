@@ -3,10 +3,44 @@ package get
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
-	"github.com/olivere/elastic"
 	"github.com/sea350/ustart_go/types"
+	"gopkg.in/olivere/elastic.v5"
 )
+
+const ipMapping = `
+	"mappings":{
+		"IPADDRESS":{
+			"properties":{
+				"IPAddress":{
+					"type":"text"
+					"fields":{
+						"raw":{
+							"type":"keyword"	
+						}
+					}
+					
+				}
+			}
+		}
+	}
+`
+
+func startIndex(eclient *elastic.Client) error {
+	ctx := context.Background()
+
+	_, err := eclient.CreateIndex("ipIndex").BodyString(ipMapping).Do(ctx)
+	if err != nil {
+		fmt.Println("Could not create", ipMapping)
+		return err
+
+	} else {
+		fmt.Println(ipMapping, "created")
+	}
+	return err
+
+}
 
 //SingupWarningByIP ...
 //Retrive Signup Warning structure based off of the addressIP of the user
@@ -19,8 +53,19 @@ func SingupWarningByIP(eclient *elastic.Client, addressIP string) (types.SignupW
 		return signWarning, err
 	}
 
+	exists, err := eclient.IndexExists("ipIndex").Do(ctx)
+	if err != nil {
+		return signWarning, err
+	}
+	if !exists {
+		err := startIndex(eclient)
+		if err != nil {
+			return signWarning, err
+		}
+	}
+
 	if searchResult.Hits.TotalHits == 0 {
-		err1 := AppendIndex(eclient, signWarning)
+		err1 := AppendIndexSignWarning(eclient, signWarning)
 		return signWarning, err1
 	} else {
 		var ipID string

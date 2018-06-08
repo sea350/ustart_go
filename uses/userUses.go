@@ -2,11 +2,14 @@ package uses
 
 import (
 	"fmt"
+	"math"
 
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
+	getWarning "github.com/sea350/ustart_go/get/warning"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	postUser "github.com/sea350/ustart_go/post/user"
+	postWarning "github.com/sea350/ustart_go/post/warning"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 
@@ -17,13 +20,40 @@ import (
 //SignUpBasic ... A basic user signup process
 //Requires all basic signup feilds (email, password ...)
 //Returns an error if there was a problem with database submission
-func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
+func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string, addressIP string) error {
+
+	newSignWarning, err := getWarning.SingupWarningByIP(eclient, addressIP)
+	if err != nil {
+		return err
+	}
+	if newSignWarning.SignLockoutUntil.After(time.Now()) {
+		err := errors.New("Account in Lockout")
+		return err
+	}
 
 	inUse, err := getUser.EmailInUse(eclient, email)
 	if err != nil {
 		return err
 	}
-	if inUse {
+	if inUse { //We start keeping track here of signup warnings
+		newSignWarning.SignIPAddress = addressIP
+		newSignWarning.SignNumberofAttempts = newSignWarning.SignNumberofAttempts + 1
+		if newSignWarning.SignLastAttempt.IsZero() {
+			newSignWarning.SignLastAttempt = time.Now()
+		} else {
+			if time.Since(newSignWarning.SignLastAttempt) >= (time.Hour * 168) {
+				newSignWarning.SignNumberofAttempts = 0
+				newSignWarning.SignLockoutCounter = 0
+			}
+			newSignWarning.SignLastAttempt = time.Now()
+		}
+
+		if newSignWarning.SignNumberofAttempts > 10 {
+			newSignWarning.SignLockoutCounter = newSignWarning.SignLockoutCounter + 1
+			newSignWarning.SignLockoutUntil = newSignWarning.SignLastAttempt.Add(time.Minute * 30 * time.Duration(lockoutOP2(newSignWarning.SignLockoutCounter)))
+			newSignWarning.SignNumberofAttempts = 0
+		}
+		postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
 		return errors.New("email is in use")
 	}
 
@@ -295,4 +325,9 @@ func NumFollow(eclient *elastic.Client, usrID string, whichOne bool) (int, error
 
 	return len(usr.Followers), nil
 
+}
+
+func lockoutOP2(LockoutCounter int) int {
+	timeOP := int(math.Exp2(float64(LockoutCounter) - 1))
+	return timeOP
 }
