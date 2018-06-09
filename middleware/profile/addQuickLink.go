@@ -19,7 +19,7 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 	}
 	ID := session.Values["DocID"].(string)
 	fmt.Println(r.FormValue("userLink"))
-	//fmt.Println("URL PATH:", r.URL.Path[10:])
+	fmt.Println("URL PATH:", r.URL.Path)
 	// if ID == r.URL.Path[10:] {
 
 	usr, err := get.UserByID(client.Eclient, ID)
