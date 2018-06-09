@@ -28,7 +28,7 @@ func UpdateSignUpWarningByIP(eclient *elastic.Client, addressIP string, field st
 		return err
 	}
 
-	termQuery := elastic.NewTermQuery("IPAddress", addressIP)
+	termQuery := elastic.NewTermQuery("SignIPAddress", addressIP)
 	searchResult, err := eclient.Search().Index("ipindex").Query(termQuery).Do(ctx)
 	var ipID string
 	for _, res := range searchResult.Hits.Hits {
@@ -63,8 +63,7 @@ func ReIndexSignupWarning(eclient *elastic.Client, signWarning types.SignupWarni
 		return err
 	}
 
-	//Fix Query
-	matchQuery := elastic.NewMatchQuery("IPAddress", addressIP) //From NewTermQuery
+	matchQuery := elastic.NewTermQuery("SignIPAddress", addressIP)
 	searchResult, err := eclient.Search().Index("ipindex").Query(matchQuery).Do(ctx)
 	var ipID string
 	for _, res := range searchResult.Hits.Hits {
