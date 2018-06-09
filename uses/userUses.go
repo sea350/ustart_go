@@ -31,7 +31,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		return err
 	}
 	if newSignWarning.SignLockoutUntil.After(time.Now()) {
-		err := errors.New("Account in Lockout")
+		err := errors.New("IP Address in Lockout")
 		return err
 	}
 
