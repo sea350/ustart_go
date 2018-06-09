@@ -12,13 +12,9 @@ import (
 const ipMapping = `
 	"mappings":{
 		"IPADDRESS":{
-			"properties":{
+			"properties":{	
 				"IPAddress":{
-					"type":"text"
-					"fields":{
-						"raw":{
-							"type":"keyword"	
-						}
+					"type":"keyword"
 					}
 					
 				}
