@@ -10,6 +10,7 @@ import (
 )
 
 const ipMapping = `
+{
 	"mappings":{
 		"IPADDRESS":{
 			"properties":{	
@@ -42,7 +43,7 @@ func startIndex(eclient *elastic.Client) error {
 func SingupWarningByIP(eclient *elastic.Client, addressIP string) (types.SignupWarning, error) {
 	ctx := context.Background()
 	var signWarning types.SignupWarning
-	termQuery := elastic.NewTermQuery("IPAddress", addressIP)
+	termQuery := elastic.NewTermQuery("SignIPAddress", addressIP)
 	searchResult, err := eclient.Search().Index().Query(termQuery).Do(ctx)
 	if err != nil {
 		return signWarning, err
