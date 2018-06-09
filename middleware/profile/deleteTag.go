@@ -29,6 +29,7 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 	deleteTag := r.FormValue("UNKNOWN")
 
+	fmt.Println("URL PATH:", r.URL.Path[10:])
 	if ID == r.URL.Path[10:] {
 		fmt.Println("URL PATH:", r.URL.Path[10:])
 
