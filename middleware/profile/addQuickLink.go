@@ -6,6 +6,8 @@ import (
 
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
+	post "github.com/sea350/ustart_go/post/user"
+	"github.com/sea350/ustart_go/types"
 )
 
 //AddQuickLink ...
@@ -29,13 +31,13 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err: middleware/profile/addQuickLink line 25")
 	}
 
-	//usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: r.FormValue("userLinkDesc"), URL: r.FormValue("userLink")})
+	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: r.FormValue("userLinkDesc"), URL: r.FormValue("userLink")})
 
-	// err = post.UpdateUser(client.Eclient, ID, "QuickLinks", usr.QuickLinks)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	fmt.Println("this is an err: middleware/profile/addQuickLink line 31")
-	// }
+	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", usr.QuickLinks)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("this is an err: middleware/profile/addQuickLink line 31")
+	}
 	// }
 
 }
