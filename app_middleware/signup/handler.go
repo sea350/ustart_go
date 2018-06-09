@@ -3,6 +3,7 @@ package signup
 import (
 	"encoding/json"
 	"fmt"
+	"net"
 	"net/http"
 	"time"
 
@@ -47,8 +48,21 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	passwordb := []byte(data.Password)
 	hashedPassword, _ := bcrypt.GenerateFromPassword(passwordb, bcrypt.DefaultCost)
 
+	//attempting to catch client IP
+	var clientIP string
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	}
+	userIP := net.ParseIP(ip)
+	if userIP == nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	} else {
+		clientIP = userIP.String()
+	}
+
 	//func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string) error {
-	err = uses.SignUpBasic(eclient, data.Username, data.Email, hashedPassword, data.Fname, data.Lname, "", "", "", "", data.University, nil, time.Now(), "", "0")
+	err = uses.SignUpBasic(eclient, data.Username, data.Email, hashedPassword, data.Fname, data.Lname, "", "", "", "", data.University, nil, time.Now(), "", clientIP)
 	if err == nil {
 		fmt.Println("Valid signup")
 		resp.updateResp(true, err)
