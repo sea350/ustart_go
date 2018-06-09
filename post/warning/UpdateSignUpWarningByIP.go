@@ -63,8 +63,9 @@ func ReIndexSignupWarning(eclient *elastic.Client, signWarning types.SignupWarni
 		return err
 	}
 
-	termQuery := elastic.NewTermQuery("IPAddress", addressIP)
-	searchResult, err := eclient.Search().Index("ipindex").Query(termQuery).Do(ctx)
+	//Fix Query
+	matchQuery := elastic.NewMatchQuery("IPAddress", addressIP) //From NewTermQuery
+	searchResult, err := eclient.Search().Index("ipindex").Query(matchQuery).Do(ctx)
 	var ipID string
 	for _, res := range searchResult.Hits.Hits {
 		ipID = res.Id
