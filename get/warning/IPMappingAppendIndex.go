@@ -7,8 +7,8 @@ import (
 	"gopkg.in/olivere/elastic.v5"
 )
 
-//AppendIndexSignWarning ...
-func AppendIndexSignWarning(eclient *elastic.Client, signUpWarning types.SignupWarning) error {
+//AddToIndexSignWarning ...
+func AddToIndexSignWarning(eclient *elastic.Client, signUpWarning types.SignupWarning) error {
 	ctx := context.Background()
 	_, err := eclient.Index().Index("ipindex").Type("IPADDRESS").BodyJson(signUpWarning).Do(ctx)
 	return err

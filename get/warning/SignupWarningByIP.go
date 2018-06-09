@@ -16,7 +16,6 @@ const ipMapping = `
 				"IPAddress":{
 					"type":"keyword"
 					}
-					
 				}
 			}
 		}
@@ -61,7 +60,7 @@ func SingupWarningByIP(eclient *elastic.Client, addressIP string) (types.SignupW
 	}
 
 	if searchResult.Hits.TotalHits == 0 {
-		err1 := AppendIndexSignWarning(eclient, signWarning)
+		err1 := AddToIndexSignWarning(eclient, signWarning)
 		return signWarning, err1
 	} else {
 		var ipID string
