@@ -12,7 +12,7 @@ import (
 func HasPrivilege(privilege string, proj types.Project, member types.Member) bool {
 
 	privilegeProfile := proj.PrivilegeProfiles[member.Role]
-	var checkPrivilege string
+	var checkPrivilege bool
 	switch strings.ToLower(privilege) {
 	case "creator":
 		return true
