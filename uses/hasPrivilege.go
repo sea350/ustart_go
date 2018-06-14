@@ -35,6 +35,6 @@ func HasPrivilege(privilege string, proj types.Project, member types.Member) boo
 
 	}
 
-	return checkPrivilege == true
+	return checkPrivilege
 
 }
