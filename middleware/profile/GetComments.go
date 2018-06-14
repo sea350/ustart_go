@@ -24,9 +24,9 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	//postaid := postID[9:]
 	//postactual := postID[10:]
 	// need to trim beginning of postID
-	pika := r.FormValue("Pikachu")
-	fmt.Println("This is debug text, GetComments.go: 23")
-	fmt.Println(pika + "IS PIKA") // pika is your own doc id
+	// pika := r.FormValue("Pikachu")
+	// fmt.Println("This is debug text, GetComments.go: 23")
+	// fmt.Println(pika + "IS PIKA") // pika is your own doc id
 	// journal entry, err
 	_, arrayofComments, err4 := uses.LoadComments(client.Eclient, postID, 0, -1)
 	//fmt.Println(parentPost);
