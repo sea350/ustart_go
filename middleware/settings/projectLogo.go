@@ -22,7 +22,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	blob := r.FormValue("image-data")
 
 	//Getting projectID and member
-	// projID := r.FormValue("projectID")
+	projID := r.FormValue("projectID")
 	// proj, err := get.ProjectByID(eclient, projID)
 	// if err != nil {
 	// 	fmt.Println(err)
