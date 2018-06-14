@@ -22,7 +22,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 
 	//We want to keep track of login attempts and lock out users who have too many failed attempts for a period of time
 	//We make this condition integer first for later
-	var ipExists bool = false
+	ipExists := false
 	var recordWarning int
 
 	inUse, err := get.EmailInUse(eclient, userEmail)

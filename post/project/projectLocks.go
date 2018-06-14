@@ -7,3 +7,6 @@ var ModifyMemberLock sync.Mutex
 
 //GenericProjectUpdateLock ...
 var GenericProjectUpdateLock sync.Mutex
+
+//FollowerLock... a lock for modifying a project's follower array
+var FollowerLock sync.Mutex

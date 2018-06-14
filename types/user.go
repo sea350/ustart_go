@@ -86,6 +86,7 @@ type User struct {
 	EntryIDs           []string       `json:"EntryIDs"`
 	Following          []string       `json:"Following"`
 	Followers          []string       `json:"Followers"`
+	FollowingProject   []string       `json:"FollowingProject"`
 	Colleagues         []string       `json:"Colleagues"`
 	SentCollReq        []string       `json:"SentCollReq"`
 	ReceivedCollReq    []string       `json:"ReceivedCollReq"`
@@ -94,5 +95,5 @@ type User struct {
 	FirstLogin         bool           `json:"FirstLogin"`
 	UserWidgets        []string       `json:"UserWidgets"`
 	LoginWarnings      []LoginWarning `json:"LoginWarnings"`
-	AuthenticationCode string         `json: "AuthenticationCode"`
+	AuthenticationCode string         `json:"AuthenticationCode"`
 }
