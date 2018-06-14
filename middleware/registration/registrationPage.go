@@ -3,6 +3,7 @@ package registration
 import (
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"strconv"
 	"strings"
@@ -98,7 +99,20 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	zip := r.FormValue("zip")
 	currYear := r.FormValue("year")
 
-	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear, "0")
+	//attempting to catch client IP
+	var clientIP string
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	}
+	userIP := net.ParseIP(ip)
+	if userIP == nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	} else {
+		clientIP = userIP.String()
+	}
+
+	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear, clientIP)
 
 	if err2 != nil {
 		fmt.Println("This is an error: registrationPage.go, 65")

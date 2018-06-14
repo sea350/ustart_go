@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	post "github.com/sea350/ustart_go/post/index"
 	"github.com/sea350/ustart_go/types"
 	"gopkg.in/olivere/elastic.v5"
 )
@@ -61,7 +62,7 @@ func SingupWarningByIP(eclient *elastic.Client, addressIP string) (types.SignupW
 	}
 
 	if searchResult.Hits.TotalHits == 0 {
-		err1 := AddToIndexSignWarning(eclient, signWarning)
+		err1 := post.AddToIndexSignWarning(eclient, signWarning)
 		return signWarning, err1
 	} else {
 		var ipID string

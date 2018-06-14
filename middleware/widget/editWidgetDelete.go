@@ -35,7 +35,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("this is an err, editInstaAdd line 26")
 	}
 
-	if len(oldWidget.Data) == 1 && (oldWidget.Classification != 15 || oldWidget.Classification != 16) {
+	if len(oldWidget.Data) == 1 && (oldWidget.Classification != 15 && oldWidget.Classification != 16) {
 		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"), isProject)
 		if err != nil {
 			fmt.Println(err)

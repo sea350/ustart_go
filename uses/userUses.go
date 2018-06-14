@@ -57,7 +57,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 			newSignWarning.SignLockoutUntil = newSignWarning.SignLastAttempt.Add(time.Minute * 30 * time.Duration(lockoutOP2(newSignWarning.SignLockoutCounter)))
 			newSignWarning.SignNumberofAttempts = 0
 		}
-		if !(newSignWarning.SignDiscovered) {
+		if newSignWarning.SignDiscovered == false {
 			newSignWarning.SignDiscovered = true
 		}
 		postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
@@ -66,7 +66,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 
 	validEmail := ValidEmail(email)
 	if !validEmail {
-		if newSignWarning.SignDiscovered {
+		if newSignWarning.SignDiscovered == true {
 			newSignWarning.SignIPAddress = addressIP
 			newSignWarning.SignNumberofAttempts = newSignWarning.SignNumberofAttempts + 1
 			if newSignWarning.SignLastAttempt.IsZero() {

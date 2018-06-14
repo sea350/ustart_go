@@ -16,7 +16,6 @@ import (
 //Requires username and password
 //Returns whether or not username and password match, a type SessionUser, and an error
 func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP string) (bool, types.SessionUser, error) {
-	//addressIP = the user IP, Steven knows how to do this
 
 	var loginSucessful = false
 	var userSession types.SessionUser
