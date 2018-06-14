@@ -17,6 +17,9 @@ type Entry struct {
 	//class 0 = user original post
 	//class 1 = user reply post
 	//class 2 = user share post
+	//class 3 = project page post
+	//class 4 = project comment
+	//class 5 = etc.
 	Content        []rune    `json:"Content"`
 	ReferenceEntry string    `json:"ReferenceEntry"`
 	MediaRef       string    `json:"MediaRef"`

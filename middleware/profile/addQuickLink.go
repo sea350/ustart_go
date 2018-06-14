@@ -21,8 +21,6 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 	}
 	ID := session.Values["DocID"].(string)
 	fmt.Println(r.FormValue("userLink"))
-	fmt.Println("URL PATH:", r.URL.Path[9:])
-	// if ID == r.URL.Path[10:] {
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	fmt.Println(usr.FirstName)
@@ -38,6 +36,5 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		fmt.Println("this is an err: middleware/profile/addQuickLink line 31")
 	}
-	// }
 
 }

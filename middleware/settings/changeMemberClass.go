@@ -8,6 +8,7 @@ import (
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/project"
+	uses "github.com/sea350/ustart_go/uses"
 )
 
 //ChangeMemberClass ...
@@ -29,28 +30,30 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	var isCreator = false
-	for i, member := range project.Members {
-		if member.MemberID == test1.(string) && member.Role <= 0 {
-			isCreator = true
-		}
+	var isCreator, _ = uses.IsLeader(client.Eclient, projectID, test1.(string))
 
-		if member.MemberID == memberID {
-			rankInt, err := strconv.Atoi(newRank)
+	if isCreator {
+		for i, member := range project.Members {
+			if member.MemberID == test1.(string) && member.Role <= 0 {
+				isCreator = true
+			}
+
+			if member.MemberID == memberID {
+				rankInt, err := strconv.Atoi(newRank)
+				if err != nil {
+					fmt.Println("error: middleware/project/changememberclass line 38")
+					fmt.Println(err)
+				} else if member.Role != 0 && rankInt != 0 {
+					project.Members[i].Role = rankInt
+				}
+			}
+		}
+		if isCreator {
+			err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
 			if err != nil {
-				fmt.Println("error: middleware/project/changememberclass line 38")
+				fmt.Println("error: middleware/project/changememberclass line 49")
 				fmt.Println(err)
-			} else if member.Role != 0 && rankInt != 0 {
-				project.Members[i].Role = rankInt
 			}
 		}
 	}
-	if isCreator {
-		err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
-		if err != nil {
-			fmt.Println("error: middleware/project/changememberclass line 49")
-			fmt.Println(err)
-		}
-	}
-
 }

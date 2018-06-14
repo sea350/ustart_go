@@ -42,6 +42,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	maker.Visible = true
 
 	newProj.Members = append(newProj.Members, maker)
+	newProj.PrivilegeProfiles = append(newProj.PrivilegeProfiles, SetMemberPrivileges(0), SetMemberPrivileges(1), SetMemberPrivileges(2))
 
 	id, err := projPost.IndexProject(eclient, newProj)
 	if err != nil {
