@@ -51,4 +51,5 @@ type Project struct {
 	Organization      string       `json:"Organization"`
 	Widgets           []string     `json:"Widgets"`
 	PrivilegeProfiles []Privileges `json:"PrivilegeProfiles"`
+	FollowedUsers     []string     `json:"FollowedUsers"`
 }
