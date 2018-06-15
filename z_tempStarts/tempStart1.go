@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	htype "html/template"
 	"net/http"
@@ -9,7 +10,7 @@ import (
 )
 
 var livePort = "5001"
-var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/index.php"))
+var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/index1.html"))
 
 func main() {
 	/*
@@ -28,6 +29,22 @@ func main() {
 	*/
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		name := r.FormValue("name")
+		email := r.FormValue("email")
+
+		if email != `` {
+			conn := "host= ustart.today port=5432 dbname=ustart user=ustart password=~m3lanKollymemes"
+			db, err := sql.Open("postgres", conn)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				_, err := db.Query("insert into newsletter (uname, email) values (" + name + ", " + email + ")")
+				if err != nil {
+					fmt.Println(err)
+				}
+			}
+		}
+
 		err := templates.ExecuteTemplate(w, "index.php", nil)
 		if err != nil {
 			fmt.Println(err)
