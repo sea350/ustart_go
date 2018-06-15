@@ -3,6 +3,7 @@ package registration
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/sessions"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -17,14 +18,16 @@ var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 //Requires the user's email address
 //Returns if the email failed to send
 func ResetPassword(eclient *elastic.Client, email string, w http.ResponseWriter, r *http.Request) error {
+	r.ParseForm()
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
-	r.ParseForm()
-	email := r.FormValue("email")
+
+	email = r.FormValue("email")
+	email = strings.ToLower(email) // we only client.Store lowercase emails in the db
 	newPass := []byte(r.FormValue("newpass"))
 	newHashedPass, err := bcrypt.GenerateFromPassword(newPass, 10)
 	if err != nil {
