@@ -9,13 +9,14 @@ import (
 //HasPrivilege ...
 //Returns bool to represent whether member is project leader
 //ALso returns index of member
-func HasPrivilege(privilege string, proj types.Project, member types.Member) bool {
+func HasPrivilege(privilege string, privs []types.Privileges, member types.Member) bool {
 
-	privilegeProfile := proj.PrivilegeProfiles[member.Role]
+	if member.Role == 0 {
+		return true
+	}
+	privilegeProfile := privs[member.Role]
 	var checkPrivilege bool
 	switch strings.ToLower(privilege) {
-	case "creator":
-		return true
 	case "member":
 		checkPrivilege = privilegeProfile.MemberManage
 	case "widget":
