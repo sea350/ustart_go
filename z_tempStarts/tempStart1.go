@@ -51,7 +51,7 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/~", func(w http.ResponseWriter, r *http.Request) {
 
 		err := templates.ExecuteTemplate(w, "index.php", nil)
 		if err != nil {
