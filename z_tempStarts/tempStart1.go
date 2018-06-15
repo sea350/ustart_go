@@ -8,7 +8,7 @@ import (
 	"github.com/sea350/ustart_go/middleware/fail"
 )
 
-var livePort = "5000"
+var livePort = "5001"
 var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/index.php"))
 
 func main() {
