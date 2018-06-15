@@ -45,7 +45,7 @@ func main() {
 			}
 		}
 
-		err := templates.ExecuteTemplate(w, "index.php", nil)
+		err := templates.ExecuteTemplate(w, "index1.html", nil)
 		if err != nil {
 			fmt.Println(err)
 		}
