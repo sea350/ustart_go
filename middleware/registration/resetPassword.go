@@ -33,23 +33,19 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 28: Error generating password")
 		fmt.Println(err)
-		return err
 	}
 
 	userID, err := getUser.IDByUsername(client.Eclient, email)
 	if err != nil {
 		fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 34: User not found")
 		fmt.Println(err)
-		return err
 	}
 
 	err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
 	if err != nil {
 		fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 40: Error resetting password")
 		fmt.Println(err)
-		return err
 	} else {
 		fmt.Println("Success")
 	}
-	return err
 }
