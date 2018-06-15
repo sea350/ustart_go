@@ -176,7 +176,6 @@ func SendEmail(to string, token string) {
 	from := "ustarttestemail@gmail.com"
 	pass := "Ust@rt20!8~~"
 	body := "http://ustart.today:5002/Activation/?email=" + to + "&verifCode=" + token
-	fmt.Println("body: " + body)
 	msg := "From: " + from + "\n" + "To: " + to + "\n" + "Subject: UStart Verification Code\n\n" + body
 
 	err1 := smtp.SendMail("smtp.gmail.com:587",
@@ -187,8 +186,6 @@ func SendEmail(to string, token string) {
 		log.Printf("smtp error: %s", err1)
 		return
 	}
-
-	fmt.Println("SENT")
 }
 
 //UserShareEntry ... CREATES A SHARED ENTRY FROM A USER
