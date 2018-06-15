@@ -81,7 +81,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 		for _, element := range mustTag {
 			//Check if NewMatchQuery order is correct
 			query = query.Should(elastic.NewMatchQuery("Tags", strings.ToLower(element)))
-			query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(2))
+			query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
 		}
 	}
 
