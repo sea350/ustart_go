@@ -79,7 +79,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 				newSignWarning.SignLastAttempt = time.Now()
 			}
 
-			if newSignWarning.SignNumberofAttempts > 2 {
+			if newSignWarning.SignNumberofAttempts > 10 {
 				newSignWarning.SignLockoutCounter = newSignWarning.SignLockoutCounter + 1
 				newSignWarning.SignLockoutUntil = newSignWarning.SignLastAttempt.Add(time.Minute * 30 * time.Duration(lockoutOP2(newSignWarning.SignLockoutCounter)))
 				newSignWarning.SignNumberofAttempts = 0
