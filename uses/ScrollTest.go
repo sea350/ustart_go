@@ -2,6 +2,7 @@ package uses
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -9,18 +10,19 @@ import (
 )
 
 //ScrollTest ...
+//Trying to understand how the elastic scroll service works (attempting to be used with LoadEntires.go function)
 func ScrollTest(eclient *elastic.Client, loadlist []string) {
-	/*
-		var newString string
-		for i := 0; i < len(loadlist); i++ {
-			newString += loadlist[i]
-		}
-		sliceQuery := elastic.NewSliceQuery().Field(newString).Id(0).Max(len(loadlist))
-		svc := eclient.Scroll().Slice(sliceQuery)
+	/* Maybe this?
+	var newString string
+	for i := 0; i < len(loadlist); i++ {
+		newString += loadlist[i]
+	}
+	sliceQuery := elastic.NewSliceQuery().Field(newString).Id(0).Max(len(loadlist))
+	svc := eclient.Scroll().Slice(sliceQuery)
 	*/
 
 	sliceQuery := elastic.NewSliceQuery().Id(0).Max(len(loadlist))
-	svc := eclient.Scroll().Slice(sliceQuery)
+	svc := eclient.Scroll("TestIndex").Slice(sliceQuery)
 	for i := 0; i < len(loadlist); i++ {
 		svc.Index(loadlist[i])
 	}
@@ -44,23 +46,23 @@ func ScrollTest(eclient *elastic.Client, loadlist []string) {
 		}
 
 		pages++
-		/*
-			for _, hit := range res.Hits.Hits {
-				if hit.Index != testIndexName {
-					fmt.Println("expected SearchResult.Hits.Hit.Index = %q; got %q", testIndexName, hit.Index)
-				}
-				item := make(map[string]interface{})
-				err := json.Unmarshal(*hit.Source, &item)
-				if err != nil {
-					fmt.Println(err)
-				}
-				docs++
-			}
 
-			if len(res.ScrollId) == 0 {
-				fmt.Println("expected scrollId in results; got %q", res.ScrollId)
+		for _, hit := range res.Hits.Hits {
+			if hit.Index != "TestIndex" {
+				fmt.Println("expected SearchResult.Hits.Hit.Index = %q; got %q", "TestIndex", hit.Index)
 			}
-		*/
+			item := make(map[string]interface{})
+			err := json.Unmarshal(*hit.Source, &item)
+			if err != nil {
+				fmt.Println(err)
+			}
+			docs++
+		}
+
+		if len(res.ScrollId) == 0 {
+			fmt.Println("expected scrollId in results; got %q", res.ScrollId)
+		}
+
 	}
 
 	if pages == 0 {
