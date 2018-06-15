@@ -6,6 +6,7 @@ import (
 	htype "html/template"
 	"net/http"
 
+	"github.com/lib/pq"
 	"github.com/sea350/ustart_go/middleware/fail"
 )
 
@@ -37,7 +38,9 @@ func main() {
 
 		if email != `` {
 			conn := "host= ustart.today port=5432 dbname=ustart user=ustart password=~m3lanKollymemes"
+			_ = pq.Efatal
 			db, err := sql.Open("postgresql", conn)
+			defer db.Close()
 			if err != nil {
 				fmt.Println(err)
 			} else {
