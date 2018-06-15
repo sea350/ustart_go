@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	htype "html/template"
 	"net/http"
 
@@ -27,7 +28,10 @@ func main() {
 	*/
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		_ = templates.ExecuteTemplate(w, "index.php", nil)
+		err := templates.ExecuteTemplate(w, "index.php", nil)
+		if err != nil {
+			fmt.Println(err)
+		}
 	})
 
 	http.HandleFunc("/404/", fail.Fail)
