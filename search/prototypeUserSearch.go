@@ -54,7 +54,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 			query = uses.MultiWildCardQuery(query, "Username", searchArr, true)
 
 			for _, element := range searchArr {
-				query = query.Must(elastic.NewFuzzyQuery("Username", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("Username", strings.ToLower(element)).Fuzziness(2))
 			}
 		}
 		//Tags
@@ -62,7 +62,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 			query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
 
 			for _, element := range searchArr {
-				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
 			}
 		}
 	} else {

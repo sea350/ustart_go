@@ -28,18 +28,18 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	blob := r.FormValue("banner-data")
 
 	//Get project by ID
-	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
-	if err != nil {
-		fmt.Println("err: middleware/settings/projectbannerupload line 33\n", err)
-	}
+	// proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
+	// if err != nil {
+	// 	fmt.Println("err: middleware/settings/projectbannerupload line 33\n", err)
+	// }
 
 	//get the member
-	_, member, err := get.ProjAndMember(eclient, r.FormValue("projectID"), test1.(string))
+	proj, member, err := get.ProjAndMember(eclient, r.FormValue("projectID"), test1.(string))
 	if err != nil {
 		fmt.Println("err: middleware/settings/projectbannerupload line 40\n", err)
 	}
 	//check privilege
-	if uses.HasPrivilege("banner", proj, member) {
+	if uses.HasPrivilege("banner", proj.PrivilegeProfiles, member) {
 		buffer := make([]byte, 512)
 		_, _ = clientFile.Read(buffer)
 		defer clientFile.Close()
@@ -53,6 +53,8 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("err: middleware/settings/projectBannerUpload invalid file upload")
 		}
 
+	} else {
+		fmt.Println("err: middleware/settings/projectLogo  you have no permission to change project banner")
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
