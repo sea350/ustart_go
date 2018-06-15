@@ -17,7 +17,7 @@ var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 //ResetPassword ... Reset's user's password
 //Requires the user's email address
 //Returns if the email failed to send
-func ResetPassword(w http.ResponseWriter, r *http.Request) error {
+func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
