@@ -38,7 +38,7 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 			} else {
-				_, err := db.Query("insert into newsletter (uname, email) values (" + name + ", " + email + ")")
+				_, err := db.Exec("insert into newsletter (uname, email) values ('" + name + "', '" + email + "')")
 				if err != nil {
 					fmt.Println(err)
 				}
