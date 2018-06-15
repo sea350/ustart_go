@@ -33,7 +33,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err: middleware/settings/projectlogo line 33\n", err)
 	}
 
-	if uses.HasPrivilege("icon", proj, member) {
+	if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
 		//Checking if image is valid by checking the first 512 bytes for correct image signature
 		buffer := make([]byte, 512)
 		_, _ = clientFile.Read(buffer)
@@ -46,7 +46,10 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Println("err: middleware/settings/projectLogo invalid file upload\n", err)
 		}
+	} else {
+		fmt.Println("err: middleware/settings/projectLogo you have no permission to change logo/icon")
 	}
+
 	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 	return
 
