@@ -10,7 +10,7 @@ import (
 )
 
 var livePort = "5001"
-var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/index1.html"))
+var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/index1.html", "/ustart/ustart_front/index.php"))
 
 func main() {
 	/*
@@ -28,7 +28,7 @@ func main() {
 		The following are all the handlers we have so fart.
 	*/
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/index1", func(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		email := r.FormValue("email")
 
@@ -46,6 +46,14 @@ func main() {
 		}
 
 		err := templates.ExecuteTemplate(w, "index1.html", nil)
+		if err != nil {
+			fmt.Println(err)
+		}
+	})
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
+		err := templates.ExecuteTemplate(w, "index.php", nil)
 		if err != nil {
 			fmt.Println(err)
 		}
