@@ -119,6 +119,7 @@ func main() {
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
 	http.HandleFunc("/welcome/", registration.Registration)
 	http.HandleFunc("/Activation/", registration.EmailVerification)
+	http.HandleFunc("/ResetPassword", registration.ResetPassword)
 
 	//SEARCH
 	http.HandleFunc("/search", search.Page)
