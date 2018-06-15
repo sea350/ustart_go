@@ -10,7 +10,7 @@ import (
 )
 
 var livePort = "5001"
-var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/index1.html", "/ustart/ustart_front/index.php"))
+var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/nil-index2.html", "/ustart/ustart_front/index.php"))
 
 func main() {
 	/*
@@ -45,7 +45,7 @@ func main() {
 			}
 		}
 
-		err := templates.ExecuteTemplate(w, "index1.html", nil)
+		err := templates.ExecuteTemplate(w, "nil-index2.html", nil)
 		if err != nil {
 			fmt.Println(err)
 		}
