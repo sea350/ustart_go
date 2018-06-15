@@ -24,7 +24,7 @@ func ResetPassword(eclient *elastic.Client, email string, w http.ResponseWriter,
 		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	r.ParseForm()
-	email := []byte(r.FormValue("email"))
+	email := r.FormValue("email")
 	newPass := []byte(r.FormValue("newpass"))
 	newHashedPass, err := bcrypt.GenerateFromPassword(newPass, 10)
 	if err != nil {
