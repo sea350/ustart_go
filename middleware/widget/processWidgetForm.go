@@ -234,8 +234,15 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `15` {
 		//calendar widget
+		input := r.FormValue("gCalEmbed")
 
-		calendarInput := template.HTML(r.FormValue("gCalEmbed"))
+		regX := regexp.MustCompile("(^[a-zA-Z0-9.!#$%&’*+/=?^_`" + `{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$)|((<iframe src=\x22)?https:\/\/calendar\.google\.com\/calendar\/((embed)|(htmlembed))\?src=.*)`)
+		if !regX.MatchString(input) {
+			return newWidget, errors.New(`Invalid widget embed code`)
+		} //Check valid embed code
+
+		calendarInput := template.HTML(input)
+
 		data = []template.HTML{calendarInput}
 		classification = 15
 	}
