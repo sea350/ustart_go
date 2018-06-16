@@ -12,6 +12,7 @@ import (
 	search "github.com/sea350/ustart_go/middleware/search"
 	settings "github.com/sea350/ustart_go/middleware/settings"
 	widget "github.com/sea350/ustart_go/middleware/widget"
+	secure "github.com/unrolled/secure"
 )
 
 var currentPort = "5002"
@@ -128,5 +129,8 @@ func main() {
 	http.HandleFunc("/AjaxLoadComments/", profile.AjaxLoadComments)
 	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
 
-	http.ListenAndServe(":"+currentPort, nil)
+	s := secure.New(secure.Options{AllowedHosts: []string{"ustart.today"}})
+	sec := s.Handler(nil)
+
+	http.ListenAndServe(":"+currentPort, sec)
 }
