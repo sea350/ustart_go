@@ -28,7 +28,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `1` {
 		//gallery
-		input := template.HTML(r.FormValue("instagramInput"))
+		input := template.HTML(r.FormValue("UNKNOWN"))
 		data = []template.HTML{input}
 		classification = 1
 	}
@@ -202,19 +202,19 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `13` {
 		//devianart -- takes in a username
+		da1 := r.FormValue("daInput")
+		da2 := r.FormValue("daInput2")
 
-		/*
-			if checkerEnable {
-				checker := uses.StringChecker(r.FormValue("daInput"), "deviantart.com") //Check valid Embed
+		regX := regexp.MustCompile(`[0-9A-Za-z\-]{1,32}`)
+		if !regX.MatchString(da1) {
+			return newWidget, errors.New(`Invalid widget embed code`)
+		} //Check valid embed code
+		if !regX.MatchString(da2) {
+			return newWidget, errors.New(`Invalid widget embed code`)
+		} //Check valid embed code
 
-				if !checker {
-					return newWidget, errors.New(`Invalid widget embed code`)
-				}
-			}
-		*/
-
-		username := template.HTML(r.FormValue("daInput"))
-		count := template.HTML(r.FormValue("daInput2"))
+		username := template.HTML(da1)
+		count := template.HTML(da2)
 		data = []template.HTML{username, count}
 		classification = 13
 	}
@@ -240,8 +240,13 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `16` {
 		//github widget username
+		urname := r.FormValue("username")
 
-		username := template.HTML(r.FormValue("username"))
+		regX := regexp.MustCompile(`[0-9A-Za-z\-]{1,32}`)
+		if !regX.MatchString(urname) {
+			return newWidget, errors.New(`Invalid widget embed code`)
+		}
+		username := template.HTML(urname)
 		data = []template.HTML{username}
 		classification = 16
 	}
