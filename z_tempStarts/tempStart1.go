@@ -38,11 +38,11 @@ func main() {
 		if email != `` {
 			conn := "host= ustart.today port=5432 dbname=ustart user=ustart password=~m3lanKollymemes"
 			db, err := sql.Open("postgres", conn)
-			defer db.Close()
 			if err != nil {
 				fmt.Println(err)
 				fmt.Println("line 44")
 			} else {
+				defer db.Close()
 				_, err := db.Exec("insert into newsletter (uname, email) values ('" + name + "', '" + email + "')")
 				if err != nil {
 					fmt.Println(err)
