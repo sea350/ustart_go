@@ -6,6 +6,7 @@ import (
 	htype "html/template"
 	"net/http"
 
+	_ "github.com/lib/pq"
 	"github.com/sea350/ustart_go/middleware/fail"
 )
 
