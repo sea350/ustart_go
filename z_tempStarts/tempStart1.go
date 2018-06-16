@@ -47,7 +47,6 @@ func main() {
 				_, err := db.Exec("insert into newsletter (uname, email) values ('" + name + "', '" + email + "')")
 				if err != nil {
 					fmt.Println(err)
-					fmt.Println("line 49")
 				}
 			}
 		}

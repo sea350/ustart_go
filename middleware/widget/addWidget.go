@@ -31,6 +31,8 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	newWidget.UserID = session.Values["DocID"].(string)
 
 	if r.FormValue("editID") == `0` {
+		fmt.Println("this is debug text middeware/widget/adduseridget.go")
+		fmt.Println(newWidget.Data)
 		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget, false)
 		if err != nil {
 			fmt.Println(err)

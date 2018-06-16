@@ -39,6 +39,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("editID") == `0` {
 		fmt.Println("this is debug text middeware/widget/addprojectidget.go")
 		fmt.Println(r.FormValue("projectWidget"))
+		fmt.Println(newWidget.Data)
 		err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true)
 		if err != nil {
 			fmt.Println(err)
