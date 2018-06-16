@@ -2,8 +2,8 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	htype "html/template"
+	"log"
 	"net/http"
 
 	_ "github.com/lib/pq"
@@ -40,21 +40,22 @@ func main() {
 			conn := "host= ustart.today port=5432 dbname=ustart user=ustart password=~m3lanKollymemes sslmode=disable"
 			db, err := sql.Open("postgres", conn)
 			if err != nil {
-				fmt.Println(err)
-				fmt.Println("line 44")
+				log.Println(err)
+				log.Println("tempStart1 line 44")
 			} else {
 				defer db.Close()
 				_, err := db.Exec("insert into newsletter (uname, email) values ('" + name + "', '" + email + "')")
 				if err != nil {
-					fmt.Println(err)
+					log.Println(err)
+					log.Println("tempstart1 line 49")
 				}
 			}
 		}
 
 		err := templates.ExecuteTemplate(w, "index1.html", nil)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("line 57")
+			log.Println(err)
+			log.Println("tempstart1 line 57")
 		}
 	})
 
