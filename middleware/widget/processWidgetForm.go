@@ -35,6 +35,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	if r.FormValue("widgetSubmit") == `2` {
 		//calendar WIP
 		image := template.HTML(r.FormValue("UNKNOWN"))
+
 		data = []template.HTML{image}
 		classification = 2
 	}
@@ -164,12 +165,12 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//anchor -- Requires link that's almost impossible to get
 		ank := r.FormValue("arInput")
 		edit := r.FormValue("editID")
-		/*
-			regX := regexp.MustCompile(``)
-			if !regX.MatchString(ank) {
-				return newWidget, errors.New(`Invalid widget embed code`)
-			} //Check valid embed code
-		*/
+
+		regX := regexp.MustCompile(`https:\/\/anchor\.fm\/[^\/]*\/episodes\/.+`)
+		if !regX.MatchString(ank) {
+			return newWidget, errors.New(`Invalid widget embed code`)
+		} //Check valid embed code
+
 		input := template.HTML(ank)
 		if r.FormValue("editID") != `0` {
 			widget, err := get.WidgetByID(client.Eclient, edit)
