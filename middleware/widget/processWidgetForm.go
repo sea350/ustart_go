@@ -10,13 +10,10 @@ import (
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/types"
-	"github.com/sea350/ustart_go/uses"
 )
 
 //ProcessWidgetForm ... Populates a barebones widget with form data
 func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
-
-	checkerEnable := false
 
 	var data []template.HTML
 	var classification int
@@ -54,7 +51,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		insta := r.FormValue("instagramInput")
 		edit := r.FormValue("editID")
 
-		regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z\-\_]{10}\/*+`)
+		regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z0-9\-\_]{11}\/.*`)
 		if !regX.MatchString(insta) {
 			return newWidget, errors.New(`Invalid widget embed code`)
 		} //Check valid URL
@@ -101,13 +98,14 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `7` {
 		//codepen -- Embed code
-		if checkerEnable {
-			checker := uses.StringChecker(r.FormValue("codepenInput"), "codepen.io") //Check valid Embed
-			if !checker {
-				return newWidget, errors.New(`Invalid widget embed code`)
-			}
-		}
-		codepenID := template.HTML(r.FormValue("codepenInput"))
+		codepen := r.FormValue("codepenInput")
+
+		regX := regexp.MustCompile(`<p data-height="265" data-theme-id="0" data-slug-hash="[A-Za-z]{6}" data-default-tab="css,result" data-user="[^"]+" data-embed-version="2" data-pen-title="[^"]+" class="codepen"\>[^<]+\<a href="https:\/\/codepen\.io\/[^\/]+\/pen\/[A-Za-z]{6}\/">[^<]+<\/a> by [^(]+\(<a href="https:\/\/codepen\.io\/[^"]+">@[^<]+<\/a>\) on <a href="https:\/\/codepen\.io">CodePen<\/a>\.<\/p>\n<script async src="https:\/\/static\.codepen\.io\/assets\/embed\/ei\.js"><\/script>`)
+		if !regX.MatchString(codepen) {
+			return newWidget, errors.New(`Invalid widget embed code`)
+		} //Check valid embed code
+
+		codepenID := template.HTML(codepen)
 		data = []template.HTML{codepenID}
 		classification = 7
 	}
