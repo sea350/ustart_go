@@ -37,7 +37,7 @@ func main() {
 		email := r.FormValue("email")
 
 		if email != `` {
-			conn := "host= ustart.today port=5432 dbname=ustart user=ustart password=~m3lanKollymemes"
+			conn := "host= ustart.today port=5432 dbname=ustart user=ustart password=~m3lanKollymemes sslmode=disable"
 			db, err := sql.Open("postgres", conn)
 			if err != nil {
 				fmt.Println(err)
