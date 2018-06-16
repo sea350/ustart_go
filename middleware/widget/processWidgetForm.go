@@ -85,7 +85,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `6` {
 		//youtube -- Takes in a URL
-		yooToob := r.FormValue("ytinput")
+		yooToob := r.FormValue("ytInput")
 		/*
 			regX := regexp.MustCompile(``)
 			if !regX.MatchString(yooToob) {
