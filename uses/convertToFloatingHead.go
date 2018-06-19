@@ -8,7 +8,7 @@ import (
 )
 
 //ConvertUserToFloatingHead ... pulls latest version of user and converts relevent data into floating head
-func ConvertUserToFloatingHead(eclient *elastic.Client, userDocID string) (types.FloatingHead, error) {
+func ConvertUserToFloatingHead(eclient *elastic.Client, userDocID string, isFollowingID string) (types.FloatingHead, error) {
 	var head types.FloatingHead
 
 	usr, err := getUser.UserByID(eclient, userDocID)
@@ -24,6 +24,15 @@ func ConvertUserToFloatingHead(eclient *elastic.Client, userDocID string) (types
 
 	head.Interface = usr.Tags
 	head.Bio = usr.Description
+
+	if isFollowingID != `` {
+		for _, id := range usr.Followers {
+			if id == isFollowingID {
+				head.Followed = true
+				break
+			}
+		}
+	}
 
 	return head, err
 }

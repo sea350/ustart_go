@@ -32,9 +32,9 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 	heads := []types.FloatingHead{}
 
 	for index, following := range userstruct.Following {
-		head, err := uses.ConvertUserToFloatingHead(client.Eclient, following)
+		head, err := uses.ConvertUserToFloatingHead(client.Eclient, following, test1.(string))
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", index))
+			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d \n", index))
 			fmt.Println(err)
 			continue
 		}

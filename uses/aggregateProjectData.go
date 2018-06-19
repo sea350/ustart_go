@@ -33,7 +33,7 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 
 	for _, member := range data.Members {
 		id := member.MemberID
-		mem, err := ConvertUserToFloatingHead(eclient, id)
+		mem, err := ConvertUserToFloatingHead(eclient, id, ``)
 		if err != nil {
 			fmt.Println(err)
 			fmt.Println("error aggregateProjectData.go 36")

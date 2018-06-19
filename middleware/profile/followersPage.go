@@ -34,26 +34,21 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	heads := []types.FloatingHead{}
 
 	for index, followerID := range userstruct.Followers {
-		head, err := uses.ConvertUserToFloatingHead(client.Eclient, followerID)
+		head, err := uses.ConvertUserToFloatingHead(client.Eclient, followerID, test1.(string))
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", index))
+			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d \n", index))
 			fmt.Println(err)
 			continue
 		}
-		for _, element := range userstruct.Following {
-			if element == followerID {
-				head.Followed = true
-				break
-			}
-		}
+
 		heads = append(heads, head)
 	}
 
 	heads2 := []types.FloatingHead{}
 	for index, following := range userstruct.Following {
-		head, err := uses.ConvertUserToFloatingHead(client.Eclient, following)
+		head, err := uses.ConvertUserToFloatingHead(client.Eclient, following, test1.(string))
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", index))
+			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d \n", index))
 			fmt.Println(err)
 			continue
 		}
