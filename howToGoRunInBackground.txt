@@ -1,0 +1,8 @@
+to run:
+go run something.go > something.go.log 2>&1 &
+
+to kill:
+go run something > something.log 2>&1 &
+//process id(s) will return in console ie:
+>> [1] 29934
+kill 29934
