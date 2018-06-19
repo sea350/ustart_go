@@ -1,5 +1,1 @@
-to run:
-go run something.go > something.go.log 2>&1 &
-
-to kill:
 nohup go run something > something.log 2>&1 &
