@@ -104,7 +104,7 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 	// }
 
 	for _, element := range searchResults.Hits.Hits {
-		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
+		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id, ``)
 		if err1 != nil {
 			err = errors.New("there was one or more problems loading results")
 			continue

@@ -37,7 +37,7 @@ func BoolUserSearch(eclient *elastic.Client, input string) ([]types.FloatingHead
 	//storing and converting result to floatinghead type
 	var results []types.FloatingHead
 	for _, element := range searchResults.Hits.Hits {
-		head, err := uses.ConvertUserToFloatingHead(eclient, element.Id)
+		head, err := uses.ConvertUserToFloatingHead(eclient, element.Id, ``)
 		if err != nil {
 			fmt.Println("err: search/boolUserSearch line 46 index ")
 		}
