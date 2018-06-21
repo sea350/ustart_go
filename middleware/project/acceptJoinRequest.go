@@ -39,6 +39,7 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 	var roleName string
 	var roleNum int
 
+	//will make moderator/admin title more consistent once agreed on
 	switch r.FormValue("role") {
 	case "Member":
 		roleName = "Member"
