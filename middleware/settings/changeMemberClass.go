@@ -40,6 +40,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 			// }
 
 			if member.MemberID == memberID {
+				fmt.Println("Members match")
 				rankInt, err := strconv.Atoi(newRank)
 				fmt.Println(member.MemberID, memberID)
 				if err != nil {
