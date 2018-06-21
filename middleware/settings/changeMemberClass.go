@@ -24,7 +24,8 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 	newRole := r.FormValue("newRole")
 
 	// var roleName string
-	var roleInt int
+	fmt.Println(newRole)
+	var roleInt = -1
 	switch newRole {
 	case "Member":
 		// roleName = "Member"
@@ -50,7 +51,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 			// }
 
 			if member.MemberID == memberID {
-
+				fmt.Println(member.Role, roleInt)
 				if err != nil {
 					fmt.Println("error: middleware/project/changememberclass line 38")
 					fmt.Println(err)
