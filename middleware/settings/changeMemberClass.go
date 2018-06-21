@@ -41,6 +41,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 
 			if member.MemberID == memberID {
 				rankInt, err := strconv.Atoi(newRank)
+				fmt.Println(member.MemberID, memberID)
 				if err != nil {
 					fmt.Println("error: middleware/project/changememberclass line 38")
 					fmt.Println(err)
