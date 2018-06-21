@@ -49,6 +49,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 				} else if member.Role != 0 && rankInt != 0 {
 					fmt.Println("RIGHT PLACE")
 					project.Members[i].Role = rankInt
+					fmt.Println(rankInt)
 					err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
 					if err != nil {
 						fmt.Println("error: middleware/project/changememberclass line 49")
