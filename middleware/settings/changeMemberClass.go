@@ -34,9 +34,9 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("IS CREATOR:", isCreator)
 	if isCreator {
 		for i, member := range project.Members {
-			if member.MemberID == test1.(string) && member.Role <= 0 {
-				isCreator = true
-			}
+			// if member.MemberID == test1.(string) && member.Role <= 0 {
+			// 	isCreator = true
+			// }
 
 			if member.MemberID == memberID {
 				rankInt, err := strconv.Atoi(newRank)
@@ -45,15 +45,20 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 					fmt.Println(err)
 				} else if member.Role != 0 && rankInt != 0 {
 					project.Members[i].Role = rankInt
+					err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
+					if err != nil {
+						fmt.Println("error: middleware/project/changememberclass line 49")
+						fmt.Println(err)
+					}
 				}
 			}
 		}
-		if isCreator {
-			err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
-			if err != nil {
-				fmt.Println("error: middleware/project/changememberclass line 49")
-				fmt.Println(err)
-			}
+		// if isCreator {
+		// 	err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
+		// 	if err != nil {
+		// 		fmt.Println("error: middleware/project/changememberclass line 49")
+		// 		fmt.Println(err)
+		// 	}
 		}
 	}
 }
