@@ -50,7 +50,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 			// }
 
 			if member.MemberID == memberID {
-				fmt.Println(member.Role)
+				fmt.Println(member.Role, roleInt)
 				if err != nil {
 					fmt.Println("error: middleware/project/changememberclass line 38")
 					fmt.Println(err)
