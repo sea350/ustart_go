@@ -33,6 +33,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 	var isCreator, _ = uses.IsLeader(client.Eclient, projectID, test1.(string))
 	fmt.Println("IS CREATOR:", isCreator)
 	if isCreator {
+		fmt.Println("IS CREATOR")
 		for i, member := range project.Members {
 			// if member.MemberID == test1.(string) && member.Role <= 0 {
 			// 	isCreator = true
