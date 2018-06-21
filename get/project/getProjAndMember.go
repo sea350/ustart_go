@@ -20,6 +20,7 @@ func ProjAndMember(eclient *elastic.Client, projID string, memberID string) (typ
 	}
 
 	var retMember types.Member
+	retMember.Role = -1
 	for mem := range project.Members {
 		if project.Members[mem].MemberID == memberID {
 			retMember = project.Members[mem]
