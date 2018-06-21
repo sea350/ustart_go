@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	get "github.com/sea350/ustart_go/get/project"
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/uses"
 )
@@ -22,23 +23,31 @@ func MakeEntry(w http.ResponseWriter, r *http.Request) {
 
 	projectID := r.FormValue("docID")
 	newContent := []rune(r.FormValue("text"))
-	newID, err := uses.ProjectCreatesEntry(client.Eclient, projectID, docID.(string), newContent)
-	if err != nil {
-		fmt.Println("err: middleware/project/makeentries line 26")
-		fmt.Println(err)
-	}
 
-	jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, true)
+	proj, member, err := get.ProjAndMember(client.Eclient, projectID, docID.(string))
 	if err != nil {
-		fmt.Println("err: middleware/project/makeentries line 32")
 		fmt.Println(err)
+		fmt.Println("middleware/project/makeENtries.go line 30")
 	}
+	if uses.HasPrivilege("post", proj.PrivilegeProfiles, member) {
+		newID, err := uses.ProjectCreatesEntry(client.Eclient, projectID, docID.(string), newContent)
+		if err != nil {
+			fmt.Println("err: middleware/project/makeentries line 26")
+			fmt.Println(err)
+		}
 
-	data, err := json.Marshal(jEntry)
-	if err != nil {
-		fmt.Println("err: middleware/project/makeentries line 38")
-		fmt.Println(err)
+		jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, true)
+		if err != nil {
+			fmt.Println("err: middleware/project/makeentries line 32")
+			fmt.Println(err)
+		}
+
+		data, err := json.Marshal(jEntry)
+		if err != nil {
+			fmt.Println("err: middleware/project/makeentries line 38")
+			fmt.Println(err)
+		}
+
+		fmt.Fprintln(w, string(data))
 	}
-
-	fmt.Fprintln(w, string(data))
 }
