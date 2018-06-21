@@ -32,11 +32,11 @@ func SetMemberPrivileges(role int) types.Privileges {
 			// Banner:       false,
 			// Links:        false,
 			// Tags:         false,
-			RoleName:     "Member",
+			RoleName:     "Admin",
 			RoleID:       role,
 			MemberManage: false,
 			WidgetManage: false,
-			PostManage:   false,
+			PostManage:   true,
 			Icon:         false,
 			Banner:       false,
 			Links:        false,
@@ -44,11 +44,11 @@ func SetMemberPrivileges(role int) types.Privileges {
 		}
 	case 2:
 		memberPrivileges = types.Privileges{
-			RoleName:     "Admin",
+			RoleName:     "Member",
 			RoleID:       role,
 			MemberManage: false,
 			WidgetManage: false,
-			PostManage:   true,
+			PostManage:   false,
 			Icon:         false,
 			Banner:       false,
 			Links:        false,
