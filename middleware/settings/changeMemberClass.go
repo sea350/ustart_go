@@ -3,7 +3,6 @@ package settings
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -22,7 +21,18 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 
 	memberID := r.FormValue("memberID")
 	projectID := r.FormValue("projectID")
-	newRank := r.FormValue("newRank")
+	newRole := r.FormValue("newRole")
+
+	// var roleName string
+	var roleInt int
+	switch newRole {
+	case "Member":
+		// roleName = "Member"
+		roleInt = 2
+	case "Moderator":
+		// roleName = "Admin"
+		roleInt = 1
+	}
 
 	project, err := get.ProjectByID(client.Eclient, projectID)
 	if err != nil {
@@ -31,29 +41,37 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var isCreator, _ = uses.IsLeader(client.Eclient, projectID, test1.(string))
-
+	fmt.Println("IS CREATOR:", isCreator)
 	if isCreator {
+		fmt.Println("IS CREATOR")
 		for i, member := range project.Members {
-			if member.MemberID == test1.(string) && member.Role <= 0 {
-				isCreator = true
-			}
+			// if member.MemberID == test1.(string) && member.Role <= 0 {
+			// 	isCreator = true
+			// }
 
 			if member.MemberID == memberID {
-				rankInt, err := strconv.Atoi(newRank)
+
 				if err != nil {
 					fmt.Println("error: middleware/project/changememberclass line 38")
 					fmt.Println(err)
-				} else if member.Role != 0 && rankInt != 0 {
-					project.Members[i].Role = rankInt
+				} else if member.Role != 0 {
+
+					project.Members[i].Role = roleInt
+
+					err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
+					if err != nil {
+						fmt.Println("error: middleware/project/changememberclass line 49")
+						fmt.Println(err)
+					}
 				}
 			}
 		}
-		if isCreator {
-			err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
-			if err != nil {
-				fmt.Println("error: middleware/project/changememberclass line 49")
-				fmt.Println(err)
-			}
-		}
+		// if isCreator {
+		// 	err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
+		// 	if err != nil {
+		// 		fmt.Println("error: middleware/project/changememberclass line 49")
+		// 		fmt.Println(err)
+		// 	}
+		//}
 	}
 }
