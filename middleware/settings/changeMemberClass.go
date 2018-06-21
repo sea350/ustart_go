@@ -24,6 +24,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 	newRole := r.FormValue("newRole")
 
 	// var roleName string
+	fmt.Println(newRole)
 	var roleInt = -1
 	switch newRole {
 	case "Member":
