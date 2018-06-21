@@ -59,6 +59,6 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 		// 		fmt.Println("error: middleware/project/changememberclass line 49")
 		// 		fmt.Println(err)
 		// 	}
-		}
+		//}
 	}
 }
