@@ -49,5 +49,7 @@ func MakeEntry(w http.ResponseWriter, r *http.Request) {
 		}
 
 		fmt.Fprintln(w, string(data))
+	} else {
+		fmt.Println("NO POSTING PRIVILEGES")
 	}
 }
