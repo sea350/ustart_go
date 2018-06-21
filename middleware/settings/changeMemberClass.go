@@ -3,7 +3,6 @@ package settings
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -22,7 +21,18 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 
 	memberID := r.FormValue("memberID")
 	projectID := r.FormValue("projectID")
-	newRank := r.FormValue("newRank")
+	newRole := r.FormValue("newRole")
+
+	// var roleName string
+	var roleInt int
+	switch newRole {
+	case "Member":
+		// roleName = "Member"
+		roleInt = 2
+	case "Moderator":
+		// roleName = "Admin"
+		roleInt = 1
+	}
 
 	project, err := get.ProjectByID(client.Eclient, projectID)
 	if err != nil {
@@ -40,16 +50,14 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 			// }
 
 			if member.MemberID == memberID {
-				fmt.Println("Members match")
-				rankInt, err := strconv.Atoi(newRank)
-				fmt.Println(member.MemberID, memberID)
+
 				if err != nil {
 					fmt.Println("error: middleware/project/changememberclass line 38")
 					fmt.Println(err)
-				} else if member.Role != 0 && rankInt != 0 {
-					fmt.Println("RIGHT PLACE")
-					project.Members[i].Role = rankInt
-					fmt.Println(rankInt)
+				} else if member.Role != 0 {
+
+					project.Members[i].Role = roleInt
+
 					err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
 					if err != nil {
 						fmt.Println("error: middleware/project/changememberclass line 49")
