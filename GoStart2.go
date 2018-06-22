@@ -119,7 +119,9 @@ func main() {
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
 	http.HandleFunc("/welcome/", registration.Registration)
 	http.HandleFunc("/Activation/", registration.EmailVerification)
-	http.HandleFunc("/ResetPassword", registration.ResetPassword)
+	http.HandleFunc("/SendPassReset", registration.ResetPassword)         //Send Email to Address
+	http.HandleFunc("/PassResetEmailConfirm", registration.ResetPassword) //HTML Render for Getting Email to Send
+	http.HandleFunc("/PassResetForm", registration.ResetPassword)         //HTML Render for Setting a new Password
 
 	//SEARCH
 	http.HandleFunc("/search", search.Page)
