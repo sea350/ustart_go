@@ -64,21 +64,21 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err)
 			}
 
-<<<<<<< HEAD
+
 	err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
 	if err != nil {
 		fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 40: Error resetting password")
 		fmt.Println(err)
 	} else {
 		fmt.Println("Success")
-=======
+
 			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
 			if err != nil {
 				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 69: Unable to remove authentication code time")
 				fmt.Println(err)
 			}
 		}
->>>>>>> f013f3e26f9b5b72973dd7462f66a44d4cde3ac4
+
 	}
 	return
 }
