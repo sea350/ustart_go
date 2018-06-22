@@ -34,6 +34,8 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 		searchArr = append(searchArr, strings.ToLower(element))
 	}
 
+	fmt.Println("SEARCHING:", stringArray)
+
 	if len(searchBy) >= 4 {
 		//Name
 		if searchBy[0] {
