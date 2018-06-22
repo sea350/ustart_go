@@ -40,7 +40,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	// If the time since authentication code was input is less than 1 hour
 	if time.Since(user.AuthenticationCodeTime) < (time.Second * 3600) {
 		if emailedToken == user.AuthenticationCode {
-			newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
+			newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("newpass")), 10)
 			if err != nil {
 				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 40: Error generating password")
 				fmt.Println(err)
@@ -74,7 +74,5 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	cs := client.ClientSide{ErrorStatus: false}
-	client.RenderSidebar(w, r, "templateNoUser2")
-	client.RenderTemplate(w, r, "reset-new-pass", cs)
+	return
 }
