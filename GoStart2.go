@@ -120,6 +120,7 @@ func main() {
 	http.HandleFunc("/welcome/", registration.Registration)
 	http.HandleFunc("/Activation/", registration.EmailVerification)
 	http.HandleFunc("/ResetPassword/", registration.ResetPassword)
+	http.HandleFunc("/SendPasswordResetEmail", registration.SendPasswordResetEmail)
 
 	//SEARCH
 	http.HandleFunc("/search", search.Page)
