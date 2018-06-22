@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/sea350/ustart_go/get/widget"
+	getProj "github.com/sea350/ustart_go/get/project"
+	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -21,17 +22,36 @@ func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	projectURL := r.FormValue("deleteProjectURL")
 
-	widg, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
-	if widg.Classification == 15 {
-		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
-		return
-	}
-	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), true)
+	projID, err := getProj.ProjectIDByURL(client.Eclient, projectURL)
+
 	if err != nil {
-		fmt.Println("This is an err, deleteWidgetProject line29")
 		fmt.Println(err)
+		fmt.Println("Error middleware/widget/deleteWidgetProject.go line 29")
 	}
 
-	http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
+	proj, member, err := getProj.ProjAndMember(client.Eclient, projID, test1.(string))
+
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Error middleware/widget/deleteWidgetProject.go line 36")
+	}
+
+	if uses.HasPrivilege("widget", proj.PrivilegeProfiles, member) {
+		widg, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
+		if widg.Classification == 15 {
+			http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
+			return
+		}
+		err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), true)
+		if err != nil {
+			fmt.Println("This is an err, deleteWidgetProject line29")
+			fmt.Println(err)
+		}
+
+		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
+	} else {
+		fmt.Println("You do not have widget privileges for this project.")
+	}
+
 	return
 }
