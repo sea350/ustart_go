@@ -10,10 +10,13 @@ import (
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/uses"
 )
 
 //ProcessWidgetForm ... Populates a barebones widget with form data
 func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
+
+	checkerEnable := false
 
 	var data []template.HTML
 	var classification int
@@ -28,14 +31,13 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `1` {
 		//gallery
-		input := template.HTML(r.FormValue("UNKNOWN"))
+		input := template.HTML(r.FormValue("instagramInput"))
 		data = []template.HTML{input}
 		classification = 1
 	}
 	if r.FormValue("widgetSubmit") == `2` {
 		//calendar WIP
 		image := template.HTML(r.FormValue("UNKNOWN"))
-
 		data = []template.HTML{image}
 		classification = 2
 	}
@@ -52,7 +54,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		insta := r.FormValue("instagramInput")
 		edit := r.FormValue("editID")
 
-		regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z0-9\-\_]{11}\/.*`)
+		regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z\-\_]{10}\/*+`)
 		if !regX.MatchString(insta) {
 			return newWidget, errors.New(`Invalid widget embed code`)
 		} //Check valid URL
@@ -86,7 +88,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `6` {
 		//youtube -- Takes in a URL
-		yooToob := r.FormValue("ytInput")
+		yooToob := r.FormValue("ytinput")
 		/*
 			regX := regexp.MustCompile(``)
 			if !regX.MatchString(yooToob) {
@@ -99,14 +101,13 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `7` {
 		//codepen -- Embed code
-		codepen := r.FormValue("codepenInput")
-
-		regX := regexp.MustCompile(`<p data-height="265" data-theme-id="0" data-slug-hash="[A-Za-z]{6}" data-default-tab="css,result" data-user="[^"]+" data-embed-version="2" data-pen-title="[^"]+" class="codepen"\>[^<]+\<a href="https:\/\/codepen\.io\/[^\/]+\/pen\/[A-Za-z]{6}\/">[^<]+<\/a> by [^(]+\(<a href="https:\/\/codepen\.io\/[^"]+">@[^<]+<\/a>\) on <a href="https:\/\/codepen\.io">CodePen<\/a>\.<\/p>\n<script async src="https:\/\/static\.codepen\.io\/assets\/embed\/ei\.js"><\/script>`)
-		if !regX.MatchString(codepen) {
-			return newWidget, errors.New(`Invalid widget embed code`)
-		} //Check valid embed code
-
-		codepenID := template.HTML(codepen)
+		if checkerEnable {
+			checker := uses.StringChecker(r.FormValue("codepenInput"), "codepen.io") //Check valid Embed
+			if !checker {
+				return newWidget, errors.New(`Invalid widget embed code`)
+			}
+		}
+		codepenID := template.HTML(r.FormValue("codepenInput"))
 		data = []template.HTML{codepenID}
 		classification = 7
 	}
@@ -165,12 +166,12 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//anchor -- Requires link that's almost impossible to get
 		ank := r.FormValue("arInput")
 		edit := r.FormValue("editID")
-
-		regX := regexp.MustCompile(`https:\/\/anchor\.fm\/[^\/]*\/episodes\/.+`)
-		if !regX.MatchString(ank) {
-			return newWidget, errors.New(`Invalid widget embed code`)
-		} //Check valid embed code
-
+		/*
+			regX := regexp.MustCompile(``)
+			if !regX.MatchString(ank) {
+				return newWidget, errors.New(`Invalid widget embed code`)
+			} //Check valid embed code
+		*/
 		input := template.HTML(ank)
 		if r.FormValue("editID") != `0` {
 			widget, err := get.WidgetByID(client.Eclient, edit)
@@ -203,19 +204,19 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `13` {
 		//devianart -- takes in a username
-		da1 := r.FormValue("daInput")
-		da2 := r.FormValue("daInput2")
 
-		regX := regexp.MustCompile(`[0-9A-Za-z\-]{1,32}`)
-		if !regX.MatchString(da1) {
-			return newWidget, errors.New(`Invalid widget embed code`)
-		} //Check valid embed code
-		if !regX.MatchString(da2) {
-			return newWidget, errors.New(`Invalid widget embed code`)
-		} //Check valid embed code
+		/*
+			if checkerEnable {
+				checker := uses.StringChecker(r.FormValue("daInput"), "deviantart.com") //Check valid Embed
 
-		username := template.HTML(da1)
-		count := template.HTML(da2)
+				if !checker {
+					return newWidget, errors.New(`Invalid widget embed code`)
+				}
+			}
+		*/
+
+		username := template.HTML(r.FormValue("daInput"))
+		count := template.HTML(r.FormValue("daInput2"))
 		data = []template.HTML{username, count}
 		classification = 13
 	}
@@ -234,27 +235,15 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `15` {
 		//calendar widget
-		input := r.FormValue("gCalEmbed")
 
-		regX := regexp.MustCompile("(^[a-zA-Z0-9.!#$%&’*+/=?^_`" + `{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$)|((<iframe src=\x22)?https:\/\/calendar\.google\.com\/calendar\/((embed)|(htmlembed))\?src=.*)`)
-		if !regX.MatchString(input) {
-			return newWidget, errors.New(`Invalid widget embed code`)
-		} //Check valid embed code
-
-		calendarInput := template.HTML(input)
-
+		calendarInput := template.HTML(r.FormValue("gCalEmbed"))
 		data = []template.HTML{calendarInput}
 		classification = 15
 	}
 	if r.FormValue("widgetSubmit") == `16` {
 		//github widget username
-		urname := r.FormValue("username")
 
-		regX := regexp.MustCompile(`[0-9A-Za-z\-]{1,32}`)
-		if !regX.MatchString(urname) {
-			return newWidget, errors.New(`Invalid widget embed code`)
-		}
-		username := template.HTML(urname)
+		username := template.HTML(r.FormValue("username"))
 		data = []template.HTML{username}
 		classification = 16
 	}

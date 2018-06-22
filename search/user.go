@@ -31,7 +31,7 @@ func User(eclient *elastic.Client, field string, searchTerm string) ([]types.Use
 	//nResults := searchResults.TotalHits
 
 	for i, element := range searchResults.Hits.Hits {
-		head, err := uses.ConvertUserToFloatingHead(eclient, element.Id, ``)
+		head, err := uses.ConvertUserToFloatingHead(eclient, element.Id)
 		if err != nil {
 			fmt.Println("err: search/user line 43 index ", i)
 		}

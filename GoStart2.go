@@ -129,10 +129,5 @@ func main() {
 	http.HandleFunc("/AjaxLoadComments/", profile.AjaxLoadComments)
 	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
 
-	/*
-		s := secure.New(secure.Options{AllowedHosts: []string{"ustart.today:5002", "ustart.today:5000"}})
-		sec := s.Handler(nil)
-	*/
-
 	http.ListenAndServe(":"+currentPort, nil)
 }

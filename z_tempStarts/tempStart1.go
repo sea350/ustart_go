@@ -2,11 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	htype "html/template"
-	"log"
 	"net/http"
 
-	_ "github.com/lib/pq"
+	"github.com/lib/pq"
 	"github.com/sea350/ustart_go/middleware/fail"
 )
 
@@ -37,25 +37,23 @@ func main() {
 		email := r.FormValue("email")
 
 		if email != `` {
-			conn := "host= ustart.today port=5432 dbname=ustart user=ustart password=~m3lanKollymemes sslmode=disable"
-			db, err := sql.Open("postgres", conn)
+			conn := "host= ustart.today port=5432 dbname=ustart user=ustart password=~m3lanKollymemes"
+			_ = pq.Efatal
+			db, err := sql.Open("postgresql", conn)
+			defer db.Close()
 			if err != nil {
-				log.Println(err)
-				log.Println("tempStart1 line 44")
+				fmt.Println(err)
 			} else {
-				defer db.Close()
 				_, err := db.Exec("insert into newsletter (uname, email) values ('" + name + "', '" + email + "')")
 				if err != nil {
-					log.Println(err)
-					log.Println("tempstart1 line 49")
+					fmt.Println(err)
 				}
 			}
 		}
 
 		err := templates.ExecuteTemplate(w, "index1.html", nil)
 		if err != nil {
-			log.Println(err)
-			log.Println("tempstart1 line 57")
+			fmt.Println(err)
 		}
 	})
 

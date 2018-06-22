@@ -7,9 +7,7 @@ import (
 	"strings"
 	"time"
 
-	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
-	post "github.com/sea350/ustart_go/post/user"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
@@ -66,24 +64,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &cookie)
 		session.Save(r, w)
 		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
-
-		//Deletes authentication code (if any) from user
-		userID, err := get.UserIDByEmail(client.Eclient, email)
-		if err != nil {
-			fmt.Println("Error: /ustart_go/middleware/login/LoginFile/ line 70: Unable to retrieve user")
-			fmt.Println(err)
-		} else {
-			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
-			if err != nil {
-				fmt.Println("Error: /ustart_go/middleware/login/LoginFile/ line 76: Unable to remove authentication code")
-				fmt.Println(err)
-			}
-			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
-			if err != nil {
-				fmt.Println("Error: /ustart_go/middleware/login/LoginFile/ line 81: Unable to remove authentication code time")
-				fmt.Println(err)
-			}
-		}
 		return
 	}
 

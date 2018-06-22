@@ -24,12 +24,6 @@ func UpdateProject(eclient *elastic.Client, projectID string, field string, newC
 	}
 
 	GenericProjectUpdateLock.Lock()
-	defer GenericProjectUpdateLock.Unlock()
-
-	if field == "Member" {
-		ModifyMemberLock.Lock()
-		defer ModifyMemberLock.Unlock()
-	}
 
 	_, err = get.ProjectByID(eclient, projectID)
 	if err != nil {
@@ -43,5 +37,6 @@ func UpdateProject(eclient *elastic.Client, projectID string, field string, newC
 		Doc(map[string]interface{}{field: newContent}).
 		Do(ctx)
 
+	defer GenericProjectUpdateLock.Unlock()
 	return err
 }

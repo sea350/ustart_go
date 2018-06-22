@@ -35,7 +35,7 @@ func ProfileSearch(eclient *elastic.Client, searchTerm string) ([]types.Floating
 	// }
 
 	for _, element := range searchResults.Hits.Hits {
-		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id, ``)
+		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
 		if err1 != nil {
 			err = errors.New("there was one or more problems loading results")
 			continue
