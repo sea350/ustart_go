@@ -72,7 +72,7 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("ListNeeded", element))
 			for _, element := range stringArray {
-				query = query.Must(elastic.NewFuzzyQuery("ListNeeded", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("ListNeeded", strings.ToLower(element)).Fuzziness(2))
 			}
 		}
 	}
@@ -82,7 +82,7 @@ func PrototypeProjectSearch(eclient *elastic.Client, searchTerm string, sortBy i
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("Tags", element))
 			for _, element := range stringArray {
-				query = query.Must(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(2))
 			}
 		}
 	}
