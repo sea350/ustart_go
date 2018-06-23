@@ -54,7 +54,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		insta := r.FormValue("instagramInput")
 		edit := r.FormValue("editID")
 
-		regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z\-\_]{10}\/*`)
+		regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z0-9\-\_]{11}\/*`)
 		if !regX.MatchString(insta) {
 			return newWidget, errors.New(`Invalid widget embed code`)
 		} //Check valid URL
