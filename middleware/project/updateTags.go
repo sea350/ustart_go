@@ -20,6 +20,7 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("projectWidget")
+	fmt.Println(ID)
 
 	tags := strings.Split(r.FormValue("skillArray"), `","`)
 	if len(tags) > 0 {
