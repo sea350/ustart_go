@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+//Privileges ...
 type Privileges struct {
 	RoleName     string `json:"RoleName"`
 	RoleID       int    `json:"RoleID"`
