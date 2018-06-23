@@ -2,7 +2,8 @@ package registration
 
 import (
 	"net/http"
-	//"github.com/gorilla/sessions"
+
+	"github.com/gorilla/sessions"
 )
 
 var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
