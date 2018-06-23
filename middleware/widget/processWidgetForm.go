@@ -56,7 +56,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
 		regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z0-9\-\_]{11}\/*`)
 		if !regX.MatchString(insta) {
-			return newWidget, errors.New(`Invalid widget embed code`)
+			return newWidget, errors.New(`Unusable Instagram URL`)
 		} //Check valid URL
 
 		input := template.HTML(insta)
@@ -79,7 +79,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
 		regX := regexp.MustCompile(`<iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https:\/\/w\.soundcloud\.com\/player\/\?url=https%3A\/\/api\.soundcloud\.com\/users\/[0-9]{9}&amp;color=%23[0-9a-f]{6}&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=true"\>\<\/iframe\>`)
 		if !regX.MatchString(soundCloud) {
-			return newWidget, errors.New(`Invalid widget embed code`)
+			return newWidget, errors.New(`Unusable Soundcloud Embed Code`)
 		} //Check valid embed code
 
 		url := template.HTML(soundCloud)
@@ -104,7 +104,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		if checkerEnable {
 			checker := uses.StringChecker(r.FormValue("codepenInput"), "codepen.io") //Check valid Embed
 			if !checker {
-				return newWidget, errors.New(`Invalid widget embed code`)
+				return newWidget, errors.New(`Unusable Codepen Embed Code`)
 			}
 		}
 		codepenID := template.HTML(r.FormValue("codepenInput"))
@@ -117,7 +117,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
 		regX := regexp.MustCompile(`https:\/\/www\.pinterest\.com\/.+\/`)
 		if !regX.MatchString(pinput) {
-			return newWidget, errors.New(`Invalid widget embed code`)
+			return newWidget, errors.New(`Unusable Pinterest URL`)
 		} //Check valid embed code
 
 		url := template.HTML(pinput)
@@ -131,7 +131,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
 		regX := regexp.MustCompile(`[A-Za-z0-9\-\.]{1,32}`)
 		if !regX.MatchString(tumblr) {
-			return newWidget, errors.New(`Invalid widget embed code`)
+			return newWidget, errors.New(`Unusable Tumblr User`)
 		} //Check valid embed code
 
 		tumblrEmbedCode := template.HTML(tumblr)
@@ -145,7 +145,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
 		regX := regexp.MustCompile(`<iframe src="https:\/\/open\.spotify\.com\/embed\/[^"]+" width="300" height="380" frameborder="0" allowtransparency="true"><\/iframe>`)
 		if !regX.MatchString(spoofy) {
-			return newWidget, errors.New(`Invalid widget embed code`)
+			return newWidget, errors.New(`Unusable Spotify Embed Code`)
 		} //Check valid embed code
 
 		spotifyEmbedCode := template.HTML(spoofy)
@@ -192,7 +192,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
 		regX := regexp.MustCompile(`[0-9A-Za-z\-]{1,32}`)
 		if !regX.MatchString(medUsername) {
-			return newWidget, errors.New(`Invalid widget embed code`)
+			return newWidget, errors.New(`Unusable Medium Username`)
 		} //Check valid embed code
 
 		username := template.HTML(medUsername)
@@ -226,7 +226,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
 		regX := regexp.MustCompile(`[0-9A-Za-z_]{1,25}`)
 		if !regX.MatchString(twitch) {
-			return newWidget, errors.New(`Invalid widget embed code`)
+			return newWidget, errors.New(`Unusable Twitch Username`)
 		} //Check valid embed code
 
 		username := template.HTML(twitch)
