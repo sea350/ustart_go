@@ -175,7 +175,9 @@ func GenerateRandomString(s int) (string, error) {
 func SendEmail(to string, token string) {
 	from := "ustarttestemail@gmail.com"
 	pass := "Ust@rt20!8~~"
-	body := "http://ustart.today:5002/Activation/?email=" + to + "&verifCode=" + token
+	url := "https://ustart.today:5002/Activation/?email=" + to + "&verifCode=" + token
+	body := "<p>Dear " + to + ",</p><p>Welcome to U-Start!</p><p>In order to help maintain your account's security, please verify your email address by clicking the following link: " + url + ".</p>" +
+		"<p>Thank you.</p><img src=\"https://scontent-lga3-1.cdninstagram.com/vp/307f6aa3c0d6973d2061d6a1978d177a/5BA70D79/t51.2885-19/s150x150/20905822_2071759413059780_7754944012800229376_a.jpg\"/>"
 	msg := "From: " + from + "\n" + "To: " + to + "\n" + "Subject: UStart Verification Code\n\n" + body
 
 	err1 := smtp.SendMail("smtp.gmail.com:587",
