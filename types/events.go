@@ -7,7 +7,7 @@ import (
 //invite only, publicly viewable, whitelist, blacklist, settings, members, privileges, title, description, creation, event date, option for
 //creator to cancel, visibility boolean, widgets, get/post, attending/invited/not going, members list and guest list
 
-//EventPrivileges ...
+//EventPrivileges ... Edit privileges for the Event Members
 type EventPrivileges struct {
 	RoleName     string `json:"RoleName"`
 	RoleID       int    `json:"RoleID"`
@@ -20,14 +20,14 @@ type EventPrivileges struct {
 	Tags         bool   `json:"Tags"`
 }
 
-//EventGuests ...
+//EventGuests ... Guest relevant data, people who have been invited to attend the event
 type EventGuests struct {
 	GuestID string `json:"GuestID"`
 	Status  int    `json:"Status"` //Marks whether they are invited/going/not going, 0 for invited, 1 for going, 2 for not
 	Visible bool   `json:"Visible"`
 }
 
-//EventMembers ...
+//EventMembers ... Member relevant data, who can modify the event page
 type EventMembers struct {
 	MemberID string    `json:"MemberID"`
 	Role     int       `json:"Role"`
@@ -36,7 +36,7 @@ type EventMembers struct {
 	Visible  bool      `json:"Visible"`
 }
 
-//Events ...
+//Events ... Event relevant data
 type Events struct {
 	Name              string            `json:"Name"`
 	Category          string            `json:"Category"`
