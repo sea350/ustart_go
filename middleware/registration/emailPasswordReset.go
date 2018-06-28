@@ -66,7 +66,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 			from := "ustarttestemail@gmail.com"
 			pass := "Ust@rt20!8~~"
 			mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
-			body := `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+			body := `
 				<html xmlns="http://www.w3.org/1999/xhtml">
 				<head>
 				<title>USTART</title>
