@@ -21,10 +21,11 @@ var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	session, _ := store.Get(r, "session_please")
-	test1, _ := session.Values["DocID"]
+	test1, errr := session.Values["DocID"]
+	fmt.Println(errr)
 	if test1 == nil {
 		fmt.Println(test1)
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/profile/jyang", http.StatusFound)
 	}
 
 	email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
