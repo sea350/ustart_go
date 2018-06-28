@@ -66,7 +66,8 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 			from := "ustarttestemail@gmail.com"
 			pass := "Ust@rt20!8~~"
 			mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
-			body := `
+			subject := "Testing testing 123"
+			/*body := `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 				<html xmlns="http://www.w3.org/1999/xhtml">
 				<head>
 				<title>USTART</title>
@@ -260,9 +261,11 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 					<div class="em_hide" style="white-space: nowrap; display: none; font-size:0px; line-height:0px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</div>
 				</body>
 				</html>
-				
-			`
-			msg := "From: " + from + "\n" + "To: " + email + "\n" + "Subject: UStart Password Reset\n\n" + mime + body
+
+			`*/
+			msg := []byte(subject + mime + "<html><body><h1>Hello World!</h1></body></html>")
+
+			//msg := "From: " + from + "\n" + "To: " + email + "\n" + "Subject: UStart Password Reset\n\n" + mime + body
 
 			err = smtp.SendMail("smtp.gmail.com:587", smtp.PlainAuth("", from, pass, "smtp.gmail.com"), from, []string{email}, []byte(msg))
 			if err != nil {
