@@ -65,7 +65,8 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 			//Todo: make from and pw not plaintext
 			from := "ustarttestemail@gmail.com"
 			pass := "Ust@rt20!8~~"
-			body := `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+			mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
+			body := `
 				<html xmlns="http://www.w3.org/1999/xhtml">
 				<head>
 				<title>USTART</title>
@@ -261,7 +262,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 				</html>
 				
 			`
-			msg := "From: " + from + "\n" + "To: " + email + "\n" + "Subject: UStart Password Reset\n\n" + body
+			msg := "From: " + from + "\n" + "To: " + email + "\n" + "Subject: UStart Password Reset\n\n" + mime + body
 
 			err = smtp.SendMail("smtp.gmail.com:587", smtp.PlainAuth("", from, pass, "smtp.gmail.com"), from, []string{email}, []byte(msg))
 			if err != nil {
