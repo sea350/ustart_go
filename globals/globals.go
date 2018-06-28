@@ -145,6 +145,10 @@ const MappingEvent = `
 				"Username":{
 					"type":"keyword",
 					
+				},
+				"Email":{
+					"type":"keyword",
+					
                 },
                 "URLName":{
 					"type":"keyword"
