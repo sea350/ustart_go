@@ -96,5 +96,5 @@ type User struct {
 	UserWidgets        []string       `json:"UserWidgets"`
 	LoginWarnings      []LoginWarning `json:"LoginWarnings"`
 	AuthenticationCode string         `json:"AuthenticationCode"`
-	UsrEvents          []Events       `json:"UsrEvents"`
+	//UsrEvents          []Events       `json:"UsrEvents"`	to be implemented later in the code
 }
