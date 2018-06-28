@@ -6,6 +6,8 @@ import (
 
 //invite only, publicly viewable, whitelist, blacklist, settings, members, privileges, title, description, creation, event date, option for
 //creator to cancel, visibility boolean, widgets, get/post, attending/invited/not going, members list and guest list
+//Have it displayed on the profile
+//People can search for the event based on title, url, tags, and PERSON HOSTING THE EVENT!
 
 //EventPrivileges ... Edit privileges for the Event Members
 type EventPrivileges struct {
@@ -38,6 +40,7 @@ type EventMembers struct {
 
 //Events ... Event relevant data
 type Events struct {
+	Host              User              `json:"Host"`
 	Name              string            `json:"Name"`
 	Category          string            `json:"Category"`
 	URLName           string            `json:"URLName"`
