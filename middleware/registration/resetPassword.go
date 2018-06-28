@@ -25,7 +25,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(errr)
 	if test1 == nil {
 		fmt.Println(test1)
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/profile/jyang", http.StatusFound)
 	}
 
 	email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
