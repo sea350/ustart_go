@@ -21,11 +21,8 @@ var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	session, _ := store.Get(r, "session_please")
-	test1, err := session.Values["DocID"]
-	if err != nil {
-		fmt.Println("Error Reset Password")
-		fmt.Println(err)
-	}
+	test1, errr := session.Values["DocID"]
+	fmt.Println(errr)
 	if test1 == nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
