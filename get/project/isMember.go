@@ -11,7 +11,7 @@ func IsMember(eclient *elastic.Client, userID string, project types.Project) boo
 	if len(project.Members) < 1 {
 		return false
 	}
-	
+
 	for mem, _ := range project.Members {
 		if project.Members[mem].MemberID == userID {
 			return true
