@@ -12,6 +12,12 @@ const EntryIndex = "test-entry_data"
 //EntryType ...
 const EntryType = "ENTRY"
 
+//EventIndex ...
+const EventIndex = "test-event_data"
+
+//EventType ...
+const EventType = "EVENT"
+
 //UserIndex ...
 const UserIndex = "test-user_data"
 
@@ -98,18 +104,55 @@ const MappingProject = `
 				"Name":{
 					"type":"keyword"
 
-					 
-
 				},
 
                 "URLName":{
 					"type":"keyword"
 					
+				},
+				"Tags":{
+					"type":"keyword"
+
+				}
+			}
+			
+        }
+    }
+}`
+
+//MappingEvent ... event mapping
+const MappingEvent = `
+{
+	"settings" :{
+		"analysis":{
+			"analyzer" : {
+				"casesensitive_text":{
+					"type" : "custom",
+					"tokenizer": "standard"
+				}
+			}
+		}
+	},
+
+
+   "mappings":{
+        "EVENT":{
+            "properties":{
+				"Name":{
+					"type":"keyword"
+
+				},
+				"Username":{
+					"type":"keyword",
 					
+                },
+                "URLName":{
+					"type":"keyword"
 					
 				},
 				"Tags":{
 					"type":"keyword"
+
 				}
 			}
 			
