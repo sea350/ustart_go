@@ -29,35 +29,35 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 	if email != "" {
 		emailInUse, err := get.EmailInUse(client.Eclient, email)
 		if err != nil {
-			fmt.Println("Error: ustart_go/middleware/registration/emailPasswordReset Line 21")
+			fmt.Println("Error: ustart_go/middleware/registration/emailPasswordReset Line 30: Unable to retrieve email")
 			fmt.Println(err)
 		}
 
 		if emailInUse {
 			token, err := uses.GenerateRandomString(32)
 			if err != nil {
-				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 16: Error generating token")
+				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 37: Error generating token")
 				fmt.Println(err)
 				return
 			}
 
 			userID, err := get.UserIDByEmail(client.Eclient, email)
 			if err != nil {
-				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 16: Unable to retreive userID by email")
+				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 44: Unable to retreive userID by email")
 				fmt.Println(err)
 				return
 			}
 
 			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", time.Now())
 			if err != nil {
-				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 16: Error posting user")
+				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 51: Error posting user")
 				fmt.Println(err)
 				return
 			}
 
 			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", token)
 			if err != nil {
-				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 16: Error posting user")
+				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 58: Error posting user")
 				fmt.Println(err)
 				return
 			}
