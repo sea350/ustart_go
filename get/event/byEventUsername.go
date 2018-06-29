@@ -9,6 +9,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
+//NOT NEEDED! WILL GET BACK TO THIS LATER IF WE DO NEED IT!
+
 //EventByUsername ...
 func EventByUsername(eclient *elastic.Client, username string) (types.Events, error) {
 	ctx := context.Background()
