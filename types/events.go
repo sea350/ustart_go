@@ -42,11 +42,12 @@ type EventMembers struct {
 type Events struct {
 	//Host              User              `json:"Host"` to be implemented later in the code
 	Name              string            `json:"Name"`
-	Category          string            `json:"Category"`
+	Tags              string            `json:"Tags"`
 	URLName           string            `json:"URLName"`
-	Description       []rune            `json:"Description"`
+	Description       []string          `json:"Description"`
 	Members           []EventMembers    `json:"Members"`
 	Guests            []EventGuests     `json:"Guests"`
+	EntryIDs          []string          `json:"EntryIDs"`
 	Location          LocStruct         `json:"Location"`
 	EventDate         time.Time         `json:"EventDate"`
 	CreationDate      time.Time         `json:"CreationDate"`

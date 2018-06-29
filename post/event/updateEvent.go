@@ -9,11 +9,12 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//UPDATES A SINGLE FEILD IN AN EXISTING ES DOC
-//Requires the docID, feild to be modified, and the new content
-//Returns an error
 //UpdateEvent ...
 func UpdateEvent(eclient *elastic.Client, eventID string, field string, newContent interface{}) error {
+	//UPDATES A SINGLE FEILD IN AN EXISTING ES DOC
+	//Requires the docID, feild to be modified, and the new content
+	//Returns an error
+
 	ctx := context.Background()
 
 	exists, err := eclient.IndexExists(globals.EventIndex).Do(ctx)
