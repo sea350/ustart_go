@@ -31,6 +31,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("email", email)
 	fmt.Println("password:", r.FormValue("password"))
 	fmt.Println("Verification:", emailedToken)
+	fmt.Println("r.form", r.Form)
 
 	user, err := getUser.UserByEmail(client.Eclient, email)
 	if err != nil {
