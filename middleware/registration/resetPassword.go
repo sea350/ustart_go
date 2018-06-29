@@ -41,6 +41,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(r.FormValue("password"))
 	// If the time since authentication code was input is less than 1 hour
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
 		newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
@@ -49,7 +50,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(r.FormValue("password"))
 		fmt.Println(newHashedPass)
 		userID, err := getUser.UserIDByEmail(client.Eclient, email)
 		if err != nil {
