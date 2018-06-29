@@ -60,6 +60,6 @@ type Events struct {
 	CroppedAvatar     string            `json:"CropAvatar"`
 	Banner            string            `json:"Banner"`
 	MemberReqSent     []string          `json:"MemberReqSent"`
+	MemberReqReceived []string          `json:"MemberReqReceived"`
 	PrivilegeProfiles []EventPrivileges `json:"PrivilegeProfiles"`
-	//MemberReqReceived []string       `json:"MemberReqReceived"` We probably don't want this
 }
