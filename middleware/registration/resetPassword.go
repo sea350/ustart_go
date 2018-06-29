@@ -6,25 +6,23 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gorilla/sessions"
 	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
 	bcrypt "golang.org/x/crypto/bcrypt"
 )
 
-var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
-
 //ResetPassword ... Reset's user's password
 //Requires the user's email address
 //Returns if the email failed to send
 func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-	if test1 == nil {
+	if test1 != nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
+		return
 	}
 
 	email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
