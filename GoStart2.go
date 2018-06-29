@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 	"text/template"
 
@@ -19,6 +20,7 @@ import (
 var currentPort = "5002"
 
 func main() {
+	flag.Parse()
 	/*
 		Lines 18-19 handle the static file locating
 		If we wanted to reorganize file/folder locations, this is one of 3 things that would have to change
