@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	chat "github.com/sea350/ustart_go/middleware/chat"
+	event "github.com/sea350/ustart_go/middleware/event"
 	fail "github.com/sea350/ustart_go/middleware/fail"
 	inbox "github.com/sea350/ustart_go/middleware/inbox"
 	login "github.com/sea350/ustart_go/middleware/login"
