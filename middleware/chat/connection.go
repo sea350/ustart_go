@@ -38,7 +38,38 @@ func (c *Connection) writer(wg *sync.WaitGroup, wsConn *websocket.Conn) {
 	}
 }
 
+func echo(conn *websocket.Conn) {
+	for {
+		var m int
+
+		err := conn.ReadJSON(&m)
+		if err != nil {
+			fmt.Println("Error reading json.", err)
+		}
+
+		fmt.Printf("Got message: %#v\n", m)
+
+		if err = conn.WriteJSON(m); err != nil {
+			fmt.Println(err)
+		}
+	}
+}
+
 var upgrader = &websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
+
+//WsHandlerFunc ...
+func WsHandlerFunc(w http.ResponseWriter, r *http.Request) {
+	if r.Header.Get("Origin") != "http://"+r.Host {
+		http.Error(w, "Origin not allowed", 403)
+		return
+	}
+	conn, err := websocket.Upgrade(w, r, w.Header(), 1024, 1024)
+	if err != nil {
+		http.Error(w, "Could not open websocket connection", http.StatusBadRequest)
+	}
+
+	go echo(conn)
+}
 
 //WsHandler ... such strong hands
 type WsHandler struct {
