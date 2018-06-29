@@ -132,10 +132,13 @@ func main() {
 
 	//CHAT
 	http.HandleFunc("/ch/", chat.Page)
-
+	http.HandleFunc("/ws", chat.WsHandler{H: hh})
+	
+/*
 	hh := chat.NewHub()
 	router := http.NewServeMux()
 	router.Handle("/ws", chat.WsHandler{H: hh})
+*/
 
 	http.ListenAndServe(":"+currentPort, nil)
 }
