@@ -16,6 +16,14 @@ import (
 //Requires a valid user email address
 //Returns if there is an error
 func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
+	session, _ := client.Store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+	if test1 != nil {
+		fmt.Println(test1)
+		http.Redirect(w, r, "/~", http.StatusFound)
+		return
+	}
+
 	email := r.FormValue("email")
 
 	var cs client.ClientSide
@@ -32,7 +40,6 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if emailInUse {
-			fmt.Println("\n\nWe are in\n\n")
 			token, err := uses.GenerateRandomString(32)
 			if err != nil {
 				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 37: Error generating token")
@@ -61,13 +68,10 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			//Todo: make from and pw not plaintext
-			// from := "ustarttestemail@gmail.com"
-			// pass := "Ust@rt20!8~~"
 			subject := "Your verification link"
 			link := "http://ustart.today:5002/ResetPassword/?email=" + email + "&verifCode=" + token
 			r := uses.NewRequest([]string{email}, subject)
-			r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": "Conor", "link": link})
+			r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": email, "link": link})
 		}
 	}
 }
