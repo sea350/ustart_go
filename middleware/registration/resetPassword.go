@@ -28,6 +28,8 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
 	emailedToken := r.FormValue("verifCode")
 
+	fmt.Println("email", email)
+
 	user, err := getUser.UserByEmail(client.Eclient, email)
 	if err != nil {
 		fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 34: User not found")
