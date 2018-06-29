@@ -132,8 +132,10 @@ func main() {
 	http.HandleFunc("/AjaxLoadComments/", profile.AjaxLoadComments)
 	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
 
-	//CHAT
+	//EVENT
+	http.HandleFunc("/event", event.ViewEvent)
 
+	//CHAT
 	http.HandleFunc("/ch/", chat.Page)
 	http.HandleFunc("/ws", chat.HandleConnections)
 
