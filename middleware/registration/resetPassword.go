@@ -56,21 +56,21 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 57: Error resetting password")
 				fmt.Println(err)
 				return
-			} else {
-				err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
-				if err != nil {
-					fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 63: Unable to remove authentication code")
-					fmt.Println(err)
-				}
+			}
+			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
+			if err != nil {
+				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 63: Unable to remove authentication code")
+				fmt.Println(err)
+			}
 
-				err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
-				if err != nil {
-					fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 69: Unable to remove authentication code time")
-					fmt.Println(err)
-				}
+			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
+			if err != nil {
+				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 69: Unable to remove authentication code time")
+				fmt.Println(err)
 			}
 		}
 
+		fmt.Println("Success!")
 	}
 	cs := client.ClientSide{ErrorStatus: false}
 	client.RenderSidebar(w, r, "templateNoUser2")
