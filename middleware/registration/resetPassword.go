@@ -41,7 +41,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("time", time.Since(user.AuthenticationCodeTime))
 	// If the time since authentication code was input is less than 1 hour
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
 		newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
@@ -50,7 +49,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-
 		userID, err := getUser.UserIDByEmail(client.Eclient, email)
 		if err != nil {
 			fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 50: User not found")
@@ -75,7 +73,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 69: Unable to remove authentication code time")
 			fmt.Println(err)
 		}
-		fmt.Println("Success")
+
 		http.Redirect(w, r, "/~", http.StatusFound)
 	} else {
 		cs.ErrorOutput = errors.New("Authentication token invalid")
