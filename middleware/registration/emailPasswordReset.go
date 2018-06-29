@@ -32,6 +32,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if emailInUse {
+			fmt.Println("\n\nWe are in\n\n")
 			token, err := uses.GenerateRandomString(32)
 			if err != nil {
 				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 37: Error generating token")
@@ -67,14 +68,6 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 			link := "http://ustart.today:5002/ResetPassword/?email=" + email + "&verifCode=" + token
 			r := uses.NewRequest([]string{email}, subject)
 			r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": "Conor", "link": link})
-
-			// msg := "From: " + from + "\n" + "To: " + email + "\n" + "Subject: UStart Password Reset\n\n" + mime + body
-
-			// err = smtp.SendMail("smtp.gmail.com:587", smtp.PlainAuth("", from, pass, "smtp.gmail.com"), from, []string{email}, []byte(msg))
-			// if err != nil {
-			// 	log.Printf("smtp error: %s", err)
-			// 	return
-
 		}
 	}
 }

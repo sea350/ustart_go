@@ -33,7 +33,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 	user, err := getUser.UserByEmail(client.Eclient, email)
 	if err != nil {
-		fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 39: User not found")
+		fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 34: User not found")
 		fmt.Println(err)
 		return
 	}
