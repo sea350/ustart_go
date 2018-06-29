@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	chat "github.com/sea350/ustart_go/middleware/chat"
-	event "github.com/sea350/ustart_go/middleware/event"
 	fail "github.com/sea350/ustart_go/middleware/fail"
 	inbox "github.com/sea350/ustart_go/middleware/inbox"
 	login "github.com/sea350/ustart_go/middleware/login"
@@ -134,7 +133,7 @@ func main() {
 	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
 
 	//EVENT
-	http.HandleFunc("/event", event.ViewEvent)
+	//http.HandleFunc("/event", event.ViewEvent)
 
 	//CHAT
 	http.HandleFunc("/ch/", chat.Page)
