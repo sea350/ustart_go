@@ -1,8 +1,8 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
+	"text/template"
 
 	chat "github.com/sea350/ustart_go/middleware/chat"
 	fail "github.com/sea350/ustart_go/middleware/fail"
