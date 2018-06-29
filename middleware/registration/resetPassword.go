@@ -6,29 +6,28 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gorilla/sessions"
 	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
 	bcrypt "golang.org/x/crypto/bcrypt"
 )
 
-var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
-
 //ResetPassword ... Reset's user's password
 //Requires the user's email address
 //Returns if the email failed to send
 func ResetPassword(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-	if test1 == nil {
-		fmt.Println(test1)
-		http.Redirect(w, r, "/~", http.StatusFound)
+	if test1 != nil {
+		fmt.Println("Test1:", test1)
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
 	}
 
 	email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
 	emailedToken := r.FormValue("verifCode")
+
+	fmt.Println("email", email)
 
 	user, err := getUser.UserByEmail(client.Eclient, email)
 	if err != nil {
@@ -59,21 +58,21 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 57: Error resetting password")
 				fmt.Println(err)
 				return
-			} else {
-				err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
-				if err != nil {
-					fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 63: Unable to remove authentication code")
-					fmt.Println(err)
-				}
+			}
+			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
+			if err != nil {
+				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 63: Unable to remove authentication code")
+				fmt.Println(err)
+			}
 
-				err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
-				if err != nil {
-					fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 69: Unable to remove authentication code time")
-					fmt.Println(err)
-				}
+			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
+			if err != nil {
+				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 69: Unable to remove authentication code time")
+				fmt.Println(err)
 			}
 		}
 
+		fmt.Println("Success!")
 	}
 	cs := client.ClientSide{ErrorStatus: false}
 	client.RenderSidebar(w, r, "templateNoUser2")
