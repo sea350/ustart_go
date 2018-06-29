@@ -16,6 +16,7 @@ import (
 //Requires the user's email address
 //Returns if the email failed to send
 func ResetPassword(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
@@ -28,6 +29,8 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	emailedToken := r.FormValue("verifCode")
 
 	fmt.Println("email", email)
+	fmt.Println("password:", r.FormValue("password"))
+	fmt.Println("Verification:", emailedToken)
 
 	user, err := getUser.UserByEmail(client.Eclient, email)
 	if err != nil {
@@ -39,7 +42,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	// If the time since authentication code was input is less than 1 hour
 	if time.Since(user.AuthenticationCodeTime) < (time.Second * 3600) {
 		if emailedToken == user.AuthenticationCode {
-			newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("newpass")), 10)
+			newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
 			if err != nil {
 				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 40: Error generating password")
 				fmt.Println(err)
