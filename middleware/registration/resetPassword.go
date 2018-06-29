@@ -16,11 +16,10 @@ import (
 //Requires the user's email address
 //Returns if the email failed to send
 func ResetPassword(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
-		fmt.Println(test1)
+		fmt.Println("Test1:", test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
