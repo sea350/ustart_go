@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 
 	chat "github.com/sea350/ustart_go/middleware/chat"
@@ -18,6 +19,7 @@ import (
 var currentPort = "5002"
 
 func main() {
+	flag.Parse()
 	/*
 		Lines 18-19 handle the static file locating
 		If we wanted to reorganize file/folder locations, this is one of 3 things that would have to change
@@ -131,11 +133,9 @@ func main() {
 	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
 
 	//CHAT
-	http.HandleFunc("/ch/", chat.Page)
 
-	hh := chat.NewHub()
-	router := http.NewServeMux()
-	router.Handle("/ws", chat.WsHandler{H: hh})
+	http.HandleFunc("/ch/", chat.Page)
+	http.HandleFunc("/ws", chat.HandleConnections)
 
 	http.ListenAndServe(":"+currentPort, nil)
 }

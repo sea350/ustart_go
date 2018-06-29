@@ -38,8 +38,6 @@ func (c *Connection) writer(wg *sync.WaitGroup, wsConn *websocket.Conn) {
 	}
 }
 
-var upgrader = &websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
-
 //WsHandler ... such strong hands
 type WsHandler struct {
 	H *Hub
