@@ -16,6 +16,12 @@ type ProjectInfo struct {
 	Visible   bool   `json:"Visible"`
 }
 
+//EventInfo ... event info
+type EventInfo struct {
+	EventID string `json:"EventID"`
+	Visible bool   `json:"Visible"`
+}
+
 //Request ... uhm
 type Request struct {
 	SenderID  string    `json:"UserID"`
@@ -97,5 +103,5 @@ type User struct {
 	LoginWarnings          []LoginWarning `json:"LoginWarnings"`
 	AuthenticationCode     string         `json:"AuthenticationCode"`
 	AuthenticationCodeTime time.Time      `json:"AuthenticationCodeTime"`
-	//UsrEvents          []Events       `json:"UsrEvents"`	to be implemented later in the code
+	UsrEvents              []EventInfo    `json:"UsrEvents"`
 }

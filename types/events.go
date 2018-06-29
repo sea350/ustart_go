@@ -40,7 +40,7 @@ type EventMembers struct {
 
 //Events ... Event relevant data
 type Events struct {
-	//Host              User              `json:"Host"` to be implemented later in the code
+	//Host              User(implemented in some way)              `json:"Host"` to be implemented later in the code
 	Name              string            `json:"Name"`
 	Tags              string            `json:"Tags"`
 	URLName           string            `json:"URLName"`
