@@ -103,5 +103,5 @@ type User struct {
 	LoginWarnings          []LoginWarning `json:"LoginWarnings"`
 	AuthenticationCode     string         `json:"AuthenticationCode"`
 	AuthenticationCodeTime time.Time      `json:"AuthenticationCodeTime"`
-	UsrEvents              []EventInfo    `json:"UsrEvents"`
+	Events                 []EventInfo    `json:"Events"`
 }

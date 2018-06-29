@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"sync"
 
@@ -48,7 +48,7 @@ type WsHandler struct {
 func (wsh WsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	wsConn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Printf("error upgrading %s", err)
+		fmt.Printf("error upgrading %s", err)
 		return
 	}
 	c := &Connection{send: make(chan []byte, 256), h: wsh.H}
