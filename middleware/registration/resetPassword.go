@@ -72,10 +72,11 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 69: Unable to remove authentication code time")
 				fmt.Println(err)
 			}
+
+			http.Redirect(w, r, "/~", http.StatusFound)
 		}
 
 		fmt.Println("Success!")
-		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 	cs := client.ClientSide{ErrorStatus: false}
 	client.RenderSidebar(w, r, "templateNoUser2")
