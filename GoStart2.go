@@ -135,7 +135,9 @@ func main() {
 
 	hh := chat.NewHub()
 	router := http.NewServeMux()
-	router.Handle("/ch/", chat.Page(template.Must(template.ParseFiles("/ustart/ustart_front/cuzsteventoldmeto.html"))))
+	router.Handle("/ch/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		template.Must(template.ParseFiles("/ustart/ustart_front/cuzsteventoldmeto.html")).Execute(w, r)
+	}))
 	router.Handle("/ws", chat.WsHandler{H: hh})
 
 	http.ListenAndServe(":"+currentPort, nil)
