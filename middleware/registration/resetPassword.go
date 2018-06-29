@@ -19,14 +19,12 @@ var store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 //Requires the user's email address
 //Returns if the email failed to send
 func ResetPassword(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Reset password connected 1")
 	r.ParseForm()
 	session, _ := store.Get(r, "session_please")
-	test1, errr := session.Values["DocID"]
-	fmt.Println(errr)
+	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
-		http.Redirect(w, r, "/profile/jyang", http.StatusFound)
+		http.Redirect(w, r, "/~", http.StatusFound)
 	}
 
 	email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
@@ -77,7 +75,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-	fmt.Println("End of password reset reached")
 	cs := client.ClientSide{ErrorStatus: false}
 	client.RenderSidebar(w, r, "templateNoUser2")
 	client.RenderTemplate(w, r, "reset-new-pass", cs)
