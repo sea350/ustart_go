@@ -44,6 +44,8 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.FormValue("password"))
 	fmt.Println(time.Since(user.AuthenticationCodeTime) < (time.Second * 3600))
 	fmt.Println(emailedToken == user.AuthenticationCode)
+	fmt.Println("emailed token", emailedToken)
+	fmt.Println("user code", user.AuthenticationCode)
 	fmt.Println(r.FormValue("password") != ``)
 	// If the time since authentication code was input is less than 1 hour
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
