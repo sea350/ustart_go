@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"net/http"
 
 	chat "github.com/sea350/ustart_go/middleware/chat"
@@ -131,14 +132,16 @@ func main() {
 	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
 
 	//CHAT
-	http.HandleFunc("/ch/", chat.Page)
-	http.HandleFunc("/ws", chat.WsHandlerFunc)
 
-	/*
-		hh := chat.NewHub()
-		router := http.NewServeMux()
-		router.Handle("/ws", chat.WsHandler{H: hh})
-	*/
+	// http.HandleFunc("/ch/", chat.Page)
+	// http.HandleFunc("/ws", chat.WsHandlerFunc)
+
+	hh := chat.NewHub()
+	router := http.NewServeMux()
+	router.Handle("/ch/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		template.Must(template.ParseFiles("/ustart/ustart_front/cuzsteventoldmeto.html")).Execute(w, r)
+	}))
+	router.Handle("/ws", chat.WsHandler{H: hh})
 
 	http.ListenAndServe(":"+currentPort, nil)
 }
