@@ -11,4 +11,5 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	cs := client.ClientSide{}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderTemplate(w, r, "cuzsteventoldmeto", cs)
+	go handleMessages()
 }
