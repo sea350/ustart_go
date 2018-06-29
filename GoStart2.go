@@ -3,7 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/sea350/ustart_go/middleware/fail"
+	chat "github.com/sea350/ustart_go/middleware/chat"
+	fail "github.com/sea350/ustart_go/middleware/fail"
 	inbox "github.com/sea350/ustart_go/middleware/inbox"
 	login "github.com/sea350/ustart_go/middleware/login"
 	profile "github.com/sea350/ustart_go/middleware/profile"
@@ -128,6 +129,13 @@ func main() {
 	//GENERIC LOAD COMMENTS
 	http.HandleFunc("/AjaxLoadComments/", profile.AjaxLoadComments)
 	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
+
+	//CHAT
+	http.HandleFunc("/ch/", chat.Page)
+
+	hh := chat.NewHub()
+	router := http.NewServeMux()
+	router.Handle("/ws", chat.WsHandler{H: hh})
 
 	http.ListenAndServe(":"+currentPort, nil)
 }
