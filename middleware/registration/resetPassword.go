@@ -41,12 +41,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(r.FormValue("password"))
-	fmt.Println(time.Since(user.AuthenticationCodeTime) < (time.Second * 3600))
-	fmt.Println(emailedToken == user.AuthenticationCode)
-	fmt.Println("emailed token", emailedToken)
-	fmt.Println("user code", user.AuthenticationCode)
-	fmt.Println(r.FormValue("password") != ``)
 	// If the time since authentication code was input is less than 1 hour
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
 		newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
@@ -55,7 +49,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(newHashedPass)
 		userID, err := getUser.UserIDByEmail(client.Eclient, email)
 		if err != nil {
 			fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 50: User not found")
@@ -81,14 +74,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
-		user, err := getUser.UserByEmail(client.Eclient, email)
-		if err != nil {
-			fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 34: User not found")
-			fmt.Println(err)
-			return
-		}
-		fmt.Println(user.Password)
-		fmt.Println("Success")
 		http.Redirect(w, r, "/~", http.StatusFound)
 	} else {
 		cs.ErrorOutput = errors.New("Authentication token invalid")
