@@ -135,6 +135,8 @@ func main() {
 
 	//EVENT
 	http.HandleFunc("/Event/", event.ViewEvent)
+	http.HandleFunc("/StartEvent/", event.StartEvent)
+	http.HandleFunc("/AddEvent/", event.AddEvent)
 
 	//CHAT
 	http.HandleFunc("/ch/", chat.Page)
