@@ -45,6 +45,7 @@ type Events struct {
 	//Host              User(implemented in some way)              `json:"Host"` to be implemented later in the code
 	Name              string            `json:"Name"`
 	Tags              string            `json:"Tags"`
+	Category          string            `json:"Category"`
 	URLName           string            `json:"URLName"`
 	Description       []string          `json:"Description"`
 	Members           []EventMembers    `json:"Members"`
