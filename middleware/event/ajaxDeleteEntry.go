@@ -21,7 +21,7 @@ func AjaxDeleteEventEntry(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	eventID := r.FormValue("eventID") //This needs to be made
+	eventID := r.FormValue("eventID") //This needs to be made on the front end side
 	entryID := r.FormValue("entryID")
 
 	entry, err := get.EntryByID(client.Eclient, entryID)
