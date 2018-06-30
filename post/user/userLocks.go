@@ -17,6 +17,9 @@ var FollowLock sync.Mutex
 //ProjectLock ...
 var ProjectLock sync.Mutex
 
+//EventLock ...
+var EventLock sync.Mutex
+
 //BlockLock ...
 var BlockLock sync.Mutex
 
