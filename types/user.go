@@ -98,6 +98,8 @@ type User struct {
 	ReceivedCollReq        []string       `json:"ReceivedCollReq"`
 	SentProjReq            []string       `json:"SentProjReq"`
 	ReceivedProjReq        []string       `json:"ReceivedProjReq"`
+	SentEventReq           []string       `json:"SentEventReq"`
+	ReceivedEventReq       []string       `json:"ReceivedEventReq"`
 	FirstLogin             bool           `json:"FirstLogin"`
 	UserWidgets            []string       `json:"UserWidgets"`
 	LoginWarnings          []LoginWarning `json:"LoginWarnings"`
