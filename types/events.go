@@ -8,6 +8,7 @@ import (
 //creator to cancel, visibility boolean, widgets, get/post, attending/invited/not going, members list and guest list
 //Have it displayed on the profile
 //People can search for the event based on title, url, tags, and PERSON HOSTING THE EVENT!
+//Projects can host events and guests/members do the relation (projects can host and be the guest)
 
 //EventPrivileges ... Edit privileges for the Event Members
 type EventPrivileges struct {
@@ -24,9 +25,10 @@ type EventPrivileges struct {
 
 //EventGuests ... Guest relevant data, people who have been invited to attend the event
 type EventGuests struct {
-	GuestID string `json:"GuestID"`
-	Status  int    `json:"Status"` //Marks whether they are invited/going/not going, 0 for invited, 1 for going, 2 for not
-	Visible bool   `json:"Visible"`
+	GuestID        string        `json:"GuestID"`
+	Representative []EventGuests `json:"Representative"` //For single user, nil by default
+	Status         int           `json:"Status"`         //Marks whether they are invited/going/not going, 0 for invited, 1 for going, 2 for not
+	Visible        bool          `json:"Visible"`
 }
 
 //EventMembers ... Member relevant data, who can modify the event page
@@ -61,5 +63,7 @@ type Events struct {
 	Banner            string            `json:"Banner"`
 	MemberReqSent     []string          `json:"MemberReqSent"`
 	MemberReqReceived []string          `json:"MemberReqReceived"`
+	GuestReqSent      []string          `json:"GuestReqSent"`
+	GuestReqReceived  []string          `json:"GuestReqReceived"`
 	PrivilegeProfiles []EventPrivileges `json:"PrivilegeProfiles"`
 }
