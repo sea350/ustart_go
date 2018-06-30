@@ -68,3 +68,20 @@ type ProjectAggregate struct {
 	Editable       bool           `json:"Editable"`
 	RequestAllowed bool           `json:"RequestAllowed"`
 }
+
+//EventSubWidgets ... data specific to each event being displayed on the events widget
+type EventSubWidgets struct {
+	Name   string `json:"Name"`
+	Link   string `json:"Link"`
+	Avatar string `json:"Avatar"`
+	ID     string `json:"ID"`
+}
+
+//EventAggregate ... a compiled struct of all relevant event data
+type EventAggregate struct {
+	DocID          string         `json:"DocID"`
+	EventData      Events         `json:"EventData"`
+	MemberData     []FloatingHead `json:"MemberData"`
+	Editable       bool           `json:"Editable"`
+	RequestAllowed bool           `json:"RequestAllowed"`
+}
