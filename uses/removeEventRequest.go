@@ -6,13 +6,13 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//RemoveEventRequest ...
-func RemoveEventRequest(eclient *elastic.Client, eventID string, userID string) (int, error) {
+//RemoveGuestRequest ...
+func RemoveGuestRequest(eclient *elastic.Client, eventID string, userID string) (int, error) {
 	var newNumRequests int
 	err := userPost.DeleteSentEventReq(eclient, userID, eventID)
 	if err != nil {
 		return newNumRequests, err
 	}
-	newNumRequests, err = evntPost.DeleteGuestReqReceived(eclient, eventID, userID)
+	newNumRequests, err = evntPost.DeleteMemberReqReceived(eclient, eventID, userID)
 	return newNumRequests, err
 }
