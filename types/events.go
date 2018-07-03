@@ -62,6 +62,7 @@ type Events struct {
 	Avatar            string            `json:"Avatar"`
 	CroppedAvatar     string            `json:"CropAvatar"`
 	Banner            string            `json:"Banner"`
+	Visible           bool              `json:"Visible"`
 	MemberReqSent     []string          `json:"MemberReqSent"`
 	MemberReqReceived []string          `json:"MemberReqReceived"`
 	GuestReqSent      []string          `json:"GuestReqSent"`
