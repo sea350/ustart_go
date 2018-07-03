@@ -33,7 +33,7 @@ var h = hubAlt{
 	rooms:      make(map[string]map[*connection]bool),
 }
 
-func (h *hubAlt) run() {
+func (h *hubAlt) Run() {
 	for {
 		select {
 		case s := <-h.register:

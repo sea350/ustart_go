@@ -92,8 +92,8 @@ func (s *subscription) writePump() {
 	}
 }
 
-// serveWs handles websocket requests from the peer.
-func serveWs(w http.ResponseWriter, r *http.Request) {
+// ServeWs handles websocket requests from the peer.
+func ServeWs(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgraderAlt.Upgrade(w, r, nil)
 	vars := mux.Vars(r)
 	log.Println(vars["room"])
