@@ -52,7 +52,8 @@ type Events struct {
 	Guests            []EventGuests     `json:"Guests"`
 	EntryIDs          []string          `json:"EntryIDs"`
 	Location          LocStruct         `json:"Location"`
-	EventDate         time.Time         `json:"EventDate"`
+	EventDateStart    time.Time         `json:"EventDateStart"`
+	EventDateEnd      time.Time         `json:"EventDateEnd"`
 	CreationDate      time.Time         `json:"CreationDate"`
 	Widgets           []Widget          `json:"Widgets"`
 	Whitelist         []string          `json:"Whitelist"`
