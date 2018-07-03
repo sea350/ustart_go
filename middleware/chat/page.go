@@ -12,13 +12,13 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderTemplate(w, r, "cuzsteventoldmeto", cs)
 
-	var h = hubAlt{
-		broadcast:  make(chan messageAlt),
-		register:   make(chan subscription),
-		unregister: make(chan subscription),
-		rooms:      make(map[string]map[*connection]bool),
-	}
+	// var h = hubAlt{
+	// 	broadcast:  make(chan messageAlt),
+	// 	register:   make(chan subscription),
+	// 	unregister: make(chan subscription),
+	// 	rooms:      make(map[string]map[*connection]bool),
+	// }
 	// go handleMessages()
 	go ServeWs(w, r)
-	go h.Run()
+	// go h.Run()
 }
