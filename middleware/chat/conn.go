@@ -23,7 +23,7 @@ const (
 	maxMessageSize = 512
 )
 
-var upgrader = websocket.Upgrader{
+var upgraderAlt = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 }
@@ -94,7 +94,7 @@ func (s *subscription) writePump() {
 
 // serveWs handles websocket requests from the peer.
 func serveWs(w http.ResponseWriter, r *http.Request) {
-	ws, err := upgrader.Upgrade(w, r, nil)
+	ws, err := upgraderAlt.Upgrade(w, r, nil)
 	vars := mux.Vars(r)
 	log.Println(vars["room"])
 	if err != nil {
