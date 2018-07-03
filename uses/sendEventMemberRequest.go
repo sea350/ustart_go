@@ -7,8 +7,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//SendEventRequest ...
-func SendEventRequest(eclient *elastic.Client, eventID, userID string) error {
+//SendEventMemberRequest ...
+func SendEventMemberRequest(eclient *elastic.Client, eventID, userID string) error {
 	err := userPost.AppendSentEventReq(eclient, userID, eventID)
 	if err != nil {
 		return err
