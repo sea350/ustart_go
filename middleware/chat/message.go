@@ -9,6 +9,7 @@ import (
 
 var clients = make(map[*websocket.Conn]bool) // connected clients
 var broadcast = make(chan Message)           // broadcast channel
+var channels = make(map[string](chan Message))
 
 // Configure the upgrader
 var upgrader = websocket.Upgrader{
@@ -17,7 +18,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-// Define our message object
+//Message ... Define our message object
 type Message struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
@@ -33,7 +34,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 	// Make sure we close the connection when the function returns
 	defer ws.Close()
-
+	chatID := r.URL.Path[4:]
 	// Register our new client
 	clients[ws] = true
 
@@ -47,14 +48,14 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		// Send the newly received message to the broadcast channel
-		broadcast <- msg
+		channels[chatID] <- msg
 	}
 }
 
-func handleMessages() {
+func handleMessages(chatID string) {
 	for {
 		// Grab the next message from the broadcast channel
-		msg := <-broadcast
+		msg := <-channels[chatID]
 		// Send it out to every client that is currently connected
 		for client := range clients {
 			err := client.WriteJSON(msg)
