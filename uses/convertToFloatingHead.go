@@ -1,6 +1,7 @@
 package uses
 
 import (
+	getEvent "github.com/sea350/ustart_go/get/event"
 	getProject "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
@@ -43,8 +44,27 @@ func ConvertProjectToFloatingHead(eclient *elastic.Client, projectID string) (ty
 	head.Username = proj.URLName
 	head.DocID = projectID
 	head.Notifications = len(proj.MemberReqReceived)
-	head.Bio = proj.Description
 	head.Interface = proj.Tags
+
+	return head, err
+}
+
+//ConvertEventToFloatingHead ... pulls latest version of user and converts relevent data into floating head
+func ConvertEventToFloatingHead(eclient *elastic.Client, eventID string) (types.FloatingHead, error) {
+	var head types.FloatingHead
+
+	evnt, err := getEvent.EventByID(eclient, eventID)
+	if err != nil {
+		panic(err)
+	}
+
+	head.FirstName = evnt.Name
+	//head.Bio = evnt.Description Need to address this since this is a string!!!
+	head.Image = evnt.Avatar
+	head.Username = evnt.URLName
+	head.DocID = eventID
+	head.Notifications = len(evnt.MemberReqReceived)
+	head.Interface = evnt.Tags
 
 	return head, err
 }
