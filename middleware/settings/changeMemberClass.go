@@ -2,8 +2,8 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
-	"strconv"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -39,20 +39,27 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if member.MemberID == memberID {
-				rankInt, err := strconv.Atoi(newRank)
-				if err != nil {
-					fmt.Println("error: middleware/project/changememberclass line 38")
-					fmt.Println(err)
-				} else if member.Role != 0 && rankInt != 0 {
-					project.Members[i].Role = rankInt
+				switch newRank {
+				case "Moderator":
+					project.Members[i].Role = 1
+					project.Members[i].Title = "Admin"
+
+				default:
+					project.Members[i].Role = 2
+					project.Members[i].Title = "Member"
+				}
+
+				if member.Role != 0 && newRank != "Creator" {
+					err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
+				} else {
+					log.Println("You do not have permission to change member class of this project")
 				}
 			}
-		}
-		if isCreator {
-			err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
+
 			if err != nil {
 				fmt.Println("error: middleware/project/changememberclass line 49")
 				fmt.Println(err)
+
 			}
 		}
 	}
