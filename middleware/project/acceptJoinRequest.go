@@ -36,10 +36,19 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
+	theRole := r.FormValue("role")
+
 	var newMember types.Member
+	switch theRole {
+	case "Moderator":
+		newMember.Title = "Admin"
+		newMember.Role = 1
+	default:
+		newMember.Title = "Member"
+		newMember.Role = 2
+	}
+
 	newMember.MemberID = newMemberID
-	newMember.Role = 2
-	newMember.Title = "Member"
 	newMember.Visible = true
 	newMember.JoinDate = time.Now()
 

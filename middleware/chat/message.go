@@ -1,15 +1,16 @@
 package chat
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	"fmt"
 
 	"github.com/gorilla/websocket"
 )
 
 var clients = make(map[*websocket.Conn]bool) // connected clients
-var broadcast = make(chan Message)           // broadcast channel
+var chatroom = make(map[string](map[*websocket.Conn]bool))
+var broadcast = make(chan Message) // broadcast channel
 var channels = make(map[string](chan Message))
 
 // Configure the upgrader
@@ -37,7 +38,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 	chatID := r.URL.Path[4:]
 	// Register our new client
-	clients[ws] = true
+	chatroom[chatID][ws] = true
 
 	fmt.Println("debug text: middleware/chat/message line 41")
 	fmt.Println(chatID)
@@ -47,26 +48,33 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			//log.Printf("error: %v", err)
+			log.Printf("error: %v", err)
 			delete(clients, ws)
 			break
 		}
 		// Send the newly received message to the broadcast channel
-		channels[chatID] <- msg
+		fmt.Println("debug text: middleware/chat/message line 55")
+		fmt.Println(msg)
+		broadcast <- msg
+		fmt.Println("message sent")
 	}
 }
 
 func handleMessages(chatID string) {
+	fmt.Println("handle messages reached")
 	for {
 		// Grab the next message from the broadcast channel
-		msg := <-channels[chatID]
+		msg := <-broadcast
 		// Send it out to every client that is currently connected
-		for client := range clients {
+		fmt.Println("debug text: middleware/chat/message line 67")
+		fmt.Println(msg)
+		fmt.Println("message received")
+		for client := range chatroom[chatID] {
 			err := client.WriteJSON(msg)
 			if err != nil {
-				//log.Printf("error: %v", err)
+				log.Printf("error: %v", err)
 				client.Close()
-				delete(clients, client)
+				delete(chatroom[chatID], client)
 			}
 		}
 	}
