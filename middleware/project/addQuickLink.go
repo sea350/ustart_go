@@ -1,7 +1,7 @@
 package project
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/project"
@@ -23,16 +23,16 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/project/addQuickLink line 25")
+		log.Println("Error: middleware/project/addQuickLink line 24")
+		log.Println(err)
 	}
 
 	proj.QuickLinks = append(proj.QuickLinks, types.Link{Name: r.FormValue("projectLinkDesc"), URL: r.FormValue("projectLink")})
 
 	err = post.UpdateProject(client.Eclient, ID, "QuickLinks", proj.QuickLinks)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/project/addQuickLink line 33")
+		log.Println("Error: middleware/project/addQuickLink line 33")
+		log.Println(err)
 	}
 
 }

@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
+	"log"
 	"math"
 
 	getEntry "github.com/sea350/ustart_go/get/entry"
@@ -108,7 +109,8 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	// SendVerificationEmail(email)
 	token, err := GenerateRandomString(32)
 	if err != nil {
-		fmt.Println(err)
+		log.Panicln("Error: uses/userUses line 110")
+		log.Println(err)
 	}
 	newUsr.AuthenticationCode = token
 	subject := "Your verification link"

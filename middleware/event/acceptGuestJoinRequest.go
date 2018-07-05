@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -24,16 +25,15 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	newGuestID := r.FormValue("userID")
 
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newGuestID)
-
 	if err != nil {
-		fmt.Println("err middleware/event/acceptguestjoinrequest line 26")
-		fmt.Println(err)
+		log.Println("Error: middleware/event/acceptGuestJoinRequest line 27")
+		log.Println(err)
 	}
 
 	err = userPost.AppendEvent(client.Eclient, newGuestID, types.EventInfo{EventID: evntID, Visible: true})
 	if err != nil {
-		fmt.Println("err middleware/event/acceptguestjoinrequest line 33")
-		fmt.Println(err)
+		log.Println("Error: middleware/event/acceptGuestJoinRequest line 33")
+		log.Println(err)
 	}
 
 	var newGuest types.EventGuests
@@ -43,8 +43,8 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	err = evntPost.AppendGuest(client.Eclient, evntID, newGuest)
 	if err != nil {
-		fmt.Println("err middleware/event/acceptguestjoinrequest line 44")
-		fmt.Println(err)
+		log.Println("Error: middleware/event/acceptGuestJoinRequest line 43")
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

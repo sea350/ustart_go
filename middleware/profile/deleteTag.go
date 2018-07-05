@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -23,23 +23,20 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/profile/deleteTag line 25")
+		log.Println("Error: middleware/profile/deleteTag line 25")
+		log.Println(err)
 	}
 
 	deleteTag := r.FormValue("UNKNOWN")
 
-	fmt.Println("URL PATH:", r.URL.Path[10:])
 	if ID == r.URL.Path[10:] {
-		fmt.Println("URL PATH:", r.URL.Path[10:])
-
 		var newArr []string
 
 		if len(usr.Tags) == 1 {
 			err := post.UpdateUser(client.Eclient, ID, "Tags", newArr)
 			if err != nil {
-				fmt.Println(err)
-				fmt.Println("this is an err: middleware/profile/deleteTag line 35")
+				log.Println("Error: middleware/profile/deleteTag line 37")
+				log.Println(err)
 			}
 			return
 		}
@@ -49,14 +46,13 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 			if tag == deleteTag {
 				target = index
-				fmt.Println(target)
 				break
 			}
 		}
 
 		if target == -1 {
-			fmt.Println("deleted object not found")
-			fmt.Println("this is an err, middleware/profile/deleteTag line 54")
+			log.Println("Error: middleware/profile/deleteTag line 54")
+			log.Println("Deleted object not found")
 			newArr = usr.Tags
 		} else if (target + 1) < len(usr.Tags) {
 			newArr = append(usr.Tags[:target], usr.Tags[(target+1):]...)
@@ -66,8 +62,8 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 		err = post.UpdateUser(client.Eclient, ID, "Tags", newArr)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an err: middleware/profile/deleteTag line 31")
+			log.Println("Error: middleware/profile/deleteTag line 64")
+			log.Println(err)
 		}
 	}
 }

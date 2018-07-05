@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -25,24 +25,22 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	userstruct, _, followbool, err5 := uses.UserPage(client.Eclient, pageUserName, test1.(string))
 	if err5 != nil {
-		fmt.Println("this is an error (ViewProfile.go: 29)")
-		fmt.Println(err5)
+		log.Println("Error: middleware/profile/ViewProfile line 26")
+		log.Println(err5)
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
 
 	widgets, errors := uses.LoadWidgets(client.Eclient, userstruct.UserWidgets)
-
 	if len(errors) != 0 {
-		fmt.Println("this is an error (ViewProfile.go: 35)")
-		fmt.Println("one or more errors have occured in loading widgets")
-		fmt.Println(errors)
+		log.Println("Error: middleware/profile/ViewProfile line 34: one or more errors have occured in loading widgets")
+		log.Println(errors)
 	}
 
 	jEntries, err5 := uses.LoadEntries(client.Eclient, userstruct.EntryIDs)
 	if err5 != nil {
-		fmt.Println("this is an error (ViewProfile.go: 41)")
-		fmt.Println(err5)
+		log.Println("Error: middleware/profile/ViewProfile line 40")
+		log.Println(err5)
 	}
 	followingState := "no"
 	if followbool == true {
@@ -78,29 +76,29 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	viewingDOC, errID := get.IDByUsername(client.Eclient, strings.ToLower(pageUserName))
 	if errID != nil {
-		fmt.Println("this is an error (ViewProfile.go: 79)")
-		fmt.Println(errID)
+		log.Println("Error: middleware/profile/ViewProfile line 80")
+		log.Println(errID)
 	}
 
 	temp := string(userstruct.Description)
 
 	numberFollowing, errnF := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), true)
 	if errnF != nil {
-		fmt.Println("this is an error (ViewProfile.go: 87)")
-		fmt.Println(errnF)
+		log.Println("Error: middleware/profile/ViewProfile line 88")
+		log.Println(errnF)
 	}
 	numberFollowers, errnF2 := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), false)
 	if errnF2 != nil {
-		fmt.Println("this is an error (ViewProfile.go: 92)")
-		fmt.Println(errnF2)
+		log.Println("Error: middleware/profile/ViewProfile line 93")
+		log.Println(errnF2)
 	}
 
 	var projHeads []types.FloatingHead
 	for _, projID := range userstruct.Projects {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projID.ProjectID)
 		if err != nil {
-			fmt.Println("this is an error (ViewProfile.go: 97)")
-			fmt.Println(err)
+			log.Println("Error: middleware/profile/ViewProfile line 101")
+			log.Println(err)
 			continue
 		}
 		head.Followed = projID.Visible

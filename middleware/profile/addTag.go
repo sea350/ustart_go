@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -29,7 +29,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 
 	err := post.UpdateUser(client.Eclient, ID, "Tags", tags)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/profile/addTag line 31")
+		log.Println("Error: middleware/profile/addTag line 30")
+		log.Println(err)
 	}
 }

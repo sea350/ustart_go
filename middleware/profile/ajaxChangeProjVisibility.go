@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -23,8 +23,8 @@ func AjaxChangeProjVisibility(w http.ResponseWriter, r *http.Request) {
 
 	usr, err := get.UserByID(client.Eclient, ID.(string))
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("err: middleware/profile/AjaxChangeProjVisibility line 27")
+		log.Println("Error: middleware/profile/AjaxChangeProjVisibility line 24")
+		log.Println(err)
 		return
 	}
 
@@ -40,7 +40,7 @@ func AjaxChangeProjVisibility(w http.ResponseWriter, r *http.Request) {
 
 	err = post.UpdateUser(client.Eclient, ID.(string), "Projects", usr.Projects)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/profile/addTag line 31")
+		log.Println("this is an err: middleware/profile/AjaxChangeProjVisibility line 41")
+		log.Println(err)
 	}
 }
