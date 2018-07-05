@@ -118,8 +118,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		"contentjuan":   "We received a request to reset your password for your Ustart Account. We would love to assist you!",
 		"contentdos":    "Simply click the button below to verify your account",
 		"contenttres":   "VERIFY ACCOUNT",
-		"contentquatro": "a new account",
-	})
+		"contentquatro": "a new account"})
 
 	newUsr.Password = password
 	newUsr.University = school
