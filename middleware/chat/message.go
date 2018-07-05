@@ -24,6 +24,7 @@ type Message struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 	Message  string `json:"message"`
+	ChatID   string `json:"chatID"`
 }
 
 //HandleConnections ...
@@ -62,22 +63,22 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleMessages(chatID string) {
+func handleMessages() {
 	for {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
 		fmt.Println("debug text: middleware/chat/message line 67")
-		fmt.Println("channel #" + chatID)
+		fmt.Println("channel #" + msg.ChatID)
 		fmt.Printf("message: %v \n", msg)
-		fmt.Println(chatroom[chatID])
+		fmt.Println(chatroom[msg.ChatID])
 
-		for client := range chatroom[chatID] {
+		for client := range chatroom[msg.ChatID] {
 			err := client.WriteJSON(msg)
 			if err != nil {
 				log.Printf("error: %v", err)
 				client.Close()
-				delete(chatroom[chatID], client)
+				delete(chatroom[msg.ChatID], client)
 			}
 		}
 	}
