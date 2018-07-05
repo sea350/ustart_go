@@ -1,20 +1,19 @@
-package project
+package event
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
-	projPost "github.com/sea350/ustart_go/post/project"
+	evntPost "github.com/sea350/ustart_go/post/event"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//AcceptJoinRequest ...
-func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
+//AcceptMemberJoinRequest ...
+func AcceptMemberJoinRequest(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
@@ -22,24 +21,23 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projID := r.FormValue("projectID")
+	evntID := r.FormValue("eventID")
 	newMemberID := r.FormValue("userID")
 
-	newNumRequests, err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
+	newNumRequests, err := uses.RemoveEventRequest(client.Eclient, evntID, newMemberID)
 	if err != nil {
-		log.Println("Error: middleware/project/acceptJoinRequest line 24")
-		log.Println(err)
+		fmt.Println("err middleware/event/acceptmemberjoinrequest line 27")
+		fmt.Println(err)
 	}
 
-	err = userPost.AppendProject(client.Eclient, newMemberID, types.ProjectInfo{ProjectID: projID, Visible: true})
+	err = userPost.AppendEvent(client.Eclient, newMemberID, types.EventInfo{EventID: evntID, Visible: true})
 	if err != nil {
-		log.Println("Error: middleware/project/acceptJoinRequest line 34")
-		log.Println(err)
+		fmt.Println("err middleware/event/acceptmemberjoinrequest line 33")
+		fmt.Println(err)
 	}
 
 	theRole := r.FormValue("role")
-
-	var newMember types.Member
+	var newMember types.EventMembers
 	switch theRole {
 	case "Moderator":
 		newMember.Title = "Admin"
@@ -48,15 +46,14 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		newMember.Title = "Member"
 		newMember.Role = 2
 	}
-
 	newMember.MemberID = newMemberID
 	newMember.Visible = true
 	newMember.JoinDate = time.Now()
 
-	err = projPost.AppendMember(client.Eclient, projID, newMember)
+	err = evntPost.AppendMember(client.Eclient, evntID, newMember)
 	if err != nil {
-		log.Println("Error: middleware/project/acceptJoinRequest line 47")
-		log.Println(err)
+		fmt.Println("err middleware/event/acceptmemberjoinrequest line 46")
+		fmt.Println(err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

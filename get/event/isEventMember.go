@@ -5,8 +5,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//isEventMember ...
-func isEventMember(eclient *elastic.Client, memberID string, event types.Events) bool {
+//IsEventMember ...
+func IsEventMember(eclient *elastic.Client, memberID string, event types.Events) bool {
 	if len(event.Members) < 1 {
 		return false
 	}
