@@ -1,7 +1,7 @@
 package uses
 
 import (
-	"fmt"
+	"log"
 
 	getProj "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -15,32 +15,35 @@ import (
 //AddWidget ...
 //Adds a new widget to the UserWidgets array
 func AddWidget(eclient *elastic.Client, docID string, newWidget types.Widget, isProject bool) error {
-
 	if isProject {
 		proj, err := getProj.ProjectByID(eclient, docID)
-
 		if err != nil {
-			fmt.Println("this is an err uses/addwidget 37")
-			fmt.Println(err)
+			log.Println("Error: uses/addWidget line 19")
+			log.Println(err)
 		}
+
 		newWidget.Position = len(proj.Widgets)
 		widgetID, err := post.IndexWidget(eclient, newWidget)
 		if err != nil {
-			panic(err)
+			log.Println("Error: uses/addWidget line 26")
+			log.Println(err)
 		}
+
 		updatedWidgets := append(proj.Widgets, widgetID)
 		updateErr := postProj.UpdateProject(eclient, docID, "Widgets", updatedWidgets)
 		return updateErr
 	}
-	usr, err := getUser.UserByID(eclient, docID)
 
+	usr, err := getUser.UserByID(eclient, docID)
 	if err != nil {
-		panic(err)
+		log.Println("Error: uses/addWidget line 37")
+		log.Panicln(err)
 	}
 	newWidget.Position = len(usr.UserWidgets)
 	widgetID, err := post.IndexWidget(eclient, newWidget)
 	if err != nil {
-		panic(err)
+		log.Panicln("Error: uses/addWidget line 43")
+		log.Panicln(err)
 	}
 
 	updatedWidgets := append(usr.UserWidgets, widgetID)

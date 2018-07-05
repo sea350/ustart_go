@@ -1,7 +1,7 @@
 package event
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/event"
@@ -22,15 +22,15 @@ func AddEventQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("middleware/event/addQuickLink line 24")
+		log.Println("middleware/event/addQuickLink line 24")
+		log.Println(err)
 	}
 
 	evnt.QuickLinks = append(evnt.QuickLinks, types.Link{Name: r.FormValue("eventLinkDesc"), URL: r.FormValue("eventLink")})
 
 	err = post.UpdateEvent(client.Eclient, ID, "QuickLinks", evnt.QuickLinks)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("middleware/event/addQuickLink.go line 32")
+		log.Println("middleware/event/addQuickLink line 32")
+		log.Println(err)
 	}
 }

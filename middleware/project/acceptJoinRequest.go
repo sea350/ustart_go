@@ -2,6 +2,7 @@ package project
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -26,14 +27,14 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	newNumRequests, err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
 	if err != nil {
-		fmt.Println("err middleware/project/acceptjoinrequest line 27")
-		fmt.Println(err)
+		log.Println("Error: middleware/project/acceptJoinRequest line 24")
+		log.Println(err)
 	}
 
 	err = userPost.AppendProject(client.Eclient, newMemberID, types.ProjectInfo{ProjectID: projID, Visible: true})
 	if err != nil {
-		fmt.Println("err middleware/project/acceptjoinrequest line 34")
-		fmt.Println(err)
+		log.Println("Error: middleware/project/acceptJoinRequest line 34")
+		log.Println(err)
 	}
 
 	var newMember types.Member
@@ -45,8 +46,8 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	err = projPost.AppendMember(client.Eclient, projID, newMember)
 	if err != nil {
-		fmt.Println("err middleware/project/acceptjoinrequest line 48")
-		fmt.Println(err)
+		log.Println("Error: middleware/project/acceptJoinRequest line 47")
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

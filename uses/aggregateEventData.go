@@ -1,7 +1,7 @@
 package uses
 
 import (
-	"fmt"
+	"log"
 
 	getEvent "github.com/sea350/ustart_go/get/event"
 	types "github.com/sea350/ustart_go/types"
@@ -16,15 +16,15 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 
 	data, err := getEvent.EventByURL(eclient, url)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("error aggregateEventData.go 17")
+		log.Println("Error: uses/aggregateEventData line 18")
+		log.Println(err)
 	}
 	eventData.EventData = data
 
 	id, err := getEvent.EventIDByURL(eclient, url)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("error aggregateEventData.go 24")
+		log.Println("Error: uses/aggregateEventData line 25")
+		log.Println(err)
 	}
 	eventData.DocID = id
 
@@ -35,8 +35,8 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		id := member.MemberID
 		mem, err := ConvertUserToFloatingHead(eclient, id)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("error aggregateEventData.go 36")
+			log.Println("Error: uses/aggregateEventData line 37")
+			log.Println(err)
 		}
 		mem.Classification = member.Role
 		eventData.MemberData = append(eventData.MemberData, mem)
