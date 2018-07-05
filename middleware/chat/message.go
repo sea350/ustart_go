@@ -38,7 +38,9 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 	chatID := r.URL.Path[4:]
 	// Register our new client
-	chatroom[chatID][ws] = true
+	temp := make(map[*websocket.Conn]bool)
+	temp[ws] = true
+	chatroom[chatID] = temp
 
 	fmt.Println("debug text: middleware/chat/message line 41")
 	fmt.Println(chatID)
