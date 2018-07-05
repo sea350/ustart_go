@@ -70,6 +70,7 @@ func handleMessages(chatID string) {
 		fmt.Println("debug text: middleware/chat/message line 67")
 		fmt.Println("channel #" + chatID)
 		fmt.Printf("message: %v \n", msg)
+		fmt.Println(chatroom[chatID])
 
 		for client := range chatroom[chatID] {
 			err := client.WriteJSON(msg)

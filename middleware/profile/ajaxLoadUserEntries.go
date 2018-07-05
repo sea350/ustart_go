@@ -3,6 +3,7 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -23,19 +24,19 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 	wallID := r.FormValue("userID")
 	user, err := get.UserByID(client.Eclient, wallID)
 	if err != nil {
-		fmt.Println("err middleware/profile/ajaxloaduserentries line 25")
-		fmt.Println(err)
+		log.Println("Error: middleware/profile/ajaxLoadUserEntries line 24")
+		log.Println(err)
 	}
 	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs)
 	if err != nil {
-		fmt.Println("err middleware/profile/ajaxloaduserentries line 30")
-		fmt.Println(err)
+		log.Println("Error: middleware/profile/ajaxLoadUserEntries line 29")
+		log.Println(err)
 	}
 
 	data, err := json.Marshal(entries)
 	if err != nil {
-		fmt.Println("err middleware/profile/ajaxloaduserentries line 37")
-		fmt.Println(err)
+		log.Println("Error: middleware/profile/ajaxLoadUserEntries line 35")
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, string(data))

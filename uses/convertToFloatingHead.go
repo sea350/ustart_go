@@ -59,7 +59,7 @@ func ConvertEventToFloatingHead(eclient *elastic.Client, eventID string) (types.
 	}
 
 	head.FirstName = evnt.Name
-	//head.Bio = evnt.Description Need to address this since this is a string!!!
+	head.Bio = evnt.Description
 	head.Image = evnt.Avatar
 	head.Username = evnt.URLName
 	head.DocID = eventID

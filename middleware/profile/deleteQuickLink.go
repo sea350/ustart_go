@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -24,8 +24,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/profile/deleteQuickLink line 25")
+		log.Println("Error: middleware/profile/deleteQuickLink line 25")
+		log.Println(err)
 	}
 
 	deleteTitle := r.FormValue("userLinkDesc")
@@ -36,8 +36,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	if len(usr.QuickLinks) <= 1 {
 		err := post.UpdateUser(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an err: middleware/profile/deleteQuickLink line 39")
+			log.Println("Error: middleware/profile/deleteQuickLink line 37")
+			log.Println(err)
 		}
 		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 		return
@@ -48,14 +48,13 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 		if link.Name == deleteTitle && link.URL == deleteURL {
 			target = index
-			fmt.Println(target)
 			break
 		}
 	}
 
 	if target == -1 {
-		fmt.Println("deleted object not found")
-		fmt.Println("this is an err, middleware/profile/deleteQuickLink line 57")
+		log.Println("Error: middleware/profile/deleteQuickLink line 56")
+		log.Println("Deleted object not found")
 		newArr = usr.QuickLinks
 	} else if (target + 1) < len(usr.QuickLinks) {
 		newArr = append(usr.QuickLinks[:target], usr.QuickLinks[(target+1):]...)
@@ -65,8 +64,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/profile/deleteQuickLink line 68")
+		log.Println("Error: middleware/profile/deleteQuickLink line 66")
+		log.Println(err)
 	}
 
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)

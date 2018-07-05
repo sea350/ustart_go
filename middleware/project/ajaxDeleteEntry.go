@@ -2,6 +2,7 @@ package project
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/sea350/ustart_go/delete"
@@ -26,21 +27,21 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 
 	entry, err := get.EntryByID(client.Eclient, entryID)
 	if err != nil {
-		fmt.Println("err: middleware/project/ajaxdeleteentry line 29")
-		fmt.Println(err)
+		log.Println("Error: middleware/project/ajaxDeleteEntry line 27")
+		log.Println(err)
 	}
 
 	err = delete.Entry(client.Eclient, entryID)
 	if err != nil {
-		fmt.Println("err: middleware/project/ajaxdeleteentry line 35")
-		fmt.Println(err)
+		log.Println("Error: middleware/project/ajaxDeleteEntry line 33")
+		log.Println(err)
 	}
 
 	//removing refrence to entry in user
 	proj, err := getProj.ProjectByID(client.Eclient, projID)
 	if err != nil {
-		fmt.Println("err: middleware/project/ajaxdeleteentry line 42")
-		fmt.Println(err)
+		log.Println("Error: middleware/project/ajaxDeleteEntry line 41")
+		log.Println(err)
 	}
 
 	removeIdx := -1
@@ -60,18 +61,17 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 
 		err = postProj.UpdateProject(client.Eclient, projID, "EntryIDs", updatedEntries)
 		if err != nil {
-			fmt.Println("err: middleware/project/ajaxdeleteentry line 63")
-			fmt.Println(err)
+			log.Println("Error: middleware/project/ajaxDeleteEntry line 62")
+			log.Println(err)
 		}
 	}
 
 	//if reply, remove reference from parent
 	if entry.Classification == 1 {
-
 		parent, err := get.EntryByID(client.Eclient, entry.ReferenceEntry)
 		if err != nil {
-			fmt.Println("err: middleware/project/ajaxdeleteentry line 73")
-			fmt.Println(err)
+			log.Println("Error: middleware/project/ajaxDeleteEntry line 71")
+			log.Println(err)
 		}
 
 		removeIdx := -1
@@ -91,8 +91,8 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 
 			err = postEntry.UpdateEntry(client.Eclient, entry.ReferenceEntry, "ReplyIDs", updatedReplies)
 			if err != nil {
-				fmt.Println("err: middleware/project/ajaxdeleteentry line 94")
-				fmt.Println(err)
+				log.Println("Error: middleware/project/ajaxDeleteEntry line 92")
+				log.Println(err)
 			}
 		}
 	}
@@ -101,8 +101,8 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 	if entry.Classification == 2 {
 		parent, err := get.EntryByID(client.Eclient, entry.ReferenceEntry)
 		if err != nil {
-			fmt.Println("err: middleware/project/ajaxdeleteentry line 104")
-			fmt.Println(err)
+			log.Println("err: middleware/project/ajaxdeleteentry line 102")
+			log.Println(err)
 		}
 		removeIdx := -1
 		for idx := range parent.ShareIDs {
@@ -121,8 +121,8 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 
 			err = postEntry.UpdateEntry(client.Eclient, entry.ReferenceEntry, "ShareIDs", updatedShares)
 			if err != nil {
-				fmt.Println("err: middleware/project/ajaxdeleteentry line 124")
-				fmt.Println(err)
+				log.Println("Error: middleware/project/ajaxDeleteEntry line 122")
+				log.Println(err)
 			}
 		}
 	}
