@@ -11,7 +11,6 @@ import (
 var clients = make(map[*websocket.Conn]bool) // connected clients
 var chatroom = make(map[string](map[*websocket.Conn]bool))
 var broadcast = make(chan Message) // broadcast channel
-var channels = make(map[string](chan Message))
 
 // Configure the upgrader
 var upgrader = websocket.Upgrader{
@@ -38,10 +37,16 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 	chatID := r.URL.Path[4:]
 	// Register our new client
-	chatroom[chatID][ws] = true
-
-	fmt.Println("debug text: middleware/chat/message line 41")
-	fmt.Println(chatID)
+	_, exists := chatroom[chatID]
+	if !exists {
+		temp := make(map[*websocket.Conn]bool)
+		temp[ws] = true
+		chatroom[chatID] = temp
+	} else {
+		temp := chatroom[chatID]
+		temp[ws] = true
+		chatroom[chatID] = temp
+	}
 
 	for {
 		var msg Message
@@ -53,22 +58,19 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		// Send the newly received message to the broadcast channel
-		fmt.Println("debug text: middleware/chat/message line 55")
-		fmt.Println(msg)
 		broadcast <- msg
-		fmt.Println("message sent")
 	}
 }
 
 func handleMessages(chatID string) {
-	fmt.Println("handle messages reached")
 	for {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
 		fmt.Println("debug text: middleware/chat/message line 67")
-		fmt.Println(msg)
-		fmt.Println("message received")
+		fmt.Println("channel #" + chatID)
+		fmt.Printf("message: %v \n", msg)
+
 		for client := range chatroom[chatID] {
 			err := client.WriteJSON(msg)
 			if err != nil {
