@@ -26,23 +26,24 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newGuestID)
 
 	if err != nil {
-		fmt.Println("err middleware/event/acceptguestjoinrequest line 27")
+		fmt.Println("err middleware/event/acceptguestjoinrequest line 26")
 		fmt.Println(err)
 	}
 
 	err = userPost.AppendEvent(client.Eclient, newGuestID, types.EventInfo{EventID: evntID, Visible: true})
 	if err != nil {
-		fmt.Println("err middleware/event/acceptguestjoinrequest line 34")
+		fmt.Println("err middleware/event/acceptguestjoinrequest line 33")
 		fmt.Println(err)
 	}
 
 	var newGuest types.EventGuests
+	newGuest.Status = 0
 	newGuest.GuestID = newGuestID
 	newGuest.Visible = true
 
 	err = evntPost.AppendGuest(client.Eclient, evntID, newGuest)
 	if err != nil {
-		fmt.Println("err middleware/event/acceptguestjoinrequest line 48")
+		fmt.Println("err middleware/event/acceptguestjoinrequest line 44")
 		fmt.Println(err)
 	}
 
