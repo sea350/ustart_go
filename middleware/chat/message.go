@@ -60,6 +60,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleMessages(chatID string) {
+	fmt.Println("handle messages reached")
 	for {
 		// Grab the next message from the broadcast channel
 		msg := <-channels[chatID]
