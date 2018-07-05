@@ -37,9 +37,16 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 	chatID := r.URL.Path[4:]
 	// Register our new client
-	temp := chatroom[chatID]
-	temp[ws] = true
-	chatroom[chatID] = temp
+	_, exists := chatroom[chatID]
+	if !exists {
+		temp := make(map[*websocket.Conn]bool)
+		temp[ws] = true
+		chatroom[chatID] = temp
+	} else {
+		temp := chatroom[chatID]
+		temp[ws] = true
+		chatroom[chatID] = temp
+	}
 
 	for {
 		var msg Message
@@ -61,7 +68,7 @@ func handleMessages(chatID string) {
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
 		fmt.Println("debug text: middleware/chat/message line 67")
-		fmt.Println("channel #"+chatID)
+		fmt.Println("channel #" + chatID)
 		fmt.Printf("message: %v \n", msg)
 
 		for client := range chatroom[chatID] {
