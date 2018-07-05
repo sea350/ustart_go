@@ -68,10 +68,23 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
+			user, err := get.UserByID(client.Eclient, userID)
+			if err != nil {
+				fmt.Println("Error ustart_go/middleware/registration/emailPasswordReset line 58: Error getting user")
+				fmt.Println(err)
+				return
+			}
+
 			subject := "Your verification link"
 			link := "http://ustart.today:5002/ResetPassword/?email=" + email + "&verifCode=" + token
 			r := uses.NewRequest([]string{email}, subject)
-			r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": email, "link": link})
+			r.Send("/ustart/ustart_front/email_template.html", map[string]string{
+				"username":      user.Username,
+				"link":          link,
+				"contentjuan":   "We received a request to reset your password for your Ustart Account. We would love to assist you!",
+				"contentdos":    "Simply click the button below to set a new password",
+				"contenttres":   "CHANGE PASSWORD",
+				"contentquatro": "a password reset"})
 		}
 	}
 }
