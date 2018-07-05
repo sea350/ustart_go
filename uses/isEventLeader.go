@@ -5,9 +5,9 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//IsEventLeader ...
 //Returns event to represent whether member is event leader
 //ALso returns index of member
+//IsEventLeader ...
 func IsEventLeader(eclient *elastic.Client, eventID string, memberID string) (bool, int) {
 	evnt, err := get.EventByID(eclient, eventID)
 	if err != nil {

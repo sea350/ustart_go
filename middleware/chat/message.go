@@ -3,6 +3,7 @@ package chat
 import (
 	"log"
 	"net/http"
+	"fmt"
 
 	"github.com/gorilla/websocket"
 )
@@ -37,6 +38,9 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	chatID := r.URL.Path[4:]
 	// Register our new client
 	clients[ws] = true
+
+	fmt.Println("debug text: middleware/chat/message line 41")
+	fmt.Println(chatID)
 
 	for {
 		var msg Message

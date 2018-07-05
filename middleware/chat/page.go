@@ -2,6 +2,7 @@ package chat
 
 import (
 	"net/http"
+	"fmt"
 
 	"github.com/sea350/ustart_go/middleware/client"
 )
@@ -12,6 +13,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderTemplate(w, r, "cuzsteventoldmeto", cs)
 	chatID := r.URL.Path[4:]
+	fmt.Println("debug text: middleware/chat/page line 15")
+	fmt.Println(chatID)
 	// var h = hubAlt{
 	// 	broadcast:  make(chan messageAlt),
 	// 	register:   make(chan subscription),
