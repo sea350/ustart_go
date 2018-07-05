@@ -56,7 +56,8 @@ func ResendEmailVerification(eclient *elastic.Client, email string) {
 			log.Printf("smtp error: %s", err4)
 			return
 		}
-		SendEmail(email, token)
+		// SendEmail(email, token)
+		//Todo: Fix email formatting
 	}
 	return
 }

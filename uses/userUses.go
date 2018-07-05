@@ -4,9 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-	"log"
 	"math"
-	"net/smtp"
 
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -107,12 +105,21 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 
 	//New user verification process
 	newUsr.FirstLogin = false
+	// SendVerificationEmail(email)
 	token, err := GenerateRandomString(32)
 	if err != nil {
 		fmt.Println(err)
 	}
 	newUsr.AuthenticationCode = token
-	SendEmail(email, token)
+	subject := "Your verification link"
+	link := "http://ustart.today:5002/ResetPassword/?email=" + email + "&verifCode=" + token
+	r := NewRequest([]string{email}, subject)
+	r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": email, "link": link,
+		"contentjuan":   "We received a request to reset your password for your Ustart Account. We would love to assist you!",
+		"contentdos":    "Simply click the button below to verify your account",
+		"contenttres":   "VERIFY ACCOUNT",
+		"contentquatro": "a new account",
+	})
 
 	newUsr.Password = password
 	newUsr.University = school
@@ -167,27 +174,6 @@ func GenerateRandomBytes(n int) ([]byte, error) {
 func GenerateRandomString(s int) (string, error) {
 	b, err := GenerateRandomBytes(s)
 	return base64.URLEncoding.EncodeToString(b), err
-}
-
-//SendEmail ... SENDS EMAIL VERIFICATION LINK TO USER
-//Requires the user's email address and token to send to user
-//Returns err
-func SendEmail(to string, token string) {
-	from := "ustarttestemail@gmail.com"
-	pass := "Ust@rt20!8~~"
-	url := "https://ustart.today:5002/Activation/?email=" + to + "&verifCode=" + token
-	body := "<p>Dear " + to + ",</p><p>Welcome to U-Start!</p><p>In order to help maintain your account's security, please verify your email address by clicking the following link: " + url + ".</p>" +
-		"<p>Thank you.</p><img src=\"https://scontent-lga3-1.cdninstagram.com/vp/307f6aa3c0d6973d2061d6a1978d177a/5BA70D79/t51.2885-19/s150x150/20905822_2071759413059780_7754944012800229376_a.jpg\"/>"
-	msg := "From: " + from + "\n" + "To: " + to + "\n" + "Subject: UStart Verification Code\n\n" + body
-
-	err1 := smtp.SendMail("smtp.gmail.com:587",
-		smtp.PlainAuth("", from, pass, "smtp.gmail.com"),
-		from, []string{to}, []byte(msg))
-
-	if err1 != nil {
-		log.Printf("smtp error: %s", err1)
-		return
-	}
 }
 
 //UserShareEntry ... CREATES A SHARED ENTRY FROM A USER
