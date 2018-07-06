@@ -57,7 +57,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 			// fmt.Println("this is debug text middeware/widget/addprojectidget.go")
 			// fmt.Println(r.FormValue("projectWidget"))
 			// fmt.Println(newWidget.Data)
-			err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true)
+			err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true, false)
 			if err != nil {
 				fmt.Println(err)
 				fmt.Println("this is an error: middleware/profile/addProjectWidget.go 45")
