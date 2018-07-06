@@ -39,6 +39,7 @@ type ClientSide struct {
 	Wall            []types.JournalEntry
 	Widgets         []types.Widget
 	Project         types.ProjectAggregate
+	Event           types.EventAggregate
 }
 
 /* The following line is how HTML is loaded by our application. Note we need the relative link from the location of GoStart2. */
