@@ -3,6 +3,7 @@ package event
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -82,14 +83,16 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	id, err := post.IndexEvent(client.Eclient, newEvent)
 
 	if err != nil {
-		log.Println("Error: middleware/event/ViewEvents line 84")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	usr, err := userGet.UserByID(client.Eclient, test1.(string))
 	if err != nil {
-		log.Println("middleware/event/ViewEvent.go line 89")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	var newEventInfo types.EventInfo
@@ -98,8 +101,9 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	err = userPost.UpdateUser(client.Eclient, test1.(string), "Events", append(usr.Events, newEventInfo))
 	if err != nil {
-		log.Println("Error: middleware/event/ViewEvent line 100")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	//cs := client.ClientSide{ErrorStatus: false}
