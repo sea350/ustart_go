@@ -56,7 +56,7 @@ type Events struct {
 	EventDateStart    time.Time         `json:"EventDateStart"`
 	EventDateEnd      time.Time         `json:"EventDateEnd"`
 	CreationDate      time.Time         `json:"CreationDate"`
-	Widgets           []Widget          `json:"Widgets"`
+	Widgets           []string          `json:"Widgets"`
 	Whitelist         []string          `json:"Whitelist"`
 	Blacklist         []string          `json:"Blacklist"`
 	Status            bool              `json:"Status"` //Whether this event is still ongoing or cancelled
