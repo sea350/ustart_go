@@ -33,7 +33,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	newWidget.UserID = session.Values["DocID"].(string)
 
 	if r.FormValue("editID") == `0` {
-		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget, false)
+		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget, false, false)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
