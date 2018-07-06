@@ -1,7 +1,7 @@
 package event
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -82,14 +82,14 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	id, err := post.IndexEvent(client.Eclient, newEvent)
 
 	if err != nil {
-		fmt.Println("middleware/event/ViewEvents.go line 71")
-		fmt.Println(err)
+		log.Println("Error: middleware/event/ViewEvents line 84")
+		log.Println(err)
 	}
 
 	usr, err := userGet.UserByID(client.Eclient, test1.(string))
 	if err != nil {
-		fmt.Println("middleware/event/ViewEvent.go line 85")
-		fmt.Println(err)
+		log.Println("middleware/event/ViewEvent.go line 89")
+		log.Println(err)
 	}
 
 	var newEventInfo types.EventInfo
@@ -98,8 +98,8 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	err = userPost.UpdateUser(client.Eclient, test1.(string), "Events", append(usr.Events, newEventInfo))
 	if err != nil {
-		fmt.Println("middleware/event/ViewEvent.go line 99")
-		fmt.Println(err)
+		log.Println("Error: middleware/event/ViewEvent line 100")
+		log.Println(err)
 	}
 
 	//cs := client.ClientSide{ErrorStatus: false}

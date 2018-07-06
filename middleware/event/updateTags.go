@@ -1,16 +1,16 @@
-package profile
+package event
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/sea350/ustart_go/middleware/client"
-	post "github.com/sea350/ustart_go/post/user"
+	post "github.com/sea350/ustart_go/post/event"
 )
 
-//AddTag ...
-func AddTag(w http.ResponseWriter, r *http.Request) {
+//UpdateEventTags ...
+func UpdateEventTags(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
@@ -19,7 +19,8 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ID := session.Values["DocID"].(string)
+	ID := r.FormValue("eventWidget")
+	fmt.Println("THIS IS THE ID:", ID)
 
 	tags := strings.Split(r.FormValue("skillArray"), `","`)
 	if len(tags) > 0 {
@@ -27,9 +28,9 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		tags[len(tags)-1] = strings.Trim(tags[len(tags)-1], `"]`)
 	}
 
-	err := post.UpdateUser(client.Eclient, ID, "Tags", tags)
+	err := post.UpdateEvent(client.Eclient, ID, "Tags", tags)
 	if err != nil {
-		log.Println("Error: middleware/profile/addTag line 30")
-		log.Println(err)
+		fmt.Println(err)
+		fmt.Println("error: middleware/event/updatetags line 31")
 	}
 }
