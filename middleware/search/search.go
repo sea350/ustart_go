@@ -2,7 +2,9 @@ package search
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/sea350/ustart_go/middleware/client"
@@ -20,20 +22,11 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cs := client.ClientSide{}
-
 	var searchBy []bool
-
 	query := r.FormValue("query")
-	//fmt.Println("searching for: " + query)
 	filter := r.FormValue("searchFilterGroup") //can be: skills,users,projects
-
-	//sortBy := r.FormValue("sortbyfilter")
 	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchlistmajors"))
-
 	searchSkills := uses.ConvertStrToStrArr(r.FormValue("searchlistskills")) //array
-
-	//searchByLocationCountry := uses.ConvertStrToStrArr(r.FormValue("searchbylocationcountry"))
-	//searchByLocationState := uses.ConvertStrToStrArr(r.FormValue("searchbylocationstate"))
 
 	if filter == `projects` {
 		if r.FormValue("searchbyprojectname") != `` {
@@ -58,8 +51,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		results, err := search.PrototypeProjectSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
-			fmt.Println("err: middleware/search/search line 60")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		cs.ListOfHeads = results
 	}
@@ -84,16 +78,18 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		results, err := search.PrototypeUserSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
-			fmt.Println("err: middleware/search/search line 85")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		cs.ListOfHeads = results
 	}
 	if filter == `skills` {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))
 		if err != nil {
-			fmt.Println("err: middleware/search/search line 92")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		cs.ListOfHeads = results
 	}

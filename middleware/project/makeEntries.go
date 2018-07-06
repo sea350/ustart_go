@@ -3,7 +3,9 @@ package project
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/uses"
@@ -24,20 +26,23 @@ func MakeEntry(w http.ResponseWriter, r *http.Request) {
 	newContent := []rune(r.FormValue("text"))
 	newID, err := uses.ProjectCreatesEntry(client.Eclient, projectID, docID.(string), newContent)
 	if err != nil {
-		fmt.Println("err: middleware/project/makeentries line 26")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, true)
 	if err != nil {
-		fmt.Println("err: middleware/project/makeentries line 32")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(jEntry)
 	if err != nil {
-		fmt.Println("err: middleware/project/makeentries line 38")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, string(data))

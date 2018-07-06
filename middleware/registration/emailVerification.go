@@ -3,7 +3,9 @@ package registration
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -21,35 +23,39 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 
 	userID, err := get.UserIDByEmail(client.Eclient, email)
 	if err != nil {
-		fmt.Println("err: middleware/registration/emailVerification line 16")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 		return
 	}
 
-	user, err1 := get.UserByEmail(client.Eclient, email)
-	if err1 != nil {
-		fmt.Println("err: middleware/registration/emailVerification line 22")
-		fmt.Println(err1)
+	user, err := get.UserByEmail(client.Eclient, email)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 		cs.ErrorStatus = true
-		cs.ErrorOutput = err1
+		cs.ErrorOutput = err
 		return
 	}
 
 	if emailToken == user.AuthenticationCode {
-		err2 := post.UpdateUser(client.Eclient, userID, "FirstLogin", true)
-		if err2 != nil {
-			fmt.Println("err: middleware/registration/emailVerification line 29")
-			fmt.Println(err2)
+		err = post.UpdateUser(client.Eclient, userID, "FirstLogin", true)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			cs.ErrorStatus = true
-			cs.ErrorOutput = err2
+			cs.ErrorOutput = err
 			return
 		}
-		err3 := post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
-		if err3 != nil {
-			fmt.Println("err: middleware/registration/emailVerification line 34")
-			fmt.Println(err3)
+		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = errors.New("err: middleware/registration/emailVerification line 34")
 		}
