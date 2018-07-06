@@ -2,7 +2,8 @@ package get
 
 import (
 	"context"
-	"fmt"
+	"log"
+	"os"
 
 	"encoding/json"
 
@@ -31,9 +32,10 @@ func ProjectByID(eclient *elastic.Client, projectID string) (types.Project, erro
 	}
 
 	err = json.Unmarshal(*searchResult.Source, &proj)
-	//if (err!=nil){return proj,err}
 	if err != nil {
-		fmt.Printf("Err: %s\n", err.Error())
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	return proj, err

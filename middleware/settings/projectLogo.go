@@ -1,8 +1,9 @@
 package settings
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	uses "github.com/sea350/ustart_go/uses"
@@ -13,7 +14,6 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
@@ -23,14 +23,11 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 
 	//Getting projectID and member
 	projID := r.FormValue("projectID")
-	// proj, err := get.ProjectByID(eclient, projID)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
 	proj, member, err := get.ProjAndMember(eclient, r.FormValue("projectID"), test1.(string))
 	if err != nil {
-		fmt.Println("err: middleware/settings/projectlogo line 33\n", err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
@@ -41,13 +38,19 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 			err = uses.ChangeProjectLogo(eclient, projID, blob)
 			if err != nil {
-				fmt.Println(err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
 			}
 		} else {
-			fmt.Println("err: middleware/settings/projectLogo invalid file upload\n", err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 	} else {
-		fmt.Println("err: middleware/settings/projectLogo you have no permission to change logo/icon")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)

@@ -1,8 +1,9 @@
 package widget
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -24,8 +25,9 @@ func DeleteWidgetProfile(w http.ResponseWriter, r *http.Request) {
 	_, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
 	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false)
 	if err != nil {
-		fmt.Println("This is an err, deleteWidgetProfile line24")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
