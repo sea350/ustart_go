@@ -67,9 +67,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	appSessUsr.Email = sessUsr.Email
 	appSessUsr.DocID = sessUsr.DocID
 
-	fmt.Println("SESSUSR", sessUsr)
-	fmt.Println(err)
-
 	if !succ {
 		fmt.Println("Invalid login")
 		w.Header().Set("Content-type", "application/json")
@@ -98,9 +95,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		session.Values["Username"] = sessUsr.Username
 		expiration := time.Now().Add((30) * time.Hour)
 		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", Expires: expiration, Path: "/"}
-
-		fmt.Println("THE RESPONSE:", resp)
-		fmt.Println("THE RESJSONs:", resJson)
 
 		http.SetCookie(w, &cookie)
 		session.Save(r, w)

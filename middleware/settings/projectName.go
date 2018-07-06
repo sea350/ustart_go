@@ -2,7 +2,9 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	uses "github.com/sea350/ustart_go/uses"
@@ -28,9 +30,10 @@ func ChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
 	//TODO: DocID
 	err = uses.ProjectNameAndDescription(eclient, r.FormValue("projectID"), projName, projDesc)
-
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	//TODO: Add in right URL
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
