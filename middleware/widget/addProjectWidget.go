@@ -1,8 +1,9 @@
 package widget
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	getProj "github.com/sea350/ustart_go/get/project"
 
@@ -23,51 +24,35 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 
 	project, member, err := getProj.ProjAndMember(client.Eclient, r.FormValue("projectWidget"), test1.(string))
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an error: middleware/profile/addProjectWidget.go 26")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
-	// newWidget, err := ProcessWidgetForm(r)
-	// if err != nil {
-	// 	fmt.Println("this is an error: middleware/profile/addProjectWidget.go 31")
-	// 	fmt.Println(err)
-	// 	http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
-	// 	return
-	// }
+	newWidget, err := ProcessWidgetForm(r)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+		http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
+		return
+	}
 
 	// newWidget.UserID = r.FormValue("projectWidget")
 
-	if uses.HasPrivilege("widget", project.PrivilegeProfiles, member) {
-
-		// if r.FormValue("editID") == `0` {
-		// 	fmt.Println("this is debug text middeware/widget/addprojectidget.go")
-		// 	fmt.Println(r.FormValue("projectWidget"))
-		// err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true)
-		newWidget, err := ProcessWidgetForm(r)
+	if r.FormValue("editID") == `0` {
+		err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addProjectWidget.go 45")
-			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
-			return
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
-
-		newWidget.UserID = r.FormValue("projectWidget")
-
-		if r.FormValue("editID") == `0` {
-			// fmt.Println("this is debug text middeware/widget/addprojectidget.go")
-			// fmt.Println(r.FormValue("projectWidget"))
-			// fmt.Println(newWidget.Data)
-			err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true)
-			if err != nil {
-				fmt.Println(err)
-				fmt.Println("this is an error: middleware/profile/addProjectWidget.go 45")
-			}
-		} else {
-			err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
-			if err != nil {
-				fmt.Println(err)
-				fmt.Println("this is an error: middleware/profile/addWidget.go 51")
-			}
+	} else {
+		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 
 		http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)

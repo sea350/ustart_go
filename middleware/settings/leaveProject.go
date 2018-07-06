@@ -2,7 +2,9 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -27,8 +29,9 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := get.ProjectByID(eclient, projID)
 	if err != nil {
-		fmt.Println("err middleware/settings/leaveproject line 28")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	var canLeave = false

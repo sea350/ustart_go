@@ -1,7 +1,7 @@
 package widget
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -31,7 +31,7 @@ func SortUserWidgets(w http.ResponseWriter, r *http.Request) {
 
 	err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "UserWidgets", ids)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/widget/sortUserWidgets line 32")
+		log.Println("Error: middleware/widget/sortUserWidgets line 32")
+		log.Println(err)
 	}
 }

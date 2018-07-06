@@ -2,7 +2,9 @@ package profile
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/middleware/stringHTML"
@@ -66,7 +68,9 @@ func ShareComment2(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.UserShareEntry(client.Eclient, docid, postid, content)
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
