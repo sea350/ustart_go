@@ -1,8 +1,8 @@
 package widget
 
 import (
-	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"strings"
 
@@ -31,15 +31,15 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err, editInstaAdd line 26")
+		log.Println("Error: middleware/widget/editWidgetDelete line 32")
+		log.Println(err)
 	}
 
 	if len(oldWidget.Data) == 1 && (oldWidget.Classification != 15 && oldWidget.Classification != 16) {
 		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"), isProject)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an err, editInstaAdd line 34")
+			log.Println("Error: middleware/widget/editWidgetDelete line 39")
+			log.Println(err)
 		}
 		if isProject {
 			http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
@@ -51,18 +51,15 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	target := -1
 	for index, link := range oldWidget.Data {
-		fmt.Println(link)
 		if strings.Contains(string(link), deletedURL) || strings.Contains(deletedURL, string(link)) {
 			target = index
-			fmt.Println(target)
 			break
 		}
 	}
 
 	var newArr []template.HTML
 	if target == -1 {
-		fmt.Println("deleted object not found")
-		fmt.Println("this is an err, editInstaAdd line 51")
+		log.Println("Error: middleware/widget/editWidgetDelete line 61 - deleted object not found")
 		newArr = oldWidget.Data
 	} else if (target + 1) < len(oldWidget.Data) {
 		newArr = append(oldWidget.Data[:target], oldWidget.Data[(target+1):]...)
@@ -72,8 +69,8 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	err = uses.EditWidget(client.Eclient, r.FormValue("editID"), newArr)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err, editInstaAdd line 62")
+		log.Println("Error: middleware/widget/editWidgetDelete line 70")
+		log.Println(err)
 	}
 	if isProject {
 		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)

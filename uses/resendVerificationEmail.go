@@ -1,7 +1,7 @@
 package uses
 
 import (
-	"fmt"
+	"log"
 	"time"
 
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -15,38 +15,38 @@ import (
 func ResendEmailVerification(eclient *elastic.Client, email string) {
 	userID, err := getUser.UserIDByEmail(eclient, email)
 	if err != nil {
-		fmt.Println("Error ustart_go/uses/resendVerificationEmail line 15: Error getting user by email")
-		fmt.Println(err)
+		log.Println("Error uses/resendVerificationEmail line 15")
+		log.Println(err)
 		return
 	}
 
 	//Todo: Get user.type by email instead of by id
 	user, err := getUser.UserByID(eclient, userID)
 	if err != nil {
-		fmt.Println("Error ustart_go/uses/resendVerificationEmail line 24: Error getting user by ID")
-		fmt.Println(err)
+		log.Println("Error: uses/resendVerificationEmail line 24")
+		log.Println(err)
 		return
 	}
 
 	if !user.FirstLogin {
 		token, err := GenerateRandomString(32)
 		if err != nil {
-			fmt.Println("Error ustart_go/uses/resendVerificationEmail line 32: Error generating token")
-			fmt.Println(err)
+			log.Println("Error: uses/resendVerificationEmail line 32")
+			log.Println(err)
 			return
 		}
 
 		err = postUser.UpdateUser(eclient, userID, "AuthenticationCode", token)
 		if err != nil {
-			fmt.Println("Error ustart_go/uses/resendVerificationEmail line 39: Error setting authentication code")
-			fmt.Println(err)
+			log.Println("Error: uses/resendVerificationEmail line 39")
+			log.Println(err)
 			return
 		}
 
 		err = postUser.UpdateUser(eclient, userID, "AuthenticationCodeTime", time.Now())
 		if err != nil {
-			fmt.Println("Error ustart_go/uses/resendVerificationEmail line 46: Error setting authentication code")
-			fmt.Println(err)
+			log.Println("Error: uses/resendVerificationEmail line 46")
+			log.Println(err)
 			return
 		}
 

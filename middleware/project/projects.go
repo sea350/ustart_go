@@ -2,7 +2,9 @@ package project
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -22,15 +24,14 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	}
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/project/projects.go line 23")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
-	//WIP
-	//numFollowers:=len(project.ProjectData.Followers)
 
 	widgets, errs := uses.LoadWidgets(client.Eclient, project.ProjectData.Widgets)
 	if len(errs) > 0 {
-		fmt.Println("there were one or more errors loading widgets")
+		log.Println("there were one or more errors loading widgets")
 		for _, eror := range errs {
 			fmt.Println(eror)
 		}
@@ -95,8 +96,9 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 
 	//proper URL
 	if !uses.ValidUsername(r.FormValue("curl")) {
-		fmt.Println("line 100: middleware/project/createproject")
-		fmt.Println("invalid custom URL")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, "Check me please")
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 
@@ -105,8 +107,9 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	if title != `` {
 		url, err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string), category, college, customURL)
 		if err != nil {
-			fmt.Println("This is an error middleware/project/createproject")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		} else {

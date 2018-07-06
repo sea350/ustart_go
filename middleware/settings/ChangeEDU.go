@@ -2,7 +2,9 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	uses "github.com/sea350/ustart_go/uses"
@@ -35,7 +37,9 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.ChangeEducation(eclient, session.Values["DocID"].(string), i, highschoolName, highschoolGrad, uniName, gradDate, major, minor)
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	http.Redirect(w, r, "/Settings/#educollapse", http.StatusFound)
 	return

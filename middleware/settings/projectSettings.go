@@ -1,8 +1,9 @@
 package settings
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -21,8 +22,9 @@ func Project(w http.ResponseWriter, r *http.Request) {
 
 	project, err := uses.AggregateProjectData(client.Eclient, projURL, test1.(string))
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("error: middleware/settings/projectsettings line 23")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	var isAdmin = false

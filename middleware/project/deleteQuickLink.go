@@ -2,7 +2,9 @@ package project
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -24,8 +26,9 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/project/deleteQuickLink line 25")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	deleteTitle := r.FormValue("deleteProjectLinkDesc")
@@ -36,8 +39,9 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	if len(proj.QuickLinks) == 1 {
 		err := post.UpdateProject(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an err: middleware/project/deleteQuickLink line 39")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
@@ -45,14 +49,11 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	target := -1
 	for index, link := range proj.QuickLinks {
-
 		if link.Name == deleteTitle && link.URL == deleteURL {
 			target = index
-			fmt.Println(target)
 			break
 		}
 	}
-
 	if target == -1 {
 		fmt.Println("deleted object not found")
 		fmt.Println("this is an err, middleware/profile/deleteQuickLink line 57")
@@ -65,8 +66,9 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	err = post.UpdateProject(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an err: middleware/profile/deleteQuickLink line 68")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

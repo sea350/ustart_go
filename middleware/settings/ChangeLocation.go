@@ -2,7 +2,9 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -45,7 +47,9 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.ChangeLocation(eclient, session.Values["DocID"].(string), countryP, conBool, stateP, sBool, cityP, cBool, zipP, zBool)
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	http.Redirect(w, r, "/Settings/#loccollapse", http.StatusFound)
 	return

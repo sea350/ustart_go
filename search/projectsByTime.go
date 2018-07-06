@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -24,9 +25,9 @@ func ProjectsByTime(eclient *elastic.Client, minTime string, maxTime string) {
 	bq = bq.Must(elastic.NewRangeQuery("AccCreation").From("2017-01-01").To("2018-04-19").Boost(3))
 	q := elastic.NewNestedQuery("Project", bq).QueryName("qname")
 	src, err := q.Source()
-
 	if err != nil {
-		fmt.Println(err)
+		log.Println("Error: search/projectsByTime line 27")
+		log.Println(err)
 	}
 
 	data, err := json.Marshal(src)
