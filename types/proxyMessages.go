@@ -1,5 +1,7 @@
 package types
 
+import "time"
+
 //ProxyMessages ... an ES indexed array of conversations designed to offload upload demand from user
 type ProxyMessages struct {
 	DocID         string              `json:"DocID"`
@@ -10,7 +12,9 @@ type ProxyMessages struct {
 
 //ConversationState ... In addition to providing the ID of the conversation, this caches the last message and how many unread messages there are
 type ConversationState struct {
-	ConvoDocID  string  `json:"ConvoDocID"`
-	NumUnread   int     `json:"NumUnread"`
-	LastMessage Message `json:"LastMessage"`
+	ConvoDocID  string    `json:"ConvoDocID"`
+	NumUnread   int       `json:"NumUnread"`
+	LastMessage Message   `json:"LastMessage"`
+	Muted       bool      `json:"Muted"`
+	MuteTimeout time.Time `json:"MuteTimeout"`
 }

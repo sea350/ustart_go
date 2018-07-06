@@ -22,7 +22,7 @@ type Eavesdropper struct {
 
 //Conversation ... an ES indexed structure that is a full record of the entire conversation including a cache of the most recent
 type Conversation struct {
-	Eavesdroppers  []Eavesdropper `json:"Eavesdroppers"`
-	MessageArchive []Message      `json:"MessageArchive"` //no limit but must be ordered by most recent interaction
-	MessageCache   []Message      `json:"MessageCache"`   //LIMIT 100, must be ordered by most recent interaction
+	Eavesdroppers  map[string]Eavesdropper `json:"Eavesdroppers"`
+	MessageArchive []Message               `json:"MessageArchive"` //no limit but must be ordered by most recent interaction
+	MessageCache   []Message               `json:"MessageCache"`   //LIMIT 100, must be ordered by most recent interaction
 }
