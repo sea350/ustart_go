@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	get "github.com/sea350/ustart_go/get/widget"
@@ -31,15 +32,17 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
-		log.Println("Error: middleware/widget/editWidgetDelete line 32")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	if len(oldWidget.Data) == 1 && (oldWidget.Classification != 15 && oldWidget.Classification != 16) {
 		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"), isProject)
 		if err != nil {
-			log.Println("Error: middleware/widget/editWidgetDelete line 39")
-			log.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		if isProject {
 			http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
@@ -69,8 +72,9 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	err = uses.EditWidget(client.Eclient, r.FormValue("editID"), newArr)
 	if err != nil {
-		log.Println("Error: middleware/widget/editWidgetDelete line 70")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	if isProject {
 		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)

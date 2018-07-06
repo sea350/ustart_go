@@ -3,7 +3,9 @@ package project
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -23,20 +25,22 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("projID") //projectID
-	fmt.Println("debug text middlware/project/loadjoinrequests line 24")
-	fmt.Println(ID)
 	var heads []types.FloatingHead
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("err: middleware/project/loadjoinrequest Line 26")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	for index, userID := range proj.MemberReqReceived {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
 		if err != nil {
-			fmt.Println(err)
+
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			fmt.Println(fmt.Sprintf("err: middleware/project/loadjoinrequest, Line 35, index %d", index))
 		}
 		heads = append(heads, head)
@@ -44,8 +48,9 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(heads)
 	if err != nil {
-		fmt.Println("err: middleware/project/loadjoinrequest, Line 45")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, string(data))

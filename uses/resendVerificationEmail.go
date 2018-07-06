@@ -2,6 +2,7 @@ package uses
 
 import (
 	"log"
+	"os"
 	"time"
 
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -15,38 +16,43 @@ import (
 func ResendEmailVerification(eclient *elastic.Client, email string) {
 	userID, err := getUser.UserIDByEmail(eclient, email)
 	if err != nil {
-		log.Println("Error uses/resendVerificationEmail line 15")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 		return
 	}
 
 	//Todo: Get user.type by email instead of by id
 	user, err := getUser.UserByID(eclient, userID)
 	if err != nil {
-		log.Println("Error: uses/resendVerificationEmail line 24")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 		return
 	}
 
 	if !user.FirstLogin {
 		token, err := GenerateRandomString(32)
 		if err != nil {
-			log.Println("Error: uses/resendVerificationEmail line 32")
-			log.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			return
 		}
 
 		err = postUser.UpdateUser(eclient, userID, "AuthenticationCode", token)
 		if err != nil {
-			log.Println("Error: uses/resendVerificationEmail line 39")
-			log.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			return
 		}
 
 		err = postUser.UpdateUser(eclient, userID, "AuthenticationCodeTime", time.Now())
 		if err != nil {
-			log.Println("Error: uses/resendVerificationEmail line 46")
-			log.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			return
 		}
 

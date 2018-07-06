@@ -3,7 +3,9 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -26,27 +28,24 @@ func WallAdd(w http.ResponseWriter, r *http.Request) {
 	textRunes := []rune(text)
 	postID, err := uses.UserNewEntry(client.Eclient, session.Values["DocID"].(string), textRunes)
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	postIDArray := []string{postID} // just an array with 1 entry
-	jEntry, err5 := uses.LoadEntries(client.Eclient, postIDArray)
-	if err5 != nil {
-		fmt.Println(err5)
+	jEntry, err := uses.LoadEntries(client.Eclient, postIDArray)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(jEntry)
-
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
-
-	/*output := stringHTML.AddClass0Entry(jEntry[0].Image,
-	jEntry[0].FirstName,
-	string(jEntry[0].Element.Content),
-	jEntry[0].ElementID,
-	string(jEntry[0].NumLikes),
-	string(jEntry[0].NumReplies),
-	string(jEntry[0].NumShares))*/
 
 	fmt.Fprintln(w, string(data))
 }

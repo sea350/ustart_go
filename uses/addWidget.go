@@ -2,6 +2,7 @@ package uses
 
 import (
 	"log"
+	"os"
 
 	getProj "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -18,15 +19,17 @@ func AddWidget(eclient *elastic.Client, docID string, newWidget types.Widget, is
 	if isProject {
 		proj, err := getProj.ProjectByID(eclient, docID)
 		if err != nil {
-			log.Println("Error: uses/addWidget line 19")
-			log.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 
 		newWidget.Position = len(proj.Widgets)
 		widgetID, err := post.IndexWidget(eclient, newWidget)
 		if err != nil {
-			log.Println("Error: uses/addWidget line 26")
-			log.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 
 		updatedWidgets := append(proj.Widgets, widgetID)
@@ -36,8 +39,9 @@ func AddWidget(eclient *elastic.Client, docID string, newWidget types.Widget, is
 
 	usr, err := getUser.UserByID(eclient, docID)
 	if err != nil {
-		log.Println("Error: uses/addWidget line 37")
-		log.Panicln(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	newWidget.Position = len(usr.UserWidgets)
 	widgetID, err := post.IndexWidget(eclient, newWidget)

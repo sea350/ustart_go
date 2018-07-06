@@ -3,6 +3,7 @@ package profile
 import (
 	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -23,8 +24,9 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
-		log.Println("Error: middleware/profile/deleteTag line 25")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	deleteTag := r.FormValue("UNKNOWN")
@@ -35,8 +37,9 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		if len(usr.Tags) == 1 {
 			err := post.UpdateUser(client.Eclient, ID, "Tags", newArr)
 			if err != nil {
-				log.Println("Error: middleware/profile/deleteTag line 37")
-				log.Println(err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
 			}
 			return
 		}
@@ -62,8 +65,9 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 		err = post.UpdateUser(client.Eclient, ID, "Tags", newArr)
 		if err != nil {
-			log.Println("Error: middleware/profile/deleteTag line 64")
-			log.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 	}
 }

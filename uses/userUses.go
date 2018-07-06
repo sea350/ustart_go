@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"os"
 
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -109,8 +110,9 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	// SendVerificationEmail(email)
 	token, err := GenerateRandomString(32)
 	if err != nil {
-		log.Panicln("Error: uses/userUses line 110")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	newUsr.AuthenticationCode = token
 	subject := "Your verification link"

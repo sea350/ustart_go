@@ -3,6 +3,7 @@ package widget
 import (
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -31,7 +32,8 @@ func SortUserWidgets(w http.ResponseWriter, r *http.Request) {
 
 	err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "UserWidgets", ids)
 	if err != nil {
-		log.Println("Error: middleware/widget/sortUserWidgets line 32")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 }

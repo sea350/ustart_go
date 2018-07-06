@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -27,14 +28,16 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	newNumRequests, err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
 	if err != nil {
-		log.Println("Error: middleware/project/acceptJoinRequest line 24")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	err = userPost.AppendProject(client.Eclient, newMemberID, types.ProjectInfo{ProjectID: projID, Visible: true})
 	if err != nil {
-		log.Println("Error: middleware/project/acceptJoinRequest line 34")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	theRole := r.FormValue("role")
@@ -55,8 +58,9 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	err = projPost.AppendMember(client.Eclient, projID, newMember)
 	if err != nil {
-		log.Println("Error: middleware/project/acceptJoinRequest line 47")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)
