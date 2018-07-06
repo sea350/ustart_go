@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/sea350/ustart_go/middleware/client"
 )
 
 var clients = make(map[*websocket.Conn]bool) // connected clients
@@ -29,6 +30,12 @@ type Message struct {
 
 //HandleConnections ...
 func HandleConnections(w http.ResponseWriter, r *http.Request) {
+	session, _ := client.Store.Get(r, "session_please")
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
+		http.Redirect(w, r, "/~", http.StatusFound)
+		return
+	}
 	// Upgrade initial GET request to a websocket
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -58,6 +65,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			delete(clients, ws)
 			break
 		}
+		msg.ChatID = chatID
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}

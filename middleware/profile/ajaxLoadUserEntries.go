@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -24,19 +25,22 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 	wallID := r.FormValue("userID")
 	user, err := get.UserByID(client.Eclient, wallID)
 	if err != nil {
-		log.Println("Error: middleware/profile/ajaxLoadUserEntries line 24")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs)
 	if err != nil {
-		log.Println("Error: middleware/profile/ajaxLoadUserEntries line 29")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(entries)
 	if err != nil {
-		log.Println("Error: middleware/profile/ajaxLoadUserEntries line 35")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, string(data))

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -23,20 +24,23 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 	wallID := r.FormValue("userID")
 	evnt, err := get.EventByID(client.Eclient, wallID)
 	if err != nil {
-		log.Println("Error: middleware/event/AjaxLoadEventEntries line 23")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	entries, err := uses.LoadEntries(client.Eclient, evnt.EntryIDs)
 	if err != nil {
-		log.Println("Error: middleware/event/AjaxLoadEventEntries line 29")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(entries)
 	if err != nil {
-		log.Println("Error: middleware/event/AjaxLoadEventEntries line 35")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, string(data))

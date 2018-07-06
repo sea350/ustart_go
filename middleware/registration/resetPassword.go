@@ -3,7 +3,9 @@ package registration
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -20,7 +22,9 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
-		fmt.Println("Test1:", test1)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -36,8 +40,9 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 	user, err := getUser.UserByEmail(client.Eclient, email)
 	if err != nil {
-		fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 34: User not found")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 		return
 	}
 
@@ -45,33 +50,38 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
 		newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
 		if err != nil {
-			fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 40: Error generating password")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			return
 		}
 		userID, err := getUser.UserIDByEmail(client.Eclient, email)
 		if err != nil {
-			fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 50: User not found")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			return
 		}
 
 		err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
 		if err != nil {
-			fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 57: Error resetting password")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			return
 		}
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
 		if err != nil {
-			fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 63: Unable to remove authentication code")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
 		if err != nil {
-			fmt.Println("Error: /ustart_go/middleware/settings/resetPassword/ line 69: Unable to remove authentication code time")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 
 		http.Redirect(w, r, "/~", http.StatusFound)

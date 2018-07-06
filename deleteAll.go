@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -21,7 +23,9 @@ func DeleteAll() {
 	deleteIndex, err = eclient.DeleteIndex(globals.UserIndex).Do(ctx)
 	if err != nil {
 		// Handle error
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	} else {
 		fmt.Println("S U C C")
 	}

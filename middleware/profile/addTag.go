@@ -3,6 +3,7 @@ package profile
 import (
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/sea350/ustart_go/middleware/client"
@@ -29,7 +30,8 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 
 	err := post.UpdateUser(client.Eclient, ID, "Tags", tags)
 	if err != nil {
-		log.Println("Error: middleware/profile/addTag line 30")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 }

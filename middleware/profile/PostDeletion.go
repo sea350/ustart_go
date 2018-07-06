@@ -2,7 +2,9 @@ package profile
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -22,13 +24,12 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	postid := r.FormValue("postid")
-	fmt.Println(session.Values["Username"])
-	fmt.Println(r.URL)
 
 	parentID, err := uses.RemoveEntry(client.Eclient, postid)
 	if err != nil {
-		fmt.Println("err: middleware/profile/postdeletion line 28")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	fmt.Fprintln(w, parentID)
 
@@ -39,7 +40,9 @@ func GenerateDeleteModal(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}

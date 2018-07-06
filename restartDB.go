@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
 
 	globals "github.com/sea350/ustart_go/globals"
 )
@@ -79,7 +81,9 @@ func RestartDB() {
 	deleteIndex, err = eclient.DeleteIndex(globals.UserIndex).Do(ctx)
 	if err != nil {
 		// Handle error
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	} else {
 		fmt.Println("S U C C")
 	}
@@ -91,29 +95,33 @@ func RestartDB() {
 	createIndex, err := eclient.CreateIndex(globals.UserIndex).BodyString(usrMapping).Do(ctx)
 	if err != nil {
 		// Handle error
-		fmt.Println(err)
-		fmt.Println("Could not create USER")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	createIndex, err = eclient.CreateIndex(globals.ProjectIndex).BodyString(projMapping).Do(ctx)
 	if err != nil {
 		// Handle error
-		fmt.Println(err)
-		fmt.Println("Could not create PROJECT")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	createIndex, err = eclient.CreateIndex(globals.WidgetIndex).BodyString(widgetMapping).Do(ctx)
 	if err != nil {
 		// Handle error
-		fmt.Println(err)
-		fmt.Println("Could not create WIDGET")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	createIndex, err = eclient.CreateIndex(globals.EntryIndex).Do(ctx)
 	if err != nil {
 		// Handle error
-		fmt.Println(err)
-		fmt.Println("Could not create ENTRY")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	if !createIndex.Acknowledged {

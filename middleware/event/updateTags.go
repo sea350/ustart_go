@@ -2,7 +2,9 @@ package event
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/sea350/ustart_go/middleware/client"
@@ -30,7 +32,8 @@ func UpdateEventTags(w http.ResponseWriter, r *http.Request) {
 
 	err := post.UpdateEvent(client.Eclient, ID, "Tags", tags)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("error: middleware/event/updatetags line 31")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 }

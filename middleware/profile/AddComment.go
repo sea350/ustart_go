@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -28,14 +29,16 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 	contentArray := []rune(comment)
 	err := uses.UserReplyEntry(client.Eclient, id, postActual, contentArray)
 	if err != nil {
-		log.Println("Error: middleware/event/addComment line 29")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	_, cmts, err := uses.LoadComments(client.Eclient, postID, 0, -1)
 	if err != nil {
-		log.Println("Error: middleware/profile/AddComment line 35")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(cmts)
@@ -60,14 +63,16 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 	contentArray := []rune(comment)
 	err := uses.UserReplyEntry(client.Eclient, session.Values["DocID"].(string), postID, contentArray)
 	if err != nil {
-		log.Println("Error: middleware/event/addComment line 61")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	_, cmts, err := uses.LoadComments(client.Eclient, postID, 0, -1)
 	if err != nil {
-		log.Println("Error: middleware/event/addComment line 67")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(cmts)

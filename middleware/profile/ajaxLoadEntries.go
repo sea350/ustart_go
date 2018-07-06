@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -25,14 +26,16 @@ func AjaxLoadEntries(w http.ResponseWriter, r *http.Request) {
 
 	entries, err := uses.LoadEntries(client.Eclient, entryIDsArr)
 	if err != nil {
-		log.Println("Error: middleware/profile/ajaxLoadEntries line 25")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(entries)
 	if err != nil {
-		log.Println("Error: middleware/profile/ajaxloadentries line 31")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, string(data))

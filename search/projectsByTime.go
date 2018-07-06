@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -26,8 +27,9 @@ func ProjectsByTime(eclient *elastic.Client, minTime string, maxTime string) {
 	q := elastic.NewNestedQuery("Project", bq).QueryName("qname")
 	src, err := q.Source()
 	if err != nil {
-		log.Println("Error: search/projectsByTime line 27")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(src)

@@ -3,7 +3,9 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -21,45 +23,17 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	postID := r.FormValue("PostID")
-	//postaid := postID[9:]
-	//postactual := postID[10:]
-	// need to trim beginning of postID
-	// pika := r.FormValue("Pikachu")
-	// fmt.Println("This is debug text, GetComments.go: 23")
-	// fmt.Println(pika + "IS PIKA") // pika is your own doc id
-	// journal entry, err
-	_, arrayofComments, err4 := uses.LoadComments(client.Eclient, postID, 0, -1)
-	//fmt.Println(parentPost);
-
-	//fmt.Println("ARRAY OF COMMENTS");
-	//fmt.Println(arrayofComments);
-	if err4 != nil {
-		fmt.Println("This is debug text, GetComments.go: 29")
-		fmt.Println(err4)
+	_, arrayofComments, err := uses.LoadComments(client.Eclient, postID, 0, -1)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
-
-	//var sum int
-	//var commentoutputs string
-	/*
-		The following is how AJAX for loading comments is handled on the server side.
-	*/
-	// for i := 0; i < len(arrayofComments); i++ {
-	// 	// postIDnow := parentPost.ReplyIDS[i]
-	// 	commentoutputs += stringHTML.CommentEntry(arrayofComments[i].Image, arrayofComments[i].FirstName, arrayofComments[i].LastName, string(arrayofComments[i].Element.Content), string(arrayofComments[i].ElementID))
-	// 	//fmt.Println(arrayofComments[i].Element.Content)
-	// 	sum += i
-	// }
-
 	data, err := json.Marshal(arrayofComments)
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	fmt.Fprintln(w, string(data))
-	//	fmt.Println("COMMENT OUTPUT:", commentoutputs)
-	//	username := session.Values["Username"].(string)
-
-	//output := stringHTML.ParentEntry(postaid, parentPost.Image, parentPost.FirstName, parentPost.LastName, string(parentPost.Element.Content), pika, username, commentoutputs)
-
-	//fmt.Fprintln(w, output)
-
 }

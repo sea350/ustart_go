@@ -106,4 +106,5 @@ type User struct {
 	AuthenticationCode     string         `json:"AuthenticationCode"`
 	AuthenticationCodeTime time.Time      `json:"AuthenticationCodeTime"`
 	Events                 []EventInfo    `json:"Events"`
+	ProxyMessagesID        string         `json:"ProxyMessagesID"`
 }

@@ -1,9 +1,9 @@
 package settings
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -26,8 +26,9 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 
 	project, err := get.ProjectByID(client.Eclient, projectID)
 	if err != nil {
-		fmt.Println("error: middleware/project/changememberclass line 25")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	var isCreator, _ = uses.IsLeader(client.Eclient, projectID, test1.(string))
@@ -57,8 +58,9 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if err != nil {
-				fmt.Println("error: middleware/project/changememberclass line 49")
-				fmt.Println(err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
 
 			}
 		}

@@ -1,8 +1,10 @@
 package profile
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/sea350/ustart_go/types"
@@ -23,24 +25,26 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	pageUserName := strings.ToLower(r.URL.Path[9:])
 
-	userstruct, _, followbool, err5 := uses.UserPage(client.Eclient, pageUserName, test1.(string))
-	if err5 != nil {
-		log.Println("Error: middleware/profile/ViewProfile line 26")
-		log.Println(err5)
+	userstruct, _, followbool, err := uses.UserPage(client.Eclient, pageUserName, test1.(string))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
 
 	widgets, errors := uses.LoadWidgets(client.Eclient, userstruct.UserWidgets)
 	if len(errors) != 0 {
-		log.Println("Error: middleware/profile/ViewProfile line 34: one or more errors have occured in loading widgets")
-		log.Println(errors)
+		fmt.Println("Error: middleware/profile/ViewProfile line 34: one or more errors have occured in loading widgets")
+		fmt.Println(errors)
 	}
 
-	jEntries, err5 := uses.LoadEntries(client.Eclient, userstruct.EntryIDs)
-	if err5 != nil {
-		log.Println("Error: middleware/profile/ViewProfile line 40")
-		log.Println(err5)
+	jEntries, err := uses.LoadEntries(client.Eclient, userstruct.EntryIDs)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	followingState := "no"
 	if followbool == true {
@@ -74,31 +78,35 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	year := bday[0:4]
 	birthdayline := month + "/" + day + "/" + year
 
-	viewingDOC, errID := get.IDByUsername(client.Eclient, strings.ToLower(pageUserName))
-	if errID != nil {
-		log.Println("Error: middleware/profile/ViewProfile line 80")
-		log.Println(errID)
+	viewingDOC, err := get.IDByUsername(client.Eclient, strings.ToLower(pageUserName))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	temp := string(userstruct.Description)
 
-	numberFollowing, errnF := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), true)
-	if errnF != nil {
-		log.Println("Error: middleware/profile/ViewProfile line 88")
-		log.Println(errnF)
+	numberFollowing, err := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), true)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
-	numberFollowers, errnF2 := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), false)
-	if errnF2 != nil {
-		log.Println("Error: middleware/profile/ViewProfile line 93")
-		log.Println(errnF2)
+	numberFollowers, err := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), false)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	var projHeads []types.FloatingHead
 	for _, projID := range userstruct.Projects {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projID.ProjectID)
 		if err != nil {
-			log.Println("Error: middleware/profile/ViewProfile line 101")
-			log.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			continue
 		}
 		head.Followed = projID.Visible

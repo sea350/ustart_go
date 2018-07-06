@@ -3,6 +3,7 @@ package profile
 import (
 	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -23,8 +24,9 @@ func AjaxChangeProjVisibility(w http.ResponseWriter, r *http.Request) {
 
 	usr, err := get.UserByID(client.Eclient, ID.(string))
 	if err != nil {
-		log.Println("Error: middleware/profile/AjaxChangeProjVisibility line 24")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 		return
 	}
 
@@ -40,7 +42,8 @@ func AjaxChangeProjVisibility(w http.ResponseWriter, r *http.Request) {
 
 	err = post.UpdateUser(client.Eclient, ID.(string), "Projects", usr.Projects)
 	if err != nil {
-		log.Println("this is an err: middleware/profile/AjaxChangeProjVisibility line 41")
-		log.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 }

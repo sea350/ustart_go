@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
+	"os"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -36,7 +38,9 @@ func ScrollTest(eclient *elastic.Client, loadlist []string) {
 			break
 		}
 		if err != nil {
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		if res == nil {
 			fmt.Println("expected results != nil; got nil")
@@ -54,7 +58,9 @@ func ScrollTest(eclient *elastic.Client, loadlist []string) {
 			item := make(map[string]interface{})
 			err := json.Unmarshal(*hit.Source, &item)
 			if err != nil {
-				fmt.Println(err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
 			}
 			docs++
 		}
@@ -73,7 +79,9 @@ func ScrollTest(eclient *elastic.Client, loadlist []string) {
 	}
 
 	if err := svc.Clear(context.TODO()); err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	if _, err := svc.Do(context.TODO()); err == nil {

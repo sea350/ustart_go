@@ -3,7 +3,9 @@ package project
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -23,19 +25,22 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 	wallID := r.FormValue("userID")
 	proj, err := get.ProjectByID(client.Eclient, wallID)
 	if err != nil {
-		fmt.Println("err middleware/project/AjaxLoadProjectEntries line 25")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	entries, err := uses.LoadEntries(client.Eclient, proj.EntryIDs)
 	if err != nil {
-		fmt.Println("err middleware/project/AjaxLoadProjectEntries line 30")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(entries)
 	if err != nil {
-		fmt.Println("err middleware/project/AjaxLoadProjectEntries line 37")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, string(data))

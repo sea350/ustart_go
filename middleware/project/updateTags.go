@@ -1,8 +1,9 @@
 package project
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/sea350/ustart_go/middleware/client"
@@ -20,7 +21,6 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("projectWidget")
-	fmt.Println("THIS IS THE ID:", ID)
 
 	tags := strings.Split(r.FormValue("skillArray"), `","`)
 	if len(tags) > 0 {
@@ -30,7 +30,8 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 
 	err := post.UpdateProject(client.Eclient, ID, "Tags", tags)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("error: middleware/project/updatetags line 31")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 }
