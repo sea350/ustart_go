@@ -140,7 +140,10 @@ func main() {
 
 	//CHAT
 	http.HandleFunc("/ch/", chat.Page)
-	http.HandleFunc("/ws", chat.HandleConnections)
+	http.HandleFunc("/ws/", chat.HandleConnections)
+
+	//http.HandleFunc("/ch/", chat.Page)
+	// http.HandleFunc("/ws", chat.Run)
 
 	http.ListenAndServe(":"+currentPort, nil)
 }

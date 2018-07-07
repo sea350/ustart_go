@@ -3,7 +3,9 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -22,14 +24,16 @@ func AjaxLoadComments(w http.ResponseWriter, r *http.Request) {
 	parentID := r.FormValue("postID")
 	_, entries, err := uses.LoadComments(client.Eclient, parentID, 0, -1)
 	if err != nil {
-		fmt.Println("err middleware/profile/ajaxloadcomments line 25")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(entries)
 	if err != nil {
-		fmt.Println("err middleware/profile/ajaxloadcomments line 32")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, string(data))

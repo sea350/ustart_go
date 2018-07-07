@@ -3,7 +3,9 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/uses"
@@ -23,14 +25,17 @@ func EditPost(w http.ResponseWriter, r *http.Request) {
 	newContent := r.FormValue("content")
 
 	editedEntry, err := uses.EditEntry(client.Eclient, postID, "Content", []rune(newContent))
-
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(editedEntry)
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	fmt.Fprintln(w, string(data))
 

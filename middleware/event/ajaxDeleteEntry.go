@@ -2,7 +2,9 @@ package event
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/delete"
 	get "github.com/sea350/ustart_go/get/entry"
@@ -26,21 +28,24 @@ func AjaxDeleteEventEntry(w http.ResponseWriter, r *http.Request) {
 
 	entry, err := get.EntryByID(client.Eclient, entryID)
 	if err != nil {
-		fmt.Println("err: middleware/event/ajaxdeleteentry line 29")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	err = delete.Entry(client.Eclient, entryID)
 	if err != nil {
-		fmt.Println("err: middleware/event/ajaxdeleteentry line 35")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	//removing reference to entry in user
 	evnt, err := getEvnt.EventByID(client.Eclient, eventID)
 	if err != nil {
-		fmt.Println("err: middleware/event/ajaxdeleteentry line 42")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	removeIdx := -1
@@ -60,8 +65,9 @@ func AjaxDeleteEventEntry(w http.ResponseWriter, r *http.Request) {
 
 		err = postEvnt.UpdateEvent(client.Eclient, eventID, "EntryIDs", updatedEntries)
 		if err != nil {
-			fmt.Println("err: middleware/event/ajaxdeleteentry line 63")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 	}
 	//if reply, remove reference from parent
@@ -69,8 +75,9 @@ func AjaxDeleteEventEntry(w http.ResponseWriter, r *http.Request) {
 
 		parent, err := get.EntryByID(client.Eclient, entry.ReferenceEntry)
 		if err != nil {
-			fmt.Println("err: middleware/event/ajaxdeleteentry line 73")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 
 		removeIdx := -1
@@ -90,8 +97,9 @@ func AjaxDeleteEventEntry(w http.ResponseWriter, r *http.Request) {
 
 			err = postEntry.UpdateEntry(client.Eclient, entry.ReferenceEntry, "ReplyIDs", updatedReplies)
 			if err != nil {
-				fmt.Println("err: middleware/event/ajaxdeleteentry line 94")
-				fmt.Println(err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
 			}
 		}
 	}
@@ -100,8 +108,9 @@ func AjaxDeleteEventEntry(w http.ResponseWriter, r *http.Request) {
 	if entry.Classification == 2 {
 		parent, err := get.EntryByID(client.Eclient, entry.ReferenceEntry)
 		if err != nil {
-			fmt.Println("err: middleware/event/ajaxdeleteentry line 104")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		removeIdx := -1
 		for idx := range parent.ShareIDs {
@@ -120,8 +129,9 @@ func AjaxDeleteEventEntry(w http.ResponseWriter, r *http.Request) {
 
 			err = postEntry.UpdateEntry(client.Eclient, entry.ReferenceEntry, "ShareIDs", updatedShares)
 			if err != nil {
-				fmt.Println("err: middleware/project/ajaxdeleteentry line 124")
-				fmt.Println(err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
 			}
 		}
 	}

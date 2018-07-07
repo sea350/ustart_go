@@ -47,14 +47,16 @@ type Events struct {
 	Tags              string            `json:"Tags"`
 	Category          string            `json:"Category"`
 	URLName           string            `json:"URLName"`
-	Description       []string          `json:"Description"`
+	QuickLinks        []Link            `json:"QuickLinks"`
+	Description       []rune            `json:"Description"`
 	Members           []EventMembers    `json:"Members"`
 	Guests            []EventGuests     `json:"Guests"`
 	EntryIDs          []string          `json:"EntryIDs"`
 	Location          LocStruct         `json:"Location"`
-	EventDate         time.Time         `json:"EventDate"`
+	EventDateStart    time.Time         `json:"EventDateStart"`
+	EventDateEnd      time.Time         `json:"EventDateEnd"`
 	CreationDate      time.Time         `json:"CreationDate"`
-	Widgets           []Widget          `json:"Widgets"`
+	Widgets           []string          `json:"Widgets"`
 	Whitelist         []string          `json:"Whitelist"`
 	Blacklist         []string          `json:"Blacklist"`
 	Status            bool              `json:"Status"` //Whether this event is still ongoing or cancelled
@@ -62,6 +64,7 @@ type Events struct {
 	Avatar            string            `json:"Avatar"`
 	CroppedAvatar     string            `json:"CropAvatar"`
 	Banner            string            `json:"Banner"`
+	Visible           bool              `json:"Visible"`
 	MemberReqSent     []string          `json:"MemberReqSent"`
 	MemberReqReceived []string          `json:"MemberReqReceived"`
 	GuestReqSent      []string          `json:"GuestReqSent"`

@@ -2,7 +2,9 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	uses "github.com/sea350/ustart_go/uses"
@@ -31,7 +33,9 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	//TODO: DocID
 	err = uses.ChangeProjectLocation(eclient, projID, country, state, city, zip)
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	//TODO: Add in right URL
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

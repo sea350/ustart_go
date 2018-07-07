@@ -1,8 +1,9 @@
 package widget
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/widget"
@@ -22,8 +23,9 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 
 	newWidget, err := ProcessWidgetForm(r)
 	if err != nil {
-		fmt.Println("this is an error: middleware/profile/addWidget.go 25")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 		return
 	}
@@ -31,16 +33,18 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	newWidget.UserID = session.Values["DocID"].(string)
 
 	if r.FormValue("editID") == `0` {
-		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget, false)
+		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget, false, false)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 37")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 	} else {
 		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an error: middleware/profile/addWidget.go 43")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 	}
 

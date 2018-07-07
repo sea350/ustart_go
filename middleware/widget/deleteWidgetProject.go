@@ -1,8 +1,9 @@
 package widget
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -11,6 +12,7 @@ import (
 
 //DeleteWidgetProject ... Deletes a widget and redirects to projects page
 func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
@@ -28,8 +30,8 @@ func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 	}
 	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), true)
 	if err != nil {
-		fmt.Println("This is an err, deleteWidgetProject line29")
-		fmt.Println(err)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)

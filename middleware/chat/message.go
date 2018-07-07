@@ -1,14 +1,17 @@
 package chat
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/sea350/ustart_go/middleware/client"
 )
 
 var clients = make(map[*websocket.Conn]bool) // connected clients
-var broadcast = make(chan Message)           // broadcast channel
+var chatroom = make(map[string](map[*websocket.Conn]bool))
+var broadcast = make(chan Message) // broadcast channel
 
 // Configure the upgrader
 var upgrader = websocket.Upgrader{
@@ -17,15 +20,22 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-// Define our message object
+//Message ... Define our message object
 type Message struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 	Message  string `json:"message"`
+	ChatID   string `json:"chatID"`
 }
 
 //HandleConnections ...
 func HandleConnections(w http.ResponseWriter, r *http.Request) {
+	session, _ := client.Store.Get(r, "session_please")
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
+		http.Redirect(w, r, "/~", http.StatusFound)
+		return
+	}
 	// Upgrade initial GET request to a websocket
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -33,19 +43,29 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 	// Make sure we close the connection when the function returns
 	defer ws.Close()
-
+	chatID := r.URL.Path[4:]
 	// Register our new client
-	clients[ws] = true
+	_, exists := chatroom[chatID]
+	if !exists {
+		temp := make(map[*websocket.Conn]bool)
+		temp[ws] = true
+		chatroom[chatID] = temp
+	} else {
+		temp := chatroom[chatID]
+		temp[ws] = true
+		chatroom[chatID] = temp
+	}
 
 	for {
 		var msg Message
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			//log.Printf("error: %v", err)
+			log.Printf("error: %v", err)
 			delete(clients, ws)
 			break
 		}
+		msg.ChatID = chatID
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}
@@ -56,12 +76,17 @@ func handleMessages() {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
-		for client := range clients {
+		fmt.Println("debug text: middleware/chat/message line 67")
+		fmt.Println("channel #" + msg.ChatID)
+		fmt.Printf("message: %v \n", msg)
+		fmt.Println(chatroom[msg.ChatID])
+
+		for client := range chatroom[msg.ChatID] {
 			err := client.WriteJSON(msg)
 			if err != nil {
-				//log.Printf("error: %v", err)
+				log.Printf("error: %v", err)
 				client.Close()
-				delete(clients, client)
+				delete(chatroom[msg.ChatID], client)
 			}
 		}
 	}

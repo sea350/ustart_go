@@ -2,7 +2,9 @@ package project
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -26,27 +28,39 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	newNumRequests, err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
 	if err != nil {
-		fmt.Println("err middleware/project/acceptjoinrequest line 27")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	err = userPost.AppendProject(client.Eclient, newMemberID, types.ProjectInfo{ProjectID: projID, Visible: true})
 	if err != nil {
-		fmt.Println("err middleware/project/acceptjoinrequest line 34")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
+	theRole := r.FormValue("role")
+
 	var newMember types.Member
+	switch theRole {
+	case "Moderator":
+		newMember.Title = "Admin"
+		newMember.Role = 1
+	default:
+		newMember.Title = "Member"
+		newMember.Role = 2
+	}
+
 	newMember.MemberID = newMemberID
-	newMember.Role = 2
-	newMember.Title = "Member"
 	newMember.Visible = true
 	newMember.JoinDate = time.Now()
 
 	err = projPost.AppendMember(client.Eclient, projID, newMember)
 	if err != nil {
-		fmt.Println("err middleware/project/acceptjoinrequest line 48")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

@@ -3,7 +3,9 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -23,27 +25,25 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("followstat")
 	postActual := postID[1:]
 	comment := r.FormValue("commentz")
-	id := r.FormValue("id") // userID
-	fmt.Println("ID IS " + id)
+	id := r.FormValue("id")
 	contentArray := []rune(comment)
-	//username := r.FormValue("username")
-	fmt.Println(postActual + "is the post ID? ")
-	err4 := uses.UserReplyEntry(client.Eclient, id, postActual, contentArray)
-	if err4 != nil {
-		fmt.Println(err4)
+	err := uses.UserReplyEntry(client.Eclient, id, postActual, contentArray)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	_, cmts, err := uses.LoadComments(client.Eclient, postID, 0, -1)
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(cmts)
 	fmt.Println("DATA NEXT:", string(data))
 	fmt.Fprintln(w, string(data))
-
-	//http.Redirect(w, r, "/profile/"+username, http.StatusFound)
-
 }
 
 //AddComment2 ... Iunno
@@ -59,25 +59,23 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	postID := r.FormValue("postID")
-	fmt.Println(postID)
-	// postActual := postID[1:]
 	comment := r.FormValue("body")
 	contentArray := []rune(comment)
-	fmt.Println(session.Values["DocID"].(string) + "IS PIKA")
-	err4 := uses.UserReplyEntry(client.Eclient, session.Values["DocID"].(string), postID, contentArray)
-	if err4 != nil {
-		fmt.Println(err4)
+	err := uses.UserReplyEntry(client.Eclient, session.Values["DocID"].(string), postID, contentArray)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	_, cmts, err := uses.LoadComments(client.Eclient, postID, 0, -1)
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	data, err := json.Marshal(cmts)
 
 	fmt.Fprintln(w, string(data))
-
-	//http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
-	//return
 }

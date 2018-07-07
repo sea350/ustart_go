@@ -2,7 +2,9 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/middleware/client"
 
@@ -26,26 +28,30 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 
 	inUse, err := get.URLInUse(client.Eclient, newURL)
 	if err != nil {
-		fmt.Println("err: middleware/settings/projectcustomurl line 28")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
-		fmt.Println("err: middleware/settings/projectcustomurl line 34")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	if inUse {
-		fmt.Println("URL IS IN USE, ERROR NOT PROPERLY HANDLED REDIRECTING TO PROJECT PAGE")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("URL IS IN USE, ERROR NOT PROPERLY HANDLED REDIRECTING TO PROJECT PAGE")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
 
 	err = uses.ChangeProjectURL(eclient, projID, newURL)
 	if err != nil {
-		fmt.Println("err: middleware/settings/projectcustomurl line 46")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

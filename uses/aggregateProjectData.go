@@ -1,7 +1,8 @@
 package uses
 
 import (
-	"fmt"
+	"log"
+	"os"
 
 	getProject "github.com/sea350/ustart_go/get/project"
 	types "github.com/sea350/ustart_go/types"
@@ -16,15 +17,17 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 
 	data, err := getProject.ProjectByURL(eclient, url)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("error aggregateProjectData.go 17")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	projectData.ProjectData = data
 
 	id, err := getProject.ProjectIDByURL(eclient, url)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("error aggregateProjectData.go 24")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	projectData.DocID = id
 
@@ -35,8 +38,9 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 		id := member.MemberID
 		mem, err := ConvertUserToFloatingHead(eclient, id)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("error aggregateProjectData.go 36")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		mem.Classification = member.Role
 		projectData.MemberData = append(projectData.MemberData, mem)

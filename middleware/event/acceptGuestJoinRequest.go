@@ -2,7 +2,9 @@ package event
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	evntPost "github.com/sea350/ustart_go/post/event"
@@ -24,26 +26,29 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	newGuestID := r.FormValue("userID")
 
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newGuestID)
-
 	if err != nil {
-		fmt.Println("err middleware/event/acceptguestjoinrequest line 27")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	err = userPost.AppendEvent(client.Eclient, newGuestID, types.EventInfo{EventID: evntID, Visible: true})
 	if err != nil {
-		fmt.Println("err middleware/event/acceptguestjoinrequest line 34")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	var newGuest types.EventGuests
+	newGuest.Status = 0
 	newGuest.GuestID = newGuestID
 	newGuest.Visible = true
 
 	err = evntPost.AppendGuest(client.Eclient, evntID, newGuest)
 	if err != nil {
-		fmt.Println("err middleware/event/acceptguestjoinrequest line 48")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

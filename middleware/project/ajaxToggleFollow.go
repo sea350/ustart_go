@@ -1,8 +1,9 @@
 package project
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -21,7 +22,8 @@ func AjaxToggleFollow(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.UserFollowProjectToggle(client.Eclient, test1.(string), projectID)
 	if err != nil {
-		fmt.Println("err: middleware/project/ajaxtogglefollow line 23")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 }
