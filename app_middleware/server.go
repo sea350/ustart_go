@@ -5,6 +5,7 @@ import (
 
 	//"github.com/sea350/ustart_go/middleware/fail"
 	//inbox "github.com/mrb721/ustart_app/ustartapp/middleware/inbox"
+	email "github.com/sea350/ustart_go/app_middleware/email"
 	login "github.com/sea350/ustart_go/app_middleware/login"
 	profile "github.com/sea350/ustart_go/app_middleware/profile"
 	project "github.com/sea350/ustart_go/app_middleware/project"
@@ -44,6 +45,7 @@ func main() {
 	http.HandleFunc("/profile/", profile.Handler)
 	http.HandleFunc("/project/", project.Handler)
 	http.HandleFunc("/search/", search.Handler)
+	http.HandleFunc("/email/", email.Handler)
 
 	//http.HandleFunc("/logout/", login.Logout)
 
