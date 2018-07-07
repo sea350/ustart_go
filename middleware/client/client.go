@@ -54,8 +54,7 @@ var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/followerlist-n
 	"/ustart/ustart_front/project_settings_F.html",
 	"/ustart/ustart_front/leftnav-nil.html", "/ustart/ustart_front/ManageProjectMembersF.html",
 	"/ustart/ustart_front/followerlist-nil.html", "/ustart/ustart_front/404.html",
-	"/ustart/ustart_front/search-nil.html", "/ustart/ustart_front/profile-wall.html",
-	"/ustart/ustart_front/reg-got-verified.html", "/ustart/ustart_front/reset-forgot-pw.html",
+	"/ustart/ustart_front/search-nil.html", "ustart/ustart_front/reg-got-verified.html", "/ustart/ustart_front/reset-forgot-pw.html",
 	"/ustart/ustart_front/reset-new-pass.html", "/ustart/ustart_front/cuzsteventoldmeto.html",
 	"/ustart/ustart_front/events.html", "/ustart/ustart_front/eventStart.html",
 	"/ustart/ustart_front/chat.html"))
