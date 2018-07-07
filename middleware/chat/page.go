@@ -60,7 +60,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 
 	//get chat proxy
 	//load list of heads
-	//client.RenderSidebar(w, r, "template2-nil")
+	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderTemplate(w, r, "chat", cs)
 	go handleMessages()
 }
