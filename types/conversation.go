@@ -15,14 +15,16 @@ type Message struct {
 
 //Eavesdropper ... Information about a single person in the conversation
 type Eavesdropper struct {
-	DocID    string `json:"DocID"`
-	Class    int    `json:"Class"`
-	Bookmark int    `json:"Bookmark"` //index of the last message the person saw in the ARCHIVE
-	Color    string `json:"Color"`    //hex format color
+	DocID     string `json:"DocID"`
+	Class     int    `json:"Class"`
+	Bookmark  int    `json:"Bookmark"`  //index of the last message the person saw in the ARCHIVE
+	TextColor string `json:"TextColor"` //hex format color
+	Nickname  string `json:"Nickname"`
 }
 
 //Conversation ... an ES indexed structure that is a full record of the entire conversation including a cache of the most recent
 type Conversation struct {
+	Title            string                  `json:"Title"`
 	Eavesdroppers    map[string]Eavesdropper `json:"Eavesdroppers"`
 	MessageIDArchive []string                `json:"MessageArchive"` //no limit but must be ordered by most recent interaction
 	MessageIDCache   []string                `json:"MessageCache"`   //LIMIT 100, must be ordered by most recent interaction
