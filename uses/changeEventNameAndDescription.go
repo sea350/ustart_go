@@ -9,7 +9,7 @@ import (
 //Requires the target event's docID, new name and description
 //Returns an error if there was a problem with database submission
 //NOTE: it is possible Name change goes through but not Description
-func ChangeEventNameAndDescription(eclient *elastic.Client, eventID string, newName string, newDescription []string) error {
+func ChangeEventNameAndDescription(eclient *elastic.Client, eventID string, newName string, newDescription []rune) error {
 	err := post.UpdateEvent(eclient, eventID, "Name", newName)
 	if err != nil {
 		return err

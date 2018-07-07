@@ -39,25 +39,21 @@ type ClientSide struct {
 	Wall            []types.JournalEntry
 	Widgets         []types.Widget
 	Project         types.ProjectAggregate
+	Event           types.EventAggregate
 }
 
 /* The following line is how HTML is loaded by our application. Note we need the relative link from the location of GoStart2. */
-var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/followerlist-nil.html",
-	"/ustart/ustart_front/emTee.html", "/ustart/ustart_front/wallttt.html",
-	"/ustart/ustart_front/wallload-nil.html", "/ustart/ustart_front/testimage.html",
-	"/ustart/ustart_front/ajax-nil.html", "/ustart/ustart_front/Membership-Nil.html",
+var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/followerlist-nil.html", "/ustart/ustart_front/Membership-Nil.html",
 	"/ustart/ustart_front/settings-Nil.html", "/ustart/ustart_front/inbox-Nil.html",
 	"/ustart/ustart_front/createProject-Nil.html", "/ustart/ustart_front/manageprojects-Nil.html",
 	"/ustart/ustart_front/projectsF.html", "/ustart/ustart_front/new-reg-nil.html",
-	"/ustart/ustart_front/loginerror-nil.html", "/ustart/ustart_front/test.html",
-	"/ustart/ustart_front/payment-nil.html", "/ustart/ustart_front/templateNoUser2.html",
+	"/ustart/ustart_front/loginerror-nil.html", "/ustart/ustart_front/templateNoUser2.html",
 	"/ustart/ustart_front/profile-nil.html", "/ustart/ustart_front/template2-nil.html",
-	"/ustart/ustart_front/template-footer-nil.html", "/ustart/ustart_front/nil-index2.html",
-	"/ustart/ustart_front/regcomplete-nil.html", "/ustart/ustart_front/project_settings_F.html",
+	"/ustart/ustart_front/template-footer-nil.html", "/ustart/ustart_front/regcomplete-nil.html",
+	"/ustart/ustart_front/project_settings_F.html", "/ustart/ustart_front/reset-forgot-pw.html",
 	"/ustart/ustart_front/leftnav-nil.html", "/ustart/ustart_front/ManageProjectMembersF.html",
 	"/ustart/ustart_front/followerlist-nil.html", "/ustart/ustart_front/404.html",
-	"/ustart/ustart_front/search-nil.html", "/ustart/ustart_front/profile-wall.html",
-	"/ustart/ustart_front/reg-got-verified.html", "/ustart/ustart_front/reset-forgot-pw.html",
+	"/ustart/ustart_front/search-nil.html", "/ustart/ustart_front/reg-got-verified.html",
 	"/ustart/ustart_front/reset-new-pass.html", "/ustart/ustart_front/cuzsteventoldmeto.html",
 	"/ustart/ustart_front/events.html", "/ustart/ustart_front/eventStart.html",
 	"/ustart/ustart_front/chat.html"))

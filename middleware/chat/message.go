@@ -22,10 +22,11 @@ var upgrader = websocket.Upgrader{
 
 //Message ... Define our message object
 type Message struct {
-	Email    string `json:"email"`
-	Username string `json:"username"`
-	Message  string `json:"message"`
-	ChatID   string `json:"chatID"`
+	Email    string `json:"Email"`
+	Username string `json:"Username"`
+	DocID    string `json:"DocID"`
+	Message  string `json:"Message"`
+	ChatID   string `json:"ChatID"`
 }
 
 //HandleConnections ...
@@ -66,6 +67,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		msg.ChatID = chatID
+		msg.DocID = docID.(string)
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}
