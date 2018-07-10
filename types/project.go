@@ -53,4 +53,14 @@ type Project struct {
 	Widgets           []string     `json:"Widgets"`
 	PrivilegeProfiles []Privileges `json:"PrivilegeProfiles"`
 	FollowedUsers     []string     `json:"FollowedUsers"`
+	Subchats          []Subchat    `json:"Subchats"`
+	ProxyMessagesID   string       `json:"ProxyMessagesID"`
+}
+
+//Subchat ... discordlite :)
+type Subchat struct {
+	ConversationID string `json:"ConversationID"`
+	ChatName       string `json:"ChatName"`
+	Icon           string `json:"Icon"`
+	Color          string `json:"Color"`
 }
