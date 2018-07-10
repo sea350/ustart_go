@@ -4,27 +4,39 @@ import (
 	"context"
 	"errors"
 
+	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 //DMExists ...
 //checks to see if a conversation between 2 people already exists
-func DMExists(eclient *elastic.Client, eavesdroppers []string) (bool, string, error) {
+func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo string) (bool, string, error) {
 
-	if len(eavesdroppers) < 2 {
-		return false, "", errors.New("invalid number of chat participants")
+	eavesOne, errOne := get.UserExists(eclient, eavesdropperOne)
+	if !eavesOne {
+		return false, "", errors.New("E1: Not all participants exist")
 	}
-	if len(eavesdroppers) > 2 {
-		return false, "", nil
+
+	if errOne != nil {
+		return false, "", errOne
 	}
+
+	eavesTwo, errTwo := get.UserExists(eclient, eavesdropperTwo)
+	if !eavesTwo {
+		return false, "", errors.New("E2: Not all participants exist")
+	}
+	if errTwo != nil {
+		return false, "", errTwo
+	}
+
 	query := elastic.NewBoolQuery()
 
-	for e := range eavesdroppers {
-		query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdroppers[e]))
-	}
+	query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdropperOne))
+	query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdropperTwo))
 
-	query = query.Should(elastic.NewTermQuery("EavesCount", len(eavesdroppers)))
+	length := 2
+	query = query.Should(elastic.NewTermQuery("EavesCount", length))
 
 	ctx := context.Background() //intialize context background
 	searchResults, err := eclient.Search().
