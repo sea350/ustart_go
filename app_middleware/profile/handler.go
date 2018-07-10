@@ -121,6 +121,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 			resp.update(err == nil, err, Usr)
 
+		case "event":
+			fmt.Println("INTENT TO CREATE EVENT")
+			_, err = uses.CreateEvent(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, data.CustomURL, data.Location, data.EventStart, data.EventEnd)
+
+			resp.update(err == nil, err, Usr)
 		case "get":
 			resp.update(errUsr == nil, errUsr, Usr)
 

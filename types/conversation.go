@@ -25,6 +25,8 @@ type Eavesdropper struct {
 //Conversation ... an ES indexed structure that is a full record of the entire conversation including a cache of the most recent
 type Conversation struct {
 	Title            string                  `json:"Title"`
+	RefProject       string                  `json:"RefProject"`
+	EavesCount       int                     `json:"EavesCount"`
 	Eavesdroppers    map[string]Eavesdropper `json:"Eavesdroppers"`
 	MessageIDArchive []string                `json:"MessageArchive"` //no limit but must be ordered by most recent interaction
 	MessageIDCache   []string                `json:"MessageCache"`   //LIMIT 100, must be ordered by most recent interaction
