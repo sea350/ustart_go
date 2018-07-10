@@ -12,7 +12,6 @@ import (
 
 var livePort = "5000"
 var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/nil-index2.html",
-	"/ustart/ustart_front/index.php",
 	"/ustart/ustart_front/template2-nil.html",
 	"/ustart/ustart_front/index1.html"))
 
