@@ -1,6 +1,7 @@
 package uses
 
 import (
+	getChat "github.com/sea350/ustart_go/get/chat"
 	getEvent "github.com/sea350/ustart_go/get/event"
 	getProject "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -66,5 +67,31 @@ func ConvertEventToFloatingHead(eclient *elastic.Client, eventID string) (types.
 	head.Notifications = len(evnt.MemberReqReceived)
 	head.Interface = evnt.Tags
 
+	return head, err
+}
+
+//ConvertProjectToFloatingHead ... pulls latest version of user and converts relevent data into floating head
+func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, viewerID string) (types.FloatingHead, error) {
+	var head types.FloatingHead
+
+	convo, err := getChat.ConvoByID(eclient, conversationID)
+	if err != nil {
+		return head, err
+	}
+
+	if convo.ReferenceProject != `` {
+		head, err = ConvertProjectToFloatingHead(eclient, convo.ReferenceProject)
+		if err != nil {
+			return head, err
+		}
+	}
+
+	msg, err := getChat.MsgByID(eclient, convo.MessageIDCache[len(convo.MessageIDCache)-1])
+	if err != nil {
+		return head, err
+	}
+
+	head.Bio = []rune{msg.Content}
+	//head.Notifications =
 	return head, err
 }
