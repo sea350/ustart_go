@@ -42,7 +42,7 @@ type EventMembers struct {
 
 //Events ... Event relevant data
 type Events struct {
-	//Host              User(implemented in some way)              `json:"Host"` to be implemented later in the code
+	Host              interface{}       `json:"Host"` //Displayed host on the event page, whether user or project
 	Name              string            `json:"Name"`
 	Tags              string            `json:"Tags"`
 	Category          string            `json:"Category"`
