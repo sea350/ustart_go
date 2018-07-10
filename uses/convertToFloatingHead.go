@@ -70,7 +70,7 @@ func ConvertEventToFloatingHead(eclient *elastic.Client, eventID string) (types.
 	return head, err
 }
 
-//ConvertProjectToFloatingHead ... pulls latest version of user and converts relevent data into floating head
+//ConvertChatToFloatingHead ... pulls latest version of chat and converts relevent data into floating head
 func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, viewerID string) (types.FloatingHead, error) {
 	var head types.FloatingHead
 
@@ -91,7 +91,12 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 		return head, err
 	}
 
-	head.Bio = []rune{msg.Content}
-	//head.Notifications =
+	for _, eaver := range convo.Eavesdroppers {
+		if eaver.DocID == viewerID {
+			head.Notifications = len(convo.MessageIDArchive) - eaver.Bookmark - 1
+		}
+	}
+
+	head.Bio = []rune(msg.Content)
 	return head, err
 }

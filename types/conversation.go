@@ -20,6 +20,8 @@ type Eavesdropper struct {
 	Bookmark  int    `json:"Bookmark"`  //index of the last message the person saw in the ARCHIVE
 	TextColor string `json:"TextColor"` //hex format color
 	Nickname  string `json:"Nickname"`
+	//Class 1 = user
+	//Class 2 = project
 }
 
 //Conversation ... an ES indexed structure that is a full record of the entire conversation including a cache of the most recent

@@ -8,6 +8,7 @@ import (
 	"net/smtp"
 )
 
+//Request ...
 type Request struct {
 	from    string
 	to      []string
@@ -15,10 +16,10 @@ type Request struct {
 	body    string
 }
 
-const (
-	MIME = "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
-)
+//MIME ...
+const MIME = "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
 
+//NewRequest ...
 func NewRequest(to []string, subject string) *Request {
 	return &Request{
 		to:      to,
@@ -48,6 +49,7 @@ func (r *Request) sendMail() bool {
 	return true
 }
 
+//Send ...
 func (r *Request) Send(templateName string, items interface{}) {
 	err := r.parseTemplate(templateName, items)
 	if err != nil {

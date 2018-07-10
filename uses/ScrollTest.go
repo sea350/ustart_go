@@ -53,7 +53,7 @@ func ScrollTest(eclient *elastic.Client, loadlist []string) {
 
 		for _, hit := range res.Hits.Hits {
 			if hit.Index != "TestIndex" {
-				fmt.Println("expected SearchResult.Hits.Hit.Index = %q; got %q", "TestIndex", hit.Index)
+				fmt.Println("expected SearchResult.Hits.Hit.Index = TestIndex; got " + hit.Index)
 			}
 			item := make(map[string]interface{})
 			err := json.Unmarshal(*hit.Source, &item)
@@ -66,7 +66,7 @@ func ScrollTest(eclient *elastic.Client, loadlist []string) {
 		}
 
 		if len(res.ScrollId) == 0 {
-			fmt.Println("expected scrollId in results; got %q", res.ScrollId)
+			fmt.Println("expected scrollId in results; got " + res.ScrollId)
 		}
 
 	}

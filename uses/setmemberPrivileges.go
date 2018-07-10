@@ -4,7 +4,7 @@ import (
 	types "github.com/sea350/ustart_go/types"
 )
 
-//SetMemberPrivileges...
+//SetMemberPrivileges ...
 //0 = Creator, 1 = admin, 2 =  member
 func SetMemberPrivileges(role int) types.Privileges {
 	var memberPrivileges types.Privileges
