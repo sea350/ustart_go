@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -78,15 +77,18 @@ func handleMessages() {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
-		fmt.Println("debug text: middleware/chat/message line 67")
-		fmt.Println("channel #" + msg.ChatID)
-		fmt.Printf("message: %v \n", msg)
-		fmt.Println(chatroom[msg.ChatID])
-
+		/*
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, "debug text")
+			log.Println("channel #" + msg.ChatID)
+			log.Printf("message: %v \n", msg)
+			log.Println(chatroom[msg.ChatID])
+		*/
 		for client := range chatroom[msg.ChatID] {
 			err := client.WriteJSON(msg)
 			if err != nil {
-				log.Printf("error: %v", err)
+				//log.Printf("error: %v", err)
 				client.Close()
 				delete(chatroom[msg.ChatID], client)
 			}
