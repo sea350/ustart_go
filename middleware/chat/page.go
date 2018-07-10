@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"os"
 
+	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
+	"github.com/sea350/ustart_go/types"
 )
 
 //Page ... draws chat page
@@ -19,6 +21,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cs := client.ClientSide{}
+	loadedMessages := []types.Message{}
+	chatHeads := []types.FloatingHead{}
+	chatMemberHeads := []types.FloatingHead{}
 
 	chatID := r.URL.Path[4:]
 
@@ -34,11 +39,17 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		go handleMessages()
 		return
 	}
-
+	/*
+		if usr.ProxyMessagesID ==``{
+			newProxy := types.ProxyMessages{DocID:docID.(string), Class:1}
+			proxyID, err :=
+			err:= post.UpdateUser(client.Eclient, docID.(string), "ProxyMes")
+		}
+	*/
 	if len(chatID) > 0 {
 		if chatID[:1] == `@` {
-			//dmUsrID, err := get.IDByUsername(client.Eclient, chatID[1:])
-			_, err := get.IDByUsername(client.Eclient, chatID[1:])
+			//this is a DM using username
+			dmID, err := get.IDByUsername(client.Eclient, chatID[1:])
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
@@ -50,7 +61,19 @@ func Page(w http.ResponseWriter, r *http.Request) {
 				go handleMessages()
 				return
 			}
-			//do DM lookup
+
+			_, _, err = getChat.DMExists(client.Eclient, dmID, docID.(string))
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
+				cs.ErrorOutput = err
+				cs.ErrorStatus = true
+				client.RenderSidebar(w, r, "template2-nil")
+				client.RenderTemplate(w, r, "chat", cs)
+				go handleMessages()
+				return
+			}
 			//if successfull, pull chat cache
 		} else {
 			//assume group chat DocID
@@ -60,6 +83,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 
 	//get chat proxy
 	//load list of heads
+	cs.ListOfHeads = chatHeads
+	cs.ListOfHeads2 = chatMemberHeads
+	cs.Messages = loadedMessages
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderTemplate(w, r, "chat", cs)
 	go handleMessages()

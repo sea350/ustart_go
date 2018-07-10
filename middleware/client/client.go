@@ -40,12 +40,13 @@ type ClientSide struct {
 	Widgets         []types.Widget
 	Project         types.ProjectAggregate
 	Event           types.EventAggregate
+	Messages        []types.Message
 }
 
 /* The following line is how HTML is loaded by our application. Note we need the relative link from the location of GoStart2. */
 var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/followerlist-nil.html", "/ustart/ustart_front/Membership-Nil.html",
 	"/ustart/ustart_front/settings-Nil.html", "/ustart/ustart_front/inbox-Nil.html",
-	"/ustart/ustart_front/createProject-Nil.html", "/ustart/ustart_front/createEvent-Nil.html",
+	"/ustart/ustart_front/createProject-Nil.html",
 	"/ustart/ustart_front/manageprojects-Nil.html", "/ustart/ustart_front/manageevents-Nil.html",
 	"/ustart/ustart_front/projectsF.html", "/ustart/ustart_front/eventsF.html",
 	"/ustart/ustart_front/new-reg-nil.html",

@@ -3,6 +3,7 @@ package chat
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -10,7 +11,7 @@ import (
 
 var clients = make(map[*websocket.Conn]bool) // connected clients
 var chatroom = make(map[string](map[*websocket.Conn]bool))
-var broadcast = make(chan Message) // broadcast channel
+var broadcast = make(chan carrierMessage) // broadcast channel
 
 // Configure the upgrader
 var upgrader = websocket.Upgrader{
@@ -19,13 +20,13 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-//Message ... Define our message object
-type Message struct {
-	Email    string `json:"Email"`
-	Username string `json:"Username"`
-	DocID    string `json:"DocID"`
-	Message  string `json:"Message"`
-	ChatID   string `json:"ChatID"`
+//DO NOT EXPORT
+type carrierMessage struct {
+	Username  string    `json:"Username"`
+	DocID     string    `json:"DocID"`
+	Message   string    `json:"Message"`
+	ChatID    string    `json:"ChatID"`
+	TimeStamp time.Time `json:"TimeStamp"`
 }
 
 //HandleConnections ...
@@ -57,7 +58,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for {
-		var msg Message
+		var msg carrierMessage
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
@@ -67,6 +68,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 		msg.ChatID = chatID
 		msg.DocID = docID.(string)
+		msg.TimeStamp = time.Now()
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}
