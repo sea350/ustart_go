@@ -21,7 +21,7 @@ func MsgByID(eclient *elastic.Client, msgID string) (types.Message, error) {
 						Type(globals.MsgType).
 						Id(msgID).
 						Do(ctx)
-	g
+
 	if err != nil {
 		return msg, err
 	}
