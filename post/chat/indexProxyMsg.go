@@ -23,7 +23,7 @@ func IndexProxyMsg(eclient *elastic.Client, newProxyMsg types.ProxyMessages) (st
 		Do(ctx)
 
 	if Err != nil {
-		return msgID, Err
+		return proxyMsgID, Err
 	}
 	proxyMsgID = idx.Id
 

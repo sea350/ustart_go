@@ -22,7 +22,7 @@ func UpdateConvo(eclient *elastic.Client, convoID string, field string, newConte
 		return errors.New("Index does not exist")
 	}
 
-	_, err = get.ConvoByID(eclient, chatID)
+	_, err = get.ConvoByID(eclient, convoID)
 	if err != nil {
 		return err
 	}
