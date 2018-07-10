@@ -28,4 +28,5 @@ type Conversation struct {
 	Eavesdroppers    map[string]Eavesdropper `json:"Eavesdroppers"`
 	MessageIDArchive []string                `json:"MessageArchive"` //no limit but must be ordered by most recent interaction
 	MessageIDCache   []string                `json:"MessageCache"`   //LIMIT 100, must be ordered by most recent interaction
+	PinnedMessages   []string                `json:"PinnedMessages"`
 }
