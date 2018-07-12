@@ -93,6 +93,7 @@ type User struct {
 	Following              []string       `json:"Following"`
 	Followers              []string       `json:"Followers"`
 	FollowingProject       []string       `json:"FollowingProject"`
+	FollowingEvent         []string       `json:"FollowingEvent"`
 	Colleagues             []string       `json:"Colleagues"`
 	SentCollReq            []string       `json:"SentCollReq"`
 	ReceivedCollReq        []string       `json:"ReceivedCollReq"`
