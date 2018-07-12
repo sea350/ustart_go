@@ -115,6 +115,30 @@ func main() {
 
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
-	http.HandleFunc("/welcome/", registration.Registration)*/
+	http.HandleFunc("/welcome/", registration.Registration)
+
+	//EVENT
+	http.HandleFunc("/Event/", event.ViewEvent)
+	http.HandleFunc("/MyEvents/", event.MyEvents)
+	http.HandleFunc("/CreateEventPage/", event.CreateEventPage)
+	http.HandleFunc("/UpdateEventTags/", event.UpdateEventTags)
+	http.HandleFunc("/AddEventLink/", event.AddEventQuickLink)
+	http.HandleFunc("/DeleteEventLink/", event.DeleteEventQuickLink)
+	http.HandleFunc("/NewUsers/", event.ManageEvents)
+	http.HandleFunc("/LoadGuestJoinRequests/", event.LoadGuestJoinRequests)
+	http.HandleFunc("/LoadMemberJoinRequests/", event.LoadMemberJoinRequests)
+	http.HandleFunc("/GuestRequestToJoin/", event.GuestRequestToJoin)
+	http.HandleFunc("/MemberRequestToJoin/", event.MemberRequestToJoin)
+	http.HandleFunc("/AcceptGuestJoinRequest/", event.AcceptGuestJoinRequest)
+	http.HandleFunc("/AcceptMemberJoinRequest/", event.AcceptMemberJoinRequest)
+	http.HandleFunc("/RejectGuestJoinRequest/", event.RejectEventGuestJoinRequest)
+	http.HandleFunc("/RejectMemberJoinRequest/", event.RejectEventMemberJoinRequest)
+	http.HandleFunc("/EventMakeEntry/", event.MakeEventEntry)
+	http.HandleFunc("/AjaxLoadEventEntries/", event.AjaxLoadEventEntries)
+	http.HandleFunc("/AjaxDeleteEventEntry/", event.AjaxDeleteEventEntry)
+	http.HandleFunc("/StartEvent/", event.StartEvent)
+	http.HandleFunc("/ManageEvents/", event.ManageEvents)
+	http.HandleFunc("/AddEvent/", event.AddEvent)
+	http.HandleFunc("/EventsPage/", event.EventsPage)*/
 	http.ListenAndServe(":5003", nil)
 }

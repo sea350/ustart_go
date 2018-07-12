@@ -25,9 +25,15 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	deletedURL := r.FormValue("deleteURL")
 	projectURL := r.FormValue("editProjectURL")
+	eventURL := r.FormValue("editEventURL")
 	var isProject = false
 	if projectURL != `` {
 		isProject = true
+	}
+
+	var isEvent = false
+	if eventURL != `` {
+		isEvent = true
 	}
 
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
@@ -38,7 +44,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(oldWidget.Data) == 1 && (oldWidget.Classification != 15 && oldWidget.Classification != 16) {
-		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"), isProject)
+		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"), isProject, isEvent)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
@@ -46,6 +52,10 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 		}
 		if isProject {
 			http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
+			return
+		}
+		if isEvent {
+			http.Redirect(w, r, "/Events/"+eventURL, http.StatusFound)
 			return
 		}
 		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
@@ -78,6 +88,10 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	}
 	if isProject {
 		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
+		return
+	}
+	if isEvent {
+		http.Redirect(w, r, "/Events/"+eventURL, http.StatusFound)
 		return
 	}
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)

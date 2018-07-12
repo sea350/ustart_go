@@ -57,6 +57,40 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		cs.ListOfHeads = results
 	}
+	if filter == `events` {
+		if r.FormValue("searchbyeventname") != `` {
+			searchBy = append(searchBy, true)
+		} else {
+			searchBy = append(searchBy, false)
+		}
+		if r.FormValue("searchbyurl") != `` {
+			searchBy = append(searchBy, true)
+		} else {
+			searchBy = append(searchBy, false)
+		}
+		if r.FormValue("searchbymembersneeded") != `` {
+			searchBy = append(searchBy, true)
+		} else {
+			searchBy = append(searchBy, false)
+		}
+		if r.FormValue("searchbyguests") != `` {
+			searchBy = append(searchBy, true)
+		} else {
+			searchBy = append(searchBy, false)
+		}
+		if r.FormValue("searchbyskills") != `` {
+			searchBy = append(searchBy, true)
+		} else {
+			searchBy = append(searchBy, false)
+		}
+		results, err := search.PrototypeEventSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
+		}
+		cs.ListOfHeads = results
+	}
 	if filter == `users` {
 		fmt.Println(r.FormValue("searchbypersonname"))
 		fmt.Println(r.FormValue("searchbyusername"))

@@ -28,6 +28,7 @@ type Eavesdropper struct {
 type Conversation struct {
 	Title            string                  `json:"Title"`
 	ReferenceProject string                  `json:"RefProject"`
+	ReferenceEvent   string                  `json:"RefEvent"`
 	EavesCount       int                     `json:"EavesCount"`
 	Eavesdroppers    map[string]Eavesdropper `json:"Eavesdroppers"`
 	MessageIDArchive []string                `json:"MessageArchive"` //no limit but must be ordered by most recent interaction

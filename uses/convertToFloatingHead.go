@@ -86,6 +86,13 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 		}
 	}
 
+	if convo.ReferenceEvent != `` {
+		head, err = ConvertEventToFloatingHead(eclient, convo.ReferenceEvent)
+		if err != nil {
+			return head, err
+		}
+	}
+
 	msg, err := getChat.MsgByID(eclient, convo.MessageIDCache[len(convo.MessageIDCache)-1])
 	if err != nil {
 		return head, err
@@ -98,5 +105,6 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 	}
 
 	head.Bio = []rune(msg.Content)
+	head.DocID = conversationID
 	return head, err
 }
