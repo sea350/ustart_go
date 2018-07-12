@@ -98,5 +98,6 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 	}
 
 	head.Bio = []rune(msg.Content)
+	head.DocID = conversationID
 	return head, err
 }
