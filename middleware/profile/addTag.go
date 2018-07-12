@@ -27,6 +27,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 	testingtag := html.EscapeString("<script>")
 	fmt.Println(testingtag)
 	tags := strings.Split(html.EscapeString(r.FormValue("skillArray")), `","`)
+	fmt.Println(r.FormValue("skillArray"))
 	fmt.Println(tags)
 
 	if len(tags) > 0 {
