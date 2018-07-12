@@ -76,8 +76,10 @@ func main() {
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/addProjectWidget/", widget.AddProjectWidget)
+	http.HandleFunc("/addEventWidget/", widget.AddEventWidget)
 	http.HandleFunc("/deleteWidget/", widget.DeleteWidgetProfile)
 	http.HandleFunc("/deleteProjectWidget/", widget.DeleteWidgetProject)
+	http.HandleFunc("/deleteEventWidget/", widget.DeleteWidgetEvent)
 	http.HandleFunc("/deleteLinkFromWidget/", widget.EditWidgetDataDelete)
 	http.HandleFunc("/sortUserWidgets/", widget.SortUserWidgets)
 
