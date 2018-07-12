@@ -26,13 +26,18 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 
 	testingtag := html.EscapeString("<script>")
 	fmt.Println(testingtag)
-	tags := strings.Split(html.EscapeString(r.FormValue("skillArray")), `","`)
+	tags := strings.Split(r.FormValue("skillArray"), `","`)
 	fmt.Println(r.FormValue("skillArray"))
 	fmt.Println(tags)
 
 	if len(tags) > 0 {
 		tags[0] = strings.Trim(tags[0], `["`)
 		tags[len(tags)-1] = strings.Trim(tags[len(tags)-1], `"]`)
+	}
+
+	for i := 0; i < len(tags); i++ {
+		tags[i] = html.EscapeString(tags[i])
+		fmt.Println(tags[i])
 	}
 
 	err := post.UpdateUser(client.Eclient, ID, "Tags", tags)
