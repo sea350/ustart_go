@@ -3,6 +3,7 @@ package get
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -21,6 +22,10 @@ func ConvoByID(eclient *elastic.Client, convoID string) (types.Conversation, err
 						Type(globals.ConvoType).
 						Id(convoID).
 						Do(ctx)
+
+	if !searchResult.Found {
+		return convo, errors.New("Conversation not found")
+	}
 
 	if err != nil {
 		return convo, err

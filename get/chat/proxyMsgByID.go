@@ -3,6 +3,7 @@ package get
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -25,7 +26,9 @@ func ProxyMsgByID(eclient *elastic.Client, proxyMsgID string) (types.ProxyMessag
 	if err != nil {
 		return proxyMsg, err
 	}
-
+	if !searchResult.Found {
+		return proxyMsg, errors.New("Proxy message not found")
+	}
 	Err := json.Unmarshal(*searchResult.Source, &proxyMsg) //unmarshal type RawMessage into user struct
 	if Err != nil {
 		return proxyMsg, Err
