@@ -11,7 +11,7 @@ import (
 
 //UpdateByQuery ...
 //Updates by query
-func UpdateByQuery(eclient *elastic.Client, docType string, id string, field string, newContent interface{}) error {
+func UpdateByQuery(eclient *elastic.Client, docType string, field string, newContent interface{}) error {
 	ctx := context.Background()
 	var index string
 	var theType string
