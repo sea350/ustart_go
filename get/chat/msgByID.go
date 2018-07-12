@@ -3,6 +3,7 @@ package get
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -24,6 +25,10 @@ func MsgByID(eclient *elastic.Client, msgID string) (types.Message, error) {
 
 	if err != nil {
 		return msg, err
+	}
+
+	if !searchResult.Found {
+		return msg, errors.New("Message not found")
 	}
 
 	Err := json.Unmarshal(*searchResult.Source, &msg) //unmarshal type RawMessage into user struct
