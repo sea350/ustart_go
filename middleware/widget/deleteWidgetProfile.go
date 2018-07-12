@@ -23,7 +23,7 @@ func DeleteWidgetProfile(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	_, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
-	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false)
+	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false, false)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

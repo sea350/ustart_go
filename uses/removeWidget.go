@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	getEvnt "github.com/sea350/ustart_go/get/event"
 	getProj "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
 	getWidget "github.com/sea350/ustart_go/get/widget"
 	globals "github.com/sea350/ustart_go/globals"
+	postEvnt "github.com/sea350/ustart_go/post/event"
 	postProj "github.com/sea350/ustart_go/post/project"
 	postUser "github.com/sea350/ustart_go/post/user"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -15,7 +17,7 @@ import (
 
 //RemoveWidget ...
 //Removes widget ID from UserWidgets array/slice and widget struct from ES
-func RemoveWidget(eclient *elastic.Client, widgetID string, isProject bool) error {
+func RemoveWidget(eclient *elastic.Client, widgetID string, isProject bool, isEvent bool) error {
 	ctx := context.Background()
 
 	//get widget to use its data
@@ -30,6 +32,12 @@ func RemoveWidget(eclient *elastic.Client, widgetID string, isProject bool) erro
 			panic(err)
 		}
 		oldArray = proj.Widgets
+	} else if isEvent {
+		event, err := getEvnt.EventByID(eclient, userID)
+		if err != nil {
+			panic(err)
+		}
+		oldArray = event.Widgets
 	} else {
 		usr, err := getUser.UserByID(eclient, userID)
 		if err != nil {
@@ -56,6 +64,12 @@ func RemoveWidget(eclient *elastic.Client, widgetID string, isProject bool) erro
 	if isProject {
 		updateErr := postProj.UpdateProject(eclient, userID, "Widgets", updatedWidgets)
 
+		if updateErr != nil {
+			fmt.Println(updateErr)
+			fmt.Println("this is an error, uses/removeWidget line 50")
+		}
+	} else if isEvent {
+		updateErr := postEvnt.UpdateEvent(eclient, userID, "Widgets", updatedWidgets)
 		if updateErr != nil {
 			fmt.Println(updateErr)
 			fmt.Println("this is an error, uses/removeWidget line 50")

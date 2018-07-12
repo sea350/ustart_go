@@ -10,8 +10,8 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//DeleteWidgetProject ... Deletes a widget and redirects to projects page
-func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
+//DeleteWidgetEvent ... Deletes a widget and redirects to projects page
+func DeleteWidgetEvent(w http.ResponseWriter, r *http.Request) {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
@@ -21,19 +21,19 @@ func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	projectURL := r.FormValue("deleteProjectURL")
+	eventURL := r.FormValue("deleteEventURL")
 
 	widg, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
 	if widg.Classification == 15 {
-		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
+		http.Redirect(w, r, "/Events/"+eventURL, http.StatusFound)
 		return
 	}
-	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), true, false)
+	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false, true)
 	if err != nil {
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
 
-	http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
+	http.Redirect(w, r, "/Events/"+eventURL, http.StatusFound)
 	return
 }
