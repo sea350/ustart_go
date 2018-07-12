@@ -7,16 +7,16 @@ type ProxyMessages struct {
 	DocID         string              `json:"DocID"`
 	Class         int                 `json:"Class"`
 	Conversations []ConversationState `json:"Conversations"` //LIMIT 8, must be ordered by most recent interaction
-	ConvoArchive  []ConversationState `json:"ConvoArchive"`  //no limit, also must be organized by most recent
+	//ConvoArchive  []ConversationState `json:"ConvoArchive"`  //no limit, also must be organized by most recent
 	//Class 1 = User inbox
 	//Class 2 = Project Inbox
 }
 
 //ConversationState ... In addition to providing the ID of the conversation, this caches the last message and how many unread messages there are
 type ConversationState struct {
-	ConvoDocID  string    `json:"ConvoDocID"`
-	NumUnread   int       `json:"NumUnread"`
-	LastMessage Message   `json:"LastMessage"`
+	ConvoDocID string `json:"ConvoDocID"`
+	// NumUnread   int       `json:"NumUnread"`
+	// LastMessage Message   `json:"LastMessage"`
 	Muted       bool      `json:"Muted"`
 	MuteTimeout time.Time `json:"MuteTimeout"`
 }
