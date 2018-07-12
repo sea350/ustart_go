@@ -42,23 +42,23 @@ type EventMembers struct {
 
 //Events ... Event relevant data
 type Events struct {
-	Host              interface{}       `json:"Host"` //Displayed host on the event page, whether user or project
-	Name              string            `json:"Name"`
-	Tags              string            `json:"Tags"`
-	Category          string            `json:"Category"`
-	URLName           string            `json:"URLName"`
-	QuickLinks        []Link            `json:"QuickLinks"`
-	Description       []rune            `json:"Description"`
-	Members           []EventMembers    `json:"Members"`
-	Guests            []EventGuests     `json:"Guests"`
-	EntryIDs          []string          `json:"EntryIDs"`
-	Location          LocStruct         `json:"Location"`
-	EventDateStart    time.Time         `json:"EventDateStart"`
-	EventDateEnd      time.Time         `json:"EventDateEnd"`
-	CreationDate      time.Time         `json:"CreationDate"`
-	Widgets           []string          `json:"Widgets"`
-	Whitelist         []string          `json:"Whitelist"`
-	Blacklist         []string          `json:"Blacklist"`
+	Host           interface{}    `json:"Host"` //Displayed host on the event page, whether user or project
+	Name           string         `json:"Name"`
+	Tags           string         `json:"Tags"`
+	Category       string         `json:"Category"`
+	URLName        string         `json:"URLName"`
+	QuickLinks     []Link         `json:"QuickLinks"`
+	Description    []rune         `json:"Description"`
+	Members        []EventMembers `json:"Members"`
+	Guests         []EventGuests  `json:"Guests"`
+	EntryIDs       []string       `json:"EntryIDs"`
+	Location       LocStruct      `json:"Location"`
+	EventDateStart time.Time      `json:"EventDateStart"`
+	EventDateEnd   time.Time      `json:"EventDateEnd"`
+	CreationDate   time.Time      `json:"CreationDate"`
+	Widgets        []string       `json:"Widgets"`
+	//Whitelist         []string          `json:"Whitelist"`
+	//Blacklist         []string          `json:"Blacklist"`
 	Status            bool              `json:"Status"` //Whether this event is still ongoing or cancelled
 	Public            bool              `json:"Public"` //Whether this event is publicly viewable or invite-only viewable
 	Avatar            string            `json:"Avatar"`
