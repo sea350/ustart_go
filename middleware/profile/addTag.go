@@ -1,6 +1,8 @@
 package profile
 
 import (
+	"fmt"
+	"html"
 	"log"
 	"net/http"
 	"os"
@@ -22,7 +24,10 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 
 	ID := session.Values["DocID"].(string)
 
-	tags := strings.Split(r.FormValue("skillArray"), `","`)
+	testingtag := html.EscapeString("<script>")
+	fmt.Println(testingtag)
+	tags := strings.Split(html.EscapeString(r.FormValue("skillArray")), `","`)
+
 	if len(tags) > 0 {
 		tags[0] = strings.Trim(tags[0], `["`)
 		tags[len(tags)-1] = strings.Trim(tags[len(tags)-1], `"]`)
