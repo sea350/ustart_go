@@ -41,7 +41,7 @@ func UserFollowEventToggle(eclient *elastic.Client, userID string, eventID strin
 			}
 			break
 		}
-	}
+	}				
 
 	//if the user is followed, unfollow them
 	if isFollowed {
