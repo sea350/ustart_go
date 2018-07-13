@@ -99,7 +99,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			_, _, err = getChat.DMExists(client.Eclient, dmID, docID.(string))
+			exists, id, err := getChat.DMExists(client.Eclient, dmID, docID.(string))
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
@@ -111,12 +111,54 @@ func Page(w http.ResponseWriter, r *http.Request) {
 				go handleMessages()
 				return
 			}
+			if exists {
+				convo, err := getChat.ConvoByID(client.Eclient, id)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					dir, _ := os.Getwd()
+					log.Println(dir, err)
+					http.Redirect(w, r, "/404/", http.StatusFound)
+					return
+				}
+				for _, eaver := range convo.Eavesdroppers {
+					head, err := uses.ConvertUserToFloatingHead(client.Eclient, eaver.DocID)
+					if err != nil {
+						log.SetFlags(log.LstdFlags | log.Lshortfile)
+						dir, _ := os.Getwd()
+						log.Println(dir, err)
+						cs.ErrorOutput = errors.New("There were one or more errors loading conversation members")
+						cs.ErrorStatus = true
+					} else {
+						eaverHeads = append(eaverHeads, head)
+					}
+				}
+				for _, msgid := range convo.MessageIDCache {
+					msg, err := getChat.MsgByID(client.Eclient, msgid)
+					if err != nil {
+						log.SetFlags(log.LstdFlags | log.Lshortfile)
+						dir, _ := os.Getwd()
+						log.Println(dir, err)
+						cs.ErrorOutput = errors.New("There were one or more errors loading conversation members")
+						cs.ErrorStatus = true
+					} else {
+						loadedMessages = append(loadedMessages, msg)
+					}
+				}
+			}
 		} else {
 			convo, err := getChat.ConvoByID(client.Eclient, chatID)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
+				http.Redirect(w, r, "/404/", http.StatusFound)
+				return
+			}
+			_, exists := convo.Eavesdroppers[docID.(string)]
+			if !exists {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, "THIS USER IS NOT PART OF THE CONVERSATION")
 				http.Redirect(w, r, "/404/", http.StatusFound)
 				return
 			}
@@ -131,7 +173,18 @@ func Page(w http.ResponseWriter, r *http.Request) {
 				}
 				eaverHeads = append(eaverHeads, head)
 			}
-			//pull chat cache
+			for _, msgid := range convo.MessageIDCache {
+				msg, err := getChat.MsgByID(client.Eclient, msgid)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					dir, _ := os.Getwd()
+					log.Println(dir, err)
+					cs.ErrorOutput = errors.New("There were one or more errors loading conversation members")
+					cs.ErrorStatus = true
+				} else {
+					loadedMessages = append(loadedMessages, msg)
+				}
+			}
 		}
 	}
 

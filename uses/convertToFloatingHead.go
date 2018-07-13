@@ -5,6 +5,7 @@ import (
 	getEvent "github.com/sea350/ustart_go/get/event"
 	getProject "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
+	"github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -102,8 +103,11 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 		if eaver.DocID == viewerID {
 			head.Notifications = len(convo.MessageIDArchive) - eaver.Bookmark - 1
 		} else if convo.Class == 1 {
-			//pull the username
-			//add it to heads
+			usr, err := getUser.UserByID(client.Eclient, eaver.DocID)
+			if err != nil {
+				return head, err
+			}
+			head.Username = usr.Username
 		}
 	}
 

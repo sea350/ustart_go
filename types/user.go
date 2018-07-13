@@ -24,7 +24,7 @@ type EventInfo struct {
 
 //Request ... uhm
 type Request struct {
-	SenderID  string    `json:"UserID"`
+	SenderID  string    `json:"SenderID"`
 	Timestamp time.Time `json:"Timestamp"`
 }
 
