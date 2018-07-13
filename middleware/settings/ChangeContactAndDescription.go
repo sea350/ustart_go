@@ -2,6 +2,7 @@ package settings
 
 import (
 	"fmt"
+	"html"
 	"net/http"
 
 	uses "github.com/sea350/ustart_go/uses"
@@ -41,7 +42,7 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 	} else {
 		eVIS = false
 	}
-	description := r.FormValue("inputDesc")
+	description := html.EscapeString(r.FormValue("inputDesc"))
 	descriptionrune := []rune(description)
 
 	userID := session.Values["DocID"].(string)
