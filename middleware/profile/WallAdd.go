@@ -3,6 +3,7 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"html"
 	"log"
 	"net/http"
 	"os"
@@ -24,7 +25,7 @@ func WallAdd(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	// docID := r.FormValue("docID")
-	text := r.FormValue("text")
+	text := html.EscapeString(r.FormValue("text"))
 	textRunes := []rune(text)
 	postID, err := uses.UserNewEntry(client.Eclient, session.Values["DocID"].(string), textRunes)
 	if err != nil {
