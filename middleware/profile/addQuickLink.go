@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"html"
 	"log"
 	"net/http"
 	"os"
@@ -29,7 +30,7 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: r.FormValue("userLinkDesc"), URL: r.FormValue("userLink")})
+	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: html.EscapeString(r.FormValue("userLinkDesc")), URL: html.EscapeString(r.FormValue("userLink"))})
 
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", usr.QuickLinks)
 	if err != nil {

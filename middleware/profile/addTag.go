@@ -33,9 +33,9 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		tags[len(tags)-1] = strings.Trim(tags[len(tags)-1], `"]`)
 	}
 
-	for i, tag := range tags {
-		tags[i] = html.EscapeString(tag)
-		fmt.Println("tag", i, tag)
+	for i, _ := range tags {
+		tags[i] = html.EscapeString(tags[i])
+		fmt.Println("tag", i, tags[i])
 	}
 
 	err := post.UpdateUser(client.Eclient, ID, "Tags", tags)
