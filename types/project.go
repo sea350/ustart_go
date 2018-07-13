@@ -55,6 +55,7 @@ type Project struct {
 	FollowedUsers     []string     `json:"FollowedUsers"`
 	Subchats          []Subchat    `json:"Subchats"`
 	ProxyMessagesID   string       `json:"ProxyMessagesID"`
+	EventIDs          []string     `json:"EventIDs"`
 }
 
 //Subchat ... discordlite :)

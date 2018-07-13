@@ -119,6 +119,7 @@ func main() {
 	http.HandleFunc("/leaveEventMember/", settings.LeaveEventMember)
 	http.HandleFunc("/eventLogo/", settings.EventLogo)
 	http.HandleFunc("/changeEventMemberClass/", settings.ChangeEventMemberClass)
+	http.HandleFunc("/eventHost/", settings.EventHost)
 	http.HandleFunc("/ProjectSettings/", settings.Project)
 	http.HandleFunc("/projectBannerUpload/", settings.ProjectBannerUpload)
 	http.HandleFunc("/projectName/", settings.ChangeNameAndDescription)

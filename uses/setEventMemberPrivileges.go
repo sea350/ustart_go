@@ -22,7 +22,7 @@ func SetEventMemberPrivileges(role int) types.EventPrivileges {
 		}
 	case 1:
 		eventmemPrivileges = types.EventPrivileges{
-			RoleName:     "Member",
+			RoleName:     "Admin",
 			RoleID:       role,
 			MemberManage: false,
 			WidgetManage: false,

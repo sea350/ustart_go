@@ -35,6 +35,7 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 	newEvent.EventDateEnd = eventTimeEnd
 	newEvent.Location = location
 	newEvent.Category = category
+	newEvent.Host = makerID
 
 	var maker types.EventMembers
 	maker.MemberID = makerID
