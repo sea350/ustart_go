@@ -40,16 +40,17 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			fmt.Println("err: middleware/event/manageevent Line 35")
 		}
+		fmt.Println("EVENT.MEMBERS.COUNT ", len(evnt.Members))
 		for _, memberInfo := range evnt.Members {
+			fmt.Println("MEMBER PARAMS EMPTY 1")
+			fmt.Println("MEMBER.ID ", memberInfo.MemberID)
+			fmt.Println("MEMBER.ROLE ", memberInfo.Role)
+			fmt.Println("MEMBER PARAMS EMPTY 2")
 			if memberInfo.MemberID == test1.(string) && memberInfo.Role <= 1 {
 				//finds user in the list of members and also checks if they have creator rank
 				isAdmin = true
 				//head.Followed in this case expresses whether or not they have edit permissions
 			}
-			fmt.Println("MEMBER PARAMS EMPTY 1")
-			fmt.Println("MEMBER.ID ", memberInfo.MemberID)
-			fmt.Println("MEMBER.ROLE ", memberInfo.Role)
-			fmt.Println("MEMBER PARAMS EMPTY 2")
 		}
 		fmt.Println("I.AM.ADMIN. ", isAdmin)
 		if !isAdmin {
