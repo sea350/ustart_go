@@ -86,18 +86,12 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	newEvent.Host = test1.(string)
 	newEvent.Visible = true
 
-	log.Println("btw url: " + url)
-	log.Println("start index")
 	id, err := post.IndexEvent(client.Eclient, newEvent)
-	log.Println("done index")
-
-	log.Println("hope noerror :3")
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
-	log.Println("whoo noerror :D")
 
 	var newEventInfo types.EventInfo
 	newEventInfo.EventID = id
