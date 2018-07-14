@@ -61,7 +61,6 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	state := r.FormValue("state")
 	city := r.FormValue("city")
 	zip := r.FormValue("zip")
-	url := r.FormValue("URL")
 
 	var eventLocation types.LocStruct
 	eventLocation.City = city
@@ -86,7 +85,6 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	newEvent.CreationDate = time.Now()
 	newEvent.Host = test1.(string)
 	newEvent.Visible = true
-	newEvent.URLName = url
 
 	log.Println("btw url: " + url)
 	log.Println("start index")
@@ -114,5 +112,5 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	//cs := client.ClientSide{ErrorStatus: false}
 
-	http.Redirect(w, r, "/Event/"+url, http.StatusFound)
+	http.Redirect(w, r, "/Event/"+id, http.StatusFound)
 }
