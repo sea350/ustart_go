@@ -30,6 +30,10 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, eventInfo := range userstruct.Events {
+		if eventInfo.EventID == nil {
+			fmt.Println("Missing EventID from %s", userstruct.Username)
+			continue
+		}
 		var isAdmin = false
 		evnt, err := getEvent.EventByID(client.Eclient, eventInfo.EventID)
 		if err != nil {
