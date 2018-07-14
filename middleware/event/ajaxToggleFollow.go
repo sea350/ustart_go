@@ -18,7 +18,7 @@ func AjaxEventToggleFollow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	eventID := r.FormValue("UNKOWN") // eventID
+	eventID := r.FormValue("eventID") // eventID
 
 	err := uses.UserFollowEventToggle(client.Eclient, test1.(string), eventID)
 	if err != nil {

@@ -18,7 +18,7 @@ func AjaxToggleFollow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projectID := r.FormValue("UNKOWN")
+	projectID := r.FormValue("projectID")
 
 	err := uses.UserFollowProjectToggle(client.Eclient, test1.(string), projectID)
 	if err != nil {
