@@ -16,7 +16,7 @@ func EventByID(eclient *elastic.Client, eventID string) (types.Events, error) {
 
 	ctx := context.Background()
 
-	log.Println("Event ID: " + eventID)
+	fmt.Printf("Event ID: %s\n", eventID)
 
 	searchResult, err := eclient.Get().
 		Index(globals.EventIndex).
