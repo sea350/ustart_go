@@ -95,10 +95,10 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	customURL := r.FormValue("curl")
 
 	//proper URL
-	if !uses.ValidUsername(r.FormValue("curl")) {
+	if !uses.ValidUsername(customURL) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
-		log.Println(dir, "Check me please")
+		log.Println(dir, "Invalid custom project URL")
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 
