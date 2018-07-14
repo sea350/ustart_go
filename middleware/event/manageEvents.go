@@ -56,6 +56,7 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("err: middleware/event/manageevents Line 51")
 		}
 
+		fmt.Println("BUFFALO WILD WINGS")
 		fmt.Println("HEAD: ", head)
 		heads = append(heads, head)
 		fmt.Println("HEADS: ", heads)
