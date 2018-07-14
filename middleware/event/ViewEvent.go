@@ -22,8 +22,18 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	cs := client.ClientSide{}
+	fmt.Println("URL IS ", r.URL.Path[7:])
+	event, err := getEvent.EventByID(client.Eclient, r.URL.Path[7:])
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("err: middleware/event/ViewEvent Line 28")
+	}
 
+	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+	if err != nil {
+		panic(err)
+	}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Event: event}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "events", cs)
