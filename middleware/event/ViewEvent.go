@@ -53,7 +53,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	log.Println("Test1: " + test1)
+	log.Println("Test1: " + test1.(string))
 	r.ParseForm()
 
 	title := r.FormValue("title")
