@@ -29,9 +29,10 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err: middleware/event/manageevents Line 26")
 	}
 
-	for _, eventInfo := range userstruct.Events {
+	for idx, eventInfo := range userstruct.Events {
+		fmt.Println("Event Idx: ", idx)
 		if eventInfo.EventID == "" {
-			fmt.Println("Missing EventID from %s", userstruct.Username)
+			fmt.Println("Missing EventID from ", userstruct.Username)
 			continue
 		}
 		var isAdmin = false

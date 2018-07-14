@@ -94,8 +94,6 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	fmt.Println("Event ID is " + id)
-
 	var newEventInfo types.EventInfo
 	newEventInfo.EventID = id
 	newEventInfo.Visible = true
