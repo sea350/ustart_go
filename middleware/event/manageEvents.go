@@ -46,8 +46,10 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 				isAdmin = true
 				//head.Followed in this case expresses whether or not they have edit permissions
 			}
+			fmt.Println("MEMBER PARAMS EMPTY 1")
 			fmt.Println("MEMBER.ID ", memberInfo.MemberID)
 			fmt.Println("MEMBER.ROLE ", memberInfo.Role)
+			fmt.Println("MEMBER PARAMS EMPTY 2")
 		}
 		fmt.Println("I.AM.ADMIN. ", isAdmin)
 		if !isAdmin {
