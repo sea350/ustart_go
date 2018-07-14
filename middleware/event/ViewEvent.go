@@ -63,6 +63,8 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	zip := r.FormValue("zip")
 	url := r.FormValue("URL")
 
+	log.Println("Event Title: " + title)
+
 	var eventLocation types.LocStruct
 	eventLocation.City = city
 	eventLocation.Country = country
@@ -109,6 +111,5 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	//cs := client.ClientSide{ErrorStatus: false}
 
-	http.Redirect(w, r, "/Event/", http.StatusFound)
-	http.Redirect(w, r, "/~", http.StatusFound)
+	http.Redirect(w, r, "/Event/"+url, http.StatusFound)
 }
