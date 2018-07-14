@@ -1,8 +1,8 @@
 package uses
 
 import (
-	getChat "github.com/sea350/ustart_go/get/Chat"
-	postChat "github.com/sea350/ustart_go/post/Chat"
+	getChat "github.com/sea350/ustart_go/get/chat"
+	postChat "github.com/sea350/ustart_go/post/chat"
 	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -42,7 +42,7 @@ func ChatFirst(eclient *elastic.Client, msg types.Message, docID1 string, docID2
 		return err
 	}
 
-	pID, err := getChat.ProxyIDByUserID(eclient, docID2)
+	pID, err = getChat.ProxyIDByUserID(eclient, docID2)
 	if err != nil {
 		return err
 	}
