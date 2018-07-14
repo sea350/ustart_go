@@ -29,8 +29,7 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err: middleware/event/manageevents Line 26")
 	}
 
-	for idx, eventInfo := range userstruct.Events {
-		fmt.Println("Event Idx: ", idx)
+	for _, eventInfo := range userstruct.Events {
 		if eventInfo.EventID == "" {
 			fmt.Println("Missing EventID from ", userstruct.Username)
 			continue
@@ -58,6 +57,7 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		}
 		heads = append(heads, head)
 	}
+	fmt.Println("HEADS: ", len(heads))
 
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
 
