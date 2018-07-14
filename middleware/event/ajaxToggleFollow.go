@@ -1,4 +1,4 @@
-package project
+package event
 
 import (
 	"log"
@@ -10,17 +10,17 @@ import (
 	client "github.com/sea350/ustart_go/middleware/client"
 )
 
-//AjaxToggleFollow ... one click follow unfollow
-func AjaxToggleFollow(w http.ResponseWriter, r *http.Request) {
+//AjaxEventToggleFollow ... one click follow unfollow
+func AjaxEventToggleFollow(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		return
 	}
 
-	projectID := r.FormValue("projectID")
+	eventID := r.FormValue("eventID") // eventID
 
-	err := uses.UserFollowProjectToggle(client.Eclient, test1.(string), projectID)
+	err := uses.UserFollowEventToggle(client.Eclient, test1.(string), eventID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"html"
 	"log"
 	"net/http"
 	"os"
@@ -20,8 +21,8 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	first := r.FormValue("fname")
-	last := r.FormValue("lname")
+	first := html.EscapeString(r.FormValue("fname"))
+	last := html.EscapeString(r.FormValue("lname"))
 
 	err := uses.ChangeFirstAndLastName(eclient, session.Values["DocID"].(string), first, last)
 	if err != nil {

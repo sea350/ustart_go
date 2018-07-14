@@ -3,6 +3,7 @@ package project
 import (
 	"encoding/json"
 	"fmt"
+	"html"
 	"log"
 	"net/http"
 	"os"
@@ -24,7 +25,7 @@ func MakeEntry(w http.ResponseWriter, r *http.Request) {
 	}
 
 	projectID := r.FormValue("docID")
-	newContent := []rune(r.FormValue("text"))
+	newContent := []rune(html.EscapeString(r.FormValue("text")))
 	proj, member, err := get.ProjAndMember(client.Eclient, projectID, docID.(string))
 
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	getEvent "github.com/sea350/ustart_go/get/event"
 	getProject "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
+	"github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -79,15 +80,15 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 		return head, err
 	}
 
-	if convo.ReferenceProject != `` {
-		head, err = ConvertProjectToFloatingHead(eclient, convo.ReferenceProject)
+	if convo.Class == 3 {
+		head, err = ConvertProjectToFloatingHead(eclient, convo.ReferenceID)
 		if err != nil {
 			return head, err
 		}
 	}
 
-	if convo.ReferenceEvent != `` {
-		head, err = ConvertEventToFloatingHead(eclient, convo.ReferenceEvent)
+	if convo.Class == 4 {
+		head, err = ConvertEventToFloatingHead(eclient, convo.ReferenceID)
 		if err != nil {
 			return head, err
 		}
@@ -101,10 +102,17 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 	for _, eaver := range convo.Eavesdroppers {
 		if eaver.DocID == viewerID {
 			head.Notifications = len(convo.MessageIDArchive) - eaver.Bookmark - 1
+		} else if convo.Class == 1 {
+			usr, err := getUser.UserByID(client.Eclient, eaver.DocID)
+			if err != nil {
+				return head, err
+			}
+			head.Username = usr.Username
 		}
 	}
 
 	head.Bio = []rune(msg.Content)
 	head.DocID = conversationID
+
 	return head, err
 }

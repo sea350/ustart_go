@@ -68,7 +68,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		if r.FormValue("searchbymembersneeded") != `` {
+		if r.FormValue("searchbymembers") != `` {
 			searchBy = append(searchBy, true)
 		} else {
 			searchBy = append(searchBy, false)
@@ -83,6 +83,13 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
+		/*
+			if r.FormValue("searchbyprojectname") != `` {
+				searchBy = append(searchBy, true)
+			} else {
+				searchBy = append(searchBy, false)
+			}
+		*/
 		results, err := search.PrototypeEventSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)

@@ -55,6 +55,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	title := r.FormValue("title")
+	maker := r.FormValue("makerID")
 	dateStart := r.FormValue("dateStart")
 	dateEnd := r.FormValue("dateEnd")
 	country := r.FormValue("country")
@@ -77,6 +78,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	newEvent.EventDateEnd, _ = time.Parse(layout, dateEnd)
 	newEvent.Location = eventLocation
 	newEvent.CreationDate = time.Now()
+	newEvent.Host = maker
 	newEvent.Visible = true
 	newEvent.URLName = url
 

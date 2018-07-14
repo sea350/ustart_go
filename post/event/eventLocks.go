@@ -10,3 +10,6 @@ var EventMemberLock sync.Mutex
 
 //EventGuestLock ... Use if modifying event guest using generic update
 var EventGuestLock sync.Mutex
+
+//EventFollowerLock ... a lock for modifying a event's follower array
+var EventFollowerLock sync.Mutex
