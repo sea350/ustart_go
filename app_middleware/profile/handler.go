@@ -106,31 +106,31 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				if !isFollowed {
 					fmt.Println("INTENT TO FOLLOW")
 					err = uses.UserFollow(eclient, usrID, data.SessUser.DocID) // session.Values["DocID"].(string))
-					resp.update(err == nil, err, Usr)
+					resp.update(err == nil, err, "", Usr)
 				} else {
 					fmt.Println("INTENT TO UNFOLLOW")
 					err = uses.UserUnfollow(eclient, usrID, data.SessUser.DocID)
-					resp.update(err == nil, err, Usr)
+					resp.update(err == nil, err, "", Usr)
 				}
 
 			}
 
 		case "proj":
 			fmt.Println("INTENT TO CREATE PROJECT")
-			_, err = uses.CreateProject(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, "College", data.CustomURL)
+			projID, err := uses.CreateProject(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, "College", data.CustomURL)
 
-			resp.update(err == nil, err, Usr)
+			resp.update(err == nil, err, projID, Usr)
 
 		case "event":
 			fmt.Println("INTENT TO CREATE EVENT")
-			_, err = uses.CreateEvent(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, data.CustomURL, data.Location, data.EventStart, data.EventEnd)
+			eventID, err := uses.CreateEvent(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, data.CustomURL, data.Location, data.EventStart, data.EventEnd)
 
-			resp.update(err == nil, err, Usr)
+			resp.update(err == nil, err, eventID, Usr)
 		case "get":
-			resp.update(errUsr == nil, errUsr, Usr)
+			resp.update(errUsr == nil, errUsr, "", Usr)
 
 		}
 	} else {
-		resp.update(false, errors.New("Token invalid"), Usr)
+		resp.update(false, errors.New("Token invalid"), "", Usr)
 	}
 }
