@@ -1,6 +1,7 @@
 package event
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -92,6 +93,8 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
+
+	fmt.Println("Event ID is " + id)
 
 	var newEventInfo types.EventInfo
 	newEventInfo.EventID = id
