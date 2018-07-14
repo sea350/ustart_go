@@ -47,15 +47,16 @@ func StartEvent(w http.ResponseWriter, r *http.Request) {
 //AddEvent ... append event to database
 func AddEvent(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
+	log.Println("Is Loading")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	log.Println("Test1: " + test1.(string))
 	r.ParseForm()
 
 	title := r.FormValue("title")
-	maker := r.FormValue("makerID")
 	dateStart := r.FormValue("dateStart")
 	dateEnd := r.FormValue("dateEnd")
 	country := r.FormValue("country")
@@ -63,6 +64,8 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	city := r.FormValue("city")
 	zip := r.FormValue("zip")
 	url := r.FormValue("URL")
+
+	log.Println("Event Title: " + title)
 
 	var eventLocation types.LocStruct
 	eventLocation.City = city
@@ -72,25 +75,25 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	layout := "2006-01-02T15:04:05.000Z"
 
-	var newEvent types.Events
-	newEvent.Name = title
-	newEvent.EventDateStart, _ = time.Parse(layout, dateStart)
-	newEvent.EventDateEnd, _ = time.Parse(layout, dateEnd)
-	newEvent.Location = eventLocation
-	newEvent.CreationDate = time.Now()
-	newEvent.Host = maker
-	newEvent.Visible = true
-	newEvent.URLName = url
-
-	id, err := post.IndexEvent(client.Eclient, newEvent)
-
+	usr, err := userGet.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
 
-	usr, err := userGet.UserByID(client.Eclient, test1.(string))
+	var newEvent types.Events
+	newEvent.Name = title
+	newEvent.EventDateStart, _ = time.Parse(layout, dateStart)
+	newEvent.EventDateEnd, _ = time.Parse(layout, dateEnd)
+	newEvent.Location = eventLocation
+	newEvent.CreationDate = time.Now()
+	newEvent.Host = test1.(string)
+	newEvent.Visible = true
+	newEvent.URLName = url
+
+	id, err := post.IndexEvent(client.Eclient, newEvent)
+
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
@@ -110,6 +113,5 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	//cs := client.ClientSide{ErrorStatus: false}
 
-	http.Redirect(w, r, "/Event/", http.StatusFound)
-	http.Redirect(w, r, "/~", http.StatusFound)
+	http.Redirect(w, r, "/Event/"+url, http.StatusFound)
 }

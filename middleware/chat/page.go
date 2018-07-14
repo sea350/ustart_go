@@ -87,6 +87,10 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("debug text", len(chatID))
+	log.Println("debug text", chatID)
+
 	if len(chatID) > 0 {
 		if chatID[:1] == `@` {
 			//this is a DM using username
