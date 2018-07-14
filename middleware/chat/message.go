@@ -10,6 +10,8 @@ import (
 	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
+	"github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/uses"
 )
 
 var clients = make(map[*websocket.Conn]bool) // connected clients
@@ -123,9 +125,14 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		msg.SenderID = docID.(string)
 		msg.TimeStamp = time.Now()
 
-		//storedMsg := types.Message{SenderID:msg.SenderID, TimeStamp: msg.TimeStamp, Content: msg.Message}
+		storedMsg := types.Message{SenderID: msg.SenderID, TimeStamp: msg.TimeStamp, Content: msg.Message}
 		if firstMessage {
-			//run firstmessage
+			err = uses.ChatFirst(client.Eclient, storedMsg, docID.(string), dmID)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
+			}
 			firstMessage = false
 			//send notification
 		} else {
