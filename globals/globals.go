@@ -173,3 +173,49 @@ const MappingEvent = `
         }
     }
 }`
+
+const MappingConvo = `
+{
+	"settings": {
+		"analysis": {
+		   "analyzer": {
+			  "my_analyzer": {
+				 "type": "custom",
+				 "filter": [
+					"lowercase"
+				 ],
+				 "tokenizer": "whitespace"
+			  }
+		   }
+		}
+	 },
+
+
+    "mappings":{
+        "CONVO":{
+            "properties":{
+				"Title":{
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}					 
+				},
+                "RefProject":{
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}		
+					
+				}
+			}
+        }
+    }
+}`

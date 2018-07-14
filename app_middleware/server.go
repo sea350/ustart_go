@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 
 	//"github.com/sea350/ustart_go/middleware/fail"
@@ -12,13 +13,18 @@ import (
 	search "github.com/sea350/ustart_go/app_middleware/search"
 	settings "github.com/sea350/ustart_go/app_middleware/settings"
 	signup "github.com/sea350/ustart_go/app_middleware/signup"
+	fail "github.com/sea350/ustart_go/middleware/fail"
 	/*profile "github.com/sea350/ustart_go/middleware/profile"
 	project "github.com/sea350/ustart_go/middleware/project"
 	registration "github.com/sea350/ustart_go/middleware/registration"
 	settings "github.com/sea350/ustart_go/middleware/settings"
 	widget "github.com/sea350/ustart_go/middleware/widget"*/)
 
+var currentPort = "5003"
+
 func main() {
+	flag.Parse()
+
 	/*
 		Lines 18-19 handle the static file locating
 		If we wanted to reorganize file/folder locations, this is one of 3 things that would have to change
@@ -26,9 +32,14 @@ func main() {
 		The other being the relative link on the actual html pages
 	*/
 	//fs := http.FileServer(http.Dir("/home/rr2396/www/"))
+	_, _ = http.Get("http://ustart.today:" + currentPort + "/KillUstartPlsNoUserinoCappucinoDeniro")
 	fs := http.FileServer(http.Dir("/ustart/ustart_front/"))
 	http.Handle("/www/", http.StripPrefix("/www/", fs))
 	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
+
+	http.HandleFunc("/404/", fail.Fail)
+	http.HandleFunc("/KillUstartPlsNoUserinoCappucinoDeniro", fail.KillSwitch)
+
 	/*
 		The following are all the handlers we have so far.
 	*/

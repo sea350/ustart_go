@@ -2,6 +2,8 @@ package post
 
 import (
 	"context"
+	"log"
+	"os"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -15,7 +17,21 @@ func IndexProxyMsg(eclient *elastic.Client, newProxyMsg types.ProxyMessages) (st
 	//RETURNS AN error and the new chat's ID IF SUCESSFUL error = nil
 	ctx := context.Background()
 	var proxyMsgID string
+	exists, err := eclient.IndexExists(globals.ProxyMsgIndex).Do(ctx)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+	}
+	if !exists {
+		_, err := eclient.CreateIndex(globals.ProxyMsgIndex).Do(ctx)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
+		}
 
+	}
 	idx, Err := eclient.Index().
 		Index(globals.ProxyMsgIndex).
 		Type(globals.ProxyMsgType).
