@@ -31,7 +31,7 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err: middleware/event/ViewEvent Line 28")
 	}
 
-	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+	userstruct, err := userGet.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
 		panic(err)
 	}
