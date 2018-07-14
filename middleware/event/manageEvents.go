@@ -34,38 +34,24 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Missing EventID from ", userstruct.Username)
 			continue
 		}
-		var isAdmin = false
 		evnt, err := getEvent.EventByID(client.Eclient, eventInfo.EventID)
 		if err != nil {
 			fmt.Println(err)
 			fmt.Println("err: middleware/event/manageevent Line 35")
 		}
-		fmt.Println("EVENT.MEMBERS.COUNT ", len(evnt.Members))
 		for _, memberInfo := range evnt.Members {
-			fmt.Println("MEMBER PARAMS EMPTY 1")
-			fmt.Println("MEMBER.ID ", memberInfo.MemberID)
-			fmt.Println("MEMBER.ROLE ", memberInfo.Role)
-			fmt.Println("MEMBER PARAMS EMPTY 2")
-			if memberInfo.MemberID == test1.(string) && memberInfo.Role <= 1 {
+			if memberInfo.MemberID == test1.(string) && memberInfo.Role > 1 {
 				//finds user in the list of members and also checks if they have creator rank
-				isAdmin = true
+				continue
 				//head.Followed in this case expresses whether or not they have edit permissions
 			}
-		}
-		fmt.Println("I.AM.ADMIN. ", isAdmin)
-		if !isAdmin {
-			continue
 		}
 		head, err := uses.ConvertEventToFloatingHead(client.Eclient, eventInfo.EventID)
 		if err != nil {
 			fmt.Println(err)
 			fmt.Println("err: middleware/event/manageevents Line 51")
 		}
-
-		fmt.Println("BUFFALO WILD WINGS")
-		fmt.Println("HEAD: ", head)
 		heads = append(heads, head)
-		fmt.Println("HEADS: ", heads)
 	}
 
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
