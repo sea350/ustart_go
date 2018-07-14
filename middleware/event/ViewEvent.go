@@ -47,11 +47,13 @@ func StartEvent(w http.ResponseWriter, r *http.Request) {
 //AddEvent ... append event to database
 func AddEvent(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
+	log.Println("Is Loading")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	log.Println("Test1: " + test1)
 	r.ParseForm()
 
 	title := r.FormValue("title")
