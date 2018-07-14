@@ -55,7 +55,6 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	title := r.FormValue("title")
-	maker := r.FormValue("makerID")
 	dateStart := r.FormValue("dateStart")
 	dateEnd := r.FormValue("dateEnd")
 	country := r.FormValue("country")
@@ -72,25 +71,25 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	layout := "2006-01-02T15:04:05.000Z"
 
-	var newEvent types.Events
-	newEvent.Name = title
-	newEvent.EventDateStart, _ = time.Parse(layout, dateStart)
-	newEvent.EventDateEnd, _ = time.Parse(layout, dateEnd)
-	newEvent.Location = eventLocation
-	newEvent.CreationDate = time.Now()
-	newEvent.Host = maker
-	newEvent.Visible = true
-	newEvent.URLName = url
-
-	id, err := post.IndexEvent(client.Eclient, newEvent)
-
+	usr, err := userGet.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
 
-	usr, err := userGet.UserByID(client.Eclient, test1.(string))
+	var newEvent types.Events
+	newEvent.Name = title
+	newEvent.EventDateStart, _ = time.Parse(layout, dateStart)
+	newEvent.EventDateEnd, _ = time.Parse(layout, dateEnd)
+	newEvent.Location = eventLocation
+	newEvent.CreationDate = time.Now()
+	newEvent.Host = test1.(string)
+	newEvent.Visible = true
+	newEvent.URLName = url
+
+	id, err := post.IndexEvent(client.Eclient, newEvent)
+
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
