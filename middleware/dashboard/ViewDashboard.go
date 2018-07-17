@@ -10,8 +10,8 @@ import (
 	client "github.com/sea350/ustart_go/middleware/client"
 )
 
-//ViewEvent ... rendering the event
-func ViewEvent(w http.ResponseWriter, r *http.Request) {
+//ViewDashboard ... rendering the dashboard
+func ViewDashboard(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
