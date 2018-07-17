@@ -1,6 +1,6 @@
 USER='elastic'
 PASS='elasticpassword'
-URL='ustart.today'
+URL='localhost'
 PORT='9200'
 JSON='Content-Type:application/json'
 INDEX='/test-user_data/USER'
