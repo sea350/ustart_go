@@ -1,3 +1,4 @@
+chmod +x ./userPutMapping.sh
 USER='elastic'
 PASS='elasticpassword'
 URL='localhost'
