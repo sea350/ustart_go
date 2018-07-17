@@ -10,7 +10,7 @@ import (
 )
 
 //ChatSend ... Executes all necessary database interactions for a message to a chat
-func ChatSend(eclient *elastic.Client, usrID string, msg types.Message) ([]string, error) {
+func ChatSend(eclient *elastic.Client, msg types.Message) ([]string, error) {
 
 	var notifyThese []string
 
@@ -19,7 +19,7 @@ func ChatSend(eclient *elastic.Client, usrID string, msg types.Message) ([]strin
 		return notifyThese, err
 	}
 
-	_, exists := convo.Eavesdroppers[usrID]
+	_, exists := convo.Eavesdroppers[msg.SenderID]
 	if !exists {
 		return notifyThese, errors.New("THIS USER IS NOT PART OF THE CONVERSATION")
 	}
