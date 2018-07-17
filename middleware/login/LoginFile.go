@@ -100,7 +100,21 @@ func Error(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(password)
 	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
-	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, "0")
+
+	//attempting to catch client IP
+	var clientIP string
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	}
+	userIP := net.ParseIP(ip)
+	if userIP == nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	} else {
+		clientIP = userIP.String()
+	}
+
+	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
 	if err2 != nil {
 		fmt.Println(err2)
 
