@@ -20,11 +20,6 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 	var loginSucessful = false
 	var userSession types.SessionUser
 
-	//We want to keep track of login attempts and lock out users who have too many failed attempts for a period of time
-	//We make this condition integer first for later
-	ipExists := false
-	var recordWarning int
-
 	inUse, err := get.EmailInUse(eclient, userEmail)
 	if err != nil {
 		return loginSucessful, userSession, err
@@ -41,78 +36,81 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 
 	//Email is valid, we need to check if we are in a login lockout or not based on IP address
 
-	for i := 0; i < len(usr.LoginWarnings); i++ {
-		if usr.LoginWarnings[i].IPAddress == addressIP {
-			if usr.LoginWarnings[i].LockoutUntil.After(time.Now()) {
-				err := errors.New("Account in Lockout")
-				return loginSucessful, userSession, err
+	/*
+		for i := 0; i < len(usr.LoginWarnings); i++ {
+			if usr.LoginWarnings[i].IPAddress == addressIP {
+				if usr.LoginWarnings[i].LockoutUntil.After(time.Now()) {
+					err := errors.New("Account in Lockout")
+					return loginSucessful, userSession, err
+				}
+				ipExists = true
+				recordWarning = i
+				break
 			}
-			ipExists = true
-			recordWarning = i
-			break
+		}
+	*/
+
+	loginData, ipExists := usr.LoginWarnings[addressIP]
+	if ipExists {
+		if loginData.LockoutUntil.After(time.Now()) {
+			err := errors.New("Account in Lockout")
+			return loginSucessful, userSession, err
 		}
 	}
 
-	/*
-		loginData, ipExists := usr.LoginWarnings[addressIP]
-		if ipExists{
-			if loginData.LockoutUntil.After(time.Now()){
-				err := errors.New("Account in Lockout")
-				return loginSucessful, userSession, err
-			}
-		}
-
-	*/
 	passErr := bcrypt.CompareHashAndPassword(usr.Password, password)
 
 	if passErr != nil {
 		//If password incorrect, the following evaluation on login lockout procedure is done
 		//If IP doesn't exist, this a New Warning for a New IP Address. Else we are simply updating an existing one our usr
-		if !(ipExists) {
-			var newWarning types.LoginWarning
-			newWarning.IPAddress = addressIP
-			newWarning.NumberAttempts = newWarning.NumberAttempts + 1
-			newWarning.LastAttempt = time.Now()
-			usr.LoginWarnings = append(usr.LoginWarnings, newWarning)
-		}
-		if ipExists {
-			if time.Since(usr.LoginWarnings[recordWarning].LastAttempt) >= (time.Minute * 10080) {
-				usr.LoginWarnings[recordWarning].NumberAttempts = 0
-				usr.LoginWarnings[recordWarning].LockoutCounter = 0
-			}
-			usr.LoginWarnings[recordWarning].NumberAttempts = usr.LoginWarnings[recordWarning].NumberAttempts + 1
-			usr.LoginWarnings[recordWarning].LastAttempt = time.Now()
-			if usr.LoginWarnings[recordWarning].NumberAttempts > 5 {
-				usr.LoginWarnings[recordWarning].LockoutCounter = usr.LoginWarnings[recordWarning].LockoutCounter + 1
-				usr.LoginWarnings[recordWarning].LockoutUntil = usr.LoginWarnings[recordWarning].LastAttempt.Add(time.Minute * 5 * time.Duration(lockoutOP(usr.LoginWarnings[recordWarning].LockoutCounter)))
-				usr.LoginWarnings[recordWarning].NumberAttempts = 0
-			}
-
-		}
-
 		/*
-			if !ipExists{
+			if !(ipExists) {
 				var newWarning types.LoginWarning
 				newWarning.IPAddress = addressIP
 				newWarning.NumberAttempts = newWarning.NumberAttempts + 1
 				newWarning.LastAttempt = time.Now()
-				usr.LoginWarnings[addressIP] = newWarning
+				usr.LoginWarnings = append(usr.LoginWarnings, newWarning)
 			}
+			if ipExists {
+				if time.Since(usr.LoginWarnings[recordWarning].LastAttempt) >= (time.Minute * 10080) {
+					usr.LoginWarnings[recordWarning].NumberAttempts = 0
+					usr.LoginWarnings[recordWarning].LockoutCounter = 0
+				}
+				usr.LoginWarnings[recordWarning].NumberAttempts = usr.LoginWarnings[recordWarning].NumberAttempts + 1
+				usr.LoginWarnings[recordWarning].LastAttempt = time.Now()
+				if usr.LoginWarnings[recordWarning].NumberAttempts > 5 {
+					usr.LoginWarnings[recordWarning].LockoutCounter = usr.LoginWarnings[recordWarning].LockoutCounter + 1
+					usr.LoginWarnings[recordWarning].LockoutUntil = usr.LoginWarnings[recordWarning].LastAttempt.Add(time.Minute * 5 * time.Duration(lockoutOP(usr.LoginWarnings[recordWarning].LockoutCounter)))
+					usr.LoginWarnings[recordWarning].NumberAttempts = 0
+				}
 
-			if ipExists{
-				if time.Since(loginData.LastAttempt) >= (time.Minute * 10080) {
-					loginData.NumberAttempts = 0
-					loginData.LockoutCounter = 0
-				}
-				loginData.NumberAttempts = loginData.NumberAttempts + 1
-				loginData.LastAttempt = time.Now()
-				if loginData.NumberAttempts > 5 {
-					loginData.LockoutCounter = loginData.LockoutCounter + 1
-					loginData.LockoutUntil = loginData.LastAttempt.Add(time.Minute * 5 * time.Duration(lockoutOP(loginData.LockoutCounter)))
-					loginData.NumberAttempts = 0
-				}
 			}
 		*/
+
+		if !ipExists {
+			var newWarning types.LoginWarning
+			newWarning.IPAddress = addressIP
+			newWarning.NumberAttempts = newWarning.NumberAttempts + 1
+			newWarning.LastAttempt = time.Now()
+			loginData = newWarning
+			usr.LoginWarnings[addressIP] = loginData
+		}
+
+		if ipExists {
+			if time.Since(loginData.LastAttempt) >= (time.Minute * 10080) {
+				loginData.NumberAttempts = 0
+				loginData.LockoutCounter = 0
+			}
+			loginData.NumberAttempts = loginData.NumberAttempts + 1
+			loginData.LastAttempt = time.Now()
+			if loginData.NumberAttempts > 5 {
+				loginData.LockoutCounter = loginData.LockoutCounter + 1
+				loginData.LockoutUntil = loginData.LastAttempt.Add(time.Minute * 5 * time.Duration(lockoutOP(loginData.LockoutCounter)))
+				loginData.NumberAttempts = 0
+			}
+			usr.LoginWarnings[addressIP] = loginData
+		}
+
 		//Update in Elastic Search Client all of our Login Warning information
 		usrID, err1 := get.UserIDByEmail(eclient, userEmail)
 		if err1 != nil {
@@ -143,7 +141,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 		if err1 != nil {
 			return false, userSession, err1
 		}
-		err2 := post.UpdateUser(eclient, usrID, "LoginWarnings", []types.LoginWarning{})
+		err2 := post.UpdateUser(eclient, usrID, "LoginWarnings", map[string]types.LoginWarning{})
 		if err2 != nil {
 			return false, userSession, err2
 		}
