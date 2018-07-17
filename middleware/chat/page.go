@@ -74,8 +74,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		for _, convoState := range proxy.Conversations {
-			head, err := uses.ConvertChatToFloatingHead(client.Eclient, convoState.ConvoDocID, docID.(string))
+		for key := range proxy.Conversations {
+			head, err := uses.ConvertChatToFloatingHead(client.Eclient, key, docID.(string))
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
@@ -124,8 +124,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 					http.Redirect(w, r, "/404/", http.StatusFound)
 					return
 				}
-				for _, eaver := range convo.Eavesdroppers {
-					head, err := uses.ConvertUserToFloatingHead(client.Eclient, eaver.DocID)
+				for key := range convo.Eavesdroppers {
+					head, err := uses.ConvertUserToFloatingHead(client.Eclient, key)
 					if err != nil {
 						log.SetFlags(log.LstdFlags | log.Lshortfile)
 						dir, _ := os.Getwd()
@@ -166,8 +166,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 				http.Redirect(w, r, "/404/", http.StatusFound)
 				return
 			}
-			for _, eaver := range convo.Eavesdroppers {
-				head, err := uses.ConvertUserToFloatingHead(client.Eclient, eaver.DocID)
+			for key := range convo.Eavesdroppers {
+				head, err := uses.ConvertUserToFloatingHead(client.Eclient, key)
 				if err != nil {
 					log.SetFlags(log.LstdFlags | log.Lshortfile)
 					dir, _ := os.Getwd()
