@@ -8,7 +8,7 @@ import (
 type Message struct {
 	SenderID       string    `json:"SenderID"`
 	ConversationID string    `json:"ConversationID"`
-	Timestamp      time.Time `json:"Timestamp"`
+	TimeStamp      time.Time `json:"TimeStamp"`
 	Content        string    `json:"Content"`
 	Hidden         bool      `json:"Hidden"`
 }
