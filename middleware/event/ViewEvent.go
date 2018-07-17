@@ -7,9 +7,9 @@ import (
 	"os"
 	"time"
 
+	getEvent "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/event"
-	getEvent "github.com/sea350/ustart_go/get/event"
 	types "github.com/sea350/ustart_go/types"
 
 	userGet "github.com/sea350/ustart_go/get/user"
@@ -37,7 +37,13 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 	}
 	// Event becoming EventAggregate?
 
-	//cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Event: event}
+	var eventAgg = types.EventAggregate{
+		DocID:          session.Values["DocID"].(string),
+		EventData:      event,
+		Editable:       true,
+		RequestAllowed: true,
+	}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Event: eventAgg}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "events", cs)
