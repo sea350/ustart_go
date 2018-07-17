@@ -11,8 +11,6 @@ import (
 	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
-	postChat "github.com/sea350/ustart_go/post/chat"
-	post "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/types"
 )
 
@@ -31,61 +29,6 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	eaverHeads := []types.FloatingHead{} //
 
 	chatID := r.URL.Path[4:]
-
-	usr, err := get.UserByID(client.Eclient, docID.(string))
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-		cs.ErrorOutput = err
-		cs.ErrorStatus = true
-		client.RenderSidebar(w, r, "template2-nil")
-		client.RenderTemplate(w, r, "chat", cs)
-		go handleMessages()
-		return
-	}
-
-	if usr.ProxyMessagesID == `` {
-		newProxy := types.ProxyMessages{DocID: docID.(string), Class: 1}
-		proxyID, err := postChat.IndexProxyMsg(client.Eclient, newProxy)
-		err = post.UpdateUser(client.Eclient, docID.(string), "ProxyMesssagesID", proxyID)
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
-			cs.ErrorOutput = err
-			cs.ErrorStatus = true
-			client.RenderSidebar(w, r, "template2-nil")
-			client.RenderTemplate(w, r, "chat", cs)
-			go handleMessages()
-			return
-		}
-	} else {
-		proxy, err := getChat.ProxyMsgByID(client.Eclient, usr.ProxyMessagesID)
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
-			cs.ErrorOutput = err
-			cs.ErrorStatus = true
-			client.RenderSidebar(w, r, "template2-nil")
-			client.RenderTemplate(w, r, "chat", cs)
-			go handleMessages()
-			return
-		}
-
-		for key := range proxy.Conversations {
-			head, err := uses.ConvertChatToFloatingHead(client.Eclient, key, docID.(string))
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-				cs.ErrorOutput = errors.New("There were one or more errors loading chat heads")
-				cs.ErrorStatus = true
-			}
-			chatHeads = append(chatHeads, head)
-		}
-	}
 
 	// log.SetFlags(log.LstdFlags | log.Lshortfile)
 	// log.Println("debug text", len(chatID))
