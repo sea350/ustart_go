@@ -15,14 +15,12 @@ curl -X PUT  $CURL_BASE/INDEX/'_mapping/_doc' -H 'Content-Type: application/json
   "properties": {
     "USER": {
       "properties": {
-        "last": { 
+        "type":"nested"
+        "LoginWarnings": { 
           "type": "text"
         }
       }
-    },
-    "user_id": {
-      "type": "keyword",
-      "ignore_above": 100 
+    } 
     }
   }
 }
