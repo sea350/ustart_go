@@ -1,7 +1,6 @@
 package event
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -25,7 +24,7 @@ func ViewDashboard(w http.ResponseWriter, r *http.Request) {
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
-	fmt.Println("URL IS ", r.URL.Path[7:])
+	// fmt.Println("URL IS ", r.URL.Path[7:])
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
