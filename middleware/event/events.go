@@ -116,16 +116,16 @@ func CreateEventPage(w http.ResponseWriter, r *http.Request) {
 	eventLocation.Zip = zip
 	eventLocation.State = state
 
-	//proper URL
-	if !uses.ValidUsername(r.FormValue("curl")) {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, "Check me please")
-		cs.ErrorStatus = true
-		cs.ErrorOutput = err
-	}
-
 	if title != `` {
+		//proper URL
+		if !uses.ValidUsername(customURL) {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, "Check me please")
+			cs.ErrorStatus = true
+			cs.ErrorOutput = err
+		}
+
 		url, err := uses.CreateEvent(client.Eclient, title, description, session.Values["DocID"].(string), category, customURL, eventLocation, eventStart, eventEnd)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
