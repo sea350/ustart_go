@@ -176,7 +176,7 @@ func main() {
 	http.HandleFunc("/ws/", chat.HandleConnections)
 
 	//DASHBOARD
-	http.HandleFunc("/EventsPage/", dash.ViewDashboard)
+	http.HandleFunc("/dash/", dash.ViewDashboard)
 	//http.HandleFunc("/ch/", chat.Page)
 	// http.HandleFunc("/ws", chat.Run)
 
