@@ -11,9 +11,13 @@ import (
 )
 
 //AppendToProxy ... appends a new conversation state OR brings a certain conversation state to the back of the list
+//needs its own lock for concurrency control
 func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID string) error {
 
 	ctx := context.Background()
+
+	AppendToProxyLock.Lock()
+	defer AppendToProxyLock.Unlock()
 
 	proxy, err := get.ProxyMsgByID(eclient, proxyID)
 	if err != nil {

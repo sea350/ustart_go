@@ -128,7 +128,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		msg.SenderID = docID.(string)
 		msg.TimeStamp = time.Now()
 
-		storedMsg := types.Message{SenderID: msg.SenderID, TimeStamp: msg.TimeStamp, Content: msg.Message}
+		storedMsg := types.Message{SenderID: msg.SenderID, TimeStamp: msg.TimeStamp, Content: msg.Message, ConversationID: actualChatID}
 		if firstMessage {
 			err = uses.ChatFirst(client.Eclient, storedMsg, docID.(string), dmToUsrID)
 			if err != nil {
@@ -137,10 +137,12 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println(dir, err)
 			}
 			firstMessage = false
-			//send notification
 		} else {
 			//run send message
 		}
+
+		//send notification here
+
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}

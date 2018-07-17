@@ -44,6 +44,7 @@ func UpdateEntry(eclient *elastic.Client, entryID string, field string, newConte
 	return err
 }
 
+//UpdateEditEntry .. who knows tbh
 func UpdateEditEntry(eclient *elastic.Client, entryID string, field string, newContent interface{}) error {
 	ctx := context.Background()
 	//stringified := string(newContent)

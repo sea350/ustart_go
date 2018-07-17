@@ -15,6 +15,7 @@ func AppendShareID(eclient *elastic.Client, entryID string, shareID string) erro
 	ctx := context.Background()
 
 	ShareArrayLock.Lock()
+	defer ShareArrayLock.Unlock()
 
 	anEntry, err := get.EntryByID(eclient, entryID)
 	if err != nil {
@@ -29,7 +30,6 @@ func AppendShareID(eclient *elastic.Client, entryID string, shareID string) erro
 		Doc(map[string]interface{}{"ShareIDs": anEntry.ShareIDs}).
 		Do(ctx)
 
-	defer ShareArrayLock.Unlock()
 	return err
 
 }

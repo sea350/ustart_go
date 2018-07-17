@@ -50,7 +50,7 @@ func EventCreatesReply(eclient *elastic.Client, eventID string, replyID string, 
 	return err
 }
 
-//EntryCreatesShare ... creates a new share entry for events and handles logic/parallel arrays
+//EventCreatesShare ... creates a new share entry for events and handles logic/parallel arrays
 func EventCreatesShare(eclient *elastic.Client, eventID string, replyID string, posterID string, newContent []rune) error {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = posterID
