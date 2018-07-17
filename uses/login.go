@@ -40,6 +40,7 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 	}
 
 	//Email is valid, we need to check if we are in a login lockout or not based on IP address
+
 	for i := 0; i < len(usr.LoginWarnings); i++ {
 		if usr.LoginWarnings[i].IPAddress == addressIP {
 			if usr.LoginWarnings[i].LockoutUntil.After(time.Now()) {
@@ -52,6 +53,16 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 		}
 	}
 
+	/*
+		loginData, ipExists := usr.LoginWarnings[addressIP]
+		if ipExists{
+			if loginData.LockoutUntil.After(time.Now()){
+				err := errors.New("Account in Lockout")
+				return loginSucessful, userSession, err
+			}
+		}
+
+	*/
 	passErr := bcrypt.CompareHashAndPassword(usr.Password, password)
 
 	if passErr != nil {
@@ -78,6 +89,30 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 			}
 
 		}
+
+		/*
+			if !ipExists{
+				var newWarning types.LoginWarning
+				newWarning.IPAddress = addressIP
+				newWarning.NumberAttempts = newWarning.NumberAttempts + 1
+				newWarning.LastAttempt = time.Now()
+				usr.LoginWarnings[addressIP] = newWarning
+			}
+
+			if ipExists{
+				if time.Since(loginData.LastAttempt) >= (time.Minute * 10080) {
+					loginData.NumberAttempts = 0
+					loginData.LockoutCounter = 0
+				}
+				loginData.NumberAttempts = loginData.NumberAttempts + 1
+				loginData.LastAttempt = time.Now()
+				if loginData.NumberAttempts > 5 {
+					loginData.LockoutCounter = loginData.LockoutCounter + 1
+					loginData.LockoutUntil = loginData.LastAttempt.Add(time.Minute * 5 * time.Duration(lockoutOP(loginData.LockoutCounter)))
+					loginData.NumberAttempts = 0
+				}
+			}
+		*/
 		//Update in Elastic Search Client all of our Login Warning information
 		usrID, err1 := get.UserIDByEmail(eclient, userEmail)
 		if err1 != nil {

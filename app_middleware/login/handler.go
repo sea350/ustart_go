@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"time"
 
@@ -59,7 +60,20 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	var appSessUsr types.AppSessionUser
 	resp.updateResp(err, false, appSessUsr)
 
-	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password), "0")
+	//attempting to catch client IP
+	var clientIP string
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	}
+	userIP := net.ParseIP(ip)
+	if userIP == nil {
+		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+	} else {
+		clientIP = userIP.String()
+	}
+
+	succ, sessUsr, err := uses.Login(eclient, data.Email, []byte(data.Password), clientIP)
 
 	appSessUsr.FirstName = sessUsr.FirstName
 	appSessUsr.LastName = sessUsr.LastName
