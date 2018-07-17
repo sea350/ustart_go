@@ -4,7 +4,7 @@ PASS='elasticpassword'
 URL='localhost'
 PORT='9200'
 JSON='Content-Type:application/json'
-INDEX='/test-user_data/USER'
+INDEX='test-user_data/USER'
 CURL_BASE='http://'$USER':'$PASS'@'$URL':'$PORT
 
  
