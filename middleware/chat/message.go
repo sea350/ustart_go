@@ -46,7 +46,6 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	chatID := r.URL.Path[4:]
 	var actualChatID string
 	var usernameIfDM string //only used if its a DM
-	var firstMessage bool
 	var dmToUsrID string
 
 	//security checks before socket is opened
@@ -72,7 +71,6 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				usernameIfDM = chatID
 			} else {
 				usernameIfDM = chatID
-				firstMessage = true
 			}
 
 		} else {
@@ -128,19 +126,25 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		msg.SenderID = docID.(string)
 		msg.TimeStamp = time.Now()
 
-		storedMsg := types.Message{SenderID: msg.SenderID, TimeStamp: msg.TimeStamp, Content: msg.Message}
-		if firstMessage {
+		storedMsg := types.Message{SenderID: msg.SenderID, TimeStamp: msg.TimeStamp, Content: msg.Message, ConversationID: actualChatID}
+		if actualChatID == `` {
 			err = uses.ChatFirst(client.Eclient, storedMsg, docID.(string), dmToUsrID)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
 			}
-			firstMessage = false
-			//send notification
 		} else {
-			//run send message
+			err = uses.ChatSend(client.Eclient, storedMsg)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
+			}
 		}
+
+		//send notification here
+
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}

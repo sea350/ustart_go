@@ -9,10 +9,10 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//UpdateConvo ... Updates conversation
-//WARNING: using this to update messages arrays may lead to concurrency problems
-//please use AppendMessageIDToConversation or edit the Message doc directly
-func UpdateConvo(eclient *elastic.Client, convoID string, field string, newContent interface{}) error {
+//AppendMessageIDToConversation ...
+//Appends with its own special "lock" used for concurrency control
+func AppendMessageIDToConversation(eclient *elastic.Client, convoID string, newMessageID string) error {
+
 	ctx := context.Background()
 
 	exists, err := eclient.IndexExists(globals.ConvoIndex).Do(ctx)
@@ -23,16 +23,22 @@ func UpdateConvo(eclient *elastic.Client, convoID string, field string, newConte
 		return errors.New("Index does not exist")
 	}
 
-	_, err = get.ConvoByID(eclient, convoID)
+	AppendMessageLock.Lock()
+	defer AppendMessageLock.Unlock()
+
+	convo, err := get.ConvoByID(eclient, convoID)
 	if err != nil {
 		return err
 	}
+
+	convo.MessageIDArchive = append(convo.MessageIDArchive, newMessageID)
+	//add any cache control here if necessary
 
 	_, err = eclient.Update().
 		Index(globals.ConvoIndex).
 		Type(globals.ConvoType).
 		Id(convoID).
-		Doc(map[string]interface{}{field: newContent}).
+		Doc(map[string]interface{}{"MessageIDArchive": convo.MessageIDArchive}).
 		Do(ctx)
 
 	if err != nil {
