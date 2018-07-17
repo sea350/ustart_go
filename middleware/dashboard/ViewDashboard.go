@@ -28,5 +28,5 @@ func ViewDashboard(w http.ResponseWriter, r *http.Request) {
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
-	client.RenderTemplate(w, r, "dash", cs)
+	client.RenderTemplate(w, r, "dashboard", cs)
 }
