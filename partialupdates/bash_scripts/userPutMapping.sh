@@ -12,7 +12,7 @@ CURL_BASE='http://'$USER':'$PASS'@'$URL':'$PORT
 # curl -XGET $CURL_BASE'/_cat/indices?v&pretty=true&s=index'
 
 echo $INDEX
-curl -XPUT  "$CURL_BASE""$INDEX"'/_mapping/_doc' -H "$JSON" -d'
+curl -XPUT  "$CURL_BASE""$INDEX"'/mapping/doc' -H "$JSON" -d'
 {
   "properties": {
     "USER": {
