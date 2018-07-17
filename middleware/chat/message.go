@@ -47,6 +47,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	var actualChatID string
 	var usernameIfDM string //only used if its a DM
 	var firstMessage bool
+	var dmToUsrID string
+
 	//security checks before socket is opened
 	if len(chatID) > 0 {
 		if chatID[:1] == "@" {
@@ -57,6 +59,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println(dir, err)
 				return
 			}
+			dmToUsrID = dmID
 			exists, id, err := getChat.DMExists(client.Eclient, dmID, docID.(string))
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -127,7 +130,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 
 		storedMsg := types.Message{SenderID: msg.SenderID, TimeStamp: msg.TimeStamp, Content: msg.Message}
 		if firstMessage {
-			err = uses.ChatFirst(client.Eclient, storedMsg, docID.(string), dmID)
+			err = uses.ChatFirst(client.Eclient, storedMsg, docID.(string), dmToUsrID)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
