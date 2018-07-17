@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	chat "github.com/sea350/ustart_go/middleware/chat"
+	dash "github.com/sea350/ustart_go/middleware/dashboard"
 	event "github.com/sea350/ustart_go/middleware/event"
 	fail "github.com/sea350/ustart_go/middleware/fail"
 	inbox "github.com/sea350/ustart_go/middleware/inbox"
@@ -174,6 +175,8 @@ func main() {
 	http.HandleFunc("/ch/", chat.Page)
 	http.HandleFunc("/ws/", chat.HandleConnections)
 
+	//DASHBOARD
+	http.HandleFunc("/EventsPage/", dash.ViewDashboard)
 	//http.HandleFunc("/ch/", chat.Page)
 	// http.HandleFunc("/ws", chat.Run)
 
