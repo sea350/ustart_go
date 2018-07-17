@@ -12,7 +12,8 @@ CURL_BASE='http://'$USER':'$PASS'@'$URL':'$PORT
 # curl -XGET $CURL_BASE'/_cat/indices?v&pretty=true&s=index'
 
 echo $INDEX
-curl -XPUT  "$CURL_BASE""$INDEX"'/mapping/doc' -H "$JSON" -d'
+# curl -XPUT  "$CURL_BASE""$INDEX"'/mapping/doc' -H "$JSON" -d'
+curl -XPUT 'http://localhost:9200/test-user_data/USER/_mapping/_doc' -H "$JSON" -d '{ "hello": "world" }'
 {
   "properties": {
     "USER": {
