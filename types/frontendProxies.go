@@ -71,7 +71,7 @@ type ProjectAggregate struct {
 
 //DashboardAggregate ... a compiled struct of all relevant dashboard data
 type DashboardAggregate struct {
-	DOCID          string    `json:"DocID"`
+	DocID          string    `json:"DocID"`
 	DashboardData  Dashboard `json:"DashboardData"`
 	RequestAllowed bool      `json:"RequestAllowed"`
 }
