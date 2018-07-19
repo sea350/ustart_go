@@ -130,6 +130,7 @@ func main() {
 	http.HandleFunc("/leaveProject/", settings.LeaveProject)
 	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
 	http.HandleFunc("/changeMemberClass/", settings.ChangeMemberClass)
+	http.HandleFunc("/DashboardSettings/", settings.Dashboard)
 
 	//REGISTRATIONS
 	http.HandleFunc("/Signup/", registration.Signup)

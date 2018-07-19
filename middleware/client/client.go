@@ -40,6 +40,7 @@ type ClientSide struct {
 	Widgets         []types.Widget
 	Project         types.ProjectAggregate
 	Event           types.EventAggregate
+	Dashboard       types.DashboardAggregate
 	Messages        []types.Message
 }
 
