@@ -69,6 +69,13 @@ type ProjectAggregate struct {
 	RequestAllowed bool           `json:"RequestAllowed"`
 }
 
+//DashboardAggregate ... a compiled struct of all relevant dashboard data
+type DashboardAggregate struct {
+	DOCID          string    `json:"DocID"`
+	DashboardData  Dashboard `json:"DashboardData"`
+	RequestAllowed bool      `json:"RequestAllowed"`
+}
+
 //EventSubWidgets ... data specific to each event being displayed on the events widget
 type EventSubWidgets struct {
 	Name   string `json:"Name"`
