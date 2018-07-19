@@ -7,8 +7,6 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	getChat "github.com/sea350/ustart_go/get/chat"
-	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
@@ -16,22 +14,13 @@ import (
 
 var clients = make(map[*websocket.Conn]bool) // connected clients
 var chatroom = make(map[string](map[*websocket.Conn]bool))
-var broadcast = make(chan carrierMessage) // broadcast channel
+var broadcast = make(chan types.Message) // broadcast channel
 
 // Configure the upgrader
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
-}
-
-//DO NOT EXPORT
-type carrierMessage struct {
-	DMUsername string    `json:"Username"`
-	SenderID   string    `json:"DocID"`
-	Message    string    `json:"Message"`
-	ChatID     string    `json:"ChatID"`
-	TimeStamp  time.Time `json:"TimeStamp"`
 }
 
 //HandleConnections ...
@@ -43,53 +32,17 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	chatID := r.URL.Path[4:]
-	var actualChatID string
-	var usernameIfDM string //only used if its a DM
-	var dmToUsrID string
+	chatURL := r.URL.Path[4:]
 
 	//security checks before socket is opened
-	if len(chatID) > 0 {
-		if chatID[:1] == "@" {
-			dmID, err := get.IDByUsername(client.Eclient, chatID[1:])
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-				return
-			}
-			dmToUsrID = dmID
-			exists, id, err := getChat.DMExists(client.Eclient, dmID, docID.(string))
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-				return
-			}
-			if exists {
-				actualChatID = id
-				usernameIfDM = chatID
-			} else {
-				usernameIfDM = chatID
-			}
-
-		} else {
-			actualChatID = chatID
-			convo, err := getChat.ConvoByID(client.Eclient, chatID)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-				return
-			}
-			_, exists := convo.Eavesdroppers[docID.(string)]
-			if exists {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, "THIS USER IS NOT PART OF THE CONVERSATION")
-				return
-			}
-		}
+	valid, actualChatID, dmTargetUserID, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+	}
+	if !valid {
+		return
 	}
 
 	// Upgrade initial GET request to a websocket
@@ -101,19 +54,19 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	// Register our new client
-	_, exists := chatroom[chatID]
+	_, exists := chatroom[chatURL]
 	if !exists {
 		temp := make(map[*websocket.Conn]bool)
 		temp[ws] = true
-		chatroom[chatID] = temp
+		chatroom[chatURL] = temp
 	} else {
-		temp := chatroom[chatID]
+		temp := chatroom[chatURL]
 		temp[ws] = true
-		chatroom[chatID] = temp
+		chatroom[chatURL] = temp
 	}
 
 	for {
-		var msg carrierMessage
+		var msg types.Message
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
@@ -121,21 +74,18 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			delete(clients, ws)
 			break
 		}
-		msg.ChatID = actualChatID
-		msg.DMUsername = usernameIfDM
-		msg.SenderID = docID.(string)
-		msg.TimeStamp = time.Now()
 
-		storedMsg := types.Message{SenderID: msg.SenderID, TimeStamp: msg.TimeStamp, Content: msg.Message, ConversationID: actualChatID}
+		msg = types.Message{SenderID: docID.(string), TimeStamp: time.Now(), Content: msg.Content, ConversationID: actualChatID}
 		if actualChatID == `` {
-			err = uses.ChatFirst(client.Eclient, storedMsg, docID.(string), dmToUsrID)
+			newConvoID, err := uses.ChatFirst(client.Eclient, msg, docID.(string), dmTargetUserID)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
 			}
+			actualChatID = newConvoID
 		} else {
-			_, err = uses.ChatSend(client.Eclient, storedMsg)
+			_, err = uses.ChatSend(client.Eclient, msg)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
@@ -163,12 +113,12 @@ func handleMessages() {
 			log.Printf("message: %v \n", msg)
 			log.Println(chatroom[msg.ChatID])
 		*/
-		for client := range chatroom[msg.ChatID] {
+		for client := range chatroom[msg.ConversationID] {
 			err := client.WriteJSON(msg)
 			if err != nil {
 				//log.Printf("error: %v", err)
 				client.Close()
-				delete(chatroom[msg.ChatID], client)
+				delete(chatroom[msg.ConversationID], client)
 			}
 		}
 	}

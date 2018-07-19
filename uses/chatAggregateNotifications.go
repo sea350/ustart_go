@@ -1,9 +1,6 @@
 package uses
 
 import (
-	"log"
-	"os"
-
 	getChat "github.com/sea350/ustart_go/get/chat"
 	getUser "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -20,9 +17,6 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string) ([]types.
 
 	usr, err := getUser.UserByID(client.Eclient, usrID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
 		return notifs, err
 	}
 
@@ -31,28 +25,20 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string) ([]types.
 		proxyID, err := postChat.IndexProxyMsg(client.Eclient, newProxy)
 		err = postUser.UpdateUser(client.Eclient, usrID, "ProxyMesssagesID", proxyID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
 			return notifs, err
 		}
 	} else {
 		proxy, err := getChat.ProxyMsgByID(client.Eclient, usr.ProxyMessagesID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
 			return notifs, err
 		}
 
 		for key := range proxy.Conversations {
 			head, err := ConvertChatToFloatingHead(client.Eclient, key, usrID)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+			if err == nil {
+				notifs = append(notifs, head)
 			}
-			notifs = append(notifs, head)
+
 		}
 	}
 
