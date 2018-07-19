@@ -3,16 +3,13 @@ package chat
 import (
 	"log"
 	"net/http"
-	"os"
-	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/types"
-	"github.com/sea350/ustart_go/uses"
 )
 
-var chatClients = make(map[string](*websocket.Conn))
+var chatClients = make(map[string](map[*websocket.Conn]bool))
 var chatNotifRadio = make(chan types.FloatingHead)
 
 //HandleChatClients ...
@@ -21,19 +18,6 @@ func HandleChatClients(w http.ResponseWriter, r *http.Request) {
 	docID, _ := session.Values["DocID"]
 	if docID == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
-		return
-	}
-
-	chatURL := r.URL.Path[4:]
-
-	//security checks before socket is opened
-	valid, actualChatID, dmTargetUserID, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-	}
-	if !valid {
 		return
 	}
 
@@ -46,15 +30,15 @@ func HandleChatClients(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	// Register our new client
-	_, exists := chatroom[chatURL]
+	_, exists := chatroom[docID.(string)]
 	if !exists {
 		temp := make(map[*websocket.Conn]bool)
 		temp[ws] = true
-		chatroom[chatURL] = temp
+		chatroom[docID.(string)] = temp
 	} else {
-		temp := chatroom[chatURL]
+		temp := chatroom[docID.(string)]
 		temp[ws] = true
-		chatroom[chatURL] = temp
+		chatroom[docID.(string)] = temp
 	}
 
 	for {
@@ -66,26 +50,6 @@ func HandleChatClients(w http.ResponseWriter, r *http.Request) {
 			delete(clients, ws)
 			break
 		}
-
-		msg = types.Message{SenderID: docID.(string), TimeStamp: time.Now(), Content: msg.Content, ConversationID: actualChatID}
-		if actualChatID == `` {
-			newConvoID, err := uses.ChatFirst(client.Eclient, msg, docID.(string), dmTargetUserID)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-			}
-			actualChatID = newConvoID
-		} else {
-			_, err = uses.ChatSend(client.Eclient, msg)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-			}
-		}
-
-		//send notification here
 
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
