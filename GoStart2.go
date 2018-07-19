@@ -70,6 +70,7 @@ func main() {
 	http.HandleFunc("/followers/", profile.FollowersPage)
 	http.HandleFunc("/following/", profile.FollowersPage)
 	http.HandleFunc("/toggleProjectInvis/", profile.AjaxChangeProjVisibility)
+	http.HandleFunc("/toggleEventInvis/", profile.AjaxChangeEventVisibility)
 
 	http.HandleFunc("/testWall/", profile.TestWallPage)
 	http.HandleFunc("/ajaxUserEntries/", profile.AjaxLoadUserEntries)
