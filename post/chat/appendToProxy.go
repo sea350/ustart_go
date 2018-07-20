@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"log"
 
 	get "github.com/sea350/ustart_go/get/chat"
 	globals "github.com/sea350/ustart_go/globals"
@@ -21,6 +22,8 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 
 	proxy, err := get.ProxyMsgByID(eclient, proxyID)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return err
 	}
 
@@ -38,14 +41,20 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 
 	exists, err = eclient.IndexExists(globals.ProxyMsgIndex).Do(ctx)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return err
 	}
 	if !exists {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(errors.New("Index does not exist"))
 		return errors.New("Index does not exist")
 	}
 
 	_, err = get.ProxyMsgByID(eclient, proxyID)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return err
 	}
 
