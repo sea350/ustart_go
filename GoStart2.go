@@ -175,7 +175,9 @@ func main() {
 
 	//CHAT
 	http.HandleFunc("/ch/", chat.Page)
-	http.HandleFunc("/ws/", chat.HandleConnections)
+	http.HandleFunc("/ws/", chat.HandleConnections)              //weebsocket
+	http.HandleFunc("/chNotifications/", chat.HandleChatClients) //websocket
+	http.HandleFunc("/LoadChat/", chat.InitialChat)
 
 	//DASHBOARD
 	http.HandleFunc("/dash/", dash.ViewDashboard)
