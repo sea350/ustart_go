@@ -1,6 +1,7 @@
 package uses
 
 import (
+	"fmt"
 	"log"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
@@ -19,6 +20,7 @@ func ChatFirst(eclient *elastic.Client, msg types.Message, docID1 string, docID2
 	eaves2.Class = 1
 	var droppers = make(map[string]types.Eavesdropper)
 	droppers[docID1] = eaves
+	fmt.Println(docID1, docID2)
 	droppers[docID2] = eaves2
 	var newConvo types.Conversation
 	newConvo.Class = 1
