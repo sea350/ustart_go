@@ -15,12 +15,6 @@ import (
 func ConvoByID(eclient *elastic.Client, convoID string) (types.Conversation, error) {
 
 	var convo types.Conversation //initialize type chat
-	var eaves = types.Eavesdropper{
-		Class: 1,
-	}
-	convo.Eavesdroppers = make(map[string]types.Eavesdropper)
-	convo.Eavesdroppers["EMPTY A"] = eaves
-	convo.Eavesdroppers["EMPTY B"] = eaves
 
 	ctx := context.Background()         //intialize context background
 	searchResult, err := eclient.Get(). //Get returns doc type, index, etc.
