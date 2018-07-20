@@ -24,6 +24,7 @@ func IndexConvo(eclient *elastic.Client, newConvo types.Conversation) (string, e
 		Do(ctx)
 
 	if Err != nil {
+		fmt.Println("INDEX CONVO ERROR", Err)
 		return convoID, Err
 	}
 	convoID = idx.Id
