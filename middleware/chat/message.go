@@ -54,15 +54,15 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	// Register our new client
-	_, exists := chatroom[chatURL]
+	_, exists := chatroom[actualChatID]
 	if !exists {
 		temp := make(map[*websocket.Conn]bool)
 		temp[ws] = true
-		chatroom[chatURL] = temp
+		chatroom[actualChatID] = temp
 	} else {
-		temp := chatroom[chatURL]
+		temp := chatroom[actualChatID]
 		temp[ws] = true
-		chatroom[chatURL] = temp
+		chatroom[actualChatID] = temp
 	}
 
 	for {
@@ -71,8 +71,12 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			log.Printf("error: %v", err)
-			delete(clients, ws)
+			if !websocket.IsCloseError(err) {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
+			}
+			delete(chatroom[actualChatID], ws)
 			break
 		}
 
