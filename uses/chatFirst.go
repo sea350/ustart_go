@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"log"
+
 	getChat "github.com/sea350/ustart_go/get/chat"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	"github.com/sea350/ustart_go/types"
@@ -20,31 +22,43 @@ func ChatFirst(eclient *elastic.Client, msg types.Message, docID1 string, docID2
 
 	convoID, err := postChat.IndexConvo(eclient, newConvo)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return ``, err
 	}
 
 	msg.ConversationID = convoID
 	msgID, err := postChat.IndexMsg(eclient, msg)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return ``, err
 	}
 
 	err = postChat.UpdateConvo(eclient, convoID, "MessageArchive", []string{msgID})
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return convoID, err
 	}
 
 	pID, err := getChat.ProxyIDByUserID(eclient, docID1)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return convoID, err
 	}
 	err = postChat.AppendToProxy(eclient, pID, convoID)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return convoID, err
 	}
 
 	pID, err = getChat.ProxyIDByUserID(eclient, docID2)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return convoID, err
 	}
 	err = postChat.AppendToProxy(eclient, pID, convoID)

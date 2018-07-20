@@ -3,14 +3,21 @@ package chat
 import (
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/sea350/ustart_go/uses"
 
 	"github.com/gorilla/websocket"
 	"github.com/sea350/ustart_go/middleware/client"
-	"github.com/sea350/ustart_go/types"
 )
 
 var chatClients = make(map[string](map[*websocket.Conn]bool))
-var chatNotifRadio = make(chan types.FloatingHead)
+var chatBroadcast = make(chan chatNotif)
+
+type chatNotif struct {
+	UserID string `json:"UserID"`
+	ChatID string `json:"ChatID"`
+}
 
 //HandleChatClients ...
 func HandleChatClients(w http.ResponseWriter, r *http.Request) {
@@ -30,51 +37,39 @@ func HandleChatClients(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	// Register our new client
-	_, exists := chatroom[docID.(string)]
+	_, exists := chatClients[docID.(string)]
 	if !exists {
 		temp := make(map[*websocket.Conn]bool)
 		temp[ws] = true
-		chatroom[docID.(string)] = temp
+		chatClients[docID.(string)] = temp
 	} else {
-		temp := chatroom[docID.(string)]
+		temp := chatClients[docID.(string)]
 		temp[ws] = true
-		chatroom[docID.(string)] = temp
+		chatClients[docID.(string)] = temp
 	}
 
-	for {
-		var msg types.Message
-		// Read in a new message as JSON and map it to a Message object
-		err := ws.ReadJSON(&msg)
-		if err != nil {
-			log.Printf("error: %v", err)
-			delete(clients, ws)
-			break
-		}
-
-		// Send the newly received message to the broadcast channel
-		broadcast <- msg
-	}
 }
 
 func handleChatAlert() {
 	for {
 		// Grab the next message from the broadcast channel
-		msg := <-broadcast
+		alert := <-chatBroadcast
 		// Send it out to every client that is currently connected
-		/*
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, "debug text")
-			log.Println("channel #" + msg.ChatID)
-			log.Printf("message: %v \n", msg)
-			log.Println(chatroom[msg.ChatID])
-		*/
-		for client := range chatroom[msg.ConversationID] {
-			err := client.WriteJSON(msg)
+
+		for clnt := range chatClients[alert.UserID] {
+			head, err := uses.ConvertChatToFloatingHead(client.Eclient, alert.ChatID, alert.UserID)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
+				continue
+			}
+
+			err = clnt.WriteJSON(head)
 			if err != nil {
 				//log.Printf("error: %v", err)
-				client.Close()
-				delete(chatroom[msg.ConversationID], client)
+				clnt.Close()
+				delete(chatClients[alert.UserID], clnt)
 			}
 		}
 	}

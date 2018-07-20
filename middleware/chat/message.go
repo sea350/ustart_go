@@ -67,6 +67,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 
 	for {
 		var msg types.Message
+		notif := chatNotif{UserID: docID.(string)}
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
@@ -94,7 +95,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 
 		//send notification here
-
+		notif.ChatID = actualChatID
+		chatBroadcast <- notif
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}

@@ -20,7 +20,6 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	docID, _ := session.Values["DocID"]
 	if docID == nil {
-		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
 
