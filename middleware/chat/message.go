@@ -71,10 +71,12 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			if !websocket.IsCloseError(err) {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+			if c, k := err.(*websocket.CloseError); k {
+				if c.Code != 1001 {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					dir, _ := os.Getwd()
+					log.Println(dir, err)
+				}
 			}
 			delete(chatroom[actualChatID], ws)
 			break
