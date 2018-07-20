@@ -24,6 +24,10 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 		return err
 	}
 
+	if len(proxy.Conversations) == 0 {
+		proxy.Conversations = make(map[string]types.ConversationState)
+	}
+
 	temp, exists := proxy.Conversations[conversationID]
 	if !exists {
 		proxy.Conversations[conversationID] = types.ConversationState{}
