@@ -54,25 +54,25 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	// Register our new client
-	_, exists := chatroom[chatURL]
+	_, exists := chatroom[actualChatID]
 	if !exists {
 		temp := make(map[*websocket.Conn]bool)
 		temp[ws] = true
-		chatroom[chatURL] = temp
+		chatroom[actualChatID] = temp
 	} else {
-		temp := chatroom[chatURL]
+		temp := chatroom[actualChatID]
 		temp[ws] = true
-		chatroom[chatURL] = temp
+		chatroom[actualChatID] = temp
 	}
 
 	for {
 		var msg types.Message
-		notif := chatNotif{UserID: docID.(string)}
+		var notif chatNotif
+		notifyThese := []string{}
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			log.Printf("error: %v", err)
-			delete(clients, ws)
+			delete(chatroom[actualChatID], ws)
 			break
 		}
 
@@ -84,9 +84,11 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
 			}
+			notifyThese = append(notifyThese, dmTargetUserID)
+			notifyThese = append(notifyThese, docID.(string))
 			actualChatID = newConvoID
-		} else {
-			_, err = uses.ChatSend(client.Eclient, msg)
+		} else if actualChatID != `` && chatURL != `` {
+			notifyThese, err = uses.ChatSend(client.Eclient, msg)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
@@ -96,7 +98,10 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 
 		//send notification here
 		notif.ChatID = actualChatID
-		//chatBroadcast <- notif
+		for _, id := range notifyThese {
+			notif.UserID = id
+			chatBroadcast <- notif
+		}
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}
