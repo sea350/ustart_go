@@ -23,7 +23,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	chatURL := r.URL.Path[4:]
+	chatURL := r.FormValue("chatUrl")
 
 	valid, actualChatID, otherUsr, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
