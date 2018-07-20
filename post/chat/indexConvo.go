@@ -15,7 +15,7 @@ func IndexConvo(eclient *elastic.Client, newConvo types.Conversation) (string, e
 	//ADDS NEW CHAT TO ES RECORDS (requires an elastic client and a Chat type)
 	//RETURNS AN error and the new chat's ID IF SUCESSFUL error = nil
 	ctx := context.Background()
-	var convoID string
+	var convoID = ""
 	fmt.Println("NEW CONVO", newConvo)
 	idx, Err := eclient.Index().
 		Index(globals.ConvoIndex).
@@ -28,5 +28,5 @@ func IndexConvo(eclient *elastic.Client, newConvo types.Conversation) (string, e
 	}
 	convoID = idx.Id
 
-	return convoID, nil
+	return convoID, Err
 }
