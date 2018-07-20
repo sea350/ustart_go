@@ -94,9 +94,12 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 		}
 	}
 
-	msg, err := getChat.MsgByID(eclient, convo.MessageIDCache[len(convo.MessageIDCache)-1])
-	if err != nil {
-		return head, err
+	if len(convo.MessageIDCache) > 0 {
+		msg, err := getChat.MsgByID(eclient, convo.MessageIDCache[len(convo.MessageIDCache)-1])
+		head.Bio = []rune(msg.Content)
+		if err != nil {
+			return head, err
+		}
 	}
 
 	for key, eaver := range convo.Eavesdroppers {
@@ -111,7 +114,6 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 		}
 	}
 
-	head.Bio = []rune(msg.Content)
 	head.DocID = conversationID
 
 	return head, err
