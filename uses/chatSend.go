@@ -2,6 +2,7 @@ package uses
 
 import (
 	"errors"
+	"log"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
 	postChat "github.com/sea350/ustart_go/post/chat"
@@ -16,11 +17,15 @@ func ChatSend(eclient *elastic.Client, msg types.Message) ([]string, error) {
 
 	convo, err := getChat.ConvoByID(eclient, msg.ConversationID)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return notifyThese, err
 	}
 
 	_, exists := convo.Eavesdroppers[msg.SenderID]
 	if !exists {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(errors.New("THIS USER IS NOT PART OF THE CONVERSATION"))
 		return notifyThese, errors.New("THIS USER IS NOT PART OF THE CONVERSATION")
 	}
 
@@ -33,10 +38,14 @@ func ChatSend(eclient *elastic.Client, msg types.Message) ([]string, error) {
 	for eaverID := range convo.Eavesdroppers {
 		pID, err := getChat.ProxyIDByUserID(eclient, eaverID)
 		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 			return notifyThese, err
 		}
 		err = postChat.AppendToProxy(eclient, pID, msg.ConversationID)
 		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 			return notifyThese, err
 		}
 
