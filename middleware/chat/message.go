@@ -85,7 +85,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println(dir, err)
 			}
 			actualChatID = newConvoID
-		} else {
+		} else if actualChatID != `` && chatURL != `` {
 			_, err = uses.ChatSend(client.Eclient, msg)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
