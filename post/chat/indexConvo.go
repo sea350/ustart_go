@@ -2,7 +2,6 @@ package post
 
 import (
 	"context"
-	"fmt"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -16,7 +15,7 @@ func IndexConvo(eclient *elastic.Client, newConvo types.Conversation) (string, e
 	//RETURNS AN error and the new chat's ID IF SUCESSFUL error = nil
 	ctx := context.Background()
 	var convoID = ""
-	fmt.Println("NEW CONVO", newConvo)
+
 	idx, Err := eclient.Index().
 		Index(globals.ConvoIndex).
 		Type(globals.ConvoType).
@@ -24,7 +23,7 @@ func IndexConvo(eclient *elastic.Client, newConvo types.Conversation) (string, e
 		Do(ctx)
 
 	if Err != nil {
-		fmt.Println("INDEX CONVO ERROR", Err)
+
 		return convoID, Err
 	}
 	convoID = idx.Id
