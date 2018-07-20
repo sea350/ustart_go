@@ -108,28 +108,3 @@ func RenderSidebar(w http.ResponseWriter, r *http.Request, tmpl string) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
-
-//RenderSidebar ... used to render anything only needs session information, like sidebar or banner
-func RenderNavbar(w http.ResponseWriter, r *http.Request, tmpl string) {
-	session, _ := Store.Get(r, "session_please")
-	var cs ClientSide
-	if session.Values["FirstName"] != nil {
-		cs.FirstName = session.Values["FirstName"].(string)
-	}
-	if session.Values["LastName"] != nil {
-		cs.LastName = session.Values["LastName"].(string)
-	}
-	if session.Values["Username"] != nil {
-		cs.Username = session.Values["Username"].(string)
-	}
-	if session.Values["DocID"] != nil {
-		cs.DOCID = session.Values["DocID"].(string)
-	}
-	if session.Values["Avatar"] != nil {
-		cs.Avatar = session.Values["Avatar"].(string)
-	}
-	err := templates.ExecuteTemplate(w, tmpl+".html", cs)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
