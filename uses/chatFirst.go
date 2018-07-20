@@ -1,7 +1,6 @@
 package uses
 
 import (
-	"fmt"
 	"log"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
@@ -23,7 +22,7 @@ func ChatFirst(eclient *elastic.Client, msg types.Message, docID1 string, docID2
 
 	convoID, err := postChat.IndexConvo(eclient, newConvo)
 	if err != nil {
-		fmt.Println("INDEX CONVO")
+
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		return ``, err
@@ -32,7 +31,7 @@ func ChatFirst(eclient *elastic.Client, msg types.Message, docID1 string, docID2
 	msg.ConversationID = convoID
 	msgID, err := postChat.IndexMsg(eclient, msg)
 	if err != nil {
-		fmt.Println("INDEX MSG")
+
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		return ``, err
