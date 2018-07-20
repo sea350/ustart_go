@@ -96,7 +96,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 
 		//send notification here
 		notif.ChatID = actualChatID
-		chatBroadcast <- notif
+		//chatBroadcast <- notif
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 	}
