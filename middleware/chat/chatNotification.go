@@ -50,7 +50,8 @@ func HandleChatClients(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func handleChatAlert() {
+//HandleChatAlert ... deals with chat notifications, meant to be run on navbar
+func HandleChatAlert() {
 	for {
 		// Grab the next message from the broadcast channel
 		alert := <-chatBroadcast
