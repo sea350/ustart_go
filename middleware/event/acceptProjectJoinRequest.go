@@ -22,10 +22,10 @@ func AcceptProjectJoinRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	evntID := r.FormValue("eventID")
+	eventID := r.FormValue("eventID")
 	projectID := r.FormValue("projectID")
 
-	newNumRequests, err := uses.RemoveProjectEventRequest(client.Eclient, evntID, projectID)
+	newNumRequests, err := uses.RemoveProjectEventRequest(client.Eclient, eventID, projectID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
@@ -44,7 +44,7 @@ func AcceptProjectJoinRequest(w http.ResponseWriter, r *http.Request) {
 	newProjectGuest.Visible = true
 	newProjectGuest.ProjectID = projectID
 
-	err = evntPost.AppendProjectGuest(client.Eclient, evntID, newProjectGuest)
+	err = evntPost.AppendProjectGuest(client.Eclient, eventID, newProjectGuest)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

@@ -56,6 +56,7 @@ type Project struct {
 	Subchats          []Subchat    `json:"Subchats"`
 	ProxyMessagesID   string       `json:"ProxyMessagesID"`
 	EventIDs          []string     `json:"EventIDs"`
+	Events            []Events     `json:"Events"`
 	SentEventReq      []string     `json:"SentEventReq"`
 	ReceivedEventReq  []string     `json:"ReceivedEventReq"`
 }

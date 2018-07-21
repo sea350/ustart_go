@@ -6,7 +6,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/project"
 	globals "github.com/sea350/ustart_go/globals"
-//	eventPost "github.com/sea350/ustart_go/post/event"
+	//	eventPost "github.com/sea350/ustart_go/post/event"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -14,8 +14,8 @@ import (
 func AppendEventID(eclient *elastic.Client, projectID string, eventID string) error {
 	ctx := context.Background()
 
-	GenericEventUpdateLock.Lock()
-	defer GenericEventUpdateLock.Unlock()
+	// GenericEventUpdateLock.Lock()
+	// defer GenericEventUpdateLock.Unlock()
 
 	proj, err := get.ProjectByID(eclient, projectID)
 
@@ -32,7 +32,6 @@ func AppendEventID(eclient *elastic.Client, projectID string, eventID string) er
 		Doc(map[string]interface{}{"EventIDs": proj.EventIDs}).
 		Do(ctx)
 
-	
 	return err
 
 }
