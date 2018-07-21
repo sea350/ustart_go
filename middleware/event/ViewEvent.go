@@ -30,11 +30,14 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		fmt.Println("err: middleware/event/ViewEvent Line 28")
 	}
+	fmt.Println("Woah")
 
+	fmt.Println("Woah2")
 	userstruct, err := userGet.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("Woah3")
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Event: event}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
