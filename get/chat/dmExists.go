@@ -6,7 +6,6 @@ import (
 
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
-	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -31,14 +30,10 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 		return false, "", errTwo
 	}
 
-	var eaves types.Eavesdropper
-	searchMap := make(map[string]types.Eavesdropper)
-	searchMap[eavesdropperOne] = eaves
-	searchMap[eavesdropperTwo] = eaves
 	query := elastic.NewBoolQuery()
 
-	query = query.Should(elastic.NewTermQuery("Eavesdroppers", eaves))
-	// query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdropperTwo))
+	query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdropperOne))
+	query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdropperTwo))
 
 	ctx := context.Background() //intialize context background
 	searchResults, err := eclient.Search().
