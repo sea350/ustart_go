@@ -6,7 +6,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/project"
 	globals "github.com/sea350/ustart_go/globals"
-	eventPost "github.com/sea350/ustart_go/post/event"
+//	eventPost "github.com/sea350/ustart_go/post/event"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
