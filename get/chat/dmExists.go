@@ -37,7 +37,7 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 	searchMap[eavesdropperTwo] = eaves
 	query := elastic.NewBoolQuery()
 
-	query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdropperOne))
+	query = query.Should(elastic.NewTermQuery("Eavesdroppers", eaves))
 	// query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdropperTwo))
 
 	ctx := context.Background() //intialize context background
