@@ -16,6 +16,7 @@ import (
 //ProcessWidgetForm ... Populates a barebones widget with form data
 func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
+	fmt.Println(r.FormValue("instagramInput"))
 	checkerEnable := false
 
 	var data []template.HTML
@@ -49,8 +50,10 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		data = []template.HTML{image}
 		classification = 3
 	}
+
 	if r.FormValue("widgetSubmit") == `4` {
 		//instagram -- Takes in an instagram post URL
+
 		insta := r.FormValue("instagramInput")
 		edit := r.FormValue("editID")
 
@@ -59,7 +62,6 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		// regX := regexp.MustCompile(`(https?:\/\/www\.)?instagram\.com(\/p\/\w+\/?)`)
 		// regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z\-\_0-9]{0,16}\/*+`)
 
-		fmt.Println(insta)
 		// if !regX.MatchString(insta) {
 		// 	return newWidget, errors.New(`Unusable Instagram URL`)
 		// } //Check valid URL
