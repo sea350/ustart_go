@@ -25,7 +25,7 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println("URL IS ", r.URL.Path[7:])
-	event, err := getEvent.EventByID(client.Eclient, r.URL.Path[7:])
+	event, err := uses.AggregateEventData(client.Eclient, r.URL.Path[7:], test1.(string))
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("err: middleware/event/ViewEvent Line 28")
@@ -35,15 +35,7 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	// Event becoming EventAggregate?
-
-	var eventAgg = types.EventAggregate{
-		DocID:          session.Values["DocID"].(string),
-		EventData:      event,
-		Editable:       true,
-		RequestAllowed: true,
-	}
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Event: eventAgg}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Event: event}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "events", cs)
