@@ -16,6 +16,7 @@ type Message struct {
 //Eavesdropper ... Information about a single person in the conversation
 type Eavesdropper struct {
 	Class     int    `json:"Class"`
+	DocID     string `json:"DocID"`
 	Bookmark  int    `json:"Bookmark"`  //index of the last message the person saw in the ARCHIVE
 	TextColor string `json:"TextColor"` //hex format color
 	Nickname  string `json:"Nickname"`

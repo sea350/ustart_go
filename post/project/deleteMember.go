@@ -7,6 +7,7 @@ import (
 	get "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
+	postChat "github.com/sea350/ustart_go/post/chat"
 	postUser "github.com/sea350/ustart_go/post/user"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -64,6 +65,13 @@ func DeleteMember(eclient *elastic.Client, projID string, userID string) error {
 	}
 
 	proj.Members = append(proj.Members[:index], proj.Members[index+1:]...)
+
+	for subchat := range proj.Subchats {
+		err = postChat.RemoveEavesFromConvo(elastic, subchat.ConversationId, userID)
+		if err != nil {
+			return err
+		}
+	}
 
 	_, err = eclient.Update().
 		Index(globals.ProjectIndex).
