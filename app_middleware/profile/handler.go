@@ -116,12 +116,20 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			}
 
 		case "proj":
+			isValid := uses.ValidUsername(data.CustomURL)
+			if !isValid {
+				resp.update(false, errors.New("Invalid custom URL"), "projID", Usr)
+			}
 			fmt.Println("INTENT TO CREATE PROJECT")
 			projID, err := uses.CreateProject(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, "College", data.CustomURL)
 
 			resp.update(err == nil, err, projID, Usr)
 
 		case "event":
+			isValid := uses.ValidUsername(data.CustomURL)
+			if !isValid {
+				resp.update(false, errors.New("Invalid custom URL"), "", Usr)
+			}
 			fmt.Println("INTENT TO CREATE EVENT")
 			eventID, err := uses.CreateEvent(eclient, data.Title, []rune(data.Description), data.SessUser.DocID, data.Category, data.CustomURL, data.Location, data.EventStart, data.EventEnd)
 

@@ -23,3 +23,5 @@ type form struct {
 //Intent:
 //uf: user follow
 //uu : user unfollow
+//proj: create project
+//event: create event
