@@ -7,7 +7,10 @@ import (
 	"os"
 	"time"
 
+	getChat "github.com/sea350/ustart_go/get/chat"
+	getProj "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
+	postChat "github.com/sea350/ustart_go/post/chat"
 	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
@@ -61,6 +64,49 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
+		return
+	}
+
+	proj, err := getProj.ProjectByID(client.Eclient, projID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+		return
+	}
+
+	convo, err := getChat.ConvoByID(client.Eclient, proj.Subchats[0].ConversationID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+		return
+	}
+
+	convo.Eavesdroppers[newMemberID] = types.Eavesdropper{Class: 1}
+
+	err = postChat.UpdateConvo(client.Eclient, proj.Subchats[0].ConversationID, "Eavesdroppers", convo.Eavesdroppers)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+		return
+	}
+
+	proxyID, err := getChat.ProxyIDByUserID(client.Eclient, newMemberID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+		return
+	}
+
+	err = postChat.AppendToProxy(client.Eclient, proxyID, proj.Subchats[0].ConversationID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+		return
 	}
 
 	fmt.Fprintln(w, newNumRequests)
