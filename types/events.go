@@ -49,6 +49,7 @@ type EventMembers struct {
 
 //Events ... Event relevant data
 type Events struct {
+	EventID        string               `json:"EventID"`
 	Host           string               `json:"Host"` //Displayed host on the event page, by userID or projectID
 	IsProjectHost  bool                 `json:"IsProjectHost"`
 	Name           string               `json:"Name"`
