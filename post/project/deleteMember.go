@@ -66,8 +66,8 @@ func DeleteMember(eclient *elastic.Client, projID string, userID string) error {
 
 	proj.Members = append(proj.Members[:index], proj.Members[index+1:]...)
 
-	for subchat := range proj.Subchats {
-		err = postChat.RemoveEavesFromConvo(elastic, subchat.ConversationId, userID)
+	for _, subchat := range proj.Subchats {
+		err = postChat.RemoveEavesFromConversation(eclient, subchat.ConversationID, userID)
 		if err != nil {
 			return err
 		}
