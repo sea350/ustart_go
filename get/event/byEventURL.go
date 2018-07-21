@@ -2,7 +2,6 @@ package get
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
