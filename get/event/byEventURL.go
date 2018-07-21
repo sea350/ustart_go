@@ -25,7 +25,7 @@ func EventByURL(eclient *elastic.Client, eventURL string) (types.Events, error) 
 		break
 	}
 
-	evnt, err = EventByURL(eclient, result)
+	evnt, err = EventByID(eclient, result)
 
 	return evnt, err
 }
