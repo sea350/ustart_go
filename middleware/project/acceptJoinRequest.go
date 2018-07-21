@@ -83,7 +83,7 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	convo.Eavesdroppers[newMemberID] = types.Eavesdropper{Class: 1}
+	convo.Eavesdroppers = append(convo.Eavesdroppers, types.Eavesdropper{Class: 1, DocID: newMemberID})
 
 	err = postChat.UpdateConvo(client.Eclient, proj.Subchats[0].ConversationID, "Eavesdroppers", convo.Eavesdroppers)
 	if err != nil {

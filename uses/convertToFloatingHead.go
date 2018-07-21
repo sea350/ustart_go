@@ -102,11 +102,11 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 		}
 	}
 
-	for key, eaver := range convo.Eavesdroppers {
-		if key == viewerID {
-			head.Notifications = len(convo.MessageIDArchive) - eaver.Bookmark - 1
+	for i := range convo.Eavesdroppers {
+		if convo.Eavesdroppers[i].DocID == viewerID {
+			head.Notifications = len(convo.MessageIDArchive) - convo.Eavesdroppers[i].Bookmark - 1
 		} else if convo.Class == 1 {
-			usr, err := getUser.UserByID(client.Eclient, key)
+			usr, err := getUser.UserByID(client.Eclient, convo.Eavesdroppers[i].DocID)
 			if err != nil {
 				return head, err
 			}

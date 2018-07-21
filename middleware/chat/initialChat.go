@@ -70,14 +70,14 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		for id := range chat.Eavesdroppers {
-			head, err := uses.ConvertUserToFloatingHead(client.Eclient, id)
+		for idx := range chat.Eavesdroppers {
+			head, err := uses.ConvertUserToFloatingHead(client.Eclient, chat.Eavesdroppers[idx].DocID)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
 			}
-			heads[id] = head
+			heads[chat.Eavesdroppers[idx]] = head
 		}
 
 	} else {
