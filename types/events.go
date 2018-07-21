@@ -31,6 +31,13 @@ type EventGuests struct {
 	Visible        bool          `json:"Visible"`
 }
 
+//EventProjectGuests ... Project Guest data
+type EventProjectGuests struct {
+	ProjectID string `json:"ProjectID"`
+	Status    int    `json:"Status"` //Marks whether they are invited/going/not going, 0 for invited, 1 for going, 2 for not
+	Visible   bool   `json:"Visible"`
+}
+
 //EventMembers ... Member relevant data, who can modify the event page
 type EventMembers struct {
 	MemberID string    `json:"MemberID"`
@@ -42,34 +49,37 @@ type EventMembers struct {
 
 //Events ... Event relevant data
 type Events struct {
-	Host           string         `json:"Host"` //Displayed host on the event page, by userID or projectID
-	IsProjectHost  bool           `json:"IsProjectHost"`
-	Name           string         `json:"Name"`
-	Tags           string         `json:"Tags"`
-	Category       string         `json:"Category"`
-	URLName        string         `json:"URLName"`
-	QuickLinks     []Link         `json:"QuickLinks"`
-	Description    []rune         `json:"Description"`
-	Members        []EventMembers `json:"Members"`
-	Guests         []EventGuests  `json:"Guests"`
-	EntryIDs       []string       `json:"EntryIDs"`
-	Location       LocStruct      `json:"Location"`
-	EventDateStart time.Time      `json:"EventDateStart"`
-	EventDateEnd   time.Time      `json:"EventDateEnd"`
-	CreationDate   time.Time      `json:"CreationDate"`
-	Widgets        []string       `json:"Widgets"`
+	Host           string               `json:"Host"` //Displayed host on the event page, by userID or projectID
+	IsProjectHost  bool                 `json:"IsProjectHost"`
+	Name           string               `json:"Name"`
+	Tags           string               `json:"Tags"`
+	Category       string               `json:"Category"`
+	URLName        string               `json:"URLName"`
+	QuickLinks     []Link               `json:"QuickLinks"`
+	Description    []rune               `json:"Description"`
+	Members        []EventMembers       `json:"Members"`
+	Guests         []EventGuests        `json:"Guests"`
+	ProjectGuests  []EventProjectGuests `json:"ProjectGuests"`
+	EntryIDs       []string             `json:"EntryIDs"`
+	Location       LocStruct            `json:"Location"`
+	EventDateStart time.Time            `json:"EventDateStart"`
+	EventDateEnd   time.Time            `json:"EventDateEnd"`
+	CreationDate   time.Time            `json:"CreationDate"`
+	Widgets        []string             `json:"Widgets"`
 	//Whitelist         []string          `json:"Whitelist"`
 	//Blacklist         []string          `json:"Blacklist"`
-	Status            bool              `json:"Status"` //Whether this event is still ongoing or cancelled
-	Public            bool              `json:"Public"` //Whether this event is publicly viewable or invite-only viewable
-	Avatar            string            `json:"Avatar"`
-	CroppedAvatar     string            `json:"CropAvatar"`
-	Banner            string            `json:"Banner"`
-	Visible           bool              `json:"Visible"`
-	FollowedUsers     []string          `json:"FollowedUsers"`
-	MemberReqSent     []string          `json:"MemberReqSent"`
-	MemberReqReceived []string          `json:"MemberReqReceived"`
-	GuestReqSent      []string          `json:"GuestReqSent"`
-	GuestReqReceived  []string          `json:"GuestReqReceived"`
-	PrivilegeProfiles []EventPrivileges `json:"PrivilegeProfiles"`
+	Status                  bool              `json:"Status"` //Whether this event is still ongoing or cancelled
+	Public                  bool              `json:"Public"` //Whether this event is publicly viewable or invite-only viewable
+	Avatar                  string            `json:"Avatar"`
+	CroppedAvatar           string            `json:"CropAvatar"`
+	Banner                  string            `json:"Banner"`
+	Visible                 bool              `json:"Visible"`
+	FollowedUsers           []string          `json:"FollowedUsers"`
+	MemberReqSent           []string          `json:"MemberReqSent"`
+	MemberReqReceived       []string          `json:"MemberReqReceived"`
+	GuestReqSent            []string          `json:"GuestReqSent"`
+	GuestReqReceived        []string          `json:"GuestReqReceived"`
+	ProjectGuestReqReceived []string          `json:"ProjectGuestReqReceived"`
+	ProjectGuestReqSent     []string          `json:"ProjectGuestReqSent"`
+	PrivilegeProfiles       []EventPrivileges `json:"PrivilegeProfiles"`
 }
