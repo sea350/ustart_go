@@ -66,8 +66,8 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	newConvo.Class = 3
 	newConvo.Title = "General"
 	newConvo.ReferenceID = id
-	newConvo.Eavesdroppers = make(map[string]types.Eavesdropper)
-	newConvo.Eavesdroppers[makerID] = types.Eavesdropper{Class: 1}
+
+	newConvo.Eavesdroppers = append(newConvo.Eavesdroppers, types.Eavesdropper{Class: 1, DocID: makerID})
 
 	convoID, err := postChat.IndexConvo(eclient, newConvo)
 	if err != nil {

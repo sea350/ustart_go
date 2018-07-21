@@ -22,7 +22,13 @@ func ChatSend(eclient *elastic.Client, msg types.Message) ([]string, error) {
 		return notifyThese, err
 	}
 
-	_, exists := convo.Eavesdroppers[msg.SenderID]
+	var exists bool
+	for idx := range convo.Eavesdroppers {
+		if convo.Eavesdroppers[idx].DocID == msg.SenderID {
+			exists = true
+			break
+		}
+	}
 	if !exists {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(errors.New("THIS USER IS NOT PART OF THE CONVERSATION"))
@@ -35,8 +41,8 @@ func ChatSend(eclient *elastic.Client, msg types.Message) ([]string, error) {
 	}
 
 	err = postChat.AppendMessageIDToConversation(eclient, msg.ConversationID, msgID)
-	for eaverID := range convo.Eavesdroppers {
-		pID, err := getChat.ProxyIDByUserID(eclient, eaverID)
+	for idx := range convo.Eavesdroppers {
+		pID, err := getChat.ProxyIDByUserID(eclient, convo.Eavesdroppers[idx].DocID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
@@ -49,7 +55,7 @@ func ChatSend(eclient *elastic.Client, msg types.Message) ([]string, error) {
 			return notifyThese, err
 		}
 
-		notifyThese = append(notifyThese, eaverID)
+		notifyThese = append(notifyThese, convo.Eavesdroppers[idx].DocID)
 
 	}
 

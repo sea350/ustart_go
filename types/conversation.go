@@ -26,13 +26,13 @@ type Eavesdropper struct {
 
 //Conversation ... an ES indexed structure that is a full record of the entire conversation including a cache of the most recent
 type Conversation struct {
-	Title            string                  `json:"Title"`
-	ReferenceID      string                  `json:"ReferenceID"`
-	Class            int                     `json:"Class"`
-	Eavesdroppers    map[string]Eavesdropper `json:"Eavesdroppers"`
-	MessageIDArchive []string                `json:"MessageArchive"` //no limit but must be ordered by most recent interaction
-	MessageIDCache   []string                `json:"MessageCache"`   //LIMIT 100, must be ordered by most recent interaction
-	PinnedMessages   []string                `json:"PinnedMessages"`
+	Title            string         `json:"Title"`
+	ReferenceID      string         `json:"ReferenceID"`
+	Class            int            `json:"Class"`
+	Eavesdroppers    []Eavesdropper `json:"Eavesdroppers"`
+	MessageIDArchive []string       `json:"MessageArchive"` //no limit but must be ordered by most recent interaction
+	MessageIDCache   []string       `json:"MessageCache"`   //LIMIT 100, must be ordered by most recent interaction
+	PinnedMessages   []string       `json:"PinnedMessages"`
 	//Class 1 = DM
 	//Class 2 = groupchat
 	//Class 3 = project (see RefrenceID)

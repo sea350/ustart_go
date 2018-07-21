@@ -21,7 +21,15 @@ func RemoveEavesFromConversation(eclient *elastic.Client, conversationID string,
 		return err
 	}
 
-	delete(convo.Eavesdroppers, eavesID)
+	for i := range convo.Eavesdroppers {
+		if convo.Eavesdroppers[i].DocID == eavesID {
+			if i < len(convo.Eavesdroppers)-1 {
+				convo.Eavesdroppers = append(convo.Eavesdroppers[:i], convo.Eavesdroppers[i+1:]...)
+			} else {
+				convo.Eavesdroppers = convo.Eavesdroppers[:i]
+			}
+		}
+	}
 
 	proxyID, err := get.ProxyIDByUserID(eclient, eavesID)
 	if err != nil {

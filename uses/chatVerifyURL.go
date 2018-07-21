@@ -39,7 +39,14 @@ func ChatVerifyURL(eclient *elastic.Client, url string, viewerID string) (bool, 
 		if err != nil {
 			return false, ``, ``, err
 		}
-		_, exists := convo.Eavesdroppers[viewerID]
+
+		var exists bool
+		for i := range convo.Eavesdroppers {
+			if convo.Eavesdroppers[i].DocID == viewerID {
+				exists = true
+				break
+			}
+		}
 		if !exists {
 			return false, ``, ``, errors.New("THIS USER IS NOT PART OF THE CONVERSATION")
 		}

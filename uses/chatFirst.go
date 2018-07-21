@@ -13,12 +13,10 @@ import (
 //returns the new convo id along with err
 func ChatFirst(eclient *elastic.Client, msg types.Message, docID1 string, docID2 string) (string, error) {
 
-	var eaves = types.Eavesdropper{Class: 1}
+	droppers := []types.Eavesdropper{}
+	droppers = append(droppers, types.Eavesdropper{Class: 1, DocID: docID1})
+	droppers = append(droppers, types.Eavesdropper{Class: 1, DocID: docID2})
 
-	var droppers = make(map[string]types.Eavesdropper)
-	droppers[docID1] = eaves
-
-	droppers[docID2] = eaves
 	var newConvo = types.Conversation{Class: 1, Eavesdroppers: droppers}
 
 	convoID, err := postChat.IndexConvo(eclient, newConvo)
