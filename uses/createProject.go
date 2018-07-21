@@ -6,7 +6,9 @@ import (
 	"errors"
 	"time"
 
+	getChat "github.com/sea350/ustart_go/get/chat"
 	projGet "github.com/sea350/ustart_go/get/project"
+	postChat "github.com/sea350/ustart_go/post/chat"
 	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
@@ -33,6 +35,9 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	newProj.Avatar = "https://i.imgur.com/TYFKsdi.png"
 	newProj.Category = category
 	newProj.Organization = college
+	if customURL != `` {
+		newProj.URLName = customURL
+	}
 
 	var maker types.Member
 	maker.JoinDate = time.Now()
@@ -48,6 +53,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	if err != nil {
 		return id, err
 	}
+
 	var addProj types.ProjectInfo
 	addProj.ProjectID = id
 	addProj.Visible = true
@@ -56,11 +62,37 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		panic(err)
 	}
 
+	var newConvo types.Conversation
+	newConvo.Class = 3
+	newConvo.Title = "General"
+	newConvo.ReferenceID = id
+	newConvo.Eavesdroppers = make(map[string]types.Eavesdropper)
+	newConvo.Eavesdroppers[makerID] = types.Eavesdropper{Class: 1}
+
+	convoID, err := postChat.IndexConvo(eclient, newConvo)
+	if err != nil {
+		return id, err
+	}
+
+	proxyID, err := getChat.ProxyIDByUserID(eclient, makerID)
+	if err != nil {
+		return id, err
+	}
+
+	err = postChat.AppendToProxy(eclient, proxyID, convoID)
+	if err != nil {
+		return id, err
+	}
+
+	err = projPost.UpdateProject(eclient, id, "Subchats", types.Subchat{ConversationID: convoID})
+	if err != nil {
+		return id, err
+	}
+
 	if customURL == `` {
-		err = projPost.UpdateProject(eclient, id, "URLName", strings.ToLower(id))
 		id = strings.ToLower(id)
+		err = projPost.UpdateProject(eclient, id, "URLName", id)
 	} else {
-		err = projPost.UpdateProject(eclient, id, "URLName", customURL)
 		id = customURL
 	}
 
