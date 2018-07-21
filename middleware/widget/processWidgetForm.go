@@ -16,7 +16,6 @@ import (
 //ProcessWidgetForm ... Populates a barebones widget with form data
 func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
-	fmt.Println(r.FormValue("instagramInput"))
 	checkerEnable := false
 
 	var data []template.HTML
