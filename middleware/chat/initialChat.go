@@ -77,7 +77,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
 			}
-			heads[chat.Eavesdroppers[idx]] = head
+			heads[chat.Eavesdroppers[idx].DocID] = head
 		}
 
 	} else {
