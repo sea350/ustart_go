@@ -52,6 +52,7 @@ type Events struct {
 	Description    []rune         `json:"Description"`
 	Members        []EventMembers `json:"Members"`
 	Guests         []EventGuests  `json:"Guests"`
+	ProjectGuests  []Project      `json:"ProjectGuests"`
 	EntryIDs       []string       `json:"EntryIDs"`
 	Location       LocStruct      `json:"Location"`
 	EventDateStart time.Time      `json:"EventDateStart"`
