@@ -77,7 +77,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//soundcloud -- Takes in a Embed Code
 		soundCloud := r.FormValue("scInput")
 
-		regX := regexp.MustCompile(`<iframe width="[0-9%]{0,4}" height="[0-9%]{0,4}" scrolling="no" frameborder="no" allow="autoplay" src="https:\/\/w\.soundcloud\.com\/player\/\?url=https%3A\/\/api\.soundcloud\.com\/users\/[0-9]{6,9}&color=%23[0-9a-f]{6}&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true(&visual=true)*"><\/iframe>`)
+		regX := regexp.MustCompile(`<iframe width="[0-9%]{0,4}" height="[0-9%]{0,4}" scrolling="no" frameborder="no" allow="autoplay" src="https:\/\/w\.soundcloud\.com\/player\/\?url=https%3A\/\/api\.soundcloud\.com\/tracks\/[0-9]{6,9}&color=%23[0-9a-f]{6}&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true(&visual=true)*"><\/iframe>`)
 		if !regX.MatchString(soundCloud) {
 			return newWidget, errors.New(`Unusable Soundcloud Embed Code`)
 		} //Check valid embed code
