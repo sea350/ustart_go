@@ -14,7 +14,8 @@ import (
 func AppendEventID(eclient *elastic.Client, projectID string, eventID string) error {
 	ctx := context.Background()
 
-	eventPost.GenericEventUpdateLock.Lock()
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
 
 	proj, err := get.ProjectByID(eclient, projectID)
 
@@ -31,7 +32,7 @@ func AppendEventID(eclient *elastic.Client, projectID string, eventID string) er
 		Doc(map[string]interface{}{"EventIDs": proj.EventIDs}).
 		Do(ctx)
 
-	defer eventPost.GenericEventUpdateLock.Unlock()
+	
 	return err
 
 }
