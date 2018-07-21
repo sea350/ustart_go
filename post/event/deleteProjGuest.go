@@ -54,7 +54,7 @@ func DeleteProjectGuest(eclient *elastic.Client, eventID string, projectID strin
 	}
 	index := -1
 	for i := range evnt.ProjectGuests {
-		if evnt.ProjectGuests[i].ProjectID == userID {
+		if evnt.ProjectGuests[i].ProjectID == projectID {
 			index = i
 			break
 		}
