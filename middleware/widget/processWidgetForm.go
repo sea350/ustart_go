@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"regexp"
 
@@ -60,7 +59,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		// regX := regexp.MustCompile(`(https?:\/\/www\.)?instagram\.com(\/p\/\w+\/?)`)
 		// regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z\-\_0-9]{0,16}\/*+`)
 
-		log.Println(insta)
+		fmt.Println(insta)
 		// if !regX.MatchString(insta) {
 		// 	return newWidget, errors.New(`Unusable Instagram URL`)
 		// } //Check valid URL
