@@ -39,11 +39,11 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		_, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, 0, 30)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 			return
 		}
 
+		log.Println(msgs)
 		// data, err := json.Marshal(size)
 		// if err != nil {
 		// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
