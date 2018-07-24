@@ -59,10 +59,14 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		temp := make(map[*websocket.Conn]bool)
 		temp[ws] = true
 		chatroom[actualChatID] = temp
+		log.Println("!exists")
+		log.Println(actualChatID)
 	} else {
 		temp := chatroom[actualChatID]
 		temp[ws] = true
 		chatroom[actualChatID] = temp
+		log.Println("else")
+		log.Println(actualChatID)
 	}
 
 	for {
