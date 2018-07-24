@@ -2,7 +2,6 @@ package uses
 
 import (
 	"errors"
-	"log"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
@@ -13,9 +12,7 @@ import (
 //ChatVerifyURL ... Executes all necessary database interactions to verify the existance of and user's acccess to a conversation
 //returns if the chat is valid, the actual id of conversation, docID of the second dmer if dm, and error
 func ChatVerifyURL(eclient *elastic.Client, url string, viewerID string) (bool, string, string, error) {
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("debug text: " + url)
-
+	
 	if len(url) > 0 {
 		if url[:1] == "@" {
 			//This means its a DM
