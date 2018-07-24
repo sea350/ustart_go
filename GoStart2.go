@@ -118,6 +118,7 @@ func main() {
 	http.HandleFunc("/eventCategory/", settings.EventCategory)
 	http.HandleFunc("/eventCustomURL/", settings.EventCustomURL)
 	http.HandleFunc("/leaveEventGuest/", settings.LeaveEventGuest)
+	http.HandleFunc("/leaveEventProjectGuest/", settings.LeaveEventProjectGuest)
 	http.HandleFunc("/leaveEventMember/", settings.LeaveEventMember)
 	http.HandleFunc("/eventLogo/", settings.EventLogo)
 	http.HandleFunc("/changeEventMemberClass/", settings.ChangeEventMemberClass)
