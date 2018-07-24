@@ -2,6 +2,7 @@ package get
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -24,6 +25,10 @@ func ProxyIDByUserID(eclient *elastic.Client, userID string) (string, error) {
 		return proxyID, err
 	}
 
+	exists := searchResult.TotalHits() > 0
+	if !exists {
+		return proxyID, errors.New("No results, proxy ID does not exist")
+	}
 	for _, element := range searchResult.Hits.Hits {
 
 		proxyID = element.Id
