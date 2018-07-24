@@ -43,7 +43,6 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		log.Println(msgs)
 		// data, err := json.Marshal(size)
 		// if err != nil {
 		// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
