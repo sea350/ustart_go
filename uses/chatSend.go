@@ -48,6 +48,8 @@ func ChatSend(eclient *elastic.Client, msg types.Message) ([]string, error) {
 			log.Println(err)
 			return notifyThese, err
 		}
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("debug text: " + pID)
 		err = postChat.AppendToProxy(eclient, pID, msg.ConversationID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)

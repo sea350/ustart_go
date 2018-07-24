@@ -38,7 +38,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 	heads := make(map[string]types.FloatingHead)
 
 	if actualChatID != `` {
-		idx, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, 0, 30)
+		_, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, 0, 30)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
@@ -46,15 +46,15 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		data, err := json.Marshal(idx)
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
-		}
-		fmt.Fprintln(w, string(data))
+		// data, err := json.Marshal(size)
+		// if err != nil {
+		// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+		// 	dir, _ := os.Getwd()
+		// 	log.Println(dir, err)
+		// }
+		// fmt.Fprintln(w, string(data))
 
-		data, err = json.Marshal(msgs)
+		data, err := json.Marshal(msgs)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
@@ -98,11 +98,11 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		heads[docID.(string)] = head
 	}
 
-	data, err := json.Marshal(heads)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-	}
-	fmt.Fprintln(w, string(data))
+	// data, err := json.Marshal(heads)
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	dir, _ := os.Getwd()
+	// 	log.Println(dir, err)
+	// }
+	// fmt.Fprintln(w, string(data))
 }
