@@ -121,10 +121,11 @@ func handleMessages() {
 				log.Printf("error: %v", err)
 				client.Close()
 				delete(chatroom[msg.ConversationID], client)
+				return
 			}
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-			log.Println(client)
+			log.Println("sent")
 		}
 	}
 }
