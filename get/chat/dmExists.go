@@ -3,6 +3,7 @@ package get
 import (
 	"context"
 	"errors"
+	"strings"
 
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
@@ -32,8 +33,8 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 
 	query := elastic.NewBoolQuery()
 
-	query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdropperOne))
-	query = query.Should(elastic.NewTermQuery("Eavesdroppers", eavesdropperTwo))
+	query = query.Should(elastic.NewTermQuery("Eavesdroppers", strings.ToLower(eavesdropperOne)))
+	query = query.Should(elastic.NewTermQuery("Eavesdroppers", strings.ToLower(eavesdropperTwo)))
 
 	ctx := context.Background() //intialize context background
 	searchResults, err := eclient.Search().
