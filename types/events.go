@@ -56,6 +56,7 @@ type Events struct {
 	Tags                    string               `json:"Tags"`
 	Category                string               `json:"Category"`
 	URLName                 string               `json:"URLName"`
+	FollowedUsers           []string             `json:"FollowedUsers"`
 	QuickLinks              []Link               `json:"QuickLinks"`
 	Description             []rune               `json:"Description"`
 	Members                 []EventMembers       `json:"Members"`
