@@ -49,13 +49,15 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 		return false, chatID, err
 	}
 
-	exists := searchResults.TotalHits() > 0
+	exists := searchResults.TotalHits() != 0
 	if !exists {
 		return exists, chatID, err
 
 	}
+
 	for _, ch := range searchResults.Hits.Hits {
 		chatID = ch.Id
+		break
 	}
 
 	return exists, chatID, err
