@@ -115,19 +115,16 @@ func handleMessages() {
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
 
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("debug text")
-		log.Println("channel #" + msg.ConversationID)
-		log.Printf("message: %v \n", msg)
-		log.Println(chatroom[msg.ConversationID])
-
 		for client := range chatroom[msg.ConversationID] {
 			err := client.WriteJSON(msg)
 			if err != nil {
-				//log.Printf("error: %v", err)
+				log.Printf("error: %v", err)
 				client.Close()
 				delete(chatroom[msg.ConversationID], client)
 			}
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+
+			log.Println(client)
 		}
 	}
 }
