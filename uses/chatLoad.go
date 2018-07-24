@@ -19,7 +19,7 @@ func ChatLoad(eclient *elastic.Client, convoID string, startFrom int, pullAmount
 		return 0, []types.Message{}, err
 	}
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println(chat)
+	log.Println(chat.MessageIDArchive)
 	if startFrom < 0 || pullAmount < 0 {
 		return 0, []types.Message{}, errors.New("Out of bounds")
 	}
