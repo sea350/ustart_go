@@ -114,14 +114,13 @@ func handleMessages() {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
-		/*
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, "debug text")
-			log.Println("channel #" + msg.ChatID)
-			log.Printf("message: %v \n", msg)
-			log.Println(chatroom[msg.ChatID])
-		*/
+
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("debug text")
+		log.Println("channel #" + msg.ConversationID)
+		log.Printf("message: %v \n", msg)
+		log.Println(chatroom[msg.ConversationID])
+
 		for client := range chatroom[msg.ConversationID] {
 			err := client.WriteJSON(msg)
 			if err != nil {
