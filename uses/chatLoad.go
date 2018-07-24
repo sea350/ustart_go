@@ -33,7 +33,7 @@ func ChatLoad(eclient *elastic.Client, convoID string, startFrom int, pullAmount
 		startFrom = length - 1
 	}
 	if startFrom-pullAmount < 0 {
-		pullAmount = startFrom
+		pullAmount = length
 	}
 
 	var problemMsgIDs string
