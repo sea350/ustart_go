@@ -58,6 +58,6 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 		chatID = ch.Id
 	}
 
-	return exists, chatID, errors.New("Conversation exists")
+	return exists, chatID, err
 
 }
