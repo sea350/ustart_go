@@ -34,13 +34,7 @@ func AppendMessageIDToConversation(eclient *elastic.Client, convoID string, newM
 	convo.MessageIDArchive = append(convo.MessageIDArchive, newMessageID)
 	//add any cache control here if necessary
 
-	_, err = eclient.Update().
-		Index(globals.ConvoIndex).
-		Type(globals.ConvoType).
-		Id(convoID).
-		Doc(map[string]interface{}{"MessageIDArchive": convo.MessageIDArchive}).
-		Do(ctx)
-
+	err = UpdateConvo(eclient, convoID, "MessageArchive", convo.MessageIDArchive)
 	if err != nil {
 		return err
 	}
