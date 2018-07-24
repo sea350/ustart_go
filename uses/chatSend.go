@@ -40,6 +40,8 @@ func ChatSend(eclient *elastic.Client, msg types.Message) ([]string, error) {
 		return notifyThese, err
 	}
 
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("debug text: " + msg.ConversationID)
 	err = postChat.AppendMessageIDToConversation(eclient, msg.ConversationID, msgID)
 	for idx := range convo.Eavesdroppers {
 		pID, err := getChat.ProxyIDByUserID(eclient, convo.Eavesdroppers[idx].DocID)
