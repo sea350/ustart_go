@@ -33,8 +33,8 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 
 	query := elastic.NewBoolQuery()
 
-	query = query.Should(elastic.NewTermQuery("Eavesdroppers", strings.ToLower(eavesdropperOne)))
-	query = query.Should(elastic.NewTermQuery("Eavesdroppers", strings.ToLower(eavesdropperTwo)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(eavesdropperOne)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(eavesdropperTwo)))
 
 	ctx := context.Background() //intialize context background
 	searchResults, err := eclient.Search().
