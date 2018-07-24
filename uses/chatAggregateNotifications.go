@@ -23,6 +23,9 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string) ([]types.
 	if usr.ProxyMessagesID == `` {
 		newProxy := types.ProxyMessages{DocID: usrID, Class: 1}
 		proxyID, err := postChat.IndexProxyMsg(client.Eclient, newProxy)
+		if err != nil {
+			return notifs, err
+		}
 		err = postUser.UpdateUser(client.Eclient, usrID, "ProxyMesssagesID", proxyID)
 		if err != nil {
 			return notifs, err

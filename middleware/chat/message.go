@@ -59,14 +59,10 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		temp := make(map[*websocket.Conn]bool)
 		temp[ws] = true
 		chatroom[actualChatID] = temp
-		log.Println("!exists")
-		log.Println(actualChatID)
 	} else {
 		temp := chatroom[actualChatID]
 		temp[ws] = true
 		chatroom[actualChatID] = temp
-		log.Println("else")
-		log.Println(actualChatID)
 	}
 
 	for {
@@ -83,10 +79,10 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		msg = types.Message{SenderID: docID.(string), TimeStamp: time.Now(), Content: msg.Content, ConversationID: actualChatID}
 		if actualChatID == `` && chatURL != `` {
 			newConvoID, err := uses.ChatFirst(client.Eclient, msg, docID.(string), dmTargetUserID)
+			log.Println(dmTargetUserID)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				log.Println(err)
 			}
 			notifyThese = append(notifyThese, dmTargetUserID)
 			notifyThese = append(notifyThese, docID.(string))
@@ -119,10 +115,10 @@ func handleMessages() {
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
 
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(msg.ConversationID)
-		_, exists := chatroom[msg.ConversationID]
-		log.Println(exists)
+		// log.SetFlags(log.LstdFlags | log.Lshortfile)
+		// log.Println(msg.ConversationID)
+		// _, exists := chatroom[msg.ConversationID]
+		// log.Println(exists)
 
 		for client := range chatroom[msg.ConversationID] {
 			err := client.WriteJSON(msg)

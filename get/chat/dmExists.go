@@ -35,6 +35,7 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(eavesdropperOne)))
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(eavesdropperTwo)))
+	query = query.Must(elastic.NewTermQuery("Class", "1"))
 
 	ctx := context.Background() //intialize context background
 	searchResults, err := eclient.Search().
@@ -49,15 +50,20 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 		return false, chatID, err
 	}
 
-	exists := searchResults.TotalHits() > 0
+	exists := searchResults.TotalHits() != 0
 	if !exists {
 		return exists, chatID, err
 
 	}
+	multi := searchResults.TotalHits() > 1
+	if multi {
+		return exists, chatID, errors.New("Too many chats of this type exist")
+	}
 	for _, ch := range searchResults.Hits.Hits {
 		chatID = ch.Id
+		break
 	}
 
-	return exists, chatID, errors.New("Conversation exists")
+	return exists, chatID, err
 
 }

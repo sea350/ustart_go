@@ -2,6 +2,7 @@ package uses
 
 import (
 	"errors"
+	"log"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
 	types "github.com/sea350/ustart_go/types"
@@ -17,6 +18,8 @@ func ChatLoad(eclient *elastic.Client, convoID string, startFrom int, pullAmount
 	if err != nil {
 		return 0, []types.Message{}, err
 	}
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println(chat)
 	if startFrom < 0 || pullAmount < 0 {
 		return 0, []types.Message{}, errors.New("Out of bounds")
 	}
