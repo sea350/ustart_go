@@ -31,12 +31,15 @@ func ChatLoad(eclient *elastic.Client, convoID string, startFrom int, pullAmount
 		startFrom = length - 1
 	}
 	if startFrom-pullAmount < 0 {
-		pullAmount = length
+		pullAmount = startFrom
 	}
 
+	//NOTE, the pull is inverted against terminology
+	//startFrom acts as an end at
+	//startfrom-pullamount is the start
 	var problemMsgIDs string
 	var messages []types.Message
-	for i := startFrom; i > startFrom-pullAmount; i-- {
+	for i := startFrom - pullAmount; i <= startFrom; i++ {
 		message, err := getChat.MsgByID(eclient, chat.MessageIDArchive[i])
 		if err != nil {
 			problemMsgIDs = problemMsgIDs + ", " + chat.MessageIDArchive[i]
