@@ -31,7 +31,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 
 	chatURL := r.FormValue("chatUrl")
 
-	var agg chatAggregate
+	agg := chatAggregate{Eavesdroppers: make(map[string]types.FloatingHead)}
 
 	valid, actualChatID, otherUsr, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
