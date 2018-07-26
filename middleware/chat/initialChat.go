@@ -14,6 +14,12 @@ import (
 	"github.com/sea350/ustart_go/middleware/client"
 )
 
+type chatAggregate struct {
+	Index         int                           `json:"Index"`
+	Messages      []types.Message               `json:"Messages"`
+	Eavesdroppers map[string]types.FloatingHead `json:"Eavesdroppers"`
+}
+
 //InitialChat ... crawling in the 90s
 //Designed for ajax
 func InitialChat(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +31,8 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 
 	chatURL := r.FormValue("chatUrl")
 
+	var agg chatAggregate
+
 	valid, actualChatID, otherUsr, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -35,31 +43,13 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	heads := make(map[string]types.FloatingHead)
-
 	if actualChatID != `` {
-		_, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, 0, 50)
+		_, agg.Messages, err = uses.ChatLoad(client.Eclient, actualChatID, 0, 50)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 			return
 		}
-
-		// data, err := json.Marshal(size)
-		// if err != nil {
-		// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-		//  	dir, _ := os.Getwd()
-		//  	log.Println(dir, err)
-		// }
-		// fmt.Fprintln(w, string(data))
-
-		data, err := json.Marshal(msgs)
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
-		}
-		fmt.Fprintln(w, string(data))
 
 		chat, err := getChat.ConvoByID(client.Eclient, actualChatID)
 		if err != nil {
@@ -76,7 +66,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
 			}
-			heads[chat.Eavesdroppers[idx].DocID] = head
+			agg.Eavesdroppers[chat.Eavesdroppers[idx].DocID] = head
 		}
 
 	} else {
@@ -86,7 +76,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		}
-		heads[otherUsr] = head
+		agg.Eavesdroppers[otherUsr] = head
 
 		head, err = uses.ConvertUserToFloatingHead(client.Eclient, docID.(string))
 		if err != nil {
@@ -94,10 +84,10 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		}
-		heads[docID.(string)] = head
+		agg.Eavesdroppers[docID.(string)] = head
 	}
 
-	data, err := json.Marshal(heads)
+	data, err := json.Marshal(agg)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
