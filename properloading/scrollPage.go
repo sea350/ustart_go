@@ -3,7 +3,6 @@ package properloading
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"strings"
 
@@ -42,19 +41,15 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, false)
 		arrResults = append(arrResults, head)
 		if err != nil {
-			fmt.Println("what is going on???")
+			return res.ScrollId, arrResults, errors.New("ISSUE WITH CONVERT FUNCTION")
+
 		}
-		fmt.Println(head.FirstName)
-	}
 
-	if err == io.EOF {
-		return res.ScrollId, arrResults, errors.New("Out of bounds")
+		if err == io.EOF {
+			return res.ScrollId, arrResults, errors.New("Out of bounds")
+
+		}
 
 	}
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	return res.ScrollId, arrResults, err
-
 }
