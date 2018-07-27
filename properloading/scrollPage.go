@@ -3,7 +3,6 @@ package properloading
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"strings"
 
@@ -23,17 +22,19 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 	for id := range docIDs {
 		tmp = append([]interface{}{strings.ToLower(docIDs[id])}, tmp...)
 	}
-	fmt.Println("TMP", tmp)
+
 	// for id := range docIDs {
 	// 	searchThese[id] = strings.ToLower(docIDs[id])
 	// }
-	query := elastic.NewTermsQuery("PosterID", tmp...)
-
+	query := elastic.NewBoolQuery()
+	query = query.Must(elastic.NewTermsQuery("PosterID", tmp...))
+	// query = query.Must(elastic.NewRangeQuery("TimeStamp").From("2017-01-01").To("2018-04-19").Boost(3))
 	var arrResults []types.JournalEntry
 
 	scroll := eclient.Scroll().
 		Index(globals.EntryIndex).
 		Query(query).
+		Sort("Timestamp", true).
 		Size(10)
 
 	if scrollID != "" {
