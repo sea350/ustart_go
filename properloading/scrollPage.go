@@ -23,17 +23,23 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 		tmp = append([]interface{}{strings.ToLower(docIDs[id])}, tmp...)
 	}
 
-	// for id := range docIDs {
-	// 	searchThese[id] = strings.ToLower(docIDs[id])
-	// }
-	query := elastic.NewBoolQuery()
-	query = query.Must(elastic.NewTermsQuery("PosterID", tmp...))
-	// query = query.Must(elastic.NewRangeQuery("TimeStamp").From("2017-01-01").To("2018-04-19").Boost(3))
+	//set up user query
+	usrQuery := elastic.NewBoolQuery()
+	usrQuery = usrQuery.Must(elastic.NewTermsQuery("PosterID", tmp...))
+	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "0"))
+	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "2"))
+
+	//set up project query
+	projQuery := elastic.NewBoolQuery()
+	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "3"))
+	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", tmp...))
+	//yeah....
+	usrQuery = usrQuery.Should(projQuery)
 	var arrResults []types.JournalEntry
 
 	scroll := eclient.Scroll().
 		Index(globals.EntryIndex).
-		Query(query).
+		Query(usrQuery).
 		Sort("TimeStamp", false).
 		Size(5)
 

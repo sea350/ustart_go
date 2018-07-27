@@ -13,11 +13,11 @@ import (
 func ProjectCreatesEntry(eclient *elastic.Client, projID string, posterID string, newContent []rune) (string, error) {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = posterID
-	createdEntry.Classification = 0
+	createdEntry.Classification = 3
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
-
+	createdEntry.ReferenceID = projID
 	//usr, err := get.GetUserByID(eclient,userID)
 
 	entryID, err := postEntry.IndexEntry(eclient, createdEntry)
