@@ -3,7 +3,9 @@ package properloading
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -17,11 +19,15 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 
 	ctx := context.Background()
 
-	// searchThese := make([]string, len(docIDs)+1)
+	tmp := make([]interface{}, 0)
+	for id := range docIDs {
+		tmp = append([]interface{}{strings.ToLower(docIDs[id])}, tmp...)
+	}
+	fmt.Println("TMP", tmp)
 	// for id := range docIDs {
 	// 	searchThese[id] = strings.ToLower(docIDs[id])
 	// }
-	query := elastic.NewTermsQuery("PosterID", []string{docIDs[0], docIDs[1]})
+	query := elastic.NewTermsQuery("PosterID", tmp)
 
 	var arrResults []types.JournalEntry
 
