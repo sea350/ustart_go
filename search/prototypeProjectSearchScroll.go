@@ -111,7 +111,7 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	// }
 
 	scroll := eclient.Scroll().
-		Index(globals.EventIndex).
+		Index(globals.ProjectIndex).
 		Query(query).
 		Size(10)
 
