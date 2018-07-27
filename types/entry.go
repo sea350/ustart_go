@@ -19,13 +19,18 @@ type Entry struct {
 	//class 2 = user share post
 	//class 3 = project page post
 	//class 4 = project comment
-	//class 5 = etc.
-	Content        []rune    `json:"Content"`
-	ReferenceEntry string    `json:"ReferenceEntry"`
-	MediaRef       string    `json:"MediaRef"`
-	TimeStamp      time.Time `json:"TimeStamp"`
-	Likes          []Like    `json:"Likes"`
-	ShareIDs       []string  `json:"ShareIDs"`
-	ReplyIDs       []string  `json:"ReplyIDs"`
-	Visible        bool      `json:"Visible"`
+	//class 5 = project share
+	//class 6 = event page post
+	//class 7 = event comment
+	//class 8 = event share
+	Content        []rune `json:"Content"`
+	ReferenceEntry string `json:"ReferenceEntry"`
+	ReferenceID    string `json:"ReferenceID"`
+
+	MediaRef  string    `json:"MediaRef"`
+	TimeStamp time.Time `json:"TimeStamp"`
+	Likes     []Like    `json:"Likes"`
+	ShareIDs  []string  `json:"ShareIDs"`
+	ReplyIDs  []string  `json:"ReplyIDs"`
+	Visible   bool      `json:"Visible"`
 }
