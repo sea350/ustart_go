@@ -18,7 +18,7 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 
 	ctx := context.Background()
 
-	var searchThese []string
+	searchThese := make([]string, len(docIDs)+1)
 	for id := range docIDs {
 		searchThese = append(searchThese, strings.ToLower(docIDs[id]))
 	}
