@@ -23,7 +23,7 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 	for id := range docIDs {
 		searchThese = append(searchThese, strings.ToLower(docIDs[id]))
 	}
-	query := elastic.NewTermsQuery("PosterID", searchThese[1])
+	query := elastic.NewTermsQuery("PosterID", searchThese[0])
 	fmt.Println(searchThese)
 	var arrResults []types.JournalEntry
 
