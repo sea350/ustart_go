@@ -4,7 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
+	"log"
+	"os"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -91,25 +92,6 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 		}
 	}
 
-	/*
-		searchResults, err := eclient.Search().
-			Index(globals.ProjectIndex).
-			Query(query).
-			Pretty(true).
-			Do(ctx)
-
-		if err != nil {
-			return results, err
-		}*/
-
-	// Testing Outputs
-	// fmt.Println("Number of Hits: ", searchResults.Hits.TotalHits)
-	// for _, s := range searchResults.Hits.Hits {
-	// 	u, _ := get.UserByID(eclient, s.Id)
-	// 	// fmt.Println(u.FirstName, u.LastName)
-	// 	fmt.Println(u.FirstName, u.LastName)
-	// }
-
 	scroll := eclient.Scroll().
 		Index(globals.ProjectIndex).
 		Query(query).
@@ -118,14 +100,15 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)
 	}
-	fmt.Println("\n\n-------------ScrollID: ", scrollID)
 
 	res, err := scroll.Do(ctx)
-	if err == io.EOF {
-		return res.ScrollId, results, err
-	}
+	// if err == io.EOF {
+	// 	return res.ScrollId, results, err
+	// }
 	if err != nil {
-		fmt.Println("\n\n-------------------Error----------------------", err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	for _, element := range res.Hits.Hits {
