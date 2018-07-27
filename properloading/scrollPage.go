@@ -3,7 +3,6 @@ package properloading
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"strings"
 
@@ -24,7 +23,7 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 		searchThese = append(searchThese, strings.ToLower(docIDs[id]))
 	}
 	query := elastic.NewTermsQuery("PosterID", searchThese[0])
-	fmt.Println(searchThese)
+
 	var arrResults []types.JournalEntry
 
 	scroll := eclient.Scroll().
