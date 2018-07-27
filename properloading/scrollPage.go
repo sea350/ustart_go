@@ -29,10 +29,10 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 		Query(query).
 		Size(2)
 
-	/*
-		if scrollID != "" {
-			scroll = scroll.ScrollId(scrollID)
-		}*/
+		/*
+			if scrollID != "" {
+				scroll = scroll.ScrollId(scrollID)
+			}*/
 
 	res, err := scroll.Do(ctx)
 	fmt.Println("RES HITS:", res.TotalHits())
