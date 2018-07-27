@@ -40,7 +40,7 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 	res, err := scroll.Do(ctx)
 
 	for _, hit := range res.Hits.Hits {
-		fmt.Println(hit.Id)
+		// fmt.Println(hit.Id)
 		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, false)
 		arrResults = append(arrResults, head)
 		if err != nil {
