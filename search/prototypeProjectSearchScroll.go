@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -120,6 +121,9 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	fmt.Println("\n\n-------------ScrollID: ", scrollID)
 
 	res, err := scroll.Do(ctx)
+	if err == io.EOF {
+		return res.ScrollId, results, err
+	}
 	if err != nil {
 		fmt.Println("\n\n-------------------Error----------------------", err)
 	}
