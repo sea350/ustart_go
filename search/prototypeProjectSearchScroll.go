@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
-	"os"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -119,23 +117,20 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)
 	}
+	fmt.Println("\n\n-------------ScrollID: ", scrollID)
 
 	res, err := scroll.Do(ctx)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		fmt.Println("\n\n-------------------Error----------------------", err)
 	}
 
-	if res.Hits.TotalHits > 0 {
-		for _, element := range res.Hits.Hits {
-			head, err1 := uses.ConvertProjectToFloatingHead(eclient, element.Id)
-			if err1 != nil {
-				err = errors.New("there was one or more problems loading results")
-				continue
-			}
-			results = append(results, head)
+	for _, element := range res.Hits.Hits {
+		head, err1 := uses.ConvertProjectToFloatingHead(eclient, element.Id)
+		if err1 != nil {
+			err = errors.New("there was one or more problems loading results")
+			continue
 		}
+		results = append(results, head)
 	}
 
 	return res.ScrollId, results, err
