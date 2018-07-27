@@ -127,13 +127,15 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 		log.Println(dir, err)
 	}
 
-	for _, element := range res.Hits.Hits {
-		head, err1 := uses.ConvertProjectToFloatingHead(eclient, element.Id)
-		if err1 != nil {
-			err = errors.New("there was one or more problems loading results")
-			continue
+	if res.Hits.TotalHits > 0 {
+		for _, element := range res.Hits.Hits {
+			head, err1 := uses.ConvertProjectToFloatingHead(eclient, element.Id)
+			if err1 != nil {
+				err = errors.New("there was one or more problems loading results")
+				continue
+			}
+			results = append(results, head)
 		}
-		results = append(results, head)
 	}
 
 	return res.ScrollId, results, err
