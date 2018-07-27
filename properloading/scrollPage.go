@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"io"
-	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -18,11 +17,11 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 
 	ctx := context.Background()
 
-	searchThese := make([]string, len(docIDs)+1)
-	for id := range docIDs {
-		searchThese[id] = strings.ToLower(docIDs[id])
-	}
-	query := elastic.NewTermsQuery("PosterID", searchThese)
+	// searchThese := make([]string, len(docIDs)+1)
+	// for id := range docIDs {
+	// 	searchThese[id] = strings.ToLower(docIDs[id])
+	// }
+	query := elastic.NewTermsQuery("PosterID", docIDs)
 
 	var arrResults []types.JournalEntry
 
