@@ -2,7 +2,6 @@ package properloading
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -37,7 +36,7 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 	if err != nil {
 		return res.ScrollId, arrResults, err
 	}
-	fmt.Println(res)
+	// fmt.Println(res)
 	// for _, hit := range res.Hits.Hits {
 	// 	fmt.Println(hit.Id)
 	// 	head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, false)
