@@ -36,13 +36,10 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 		searchArr = append(searchArr, strings.ToLower(element))
 	}
 
-	fmt.Println("SEARCHING:", stringArray)
-
 	if len(searchBy) >= 4 {
 		//Name
 		if searchBy[0] {
 			query = uses.MultiWildCardQuery(query, "Name", stringArray, true)
-			fmt.Println("SEARCHING BY NAME")
 			for _, element := range stringArray {
 				query = query.Should(elastic.NewFuzzyQuery("Name", strings.ToLower(element)).Fuzziness(2))
 			}
@@ -95,16 +92,13 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	scroll := eclient.Scroll().
 		Index(globals.ProjectIndex).
 		Query(query).
-		Size(2)
+		Size(5)
 
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)
 	}
 
 	res, err := scroll.Do(ctx)
-	// if err == io.EOF {
-	// 	return res.ScrollId, results, err
-	// }
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
