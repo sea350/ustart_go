@@ -2,14 +2,11 @@ package properloading
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"io"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
-	"github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -38,20 +35,20 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 
 	res, err := scroll.Do(ctx)
 	fmt.Println(res.Hits.Hits)
-	for _, hit := range res.Hits.Hits {
-		fmt.Println(hit.Id)
-		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, false)
-		arrResults = append(arrResults, head)
-		if err != nil {
-			return res.ScrollId, arrResults, errors.New("ISSUE WITH CONVERT FUNCTION")
+	// for _, hit := range res.Hits.Hits {
+	// 	fmt.Println(hit.Id)
+	// 	head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, false)
+	// 	arrResults = append(arrResults, head)
+	// 	if err != nil {
+	// 		return res.ScrollId, arrResults, errors.New("ISSUE WITH CONVERT FUNCTION")
 
-		}
+	// 	}
 
-		if err == io.EOF {
-			return res.ScrollId, arrResults, errors.New("Out of bounds")
+	// 	if err == io.EOF {
+	// 		return res.ScrollId, arrResults, errors.New("Out of bounds")
 
-		}
+	// 	}
 
-	}
+	// }
 	return res.ScrollId, arrResults, err
 }
