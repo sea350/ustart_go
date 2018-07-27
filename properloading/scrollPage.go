@@ -34,6 +34,7 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 	}
 
 	res, err := scroll.Do(ctx)
+	fmt.Println("RES:", res)
 	if err != nil {
 		return "res.ScrollID", arrResults, err
 	}
