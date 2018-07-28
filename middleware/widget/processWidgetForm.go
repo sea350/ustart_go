@@ -260,18 +260,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//gallery widget\
 		galleryInput := r.FormValue("galleryImageInput")
 		edit := r.FormValue("editID")
-		if edit != `0` {
-			widget, err := get.WidgetByID(client.Eclient, edit)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				return newWidget, err
-			}
-
-			data = append(widget.Data, galleryInput)
-		} else {
-			data = []template.HTML{galleryInput}
-		}
+		data = []template.HTML{galleryInput}
 		classification = 17
 	}
 
