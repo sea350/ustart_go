@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	get "github.com/sea350/ustart_go/get/event"
@@ -109,7 +110,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 					fmt.Println("INTENT TO JOIN")
 					err1 := userPost.AppendSentEventReq(eclient, data.SessUser.DocID, evntID)
 
-					err2 := evntPost.AppendGuestReqReceived(eclient, evntID, data.SessUser.DocID)
+					classification, err := strconv.Atoi(r.FormValue("classification"))
+					if err != nil {
+						resp.update(err == nil, err, Evnt)
+					}
+					err2 := evntPost.AppendGuestReqReceived(eclient, evntID, data.SessUser.DocID, classification)
 					if err1 != nil {
 						resp.update(err1 == nil, err1, Evnt)
 					} else {
@@ -147,7 +152,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 		case "accept guest":
 			err1 := userPost.AppendEvent(eclient, data.GuestJoinerID, types.EventInfo{EventID: evntID, Visible: true})
-			_, err2 := uses.RemoveGuestRequest(eclient, evntID, data.GuestJoinerID)
+			classification, err := strconv.Atoi(r.FormValue("classification"))
+			if err != nil {
+				resp.update(err == nil, err, Evnt)
+			}
+			_, err2 := uses.RemoveGuestRequest(eclient, evntID, data.GuestJoinerID, classification)
 
 			var newGuest types.EventGuests
 			newGuest.GuestID = data.MemberJoinerID
@@ -169,7 +178,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			_, err = uses.RemoveEventRequest(eclient, evntID, data.MemberJoinerID)
 			resp.update(err == nil, err, Evnt)
 		case "reject guest":
-			_, err := uses.RemoveGuestRequest(eclient, evntID, data.GuestJoinerID)
+			classification, err := strconv.Atoi(r.FormValue("classification"))
+			if err != nil {
+				resp.update(err == nil, err, Evnt)
+			}
+			_, err = uses.RemoveGuestRequest(eclient, evntID, data.GuestJoinerID, classification)
 			resp.update(err == nil, err, Evnt)
 
 		case "member leave":
