@@ -29,6 +29,7 @@ type Conversation struct {
 	Title            string         `json:"Title"`
 	ReferenceID      string         `json:"ReferenceID"`
 	Class            int            `json:"Class"`
+	Size             int            `json:"Size"`
 	Eavesdroppers    []Eavesdropper `json:"Eavesdroppers"`
 	MessageIDArchive []string       `json:"MessageArchive"` //no limit but must be ordered by most recent interaction
 	MessageIDCache   []string       `json:"MessageCache"`   //LIMIT 100, must be ordered by most recent interaction
