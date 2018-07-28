@@ -54,15 +54,28 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	// Register our new client
-	_, exists := chatroom[actualChatID]
-	if !exists {
-		temp := make(map[*websocket.Conn]bool)
-		temp[ws] = true
-		chatroom[actualChatID] = temp
-	} else {
-		temp := chatroom[actualChatID]
-		temp[ws] = true
-		chatroom[actualChatID] = temp
+	if chatURL == `` {
+		_, exists := chatroom[``]
+		if !exists {
+			temp := make(map[*websocket.Conn]bool)
+			temp[ws] = true
+			chatroom[``] = temp
+		} else {
+			temp := chatroom[``]
+			temp[ws] = true
+			chatroom[``] = temp
+		}
+	} else if actualChatID != `` {
+		_, exists := chatroom[actualChatID]
+		if !exists {
+			temp := make(map[*websocket.Conn]bool)
+			temp[ws] = true
+			chatroom[actualChatID] = temp
+		} else {
+			temp := chatroom[actualChatID]
+			temp[ws] = true
+			chatroom[actualChatID] = temp
+		}
 	}
 
 	for {
@@ -84,9 +97,13 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 			}
+			temp := make(map[*websocket.Conn]bool)
+			temp[ws] = true
+			chatroom[actualChatID] = temp
 			notifyThese = append(notifyThese, dmTargetUserID)
 			notifyThese = append(notifyThese, docID.(string))
 			actualChatID = newConvoID
+
 		} else if actualChatID != `` && chatURL != `` {
 			notifyThese, err = uses.ChatSend(client.Eclient, msg)
 			if err != nil {
