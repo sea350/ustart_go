@@ -37,6 +37,12 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(eavesdropperTwo)))
 	query = query.Must(elastic.NewTermQuery("Class", "1"))
 
+	if eavesdropperOne == eavesdropperTwo {
+		query = query.Must(elastic.NewTermQuery("Size", "1"))
+	} else {
+		query = query.Must(elastic.NewTermQuery("Size", "1"))
+	}
+
 	ctx := context.Background() //intialize context background
 	searchResults, err := eclient.Search().
 		Index(globals.ConvoIndex).
