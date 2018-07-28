@@ -94,8 +94,8 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 		}
 	}
 
-	if len(convo.MessageIDCache) > 0 {
-		msg, err := getChat.MsgByID(eclient, convo.MessageIDCache[len(convo.MessageIDCache)-1])
+	if len(convo.MessageIDArchive) > 0 {
+		msg, err := getChat.MsgByID(eclient, convo.MessageIDArchive[len(convo.MessageIDArchive)-1])
 		head.Bio = []rune(msg.Content)
 		if err != nil {
 			return head, err
