@@ -88,7 +88,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			delete(chatroom[actualChatID], ws)
 			break
 		}
-		if len(msg.Content > 500) {
+		if len(msg.Content) > 500 {
 			continue
 		}
 
