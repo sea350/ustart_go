@@ -35,18 +35,18 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	for _, receivedReq := range evnt.GuestReqReceived {
-		if receivedReq == test1.(string) {
-			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
-			return
-		}
+
+	if _, exists := evnt.GuestReqReceived[test1.(string)]; exists {
+		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+		return
 	}
+
 	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), ID)
 	if err != nil {
 		fmt.Println("err middleware/event/guestrequesttojoin line42")
 		fmt.Println(err)
 	}
-	err = evntPost.AppendGuestReqReceived(client.Eclient, ID, test1.(string))
+	err = evntPost.AppendGuestReqReceived(client.Eclient, ID, test1.(string), evnt.GuestReqReceived[test1.(string)])
 	if err != nil {
 		fmt.Println("err middleware/event/guestrequesttojoin line47")
 		fmt.Println(err)

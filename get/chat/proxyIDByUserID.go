@@ -25,10 +25,13 @@ func ProxyIDByUserID(eclient *elastic.Client, userID string) (string, error) {
 		return proxyID, err
 	}
 
-	exists := searchResult.TotalHits() > 0
-	if !exists {
+	if searchResult.TotalHits() == 0 {
 		return proxyID, errors.New("No results, proxy ID does not exist")
 	}
+	if searchResult.TotalHits() > 1 {
+		return proxyID, errors.New("multiple proxies found")
+	}
+
 	for _, element := range searchResult.Hits.Hits {
 
 		proxyID = element.Id

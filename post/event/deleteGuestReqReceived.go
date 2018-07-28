@@ -20,19 +20,7 @@ func DeleteGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 		return numRequests, errors.New("Event does not exist")
 	}
 
-	//replace with universal.FindIndex when it works
-	index := -1
-	for i := range evnt.GuestReqReceived {
-		if evnt.GuestReqReceived[i] == userID {
-			index = i
-			break
-		}
-	}
-	if index == -1 {
-		return numRequests, errors.New("link not found")
-	}
-
-	evnt.GuestReqReceived = append(evnt.GuestReqReceived[:index], evnt.GuestReqReceived[index+1:]...)
+	delete(evnt.GuestReqReceived, userID)
 
 	_, err = eclient.Update().
 		Index(globals.EventIndex).

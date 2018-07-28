@@ -34,12 +34,23 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for index, userID := range evnt.GuestReqReceived {
-		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
-		if err != nil {
-			fmt.Println(err)
-			fmt.Println(fmt.Sprintf("err: middleware/event/loadjoinrequest, Line 35, index %d", index))
+		if userID == 1 {
+			head, err := uses.ConvertUserToFloatingHead(client.Eclient, index)
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println(fmt.Sprintf("err: middleware/event/loadjoinrequest, Line 35, index %s", index))
+			}
+			heads = append(heads, head)
 		}
-		heads = append(heads, head)
+		if userID == 2 {
+			head, err := uses.ConvertProjectToFloatingHead(client.Eclient, index)
+			if err != nil {
+				fmt.Println(err)
+				fmt.Println(fmt.Sprintf("err: middleware/event/loadprojjoinrequest, Line 40, index %s", index))
+			}
+			heads = append(heads, head)
+		}
+
 	}
 
 	data, err := json.Marshal(heads)
