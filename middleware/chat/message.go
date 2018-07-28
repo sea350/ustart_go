@@ -96,12 +96,12 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 			}
-			temp := make(map[*websocket.Conn]bool)
-			temp[ws] = true
-			chatroom[actualChatID] = temp
 			notifyThese = append(notifyThese, dmTargetUserID)
 			notifyThese = append(notifyThese, docID.(string))
 			actualChatID = newConvoID
+			temp := make(map[*websocket.Conn]bool)
+			temp[ws] = true
+			chatroom[actualChatID] = temp
 			msg.ConversationID = actualChatID
 
 		} else if actualChatID != `` && chatURL != `` {
