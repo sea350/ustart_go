@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"bytes"
 	"strings"
+	"io"
 
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -269,7 +270,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		}
 		defer galleryFile.Close()
 		name := strings.Split(galleryHeader.Filename, ".")
-		io.Copy(&Buf, file)
+		io.Copy(&Buf, galleryFile)
 		contents := Buf.String()
 		data = []template.HTML{name, contents}
 		Buf.Reset()
