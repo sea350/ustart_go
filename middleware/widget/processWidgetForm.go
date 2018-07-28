@@ -6,6 +6,9 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"bytes"
+	"strings"
+	"io"
 
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -258,6 +261,19 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `17` {
 		//gallery widget
+		var Buf bytes.Buffer
+		galleryFile, galleryHeader, err := r.FormFile("galleryImageInput")
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return newWidget, err
+		}
+		defer galleryFile.Close()
+		name := strings.Split(galleryHeader.Filename, ".")
+		io.Copy(&Buf, galleryFile)
+		contents := Buf.String()
+		data = []template.HTML{template.HTML(name[0]), template.HTML(contents)}
+		Buf.Reset()
 		classification = 17
 	}
 
