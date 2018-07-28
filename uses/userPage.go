@@ -17,17 +17,17 @@ func UserPage(eclient *elastic.Client, username string, viewerID string) (types.
 
 	userID, err := get.IDByUsername(eclient, username)
 	if err != nil {
-		return usr, "errors passed 0", isFollowed, err
+		return usr, "errors passed 0, username is " + username, isFollowed, err
 	}
 
 	usr, err = get.UserByID(eclient, userID)
 	if err != nil {
-		return usr, "errors passed 1", isFollowed, err
+		return usr, "errors passed 1, userId is " + userID, isFollowed, err
 	}
 
 	viewer, err := get.UserByID(eclient, viewerID)
 	if err != nil {
-		return usr, "errors passed 2", isFollowed, err
+		return usr, "errors passed 2, viewId is " + viewerID, isFollowed, err
 	}
 
 	for _, element := range viewer.Following {
