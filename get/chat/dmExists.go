@@ -40,7 +40,7 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 	if eavesdropperOne == eavesdropperTwo {
 		query = query.Must(elastic.NewTermQuery("Size", "1"))
 	} else {
-		query = query.Must(elastic.NewTermQuery("Size", "1"))
+		query = query.Must(elastic.NewTermQuery("Size", "2"))
 	}
 
 	ctx := context.Background() //intialize context background
