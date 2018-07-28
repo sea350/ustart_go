@@ -23,7 +23,7 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string) ([]types.
 	if usr.ProxyMessagesID == `` {
 		prox, _ := getChat.ProxyIDByUserID(eclient, usrID)
 		if prox != `` { //resync
-			err = postUser.UpdateUser(client.Eclient, usrID, "ProxyMesssagesID", prox)
+			err = postUser.UpdateUser(client.Eclient, usrID, "ProxyMessagesID", prox)
 			if err != nil {
 				return notifs, err
 			}
@@ -33,7 +33,7 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string) ([]types.
 		if err != nil {
 			return notifs, err
 		}
-		err = postUser.UpdateUser(client.Eclient, usrID, "ProxyMesssagesID", proxyID)
+		err = postUser.UpdateUser(client.Eclient, usrID, "ProxyMessagesID", proxyID)
 		if err != nil {
 			return notifs, err
 		}
