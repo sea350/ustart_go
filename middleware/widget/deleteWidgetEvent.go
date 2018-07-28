@@ -12,7 +12,6 @@ import (
 
 //DeleteWidgetEvent ... Deletes a widget and redirects to projects page
 func DeleteWidgetEvent(w http.ResponseWriter, r *http.Request) {
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
@@ -23,13 +22,10 @@ func DeleteWidgetEvent(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	eventURL := r.FormValue("deleteEventURL")
 
-	widg, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
-	if widg.Classification == 15 {
-		http.Redirect(w, r, "/Events/"+eventURL, http.StatusFound)
-		return
-	}
+	_, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
 	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false, true)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}

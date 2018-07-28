@@ -256,6 +256,12 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		data = []template.HTML{username}
 		classification = 16
 	}
+	if r.FormValue("widgetSubmit") == `17` {
+		//gallery widget\
+		galleryInput := template.HTML(r.FormValue("galleryImageInput"))
+		data = []template.HTML{galleryInput}
+		classification = 17
+	}
 
 	return types.Widget{Data: data, Classification: classification}, nil
 }
