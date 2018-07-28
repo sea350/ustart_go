@@ -14,7 +14,7 @@ import (
 //AppendGuestReqReceived ... APPENDS A USER ID TO A EVENTS GuestReqReceived ARRAY
 //Requires event's docID and the user's docID
 //Returns an error
-func AppendGuestReqReceived(eclient *elastic.Client, eventID string, userID string) error {
+func AppendGuestReqReceived(eclient *elastic.Client, eventID string, userID string, classification int) error {
 
 	ctx := context.Background()
 
@@ -23,7 +23,7 @@ func AppendGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 		return errors.New("Event does not exist")
 	}
 
-	evnt.GuestReqReceived = append(evnt.GuestReqReceived, userID)
+	evnt.GuestReqReceived[userID] = classification
 
 	_, err = eclient.Update().
 		Index(globals.EventIndex).
