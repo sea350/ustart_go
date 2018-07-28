@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -30,7 +29,6 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(heads)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
 		log.Println(err)
 	}
 	fmt.Fprintln(w, string(data))
