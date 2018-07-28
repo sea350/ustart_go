@@ -96,10 +96,11 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 
 	if len(convo.MessageIDArchive) > 0 {
 		msg, err := getChat.MsgByID(eclient, convo.MessageIDArchive[len(convo.MessageIDArchive)-1])
-		head.Bio = []rune(msg.Content)
 		if err != nil {
 			return head, err
 		}
+		head.Bio = []rune(msg.Content)
+		head.Time = msg.TimeStamp
 	}
 
 	for i := range convo.Eavesdroppers {
@@ -111,6 +112,7 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 				return head, err
 			}
 			head.Username = usr.Username
+			head.Image = usr.Avatar
 		}
 	}
 

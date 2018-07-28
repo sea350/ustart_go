@@ -1,5 +1,9 @@
 package types
 
+import (
+	"time"
+)
+
 //WARNING: NOT FOR DATABASE USE
 
 //AppSessionUser ...
@@ -33,6 +37,7 @@ type FloatingHead struct {
 	DocID          string      `json:"DocID"`
 	Classification int         `json:"Classification"`
 	Notifications  int         `json:"Notifications"`
+	Time           time.Time   `json:"Time"`
 	Interface      interface{} `json:"Interface"`
 	//for projects Username = project URLName
 	//for projects Firstname = project Name
