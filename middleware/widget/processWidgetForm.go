@@ -2,8 +2,8 @@ package widget
 
 import (
 	"errors"
-	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"regexp"
 
@@ -69,7 +69,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		if edit != `0` {
 			widget, err := get.WidgetByID(client.Eclient, edit)
 			if err != nil {
-				fmt.Println("this is an err, addwidget 66")
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 				return newWidget, err
 			}
 
@@ -158,7 +159,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		if edit != `0` {
 			widget, err := get.WidgetByID(client.Eclient, edit)
 			if err != nil {
-				fmt.Println("this is an err, addwidget 156")
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 				return newWidget, err
 			}
 
@@ -182,7 +184,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		if r.FormValue("editID") != `0` {
 			widget, err := get.WidgetByID(client.Eclient, edit)
 			if err != nil {
-				fmt.Println("this is an err, addwidget 180")
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 				return newWidget, err
 			}
 

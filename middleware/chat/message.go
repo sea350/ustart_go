@@ -91,8 +91,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			notifyThese, err = uses.ChatSend(client.Eclient, msg)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				log.Println(err)
 			}
 		}
 
