@@ -24,15 +24,14 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 	heads, err := uses.ChatAggregateNotifications(client.Eclient, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	data, err := json.Marshal(heads)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	fmt.Fprintln(w, string(data))
 }

@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"log"
+
 	getChat "github.com/sea350/ustart_go/get/chat"
 	getUser "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -25,22 +27,30 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string) ([]types.
 		if prox != `` { //resync
 			err = postUser.UpdateUser(client.Eclient, usrID, "ProxyMessagesID", prox)
 			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 				return notifs, err
 			}
 		} else {
 			newProxy := types.ProxyMessages{DocID: usrID, Class: 1}
 			proxyID, err := postChat.IndexProxyMsg(client.Eclient, newProxy)
 			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 				return notifs, err
 			}
 			err = postUser.UpdateUser(client.Eclient, usrID, "ProxyMessagesID", proxyID)
 			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 				return notifs, err
 			}
 		}
 	} else {
 		proxy, err := getChat.ProxyMsgByID(client.Eclient, usr.ProxyMessagesID)
 		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 			return notifs, err
 		}
 
