@@ -259,7 +259,6 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	if r.FormValue("widgetSubmit") == `17` {
 		//gallery widget\
 		galleryInput := template.HTML(r.FormValue("galleryImageInput"))
-		_ := r.FormValue("editID")
 		data = []template.HTML{galleryInput}
 		classification = 17
 	}
