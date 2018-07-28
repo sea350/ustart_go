@@ -112,6 +112,8 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 				return head, err
 			}
 			head.Username = usr.Username
+			head.FirstName = usr.FirstName
+			head.LastName = usr.LastName
 			head.Image = usr.Avatar
 		}
 	}
