@@ -258,20 +258,6 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `17` {
 		//gallery widget
-		var Buf bytes.Buffer
-		galleryFile, galleryHeader, err := r.FormFile("galleryImageInput")
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err + " in Gallery Widget")
-			return newWidget, err
-		}
-		defer file.Close()
-		name := strings.Split(galleryHeader.Filename, ".")
-		fmt.Printf("File name %s\n", name[0])
-		io.Copy(&Buf, file)
-		contents := Buf.String()
-		data = []template.HTML{name, contents}
-		Buf.Reset()
 		classification = 17
 	}
 
