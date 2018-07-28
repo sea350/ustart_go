@@ -2,17 +2,51 @@ package uses
 
 import (
 	"errors"
+	"log"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
+	postChat "github.com/sea350/ustart_go/post/chat"
+	postUser "github.com/sea350/ustart_go/post/user"
+	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 //ChatVerifyURL ... Executes all necessary database interactions to verify the existance of and user's acccess to a conversation
 //returns if the chat is valid, the actual id of conversation, docID of the second dmer if dm, and error
 func ChatVerifyURL(eclient *elastic.Client, url string, viewerID string) (bool, string, string, error) {
-	
+	usr, err := get.UserByID(eclient, viewerID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	if usr.ProxyMessagesID == `` {
+		prox, _ := getChat.ProxyIDByUserID(eclient, viewerID)
+		if prox != `` { //resync
+			err = postUser.UpdateUser(client.Eclient, viewerID, "ProxyMessagesID", prox)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+				return false, ``, ``, err
+			}
+		} else {
+			newProxy := types.ProxyMessages{DocID: viewerID, Class: 1}
+			proxyID, err := postChat.IndexProxyMsg(client.Eclient, newProxy)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+				return false, ``, ``, err
+			}
+			err = postUser.UpdateUser(client.Eclient, viewerID, "ProxyMessagesID", proxyID)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+				return false, ``, ``, err
+			}
+		}
+	}
+
 	if len(url) > 0 {
 		if url[:1] == "@" {
 			//This means its a DM

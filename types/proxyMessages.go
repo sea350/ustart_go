@@ -15,6 +15,7 @@ type ProxyMessages struct {
 type ConversationState struct {
 	// NumUnread   int       `json:"NumUnread"`
 	// LastMessage Message   `json:"LastMessage"`
+	Read        bool      `json:"Read"`
 	Muted       bool      `json:"Muted"`
 	MuteTimeout time.Time `json:"MuteTimeout"`
 }
