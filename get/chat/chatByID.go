@@ -9,6 +9,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
+//ChatByID ...
 func ChatByID(eclient *elastic.Client, chatID string) (types.Chat, error) {
 
 	var chat types.Chat //initialize type chat
