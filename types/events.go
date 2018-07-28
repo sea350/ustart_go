@@ -4,12 +4,6 @@ import (
 	"time"
 )
 
-//invite only, publicly viewable, whitelist, blacklist, settings, members, privileges, title, description, creation, event date, option for
-//creator to cancel, visibility boolean, widgets, get/post, attending/invited/not going, members list and guest list
-//Have it displayed on the profile
-//People can search for the event based on title, url, tags, and PERSON HOSTING THE EVENT!
-//Projects can host events and guests/members do the relation (projects can host and be the guest)
-
 //EventPrivileges ... Edit privileges for the Event Members
 type EventPrivileges struct {
 	RoleName     string `json:"RoleName"`
@@ -32,15 +26,6 @@ type EventGuests struct {
 	Classification int           `json:"Classification"` //1 for guest, 2 for project guest
 }
 
-/*
-//EventProjectGuests ... Project Guest data
-type EventProjectGuests struct {
-	ProjectID      string        `json:"ProjectID"`
-	Status         int           `json:"Status"` //Marks whether they are invited/going/not going, 0 for invited, 1 for going, 2 for not
-	Representative []EventGuests `json:"Representative"`
-	Visible        bool          `json:"Visible"`
-}
-*/
 //EventMembers ... Member relevant data, who can modify the event page
 type EventMembers struct {
 	MemberID string    `json:"MemberID"`
@@ -80,8 +65,4 @@ type Events struct {
 	GuestReqSent      map[string]int    `json:"GuestReqSent"`
 	GuestReqReceived  map[string]int    `json:"GuestReqReceived"`
 	PrivilegeProfiles []EventPrivileges `json:"PrivilegeProfiles"`
-	//Public                  bool                 `json:"Public"` //Whether this event is publicly viewable or invite-only viewable
-	//ProjectGuests           []EventProjectGuests `json:"ProjectGuests"`
-	//ProjectGuestReqReceived []string          `json:"ProjectGuestReqReceived"`
-	//ProjectGuestReqSent     []string          `json:"ProjectGuestReqSent"`
 }
