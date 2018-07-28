@@ -3,6 +3,7 @@ package event
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -19,8 +20,13 @@ func RejectEventGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	evntID := r.FormValue("eventID")
 	newMemberID := r.FormValue("userID")
+	classification, err := strconv.Atoi(r.FormValue("classification"))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newMemberID)
+	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newMemberID, classification)
 	if err != nil {
 		fmt.Println("err middleware/event/rejectguestjoinrequest line 27")
 		fmt.Println(err)
