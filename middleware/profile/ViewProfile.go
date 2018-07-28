@@ -25,11 +25,12 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	pageUserName := strings.ToLower(r.URL.Path[9:])
 
-	userstruct, _, followbool, err := uses.UserPage(client.Eclient, pageUserName, test1.(string))
+	userstruct, errMessage, followbool, err := uses.UserPage(client.Eclient, pageUserName, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
+		log.Println("User Error (viewprofile.33): " + errMessage)
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
