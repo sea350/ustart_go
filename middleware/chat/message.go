@@ -92,11 +92,12 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		msg = types.Message{SenderID: docID.(string), TimeStamp: time.Now(), Content: msg.Content, ConversationID: actualChatID}
 		if actualChatID == `` && chatURL != `` {
 			newConvoID, err := uses.ChatFirst(client.Eclient, msg, docID.(string), dmTargetUserID)
-			log.Println(dmTargetUserID)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 			}
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(newConvoID)
 			temp := make(map[*websocket.Conn]bool)
 			temp[ws] = true
 			chatroom[actualChatID] = temp
