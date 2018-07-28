@@ -159,7 +159,7 @@ func main() {
 	http.HandleFunc("/LoadMemberJoinRequests/", event.LoadMemberJoinRequests)
 	http.HandleFunc("/GuestRequestToJoin/", event.GuestRequestToJoin)
 	http.HandleFunc("/MemberRequestToJoin/", event.MemberRequestToJoin)
-	http.HandleFunc("/AcceptProjectJoinRequest/", event.AcceptProjectJoinRequest)
+	http.HandleFunc("/AcceptGuestJoinRequest/", event.AcceptGuestJoinRequest)
 	http.HandleFunc("/AcceptMemberJoinRequest/", event.AcceptMemberJoinRequest)
 	http.HandleFunc("/RejectGuestJoinRequest/", event.RejectEventGuestJoinRequest)
 	http.HandleFunc("/RejectMemberJoinRequest/", event.RejectEventMemberJoinRequest)
