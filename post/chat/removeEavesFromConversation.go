@@ -48,7 +48,7 @@ func RemoveEavesFromConversation(eclient *elastic.Client, conversationID string,
 		return err
 	}
 
-	for i := range proxy.Conversations {
+	for i := len(proxy.Conversations) - 1; i >= 0; i-- {
 		if proxy.Conversations[i].ConvoID == conversationID {
 			proxy.Conversations = append(proxy.Conversations[:i], proxy.Conversations[i+1:]...)
 			break
