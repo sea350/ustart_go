@@ -48,6 +48,14 @@ func HandleChatClients(w http.ResponseWriter, r *http.Request) {
 		chatClients[docID.(string)] = temp
 	}
 
+	for {
+		var notif chatNotif
+		err := ws.ReadJSON(&notif)
+		if err != nil {
+			break
+		}
+	}
+
 }
 
 //HandleChatAlert ... deals with chat notifications, meant to be run on navbar
