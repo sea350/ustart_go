@@ -25,8 +25,9 @@ func ScrollPageProject(eclient *elastic.Client, docIDs []string, scrollID string
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
-	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "3"))
 	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", ids...))
+	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "3"))
+
 	//yeah....
 
 	var arrResults []types.JournalEntry
