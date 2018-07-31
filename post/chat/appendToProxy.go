@@ -48,6 +48,9 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 		}
 	}
 
+	if temp.ConvoID == `` {
+		temp.ConvoID = conversationID
+	}
 	temp.Read = false
 	proxy.Conversations = append(proxy.Conversations, temp)
 
