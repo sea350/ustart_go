@@ -34,6 +34,7 @@ type ClientSide struct {
 	Following       int
 	Page            string //DocID of current page
 	FollowingStatus string
+	ScrollID        string
 	ListOfHeads     []types.FloatingHead
 	ListOfHeads2    []types.FloatingHead
 	Wall            []types.JournalEntry
