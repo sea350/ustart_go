@@ -14,7 +14,7 @@ import (
 
 //ScrollPage ...
 //Scrolls through docs being loaded
-func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (string, []types.JournalEntry, error) {
+func ScrollPageDash(eclient *elastic.Client, docIDs []string, scrollID string) (string, []types.JournalEntry, error) {
 
 	ctx := context.Background()
 
