@@ -12,9 +12,9 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//ScrollPage ...
-//Scrolls through docs being loaded
-func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (string, []types.JournalEntry, error) {
+//ScrollPageUser ...
+//Scrolls through docs being loaded on the user wall
+func ScrollPageUser(eclient *elastic.Client, docIDs []string, scrollID string) (string, []types.JournalEntry, error) {
 
 	ctx := context.Background()
 
@@ -29,17 +29,11 @@ func ScrollPage(eclient *elastic.Client, docIDs []string, scrollID string) (stri
 	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "0"))
 	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "2"))
 
-	//set up project query
-	projQuery := elastic.NewBoolQuery()
-	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "3"))
-	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", ids...))
-	//yeah....
-	finalQuery := usrQuery.Should(projQuery)
 	var arrResults []types.JournalEntry
 
 	scroll := eclient.Scroll().
 		Index(globals.EntryIndex).
-		Query(finalQuery).
+		Query(usrQuery).
 		Sort("TimeStamp", false).
 		Size(5)
 
