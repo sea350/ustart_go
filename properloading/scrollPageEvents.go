@@ -27,7 +27,7 @@ func ScrollPageEvents(eclient *elastic.Client, docIDs []string, scrollID string)
 	evntQuery := elastic.NewBoolQuery()
 	evntQuery = evntQuery.Must(elastic.NewTermsQuery("ReferenceID", tmp...))
 	evntQuery = evntQuery.Should(elastic.NewTermQuery("Classification", "6"))
-	evntQuery = evntQuery.Should(elastic.NewTermQuery("Classification", "7"))
+	//evntQuery = evntQuery.Should(elastic.NewTermQuery("Classification", "7"))
 	evntQuery = evntQuery.Should(elastic.NewTermQuery("Classification", "8"))
 
 	var arrResults []types.JournalEntry
