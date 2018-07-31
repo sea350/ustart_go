@@ -12,7 +12,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//ScrollPage ...
+//ScrollPageDash ...
 //Scrolls through docs being loaded
 func ScrollPageDash(eclient *elastic.Client, docIDs []string, scrollID string) (string, []types.JournalEntry, error) {
 
