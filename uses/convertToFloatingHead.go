@@ -116,7 +116,7 @@ func ConvertChatToFloatingHead(eclient *elastic.Client, conversationID string, v
 			head.LastName = usr.LastName
 			head.Image = usr.Avatar
 			if msg.SenderID == convo.Eavesdroppers[i].DocID {
-				head.Bio = []rune(usr.FirstName + `` + usr.LastName + `: ` + msg.Content)
+				head.Bio = []rune(usr.FirstName + ` ` + usr.LastName + `: ` + msg.Content)
 			}
 		}
 
