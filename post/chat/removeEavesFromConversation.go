@@ -12,6 +12,9 @@ import (
 //RemoveEavesFromConversation ...removes eaves from convo and also syncronizes proxies
 func RemoveEavesFromConversation(eclient *elastic.Client, conversationID string, eavesID string) error {
 
+	AppendToProxyLock.Lock()
+	defer AppendToProxyLock.Unlock()
+
 	ctx := context.Background()
 
 	convo, err := get.ConvoByID(eclient, conversationID)
@@ -45,7 +48,12 @@ func RemoveEavesFromConversation(eclient *elastic.Client, conversationID string,
 		return err
 	}
 
-	delete(proxy.Conversations, conversationID)
+	for i := range proxy.Conversations {
+		if proxy.Conversations[i].ConvoID == conversationID {
+			proxy.Conversations = append(proxy.Conversations[:i], proxy.Conversations[i+1:]...)
+			break
+		}
+	}
 
 	_, err = eclient.Update().
 		Index(globals.ProxyMsgIndex).

@@ -54,8 +54,8 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string) ([]types.
 			return notifs, err
 		}
 
-		for key := range proxy.Conversations {
-			head, err := ConvertChatToFloatingHead(client.Eclient, key, usrID)
+		for i := len(proxy.Conversations) - 1; i >= 0; i-- {
+			head, err := ConvertChatToFloatingHead(client.Eclient, proxy.Conversations[i].ConvoID, usrID)
 			if err == nil {
 				notifs = append(notifs, head)
 			}

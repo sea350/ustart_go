@@ -20,26 +20,7 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 	AppendToProxyLock.Lock()
 	defer AppendToProxyLock.Unlock()
 
-	proxy, err := get.ProxyMsgByID(eclient, proxyID)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-		return err
-	}
-
-	if len(proxy.Conversations) == 0 {
-		proxy.Conversations = make(map[string]types.ConversationState)
-	}
-
-	temp, exists := proxy.Conversations[conversationID]
-	if !exists {
-		proxy.Conversations[conversationID] = types.ConversationState{}
-	} else {
-		delete(proxy.Conversations, conversationID)
-		proxy.Conversations[conversationID] = temp
-	}
-
-	exists, err = eclient.IndexExists(globals.ProxyMsgIndex).Do(ctx)
+	exists, err := eclient.IndexExists(globals.ProxyMsgIndex).Do(ctx)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -50,6 +31,25 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 		log.Println(errors.New("Index does not exist"))
 		return errors.New("Index does not exist")
 	}
+
+	proxy, err := get.ProxyMsgByID(eclient, proxyID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return err
+	}
+
+	var temp types.ConversationState
+	for i := range proxy.Conversations {
+		if proxy.Conversations[i].ConvoID == conversationID {
+			temp = proxy.Conversations[i]
+			proxy.Conversations = append(proxy.Conversations[:i], proxy.Conversations[i+1:]...)
+			break
+		}
+	}
+
+	temp.Read = false
+	proxy.Conversations = append(proxy.Conversations, temp)
 
 	_, err = get.ProxyMsgByID(eclient, proxyID)
 	if err != nil {
