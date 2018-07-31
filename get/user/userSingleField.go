@@ -16,9 +16,9 @@ func SingleStringField(eclient *elastic.Client, queryField string, queryTerm str
 	ctx := context.Background()
 
 	//username:= EmailToUsername(email) //for username query
-	termQuery := elastic.NewTermQuery("Username", "jc5537")
+	termQuery := elastic.NewTermQuery(queryField, queryTerm)
 
-	fsc := elastic.NewFetchSourceContext(true).Include("Tags") //.Exclude("*")
+	fsc := elastic.NewFetchSourceContext(true).Include(includeField) //.Exclude("*")
 	builder := elastic.NewSearchSource().Query(termQuery).DocvalueField("hello").FetchSourceContext(fsc)
 	// src, err := builder.Source()
 	searchRes, err := eclient.Search().
@@ -32,13 +32,14 @@ func SingleStringField(eclient *elastic.Client, queryField string, queryTerm str
 	for _, element := range searchRes.Hits.Hits {
 
 		result := element.Source
+
 		data, _ = json.Marshal(*result)
 		break
 
 	}
 
 	// fmt.Println()
-	fmt.Println(string(data))
+
 	// var usr types.User
 	if err != nil {
 		fmt.Println(err)
@@ -47,3 +48,42 @@ func SingleStringField(eclient *elastic.Client, queryField string, queryTerm str
 	return string(data), err
 
 }
+
+// //StringArrayField ...
+// //Retreives a single stirng array field from user
+// func StringArrayField(eclient *elastic.Client, queryField string, queryTerm string, includeField string) ([]string, error) {
+
+// 	ctx := context.Background()
+
+// 	//username:= EmailToUsername(email) //for username query
+// 	termQuery := elastic.NewTermQuery(queryField, queryTerm)
+
+// 	fsc := elastic.NewFetchSourceContext(true).Include(includeField) //.Exclude("*")
+// 	builder := elastic.NewSearchSource().Query(termQuery).DocvalueField("hello").FetchSourceContext(fsc)
+// 	// src, err := builder.Source()
+// 	searchRes, err := eclient.Search().
+// 		Index(globals.UserIndex).
+// 		Type(globals.UserType).
+// 		SearchSource(builder).
+// 		Do(ctx)
+
+// 	var data []byte
+// 	// Err := json.Unmarshal(*searchRes.Source, &usr)
+// 	for _, element := range searchRes.Hits.Hits {
+
+// 		result := element.Source
+// 		data, _ = json.Marshal(*result)
+// 		break
+
+// 	}
+
+// 	// fmt.Println()
+// 	fmt.Println(string(data))
+// 	// var usr types.User
+// 	if err != nil {
+// 		fmt.Println(err)
+
+// 	}
+// 	return []string(data), err
+
+// }
