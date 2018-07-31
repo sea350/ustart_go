@@ -18,17 +18,17 @@ func ScrollPageEvents(eclient *elastic.Client, docIDs []string, scrollID string)
 
 	ctx := context.Background()
 
-	tmp := make([]interface{}, 0)
+	docIDModified := make([]interface{}, 0)
 	for id := range docIDs {
-		tmp = append([]interface{}{strings.ToLower(docIDs[id])}, tmp...)
+		docIDModified = append([]interface{}{strings.ToLower(docIDs[id])}, docIDModified...)
 	}
 
 	//set up event query
 	evntQuery := elastic.NewBoolQuery()
-	evntQuery = evntQuery.Must(elastic.NewTermsQuery("ReferenceID", tmp...))
+	evntQuery = evntQuery.Must(elastic.NewTermsQuery("ReferenceID", docIDModified...))
 	evntQuery = evntQuery.Should(elastic.NewTermQuery("Classification", "6"))
 	//evntQuery = evntQuery.Should(elastic.NewTermQuery("Classification", "7"))
-	evntQuery = evntQuery.Should(elastic.NewTermQuery("Classification", "8"))
+	//evntQuery = evntQuery.Should(elastic.NewTermQuery("Classification", "8"))
 
 	var arrResults []types.JournalEntry
 	scroll := eclient.Scroll().
