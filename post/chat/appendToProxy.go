@@ -40,7 +40,7 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 	}
 
 	var temp types.ConversationState
-	for i := range proxy.Conversations {
+	for i := len(proxy.Conversations) - 1; i >= 0; i-- {
 		if proxy.Conversations[i].ConvoID == conversationID {
 			temp = proxy.Conversations[i]
 			proxy.Conversations = append(proxy.Conversations[:i], proxy.Conversations[i+1:]...)
