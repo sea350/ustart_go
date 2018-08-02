@@ -116,7 +116,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	}
 	newUsr.AuthenticationCode = token
 	subject := "Your verification link"
-	link := "http://ustart.today:5002/ResetPassword/?email=" + email + "&verifCode=" + token
+	link := "http://ustart.today:5002/Activation/?email=" + email + "&verifCode=" + token
 	r := NewRequest([]string{email}, subject)
 	r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": username, "link": link,
 		"contentjuan":   "We received a request to reset your password for your Ustart Account. We would love to assist you!",
