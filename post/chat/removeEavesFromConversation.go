@@ -50,18 +50,15 @@ func RemoveEavesFromConversation(eclient *elastic.Client, conversationID string,
 
 	for i := len(proxy.Conversations) - 1; i >= 0; i-- {
 		if proxy.Conversations[i].ConvoID == conversationID {
+			if proxy.Conversations[i].Read {
+				proxy.NumUnread--
+			}
 			proxy.Conversations = append(proxy.Conversations[:i], proxy.Conversations[i+1:]...)
 			break
 		}
 	}
 
-	_, err = eclient.Update().
-		Index(globals.ProxyMsgIndex).
-		Type(globals.ProxyMsgType).
-		Id(proxyID).
-		Doc(map[string]interface{}{"Conversations": proxy.Conversations}).
-		Do(ctx)
-
+	err = ReindexProxyMsg(eclient, proxyID, proxy)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)

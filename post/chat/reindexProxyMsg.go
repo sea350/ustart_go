@@ -11,7 +11,7 @@ import (
 
 //ReindexProxyMsg ...
 //Reindex messages
-func ReindexProxyMsg(eclient *elastic.Client, newMsg types.ProxyMessages, msgID string) error {
+func ReindexProxyMsg(eclient *elastic.Client, msgID string, newMsg types.ProxyMessages) error {
 	ctx := context.Background()
 
 	exists, err := eclient.IndexExists(globals.ProxyMsgIndex).Do(ctx)
