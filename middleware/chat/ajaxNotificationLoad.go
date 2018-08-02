@@ -20,13 +20,17 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	heads, err := uses.ChatAggregateNotifications(client.Eclient, docID.(string))
+	heads, numUnread, err := uses.ChatAggregateNotifications(client.Eclient, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
-	data, err := json.Marshal(heads)
+	sendData := make(map[string]interface{})
+	sendData["numUnread"] = numUnread
+	sendData["heads"] = heads
+
+	data, err := json.Marshal(sendData)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)

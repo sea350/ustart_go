@@ -7,18 +7,24 @@ import (
 
 	get "github.com/sea350/ustart_go/get/chat"
 	globals "github.com/sea350/ustart_go/globals"
-	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//AppendToProxy ... appends a new conversation state OR brings a certain conversation state to the back of the list
-//needs its own lock for concurrency control
-func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID string) error {
+//MarkAsRead ... marks a convo as read in proxies
+//uses append to proxy lock as it modifies proxies
+func MarkAsRead(eclient *elastic.Client, usrID string, conversationID string) error {
 
 	ctx := context.Background()
 
 	AppendToProxyLock.Lock()
 	defer AppendToProxyLock.Unlock()
+
+	proxyID, err := get.ProxyIDByUserID(eclient, usrID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return err
+	}
 
 	exists, err := eclient.IndexExists(globals.ProxyMsgIndex).Do(ctx)
 	if err != nil {
@@ -39,25 +45,16 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 		return err
 	}
 
-	var temp types.ConversationState
 	for i := len(proxy.Conversations) - 1; i >= 0; i-- {
 		if proxy.Conversations[i].ConvoID == conversationID {
-			temp = proxy.Conversations[i]
-			proxy.Conversations = append(proxy.Conversations[:i], proxy.Conversations[i+1:]...)
+			if !proxy.Conversations[i].Read {
+				proxy.NumUnread--
+				proxy.Conversations[i].Read = true
+			}
 			break
 		}
 	}
 
-	if temp.ConvoID == `` {
-		temp.ConvoID = conversationID
-	}
-	if temp.Read {
-		temp.Read = false
-		proxy.NumUnread++
-	}
-	proxy.Conversations = append(proxy.Conversations, temp)
-
 	err = ReindexProxyMsg(eclient, proxyID, proxy)
-
 	return err
 }

@@ -3,17 +3,17 @@ package chat
 import (
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/sea350/ustart_go/middleware/client"
+	postChat "github.com/sea350/ustart_go/post/chat"
 	"github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
 )
 
 var clients = make(map[*websocket.Conn]bool) // connected clients
-var chatroom = make(map[string](map[*websocket.Conn]bool))
+var chatroom = make(map[string](map[*websocket.Conn]string))
 var broadcast = make(chan types.Message) // broadcast channel
 
 // Configure the upgrader
@@ -38,8 +38,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	valid, actualChatID, dmTargetUserID, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	if !valid {
 		return
@@ -57,24 +56,29 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	if chatURL == `` {
 		_, exists := chatroom[``]
 		if !exists {
-			temp := make(map[*websocket.Conn]bool)
-			temp[ws] = true
+			temp := make(map[*websocket.Conn]string)
+			temp[ws] = docID.(string)
 			chatroom[``] = temp
 		} else {
 			temp := chatroom[``]
-			temp[ws] = true
+			temp[ws] = docID.(string)
 			chatroom[``] = temp
 		}
 	} else if actualChatID != `` {
 		_, exists := chatroom[actualChatID]
 		if !exists {
-			temp := make(map[*websocket.Conn]bool)
-			temp[ws] = true
+			temp := make(map[*websocket.Conn]string)
+			temp[ws] = docID.(string)
 			chatroom[actualChatID] = temp
 		} else {
 			temp := chatroom[actualChatID]
-			temp[ws] = true
+			temp[ws] = docID.(string)
 			chatroom[actualChatID] = temp
+		}
+		err = postChat.MarkAsRead(client.Eclient, docID.(string), actualChatID)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		}
 	}
 
@@ -102,8 +106,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			notifyThese = append(notifyThese, dmTargetUserID)
 			notifyThese = append(notifyThese, docID.(string))
 			actualChatID = newConvoID
-			temp := make(map[*websocket.Conn]bool)
-			temp[ws] = true
+			temp := make(map[*websocket.Conn]string)
+			temp[ws] = docID.(string)
 			chatroom[actualChatID] = temp
 			msg.ConversationID = actualChatID
 
@@ -137,13 +141,18 @@ func handleMessages() {
 		// _, exists := chatroom[msg.ConversationID]
 		// log.Println(exists)
 
-		for client := range chatroom[msg.ConversationID] {
-			err := client.WriteJSON(msg)
+		for clnt, docID := range chatroom[msg.ConversationID] {
+			err := clnt.WriteJSON(msg)
 			if err != nil {
 				log.Printf("error: %v", err)
-				client.Close()
-				delete(chatroom[msg.ConversationID], client)
+				clnt.Close()
+				delete(chatroom[msg.ConversationID], clnt)
 				return
+			}
+			err = postChat.MarkAsRead(client.Eclient, docID, msg.ConversationID)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 			}
 
 		}

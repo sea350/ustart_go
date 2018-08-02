@@ -6,6 +6,7 @@ import "time"
 type ProxyMessages struct {
 	DocID         string              `json:"DocID"`
 	Class         int                 `json:"Class"`
+	NumUnread     int                 `json:"NumUnread"`
 	Conversations []ConversationState `json:"Conversations"` //must be ordered by most recent interaction
 	//Class 1 = User inbox
 	//Class 2 = Project Inbox
