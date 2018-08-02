@@ -50,6 +50,7 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 
 	if temp.ConvoID == `` {
 		temp.ConvoID = conversationID
+		proxy.NumUnread++
 	}
 	if temp.Read {
 		temp.Read = false
