@@ -1,7 +1,6 @@
 package search
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -84,13 +83,6 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		/*
-			if r.FormValue("searchbyprojectname") != `` {
-				searchBy = append(searchBy, true)
-			} else {
-				searchBy = append(searchBy, false)
-			}
-		*/
 		scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -101,9 +93,6 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		cs.ScrollID = scrollID
 	}
 	if filter == `users` {
-		fmt.Println(r.FormValue("searchbypersonname"))
-		fmt.Println(r.FormValue("searchbyusername"))
-		fmt.Println(r.FormValue("searchbyskills"))
 		if r.FormValue("searchbypersonname") != `` {
 			searchBy = append(searchBy, true)
 		} else {
