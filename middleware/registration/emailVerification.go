@@ -18,7 +18,7 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 
 	var cs client.ClientSide
 
-	defer client.RenderSidebar(w, r, "template2-nil")
+	defer client.RenderSidebar(w, r, "templateNoUser2")
 	defer client.RenderTemplate(w, r, "reg-got-verified", cs)
 
 	userID, err := get.UserIDByEmail(client.Eclient, email)
