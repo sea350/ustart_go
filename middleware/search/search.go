@@ -50,13 +50,13 @@ func Page(w http.ResponseWriter, r *http.Request) {
 			searchBy = append(searchBy, false)
 		}
 		scrollID, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
-		fmt.Println("\n---------ScrollID---------\n", scrollID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		}
 		cs.ListOfHeads = results
+		cs.ScrollID = scrollID
 	}
 	if filter == `events` {
 		if r.FormValue("searchbyeventname") != `` {
@@ -91,13 +91,14 @@ func Page(w http.ResponseWriter, r *http.Request) {
 				searchBy = append(searchBy, false)
 			}
 		*/
-		results, err := search.PrototypeEventSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
+		scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		}
 		cs.ListOfHeads = results
+		cs.ScrollID = scrollID
 	}
 	if filter == `users` {
 		fmt.Println(r.FormValue("searchbypersonname"))
@@ -118,13 +119,14 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		results, err := search.PrototypeUserSearch(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{})
+		scrollID, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		}
 		cs.ListOfHeads = results
+		cs.ScrollID = scrollID
 	}
 	if filter == `skills` {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))
