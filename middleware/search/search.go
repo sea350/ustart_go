@@ -48,7 +48,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		scrollID, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
+		numHits, scrollID, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
@@ -56,6 +56,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		cs.ListOfHeads = results
 		cs.ScrollID = scrollID
+		cs.Hits = numHits
 	}
 	if filter == `events` {
 		if r.FormValue("searchbyeventname") != `` {
@@ -83,7 +84,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
+		numHits, scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
@@ -91,6 +92,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		cs.ListOfHeads = results
 		cs.ScrollID = scrollID
+		cs.Hits = numHits
 	}
 	if filter == `users` {
 		if r.FormValue("searchbypersonname") != `` {
