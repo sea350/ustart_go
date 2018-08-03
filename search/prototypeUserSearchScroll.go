@@ -125,13 +125,16 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		log.Println(dir, err)
 	}
 
-	for _, element := range res.Hits.Hits {
-		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
-		if err1 != nil {
-			err = errors.New("there was one or more problems loading results")
-			continue
+	fmt.Println(res.Hits.TotalHits)
+	if res.Hits.TotalHits > 0 {
+		for _, element := range res.Hits.Hits {
+			head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
+			if err1 != nil {
+				err = errors.New("there was one or more problems loading results")
+				continue
+			}
+			results = append(results, head)
 		}
-		results = append(results, head)
 	}
 
 	return res.ScrollId, results, err

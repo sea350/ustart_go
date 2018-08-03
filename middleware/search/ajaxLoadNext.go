@@ -14,6 +14,9 @@ import (
 	"github.com/sea350/ustart_go/uses"
 )
 
+//AjaxLoadNext ... Loads more results after initial results loads once bottom of page is reached
+//Takes w, r and search parameters from form values
+//Returns Marshalled results(array of floating heads)
 func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -22,8 +25,6 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//No clientside, no rendering
-	//Marshall results and return
 	var searchBy []bool
 	query := r.FormValue("query")
 	scrollID := r.FormValue("scrollID")
