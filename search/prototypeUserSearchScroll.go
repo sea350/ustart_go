@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -116,9 +117,9 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 	// }
 
 	res, err := scroll.Do(ctx)
-	// if err == io.EOF {
-	// 	return res.ScrollId, results, err
-	// }
+	if err == io.EOF {
+		return res.ScrollId, results, err
+	}
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
