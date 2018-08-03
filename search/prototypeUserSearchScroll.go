@@ -125,7 +125,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		log.Println(dir, err)
 	}
 
-	fmt.Println(res.Hits.TotalHits)
+	fmt.Println("\n\n", res.Hits.TotalHits, "\n\n")
 	if res.Hits.TotalHits > 0 {
 		for _, element := range res.Hits.Hits {
 			head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
