@@ -8,6 +8,7 @@ import (
 	dash "github.com/sea350/ustart_go/middleware/dashboard"
 	event "github.com/sea350/ustart_go/middleware/event"
 	fail "github.com/sea350/ustart_go/middleware/fail"
+	img "github.com/sea350/ustart_go/middleware/img"
 	inbox "github.com/sea350/ustart_go/middleware/inbox"
 	login "github.com/sea350/ustart_go/middleware/login"
 	profile "github.com/sea350/ustart_go/middleware/profile"
