@@ -48,8 +48,8 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sendThis := make(map[string]interface{})
-	sendThis["newIndex"] = newIdx
-	sendThis["messages"] = msgs
+	sendThis["Index"] = newIdx
+	sendThis["Messages"] = msgs
 
 	data, err := json.Marshal(sendThis)
 	if err != nil {

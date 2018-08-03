@@ -45,8 +45,8 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			return
 		}
-		agg["messages"] = msgs
-		agg["index"] = idx
+		agg["Messages"] = msgs
+		agg["Index"] = idx
 
 		chat, err := getChat.ConvoByID(client.Eclient, actualChatID)
 		if err != nil {
@@ -65,7 +65,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			}
 			temp := make(map[string]types.FloatingHead)
 			temp[chat.Eavesdroppers[idx].DocID] = head
-			agg["eavesdroppers"] = temp
+			agg["Eavesdroppers"] = temp
 		}
 
 	} else {
@@ -85,7 +85,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			log.Println(dir, err)
 		}
 		temp[docID.(string)] = head
-		agg["eavesdroppers"] = temp
+		agg["Eavesdroppers"] = temp
 	}
 
 	data, err := json.Marshal(agg)
