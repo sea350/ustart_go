@@ -54,6 +54,12 @@ const WidgetIndex = "test-widget_data"
 //WidgetType ...
 const WidgetType = "WIDGET"
 
+//ImgIndex ...
+const ImgIndex = "test-img_data"
+
+//ImgType ...
+const ImgType = "IMG"
+
 //MappingUsr ... user mapping
 const MappingUsr = `
 {

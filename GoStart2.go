@@ -182,5 +182,8 @@ func main() {
 	//http.HandleFunc("/ch/", chat.Page)
 	// http.HandleFunc("/ws", chat.Run)
 
+	//IMG
+	http.HandleFunc("/img/", img.Display)
+
 	http.ListenAndServe(":"+currentPort, nil)
 }
