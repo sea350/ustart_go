@@ -176,6 +176,7 @@ func main() {
 	http.HandleFunc("/ch/", chat.Page)
 	http.HandleFunc("/ws/", chat.HandleConnections) //weebsocket
 	http.HandleFunc("/cN/", chat.HandleChatClients) //websocket
+	http.HandleFunc("/AjaxLoadChat/", chat.InitialChat)
 	http.HandleFunc("/AjaxLoadMoreChat/", chat.AjaxLoadMoreChat)
 	http.HandleFunc("/AjaxChatNotifications/", chat.AjaxNotificationLoad)
 
