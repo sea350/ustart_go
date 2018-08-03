@@ -75,7 +75,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		}
-		temp := make(map[string]interface{})
+		temp := make(map[string]types.FloatingHead)
 		temp[otherUsr] = head
 
 		head, err = uses.ConvertUserToFloatingHead(client.Eclient, docID.(string))
