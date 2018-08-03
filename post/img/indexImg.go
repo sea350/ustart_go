@@ -19,13 +19,18 @@ func IndexImg(eclient *elastic.Client, newImg types.Img) (string, error) {
 	var id string
 	exists, err := eclient.IndexExists(globals.ImgIndex).Do(ctx)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return id, err
 	}
 	// If the index doesn't exist, create it and return error.
 	if !exists {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("debug text: case !exists")
 		createIndex, Err := eclient.CreateIndex(globals.ImgIndex).Do(ctx)
 		if Err != nil {
-			panic(Err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(Err)
 		}
 		log.Println(createIndex)
 		// TODO fix this.
@@ -35,15 +40,13 @@ func IndexImg(eclient *elastic.Client, newImg types.Img) (string, error) {
 		}
 	}
 
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("debug text: about to index")
 	// Index the document.
-	newI, Err := eclient.Index().
+	newI, err := eclient.Index().
 		Index(globals.ImgIndex).
 		BodyJson(newImg).
 		Do(ctx)
 
-	if Err != nil {
-		return id, Err
-	}
-
-	return newI.Id, nil
+	return newI.Id, err
 }
