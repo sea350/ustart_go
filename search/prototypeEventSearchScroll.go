@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -90,26 +91,6 @@ func PrototypeEventSearchScroll(eclient *elastic.Client, searchTerm string, sort
 		}
 	}
 
-	/*
-		searchResults, err := eclient.Search().
-			Index(globals.EventIndex).
-			Query(x).
-			Pretty(true).
-			Do(ctx)
-
-		if err != nil {
-			return results, err
-		}
-	*/
-
-	// Testing Outputs
-	// fmt.Println("Number of Hits: ", searchResults.Hits.TotalHits)
-	// for _, s := range searchResults.Hits.Hits {
-	// 	u, _ := get.UserByID(eclient, s.Id)
-	// 	// fmt.Println(u.FirstName, u.LastName)
-	// 	fmt.Println(u.FirstName, u.LastName)
-	// }
-
 	scroll := eclient.Scroll().
 		Index(globals.EventIndex).
 		Query(query).
@@ -120,6 +101,9 @@ func PrototypeEventSearchScroll(eclient *elastic.Client, searchTerm string, sort
 	}
 
 	res, err := scroll.Do(ctx)
+	if err == io.EOF {
+		return "", results, err
+	}
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

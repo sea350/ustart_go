@@ -27,19 +27,10 @@ searchTerm 	-> The term user is inputting
 */
 func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortBy int, searchBy []bool, mustMajor []string, mustTag []string, mustLoc []types.LocStruct, scrollID string) (string, []types.FloatingHead, error) {
 	ctx := context.Background()
-
 	var results []types.FloatingHead
 	var searchArr []string
 	query := elastic.NewBoolQuery()
-
 	searchArr = strings.Split(searchTerm, ` `)
-	/*
-		for _, element := range stringArray {
-			searchArr = append(searchArr, strings.ToLower(element))
-		}
-	*/
-	//, "Description", "URLName", "Tags"
-	// query := elastic.NewMultiMatchQuery(searchTerm, "FirstName", "LastName")
 
 	if len(searchBy) >= 3 {
 		//Name
@@ -87,18 +78,6 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 			query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
 		}
 	}
-
-	/*
-		searchResults, err := eclient.Search().
-			Index(globals.UserIndex).
-			Query(query).
-			Pretty(true).
-			Do(ctx)
-
-		if err != nil {
-			return results, err
-		}
-	*/
 
 	scroll := eclient.Scroll().
 		Index(globals.UserIndex).
