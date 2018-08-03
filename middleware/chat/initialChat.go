@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
@@ -31,8 +30,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 	valid, actualChatID, otherUsr, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	if !valid {
 		return
@@ -51,8 +49,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		chat, err := getChat.ConvoByID(client.Eclient, actualChatID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 			return
 		}
 
@@ -60,8 +57,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			head, err := uses.ConvertUserToFloatingHead(client.Eclient, chat.Eavesdroppers[idx].DocID)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				log.Println(err)
 			}
 			temp := make(map[string]types.FloatingHead)
 			temp[chat.Eavesdroppers[idx].DocID] = head
@@ -72,8 +68,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, otherUsr)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		temp := make(map[string]types.FloatingHead)
 		temp[otherUsr] = head
@@ -81,8 +76,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		head, err = uses.ConvertUserToFloatingHead(client.Eclient, docID.(string))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		temp[docID.(string)] = head
 		agg["Eavesdroppers"] = temp
@@ -91,8 +85,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(agg)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	fmt.Fprintln(w, string(data))
 }
