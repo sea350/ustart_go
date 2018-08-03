@@ -108,18 +108,8 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)
 	}
-	// Testing Outputs
-	// fmt.Println("Number of Hits: ", searchResults.Hits.TotalHits)
-	// for _, s := range searchResults.Hits.Hits {
-	// 	u, _ := get.UserByID(eclient, s.Id)
-	// 	// fmt.Println(u.FirstName, u.LastName)
-	// 	fmt.Println(u.FirstName, u.LastName)
-	// }
 
 	res, err := scroll.Do(ctx)
-	// fmt.Println("\n", res.ScrollId)
-	fmt.Println("\n", results)
-	fmt.Println("\n", err)
 	if err == io.EOF {
 		return "", results, err
 	}
@@ -129,16 +119,13 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		log.Println(dir, err)
 	}
 
-	fmt.Println("\n\n", res.Hits.TotalHits, "\n\n")
-	if res.Hits.TotalHits > 0 {
-		for _, element := range res.Hits.Hits {
-			head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
-			if err1 != nil {
-				err = errors.New("there was one or more problems loading results")
-				continue
-			}
-			results = append(results, head)
+	for _, element := range res.Hits.Hits {
+		head, err1 := uses.ConvertUserToFloatingHead(eclient, element.Id)
+		if err1 != nil {
+			err = errors.New("there was one or more problems loading results")
+			continue
 		}
+		results = append(results, head)
 	}
 
 	return res.ScrollId, results, err
