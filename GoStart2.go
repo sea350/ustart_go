@@ -145,6 +145,7 @@ func main() {
 
 	//SEARCH
 	http.HandleFunc("/search", search.Page)
+	http.HandleFunc("/AjaxLoadNext", search.AjaxLoadNext)
 
 	//GENERIC LOAD COMMENTS
 	http.HandleFunc("/AjaxLoadComments/", profile.AjaxLoadComments)
