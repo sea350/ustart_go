@@ -63,7 +63,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			temp[chat.Eavesdroppers[idx].DocID] = head
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println("debug text: ")
-			log.Println(temp)
+			log.Println(len(temp))
 			agg["Eavesdroppers"] = temp
 		}
 
