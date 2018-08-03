@@ -43,6 +43,7 @@ type ClientSide struct {
 	Event           types.EventAggregate
 	Dashboard       types.DashboardAggregate
 	Messages        []types.Message
+	Hits            int
 }
 
 /* The following line is how HTML is loaded by our application. Note we need the relative link from the location of GoStart2. */

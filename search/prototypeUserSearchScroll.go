@@ -25,7 +25,7 @@ mustTag 	-> Array of Tags that each result must have
 mustLoc 	-> Location that the result must have
 searchTerm 	-> The term user is inputting
 */
-func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortBy int, searchBy []bool, mustMajor []string, mustTag []string, mustLoc []types.LocStruct, scrollID string) (string, []types.FloatingHead, error) {
+func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortBy int, searchBy []bool, mustMajor []string, mustTag []string, mustLoc []types.LocStruct, scrollID string) (int, string, []types.FloatingHead, error) {
 	ctx := context.Background()
 	var results []types.FloatingHead
 	var searchArr []string
@@ -90,7 +90,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 
 	res, err := scroll.Do(ctx)
 	if err == io.EOF {
-		return "", results, err
+		return 0, "", results, err
 	}
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -107,5 +107,5 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		results = append(results, head)
 	}
 
-	return res.ScrollId, results, err
+	return int(res.Hits.TotalHits), res.ScrollId, results, err
 }

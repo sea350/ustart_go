@@ -108,7 +108,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		scrollID, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
+		numHits, scrollID, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
@@ -116,6 +116,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		cs.ListOfHeads = results
 		cs.ScrollID = scrollID
+		cs.Hits = numHits
 	}
 	if filter == `skills` {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))

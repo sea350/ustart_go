@@ -123,7 +123,7 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		_, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
+		_, _, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
