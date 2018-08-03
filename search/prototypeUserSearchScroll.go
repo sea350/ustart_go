@@ -117,11 +117,11 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 	// }
 
 	res, err := scroll.Do(ctx)
-	fmt.Println("\n", res.ScrollId)
+	// fmt.Println("\n", res.ScrollId)
 	fmt.Println("\n", results)
 	fmt.Println("\n", err)
 	if err == io.EOF {
-		return res.ScrollId, results, err
+		return "", results, err
 	}
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
