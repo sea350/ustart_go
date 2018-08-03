@@ -14,12 +14,6 @@ import (
 	"github.com/sea350/ustart_go/middleware/client"
 )
 
-type chatAggregate struct {
-	Index         int                           `json:"Index"`
-	Messages      []types.Message               `json:"Messages"`
-	Eavesdroppers map[string]types.FloatingHead `json:"Eavesdroppers"`
-}
-
 //InitialChat ... crawling in the 90s
 //Designed for ajax
 func InitialChat(w http.ResponseWriter, r *http.Request) {
@@ -31,7 +25,8 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 
 	chatURL := r.FormValue("chatUrl")
 
-	agg := chatAggregate{Eavesdroppers: make(map[string]types.FloatingHead)}
+	agg := make(map[string]interface{})
+	//agg["eavesdroppers"] = make(map[string]types.FloatingHead)
 
 	valid, actualChatID, otherUsr, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
@@ -44,12 +39,14 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if actualChatID != `` {
-		_, agg.Messages, err = uses.ChatLoad(client.Eclient, actualChatID, 0, 50)
+		idx, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, 0, 50)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 			return
 		}
+		agg["Messages"] = msgs
+		agg["Index"] = idx
 
 		chat, err := getChat.ConvoByID(client.Eclient, actualChatID)
 		if err != nil {
@@ -66,7 +63,9 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
 			}
-			agg.Eavesdroppers[chat.Eavesdroppers[idx].DocID] = head
+			temp := make(map[string]types.FloatingHead)
+			temp[chat.Eavesdroppers[idx].DocID] = head
+			agg["Eavesdroppers"] = temp
 		}
 
 	} else {
@@ -76,7 +75,8 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		}
-		agg.Eavesdroppers[otherUsr] = head
+		temp := make(map[string]interface{})
+		temp[otherUsr] = head
 
 		head, err = uses.ConvertUserToFloatingHead(client.Eclient, docID.(string))
 		if err != nil {
@@ -84,7 +84,8 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		}
-		agg.Eavesdroppers[docID.(string)] = head
+		temp[docID.(string)] = head
+		agg["Eavesdroppers"] = temp
 	}
 
 	data, err := json.Marshal(agg)
