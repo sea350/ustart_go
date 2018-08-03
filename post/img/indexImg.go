@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"log"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -24,9 +25,9 @@ func IndexImg(eclient *elastic.Client, newImg types.Img) (string, error) {
 	if !exists {
 		createIndex, Err := eclient.CreateIndex(globals.ImgIndex).Do(ctx)
 		if Err != nil {
-			_, _ = eclient.IndexExists(globals.ImgIndex).Do(ctx)
 			panic(Err)
 		}
+		log.Println(createIndex)
 		// TODO fix this.
 		if !createIndex.Acknowledged {
 			// Return an error saying it doesn't exist
