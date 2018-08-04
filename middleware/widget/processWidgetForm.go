@@ -265,7 +265,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		defer galleryFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || galleryHeader.Size == 0 {
 			name := strings.Split(galleryHeader.Filename, ".")
-			contents := buffer.(string)
+			contents := buffer
 			data = []template.HTML{template.HTML(name[0]), template.HTML(contents)}
 		}
 		classification = 17
