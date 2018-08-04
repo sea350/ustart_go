@@ -57,7 +57,6 @@ func main() {
 	http.HandleFunc("/ShareComment", profile.ShareComment2)
 	http.HandleFunc("/AddComment/", profile.AddComment)
 	http.HandleFunc("/AddComment2/", profile.AddComment2)
-	http.HandleFunc("/loadWall/", profile.WallLoad)
 	http.HandleFunc("/addPost/", profile.WallAdd)
 	http.HandleFunc("/addSkill/", profile.AddTag)
 	http.HandleFunc("/deleteSkill/", profile.DeleteTag)
