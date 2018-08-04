@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	scrollpkg "github.com/sea350/ustart_go/properloading"
 )
@@ -22,22 +21,23 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 	}
 
 	wallID := r.FormValue("userID")
-	user, err := get.UserByID(client.Eclient, wallID)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-	}
 	/*
-		entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs)
+		user, err := get.UserByID(client.Eclient, wallID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		}
+
+			entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
+			}
 	*/
 
-	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, user.EntryIDs, "")
+	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, []string{wallID}, "")
 	if err != nil {
 		fmt.Println(res)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
