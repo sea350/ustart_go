@@ -3,10 +3,8 @@ package uses
 import (
 	"strings"
 
-	"errors"
 	"time"
 
-	eventGet "github.com/sea350/ustart_go/get/event"
 	eventPost "github.com/sea350/ustart_go/post/event"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
@@ -17,14 +15,6 @@ import (
 //Requires all fundemental information for the new event (title, creator docID, etc...)
 //Returns an error if there was a problem with database submission
 func CreateEvent(eclient *elastic.Client, title string, description []rune, makerID string, category string, location types.LocStruct, eventTimeStart time.Time) (string, error) {
-	inUse, err := eventGet.EventURLInUse(eclient, customURL)
-	if err != nil {
-		return "", err
-	}
-	if inUse {
-		return "", errors.New("Event URL is taken")
-	}
-
 	var newEvent types.Events
 	newEvent.Name = title
 	newEvent.Description = description
@@ -60,10 +50,8 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 		panic(err)
 	}
 
-	if customURL == `` {
-		err = eventPost.UpdateEvent(eclient, id, "URLName", strings.ToLower(id))
-		id = strings.ToLower(id)
-	}
+	err = eventPost.UpdateEvent(eclient, id, "URLName", strings.ToLower(id))
+	id = strings.ToLower(id)
 
 	return id, err
 }
