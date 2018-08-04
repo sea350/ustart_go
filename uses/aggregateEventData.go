@@ -15,11 +15,12 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 	var eventData types.EventAggregate
 	eventData.RequestAllowed = true
 
-	data, err := getEvent.EventByURL(eclient, url)
+	data, err := getEvent.EventById(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
+		log.Println(dir, url)
 	}
 	eventData.EventData = data
 	eventData.DocID = url
