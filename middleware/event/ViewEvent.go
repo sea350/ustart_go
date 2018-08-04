@@ -75,7 +75,10 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	eventLocation.Zip = zip
 	eventLocation.State = state
 
-	CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, dateStart)
+	id, err := CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, dateStart)
+	if err == nil {
+		return
+	}
 
 	http.Redirect(w, r, "/Event/"+id, http.StatusFound)
 }
