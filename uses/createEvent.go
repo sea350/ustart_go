@@ -22,7 +22,6 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 	newEvent.CreationDate = time.Now()
 	newEvent.Avatar = "https://i.imgur.com/TYFKsdi.png"
 	newEvent.EventDateStart = eventTimeStart
-	newEvent.EventDateEnd = eventTimeEnd
 	newEvent.Location = location
 	newEvent.Category = category
 	newEvent.Host = makerID
