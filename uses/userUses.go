@@ -11,6 +11,7 @@ import (
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
 	getWarning "github.com/sea350/ustart_go/get/warning"
+	postChat "github.com/sea350/ustart_go/post/chat"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	postUser "github.com/sea350/ustart_go/post/user"
 	postWarning "github.com/sea350/ustart_go/post/warning"
@@ -151,10 +152,19 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		newUsr.Class = 5
 	}
 
-	_, retErr := postUser.IndexUser(eclient, newUsr)
+	id, retErr := postUser.IndexUser(eclient, newUsr)
 	if retErr != nil {
 		return retErr
 	}
+
+	newProxy := types.ProxyMessages{DocID: id, Class: 1}
+	proxyID, err := postChat.IndexProxyMsg(eclient, newProxy)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	err = postUser.UpdateUser(eclient, id, "ProxyMessages", proxyID)
 
 	return err
 }
