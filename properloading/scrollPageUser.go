@@ -40,7 +40,7 @@ func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (str
 		Index(globals.EntryIndex).
 		Query(usrQuery).
 		Sort("TimeStamp", false).
-		Size(5)
+		Size(12)
 
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)

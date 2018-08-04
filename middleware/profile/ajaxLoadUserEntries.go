@@ -21,23 +21,9 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 	}
 
 	wallID := r.FormValue("userID")
-	/*
-		user, err := get.UserByID(client.Eclient, wallID)
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
-		}
+	scrollID := r.FormValue("scrollID")
 
-			entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-			}
-	*/
-
-	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, wallID, "")
+	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, wallID, scrollID)
 	if err != nil {
 		fmt.Println(res)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
