@@ -7,10 +7,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/sea350/ustart_go/uses"
-
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
+	scrollpkg "github.com/sea350/ustart_go/properloading"
 )
 
 //AjaxLoadProjectEntries ... pulls all entries for a given project and fprints it back as a json array
@@ -29,8 +28,18 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
-	entries, err := uses.LoadEntries(client.Eclient, proj.EntryIDs)
+	/*
+		entries, err := uses.LoadEntries(client.Eclient, proj.EntryIDs)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
+		}
+	*/
+
+	res, entries, err := scrollpkg.ScrollPageProject(client.Eclient, proj.EntryIDs, "")
 	if err != nil {
+		fmt.Println(res)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)

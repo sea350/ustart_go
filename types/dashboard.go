@@ -6,4 +6,5 @@ type Dashboard struct {
 	Followers        []string `json:"Followers"`
 	FollowingProject []string `json:"FollowingProject"`
 	FollowingEvent   []string `json:"FollowingEvent"`
+	EntryIDs         []string `json:"EntryIDs"`
 }

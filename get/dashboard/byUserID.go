@@ -6,21 +6,17 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//DashboardByUsername ...
-func DashboardByUsername(eclient *elastic.Client, username string) (types.Dashboard, error) {
+//DashboardByUserID ...
+func DashboardByUserID(eclient *elastic.Client, usrID string) (types.Dashboard, error) {
 
 	var newDash types.Dashboard
 
-	usr, err := get.UserByUsername(eclient, username)
+	usr, err := get.UserByID(eclient, usrID)
 	if err != nil {
 		return newDash, err
 	}
 
-	id, err := get.IDByUsername(eclient, username)
-	if err != nil {
-		return newDash, err
-	}
-	newDash.ID = id
+	newDash.ID = usrID
 	newDash.Followers = usr.Followers
 	newDash.FollowingProject = usr.FollowingProject
 	newDash.FollowingEvent = usr.FollowingEvent

@@ -24,6 +24,7 @@ func DashboardByEmail(eclient *elastic.Client, email string) (types.Dashboard, e
 	newDash.Followers = usr.Followers
 	newDash.FollowingProject = usr.FollowingProject
 	newDash.FollowingEvent = usr.FollowingEvent
+	newDash.EntryIDs = usr.EntryIDs
 
 	return newDash, err
 
