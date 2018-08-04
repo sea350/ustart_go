@@ -14,7 +14,7 @@ import (
 func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (types.EventAggregate, error) {
 	var eventData types.EventAggregate
 	eventData.RequestAllowed = true
-	
+
 	data, err := getEvent.EventByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -22,14 +22,7 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		log.Println(dir, err)
 	}
 	eventData.EventData = data
-
-	id, err := getEvent.EventIDByURL(eclient, url)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-	}
-	eventData.DocID = id
+	eventData.DocID = url
 
 	//Remember to load widgets seperately
 	//Remember to load wall posts seperately
