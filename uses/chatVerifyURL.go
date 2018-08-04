@@ -20,6 +20,7 @@ func ChatVerifyURL(eclient *elastic.Client, url string, viewerID string) (bool, 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return false, ``, ``, err
 	}
 	if usr.ProxyMessagesID == `` {
 		prox, _ := getChat.ProxyIDByUserID(eclient, viewerID)
@@ -59,7 +60,7 @@ func ChatVerifyURL(eclient *elastic.Client, url string, viewerID string) (bool, 
 			exists, id, err := getChat.DMExists(client.Eclient, targetID, viewerID)
 			if err != nil {
 				//there was a problem finding the dm
-				return exists, id, ``, err
+				return false, id, ``, err
 			}
 			if exists {
 				return exists, id, targetID, err
