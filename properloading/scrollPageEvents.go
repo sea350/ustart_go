@@ -14,7 +14,7 @@ import (
 
 //ScrollPageEvents ...
 //Scrolls through event docs being loaded
-func ScrollPageEvents(eclient *elastic.Client, docIDs []string, scrollID string) (string, []types.JournalEntry, error) {
+func ScrollPageEvents(eclient *elastic.Client, docIDs []string, scrollID string) (string, []types.JournalEntry, int64, error) {
 
 	ctx := context.Background()
 
@@ -47,15 +47,15 @@ func ScrollPageEvents(eclient *elastic.Client, docIDs []string, scrollID string)
 		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, false)
 		arrResults = append(arrResults, head)
 		if err != nil {
-			return res.ScrollId, arrResults, errors.New("ISSUE WITH CONVERT FUNCTION")
+			return res.ScrollId, arrResults, res.Hits.TotalHits, errors.New("ISSUE WITH CONVERT FUNCTION")
 
 		}
 
 		if err == io.EOF {
-			return res.ScrollId, arrResults, errors.New("Out of bounds")
+			return res.ScrollId, arrResults, res.Hits.TotalHits, errors.New("Out of bounds")
 
 		}
 	}
 
-	return res.ScrollId, arrResults, err
+	return res.ScrollId, arrResults, res.Hits.TotalHits, err
 }

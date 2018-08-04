@@ -38,7 +38,7 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 		}
 	*/
 
-	res, entries, err := scrollpkg.ScrollPageEvents(client.Eclient, evnt.EntryIDs, "")
+	res, entries, total, err := scrollpkg.ScrollPageEvents(client.Eclient, evnt.EntryIDs, "")
 	if err != nil {
 		fmt.Println(res)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -46,7 +46,12 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	data, err := json.Marshal(entries)
+	results := make(map[string]interface{})
+	results["JournalEntries"] = entries
+	results["ScrollID"] = res
+	results["TotalHits"] = total
+
+	data, err := json.Marshal(results)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
