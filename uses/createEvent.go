@@ -16,7 +16,7 @@ import (
 //CreateEvent ... Create an event
 //Requires all fundemental information for the new event (title, creator docID, etc...)
 //Returns an error if there was a problem with database submission
-func CreateEvent(eclient *elastic.Client, title string, description []rune, makerID string, category string, customURL string, location types.LocStruct, eventTimeStart time.Time, eventTimeEnd time.Time) (string, error) {
+func CreateEvent(eclient *elastic.Client, title string, description []rune, makerID string, category string, location types.LocStruct, eventTimeStart time.Time) (string, error) {
 	inUse, err := eventGet.EventURLInUse(eclient, customURL)
 	if err != nil {
 		return "", err
@@ -63,9 +63,6 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 	if customURL == `` {
 		err = eventPost.UpdateEvent(eclient, id, "URLName", strings.ToLower(id))
 		id = strings.ToLower(id)
-	} else {
-		err = eventPost.UpdateEvent(eclient, id, "URLName", customURL)
-		id = customURL
 	}
 
 	return id, err

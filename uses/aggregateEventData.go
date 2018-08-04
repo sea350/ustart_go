@@ -1,7 +1,6 @@
 package uses
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -16,7 +15,6 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 	var eventData types.EventAggregate
 	eventData.RequestAllowed = true
 
-	fmt.Println("URL IS ", url)
 	data, err := getEvent.EventByID(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
