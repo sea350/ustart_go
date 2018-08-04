@@ -6,9 +6,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
-	"bytes"
 	"strings"
-	"io"
 
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -265,7 +263,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		buffer := make([]byte, 512)
 		_, _ = galleryFile.Read(buffer)
 		defer galleryFile.Close()
-		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
+		if http.DetectContentType(buffer)[0:5] == "image" || galleryHeader.Size == 0 {
 			name := strings.Split(galleryHeader.Filename, ".")
 			contents := buffer.String()
 			data = []template.HTML{template.HTML(name[0]), template.HTML(contents)}
