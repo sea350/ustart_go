@@ -3,10 +3,8 @@ package search
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"log"
-	"os"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -60,7 +58,8 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 			}
 		}
 	} else {
-		fmt.Println("WARNING: searchBy array is too short")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("WARNING: searchBy array is too short")
 	}
 	// Major
 	if len(mustMajor) > 0 {
@@ -94,8 +93,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 	}
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	for _, element := range res.Hits.Hits {
