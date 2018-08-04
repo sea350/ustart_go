@@ -265,13 +265,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		defer galleryFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || galleryHeader.Size == 0 {
 			name := strings.Split(galleryHeader.Filename, ".")
-			contents := buffer.String()
+			contents := buffer.(string)
 			data = []template.HTML{template.HTML(name[0]), template.HTML(contents)}
-			if err != nil {
-				fmt.Println("err: processWidgetForm Gallery Widget line 271\n", err)
-			}
-		} else {
-			fmt.Println("err: processWidgetForm Gallery Widget invalid file upload...\n", http.DetectContentType(buffer), "Error:\n", err)
 		}
 		classification = 17
 	}
