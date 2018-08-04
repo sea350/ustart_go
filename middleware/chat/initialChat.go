@@ -75,6 +75,9 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		}
 		temp := make(map[string]types.FloatingHead)
 		temp[otherUsr] = head
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("debug text")
+		log.Println(len(temp))
 
 		head, err = uses.ConvertUserToFloatingHead(client.Eclient, docID.(string))
 		if err != nil {
@@ -82,6 +85,8 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 		temp[docID.(string)] = head
+		log.Println("debug text 2")
+		log.Println(len(temp))
 		agg["Eavesdroppers"] = temp
 	}
 
