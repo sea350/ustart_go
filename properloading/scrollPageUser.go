@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"io"
-	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -14,18 +13,19 @@ import (
 
 //ScrollPageUser ...
 //Scrolls through docs being loaded on the user wall
-func ScrollPageUser(eclient *elastic.Client, docIDs []string, scrollID string) (string, []types.JournalEntry, int, error) {
+func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (string, []types.JournalEntry, int, error) {
 
 	ctx := context.Background()
 
-	ids := make([]interface{}, 0)
-	for id := range docIDs {
-		ids = append([]interface{}{strings.ToLower(docIDs[id])}, ids...)
-	}
-
+	/*
+		ids := make([]interface{}, 0)
+		for id := range docIDs {
+			ids = append([]interface{}{strings.ToLower(docIDs[id])}, ids...)
+		}
+	*/
 	//set up user query
 	usrQuery := elastic.NewBoolQuery()
-	usrQuery = usrQuery.Must(elastic.NewTermsQuery("PosterID", ids...))
+	usrQuery = usrQuery.Must(elastic.NewTermQuery("PosterID", docID))
 	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "0"))
 	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "2"))
 

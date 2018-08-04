@@ -37,7 +37,7 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 			}
 	*/
 
-	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, []string{wallID}, "")
+	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, wallID, "")
 	if err != nil {
 		fmt.Println(res)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)

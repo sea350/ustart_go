@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	get "github.com/sea350/ustart_go/get/dashboard"
 	client "github.com/sea350/ustart_go/middleware/client"
 	scrollpkg "github.com/sea350/ustart_go/properloading"
 )
@@ -21,14 +20,16 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	wallID := r.FormValue("userID")
-	dash, err := get.DashboardByUserID(client.Eclient, wallID)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-	}
+	/*
+		dash, err := get.DashboardByUserID(client.Eclient, wallID)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
+		}
+	*/
 
-	res, entries, total, err := scrollpkg.ScrollPageDash(client.Eclient, dash.EntryIDs, "")
+	res, entries, total, err := scrollpkg.ScrollPageDash(client.Eclient, []string{wallID}, "")
 	if err != nil {
 		fmt.Println(res)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
