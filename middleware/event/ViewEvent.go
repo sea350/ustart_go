@@ -75,7 +75,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	eventLocation.Zip = zip
 	eventLocation.State = state
 
-	id, err := CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, dateStart)
+	id, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, dateStart)
 	if err == nil {
 		return
 	}
