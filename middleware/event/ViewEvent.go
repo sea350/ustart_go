@@ -3,6 +3,8 @@ package event
 import (
 	"log"
 	"net/http"
+	"strconv"
+	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
@@ -61,12 +63,15 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	title := r.FormValue("title")
-	dateStart := r.FormValue("dateStart")
+	year, _ := strconv.Atoi(r.FormValue("dateStart")[0:4])
+	month, _ := strconv.Atoi(r.FormValue("dateStart")[5:7])
+	day, _ := strconv.Atoi(r.FormValue("dateStart")[8:10])
+	dateOfEvent := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
 	country := r.FormValue("country")
 	state := r.FormValue("state")
 	city := r.FormValue("city")
 	zip := r.FormValue("zip")
-	desc := r.FormValue("event_desc")
+	desc := []rune(r.FormValue("event_desc"))
 	category := r.FormValue("category")
 
 	var eventLocation types.LocStruct
@@ -75,7 +80,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	eventLocation.Zip = zip
 	eventLocation.State = state
 
-	id, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, dateStart)
+	id, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, dateOfEvent)
 	if err == nil {
 		return
 	}
