@@ -259,13 +259,13 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `17` {
 		//gallery widget
-		galleryFile, galleryHeader, err := r.FormFile("galleryImageInput")	
+		galleryFile, galleryHeader, _ := r.FormFile("galleryImageInput")	
 		buffer := make([]byte, 512)
 		_, _ = galleryFile.Read(buffer)
 		defer galleryFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || galleryHeader.Size == 0 {
 			name := strings.Split(galleryHeader.Filename, ".")
-			contents := buffer.(string)
+			contents := buffer
 			data = []template.HTML{template.HTML(name[0]), template.HTML(contents)}
 		}
 		classification = 17
