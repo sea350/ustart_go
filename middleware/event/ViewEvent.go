@@ -27,8 +27,8 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("URL IS ", r.URL.Path[7:])
 	event, err := uses.AggregateEventData(client.Eclient, r.URL.Path[7:], test1.(string))
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("err: middleware/event/ViewEvent Line 28")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	userstruct, err := userGet.UserByID(client.Eclient, session.Values["DocID"].(string))
