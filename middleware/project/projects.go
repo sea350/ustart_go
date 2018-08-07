@@ -1,11 +1,11 @@
 package project
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"time"
 
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/types"
@@ -98,21 +98,22 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 		//proper URL
 		if !uses.ValidUsername(customURL) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, "Invalid custom project URL")
+			log.Println("Invalid custom project URL")
 			cs.ErrorStatus = true
-			cs.ErrorOutput = err
+			cs.ErrorOutput = errors.New("Invalid custom project URL")
+			client.RenderSidebar(w, r, "template2-nil")
+			client.RenderSidebar(w, r, "leftnav-nil")
+			client.RenderTemplate(w, r, "createProject-Nil", cs)
+			return
 
 		}
 		url, err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string), category, college, customURL)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		} else {
-			time.Sleep(5000)
 			http.Redirect(w, r, "/Projects/"+url, http.StatusFound)
 			return
 		}

@@ -84,7 +84,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		return id, err
 	}
 
-	err = projPost.UpdateProject(eclient, id, "Subchats", types.Subchat{ConversationID: convoID})
+	err = projPost.UpdateProject(eclient, id, "Subchats", []types.Subchat{types.Subchat{ConversationID: convoID, ChatName: "General Chat"}})
 	if err != nil {
 		return id, err
 	}

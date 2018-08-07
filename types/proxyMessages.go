@@ -17,6 +17,7 @@ type ConversationState struct {
 	// NumUnread   int       `json:"NumUnread"`
 	// LastMessage Message   `json:"LastMessage"`
 	ConvoID     string    `json:"ConvoID"`
+	ProjectID   string    `json:"ProjectID"`
 	Read        bool      `json:"Read"`
 	Muted       bool      `json:"Muted"`
 	MuteTimeout time.Time `json:"MuteTimeout"`
