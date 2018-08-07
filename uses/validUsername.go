@@ -7,7 +7,7 @@ import (
 //ValidUsername ... checks if the username entered is properly formatted
 func ValidUsername(uname string) bool {
 	//checking for proper email format
-	rxEmail := regexp.MustCompile(`[^-\s][a-zA-Z0-9][^-\s][a-zA-Z0-9_][^-\s]+[^-\s][a-zA-Z0-9][^-\s]`) //double check if you need slashes
+	rxEmail := regexp.MustCompile(`[A-Za-z\d][\w\d-]+[A-Za-z\d]`) //double check if you need slashes
 	//taken from new-reg-nil.htmll
 	if !rxEmail.MatchString(uname) {
 		return false
