@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	scrollpkg "github.com/sea350/ustart_go/properloading"
@@ -39,10 +38,8 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 
 	res, entries, total, err := scrollpkg.ScrollPageProject(client.Eclient, []string{wallID}, "")
 	if err != nil {
-		fmt.Println(res)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	results := make(map[string]interface{})
@@ -53,8 +50,7 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(results)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, string(data))

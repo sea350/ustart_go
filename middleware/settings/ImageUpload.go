@@ -2,6 +2,7 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -33,10 +34,12 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 		err = uses.ChangeAccountImagesAndStatus(eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 		if err != nil {
-			fmt.Println("err: middleware/settings/imageupload line 51\n", err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		}
 	} else {
-		fmt.Println("err: middleware/settings/imageupload invalid file upload\n", err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("invalid file upload")
 	}
 
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
