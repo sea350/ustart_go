@@ -26,6 +26,7 @@ func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (str
 		}
 	*/
 
+	//Mimics the above, but for a single entry
 	userID := strings.ToLower(docID)
 
 	//set up user query

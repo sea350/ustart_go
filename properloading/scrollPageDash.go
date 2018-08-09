@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"log"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -48,6 +49,14 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, scrollID string) (
 	}
 
 	res, err := scroll.Do(ctx)
+	if err == io.EOF {
+		return "", arrResults, 0, err //we might need special treatment for EOF error
+	}
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return "", arrResults, 0, err
+	}
 
 	for _, hit := range res.Hits.Hits {
 		// fmt.Println(hit.Id)
