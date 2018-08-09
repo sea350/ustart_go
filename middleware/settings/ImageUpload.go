@@ -36,6 +36,8 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
+		} else {
+			session.Values["Avatar"] = blob
 		}
 	} else {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
