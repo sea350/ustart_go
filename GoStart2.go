@@ -41,12 +41,14 @@ func main() {
 	http.HandleFunc("/404/", fail.Fail)
 	http.HandleFunc("/KillUstartPlsNoUserinoCappucinoDeniro", fail.KillSwitch)
 
-	//LOGIN & LOGOUT
 	http.HandleFunc("/Inbox/", inbox.Inbox)
+
+	//LOGIN & LOGOUT
 	http.HandleFunc("/loginerror/", login.Error)
 	http.HandleFunc("/", login.Home)
 	http.HandleFunc("/profilelogin/", login.Login)
 	http.HandleFunc("/logout/", login.Logout)
+	http.HandleFunc("/unverified/", login.Unverified)
 
 	// USER PROFILE AND INTERACTIONS
 	http.HandleFunc("/profile/", profile.ViewProfile)

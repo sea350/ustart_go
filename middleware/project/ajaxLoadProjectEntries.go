@@ -3,6 +3,7 @@ package project
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 
@@ -20,6 +21,7 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 	}
 
 	wallID := r.FormValue("userID")
+	scrollID := r.FormValue("scrollID")
 	/*
 		proj, err := get.ProjectByID(client.Eclient, wallID)
 		if err != nil {
@@ -36,10 +38,12 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 			}
 	*/
 
-	res, entries, total, err := scrollpkg.ScrollPageProject(client.Eclient, []string{wallID}, "")
+	res, entries, total, err := scrollpkg.ScrollPageProject(client.Eclient, wallID, scrollID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
 	}
 
 	results := make(map[string]interface{})

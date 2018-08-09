@@ -26,6 +26,7 @@ func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (str
 		}
 	*/
 
+	//Mimics the above, but for a single entry
 	userID := strings.ToLower(docID)
 
 	//set up user query
@@ -65,12 +66,6 @@ func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (str
 			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("ISSUE WITH CONVERT FUNCTION")
 
 		}
-
-		if err == io.EOF {
-			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("Out of bounds")
-
-		}
-
 	}
 
 	return res.ScrollId, arrResults, int(res.Hits.TotalHits), err
