@@ -45,6 +45,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	if !user.Verified {
 		http.Redirect(w, r, "/Activation/", http.StatusFound)
+		fmt.Println("\n\nNot verified")
 		return
 	}
 	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
