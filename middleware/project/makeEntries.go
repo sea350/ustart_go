@@ -6,7 +6,6 @@ import (
 	"html"
 	"log"
 	"net/http"
-	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -30,8 +29,7 @@ func MakeEntry(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	if uses.HasPrivilege("post", proj.PrivilegeProfiles, member) {
@@ -39,20 +37,18 @@ func MakeEntry(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 
 		jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, true)
 		if err != nil {
-			fmt.Println("err: middleware/project/makeentries line 32")
-			fmt.Println(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		}
 		data, err := json.Marshal(jEntry)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		fmt.Fprintln(w, string(data))
 	}
