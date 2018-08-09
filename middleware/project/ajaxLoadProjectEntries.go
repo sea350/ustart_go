@@ -36,7 +36,7 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 			}
 	*/
 
-	res, entries, total, err := scrollpkg.ScrollPageProject(client.Eclient, []string{wallID}, "")
+	res, entries, total, err := scrollpkg.ScrollPageProject(client.Eclient, wallID, "")
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)

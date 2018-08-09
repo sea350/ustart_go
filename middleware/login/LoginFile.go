@@ -45,7 +45,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	user, _ := get.UserByEmail(client.Eclient, email)
 
 	if !user.Verified {
-		http.Redirect(w, r, "/Activation/", http.StatusFound)
+		session.Values["Email"] = user.Email
+		session.Save(r, w)
+		http.Redirect(w, r, "/unverified/", http.StatusFound)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("User not verified")
 		return
