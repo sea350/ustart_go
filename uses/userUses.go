@@ -107,7 +107,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	newUsr.Username = username
 
 	//New user verification process
-	newUsr.FirstLogin = false
+	newUsr.Verified = false
 	// SendVerificationEmail(email)
 	token, err := GenerateRandomString(32)
 	if err != nil {

@@ -92,6 +92,7 @@ type User struct {
 	SentEventReq           []string                `json:"SentEventReq"`
 	ReceivedEventReq       []string                `json:"ReceivedEventReq"`
 	FirstLogin             bool                    `json:"FirstLogin"`
+	Verified               bool                    `json:"Verified"`
 	UserWidgets            []string                `json:"UserWidgets"`
 	LoginWarnings          map[string]LoginWarning `json:"LoginWarnings"`
 	AuthenticationCode     string                  `json:"AuthenticationCode"`

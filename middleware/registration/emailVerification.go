@@ -42,7 +42,7 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if emailToken == user.AuthenticationCode {
-		err = post.UpdateUser(client.Eclient, userID, "FirstLogin", true)
+		err = post.UpdateUser(client.Eclient, userID, "Verified", true)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()

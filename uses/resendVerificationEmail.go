@@ -31,7 +31,7 @@ func ResendEmailVerification(eclient *elastic.Client, email string) {
 		return
 	}
 
-	if !user.FirstLogin {
+	if !user.Verified {
 		token, err := GenerateRandomString(32)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)

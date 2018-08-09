@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -36,15 +37,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	email := r.FormValue("email")
 	email = strings.ToLower(email) // we only client.Store lowercase emails in the db
-	//	var password []byte
 	password := r.FormValue("password")
-	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
 
-	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
+	//Check if user is verified
+	user, _ := get.UserByEmail(client.Eclient, email)
 
-	// doc ID can be retrieved here!
-	//cs := &ClientSide{}
+	if !user.Verified {
+		http.Redirect(w, r, "/Activation/", http.StatusFound)
+		return
+	}
+	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
 
 	if err2 != nil {
 		fmt.Println(err2)
