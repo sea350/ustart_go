@@ -44,6 +44,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	//Check if user is verified
 	user, _ := get.UserByEmail(client.Eclient, email)
 
+	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
+
+	if err2 != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	if !successful {
+		cs := client.ClientSide{ErrorStatus: true}
+		fmt.Println(successful)
+		fmt.Println("This is an error, LoginFile.go: 55")
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "loginerror-nil", cs)
+		return
+	}
+
 	if !user.Verified {
 		session.Values["Email"] = user.Email
 		session.Save(r, w)
@@ -51,12 +67,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("User not verified")
 		return
-	}
-	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
-
-	if err2 != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
 	}
 
 	if successful {
@@ -71,17 +81,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &cookie)
 		session.Save(r, w)
 		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
-		return
 	}
 
-	if !successful {
-		cs := client.ClientSide{ErrorStatus: true}
-		fmt.Println(successful)
-		fmt.Println("This is an error, LoginFile.go: 55")
-		client.RenderTemplate(w, r, "templateNoUser2", cs)
-		client.RenderTemplate(w, r, "loginerror-nil", cs)
-
-	}
 }
 
 // func LoggedIn (w http.ResponseWriter, r *http.Request){
