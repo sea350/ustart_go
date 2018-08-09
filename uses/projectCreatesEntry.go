@@ -35,10 +35,11 @@ func ProjectCreatesEntry(eclient *elastic.Client, projID string, posterID string
 func ProjectCreatesReply(eclient *elastic.Client, projID string, replyID string, posterID string, newContent []rune) error {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = posterID
-	createdEntry.Classification = 1
+	createdEntry.Classification = 4
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
+	createdEntry.ReferenceID = projID
 
 	//usr, err := get.GetUserByID(eclient,userID)
 
@@ -62,10 +63,11 @@ func ProjectCreatesReply(eclient *elastic.Client, projID string, replyID string,
 func ProjectCreatesShare(eclient *elastic.Client, projID string, replyID string, posterID string, newContent []rune) error {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = posterID
-	createdEntry.Classification = 2
+	createdEntry.Classification = 5
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
+	createdEntry.ReferenceID = projID
 
 	//usr, err := get.GetUserByID(eclient,userID)
 

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"log"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -20,7 +21,7 @@ func ScrollPageProject(eclient *elastic.Client, docID string, scrollID string) (
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
-	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", docID))
+	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", strings.ToLower(docID)))
 	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "3"))
 
 	//yeah....
