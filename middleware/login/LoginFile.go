@@ -2,6 +2,7 @@ package login
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"strings"
@@ -45,14 +46,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	if !user.Verified {
 		http.Redirect(w, r, "/Activation/", http.StatusFound)
-		fmt.Println("\n\nNot verified")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("User not verified")
 		return
 	}
 	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
 
 	if err2 != nil {
-		fmt.Println(err2)
-		fmt.Println("This is an error, LoginFile.go: 40")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	if successful {
