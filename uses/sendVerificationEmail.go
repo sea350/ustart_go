@@ -10,10 +10,10 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//ResendEmailVerification ... resends User Verification Email
+//SendEmailVerification ... resends User Verification Email
 //Requires the user's email address
 //Returns if the email failed to send
-func ResendEmailVerification(eclient *elastic.Client, email string) {
+func SendVerificationEmail(eclient *elastic.Client, email string) {
 	userID, err := getUser.UserIDByEmail(eclient, email)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
