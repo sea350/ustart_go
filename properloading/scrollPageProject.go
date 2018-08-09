@@ -46,7 +46,7 @@ func ScrollPageProject(eclient *elastic.Client, docIDs []string, scrollID string
 
 	for _, hit := range res.Hits.Hits {
 		// fmt.Println(hit.Id)
-		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, false)
+		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, true)
 		arrResults = append(arrResults, head)
 		if err != nil {
 			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("ISSUE WITH CONVERT FUNCTION")
