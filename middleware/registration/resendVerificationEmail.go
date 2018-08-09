@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
-	uses "github.com/sea350/ustart_go/uses"
 )
 
+//ResendVerificationEmail ... Resends the email verification link to user
 func ResendVerificationEmail(w http.ResponseWriter, r *http.Request) {
-	email := r.FormValue("email")
-	fmt.Println(email)
-	uses.SendVerificationEmail(client.Eclient, email)
+	session, _ := client.Store.Get(r, "session_please")
+	fmt.Println(session.Values["Email"])
+	//uses.SendVerificationEmail(client.Eclient, email)
 }
