@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
-	"strings"
+	"log"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -14,18 +14,13 @@ import (
 
 //ScrollPageProject ...
 //Scrolls through docs being loaded on project page
-func ScrollPageProject(eclient *elastic.Client, docIDs []string, scrollID string) (string, []types.JournalEntry, int, error) {
+func ScrollPageProject(eclient *elastic.Client, docID string, scrollID string) (string, []types.JournalEntry, int, error) {
 
 	ctx := context.Background()
 
-	ids := make([]interface{}, 0)
-	for id := range docIDs {
-		ids = append([]interface{}{strings.ToLower(docIDs[id])}, ids...)
-	}
-
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
-	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", ids...))
+	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", docID))
 	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "3"))
 
 	//yeah....
@@ -43,6 +38,14 @@ func ScrollPageProject(eclient *elastic.Client, docIDs []string, scrollID string
 	}
 
 	res, err := scroll.Do(ctx)
+	if err == io.EOF {
+		return "", arrResults, 0, err //we might need special treatment for EOF error
+	}
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return "", arrResults, 0, err
+	}
 
 	for _, hit := range res.Hits.Hits {
 		// fmt.Println(hit.Id)
@@ -50,14 +53,7 @@ func ScrollPageProject(eclient *elastic.Client, docIDs []string, scrollID string
 		arrResults = append(arrResults, head)
 		if err != nil {
 			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("ISSUE WITH CONVERT FUNCTION")
-
 		}
-
-		if err == io.EOF {
-			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("Out of bounds")
-
-		}
-
 	}
 
 	return res.ScrollId, arrResults, int(res.Hits.TotalHits), err
