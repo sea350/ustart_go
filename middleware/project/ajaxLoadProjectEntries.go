@@ -21,7 +21,12 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 	}
 
 	wallID := r.FormValue("userID")
+	if wallID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("WARNING: docID not received")
+	}
 	scrollID := r.FormValue("scrollID")
+
 	/*
 		proj, err := get.ProjectByID(client.Eclient, wallID)
 		if err != nil {

@@ -26,7 +26,17 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	projID := r.FormValue("projectID")
+	if projID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("WARNING: project ID not received")
+		return
+	}
 	newMemberID := r.FormValue("userID")
+	if newMemberID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("WARNING: new member ID not received")
+		return
+	}
 
 	newNumRequests, err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
 	if err != nil {
