@@ -20,8 +20,8 @@ func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (str
 	//set up user query
 	usrQuery := elastic.NewBoolQuery()
 	usrQuery = usrQuery.Must(elastic.NewTermQuery("PosterID", strings.ToLower(docID)))
-	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "0"))
-	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "2"))
+	usrQuery = usrQuery.Must(elastic.NewTermQuery("Classification", "0"))
+	usrQuery = usrQuery.Must(elastic.NewTermQuery("Classification", "2"))
 
 	var arrResults []types.JournalEntry
 
