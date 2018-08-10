@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -27,22 +26,21 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	newGuestID := r.FormValue("userID")
 	classification, err := strconv.Atoi(r.FormValue("classification"))
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return
 	}
 
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newGuestID, classification)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	err = userPost.AppendEvent(client.Eclient, newGuestID, types.EventInfo{EventID: evntID, Visible: true})
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	var newGuest types.EventGuests
@@ -54,8 +52,7 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	err = evntPost.AppendGuest(client.Eclient, evntID, newGuest)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)
