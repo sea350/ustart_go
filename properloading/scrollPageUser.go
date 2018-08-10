@@ -3,8 +3,6 @@ package properloading
 import (
 	"context"
 	"errors"
-	"io"
-	"log"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -19,19 +17,9 @@ func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (str
 
 	ctx := context.Background()
 
-	/*
-		ids := make([]interface{}, 0)
-		for id := range docIDs {
-			ids = append([]interface{}{strings.ToLower(docIDs[id])}, ids...)
-		}
-	*/
-
-	//Mimics the above, but for a single entry
-	userID := strings.ToLower(docID)
-
 	//set up user query
 	usrQuery := elastic.NewBoolQuery()
-	usrQuery = usrQuery.Must(elastic.NewTermQuery("PosterID", userID))
+	usrQuery = usrQuery.Must(elastic.NewTermQuery("PosterID", strings.ToLower(docID)))
 	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "0"))
 	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "2"))
 
@@ -48,12 +36,7 @@ func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (str
 	}
 
 	res, err := scroll.Do(ctx)
-	if err == io.EOF {
-		return "", arrResults, 0, err //we might need special treatment for EOF error
-	}
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
 		return "", arrResults, 0, err
 	}
 

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
@@ -17,7 +16,7 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//AcceptJoinRequest ...
+//AcceptJoinRequest ... made for ajax
 func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -32,15 +31,30 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 	newNumRequests, err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+		return
+	}
+
+	proj, err := getProj.ProjectByID(client.Eclient, projID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return
+	}
+
+	for i := range proj.Members {
+		if proj.Members[i].MemberID == newMemberID {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("USER IS ALREADY A MEMBER")
+			return
+		}
 	}
 
 	err = userPost.AppendProject(client.Eclient, newMemberID, types.ProjectInfo{ProjectID: projID, Visible: true})
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+		return
 	}
 
 	theRole := r.FormValue("role")
@@ -62,24 +76,14 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 	err = projPost.AppendMember(client.Eclient, projID, newMember)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-		return
-	}
-
-	proj, err := getProj.ProjectByID(client.Eclient, projID)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 		return
 	}
 
 	convo, err := getChat.ConvoByID(client.Eclient, proj.Subchats[0].ConversationID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 		return
 	}
 
@@ -88,24 +92,21 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 	err = postChat.UpdateConvo(client.Eclient, proj.Subchats[0].ConversationID, "Eavesdroppers", convo.Eavesdroppers)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 		return
 	}
 
 	proxyID, err := getChat.ProxyIDByUserID(client.Eclient, newMemberID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 		return
 	}
 
 	err = postChat.AppendToProxy(client.Eclient, proxyID, proj.Subchats[0].ConversationID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 		return
 	}
 

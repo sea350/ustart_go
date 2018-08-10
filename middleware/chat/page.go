@@ -3,7 +3,6 @@ package chat
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -26,8 +25,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	valid, _, _, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	if !valid {
 		http.Redirect(w, r, "/404/", http.StatusFound)
@@ -35,6 +33,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	}
 
 	client.RenderSidebar(w, r, "template2-nil")
+	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "chat", cs)
 	go handleMessages()
 	go HandleChatAlert()
