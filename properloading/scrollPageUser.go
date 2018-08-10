@@ -3,7 +3,6 @@ package properloading
 import (
 	"context"
 	"errors"
-	"log"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -32,9 +31,6 @@ func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (str
 		Size(12)
 
 	scroll = scroll.ScrollId(scrollID)
-
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("scrollID: " + scrollID)
 
 	res, err := scroll.Do(ctx)
 	if err != nil {
