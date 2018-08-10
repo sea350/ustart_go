@@ -3,9 +3,9 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
-	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	scrollpkg "github.com/sea350/ustart_go/properloading"
@@ -25,10 +25,8 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 
 	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, wallID, scrollID)
 	if err != nil {
-		fmt.Println(res)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	results := make(map[string]interface{})
@@ -38,9 +36,10 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(results)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err) //we might need special treatment for EOF error
+		}
 	}
 
 	fmt.Fprintln(w, string(data))
