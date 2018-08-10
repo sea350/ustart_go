@@ -11,5 +11,5 @@ import (
 func ResendVerificationEmail(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	uses.SendVerificationEmail(client.Eclient, session.Values["Email"].(string))
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
 }
