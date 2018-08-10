@@ -21,12 +21,18 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 	}
 
 	wallID := r.FormValue("userID")
+	if wallID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("WARNING: docID not received")
+	}
 	scrollID := r.FormValue("scrollID")
 
 	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, wallID, scrollID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err) //we might need special treatment for EOF error
+		}
 	}
 
 	results := make(map[string]interface{})
@@ -36,10 +42,8 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(results)
 	if err != nil {
-		if err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err) //we might need special treatment for EOF error
-		}
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, string(data))
