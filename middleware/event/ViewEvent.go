@@ -95,6 +95,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		endDateOfEvent = time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
 	}
 
+	street := r.FormValue("street")
 	country := r.FormValue("country")
 	state := r.FormValue("state")
 	city := r.FormValue("city")
@@ -103,6 +104,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	category := r.FormValue("category")
 
 	var eventLocation types.LocStruct
+	eventLocation.Street = street
 	eventLocation.City = city
 	eventLocation.Country = country
 	eventLocation.Zip = zip
