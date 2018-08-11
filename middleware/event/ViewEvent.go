@@ -64,15 +64,17 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	title := r.FormValue("title")
-	
+
 	dateStart := r.FormValue("dateStart")
 	if len(dateStart) > 9 {
 		month, _ := strconv.Atoi(r.FormValue("dateStart")[0:2])
 		day, _ := strconv.Atoi(r.FormValue("dateStart")[3:5])
 		year, _ := strconv.Atoi(r.FormValue("dateStart")[6:10])
 		dateOfEvent := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
-	} else
+	} else {
 		log.Println("DateStart is Less than 10 Characters: ", dateStart)
+	}
+
 	country := r.FormValue("country")
 	state := r.FormValue("state")
 	city := r.FormValue("city")
