@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -68,7 +69,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	startDate := r.FormValue("startDate")
 	if len(startDate) > 15 {
 		year, _ := strconv.Atoi(startDate[6:10])
-		month, _ := time.Month(strconv.Atoi(startDate[0:2])
+		month, _ := time.Month(strconv.Atoi(startDate[0:2]))
 		day, _ := strconv.Atoi(startDate[3:5])
 		hour, _ := strconv.Atoi(startDate[11:13])
 		minute, _ := strconv.Atoi(startDate[14:16])
