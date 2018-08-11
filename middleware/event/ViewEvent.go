@@ -65,6 +65,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	title := r.FormValue("title")
 
+	dateOfEvent := time.Date(0, 0, 0, 0, 0, 0, 0, time.UTC)
 	dateStart := r.FormValue("dateStart")
 	if len(dateStart) > 9 {
 		month, _ := strconv.Atoi(r.FormValue("dateStart")[0:2])
