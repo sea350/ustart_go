@@ -105,7 +105,6 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
-		http.Redirect(w, r, "/StartEvent/", http.StatusFound)
 	}
 
 	http.Redirect(w, r, "/Event/"+id, http.StatusFound)
