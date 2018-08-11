@@ -3,7 +3,6 @@ package profile
 import (
 	"log"
 	"net/http"
-	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -18,29 +17,24 @@ func Like(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r.ParseForm()
 	postid := r.FormValue("PostID")
-	postactual := postid[10:]       // postid has to be trimmed
-	docid := r.FormValue("selfDoc") // docid of the doc you are viewing double check
-	likeStatus, err := uses.IsLiked(client.Eclient, postactual, session.Values["DocID"].(string))
+
+	likeStatus, err := uses.IsLiked(client.Eclient, postid, session.Values["DocID"].(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	if likeStatus == true {
-		err := uses.UserUnlikeEntry(client.Eclient, postactual, session.Values["DocID"].(string))
+		err := uses.UserUnlikeEntry(client.Eclient, postid, session.Values["DocID"].(string))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 	} else {
-		err := uses.UserLikeEntry(client.Eclient, postactual, docid)
+		err := uses.UserLikeEntry(client.Eclient, postid, session.Values["DocID"].(string))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 	}
 }
