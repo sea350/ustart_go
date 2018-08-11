@@ -41,7 +41,7 @@ type Events struct {
 	Host              string            `json:"Host"` //Displayed host on the event page, by userID or projectID
 	IsProjectHost     bool              `json:"IsProjectHost"`
 	Name              string            `json:"Name"`
-	Tags              string            `json:"Tags"`
+	Tags              []string          `json:"Tags"`
 	Category          string            `json:"Category"`
 	URLName           string            `json:"URLName"`
 	FollowedUsers     []string          `json:"FollowedUsers"`
