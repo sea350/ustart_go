@@ -80,7 +80,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	endDate := r.FormValue("startDate")
 	if len(endDate) > 15 {
 		year, _ := strconv.Atoi(endDate[6:10])
-		month, _ := time.Month(strconv.Atoi(endDate[0:2])
+		month, _ := time.Month(strconv.Atoi(endDate[0:2]))
 		day, _ := strconv.Atoi(endDate[3:5])
 		hour, _ := strconv.Atoi(endDate[11:13])
 		minute, _ := strconv.Atoi(endDate[14:16])
