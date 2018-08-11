@@ -47,7 +47,7 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 	addEvnt.Visible = true
 	err = userPost.AppendEvent(eclient, makerID, addEvnt)
 	if err != nil {
-		panic(err)
+		return id, err
 	}
 
 	err = eventPost.UpdateEvent(eclient, id, "URLName", strings.ToLower(id))

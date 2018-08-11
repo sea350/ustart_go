@@ -68,24 +68,23 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	startDate := r.FormValue("startDate")
 	if len(startDate) > 15 {
-		startDateOfEvent.Year, _ = strconv.Atoi(startDate[6:10])
-		startDateOfEvent.Month, _ = time.Month(strconv.Atoi(startDate[0:2]))
-		startDateOfEvent.Day, _ = strconv.Atoi(startDate[3:5])
-		startDateOfEvent.Hour, _ = strconv.Atoi(startDate[11:13])
-		startDateOfEvent.Minute, _ = strconv.Atoi(startDate[14:16])
-	} else {
-		log.Println("DateStart is Less than 15 Characters: ", startDate)
+		year, _ := strconv.Atoi(startDate[6:10])
+		month, _ := strconv.Atoi(startDate[0:2])
+		day, _ := strconv.Atoi(startDate[3:5])
+		hour, _ := strconv.Atoi(startDate[11:13])
+		minute, _ := strconv.Atoi(startDate[14:16])
+		startDateOfEvent = time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
 	}
+
 	endDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	endDate := r.FormValue("startDate")
 	if len(endDate) > 15 {
-		endDateOfEvent.Year, _ = strconv.Atoi(endDate[6:10])
-		endDateOfEvent.Month, _ = time.Month(strconv.Atoi(endDate[0:2]))
-		endDateOfEvent.Day, _ = strconv.Atoi(endDate[3:5])
-		endDateOfEvent.Hour, _ = strconv.Atoi(endDate[11:13])
-		endDateOfEvent.Minute, _ = strconv.Atoi(endDate[14:16])
-	} else {
-		log.Println("DateStart is Less than 15 Characters: ", endDate)
+		year, _ := strconv.Atoi(endDate[6:10])
+		month, _ := strconv.Atoi(endDate[0:2])
+		day, _ := strconv.Atoi(endDate[3:5])
+		hour, _ := strconv.Atoi(endDate[11:13])
+		minute, _ := strconv.Atoi(endDate[14:16])
+		endDateOfEvent = time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
 	}
 
 	country := r.FormValue("country")
@@ -106,7 +105,6 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
-		http.Redirect(w, r, "/StartEvent/"+id, http.StatusFound)
 	}
 
 	http.Redirect(w, r, "/Event/"+id, http.StatusFound)
