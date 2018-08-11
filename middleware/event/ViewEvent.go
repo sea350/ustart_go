@@ -1,6 +1,7 @@
 package event
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -27,12 +28,19 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
+	widgets, errs := uses.LoadWidgets(client.Eclient, event.EventData.Widgets)
+	if len(errs) > 0 {
+		log.Println("there were one or more errors loading widgets")
+		for _, eror := range errs {
+			fmt.Println(eror)
+		}
+	}
 
 	userstruct, err := userGet.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
 		panic(err)
 	}
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Event: event}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Event: event, Widgets: widgets}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "events", cs)
