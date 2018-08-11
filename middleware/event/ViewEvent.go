@@ -3,6 +3,7 @@ package event
 import (
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
@@ -81,8 +82,11 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	eventLocation.State = state
 
 	id, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, dateOfEvent)
-	if err == nil {
-		return
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+		http.Redirect(w, r, "/404/"+id, http.StatusFound)
 	}
 
 	http.Redirect(w, r, "/Event/"+id, http.StatusFound)
