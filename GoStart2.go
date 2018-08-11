@@ -53,7 +53,7 @@ func main() {
 	// USER PROFILE AND INTERACTIONS
 	http.HandleFunc("/profile/", profile.ViewProfile)
 	http.HandleFunc("/callme/", profile.Follow)
-	http.HandleFunc("/Like", profile.Like)
+	http.HandleFunc("/Like/", profile.Like)
 	http.HandleFunc("/getComments/", profile.GetComments)
 	http.HandleFunc("/shareComments/", profile.ShareComments)
 	http.HandleFunc("/ShareComment", profile.ShareComment2)
