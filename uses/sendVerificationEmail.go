@@ -10,7 +10,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//SendEmailVerification ... resends User Verification Email
+//SendVerificationEmail ... resends User Verification Email
 //Requires the user's email address
 //Returns if the email failed to send
 func SendVerificationEmail(eclient *elastic.Client, email string) {

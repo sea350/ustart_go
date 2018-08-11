@@ -54,7 +54,11 @@ func ChatSend(eclient *elastic.Client, msg types.Message) ([]string, error) {
 			log.Println(err)
 			return notifyThese, err
 		}
-		err = postChat.AppendToProxy(eclient, pID, msg.ConversationID)
+		var seen bool
+		if convo.Eavesdroppers[idx].DocID == msg.SenderID {
+			seen = true
+		}
+		err = postChat.AppendToProxy(eclient, pID, msg.ConversationID, seen)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)

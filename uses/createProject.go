@@ -79,7 +79,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		return id, err
 	}
 
-	err = postChat.AppendToProxy(eclient, proxyID, convoID)
+	err = postChat.AppendToProxy(eclient, proxyID, convoID, false)
 	if err != nil {
 		return id, err
 	}

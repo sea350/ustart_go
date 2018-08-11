@@ -56,7 +56,7 @@ func ChatFirst(eclient *elastic.Client, msg types.Message, docID1 string, docID2
 		log.Println(err)
 		return convoID, err
 	}
-	err = postChat.AppendToProxy(eclient, pID, convoID)
+	err = postChat.AppendToProxy(eclient, pID, convoID, false)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -69,7 +69,7 @@ func ChatFirst(eclient *elastic.Client, msg types.Message, docID1 string, docID2
 		log.Println(err)
 		return convoID, err
 	}
-	err = postChat.AppendToProxy(eclient, pID, convoID)
+	err = postChat.AppendToProxy(eclient, pID, convoID, false)
 
 	return convoID, err
 
