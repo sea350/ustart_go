@@ -38,7 +38,7 @@ func Event(w http.ResponseWriter, r *http.Request) {
 		cs := client.ClientSide{Event: event}
 		client.RenderSidebar(w, r, "template2-nil")
 		client.RenderSidebar(w, r, "leftnav-nil")
-		client.RenderTemplate(w, r, "event_settings_F", cs)
+		client.RenderTemplate(w, r, "eventSettings", cs)
 
 	} else {
 		http.Redirect(w, r, "/404/", http.StatusFound)
