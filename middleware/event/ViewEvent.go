@@ -67,14 +67,24 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	startDate := r.FormValue("startDate")
 	if len(startDate) > 15 {
-		log.Println("")
+		year, _ := strconv.Atoi(startDate[6:10])
+		month, _ := time.Month(strconv.Atoi(startDate[0:2])
+		day, _ := strconv.Atoi(startDate[3:5])
+		hour, _ := strconv.Atoi(startDate[11:13])
+		minute, _ := strconv.Atoi(startDate[14:16])
+		startDateOfEvent = time.Date(year, month, day, hour, minute, 0, 0, time.UTC)
 	} else {
 		log.Println("DateStart is Less than 15 Characters: ", startDate)
 	}
 	endDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	endDate := r.FormValue("startDate")
 	if len(endDate) > 15 {
-		log.Println("")
+		year, _ := strconv.Atoi(endDate[6:10])
+		month, _ := time.Month(strconv.Atoi(endDate[0:2])
+		day, _ := strconv.Atoi(endDate[3:5])
+		hour, _ := strconv.Atoi(endDate[11:13])
+		minute, _ := strconv.Atoi(endDate[14:16])
+		endDateOfEvent = time.Date(year, month, day, hour, minute, 0, 0, time.UTC)
 	} else {
 		log.Println("DateStart is Less than 15 Characters: ", endDate)
 	}
