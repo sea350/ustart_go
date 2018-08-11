@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"log"
 
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
@@ -11,7 +12,7 @@ import (
 )
 
 //AppendEvent ... appends new event to user
-//takes in eclient, userID, event ID, and a book
+//takes in eclient, userID, event ID
 func AppendEvent(eclient *elastic.Client, usrID string, evnt types.EventInfo) error {
 	ctx := context.Background()
 
@@ -25,6 +26,9 @@ func AppendEvent(eclient *elastic.Client, usrID string, evnt types.EventInfo) er
 	}
 
 	usr.Events = append(usr.Events, evnt)
+
+	log.Println("evnt: ", evnt)
+	log.Println("usr.Events: ", len(usr.Events))
 
 	_, err = eclient.Update().
 		Index(globals.EventIndex).
