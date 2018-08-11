@@ -71,7 +71,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		month, _ := strconv.Atoi(r.FormValue("dateStart")[0:2])
 		day, _ := strconv.Atoi(r.FormValue("dateStart")[3:5])
 		year, _ := strconv.Atoi(r.FormValue("dateStart")[6:10])
-		dateOfEvent := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
+		dateOfEvent = time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
 	} else {
 		log.Println("DateStart is Less than 10 Characters: ", dateStart)
 	}
