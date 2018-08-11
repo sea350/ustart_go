@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -67,14 +68,22 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	startDate := r.FormValue("startDate")
 	if len(startDate) > 15 {
-		log.Println("D")
+		startDateOfEvent.Year, _ = strconv.Atoi(startDate[6:10])
+		startDateOfEvent.Month, _ = time.Month(strconv.Atoi(startDate[0:2]))
+		startDateOfEvent.Day, _ = strconv.Atoi(startDate[3:5])
+		startDateOfEvent.Hour, _ = strconv.Atoi(startDate[11:13])
+		startDateOfEvent.Minute, _ = strconv.Atoi(startDate[14:16])
 	} else {
 		log.Println("DateStart is Less than 15 Characters: ", startDate)
 	}
 	endDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	endDate := r.FormValue("startDate")
 	if len(endDate) > 15 {
-		log.Println("W")
+		endDateOfEvent.Year, _ = strconv.Atoi(endDate[6:10])
+		endDateOfEvent.Month, _ = time.Month(strconv.Atoi(endDate[0:2]))
+		endDateOfEvent.Day, _ = strconv.Atoi(endDate[3:5])
+		endDateOfEvent.Hour, _ = strconv.Atoi(endDate[11:13])
+		endDateOfEvent.Minute, _ = strconv.Atoi(endDate[14:16])
 	} else {
 		log.Println("DateStart is Less than 15 Characters: ", endDate)
 	}
