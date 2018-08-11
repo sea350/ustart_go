@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -65,15 +64,19 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	title := r.FormValue("title")
 
-	dateOfEvent := time.Date(0, 0, 0, 0, 0, 0, 0, time.UTC)
-	dateStart := r.FormValue("dateStart")
-	if len(dateStart) > 9 {
-		month, _ := strconv.Atoi(r.FormValue("dateStart")[0:2])
-		day, _ := strconv.Atoi(r.FormValue("dateStart")[3:5])
-		year, _ := strconv.Atoi(r.FormValue("dateStart")[6:10])
-		dateOfEvent = time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
+	startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
+	startDate := r.FormValue("startDate")
+	if len(startDate) > 15 {
+		log.Println("D")
 	} else {
-		log.Println("DateStart is Less than 10 Characters: ", dateStart)
+		log.Println("DateStart is Less than 15 Characters: ", startDate)
+	}
+	endDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
+	endDate := r.FormValue("startDate")
+	if len(endDate) > 15 {
+		log.Println("W")
+	} else {
+		log.Println("DateStart is Less than 15 Characters: ", endDate)
 	}
 
 	country := r.FormValue("country")
@@ -89,7 +92,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	eventLocation.Zip = zip
 	eventLocation.State = state
 
-	id, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, dateOfEvent)
+	id, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, startDateOfEvent, endDateOfEvent)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

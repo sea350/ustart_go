@@ -14,7 +14,7 @@ import (
 //CreateEvent ... Create an event
 //Requires all fundemental information for the new event (title, creator docID, etc...)
 //Returns an error if there was a problem with database submission
-func CreateEvent(eclient *elastic.Client, title string, description []rune, makerID string, category string, location types.LocStruct, eventTimeStart time.Time) (string, error) {
+func CreateEvent(eclient *elastic.Client, title string, description []rune, makerID string, category string, location types.LocStruct, eventTimeStart time.Time, eventTimeEnd time.Time) (string, error) {
 	var newEvent types.Events
 	newEvent.Name = title
 	newEvent.Description = description
@@ -22,6 +22,7 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 	newEvent.CreationDate = time.Now()
 	newEvent.Avatar = "https://i.imgur.com/TYFKsdi.png"
 	newEvent.EventDateStart = eventTimeStart
+	newEvent.EventDateEnd = eventTimeEnd
 	newEvent.Location = location
 	newEvent.Category = category
 	newEvent.Host = makerID
