@@ -74,9 +74,8 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		hour, _ := strconv.Atoi(startDate[11:13])
 		minute, _ := strconv.Atoi(startDate[14:16])
 		startDateOfEvent = time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
-	} else {
-		log.Println("DateStart is Less than 15 Characters: ", startDate)
 	}
+
 	endDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	endDate := r.FormValue("startDate")
 	if len(endDate) > 15 {
@@ -86,8 +85,6 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		hour, _ := strconv.Atoi(endDate[11:13])
 		minute, _ := strconv.Atoi(endDate[14:16])
 		endDateOfEvent = time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
-	} else {
-		log.Println("DateStart is Less than 15 Characters: ", endDate)
 	}
 
 	country := r.FormValue("country")
@@ -108,7 +105,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
-		http.Redirect(w, r, "/StartEvent/"+id, http.StatusFound)
+		http.Redirect(w, r, "/StartEvent/", http.StatusFound)
 	}
 
 	http.Redirect(w, r, "/Event/"+id, http.StatusFound)
