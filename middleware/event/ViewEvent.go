@@ -68,16 +68,16 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	startDate := r.FormValue("startDate")
 	if len(startDate) > 15 {
-		startDateOfEvent = time.Date(strconv.Atoi(startDate)[6:10], time.Month(strconv.Atoi(startDate)[0:2]),
-			strconv.Atoi(startDate)[3:5], strconv.Atoi(startDate)[11:13], strconv.Atoi(startDate)[14:16], 0, 0, time.UTC)
+		startDateOfEvent = time.Date(strconv.Atoi(startDate[6:10]), time.Month(strconv.Atoi(startDate[0:2])),
+			strconv.Atoi(startDate[3:5]), strconv.Atoi(startDate[11:13]), strconv.Atoi(startDate[14:16]), 0, 0, time.UTC)
 	} else {
 		log.Println("DateStart is Less than 15 Characters: ", startDate)
 	}
 	endDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	endDate := r.FormValue("startDate")
 	if len(endDate) > 15 {
-		endDateOfEvent = time.Date(strconv.Atoi(endDate)[6:10], time.Month(strconv.Atoi(endDate)[0:2]),
-			strconv.Atoi(endDate)[3:5], strconv.Atoi(endDate)[11:13], strconv.Atoi(endDate)[14:16], 0, 0, time.UTC)
+		endDateOfEvent = time.Date(strconv.Atoi(endDate[6:10]), time.Month(strconv.Atoi(endDate[0:2])),
+			strconv.Atoi(endDate[3:5]), strconv.Atoi(endDate[11:13]), strconv.Atoi(endDate[14:16]), 0, 0, time.UTC)
 	} else {
 		log.Println("DateStart is Less than 15 Characters: ", endDate)
 	}
