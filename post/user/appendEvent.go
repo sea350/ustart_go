@@ -31,8 +31,8 @@ func AppendEvent(eclient *elastic.Client, usrID string, evnt types.EventInfo) er
 	log.Println("usr.Events: ", len(usr.Events))
 
 	_, err = eclient.Update().
-		Index(globals.EventIndex).
-		Type(globals.EventType).
+		Index(globals.UserIndex).
+		Type(globals.UserType).
 		Id(usrID).
 		Doc(map[string]interface{}{"Events": usr.Events}).
 		Do(ctx)
