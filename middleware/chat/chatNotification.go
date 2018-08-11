@@ -3,7 +3,6 @@ package chat
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -69,8 +68,7 @@ func HandleChatAlert() {
 			head, err := uses.ConvertChatToFloatingHead(client.Eclient, alert.ChatID, alert.UserID)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				log.Println(err)
 				continue
 			}
 

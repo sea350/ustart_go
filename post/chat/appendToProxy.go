@@ -13,7 +13,7 @@ import (
 
 //AppendToProxy ... appends a new conversation state OR brings a certain conversation state to the back of the list
 //needs its own lock for concurrency control
-func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID string) error {
+func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID string, seen bool) error {
 
 	ctx := context.Background()
 
@@ -48,11 +48,14 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, conversationID strin
 		}
 	}
 
-	if temp.ConvoID == `` {
+	if temp.ConvoID == `` { //adding a new convo
 		temp.ConvoID = conversationID
 		proxy.NumUnread++
+	} else if !temp.Read && seen {
+		temp.Read = false
+		proxy.NumUnread--
 	}
-	if temp.Read {
+	if temp.Read && !seen {
 		temp.Read = false
 		proxy.NumUnread++
 	}

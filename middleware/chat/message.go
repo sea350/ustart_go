@@ -119,14 +119,15 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
+		// Send the newly received message to the broadcast channel
+		broadcast <- msg
+
 		//send notification here
 		notif.ChatID = actualChatID
 		for _, id := range notifyThese {
 			notif.UserID = id
 			chatBroadcast <- notif
 		}
-		// Send the newly received message to the broadcast channel
-		broadcast <- msg
 	}
 }
 

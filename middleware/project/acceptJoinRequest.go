@@ -113,7 +113,7 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = postChat.AppendToProxy(client.Eclient, proxyID, proj.Subchats[0].ConversationID)
+	err = postChat.AppendToProxy(client.Eclient, proxyID, proj.Subchats[0].ConversationID, false)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
