@@ -55,6 +55,7 @@ type JournalEntry struct {
 	NumReplies       int         `json:"NumReplies"`
 	NumLikes         int         `json:"NumLikes"`
 	NumShares        int         `json:"NumShares"`
+	Liked            bool        `json:"Liked"`
 	ReferenceElement interface{} `json:"ReferenceElement"`
 }
 

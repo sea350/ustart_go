@@ -8,7 +8,7 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//Like ... Iunno
+//Like ... likes a post, designed for ajax
 func Like(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]

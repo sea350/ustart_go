@@ -13,7 +13,7 @@ import (
 
 //ScrollPageUser ...
 //Scrolls through docs being loaded on the user wall
-func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (string, []types.JournalEntry, int, error) {
+func ScrollPageUser(eclient *elastic.Client, docID string, viewerID string, scrollID string) (string, []types.JournalEntry, int, error) {
 
 	ctx := context.Background()
 
@@ -40,7 +40,7 @@ func ScrollPageUser(eclient *elastic.Client, docID string, scrollID string) (str
 	//fmt.Println(res.Hits.TotalHits)
 
 	for _, hit := range res.Hits.Hits {
-		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, true)
+		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, true)
 		arrResults = append(arrResults, head)
 		if err != nil {
 			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("ISSUE WITH CONVERT FUNCTION")

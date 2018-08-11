@@ -15,7 +15,7 @@ import (
 
 //ScrollPageProject ...
 //Scrolls through docs being loaded on project page
-func ScrollPageProject(eclient *elastic.Client, docID string, scrollID string) (string, []types.JournalEntry, int, error) {
+func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, scrollID string) (string, []types.JournalEntry, int, error) {
 
 	ctx := context.Background()
 
@@ -50,7 +50,7 @@ func ScrollPageProject(eclient *elastic.Client, docID string, scrollID string) (
 
 	for _, hit := range res.Hits.Hits {
 		// fmt.Println(hit.Id)
-		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, true)
+		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, true)
 		arrResults = append(arrResults, head)
 		if err != nil {
 			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("ISSUE WITH CONVERT FUNCTION")

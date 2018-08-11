@@ -11,8 +11,8 @@ import (
 //PostComments ... posts comments???
 func PostComments(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["DocID"]
-	if test1 == nil {
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
 		//No docid in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
@@ -28,7 +28,7 @@ func PostComments(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println("This is debug text, GetComments.go: 23")
 	// fmt.Println(pika) // pika is your own doc id
 	// journal entry, err
-	_, arrayofComments, err4 := uses.LoadComments(client.Eclient, postID, 0, -1)
+	_, arrayofComments, err4 := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	//	fmt.Println(parentPost);
 
 	fmt.Println("ARRAY OF COMMENTS")

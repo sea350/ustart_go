@@ -14,19 +14,19 @@ import (
 //ShareComments ...  purpose unknown
 func ShareComments(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["DocID"]
-	if test1 == nil {
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
 	r.ParseForm()
 	postid := r.FormValue("PostID")
-	//postaid := postid[9:]
+
 	postactual := postid[11:]
 	pika := r.FormValue("Pikachu")
 	fmt.Println("This is debug text, ShareComment.go: 21")
 	fmt.Println(pika)
-	parentPost, arrayofComments, err4 := uses.LoadComments(client.Eclient, postactual, 0, -1)
+	parentPost, arrayofComments, err4 := uses.LoadComments(client.Eclient, postactual, docID.(string), 0, -1)
 	if err4 != nil {
 		fmt.Println(err4)
 	}
