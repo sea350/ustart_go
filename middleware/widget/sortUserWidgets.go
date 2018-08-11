@@ -3,7 +3,6 @@ package widget
 import (
 	"log"
 	"net/http"
-	"os"
 	"strings"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -23,6 +22,9 @@ func SortUserWidgets(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	sortedWidgets := r.FormValue("sortedWidgets")
+	if r.FormValue("pageID") != session.Values["DocID"].(string) {
+		return
+	}
 
 	ids := strings.Split(sortedWidgets, `","`)
 	if len(ids) > 0 {
@@ -33,7 +35,6 @@ func SortUserWidgets(w http.ResponseWriter, r *http.Request) {
 	err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "UserWidgets", ids)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 }
