@@ -69,12 +69,32 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	r.ParseForm()
+	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+	if err != nil {
+		panic(err)
+	}
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}	
+	//r.ParseForm()
 
 	title := r.FormValue("title")
-
-	startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
+	college := r.FormValue("universityName")
+	customURL := r.FormValue("eventurl")
+	category := r.FormValue("eventCategory")
+	//startDateOfEvent
 	startDate := r.FormValue("startDate")
+	//endDateOfEvent
+	endDate := r.FormValue("endDate")
+	//eventLocation
+	country := r.FormValue("country")
+	state := r.FormValue("state")
+	city := r.FormValue("city")
+	zip := r.FormValue("zip")
+	street := r.FormValue("street")
+
+	desc := []rune(r.FormValue("event_desc"))
+
+	
+	startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	if len(startDate) > 15 {
 		year, _ := strconv.Atoi(startDate[6:10])
 		month, _ := strconv.Atoi(startDate[0:2])
@@ -85,7 +105,6 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	endDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
-	endDate := r.FormValue("startDate")
 	if len(endDate) > 15 {
 		year, _ := strconv.Atoi(endDate[6:10])
 		month, _ := strconv.Atoi(endDate[0:2])
@@ -109,13 +128,33 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	eventLocation.Country = country
 	eventLocation.Zip = zip
 	eventLocation.State = state
+	eventLocation.Street = street
 
-	id, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, startDateOfEvent, endDateOfEvent)
+
+	if title != ``{
+		//proper URL
+		if !usues.ValidUsername(customURL){
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("Invalid custom event URL")
+			cs.ErrorStatus = true
+			cs.ErrorOutput = errors.New("Invalid custom event URL")
+			client.RenderSidebar(w, r, "template2-nil")
+			client.RenderSidebar(w, r, "leftnav-nil")
+			client.RenderTemplate(w, r, "eventStart", cs)
+			return
+		}
+	url, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, startDateOfEvent, endDateOfEvent, college, customURL)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
+	}else{
+	http.Redirect(w, r, "/events/"+url, http.StatusFound)
+	return
 	}
-
-	http.Redirect(w, r, "/Event/"+id, http.StatusFound)
 }
+
+client.RenderSidebar(w, r, "template2-nil")
+client.RenderSidebar(w, r, "leftnav-nil")
+client.RenderTemplate(w, r, "eventStart", cs)
+}//end of AddEvent
