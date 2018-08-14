@@ -46,7 +46,7 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newIdx, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, 0, idx)
+	newIdx, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, idx, 50)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
