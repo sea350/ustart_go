@@ -1,13 +1,14 @@
 package uses
 
 import (
+	"errors"
 	"strings"
 
 	"time"
 
+	eventGet "github.com/sea350/ustart_go/get/event"
 	eventPost "github.com/sea350/ustart_go/post/event"
 	userPost "github.com/sea350/ustart_go/post/user"
-	eventGet "github.com/sea350/ustart_go/get/event"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -26,8 +27,8 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 
 	var newEvent types.Events
 	newEvent.Visible = true
-	newEvent.CreationDate = time.Now()	
-	newEvent.Avatar = "https://i.imgur.com/TYFKsdi.png"	
+	newEvent.CreationDate = time.Now()
+	newEvent.Avatar = "https://i.imgur.com/TYFKsdi.png"
 	newEvent.Name = title
 	newEvent.Description = description
 	newEvent.Host = makerID
@@ -35,15 +36,14 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 	newEvent.Location = location
 	newEvent.EventDateStart = eventTimeStart
 	newEvent.EventDateEnd = eventTimeEnd
-	newEvent.College = college
+	newEvent.Organization = college
 	if college == `` {
-		newEvent.College = ""
+		newEvent.Organization = ""
 	}
 	newEvent.URLName = customURL
 	if customURL != `` {
 		newEvent.URLName = customURL
 	}
-
 
 	var maker types.EventMembers
 	maker.MemberID = makerID
@@ -72,7 +72,7 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 	if customURL == `` {
 		id = strings.ToLower(id)
 		err = eventPost.UpdateEvent(eclient, id, "URLName", id)
-	}else{
+	} else {
 		id = customURL
 	}
 	return id, err
