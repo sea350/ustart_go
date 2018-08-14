@@ -24,6 +24,10 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 
 	chatID := r.FormValue("chatID")
 	idxStr := r.FormValue("index")
+	if chatID == `` || idxStr == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(`chat ID or index not submitted`)
+	}
 	idx, err := strconv.Atoi(idxStr)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
