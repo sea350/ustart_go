@@ -47,8 +47,9 @@ func ChatLoad(eclient *elastic.Client, convoID string, startFrom int, pullAmount
 		}
 		messages = append(messages, message)
 	}
+	final := startFrom - pullAmount
 	if len(problemMsgIDs) > 0 {
-		return startFrom - pullAmount, messages, errors.New("Problems loading the following messages" + problemMsgIDs)
+		return final, messages, errors.New("Problems loading the following messages" + problemMsgIDs)
 	}
-	return startFrom - pullAmount, messages, nil
+	return final, messages, nil
 }
