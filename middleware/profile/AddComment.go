@@ -14,8 +14,8 @@ import (
 //AddComment ... Iunno
 func AddComment(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["Username"]
-	if test1 == nil {
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
@@ -34,7 +34,7 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	_, cmts, err := uses.LoadComments(client.Eclient, postID, 0, -1)
+	_, cmts, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
@@ -49,9 +49,9 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 //AddComment2 ... Iunno
 func AddComment2(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["Username"]
+	docID, _ := session.Values["DocID"]
 	fmt.Println("WE ARE IN ADDCOMMENT.GO")
-	if test1 == nil {
+	if docID == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
@@ -61,14 +61,14 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("postID")
 	comment := r.FormValue("body")
 	contentArray := []rune(comment)
-	err := uses.UserReplyEntry(client.Eclient, session.Values["DocID"].(string), postID, contentArray)
+	err := uses.UserReplyEntry(client.Eclient, docID.(string), postID, contentArray)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
 
-	_, cmts, err := uses.LoadComments(client.Eclient, postID, 0, -1)
+	_, cmts, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

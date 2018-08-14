@@ -14,8 +14,8 @@ import (
 //AjaxLoadProjectEntries ... pulls all entries for a given project and fprints it back as a json array
 func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["DocID"]
-	if test1 == nil {
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
@@ -43,7 +43,7 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 			}
 	*/
 
-	res, entries, total, err := scrollpkg.ScrollPageProject(client.Eclient, wallID, scrollID)
+	res, entries, total, err := scrollpkg.ScrollPageProject(client.Eclient, wallID, docID.(string), scrollID)
 	if err != nil {
 		if err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)

@@ -14,8 +14,8 @@ import (
 //AjaxLoadEventEntries ... pulls all entries for a given event and fprints it back as a json array
 func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["DocID"]
-	if test1 == nil {
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
@@ -38,7 +38,7 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 			}
 	*/
 
-	res, entries, total, err := scrollpkg.ScrollPageEvents(client.Eclient, []string{wallID}, "")
+	res, entries, total, err := scrollpkg.ScrollPageEvents(client.Eclient, []string{wallID}, docID.(string), "")
 	if err != nil {
 		fmt.Println(res)
 		log.SetFlags(log.LstdFlags | log.Lshortfile)

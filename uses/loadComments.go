@@ -12,7 +12,7 @@ import (
 //NOTE set uppper bound to -1 to pull to the end of the array
 //Returns the parent entry as a JournalEntry, an array of replies, and an error
 //NOTE, if the entry is set to invisible it is skipped
-func LoadComments(eclient *elastic.Client, entryID string, lowerBound int, upperBound int) (types.JournalEntry, []types.JournalEntry, error) {
+func LoadComments(eclient *elastic.Client, entryID string, viewerID string, lowerBound int, upperBound int) (types.JournalEntry, []types.JournalEntry, error) {
 	var entries []types.JournalEntry
 	var parent types.JournalEntry
 	var start int
@@ -22,7 +22,7 @@ func LoadComments(eclient *elastic.Client, entryID string, lowerBound int, upper
 		return parent, entries, errors.New("Lower Bound limit is out of bounds")
 	}
 
-	parent, err := ConvertEntryToJournalEntry(eclient, entryID, true)
+	parent, err := ConvertEntryToJournalEntry(eclient, entryID, viewerID, true)
 	if err != nil {
 		return parent, entries, err
 	}
@@ -36,7 +36,7 @@ func LoadComments(eclient *elastic.Client, entryID string, lowerBound int, upper
 
 	start = (len(parent.Element.ReplyIDs) - 1) - lowerBound
 	for i := start; i >= finish; i-- {
-		jEntry, err := ConvertEntryToJournalEntry(eclient, parent.Element.ReplyIDs[i], true)
+		jEntry, err := ConvertEntryToJournalEntry(eclient, parent.Element.ReplyIDs[i], viewerID, true)
 		if err != nil {
 			return parent, entries, err
 		}

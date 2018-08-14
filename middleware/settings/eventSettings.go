@@ -18,7 +18,7 @@ func Event(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	evntURL := r.URL.Path[17:]
+	evntURL := r.URL.Path[14:]
 
 	event, err := uses.AggregateEventData(client.Eclient, evntURL, test1.(string))
 	if err != nil {
@@ -38,7 +38,7 @@ func Event(w http.ResponseWriter, r *http.Request) {
 		cs := client.ClientSide{Event: event}
 		client.RenderSidebar(w, r, "template2-nil")
 		client.RenderSidebar(w, r, "leftnav-nil")
-		client.RenderTemplate(w, r, "event_settings_F", cs)
+		client.RenderTemplate(w, r, "eventSettings", cs)
 
 	} else {
 		http.Redirect(w, r, "/404/", http.StatusFound)

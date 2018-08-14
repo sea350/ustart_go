@@ -14,8 +14,8 @@ import (
 //GetComments ... gets comments???
 func GetComments(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["DocID"]
-	if test1 == nil {
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
 		//No docid in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
@@ -23,7 +23,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	postID := r.FormValue("PostID")
-	_, arrayofComments, err := uses.LoadComments(client.Eclient, postID, 0, -1)
+	_, arrayofComments, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

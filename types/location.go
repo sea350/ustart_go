@@ -2,6 +2,7 @@ package types
 
 //LocStruct .. who knows tbh
 type LocStruct struct {
+	Street     string `json:"Street"`
 	Country    string `json:"Country"`
 	CountryVis bool   `json:"CountryVis"`
 	State      string `json:"State"`

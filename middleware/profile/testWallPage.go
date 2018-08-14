@@ -13,8 +13,8 @@ import (
 //TestWallPage ... a page dedicated to testing only wall code
 func TestWallPage(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["DocID"]
-	if test1 == nil {
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
@@ -30,13 +30,13 @@ func TestWallPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err middleware/profile/testwallpage line 28")
 		fmt.Println(err)
 	}
-	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs)
+	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs, docID.(string))
 	if err != nil {
 		fmt.Println("err middleware/profile/testwallpage line 35")
 		fmt.Println(err)
 	}
 
-	viewer, err := get.UserByID(client.Eclient, test1.(string))
+	viewer, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
 		fmt.Println("err middleware/profile/testwallpage line 41")
 		fmt.Println(err)

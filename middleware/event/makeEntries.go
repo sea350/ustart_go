@@ -27,7 +27,7 @@ func MakeEventEntry(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, true)
+	jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, docID.(string), true)
 	if err != nil {
 		fmt.Println("err: middleware/event/makeentries line 32")
 		fmt.Println(err)

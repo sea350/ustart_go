@@ -40,7 +40,7 @@ func MakeEntry(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 
-		jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, true)
+		jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, docID.(string), true)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
