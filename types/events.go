@@ -51,7 +51,7 @@ type Events struct {
 	Guests            []EventGuests     `json:"Guests"`
 	EntryIDs          []string          `json:"EntryIDs"`
 	Location          LocStruct         `json:"Location"`
-	Organization      String            `json:"Organization"`
+	Organization      string            `json:"Organization"`
 	EventDateStart    time.Time         `json:"EventDateStart"`
 	EventDateEnd      time.Time         `json:"EventDateEnd"`
 	CreationDate      time.Time         `json:"CreationDate"`
