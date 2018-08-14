@@ -60,6 +60,12 @@ const ImgIndex = "test-img_data"
 //ImgType ...
 const ImgType = "IMG"
 
+//FollowIndex ...
+const FollowIndex = "test-follow_data"
+
+//FollowType ...
+const FollowType = "FOLLOW"
+
 //MappingUsr ... user mapping
 const MappingUsr = `
 {
