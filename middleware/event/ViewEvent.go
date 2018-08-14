@@ -114,14 +114,6 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		endDateOfEvent = time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
 	}
 
-	street := r.FormValue("street")
-	country := r.FormValue("country")
-	state := r.FormValue("state")
-	city := r.FormValue("city")
-	zip := r.FormValue("zip")
-	desc := []rune(r.FormValue("event_desc"))
-	category := r.FormValue("category")
-
 	var eventLocation types.LocStruct
 	eventLocation.Street = street
 	eventLocation.City = city
@@ -149,7 +141,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}else{
-	http.Redirect(w, r, "/events/"+url, http.StatusFound)
+	http.Redirect(w, r, "/Event/"+url, http.StatusFound)
 	return
 	}
 }
