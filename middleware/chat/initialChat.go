@@ -37,7 +37,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if actualChatID != `` {
-		idx, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, 0, 50)
+		idx, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, -1, 50)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
