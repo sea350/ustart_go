@@ -10,4 +10,6 @@ type LocStruct struct {
 	CityVis    bool   `json:"CityVis"`
 	Zip        string `json:"Zip"`
 	ZipVis     bool   `json:"ZipVis"`
+	Street     string `json:"Street"`
+	StreetVis  bool   `json:"StreetVis"`
 }
