@@ -12,4 +12,5 @@ type Notification struct {
 	ReferenceIDs []string  `json:"ReferenceIDs"`
 	Seen         bool      `json:"Seen"`
 	Timestamp    time.Time `json:"Timestamp"`
+	Visible      bool      `json:"Visible"`
 }

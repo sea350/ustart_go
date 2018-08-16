@@ -16,7 +16,7 @@ func ProxyIDByUserID(eclient *elastic.Client, userID string) (string, error) {
 
 	termQuery := elastic.NewTermQuery("DocID", strings.ToLower(userID))
 	searchResult, err := eclient.Search().
-		Index(globals.ProxyMsgIndex).
+		Index(globals.ProxyNotifIndex).
 		Query(termQuery).
 		Do(ctx)
 
@@ -29,19 +29,10 @@ func ProxyIDByUserID(eclient *elastic.Client, userID string) (string, error) {
 		return proxyID, errors.New("No results, proxy ID does not exist")
 	}
 	if searchResult.TotalHits() > 1 {
-		/*
-			for _, element := range searchResult.Hits.Hits {
-				prx, _ := ProxyMsgByID(eclient, element.Id)
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(prx)
-
-			}
-		*/
 		return proxyID, errors.New("multiple proxies found")
 	}
 
 	for _, element := range searchResult.Hits.Hits {
-
 		proxyID = element.Id
 		break
 	}
