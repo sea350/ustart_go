@@ -10,12 +10,13 @@ func IsEventGuest(eclient *elastic.Client, guestID string, event types.Events) b
 	if len(event.Guests) < 1 {
 		return false
 	}
-
-	for gust, _ := range event.Guests {
-		if event.Guests[gust].GuestID == guestID {
-			return true
+	/*
+		for gust, _ := range event.Guests {
+			if event.Guests[gust].GuestID == guestID {
+				return true
+			}
 		}
-	}
+	*/
 
 	return false
 
