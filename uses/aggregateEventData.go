@@ -15,7 +15,7 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 	var eventData types.EventAggregate
 	eventData.RequestAllowed = true
 
-	data, err := getEvent.EventByID(eclient, url)
+	data, err := getEvent.EventByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
