@@ -38,9 +38,14 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		}
 		evnt, err := getEvent.EventByID(client.Eclient, eventInfo.EventID)
 		if err != nil {
+<<<<<<< HEAD
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
+=======
+			fmt.Println(err)
+			fmt.Println("err: middleware/event/manageevents Line 35")
+>>>>>>> c0dbf3ecebbacaf8898a50228ffa1bead434e43f
 		}
 		for _, memberInfo := range evnt.Members {
 			if memberInfo.MemberID == test1.(string) && memberInfo.Role > 1 {
@@ -56,6 +61,9 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 			log.Println(dir, err)
 		}
 		heads = append(heads, head)
+
+		fmt.Println(heads)
+
 	}
 
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
