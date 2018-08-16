@@ -9,11 +9,10 @@ import (
 	"strconv"
 	"time"
 
+	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
-
-	userGet "github.com/sea350/ustart_go/get/user"
 )
 
 //ViewEvent ... rendering the event
@@ -38,7 +37,7 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	userstruct, err := userGet.UserByID(client.Eclient, session.Values["DocID"].(string))
+	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
 		panic(err)
 	}
@@ -73,7 +72,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	userstruct, err := userGet.UserByID(client.Eclient, session.Values["DocID"].(string))
+	userstruct, err := user.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
 		panic(err)
 	}

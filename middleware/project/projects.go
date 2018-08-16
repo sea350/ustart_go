@@ -46,7 +46,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	client.RenderTemplate(w, r, "projectsF", cs)
 }
 
-//MyProjects ...
+//MyProjects ... ManageProject
 func MyProjects(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
