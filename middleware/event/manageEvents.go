@@ -36,7 +36,7 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		evnt, err := getEvent.EventByID(client.Eclient, eventInfo.EventID)
 		if err != nil {
 			fmt.Println(err)
-			fmt.Println("err: middleware/event/manageevent Line 35")
+			fmt.Println("err: middleware/event/manageevents Line 35")
 		}
 		for _, memberInfo := range evnt.Members {
 			if memberInfo.MemberID == test1.(string) && memberInfo.Role > 1 {
