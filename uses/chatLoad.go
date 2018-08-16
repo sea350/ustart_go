@@ -9,7 +9,7 @@ import (
 )
 
 //ChatLoad ... agreggates a quantity of messages from a certain index in a conversation
-//if you start from zero it pulls from the end of the array
+//if you start from -1 it pulls from the end of the array
 //returns current size of messages array and err
 //NOTE: this method may be replaced with a scrollservice elastic search
 func ChatLoad(eclient *elastic.Client, convoID string, startFrom int, pullAmount int) (int, []types.Message, error) {
@@ -18,7 +18,7 @@ func ChatLoad(eclient *elastic.Client, convoID string, startFrom int, pullAmount
 		return 0, []types.Message{}, err
 	}
 
-	if startFrom < 0 || pullAmount < 0 {
+	if startFrom < -1 || pullAmount < 0 || startFrom == 0 {
 		return 0, []types.Message{}, errors.New("Out of bounds")
 	}
 
@@ -27,7 +27,7 @@ func ChatLoad(eclient *elastic.Client, convoID string, startFrom int, pullAmount
 	if startFrom > length {
 		startFrom = length - 1
 	}
-	if startFrom == 0 {
+	if startFrom == -1 {
 		startFrom = length - 1
 	}
 	if startFrom-pullAmount < 0 {
