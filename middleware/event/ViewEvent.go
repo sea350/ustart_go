@@ -37,7 +37,7 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		panic(err)
 	}
@@ -72,7 +72,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	userstruct, err := user.UserByID(client.Eclient, session.Values["DocID"].(string))
+	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		panic(err)
 	}
