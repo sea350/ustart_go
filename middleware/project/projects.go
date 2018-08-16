@@ -8,7 +8,7 @@ import (
 	"os"
 
 	get "github.com/sea350/ustart_go/get/user"
-	"github.com/sea350/ustart_go/types"
+	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 
 	client "github.com/sea350/ustart_go/middleware/client"
