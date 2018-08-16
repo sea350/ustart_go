@@ -11,7 +11,7 @@ import (
 )
 
 //IndexMsg ...
-//Indexes a new message
+//Indexes a new message, returns docID and error
 func IndexMsg(eclient *elastic.Client, newMsg types.Message) (string, error) {
 	//ADDS NEW CHAT TO ES RECORDS (requires an elastic client and a Chat type)
 	//RETURNS AN error and the new chat's ID IF SUCESSFUL error = nil
