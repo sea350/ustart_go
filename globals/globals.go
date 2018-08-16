@@ -48,6 +48,18 @@ const ProxyMsgIndex = "test-proxymsg_data"
 //ProxyMsgType ...
 const ProxyMsgType = "PROXYMSG"
 
+//ProxyNotifIndex ...
+const ProxyNotifIndex = "test-proxynotif_data"
+
+//ProxyNotifType ...
+const ProxyNotifType = "PROXYNOTIF"
+
+//NotificationIndex ...
+const NotificationIndex = "test-notification_data"
+
+//NotificationType ...
+const NotificationType = "NOTIFICATION"
+
 //WidgetIndex ...
 const WidgetIndex = "test-widget_data"
 
@@ -186,6 +198,7 @@ const MappingEvent = `
     }
 }`
 
+//MappingConvo ...
 const MappingConvo = `
 {
 	"settings": {

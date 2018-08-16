@@ -2,7 +2,9 @@ package event
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	getEvent "github.com/sea350/ustart_go/get/event"
 	get "github.com/sea350/ustart_go/get/user"
@@ -14,6 +16,7 @@ import (
 
 //ManageEvents ...
 func ManageEvents(w http.ResponseWriter, r *http.Request) {
+	log.Println("ManageEvents?")
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
@@ -25,8 +28,9 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("err: middleware/event/manageevents Line 26")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	for _, eventInfo := range userstruct.Events {
@@ -35,8 +39,9 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		}
 		evnt, err := getEvent.EventByID(client.Eclient, eventInfo.EventID)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("err: middleware/event/manageevent Line 35")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		for _, memberInfo := range evnt.Members {
 			if memberInfo.MemberID == test1.(string) && memberInfo.Role > 1 {
@@ -47,10 +52,14 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		}
 		head, err := uses.ConvertEventToFloatingHead(client.Eclient, eventInfo.EventID)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("err: middleware/event/manageevents Line 51")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 		}
 		heads = append(heads, head)
+
+		fmt.Println(heads)
+
 	}
 
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
