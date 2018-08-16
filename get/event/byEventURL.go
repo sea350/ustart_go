@@ -9,8 +9,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//EventByURL ... queries ES to get the event by URL
-func EventByID(eclient *elastic.Client, eventURL string) (types.Events, error) {
+//EventByURL ... queries ES to get the event by ID
+func EventByURL(eclient *elastic.Client, eventURL string) (types.Events, error) {
 	ctx := context.Background()
 	termQuery := elastic.NewTermQuery("URLName", strings.ToLower(eventURL))
 	searchResult, err := eclient.Search().
@@ -18,6 +18,7 @@ func EventByID(eclient *elastic.Client, eventURL string) (types.Events, error) {
 		Type(globals.EventType).
 		Query(termQuery).
 		Do(ctx)
+
 	var result string
 	var evnt types.Events
 	for _, element := range searchResult.Hits.Hits {
