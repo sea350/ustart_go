@@ -9,6 +9,7 @@ import (
 	getChat "github.com/sea350/ustart_go/get/chat"
 	projGet "github.com/sea350/ustart_go/get/project"
 	postChat "github.com/sea350/ustart_go/post/chat"
+	followPost "github.com/sea350/ustart_go/post/follow"
 	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
@@ -59,9 +60,13 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	addProj.Visible = true
 	err = userPost.AppendProject(eclient, makerID, addProj)
 	if err != nil {
-		panic(err)
+		return id, err
 	}
 
+	errFollow := followPost.IndexFollow(eclient, id)
+	if errFollow != nil {
+		return id, errFollow
+	}
 	var newConvo types.Conversation
 	newConvo.Class = 3
 	newConvo.Title = "General"
