@@ -10,12 +10,13 @@ func IsEventMember(eclient *elastic.Client, memberID string, event types.Events)
 	if len(event.Members) < 1 {
 		return false
 	}
-
-	for mem, _ := range event.Members {
-		if event.Members[mem].MemberID == memberID {
-			return true
+	/*
+		for mem, _ := range event.Members {
+			if event.Members[mem].MemberID == memberID {
+				return true
+			}
 		}
-	}
+	*/
 
 	return false
 
