@@ -10,7 +10,7 @@ import (
 )
 
 //EventByURL ... queries ES to get the event by URL
-func EventByURL(eclient *elastic.Client, eventURL string) (types.Events, error) {
+func EventByID(eclient *elastic.Client, eventURL string) (types.Events, error) {
 	ctx := context.Background()
 	termQuery := elastic.NewTermQuery("URLName", strings.ToLower(eventURL))
 	searchResult, err := eclient.Search().
@@ -25,6 +25,6 @@ func EventByURL(eclient *elastic.Client, eventURL string) (types.Events, error) 
 		break
 	}
 
-	evnt, err = EventByURL(eclient, result)
+	evnt, err = EventByID(eclient, result)
 	return evnt, err
 }

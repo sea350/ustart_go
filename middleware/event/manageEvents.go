@@ -51,6 +51,9 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("err: middleware/event/manageevents Line 51")
 		}
 		heads = append(heads, head)
+
+		fmt.Println(heads)
+
 	}
 
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}

@@ -17,6 +17,7 @@ import (
 )
 
 //ViewEvent ... rendering the event
+//ProjectsPage
 func ViewEvent(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -48,6 +49,7 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 //StartEvent ... rendering the event form
+//equivalent of CreateProjectPage
 func StartEvent(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -63,6 +65,7 @@ func StartEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 //AddEvent ... append event to database
+//equivalent of CreateProjectPage
 func AddEvent(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
