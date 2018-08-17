@@ -8,9 +8,8 @@ import (
 type Notification struct {
 	Class        int       `json:"Class"`
 	DocID        string    `json:"DocID"`
-	Hyperlink    string    `json:"Hyperlink"`
 	ReferenceIDs []string  `json:"ReferenceIDs"`
 	Seen         bool      `json:"Seen"`
 	Timestamp    time.Time `json:"Timestamp"`
-	Visible      bool      `json:"Visible"`
+	Invisible    bool      `json:"Invisible"`
 }

@@ -4,7 +4,7 @@ package types
 type ProxyNotifications struct {
 	DocID             string   `json:"DocID"`
 	NumUnread         int      `json:"NumUnread"`
-	NotificationCache []string `json:"NotificationCache"` //must be limited to 5
+	NotificationCache []string `json:"NotificationCache"` //must be limited to 10
 }
 
 //NotificationSettings ... settings for which notifications a user wants to opt in or out of

@@ -9,12 +9,12 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//UpdateProxyMsg  ...
-//Updates proxy messages
-func UpdateProxyMsg(eclient *elastic.Client, msgID string, field string, newContent interface{}) error {
+//UpdateProxyNotifcations  ...
+//Updates proxy notifications
+func UpdateProxyNotifcations(eclient *elastic.Client, msgID string, field string, newContent interface{}) error {
 	ctx := context.Background()
 
-	exists, err := eclient.IndexExists(globals.ProxyMsgIndex).Do(ctx)
+	exists, err := eclient.IndexExists(globals.ProxyNotifIndex).Do(ctx)
 	if err != nil {
 		return err
 	}
@@ -28,8 +28,7 @@ func UpdateProxyMsg(eclient *elastic.Client, msgID string, field string, newCont
 	}
 
 	_, err = eclient.Update().
-		Index(globals.ProxyMsgIndex).
-		Type(globals.ProxyMsgType).
+		Index(globals.ProxyNotifIndex).
 		Id(msgID).
 		Doc(map[string]interface{}{field: newContent}).
 		Do(ctx)
