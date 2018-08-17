@@ -50,7 +50,7 @@ func SingleStringField(eclient *elastic.Client, queryField string, queryTerm str
 }
 
 // //StringArrayField ...
-// //Retreives a single stirng array field from user
+// //Retreives a single string array field from user
 // func StringArrayField(eclient *elastic.Client, queryField string, queryTerm string, includeField string) ([]string, error) {
 
 // 	ctx := context.Background()

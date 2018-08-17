@@ -49,7 +49,7 @@ func UpdateByQuery(eclient *elastic.Client, docType string, field string, newCon
 
 	query := elastic.NewMatchQuery(field, newContent)
 	_, err = eclient.UpdateByQuery().
-		Refresh("conflicts=proceed").
+		Refresh("conflicts:proceed").
 		Index(index).
 		Type(theType).
 		Query(query).
