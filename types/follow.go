@@ -6,5 +6,12 @@ type Follow struct {
 	DocID     string          `json:"DocID"`
 	Followers map[string]bool `json:"Followers"`
 	Following map[string]bool `json:"Following"`
-	Bell      []string        `json:"Bell"`
+	Bell      map[string]bool `json:"Bell"`
 }
+
+//TODO: store ids in lowercase
+//Changes must be made in the following ( ;) ):
+//signup
+//view profile
+//user/project(?) type
+//app middleware
