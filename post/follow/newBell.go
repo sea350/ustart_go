@@ -36,14 +36,14 @@ func NewUserBell(eclient *elastic.Client, userID string, field string, newKey st
 	case "followers":
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
-		foll.Followers[newKey] = false
-		followMap = foll.Followers
+		foll.UserFollowers[newKey] = false
+		followMap = foll.UserFollowers
 
 	case "following":
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
-		foll.Following[newKey] = false
-		followMap = foll.Following
+		foll.UserFollowing[newKey] = false
+		followMap = foll.UserFollowing
 	default:
 		return errors.New("Invalid field")
 	}
