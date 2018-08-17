@@ -1,7 +1,6 @@
 package event
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -16,7 +15,7 @@ import (
 
 //ManageEvents ...
 func ManageEvents(w http.ResponseWriter, r *http.Request) {
-	log.Println("ManageEvents?")
+	//log.Println("ManageEvents?")
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
@@ -58,7 +57,7 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		}
 		heads = append(heads, head)
 
-		fmt.Println(heads)
+		//fmt.Println(heads)
 
 	}
 
