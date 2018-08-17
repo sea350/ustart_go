@@ -2,7 +2,7 @@ package post
 
 import "sync"
 
-//ProcLock ...
+//FollowerLock ...
 var FollowerLock sync.Mutex
 
 //FollowingLock

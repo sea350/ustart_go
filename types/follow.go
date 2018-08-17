@@ -3,10 +3,16 @@ package types
 //Follow struct ...
 //Stores maps for followers and following
 type Follow struct {
-	DocID     string          `json:"DocID"`
-	Followers map[string]bool `json:"Followers"`
-	Following map[string]bool `json:"Following"`
-	Bell      map[string]bool `json:"Bell"`
+	DocID            string          `json:"DocID"`
+	UserFollowers    map[string]bool `json:"UserFollowers"`
+	UserFollowing    map[string]bool `json:"UserFollowing"`
+	ProjectFollowers map[string]bool `json:"ProjectFollowers"`
+	ProjectFollowing map[string]bool `json:"ProjectFollowing"`
+	EventFollowers   map[string]bool `json:"EventFollowers"`
+	EventFollowing   map[string]bool `json:"EventFollowing"`
+	UserBell         map[string]bool `json:"UserBell"`
+	ProjectBell      map[string]bool `json:"ProjectBell"`
+	EventBell        map[string]bool `json:"EventBell"`
 }
 
 //TODO: store ids in lowercase

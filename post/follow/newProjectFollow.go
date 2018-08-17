@@ -10,11 +10,11 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//NewUserBell ...
+//NewProjectFollow ...
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func NewUserBell(eclient *elastic.Client, userID string, field string, newKey string) error {
+func NewProjectFollow(eclient *elastic.Client, userID string, field string, newKey string, isBell bool) error {
 
 	ctx := context.Background()
 
@@ -36,14 +36,14 @@ func NewUserBell(eclient *elastic.Client, userID string, field string, newKey st
 	case "followers":
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
-		foll.Followers[newKey] = false
-		followMap = foll.Followers
+		foll.ProjectFollowers[newKey] = isBell
+		followMap = foll.ProjectFollowers
 
 	case "following":
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
-		foll.Following[newKey] = false
-		followMap = foll.Following
+		foll.ProjectFollowing[newKey] = isBell
+		followMap = foll.ProjectFollowing
 	default:
 		return errors.New("Invalid field")
 	}

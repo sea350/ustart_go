@@ -41,10 +41,17 @@ func IndexFollow(eclient *elastic.Client, userID string) error {
 	var newFollowers = make(map[string]bool)
 	var newBell = make(map[string]bool)
 	var newFollow = types.Follow{
-		DocID:     userID,
-		Followers: newFollowers,
-		Following: newFollowing,
-		Bell:      newBell,
+		DocID: userID,
+
+		UserFollowers:    newFollowers,
+		UserFollowing:    newFollowing,
+		ProjectFollowers: newFollowers,
+		ProjectFollowing: newFollowing,
+		EventFollowers:   newFollowers,
+		EventFollowing:   newFollowing,
+		UserBell:         newBell,
+		ProjectBell:      newBell,
+		EventBell:        newBell,
 	}
 	// Index the document.
 	_, Err := eclient.Index().

@@ -9,7 +9,7 @@ import (
 
 //IsFollowing ...
 //Determines if specific doc id is being followed
-func IsFollowing(eclient *elastic.Client, userID string, followID string) (bool, error) {
+func IsFollowing(eclient *elastic.Client, userID string, followID string, followType int) (bool, error) {
 	_, follows, err := ByUserID(eclient, userID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -17,7 +17,15 @@ func IsFollowing(eclient *elastic.Client, userID string, followID string) (bool,
 		return false, err
 	}
 
-	_, exists := follows.Following[followID]
+	var exists bool
+	switch followType {
+	case 1:
+		_, exists = follows.UserFollowing[followID]
+	case 2:
+		_, exists = follows.ProjectFollowing[followID]
+	case 3:
+		_, exists = follows.EventFollowing[followID]
+	}
 
 	return exists, err
 }
