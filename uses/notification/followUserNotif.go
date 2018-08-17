@@ -23,7 +23,7 @@ func FollowUserNotif(eclient *elastic.Client, followedUserID string, followerID 
 		return err
 	}
 
-	err = post.AppendToProxyNotification(eclient, proxyID, notifID)
+	err = post.AppendToProxy(eclient, proxyID, notifID, true)
 
 	return err
 }
