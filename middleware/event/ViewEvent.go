@@ -83,8 +83,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	college := r.FormValue("universityName")
 	customURL := r.FormValue("eventurl")
 	category := r.FormValue("eventCategory")
-	//startDateOfEvent
-	startDate := r.FormValue("startDate")
+
 	//endDateOfEvent
 	endDate := r.FormValue("endDate")
 	//eventLocation
@@ -96,15 +95,24 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	desc := []rune(r.FormValue("event_desc"))
 
-	startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
-	if len(startDate) > 15 {
-		year, _ := strconv.Atoi(startDate[6:10])
-		month, _ := strconv.Atoi(startDate[0:2])
-		day, _ := strconv.Atoi(startDate[3:5])
-		hour, _ := strconv.Atoi(startDate[11:13])
-		minute, _ := strconv.Atoi(startDate[14:16])
-		startDateOfEvent = time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
-	}
+	year, _ := strconv.Atoi(r.FormValue("startDate")[0:4])
+	month, _ := strconv.Atoi(r.FormValue("startDate")[5:7])
+	day, _ := strconv.Atoi(r.FormValue("startDate")[8:10])
+	hour, _ := strconv.Atoi(r.FormValue("startDate")[11:13])
+	minute, _ := strconv.Atoi(r.FormValue("startDate")[14:16])
+	startDateOfEvent := time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
+
+	/*
+		startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
+		if len(startDate) > 15 {
+			year, _ := strconv.Atoi(startDate[6:10])
+			month, _ := strconv.Atoi(startDate[0:2])
+			day, _ := strconv.Atoi(startDate[3:5])
+			hour, _ := strconv.Atoi(startDate[11:13])
+			minute, _ := strconv.Atoi(startDate[14:16])
+			startDateOfEvent = time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
+		}
+	*/
 
 	endDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 	if len(endDate) > 15 {
@@ -136,7 +144,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 			client.RenderTemplate(w, r, "eventStart", cs)
 			return
 		}
-		url, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, startDateOfEvent, endDateOfEvent, college, customURL)
+		url, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, startDate, endDate, college, customURL)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
