@@ -49,7 +49,7 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, notifID string, seen
 
 	if temp == `` { //adding a new convo
 		if len(proxy.NotificationCache) >= 10 {
-			proxy.NotificationCache = append(proxy.ConverNotificationCachesations[1:], notifID)
+			proxy.NotificationCache = append(proxy.NotificationCache[1:], notifID)
 		} else {
 			proxy.NotificationCache = append(proxy.NotificationCache, notifID)
 		}
@@ -59,7 +59,7 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, notifID string, seen
 		proxy.NumUnread++
 	}
 
-	err = ReindexProxyNotification(eclient, proxyID, proxy)
+	err = ReindexProxyNotifications(eclient, proxyID, proxy)
 
 	return err
 }
