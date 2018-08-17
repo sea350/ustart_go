@@ -15,7 +15,7 @@ import (
 
 //ManageEvents ...
 func ManageEvents(w http.ResponseWriter, r *http.Request) {
-	//log.Println("ManageEvents?")
+
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
@@ -30,6 +30,7 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
+
 	}
 
 	for _, eventInfo := range userstruct.Events {
@@ -56,8 +57,6 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 			log.Println(dir, err)
 		}
 		heads = append(heads, head)
-
-		//fmt.Println(heads)
 
 	}
 
