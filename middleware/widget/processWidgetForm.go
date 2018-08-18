@@ -123,7 +123,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//pinterest -- Currently will take in user profiles and NOT POSTS!!!!!!!
 		pinput := r.FormValue("pinInput")
 
-		regX := regexp.MustCompile(`https:\/\/www\.pinterest\.com\/.+\/`)
+		regX := regexp.MustCompile(`https:\/\/www\.pinterest\.com\/.+`)
 		if !regX.MatchString(pinput) {
 			return newWidget, errors.New(`Unusable Pinterest URL`)
 		} //Check valid embed code
@@ -259,7 +259,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `17` {
 		//gallery widget
-		galleryFile, galleryHeader, _ := r.FormFile("galleryImageInput")	
+		galleryFile, galleryHeader, _ := r.FormFile("galleryImageInput")
 		buffer := make([]byte, 512)
 		_, _ = galleryFile.Read(buffer)
 		defer galleryFile.Close()
