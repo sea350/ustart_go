@@ -2,7 +2,6 @@ package event
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -108,10 +107,12 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		month, _ := strconv.Atoi(r.FormValue("startDate")[5:7])
 		day, _ := strconv.Atoi(r.FormValue("startDate")[8:10])
 	}
-	else{
-		client.RenderTemplate(w, r, "eventStart", cs)
-		return		
-	}
+	/*
+		else{
+			client.RenderTemplate(w, r, "eventStart", cs)
+			return
+		}
+	*/
 	/*
 		startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 		if len(startDate) > 15 {
