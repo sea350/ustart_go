@@ -9,13 +9,13 @@ import (
 //Follow ...
 //allows for following a project, profile, or event
 func Follow(eclient *elastic.Client, hostID string, viewerID string) error {
-	err := postFollow.NewFollow(eclient, viewerID, "Following", hostID, false)
+	err := postFollow.NewUserFollow(eclient, viewerID, "Following", hostID, false)
 	if err != nil {
 		return err
 	}
 
 	//false = append to followers
-	err = postFollow.NewFollow(eclient, hostID, "Followers", viewerID, false)
+	err = postFollow.NewUserFollow(eclient, hostID, "Followers", viewerID, false)
 	if err != nil {
 		return err
 	}

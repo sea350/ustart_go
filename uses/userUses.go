@@ -341,6 +341,7 @@ func UpdateUserTags(eclient *elastic.Client, userID string, tags []string) error
 	return err
 }
 
+/*
 //UserFollow ... ALLOWS A USER TO FOLLOW SOMEONE ELSE
 //Requires the follower's docID and the followed docID
 //Returns an error
@@ -358,6 +359,7 @@ func UserFollow(eclient *elastic.Client, hostID string, viewerID string) error {
 
 	return nil
 }
+*/
 
 //UserUnfollow ... ALLOWS A USER TO UNFOLLOW SOMEONE ELSE
 //Returns an error
