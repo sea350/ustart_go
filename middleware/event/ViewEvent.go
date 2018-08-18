@@ -94,6 +94,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	desc := []rune(r.FormValue("event_desc"))
 
+	fmt.println(r.FormValue("startDate"))
 	Syear, _ := strconv.Atoi(r.FormValue("startDate")[0:4])
 	Smonth, _ := strconv.Atoi(r.FormValue("startDate")[5:7])
 	Sday, _ := strconv.Atoi(r.FormValue("startDate")[8:10])
