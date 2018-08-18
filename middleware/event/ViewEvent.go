@@ -27,13 +27,13 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 	event, err := uses.AggregateEventData(client.Eclient, r.URL.Path[7:], test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		//log.Println(err)
 	}
 	widgets, errs := uses.LoadWidgets(client.Eclient, event.EventData.Widgets)
 	if len(errs) > 0 {
 		log.Println("there were one or more errors loading widgets")
 		for _, eror := range errs {
-			fmt.Println(eror)
+			//fmt.Println(eror)
 		}
 	}
 
@@ -98,10 +98,20 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	year, _ := strconv.Atoi(r.FormValue("startDate")[0:4])
 	month, _ := strconv.Atoi(r.FormValue("startDate")[5:7])
 	day, _ := strconv.Atoi(r.FormValue("startDate")[8:10])
-	hour, _ := strconv.Atoi(r.FormValue("startDate")[11:13])
-	minute, _ := strconv.Atoi(r.FormValue("startDate")[14:16])
+	//hour, _ := strconv.Atoi(r.FormValue("startDate")[11:13])
+	//minute, _ := strconv.Atoi(r.FormValue("startDate")[14:16])
 	startDateOfEvent := time.Date(year, time.Month(month), day, hour, minute, 0, 0, time.UTC)
 
+	startDate := r.FormValue("startDate")
+	if len(startDate) > 15 {
+		year, _ := strconv.Atoi(r.FormValue("startDate")[0:4])
+		month, _ := strconv.Atoi(r.FormValue("startDate")[5:7])
+		day, _ := strconv.Atoi(r.FormValue("startDate")[8:10])
+	}
+	else{
+		client.RenderTemplate(w, r, "eventStart", cs)
+		return		
+	}
 	/*
 		startDateOfEvent := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
 		if len(startDate) > 15 {
@@ -148,7 +158,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			//log.Println(dir, err)
 		} else {
 			http.Redirect(w, r, "/Event/"+url, http.StatusFound)
 			return
