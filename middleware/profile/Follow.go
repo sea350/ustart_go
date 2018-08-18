@@ -3,7 +3,6 @@ package profile
 import (
 	"log"
 	"net/http"
-	"os"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -26,25 +25,22 @@ func Follow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isFollowed, err := getFollow.IsFollowing(client.Eclient, userID, session.Values["DocID"].(string), 1) //uses.IsFollowed(client.Eclient, userID, session.Values["DocID"].(string))
+	isFollowed, err := getFollow.IsFollowing(client.Eclient, userID, session.Values["DocID"].(string), 2) //uses.IsFollowed(client.Eclient, userID, session.Values["DocID"].(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	if isFollowed == true {
 		err := uses.UserUnfollow(client.Eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 	} else {
 		err := uses.UserFollow(client.Eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 	}
 
