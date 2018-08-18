@@ -25,7 +25,7 @@ func Follow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	isFollowed, err := getFollow.IsFollowing(client.Eclient, userID, session.Values["DocID"].(string), 2) //uses.IsFollowed(client.Eclient, userID, session.Values["DocID"].(string))
+	isFollowed, err := getFollow.IsFollowing(client.Eclient, userID, session.Values["DocID"].(string), 3) //uses.IsFollowed(client.Eclient, userID, session.Values["DocID"].(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
