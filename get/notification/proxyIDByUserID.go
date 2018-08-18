@@ -3,9 +3,11 @@ package get
 import (
 	"context"
 	"errors"
+	"log"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
+	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -26,7 +28,23 @@ func ProxyIDByUserID(eclient *elastic.Client, userID string) (string, error) {
 	}
 
 	if searchResult.TotalHits() == 0 {
-		return proxyID, errors.New("No results, proxy ID does not exist")
+		exists, _ := eclient.IndexExists(globals.ProxyNotifIndex).Do(ctx)
+		if !exists {
+			_, err := eclient.CreateIndex(globals.ProxyNotifIndex).Do(ctx)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+				return proxyID, err
+			}
+		}
+		var settings types.NotificationSettings
+		settings.Default()
+		idx, err := eclient.Index().
+			Index(globals.ProxyNotifIndex).
+			BodyJson(types.ProxyNotifications{DocID: userID, Settings: settings}).
+			Do(ctx)
+
+		return idx.Id, err
 	}
 	if searchResult.TotalHits() > 1 {
 		return proxyID, errors.New("multiple proxies found")

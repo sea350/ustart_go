@@ -2,9 +2,10 @@ package types
 
 //ProxyNotifications ... an ES indexed array of conversations designed to offload upload demand from user
 type ProxyNotifications struct {
-	DocID             string   `json:"DocID"`
-	NumUnread         int      `json:"NumUnread"`
-	NotificationCache []string `json:"NotificationCache"` //must be limited to 10
+	DocID             string               `json:"DocID"`
+	NumUnread         int                  `json:"NumUnread"`
+	NotificationCache []string             `json:"NotificationCache"` //must be limited to 10
+	Settings          NotificationSettings `json:"Settings"`
 }
 
 //NotificationSettings ... settings for which notifications a user wants to opt in or out of

@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/sea350/ustart_go/types"
-	"github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -16,7 +15,7 @@ func GenerateMessage(eclient *elastic.Client, notif types.Notification) (string,
 		if len(notif.ReferenceIDs) > 1 {
 			return strconv.Itoa(len(notif.ReferenceIDs)) + " new followers", nil
 		} else if len(notif.ReferenceIDs) == 1 {
-			head, err := uses.ConvertUserToFloatingHead(eclient, notif.ReferenceIDs[0])
+			head, err := ConvertUserToFloatingHead(eclient, notif.ReferenceIDs[0])
 			if err != nil {
 				return ``, err
 			}

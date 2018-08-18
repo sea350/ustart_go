@@ -24,16 +24,16 @@ func IndexProxyNotification(eclient *elastic.Client, newProxy types.ProxyNotific
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
+			return proxyID, err
 		}
-
 	}
-	idx, Err := eclient.Index().
+	idx, err := eclient.Index().
 		Index(globals.ProxyNotifIndex).
 		BodyJson(newProxy).
 		Do(ctx)
 
-	if Err != nil {
-		return proxyID, Err
+	if err != nil {
+		return proxyID, err
 	}
 	proxyID = idx.Id
 
