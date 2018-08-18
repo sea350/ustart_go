@@ -58,5 +58,5 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	fmt.Fprintln(w, string(data))
+	//fmt.Fprintln(w, string(data))
 }
