@@ -107,6 +107,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		month, _ := strconv.Atoi(r.FormValue("startDate")[5:7])
 		day, _ := strconv.Atoi(r.FormValue("startDate")[8:10])
 	}
+}
 	/*
 		else{
 			client.RenderTemplate(w, r, "eventStart", cs)
