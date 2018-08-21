@@ -23,6 +23,7 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 
 	//Getting eventID and member
 	evntiD := r.FormValue("eventID")
+	log.Println(evntiD)
 	evnt, member, err := get.EventAndMember(eclient, r.FormValue("eventID"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
