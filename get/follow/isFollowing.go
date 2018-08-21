@@ -1,16 +1,11 @@
 package get
 
-import (
-	"errors"
-	"log"
-	"strings"
-
-	elastic "gopkg.in/olivere/elastic.v5"
-	//post "github.com/sea350/ustart_go/post"
-)
+//post "github.com/sea350/ustart_go/post"
 
 //IsFollowing ...
 //Determines if specific doc id is being followed
+/*
+GP COMMENT
 func IsFollowing(eclient *elastic.Client, userID string, followID string, followType string) (bool, error) {
 	_, follows, err := ByID(eclient, userID)
 	if err != nil {
@@ -33,3 +28,4 @@ func IsFollowing(eclient *elastic.Client, userID string, followID string, follow
 
 	return exists, err
 }
+*/
