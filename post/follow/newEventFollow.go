@@ -41,8 +41,8 @@ func NewEventFollow(eclient *elastic.Client, userID string, field string, newKey
 		followMap = foll.EventFollowers
 		//modify user bell map if bell follower
 		if isBell {
-			foll.ProjectBell[newKey] = isBell
-			bellMap = foll.ProjectBell
+			foll.EventBell[newKey] = isBell
+			bellMap = foll.EventBell
 		}
 
 	case "following":
