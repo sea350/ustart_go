@@ -190,7 +190,7 @@ func main() {
 	// http.HandleFunc("/ws", chat.Run)
 
 	//Notifications
-	http.HandleFunc("/ajaxNotifications/", notification.AjaxNotificationLoad)
+	http.HandleFunc("/AjaxNotifications/", notification.AjaxNotificationLoad)
 
 	//IMG
 	http.HandleFunc("/img/", img.Display)
