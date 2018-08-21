@@ -1,6 +1,7 @@
 package uses
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -30,6 +31,7 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 		log.Println(dir, err)
 	}
 	projectData.DocID = id
+	fmt.Println("What happens in here?", projectData.DocID)
 
 	//Remember to load widgets seperately
 	//Remember to load wall posts seperately
