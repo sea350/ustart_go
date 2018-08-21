@@ -19,7 +19,7 @@ func Event(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	evntURL := r.URL.Path[14:]
+	evntURL := r.URL.Path[15:]
 	event, err := uses.AggregateEventData(client.Eclient, evntURL, test1.(string))
 	fmt.Println("eventHERE SETTING", event)
 	if err != nil {
