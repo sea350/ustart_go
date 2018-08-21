@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -13,14 +14,16 @@ import (
 func Project(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
+	fmt.Println("project", test1)
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
 
 	projURL := r.URL.Path[17:]
-
+	fmt.Println(projURL)
 	project, err := uses.AggregateProjectData(client.Eclient, projURL, test1.(string))
+	fmt.Println("project", project)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

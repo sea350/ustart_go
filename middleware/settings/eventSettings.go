@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -19,8 +20,9 @@ func Event(w http.ResponseWriter, r *http.Request) {
 	}
 
 	evntURL := r.URL.Path[14:]
-
+	fmt.Println("eventURL", evntURL)
 	event, err := uses.AggregateEventData(client.Eclient, evntURL, test1.(string))
+	fmt.Println("event", event)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
