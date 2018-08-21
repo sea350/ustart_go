@@ -12,8 +12,8 @@ import (
 	//post "github.com/sea350/ustart_go/post"
 )
 
-//ByUserID ...
-func ByUserID(eclient *elastic.Client, userID string) (string, types.Follow, error) {
+//ByID ...
+func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) {
 	ctx := context.Background() //intialize context background
 	var foll types.Follow       //initialize follow
 	var follID string           //initialize follow ID

@@ -26,7 +26,7 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 		return errors.New("Index does not exist")
 	}
 
-	follID, foll, err := getFollow.ByUserID(eclient, userID)
+	follID, foll, err := getFollow.ByID(eclient, userID)
 	if err != nil {
 		return err
 	}
