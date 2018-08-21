@@ -56,8 +56,6 @@ func main() {
 	http.HandleFunc("/callme/", profile.Follow)
 	http.HandleFunc("/Like/", profile.Like)
 	http.HandleFunc("/getComments/", profile.GetComments)
-	http.HandleFunc("/shareComments/", profile.ShareComments)
-	http.HandleFunc("/ShareComment", profile.ShareComment2)
 	http.HandleFunc("/AddComment/", profile.AddComment)
 	http.HandleFunc("/AddComment2/", profile.AddComment2)
 	http.HandleFunc("/addPost/", profile.WallAdd)
@@ -135,7 +133,6 @@ func main() {
 	http.HandleFunc("/leaveProject/", settings.LeaveProject)
 	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
 	http.HandleFunc("/changeMemberClass/", settings.ChangeMemberClass)
-	http.HandleFunc("/DashboardSettings/", settings.Dashboard)
 
 	//REGISTRATIONS
 	http.HandleFunc("/Signup/", registration.Signup)
