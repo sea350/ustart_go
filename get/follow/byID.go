@@ -28,7 +28,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		return "", foll, err
 	}
 
-	if searchResult.Hits.TotalHits > 1 {
+	if searchResult.Hits.TotalHits > 2 {
 		return "", foll, errors.New("More than one result found")
 	} else if searchResult.Hits.TotalHits < 1 {
 		return "", foll, errors.New("No results found")
