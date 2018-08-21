@@ -18,7 +18,6 @@ import (
 func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-	fmt.Println("project", test1)
 
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
