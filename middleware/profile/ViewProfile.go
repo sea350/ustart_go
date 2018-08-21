@@ -26,7 +26,6 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	userstruct, errMessage, followbool, err := uses.UserPage(client.Eclient, pageUserName, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("one or more errors have occured in loading widgets")
 		log.Println(err)
 		log.Println("User Error: " + errMessage)
 		http.Redirect(w, r, "/404/", http.StatusFound)
