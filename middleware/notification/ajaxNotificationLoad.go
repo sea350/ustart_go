@@ -1,4 +1,4 @@
-package chat
+package notification
 
 import (
 	"encoding/json"
@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/sea350/ustart_go/uses"
-
+	get "github.com/sea350/ustart_go/get/notification"
 	"github.com/sea350/ustart_go/middleware/client"
+	"github.com/sea350/ustart_go/uses"
 )
 
 //AjaxNotificationLoad ... crawling in the 90s
@@ -20,15 +20,46 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	heads, numUnread, err := uses.ChatAggregateNotifications(client.Eclient, docID.(string))
+	var notifs []map[string]interface{}
+
+	proxy, err := get.ProxyNotificationByUserID(client.Eclient, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
+	count := 0
+	for _, id := range proxy.NotificationCache {
+		notif, err := get.NotificationByID(client.Eclient, id)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			continue
+		}
+		if notif.Invisible {
+			continue
+		}
+
+		msg, err := uses.GenerateMessage(client.Eclient, notif)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			continue
+		}
+
+		notifAggregate := make(map[string]interface{})
+		notifAggregate["Data"] = notif
+		notifAggregate["Message"] = msg
+		notifs = append(notifs, notifAggregate)
+		count++
+		if count == 5 {
+			break
+		}
+
+	}
+
 	sendData := make(map[string]interface{})
-	sendData["numUnread"] = numUnread
-	sendData["notifications"] = heads
+	sendData["notifications"] = notifs
 
 	data, err := json.Marshal(sendData)
 	if err != nil {

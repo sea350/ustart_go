@@ -11,6 +11,7 @@ import (
 	img "github.com/sea350/ustart_go/middleware/img"
 	inbox "github.com/sea350/ustart_go/middleware/inbox"
 	login "github.com/sea350/ustart_go/middleware/login"
+	"github.com/sea350/ustart_go/middleware/notification"
 	profile "github.com/sea350/ustart_go/middleware/profile"
 	project "github.com/sea350/ustart_go/middleware/project"
 	registration "github.com/sea350/ustart_go/middleware/registration"
@@ -187,6 +188,9 @@ func main() {
 	http.HandleFunc("/dash/", dash.ViewDashboard)
 	//http.HandleFunc("/ch/", chat.Page)
 	// http.HandleFunc("/ws", chat.Run)
+
+	//Notifications
+	http.HandleFunc("/ajaxNotifications/", notification.AjaxNotificationLoad)
 
 	//IMG
 	http.HandleFunc("/img/", img.Display)
