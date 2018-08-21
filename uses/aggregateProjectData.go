@@ -25,6 +25,7 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 	fmt.Println("AggregateProjectDATA DATA", data)
 	projectData.ProjectData = data
 
+	fmt.Println("Project url", url)
 	id, err := getProject.ProjectIDByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
