@@ -5,5 +5,5 @@ import "sync"
 //FollowerLock ...
 var FollowerLock sync.Mutex
 
-//FollowingLock
+//FollowingLock ...
 var FollowingLock sync.Mutex

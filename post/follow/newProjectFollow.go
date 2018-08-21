@@ -32,13 +32,18 @@ func NewProjectFollow(eclient *elastic.Client, userID string, field string, newK
 	}
 
 	var followMap = make(map[string]bool)
+	var bellMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
 		foll.ProjectFollowers[newKey] = isBell
 		followMap = foll.ProjectFollowers
-
+		//modify user bell map if bell follower
+		if isBell {
+			foll.ProjectBell[newKey] = isBell
+			bellMap = foll.ProjectBell
+		}
 	case "following":
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
@@ -47,12 +52,17 @@ func NewProjectFollow(eclient *elastic.Client, userID string, field string, newK
 	default:
 		return errors.New("Invalid field")
 	}
-	_, err = eclient.Update().
+	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{field: followMap}). //field = Followers or Following, newContent =
-		Do(ctx)
+		Doc(map[string]interface{}{field: followMap}) //field = Followers or Following, newContent =
+
+	//only executes when there is a new bell follower
+	if isBell && strings.ToLower(field) == "followers" {
+		newFollow.Doc(map[string]interface{}{"ProjectBell": bellMap})
+	}
+	_, err = newFollow.Do(ctx)
 
 	return err
 }

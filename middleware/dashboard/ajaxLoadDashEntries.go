@@ -28,6 +28,17 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 		}
 	*/
 
+	//READ THIS:
+	// _, followDoc, err := getFollow.ByID(client.Eclient, wallID)
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	log.Println(err)
+	// }
+
+	// followDoc.UserFollowing
+	// followDoc.ProjectFollowing
+	// followDoc.EventFollowing <-- might still be separate?
+	//this is how to get the list of docIDs for the current pages following maps
 	res, entries, total, err := scrollpkg.ScrollPageDash(client.Eclient, []string{wallID}, docID.(string), "")
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)

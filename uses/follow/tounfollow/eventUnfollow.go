@@ -6,16 +6,16 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//ProjectUnfollow ...
+//EventUnfollow ...
 //allows for following a project, profile, or event
-func ProjectUnfollow(eclient *elastic.Client, hostID string, viewerID string) error {
+func EventUnfollow(eclient *elastic.Client, hostID string, viewerID string) error {
 	//remove from following
-	err := postFollow.RemoveProjectFollow(eclient, viewerID, "ProjectFollowing", hostID)
+	err := postFollow.RemoveEventFollow(eclient, viewerID, "EventFollowing", hostID)
 	if err != nil {
 		return err
 	}
 	//remove from followers
-	err = postFollow.RemoveProjectFollow(eclient, hostID, "ProjectFollowers", viewerID)
+	err = postFollow.RemoveEventFollow(eclient, hostID, "EventFollowers", viewerID)
 	if err != nil {
 		return err
 	}

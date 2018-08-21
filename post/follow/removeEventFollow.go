@@ -10,11 +10,11 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//RemoveFollow ...
+//RemoveEventFollow ...
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func RemoveFollow(eclient *elastic.Client, userID string, field string, deleteKey string) error {
+func RemoveEventFollow(eclient *elastic.Client, userID string, field string, deleteKey string) error {
 
 	ctx := context.Background()
 
