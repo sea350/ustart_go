@@ -30,7 +30,7 @@ func Event(w http.ResponseWriter, r *http.Request) {
 	//var isAdmin = false
 	for _, member := range event.EventData.Members {
 		if member.MemberID == test1.(string) && member.Role <= 0 {
-			isAdmin = true
+			//isAdmin = true
 			break
 		}
 	}
