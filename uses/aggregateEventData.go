@@ -31,7 +31,7 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		log.Println(dir, err)
 	}
 	eventData.DocID = id
-	fmt.Println("aggregateEventData", eventData.DocID)
+	fmt.Println("aggregateEventDataHERE", eventData.DocID)
 
 	//Remember to load widgets seperately
 	//Remember to load wall posts seperately
