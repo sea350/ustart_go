@@ -37,7 +37,8 @@ func Follow(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 	} else {
-		err := uses.UserFollow(client.Eclient, userID, session.Values["DocID"].(string))
+		//GP COMMENT TO RUN GO START
+		//err := uses.UserFollow(client.Eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
