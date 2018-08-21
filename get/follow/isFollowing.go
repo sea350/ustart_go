@@ -1,7 +1,9 @@
 package get
 
 import (
+	"errors"
 	"log"
+	"strings"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 	//post "github.com/sea350/ustart_go/post"
@@ -9,8 +11,8 @@ import (
 
 //IsFollowing ...
 //Determines if specific doc id is being followed
-func IsFollowing(eclient *elastic.Client, userID string, followID string, followType int) (bool, error) {
-	_, follows, err := ByUserID(eclient, userID)
+func IsFollowing(eclient *elastic.Client, userID string, followID string, followType string) (bool, error) {
+	_, follows, err := ByID(eclient, userID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -18,13 +20,15 @@ func IsFollowing(eclient *elastic.Client, userID string, followID string, follow
 	}
 
 	var exists bool
-	switch followType {
-	case 1:
+	switch strings.ToLower(followType) {
+	case "user":
 		_, exists = follows.UserFollowing[followID]
-	case 2:
+	case "project":
 		_, exists = follows.ProjectFollowing[followID]
-	case 3:
+	case "event":
 		_, exists = follows.EventFollowing[followID]
+	default:
+		return false, errors.New("Invalid field")
 	}
 
 	return exists, err
