@@ -52,9 +52,8 @@ func ProxyNotificationByUserID(eclient *elastic.Client, userID string) (types.Pr
 
 		if err != nil {
 			return types.ProxyNotifications{}, err
-		} else {
-			return proxy, nil
 		}
+		return proxy, nil
 	}
 	if searchResult.TotalHits() > 1 {
 		return proxy, errors.New("multiple proxies found")
