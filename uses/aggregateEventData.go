@@ -22,8 +22,10 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
+	fmt.Println("AggregateEventDATA DATA", data)
 	eventData.EventData = data
 
+	fmt.Println("Event url", url)
 	id, err := getEvent.EventIDByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)

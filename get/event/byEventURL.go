@@ -12,7 +12,7 @@ import (
 
 //EventByURL ... queries ES to get the event by URL
 func EventByURL(eclient *elastic.Client, eventURL string) (types.Events, error) {
-	fmt.Println("EventByURL EVENTURL", eventURL)
+	fmt.Println("SHOULD BE WORKING HERE EVNETURL", eventURL)
 	ctx := context.Background()
 	termQuery := elastic.NewTermQuery("URLName", strings.ToLower(eventURL))
 	searchResult, err := eclient.Search().
