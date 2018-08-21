@@ -29,6 +29,7 @@ func IndexProxyNotification(eclient *elastic.Client, newProxy types.ProxyNotific
 	}
 	idx, err := eclient.Index().
 		Index(globals.ProxyNotifIndex).
+		Type(globals.ProxyNotifType).
 		BodyJson(newProxy).
 		Do(ctx)
 

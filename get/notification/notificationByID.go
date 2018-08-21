@@ -17,6 +17,7 @@ func NotificationByID(eclient *elastic.Client, notifID string) (types.Notificati
 	ctx := context.Background()         //intialize context background
 	searchResult, err := eclient.Get(). //Get returns doc type, index, etc.
 						Index(globals.NotificationIndex).
+						Type(globals.NotificationType).
 						Id(notifID).
 						Do(ctx)
 	if err != nil {

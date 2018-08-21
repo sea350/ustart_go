@@ -30,6 +30,7 @@ func IndexNotification(eclient *elastic.Client, newNotif types.Notification) (st
 	}
 	idx, Err := eclient.Index().
 		Index(globals.NotificationIndex).
+		Type(globals.NotificationType).
 		BodyJson(newNotif).
 		Do(ctx)
 

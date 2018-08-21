@@ -19,6 +19,7 @@ func ProxyIDByUserID(eclient *elastic.Client, userID string) (string, error) {
 	termQuery := elastic.NewTermQuery("DocID", strings.ToLower(userID))
 	searchResult, err := eclient.Search().
 		Index(globals.ProxyNotifIndex).
+		Type(globals.ProxyNotifType).
 		Query(termQuery).
 		Do(ctx)
 

@@ -26,6 +26,7 @@ func ReindexNotification(eclient *elastic.Client, newNotif types.Notification, d
 
 	_, err = eclient.Index().
 		Index(globals.NotificationIndex).
+		Type(globals.NotificationType).
 		Id(docID).
 		BodyJson(newNotif).
 		Do(ctx)

@@ -29,6 +29,7 @@ func UpdateProxyNotifcations(eclient *elastic.Client, msgID string, field string
 
 	_, err = eclient.Update().
 		Index(globals.ProxyNotifIndex).
+		Type(globals.ProxyNotifType).
 		Id(msgID).
 		Doc(map[string]interface{}{field: newContent}).
 		Do(ctx)

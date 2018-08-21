@@ -18,6 +18,7 @@ func NtoificationsByUserID(eclient *elastic.Client, userID string) ([]types.Noti
 	termQuery := elastic.NewTermQuery("DocID", strings.ToLower(userID))
 	searchResult, err := eclient.Search().
 		Index(globals.NotificationIndex).
+		Type(globals.NotificationType).
 		Query(termQuery).
 		Do(ctx)
 

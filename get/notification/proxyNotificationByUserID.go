@@ -34,6 +34,7 @@ func ProxyNotificationByUserID(eclient *elastic.Client, userID string) (types.Pr
 	termQuery := elastic.NewTermQuery("DocID", strings.ToLower(userID))
 	searchResult, err := eclient.Search().
 		Index(globals.ProxyNotifIndex).
+		Type(globals.ProxyNotifType).
 		Query(termQuery).
 		Do(ctx)
 
@@ -47,6 +48,7 @@ func ProxyNotificationByUserID(eclient *elastic.Client, userID string) (types.Pr
 
 		_, err := eclient.Index().
 			Index(globals.ProxyNotifIndex).
+			Type(globals.ProxyNotifType).
 			BodyJson(proxy).
 			Do(ctx)
 

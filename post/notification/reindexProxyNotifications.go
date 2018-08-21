@@ -26,6 +26,7 @@ func ReindexProxyNotifications(eclient *elastic.Client, docID string, newNotif t
 
 	_, err = eclient.Index().
 		Index(globals.ProxyNotifIndex).
+		Type(globals.ProxyNotifType).
 		Id(docID).
 		BodyJson(newNotif).
 		Do(ctx)

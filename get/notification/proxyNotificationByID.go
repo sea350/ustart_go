@@ -17,6 +17,7 @@ func ProxyNotificationByID(eclient *elastic.Client, notifID string) (types.Proxy
 	ctx := context.Background()         //intialize context background
 	searchResult, err := eclient.Get(). //Get returns doc type, index, etc.
 						Index(globals.ProxyNotifIndex).
+						Type(globals.ProxyNotifType).
 						Id(notifID).
 						Do(ctx)
 	if err != nil {
