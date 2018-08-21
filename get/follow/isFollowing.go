@@ -13,8 +13,7 @@ import (
 //IsFollowing ...
 //Determines if specific doc id is being followed
 
-//GP COMMENT cannot use int AS STRING (followID)
-func IsFollowing(eclient *elastic.Client, userID string, followID int, followType string) (bool, error) {
+func IsFollowing(eclient *elastic.Client, userID string, followID string, followType string) (bool, error) {
 	_, follows, err := ByID(eclient, userID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
