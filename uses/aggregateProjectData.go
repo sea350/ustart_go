@@ -1,7 +1,6 @@
 package uses
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -22,10 +21,8 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
-	fmt.Println("AggregateProjectDATA DATA", data)
 	projectData.ProjectData = data
 
-	fmt.Println("Project url", url)
 	id, err := getProject.ProjectIDByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -33,7 +30,6 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 		log.Println(dir, err)
 	}
 	projectData.DocID = id
-	fmt.Println("What happens in here?", projectData.DocID)
 
 	//Remember to load widgets seperately
 	//Remember to load wall posts seperately

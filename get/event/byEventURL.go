@@ -2,7 +2,6 @@ package get
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -12,7 +11,6 @@ import (
 
 //EventByURL ... queries ES to get the event by URL
 func EventByURL(eclient *elastic.Client, eventURL string) (types.Events, error) {
-	fmt.Println("SHOULD BE WORKING HERE EVNETURL", eventURL)
 	ctx := context.Background()
 	termQuery := elastic.NewTermQuery("URLName", strings.ToLower(eventURL))
 	searchResult, err := eclient.Search().

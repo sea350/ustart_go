@@ -1,7 +1,6 @@
 package uses
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -22,10 +21,8 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
-	fmt.Println("AggregateEventDATA DATA", data)
 	eventData.EventData = data
 
-	fmt.Println("Event url", url)
 	id, err := getEvent.EventIDByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -33,7 +30,6 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		log.Println(dir, err)
 	}
 	eventData.DocID = id
-	fmt.Println("aggregateEventData.go data not parsed HERE", eventData.DocID)
 
 	//Remember to load widgets seperately
 	//Remember to load wall posts seperately
