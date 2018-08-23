@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"strings"
 
@@ -29,6 +30,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 	}
 
 	if searchResult.Hits.TotalHits > 2 {
+		fmt.Println(userID, searchResult.Hits.TotalHits)
 		return "", foll, errors.New("More than one result found")
 	} else if searchResult.Hits.TotalHits < 1 {
 
