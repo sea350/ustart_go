@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
+	getFollow "github.com/sea350/ustart_go/get/follow"
 	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
@@ -20,55 +20,51 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	docID, err := get.IDByUsername(client.Eclient, r.URL.Path[11:])
+	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[11:])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		log.Println(err)
 	}
 
-	// docID := session.Values["DocID"].(string)
-	userstruct, err := get.UserByID(client.Eclient, docID)
+	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		log.Println(err)
 	}
 
 	heads := []types.FloatingHead{}
 
-	for index, followerID := range userstruct.Followers {
-		head, err := uses.ConvertUserToFloatingHead(client.Eclient, followerID)
+	//_ for bell follows
+	for idKey := range followDoc.UserFollowers {
+		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", index))
+			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+
+			log.Println(err)
 			continue
 		}
-		for _, element := range userstruct.Following {
-			if element == followerID {
-				head.Followed = true
-				break
-			}
-		}
+		isFollowing, _ := followDoc.UserFollowing[idKey]
+		head.Followed = isFollowing
 		heads = append(heads, head)
 	}
 
 	heads2 := []types.FloatingHead{}
-	for index, following := range userstruct.Following {
-		head, err := uses.ConvertUserToFloatingHead(client.Eclient, following)
+	for idKey := range followDoc.UserFollowing {
+		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", index))
+			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+
+			log.Println(err)
 			continue
 		}
 		heads2 = append(heads2, head)
 	}
 
-	cs := client.ClientSide{UserInfo: userstruct, Page: docID, ListOfHeads: heads, ListOfHeads2: heads2}
+	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), ListOfHeads: heads, ListOfHeads2: heads2}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")

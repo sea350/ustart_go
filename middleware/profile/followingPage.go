@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	getFollow "github.com/sea350/ustart_go/get/follow"
 	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
@@ -20,13 +21,14 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	docID, err := get.IDByUsername(client.Eclient, r.URL.Path[11:])
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-	}
-	userstruct, err := get.UserByID(client.Eclient, docID)
+	// docID, err := get.IDByUsername(client.Eclient, r.URL.Path[11:])
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	dir, _ := os.Getwd()
+	// 	log.Println(dir, err)
+	// }
+	_, followDoc, err := getFollow.ByID(client.Eclient, test1.(string))
+	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
@@ -35,10 +37,10 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 
 	heads := []types.FloatingHead{}
 
-	for index, following := range userstruct.Following {
-		head, err := uses.ConvertUserToFloatingHead(client.Eclient, following)
+	for idKey := range followDoc.UserFollowing {
+		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", index))
+			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
