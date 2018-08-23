@@ -8,6 +8,8 @@ import (
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	"github.com/sea350/ustart_go/middleware/client"
 	postFollow "github.com/sea350/ustart_go/post/follow"
+	post "github.com/sea350/ustart_go/post/notification"
+	"github.com/sea350/ustart_go/types"
 )
 
 //AjaxUserFollowsUser ... an ajax call that toggles whether a user is actively following another user
@@ -30,35 +32,41 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if isFollowing {
+	if !isFollowing {
 		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 			return
 		}
 
 		err = postFollow.NewUserFollow(client.Eclient, followingID, "followers", ID.(string), false)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
+			return
+		}
+
+		var notif types.Notification
+		notif.NewFollower(followingID, ID.(string))
+		_, err := post.IndexNotification(client.Eclient, notif)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return
 		}
 	} else {
 		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 			return
 		}
 
 		err = postFollow.RemoveUserFollow(client.Eclient, followingID, "followers", ID.(string))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 	}
 
