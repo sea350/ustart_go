@@ -24,6 +24,7 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 	country := r.FormValue("country")
 	state := r.FormValue("state")
 	city := r.FormValue("city")
+	street := r.FormValue("street")
 	zip := r.FormValue("zip")
 	//   fmt.Println(blob)
 
@@ -31,7 +32,7 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 	evnt, err := get.EventByID(eclient, evntID)
 	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
-	err = uses.ChangeEventLocation(eclient, evntID, country, state, city, zip)
+	err = uses.ChangeEventLocation(eclient, evntID, country, state, city, street, zip)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
