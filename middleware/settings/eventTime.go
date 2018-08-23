@@ -12,8 +12,8 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//EventChangeNameAndDescription ...
-//For Events
+//For Events Time
+//EventTime...
 func EventTime(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
