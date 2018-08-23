@@ -35,7 +35,7 @@ type NotificationSettings struct {
 }
 
 //Default ... default notification settings configuration
-func (notif *NotificationSettings) Default() {
+func (notif NotificationSettings) Default() {
 	notif.EntryLiked = true
 	notif.EntryReplied = true
 	notif.EntryShared = true
