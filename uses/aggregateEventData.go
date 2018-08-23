@@ -39,11 +39,11 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		mem, err := ConvertUserToFloatingHead(eclient, id)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		mem.Classification = member.Role
 		eventData.MemberData = append(eventData.MemberData, mem)
+
 		if viewerID == member.MemberID {
 			eventData.RequestAllowed = false
 		}

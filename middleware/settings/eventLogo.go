@@ -23,7 +23,6 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 
 	//Getting eventID and member
 	evntiD := r.FormValue("eventID")
-	log.Println(evntiD)
 	evnt, member, err := get.EventAndMember(eclient, r.FormValue("eventID"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -43,15 +42,7 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
 			}
-		} else {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
 		}
-	} else {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
 	}
 
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)

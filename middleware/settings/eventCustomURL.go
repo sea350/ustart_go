@@ -43,7 +43,7 @@ func EventCustomURL(w http.ResponseWriter, r *http.Request) {
 	if inUse {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("URL IS IN USE, ERROR NOT PROPERLY HANDLED REDIRECTING TO EVENT PAGE")
-		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+		http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 		return
 	}
 
@@ -54,7 +54,7 @@ func EventCustomURL(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 	return
 
 }

@@ -19,7 +19,6 @@ func Project(w http.ResponseWriter, r *http.Request) {
 	}
 
 	projURL := r.URL.Path[17:]
-
 	project, err := uses.AggregateProjectData(client.Eclient, projURL, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
