@@ -27,7 +27,7 @@ func EventByID(eclient *elastic.Client, eventID string) (types.Events, error) {
 		return evnt, err
 	}
 
-	fmt.Println(searchResult.Source)
+	fmt.Println(*searchResult.Source)
 
 	err = json.Unmarshal(*searchResult.Source, &evnt)
 	if err != nil {
