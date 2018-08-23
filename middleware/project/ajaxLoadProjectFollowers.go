@@ -1,7 +1,6 @@
 package project
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -23,20 +22,17 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[10:])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 		log.Println(err)
 	}
 
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 		log.Println(err)
 	}
 	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 		log.Println(err)
 	}
 
@@ -46,10 +42,9 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.UserFollowers {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 			log.Println(err)
+			log.Println("index " + idKey)
 			continue
 		}
 		isFollowing, _ := followDoc.UserFollowing[idKey]
@@ -60,10 +55,9 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.ProjectFollowers {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 			log.Println(err)
+			log.Println("index " + idKey)
 			continue
 		}
 		isFollowing, _ := followDoc.ProjectFollowing[idKey]
@@ -75,9 +69,8 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.UserFollowing {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-
+			log.Println("index " + idKey)
 			log.Println(err)
 			continue
 		}
@@ -87,9 +80,8 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.ProjectFollowing {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-
+			log.Println("index " + idKey)
 			log.Println(err)
 			continue
 		}
