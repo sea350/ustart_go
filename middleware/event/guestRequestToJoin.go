@@ -1,6 +1,7 @@
 package event
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -27,6 +28,7 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
+	fmt.Println(evnt.URLName)
 	for _, guestInfo := range evnt.Guests {
 		if guestInfo.GuestID == test1.(string) {
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
