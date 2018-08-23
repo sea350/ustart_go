@@ -23,6 +23,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 	searchResult, err := eclient.Search(). //Get returns doc type, index, etc.
 						Index(globals.FollowIndex).
 						Type(globals.FollowType).
+						Query(query).
 						Do(ctx)
 
 	if err != nil {
