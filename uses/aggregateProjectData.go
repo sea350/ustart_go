@@ -2,7 +2,6 @@ package uses
 
 import (
 	"log"
-	"os"
 
 	getProject "github.com/sea350/ustart_go/get/project"
 	types "github.com/sea350/ustart_go/types"
@@ -15,19 +14,20 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 	var projectData types.ProjectAggregate
 	projectData.RequestAllowed = true
 
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println(url)
+
 	data, err := getProject.ProjectByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	projectData.ProjectData = data
 
 	id, err := getProject.ProjectIDByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	projectData.DocID = id
 
@@ -39,8 +39,7 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 		mem, err := ConvertUserToFloatingHead(eclient, id)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		mem.Classification = member.Role
 		projectData.MemberData = append(projectData.MemberData, mem)
