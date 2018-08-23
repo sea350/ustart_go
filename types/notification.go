@@ -15,6 +15,33 @@ type Notification struct {
 	Invisible    bool      `json:"Invisible"`
 }
 
+//LikedEntry ... creates a notification for a new follower
+func (notif *Notification) LikedEntry(posterID string, entryID string, likerID string) {
+	notif.Class = 1
+	notif.DocID = posterID
+	notif.RedirectToID = entryID
+	notif.ReferenceIDs = append(notif.ReferenceIDs, likerID)
+	notif.Timestamp = time.Now()
+}
+
+//CommentedEntry ... creates a notification for a new follower
+func (notif *Notification) CommentedEntry(posterID string, entryID string, commenterID string) {
+	notif.Class = 2
+	notif.DocID = posterID
+	notif.RedirectToID = entryID
+	notif.ReferenceIDs = append(notif.ReferenceIDs, commenterID)
+	notif.Timestamp = time.Now()
+}
+
+//SharedEntry ... creates a notification for a new follower
+func (notif *Notification) SharedEntry(posterID string, entryID string, sharerID string) {
+	notif.Class = 3
+	notif.DocID = posterID
+	notif.RedirectToID = entryID
+	notif.ReferenceIDs = append(notif.ReferenceIDs, sharerID)
+	notif.Timestamp = time.Now()
+}
+
 //NewFollower ... creates a notification for a new follower
 func (notif *Notification) NewFollower(followerID string, followingID string) {
 	notif.Class = 4
