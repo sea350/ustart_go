@@ -2,10 +2,8 @@ package project
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	get "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
@@ -18,30 +16,46 @@ import (
 func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+
+	var cs client.ClientSide
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println(r.URL.Path[10:])
+	log.Println(test1.(string))
+
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+		cs.ErrorStatus = true
+		cs.ErrorOutput = err
+		client.RenderSidebar(w, r, "template2-nil")
+		client.RenderSidebar(w, r, "leftnav-nil")
+		client.RenderTemplate(w, r, "projectsF", cs)
+		return
 	}
 
 	widgets, errs := uses.LoadWidgets(client.Eclient, project.ProjectData.Widgets)
 	if len(errs) > 0 {
 		log.Println("there were one or more errors loading widgets")
 		for _, eror := range errs {
-			fmt.Println(eror)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(eror)
 		}
 	}
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		panic(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		cs.ErrorStatus = true
+		cs.ErrorOutput = err
 	}
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Project: project, Widgets: widgets}
+	cs = client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Project: project, Widgets: widgets}
+
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "projectsF", cs)
@@ -57,19 +71,27 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var heads []types.FloatingHead
-
+	var cs client.ClientSide
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		panic(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		cs.ErrorStatus = true
+		cs.ErrorOutput = err
+		client.RenderSidebar(w, r, "template2-nil")
+		client.RenderSidebar(w, r, "leftnav-nil")
+		client.RenderTemplate(w, r, "manageprojects-Nil", cs)
+		return
 	}
 	for _, projectInfo := range userstruct.Projects {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projectInfo.ProjectID)
 		if err != nil {
-			panic(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		}
 		heads = append(heads, head)
 	}
-	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
+	cs = client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "manageprojects-Nil", cs)
@@ -85,7 +107,8 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	}
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		panic(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}
 

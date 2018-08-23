@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"strings"
 
@@ -22,36 +23,21 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 	searchResult, err := eclient.Search(). //Get returns doc type, index, etc.
 						Index(globals.FollowIndex).
 						Type(globals.FollowType).
+						Query(query).
 						Do(ctx)
 
 	if err != nil {
 		return "", foll, err
 	}
 
-	if searchResult.Hits.TotalHits > 2 {
+	if searchResult.Hits.TotalHits > 1 {
+		fmt.Println(userID, searchResult.Hits.TotalHits)
 		return "", foll, errors.New("More than one result found")
 	} else if searchResult.Hits.TotalHits < 1 {
-		exists, err := eclient.IndexExists(globals.FollowIndex).Do(ctx)
+
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
-		}
-		// If the index doesn't exist, create it and return error.
-		if !exists {
-			createIndex, Err := eclient.CreateIndex(globals.FollowIndex).BodyString(globals.MappingFollow).Do(ctx)
-			if Err != nil {
-				_, _ = eclient.IndexExists(globals.FollowIndex).Do(ctx)
-				panic(Err)
-			}
-			// TODO fix this.
-			if !createIndex.Acknowledged {
-			}
-
-			// Return an error saying it doesn't exist
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-			}
 		}
 
 		var newFollowing = make(map[string]bool)
