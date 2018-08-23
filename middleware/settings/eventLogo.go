@@ -37,11 +37,6 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 		defer clientFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 			err = uses.ChangeEventLogo(eclient, evntiD, blob)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-			}
 		}
 	}
 
