@@ -38,7 +38,7 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 	//TODO: Add in right URL
-	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 	return
 
 }

@@ -42,15 +42,7 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 				dir, _ := os.Getwd()
 				log.Println(dir, err)
 			}
-		} else {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
 		}
-	} else {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
 	}
 
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
