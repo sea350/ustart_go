@@ -2,6 +2,7 @@ package get
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -23,6 +24,11 @@ func ProjectIDByURL(eclient *elastic.Client, projectURL string) (string, error) 
 
 	var result string
 
+	if searchResult.Hits.TotalHits > 1 {
+		return "", errors.New("Too many results")
+	} else if searchResult.Hits.TotalHits < 1 {
+		return "", errors.New("No results")
+	}
 	for _, element := range searchResult.Hits.Hits {
 
 		result = element.Id
