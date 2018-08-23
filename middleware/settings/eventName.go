@@ -21,7 +21,7 @@ func EventChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	evntName := r.FormValue("ename")
+	evntName := r.FormValue("pname")
 	evntDesc := []rune(r.FormValue("inputDesc"))
 	//   fmt.Println(blob)
 	//fmt.Println(projName, projName)
