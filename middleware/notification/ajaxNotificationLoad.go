@@ -50,7 +50,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 		notifAggregate := make(map[string]interface{})
 		notifAggregate["Data"] = notif
 		notifAggregate["Message"] = msg
-		notifAggregate["URL"] = URL
+		notifAggregate["URL"] = url
 		notifs = append(notifs, notifAggregate)
 		count++
 		if count == 5 {
