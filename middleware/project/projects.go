@@ -4,7 +4,6 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"time"
 
 	get "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
@@ -24,6 +23,9 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 
 	var cs client.ClientSide
 
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println(r.URL.Path[10:])
+	log.Println(test1.(string))
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -135,7 +137,6 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		} else {
-			time.Sleep(10000)
 			http.Redirect(w, r, "/Projects/"+url, http.StatusFound)
 			return
 		}
