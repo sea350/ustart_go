@@ -23,8 +23,6 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("Manage Events: Loaded User")
-
 	var heads []types.FloatingHead
 
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
