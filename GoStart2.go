@@ -121,7 +121,7 @@ func main() {
 	http.HandleFunc("/eventBannerUpload/", settings.EventBannerUpload)
 	http.HandleFunc("/eventName/", settings.EventChangeNameAndDescription)
 	http.HandleFunc("/eventTime/", settings.EventTime)
-	http.HandleFunc("/eventLocation/", settings.EventLocation)
+	http.HandleFunc("/eventLocationChang/", settings.EventLocation)
 	http.HandleFunc("/eventCategory/", settings.EventCategory)
 	http.HandleFunc("/eventCustomURL/", settings.EventCustomURL)
 	http.HandleFunc("/leaveEvent/", settings.LeaveEvent)

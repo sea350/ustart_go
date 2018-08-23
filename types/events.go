@@ -35,6 +35,13 @@ type EventMembers struct {
 	Visible  bool      `json:"Visible"`
 }
 
+//EventProjects ... Project information, what is displayed for the event page
+type EventProjects struct {
+	ProjectID string `json:"ProjectID"`
+	Title     string `json:"Title"`
+	Visible   bool   `json:"Visible"`
+}
+
 //Events ... Event relevant data
 type Events struct {
 	EventID           string            `json:"EventID"`
@@ -48,6 +55,7 @@ type Events struct {
 	QuickLinks        []Link            `json:"QuickLinks"`
 	Description       []rune            `json:"Description"`
 	Members           []EventMembers    `json:"Members"`
+	Projects          []EventProjects   `json:"Projects"`
 	Guests            []EventGuests     `json:"Guests"`
 	EntryIDs          []string          `json:"EntryIDs"`
 	Location          LocStruct         `json:"Location"`

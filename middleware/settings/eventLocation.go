@@ -20,6 +20,7 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	fmt.Println(r.FormValue("street"))
 	r.ParseForm()
 	country := r.FormValue("country")
 	state := r.FormValue("state")
