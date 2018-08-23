@@ -10,7 +10,7 @@ import (
 	postFollow "github.com/sea350/ustart_go/post/follow"
 )
 
-//AjaxUserFollowsUser ... an ajax call that changes whether a project is visible on the user page
+//AjaxUserFollowsProject ... an ajax call that changes whether a user is actively following a project
 func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	ID, _ := session.Values["DocID"]
@@ -20,10 +20,10 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	eventID := r.FormValue("eventID")
+	// eventID := r.FormValue("eventID")
 	var followingID string
 
-	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID, followingID, "project")
+	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "project")
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
@@ -32,7 +32,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isFollowing {
-		err = postFollow.NewUserFollow(client.Eclient, ID, "following", followingID, false)
+		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
@@ -40,7 +40,22 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID, false)
+		err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
+		}
+	} else {
+		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
+			return
+		}
+
+		err = postFollow.RemoveProjectFollow(client.Eclient, followingID, "followers", ID.(string))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
