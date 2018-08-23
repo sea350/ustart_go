@@ -30,7 +30,8 @@ func EventByID(eclient *elastic.Client, eventID string) (types.Events, error) {
 
 	byteArray := *searchResult.Source
 	byteLength := bytes.IndexByte(byteArray, 0)
-	fmt.Println(string(byteArray[:byteLength]))
+	fmt.Println(byteLength)
+	fmt.Println(string(byteArray[:80]))
 
 	err = json.Unmarshal(*searchResult.Source, &evnt)
 	if err != nil {
