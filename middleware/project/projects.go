@@ -26,6 +26,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println(r.URL.Path[10:])
 	log.Println(test1.(string))
+
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
