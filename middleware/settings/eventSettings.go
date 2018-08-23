@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -34,22 +33,15 @@ func Event(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	fmt.Println(isAdmin)
-	cs := client.ClientSide{Event: event}
-	client.RenderSidebar(w, r, "template2-nil")
-	client.RenderSidebar(w, r, "leftnav-nil")
-	client.RenderTemplate(w, r, "eventSettings", cs)
-	/*
-		if isAdmin {
-			cs := client.ClientSide{Event: event}
-			client.RenderSidebar(w, r, "template2-nil")
-			client.RenderSidebar(w, r, "leftnav-nil")
-			client.RenderTemplate(w, r, "eventSettings", cs)
+	if isAdmin {
+		cs := client.ClientSide{Event: event}
+		client.RenderSidebar(w, r, "template2-nil")
+		client.RenderSidebar(w, r, "leftnav-nil")
+		client.RenderTemplate(w, r, "eventSettings", cs)
 
-		} else {
-			http.Redirect(w, r, "/404/", http.StatusFound)
-			return
-		}
-	*/
+	} else {
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
+	}
 
 }
