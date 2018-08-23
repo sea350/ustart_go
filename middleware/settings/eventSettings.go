@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -26,13 +27,14 @@ func Event(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	//var isAdmin = false
+	var isAdmin = false
 	for _, member := range event.EventData.Members {
 		if member.MemberID == test1.(string) && member.Role <= 0 {
-			//isAdmin = true
+			isAdmin = true
 			break
 		}
 	}
+	fmt.Println(isAdmin)
 	cs := client.ClientSide{Event: event}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
