@@ -28,6 +28,7 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 	zip := r.FormValue("zip")
 	//   fmt.Println(blob)
 
+	fmt.Println("street in settings", street)
 	evntID := r.FormValue("eventID")
 	evnt, err := get.EventByID(eclient, evntID)
 	//fmt.Println(reflect.TypeOf(blob))

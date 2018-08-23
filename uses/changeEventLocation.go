@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"fmt"
+
 	post "github.com/sea350/ustart_go/post/event"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -17,6 +19,7 @@ func ChangeEventLocation(eclient *elastic.Client, eventID string, country string
 	newLoc.Street = street
 	newLoc.Zip = zip
 
+	fmt.Println("street in uses", street)
 	err := post.UpdateEvent(eclient, eventID, "Location", newLoc)
 	return err
 
