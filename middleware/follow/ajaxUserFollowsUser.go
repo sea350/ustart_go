@@ -22,7 +22,7 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var followingID string
+	followingID := r.FormValue("userID")
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "user")
 	if err != nil {

@@ -49,6 +49,18 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 		heads = append(heads, head)
 	}
 
+	for idKey := range followDoc.ProjectFollowing {
+		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
+		if err != nil {
+			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
+			continue
+		}
+		heads = append(heads, head)
+	}
+
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
 
 	client.RenderSidebar(w, r, "template2-nil")

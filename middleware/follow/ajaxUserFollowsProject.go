@@ -20,8 +20,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// eventID := r.FormValue("eventID")
-	var followingID string
+	followingID := r.FormValue("userID")
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "project")
 	if err != nil {

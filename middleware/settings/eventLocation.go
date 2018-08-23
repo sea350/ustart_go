@@ -14,12 +14,13 @@ import (
 //For Events Location
 func EventLocation(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session_please")
-	test1, _ := session.Values["eventID"]
+	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+
 	r.ParseForm()
 	country := r.FormValue("country")
 	state := r.FormValue("state")
@@ -28,12 +29,10 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 	zip := r.FormValue("zip")
 	//   fmt.Println(blob)
 
-	fmt.Println("street in settings", street)
-	evntID := r.FormValue("eventID")
-	evnt, err := get.EventByID(eclient, evntID)
+	evnt, err := get.EventByID(eclient, r.FormValue("eventID"))
 	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
-	err = uses.ChangeEventLocation(eclient, evntID, country, state, city, street, zip)
+	err = uses.ChangeEventLocation(eclient, r.FormValue("eventID"), country, state, city, street, zip)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
