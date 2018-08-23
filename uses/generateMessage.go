@@ -31,7 +31,11 @@ func GenerateNotifMsgAndLink(eclient *elastic.Client, notif types.Notification) 
 		}
 		return head.FirstName + ` has accepted your request to join!`, `/Projects/` + head.Username, nil
 	case 13:
-
+		head, err := ConvertProjectToFloatingHead(eclient, notif.RedirectToID)
+		if err != nil {
+			return ``, ``, err
+		}
+		return head.FirstName + ` has accepted your request to join!`, `/Projects/` + head.Username, nil
 	}
 
 	return "", ``, errors.New("invalid notif")
