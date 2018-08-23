@@ -8,6 +8,7 @@ import (
 	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 
+	getFollow "github.com/sea350/ustart_go/get/follow"
 	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 )
@@ -84,12 +85,9 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	temp := string(userstruct.Description)
 
-	numberFollowing, err := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), true)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-	}
-	numberFollowers, err := uses.NumFollow(client.Eclient, session.Values["DocID"].(string), false)
+	_, follDoc, err := getFollow.ByID(client.Eclient, session.Values["DocID"].(string))
+	numberFollowers := len(follDoc.UserFollowers) + len(follDoc.ProjectFollowers) + len(follDoc.EventFollowers)
+	numberFollowing := len(follDoc.UserFollowing) + len(follDoc.ProjectFollowing) + len(follDoc.EventFollowing)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)

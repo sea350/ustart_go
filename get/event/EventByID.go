@@ -1,7 +1,6 @@
 package get
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -27,11 +26,6 @@ func EventByID(eclient *elastic.Client, eventID string) (types.Events, error) {
 		fmt.Printf("Error From EventByID.SearchResult.Get(): %s\n", err.Error())
 		return evnt, err
 	}
-
-	byteArray := *searchResult.Source
-	byteLength := bytes.IndexByte(byteArray, 0)
-	fmt.Println(byteLength)
-	fmt.Println(string(byteArray[:80]))
 
 	err = json.Unmarshal(*searchResult.Source, &evnt)
 	if err != nil {

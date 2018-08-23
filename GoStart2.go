@@ -8,6 +8,7 @@ import (
 	dash "github.com/sea350/ustart_go/middleware/dashboard"
 	event "github.com/sea350/ustart_go/middleware/event"
 	fail "github.com/sea350/ustart_go/middleware/fail"
+	follow "github.com/sea350/ustart_go/middleware/follow"
 	img "github.com/sea350/ustart_go/middleware/img"
 	inbox "github.com/sea350/ustart_go/middleware/inbox"
 	login "github.com/sea350/ustart_go/middleware/login"
@@ -98,10 +99,12 @@ func main() {
 	http.HandleFunc("/RequestToJoin/", project.RequestToJoin)
 	http.HandleFunc("/AcceptJoinRequest/", project.AcceptJoinRequest)
 	http.HandleFunc("/RejectJoinRequest/", project.RejectJoinRequest)
+	http.HandleFunc("/AjaxLoadProjectFollowers", project.AjaxLoadProjectFollowers)
 	http.HandleFunc("/ProjectMakeEntry/", project.MakeEntry)
 	http.HandleFunc("/AjaxLoadProjectEntries/", project.AjaxLoadProjectEntries)
 	http.HandleFunc("/AjaxDeleteProjectEntry/", project.AjaxDeleteEntry)
-	http.HandleFunc("/AjaxUserFollowProjectToggle/", project.AjaxToggleFollow)
+	// http.HandleFunc("/AjaxUserFollowProjectToggle/", project.AjaxToggleFollow)
+	http.HandleFunc("/AjaxUserFollowProjectToggle/", follow.AjaxUserFollowsProject)
 
 	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)
