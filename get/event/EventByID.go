@@ -27,11 +27,6 @@ func EventByID(eclient *elastic.Client, eventID string) (types.Events, error) {
 		return evnt, err
 	}
 
-	byteArray := *searchResult.Source
-	byteLength := len(byteArray)
-	fmt.Println(byteLength)
-	fmt.Println(string(byteArray[:byteLength]))
-
 	err = json.Unmarshal(*searchResult.Source, &evnt)
 	if err != nil {
 		fmt.Printf("Err: %s\n", err.Error())
