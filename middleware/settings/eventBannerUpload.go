@@ -25,7 +25,7 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 	blob := r.FormValue("banner-data")
 
 	//Get event by ID
-	// evnt, err := get.EventbyID(eclient, r.FormValue("eventID"))
+	//evnt, err := get.EventbyID(eclient, r.FormValue("eventID"))
 	// if err != nil {
 	// 	fmt.Println("err: middleware/settings/eventBannerUpload line 33\n", err)
 	// }
@@ -50,7 +50,8 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("err: middleware/settings/eventLogo  you have no permission to change event banner")
 	}
-
+	fmt.Println("EVENT", evnt)
+	fmt.Println("EVENT URLNAME", evnt.URLName)
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 	return
 }
