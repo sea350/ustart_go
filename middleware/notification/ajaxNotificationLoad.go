@@ -40,7 +40,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		msg, err := uses.GenerateMessage(client.Eclient, notif)
+		msg, url, err := uses.GenerateNotifMsgAndLink(client.Eclient, notif)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
@@ -50,6 +50,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 		notifAggregate := make(map[string]interface{})
 		notifAggregate["Data"] = notif
 		notifAggregate["Message"] = msg
+		notifAggregate["RedirectTo"] = url
 		notifs = append(notifs, notifAggregate)
 		count++
 		if count == 5 {
