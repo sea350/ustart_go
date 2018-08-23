@@ -53,6 +53,15 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 			eventData.RequestAllowed = false
 		}
 	}
+	for _, project := range data.Projects {
+		id := project.ProjectID
+		proj, err := ConvertProjectToFloatingHead(eclient, id)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+		eventData.ProjectData = append(eventData.ProjectData, proj)
+	}
 
 	return eventData, err
 }
