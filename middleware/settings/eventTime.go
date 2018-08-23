@@ -21,8 +21,20 @@ func EventTime(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	Sdate := r.FormValue("startDate")
-	Edate := r.FormValue("endDate")
+
+	Syear, _ := strconv.Atoi(r.FormValue("startDate")[0:4])
+	Smonth, _ := strconv.Atoi(r.FormValue("startDate")[5:7])
+	Sday, _ := strconv.Atoi(r.FormValue("startDate")[8:10])
+	Shour, _ := strconv.Atoi(r.FormValue("startDate")[11:13])
+	Sminute, _ := strconv.Atoi(r.FormValue("startDate")[14:16])
+	Sdate := time.Date(Syear, time.Month(Smonth), Sday, Shour, Sminute, 0, 0, time.UTC)	
+
+	Eyear, _ := strconv.Atoi(r.FormValue("endDate")[0:4])
+	Emonth, _ := strconv.Atoi(r.FormValue("endDate")[5:7])
+	Eday, _ := strconv.Atoi(r.FormValue("endDate")[8:10])
+	Ehour, _ := strconv.Atoi(r.FormValue("endDate")[11:13])
+	Eminute, _ := strconv.Atoi(r.FormValue("endDate")[14:16])
+	Edate := time.Date(Eyear, time.Month(Emonth), Eday, Ehour, Eminute, 0, 0, time.UTC)		
 	
 	evnt, err := get.EventByID(eclient, r.FormValue("eventID"))
 	//TODO: DocID
