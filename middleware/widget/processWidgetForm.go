@@ -254,7 +254,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//github widget username
 
 		username := template.HTML(r.FormValue("username"))
-		data = []template.HTML{username}
+		count := template.HTML(r.FormValue("git-count"))
+		data = []template.HTML{username, count}
 		classification = 16
 	}
 	if r.FormValue("widgetSubmit") == `17` {
