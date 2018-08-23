@@ -58,7 +58,7 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 			log.Println(dir, err)
 			continue
 		}
-		heads2 = append(heads, head)
+		heads = append(heads, head)
 	}
 
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ListOfHeads: heads}
