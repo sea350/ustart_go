@@ -1,6 +1,7 @@
 package uses
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -44,6 +45,8 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 		}
 		mem.Classification = member.Role
 		projectData.MemberData = append(projectData.MemberData, mem)
+		fmt.Println("Project what is viewerID", viewerID)
+		fmt.Println("Project what is MemberID", member.MemberID)
 		if viewerID == member.MemberID {
 			projectData.RequestAllowed = false
 		}
