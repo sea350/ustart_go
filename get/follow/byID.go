@@ -31,27 +31,10 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 	if searchResult.Hits.TotalHits > 2 {
 		return "", foll, errors.New("More than one result found")
 	} else if searchResult.Hits.TotalHits < 1 {
-		exists, err := eclient.IndexExists(globals.FollowIndex).Do(ctx)
+
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
-		}
-		// If the index doesn't exist, create it and return error.
-		if !exists {
-			createIndex, Err := eclient.CreateIndex(globals.FollowIndex).BodyString(globals.MappingFollow).Do(ctx)
-			if Err != nil {
-				_, _ = eclient.IndexExists(globals.FollowIndex).Do(ctx)
-				panic(Err)
-			}
-			// TODO fix this.
-			if !createIndex.Acknowledged {
-			}
-
-			// Return an error saying it doesn't exist
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-			}
 		}
 
 		var newFollowing = make(map[string]bool)
