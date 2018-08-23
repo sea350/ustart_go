@@ -24,7 +24,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	pageUserName := strings.ToLower(r.URL.Path[9:])
 
-	userstruct, errMessage, followbool, err := uses.UserPage(client.Eclient, pageUserName, docID.(string))
+	userstruct, errMessage, _, err := uses.UserPage(client.Eclient, pageUserName, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -45,11 +45,13 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
-	followingState := "no"
-	if followbool == true {
-		followingState = "yes"
-	}
-	if followbool == false {
+	followingState := false
+	_, follDoc, err := getFollow.ByID(client.Eclient, session.Values["DocID"].(string))
+	exist1, _ := follDoc.UserFollowers[session.Values["DocID"].(string)]
+	exist2, _ := follDoc.ProjectFollowers[session.Values["DocID"].(string)]
+	exist3, _ := follDoc.EventFollowers[session.Values["DocID"].(string)]
+	if exist1 || exist2 || exist3 {
+		followingState = true
 	}
 
 	var ClassYear string
@@ -85,7 +87,6 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	temp := string(userstruct.Description)
 
-	_, follDoc, err := getFollow.ByID(client.Eclient, session.Values["DocID"].(string))
 	numberFollowers := len(follDoc.UserFollowers) + len(follDoc.ProjectFollowers) + len(follDoc.EventFollowers)
 	numberFollowing := len(follDoc.UserFollowing) + len(follDoc.ProjectFollowing) + len(follDoc.EventFollowing)
 	if err != nil {
