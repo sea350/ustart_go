@@ -39,6 +39,7 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		}
 		evnt, err := getEvent.EventByID(client.Eclient, eventInfo.EventID)
 		if err != nil {
+			continue //if event doesn't exist, ignore it
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
