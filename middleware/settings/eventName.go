@@ -21,7 +21,7 @@ func EventChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	evntName := r.FormValue("ename")
+	evntName := r.FormValue("pname")
 	evntDesc := []rune(r.FormValue("inputDesc"))
 	//   fmt.Println(blob)
 	//fmt.Println(projName, projName)
@@ -36,7 +36,7 @@ func EventChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 	//TODO: Add in right URL
-	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	return
 
 }
