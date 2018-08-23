@@ -12,6 +12,42 @@ import (
 // Return message, link, and error
 func GenerateNotifMsgAndLink(eclient *elastic.Client, notif types.Notification) (string, string, error) {
 	switch notif.Class {
+	case 1:
+		if len(notif.ReferenceIDs) > 1 {
+			return strconv.Itoa(len(notif.ReferenceIDs)) + " new likes on your journal entry", `/404`, nil
+		} else if len(notif.ReferenceIDs) == 1 {
+			head, err := ConvertUserToFloatingHead(eclient, notif.ReferenceIDs[0])
+			if err != nil {
+				return ``, ``, err
+			}
+			return head.FirstName + ` ` + head.LastName + ` has liked your journal entry`, `/404`, nil
+		} else {
+			return ``, ``, errors.New("invalid notification")
+		}
+	case 2:
+		if len(notif.ReferenceIDs) > 1 {
+			return strconv.Itoa(len(notif.ReferenceIDs)) + " new comments on your journal entry", `/404`, nil
+		} else if len(notif.ReferenceIDs) == 1 {
+			head, err := ConvertUserToFloatingHead(eclient, notif.ReferenceIDs[0])
+			if err != nil {
+				return ``, ``, err
+			}
+			return head.FirstName + ` ` + head.LastName + ` has commented to your journal entry`, `/404`, nil
+		} else {
+			return ``, ``, errors.New("invalid notification")
+		}
+	case 3:
+		if len(notif.ReferenceIDs) > 1 {
+			return strconv.Itoa(len(notif.ReferenceIDs)) + " people have shared your journal entry", `/404`, nil
+		} else if len(notif.ReferenceIDs) == 1 {
+			head, err := ConvertUserToFloatingHead(eclient, notif.ReferenceIDs[0])
+			if err != nil {
+				return ``, ``, err
+			}
+			return head.FirstName + ` ` + head.LastName + ` has shared your journal entry`, `/404`, nil
+		} else {
+			return ``, ``, errors.New("invalid notification")
+		}
 	case 4:
 		if len(notif.ReferenceIDs) > 1 {
 			return "You have " + strconv.Itoa(len(notif.ReferenceIDs)) + " new followers", `/404`, nil
