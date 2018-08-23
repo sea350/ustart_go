@@ -1,7 +1,6 @@
 package uses
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -15,7 +14,6 @@ import (
 func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (types.EventAggregate, error) {
 	var eventData types.EventAggregate
 	eventData.RequestAllowed = true
-	fmt.Println("what is viewer ID", viewerID)
 
 	data, err := getEvent.EventByURL(eclient, url)
 	if err != nil {
@@ -41,13 +39,11 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		mem, err := ConvertUserToFloatingHead(eclient, id)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		mem.Classification = member.Role
 		eventData.MemberData = append(eventData.MemberData, mem)
 
-		fmt.Println("what is member id", member.MemberID)
 		if viewerID == member.MemberID {
 			eventData.RequestAllowed = false
 		}

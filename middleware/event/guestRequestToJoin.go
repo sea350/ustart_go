@@ -1,7 +1,7 @@
 package event
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/event"
@@ -20,13 +20,11 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("eventID") //event docID
-	fmt.Println(ID)
-	fmt.Println("debug text requesttojoin line 23")
 
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
-		fmt.Println("err middleware/event/guestrequesttojoin line25")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	for _, guestInfo := range evnt.Guests {
@@ -43,13 +41,13 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 
 	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), ID)
 	if err != nil {
-		fmt.Println("err middleware/event/guestrequesttojoin line42")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 	err = evntPost.AppendGuestReqReceived(client.Eclient, ID, test1.(string), evnt.GuestReqReceived[test1.(string)])
 	if err != nil {
-		fmt.Println("err middleware/event/guestrequesttojoin line47")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
