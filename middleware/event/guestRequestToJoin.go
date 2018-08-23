@@ -29,13 +29,13 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 
 	for _, guestInfo := range evnt.Guests {
 		if guestInfo.GuestID == test1.(string) {
-			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
 	}
 
 	if _, exists := evnt.GuestReqReceived[test1.(string)]; exists {
-		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 		return
 	}
 
@@ -50,6 +50,6 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	return
 }
