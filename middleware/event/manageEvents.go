@@ -39,10 +39,7 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		}
 		evnt, err := getEvent.EventByID(client.Eclient, eventInfo.EventID)
 		if err != nil {
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
-			continue //if event doesn't exist, ignore it
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			continue //if event doesn't work, ignore it; so that we can show the rest
 		}
 		for _, memberInfo := range evnt.Members {
 			if memberInfo.MemberID == test1.(string) && memberInfo.Role > 1 {
