@@ -1,4 +1,4 @@
-package profile
+package project
 
 import (
 	"fmt"
@@ -12,21 +12,27 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//FollowersPage ... Shows the page for followers
-func FollowersPage(w http.ResponseWriter, r *http.Request) {
+//AjaxLoadProjectFollowers ... Shows the page for followers
+func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[11:])
+	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[10:])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 		log.Println(err)
 	}
 
+	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+
+		log.Println(err)
+	}
 	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -90,7 +96,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		heads2 = append(heads2, head)
 	}
 
-	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), ListOfHeads: heads, ListOfHeads2: heads2}
+	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), ListOfHeads: heads, Project: project, ListOfHeads2: heads2}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
