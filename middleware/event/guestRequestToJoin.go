@@ -1,7 +1,6 @@
 package event
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -31,10 +30,12 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	fmt.Println("event ID", id)
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("event ID", id)
 
 	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
