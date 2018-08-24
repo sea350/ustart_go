@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -14,12 +13,13 @@ import (
 )
 
 //ByID ...
+//
 func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) {
 	ctx := context.Background() //intialize context background
 	var foll types.Follow       //initialize follow
 	var follID string           //initialize follow ID
 
-	query := elastic.NewTermQuery("DocID", strings.ToLower(userID))
+	query := elastic.NewTermQuery("DocID", userID)
 	searchResult, err := eclient.Search(). //Get returns doc type, index, etc.
 						Index(globals.FollowIndex).
 						Type(globals.FollowType).
@@ -36,21 +36,21 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 	} else if searchResult.Hits.TotalHits < 1 {
 		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC WITH TOTALHITS:", searchResult.Hits.TotalHits)
 
-		var newFollowing = make(map[string]bool)
-		var newFollowers = make(map[string]bool)
-		var newBell = make(map[string]bool)
+		// var newFollowing = make(map[string]bool)
+		// var newFollowers = make(map[string]bool)
+		// var newBell = make(map[string]bool)
 		var newFollow = types.Follow{
-			DocID: userID,
+		// DocID: userID,
 
-			UserFollowers:    newFollowers,
-			UserFollowing:    newFollowing,
-			ProjectFollowers: newFollowers,
-			ProjectFollowing: newFollowing,
-			EventFollowers:   newFollowers,
-			EventFollowing:   newFollowing,
-			UserBell:         newBell,
-			ProjectBell:      newBell,
-			EventBell:        newBell,
+		// UserFollowers:    newFollowers,
+		// UserFollowing:    newFollowing,
+		// ProjectFollowers: newFollowers,
+		// ProjectFollowing: newFollowing,
+		// EventFollowers:   newFollowers,
+		// EventFollowing:   newFollowing,
+		// UserBell:         newBell,
+		// ProjectBell:      newBell,
+		// EventBell:        newBell,
 		}
 		// Index the document.
 		newDoc, Err := eclient.Index().
@@ -63,20 +63,8 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			log.Println(Err)
 		}
 
-		res, err := eclient.Get(). //Get returns doc type, index, etc.
-						Index(globals.FollowIndex).
-						Type(globals.FollowType).
-						Id(newDoc.Id).
-						Do(ctx)
-
-		if err != nil {
-			return newDoc.Id, foll, err
-		}
-
-		err = json.Unmarshal(*res.Source, &foll) //unmarshal type RawMessage into user struct
-
-		fmt.Println("FOLLOW DOC:", foll)
-		return newDoc.Id, foll, err
+		fmt.Println("FOLLOW DOC:", newDoc.Id)
+		return newDoc.Id, newFollow, err
 	}
 
 	for _, hit := range searchResult.Hits.Hits {
