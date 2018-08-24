@@ -34,7 +34,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		fmt.Println(userID, searchResult.Hits.TotalHits)
 		return "", foll, errors.New("More than one result found")
 	} else if searchResult.Hits.TotalHits < 1 {
-
+		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
@@ -57,7 +57,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			EventBell:        newBell,
 		}
 		// Index the document.
-		_, Err := eclient.Index().
+		newID, Err := eclient.Index().
 			Index(globals.FollowIndex).
 			Type(globals.FollowType).
 			BodyJson(newFollow).
@@ -65,6 +65,18 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		if Err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(Err)
+		}
+
+		query := elastic.NewBoolQuery()
+		query = query.Must(elastic.NewTermQuery("DocID", strings.ToLower(userID)))
+		searchResult, err := eclient.Search(). //Get returns doc type, index, etc.
+							Index(globals.FollowIndex).
+							Type(globals.FollowType).
+							Query(query).
+							Do(ctx)
+
+		if err != nil {
+			return "", foll, err
 		}
 	}
 
