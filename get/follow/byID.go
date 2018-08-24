@@ -79,7 +79,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 
 		err = json.Unmarshal(*res.Source, &foll) //unmarshal type RawMessage into user struct
 
-		return newID, foll, err
+		return newID.Id, foll, err
 	}
 
 	for _, hit := range searchResult.Hits.Hits {
