@@ -78,6 +78,8 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	default:
 		return errors.New("Invalid field")
 	}
+	fmt.Println("NUF:", followMap)
+
 	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
