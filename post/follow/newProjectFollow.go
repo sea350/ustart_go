@@ -14,7 +14,7 @@ import (
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func NewProjectFollow(eclient *elastic.Client, userID string, field string, newKey string, isBell bool) error {
+func NewProjectFollow(eclient *elastic.Client, projID string, field string, newKey string, isBell bool) error {
 
 	ctx := context.Background()
 
@@ -26,10 +26,12 @@ func NewProjectFollow(eclient *elastic.Client, userID string, field string, newK
 		return errors.New("Index does not exist")
 	}
 
-	follID, foll, err := getFollow.ByID(eclient, userID)
+	follID, foll, err := getFollow.ByID(eclient, projID)
 	if err != nil {
 		return err
 	}
+
+	//  vFollowerLock.Lock()
 
 	var followMap = make(map[string]bool)
 	var bellMap = make(map[string]bool)
@@ -37,18 +39,37 @@ func NewProjectFollow(eclient *elastic.Client, userID string, field string, newK
 	case "followers":
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
-		foll.ProjectFollowers[newKey] = isBell
-		followMap = foll.ProjectFollowers
-		//modify user bell map if bell follower
-		if isBell {
-			foll.ProjectBell[newKey] = isBell
-			bellMap = foll.ProjectBell
+		if len(foll.ProjectFollowers) == 0 {
+			var newMap = make(map[string]bool)
+			newMap[newKey] = isBell
+			followMap = newMap
+			if isBell {
+				var newBell = make(map[string]bool)
+				newBell[newKey] = isBell
+				bellMap = newBell
+			}
+		} else {
+			foll.ProjectFollowers[newKey] = isBell
+			followMap = foll.ProjectFollowers
+
+			//modify user bell map if bell follower
+			if isBell {
+				foll.ProjectBell[newKey] = isBell
+				bellMap = foll.ProjectBell
+			}
 		}
+
 	case "following":
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
-		foll.ProjectFollowing[newKey] = isBell
-		followMap = foll.ProjectFollowing
+		if len(foll.ProjectFollowing) == 0 {
+			var newMap = make(map[string]bool)
+			newMap[newKey] = isBell
+			followMap = newMap
+		} else {
+			foll.ProjectFollowing[newKey] = isBell
+			followMap = foll.ProjectFollowing
+		}
 	default:
 		return errors.New("Invalid field")
 	}
@@ -63,6 +84,5 @@ func NewProjectFollow(eclient *elastic.Client, userID string, field string, newK
 		newFollow.Doc(map[string]interface{}{"ProjectBell": bellMap})
 	}
 	_, err = newFollow.Do(ctx)
-
 	return err
 }
