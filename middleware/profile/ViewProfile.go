@@ -47,14 +47,15 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	followingState := false
+
 	id, err := getUser.IDByUsername(client.Eclient, pageUserName)
 	if err != nil {
 		return
 	}
 	_, follDoc, err := getFollow.ByID(client.Eclient, id)
-	exist1, _ := follDoc.UserFollowers[session.Values["DocID"].(string)]
-	exist2, _ := follDoc.ProjectFollowers[session.Values["DocID"].(string)]
-	exist3, _ := follDoc.EventFollowers[session.Values["DocID"].(string)]
+	_, exist1 := follDoc.UserFollowers[session.Values["DocID"].(string)]
+	_, exist2 := follDoc.ProjectFollowers[session.Values["DocID"].(string)]
+	_, exist3 := follDoc.EventFollowers[session.Values["DocID"].(string)]
 	if exist1 || exist2 || exist3 {
 		followingState = true
 	}
