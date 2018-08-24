@@ -67,17 +67,19 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			log.Println(Err)
 		}
 
-		query := elastic.NewBoolQuery()
-		query = query.Must(elastic.NewTermQuery("DocID", strings.ToLower(userID)))
-		searchResult, err := eclient.Search(). //Get returns doc type, index, etc.
-							Index(globals.FollowIndex).
-							Type(globals.FollowType).
-							Query(query).
-							Do(ctx)
+		res, err := eclient.Get(). //Get returns doc type, index, etc.
+						Index(globals.FollowIndex).
+						Type(globals.FollowType).
+						Id(newID).
+						Do(ctx)
 
 		if err != nil {
 			return "", foll, err
 		}
+
+		err = json.Unmarshal(*res.Source, &foll) //unmarshal type RawMessage into user struct
+
+		return newID, foll, err
 	}
 
 	for _, hit := range searchResult.Hits.Hits {
