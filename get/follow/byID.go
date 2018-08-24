@@ -34,7 +34,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		fmt.Println(userID, searchResult.Hits.TotalHits)
 		return "", foll, errors.New("More than one result found")
 	} else if searchResult.Hits.TotalHits < 1 {
-		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC")
+		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC WITH TOTALHITS:", searchResult.Hits.TotalHits)
 
 		var newFollowing = make(map[string]bool)
 		var newFollowers = make(map[string]bool)
