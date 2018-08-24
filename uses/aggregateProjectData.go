@@ -14,9 +14,6 @@ func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) 
 	var projectData types.ProjectAggregate
 	projectData.RequestAllowed = true
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println(url)
-
 	data, err := getProject.ProjectByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)

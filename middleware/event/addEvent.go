@@ -84,6 +84,7 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 			dir, _ := os.Getwd()
 			log.Println(dir, err)
 		} else {
+			time.Sleep(2 * time.Second)
 			http.Redirect(w, r, "/Event/"+url, http.StatusFound)
 			return
 		}
