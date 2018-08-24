@@ -31,15 +31,15 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	for _, receivedReq := range evnt.GuestReqReceived {
-		if receivedReq == test1.(int) {
-			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
-			return
-		}
-	}
-	fmt.Println("event ID", id)
-	fmt.Println("user ID", test1.(int))
 
+	fmt.Println("event ID", id)
+	if _, exists := evnt.GuestReqReceived[test1.(string)]; exists {
+		fmt.Println("GuestReqReceived working?")
+		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
+		return
+	}
+
+	fmt.Println("reached here?")
 	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -51,7 +51,6 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
-	fmt.Println("AppendGuestReqReceived working?", err)
 
 	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	return
