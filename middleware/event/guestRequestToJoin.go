@@ -41,12 +41,12 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), ID)
+	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
-	err = evntPost.AppendGuestReqReceived(client.Eclient, ID, test1.(string), evnt.GuestReqReceived[test1.(string)])
+	err = evntPost.AppendGuestReqReceived(client.Eclient, id, test1.(string), evnt.GuestReqReceived[test1.(string)])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
