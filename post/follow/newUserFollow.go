@@ -83,7 +83,7 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	var theField string
 	if strings.ToLower(field) == "followers" {
 		theField = "UserFollowers"
-	} else if strings.ToLower(field) == "followers" {
+	} else if strings.ToLower(field) == "following" {
 		theField = "UserFollowing"
 	}
 	newFollow := eclient.Update().
