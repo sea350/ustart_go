@@ -19,11 +19,11 @@ type EventPrivileges struct {
 
 //EventGuests ... Guest relevant data, people who have been invited to attend the event
 type EventGuests struct {
-	GuestID        string        `json:"GuestID"` //Can be a userID or a projectID
-	Status         int           `json:"Status"`  //Marks whether they are invited/going/not going, 0 for invited, 1 for going, 2 for not
-	Visible        bool          `json:"Visible"`
-	Representative []EventGuests `json:"Representative"`
-	Classification int           `json:"Classification"` //1 for guest, 2 for project guest
+	GuestID string `json:"GuestID"` //Can be a userID or a projectID
+	Status  int    `json:"Status"`  //Marks whether they are invited/going/not going, 0 for invited, 1 for going, 2 for not
+	Visible bool   `json:"Visible"`
+	//Representative []EventGuests `json:"Representative"`
+	Classification int `json:"Classification"` //1 for guest, 2 for project guest
 }
 
 //EventMembers ... Member relevant data, who can modify the event page

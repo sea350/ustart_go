@@ -11,6 +11,7 @@ import (
 //takes in eclient, user ID, the project ID
 func AppendSentProjReq(eclient *elastic.Client, usrID string, projID string) error {
 	ProjectLock.Lock()
+	defer ProjectLock.Unlock()
 
 	usr, err := get.UserByID(eclient, usrID)
 
@@ -22,7 +23,6 @@ func AppendSentProjReq(eclient *elastic.Client, usrID string, projID string) err
 
 	err = UpdateUser(eclient, usrID, "SentProjReq", usr.SentProjReq)
 
-	defer ProjectLock.Unlock()
 	return err
 
 }

@@ -11,10 +11,10 @@ import (
 //AppendSentEventReq ... appends to either sent event request arrays within user
 //takes in eclient, user ID, the event ID
 func AppendSentEventReq(eclient *elastic.Client, usrID string, eventID string) error {
-	fmt.Println("is it reached here?")
-	EventLock.Lock()
 
-	fmt.Println("is it reached here?")
+	EventLock.Lock()
+	defer EventLock.Unlock()
+
 	usr, err := get.UserByID(eclient, usrID)
 
 	fmt.Println("who is the user?", usr)
@@ -26,7 +26,6 @@ func AppendSentEventReq(eclient *elastic.Client, usrID string, eventID string) e
 
 	err = UpdateUser(eclient, usrID, "SentEventReq", usr.SentEventReq)
 
-	defer EventLock.Unlock()
 	return err
 
 }

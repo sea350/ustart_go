@@ -7,11 +7,10 @@ import (
 
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
-	evntPost "github.com/sea350/ustart_go/post/event"
 	userPost "github.com/sea350/ustart_go/post/user"
 )
 
-//GuestRequestToJoin ...
+//GuestRequestToJoin ... PUBLIC no need for request received
 func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -33,25 +32,11 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("event ID", id)
-	if _, exists := evnt.GuestReqReceived[test1.(string)]; exists {
-		fmt.Println("GuestReqReceived working?")
-		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
-		return
-	}
 
-	fmt.Println("reached here?")
 	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
-	fmt.Println("AppendSentEventReq working?", err)
-	err = evntPost.AppendGuestReqReceived(client.Eclient, id, test1.(string), evnt.GuestReqReceived[test1.(string)])
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-	}
-
 	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
-	return
+
 }
