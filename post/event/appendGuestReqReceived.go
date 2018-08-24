@@ -34,6 +34,7 @@ func AppendGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 		evnt.GuestReqReceived = newReq
 
 	} else {
+		fmt.Println("guestrequest not 0", evnt.GuestReqReceived[userID])
 		evnt.GuestReqReceived[userID] = classification
 	}
 
