@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
+	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -26,7 +27,14 @@ func ProxyIDByUserID(eclient *elastic.Client, userID string) (string, error) {
 	}
 
 	if searchResult.TotalHits() == 0 {
-		return proxyID, errors.New("No results, proxy ID does not exist")
+		proxy := types.ProxyMessages{DocID: userID, Class: 1}
+		result, err := eclient.Index().
+			Index(globals.ProxyMsgIndex).
+			Type(globals.ProxyMsgType).
+			BodyJson(proxy).
+			Do(ctx)
+
+		return result.Id, err
 	}
 	if searchResult.TotalHits() > 1 {
 		/*

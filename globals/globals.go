@@ -1,4 +1,4 @@
-package get
+package globals
 
 //ProjectIndex ...
 const ProjectIndex = "test-project_data"
