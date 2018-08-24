@@ -21,7 +21,7 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("eventID") //event docID
-
+	fmt.Println("ID", ID)
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
