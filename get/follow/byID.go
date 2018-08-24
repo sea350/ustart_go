@@ -34,11 +34,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		fmt.Println(userID, searchResult.Hits.TotalHits)
 		return "", foll, errors.New("More than one result found")
 	} else if searchResult.Hits.TotalHits < 1 {
-
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-		}
+		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC WITH TOTALHITS:", searchResult.Hits.TotalHits)
 
 		var newFollowing = make(map[string]bool)
 		var newFollowers = make(map[string]bool)
@@ -57,7 +53,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			EventBell:        newBell,
 		}
 		// Index the document.
-		_, Err := eclient.Index().
+		newDoc, Err := eclient.Index().
 			Index(globals.FollowIndex).
 			Type(globals.FollowType).
 			BodyJson(newFollow).
@@ -66,6 +62,21 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(Err)
 		}
+
+		res, err := eclient.Get(). //Get returns doc type, index, etc.
+						Index(globals.FollowIndex).
+						Type(globals.FollowType).
+						Id(newDoc.Id).
+						Do(ctx)
+
+		if err != nil {
+			return newDoc.Id, foll, err
+		}
+
+		err = json.Unmarshal(*res.Source, &foll) //unmarshal type RawMessage into user struct
+
+		fmt.Println("FOLLOW DOC:", foll)
+		return newDoc.Id, foll, err
 	}
 
 	for _, hit := range searchResult.Hits.Hits {

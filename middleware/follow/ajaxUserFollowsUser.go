@@ -25,8 +25,6 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 
 	followingID := r.FormValue("userID")
 
-	fmt.Println("THE FOLLOWING ID:", followingID)
-	fmt.Println("THE USER ID:", ID)
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "user")
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -36,6 +34,7 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !isFollowing {
+		fmt.Println("TRYING TO FOLLOW")
 		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -59,6 +58,7 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
+		fmt.Println("TRYING TO UNFOLLOW")
 		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
