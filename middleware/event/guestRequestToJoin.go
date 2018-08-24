@@ -19,16 +19,12 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-
-	ID := r.FormValue("eventID") //event docID
-
-	evnt, err := get.EventByID(client.Eclient, ID)
+	id := r.FormValue("eventID") //event docID
+	evnt, err := get.EventByID(client.Eclient, id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
-
-	fmt.Println(evnt.URLName)
 	for _, guestInfo := range evnt.Guests {
 		if guestInfo.GuestID == test1.(string) {
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
@@ -36,17 +32,21 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	fmt.Println("event ID", id)
 	if _, exists := evnt.GuestReqReceived[test1.(string)]; exists {
+		fmt.Println("GuestReqReceived working?")
 		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 		return
 	}
 
-	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), ID)
+	fmt.Println("reached here?")
+	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
-	err = evntPost.AppendGuestReqReceived(client.Eclient, ID, test1.(string), evnt.GuestReqReceived[test1.(string)])
+	fmt.Println("AppendSentEventReq working?", err)
+	err = evntPost.AppendGuestReqReceived(client.Eclient, id, test1.(string), evnt.GuestReqReceived[test1.(string)])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)

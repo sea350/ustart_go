@@ -2,6 +2,7 @@ package post
 
 import (
 	"errors"
+	"fmt"
 
 	get "github.com/sea350/ustart_go/get/user"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -10,10 +11,13 @@ import (
 //AppendSentEventReq ... appends to either sent event request arrays within user
 //takes in eclient, user ID, the event ID
 func AppendSentEventReq(eclient *elastic.Client, usrID string, eventID string) error {
+	fmt.Println("is it reached here?")
 	EventLock.Lock()
 
+	fmt.Println("is it reached here?")
 	usr, err := get.UserByID(eclient, usrID)
 
+	fmt.Println("who is the user?", usr)
 	if err != nil {
 		return errors.New("User does not exist")
 	}

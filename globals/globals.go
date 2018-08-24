@@ -247,18 +247,6 @@ const MappingConvo = `
 
 const MappingFollow = `
 {
-	"settings" :{
-		"analysis":{
-			"analyzer" : {
-				"casesensitive_text":{
-					"type" : "custom",
-					"tokenizer": "standard"
-				}
-			}
-		}
-	},
-
-
    "mappings":{
         "FOLLOW":{
             "properties":{
