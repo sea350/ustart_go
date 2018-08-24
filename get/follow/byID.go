@@ -70,7 +70,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		res, err := eclient.Get(). //Get returns doc type, index, etc.
 						Index(globals.FollowIndex).
 						Type(globals.FollowType).
-						Id(newID).
+						Id(newID.Id).
 						Do(ctx)
 
 		if err != nil {
