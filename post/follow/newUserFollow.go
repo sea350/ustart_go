@@ -66,6 +66,7 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 		defer FollowingLock.Unlock()
 		fmt.Println("CASE FOLLOWING, LINE 67")
 		if len(foll.UserFollowing) == 0 {
+			fmt.Println("CASE FOLLOWING, LINE 69")
 			var newMap = make(map[string]bool)
 			newMap[newKey] = isBell
 			followMap = newMap
@@ -87,5 +88,8 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 		newFollow.Doc(map[string]interface{}{"UserBell": bellMap})
 	}
 	_, err = newFollow.Do(ctx)
+	if err != nil {
+		fmt.Println("LINE 92 ERROR," err)
+	}
 	return err
 }
