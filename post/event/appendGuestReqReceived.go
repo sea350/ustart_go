@@ -18,6 +18,9 @@ func AppendGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 
 	ctx := context.Background()
 
+	EventGuestRequestLock.Lock()
+	defer EventGuestRequestLock.Unlock()
+
 	evnt, err := get.EventByID(eclient, eventID)
 	if err != nil {
 		return errors.New("Event does not exist")
