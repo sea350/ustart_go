@@ -27,9 +27,10 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
-
-	fmt.Println(evnt.URLName)
+	fmt.Println("test1 value", test1.(string))
+	fmt.Println("event url name", evnt.URLName)
 	for _, guestInfo := range evnt.Guests {
+		fmt.Println("guestinfo. guestid", guestInfo.GuestID)
 		if guestInfo.GuestID == test1.(string) {
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
