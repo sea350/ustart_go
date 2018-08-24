@@ -13,6 +13,7 @@ import (
 func AppendSentEventReq(eclient *elastic.Client, usrID string, eventID string) error {
 	EventLock.Lock()
 
+	fmt.Println("is it reached here?")
 	usr, err := get.UserByID(eclient, usrID)
 
 	fmt.Println("who is the user?", usr)
