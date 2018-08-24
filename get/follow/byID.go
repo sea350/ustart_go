@@ -53,7 +53,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			EventBell:        newBell,
 		}
 		// Index the document.
-		newID, Err := eclient.Index().
+		newDoc, Err := eclient.Index().
 			Index(globals.FollowIndex).
 			Type(globals.FollowType).
 			BodyJson(newFollow).
@@ -66,17 +66,17 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		res, err := eclient.Get(). //Get returns doc type, index, etc.
 						Index(globals.FollowIndex).
 						Type(globals.FollowType).
-						Id(newID.Id).
+						Id(newDoc.Id).
 						Do(ctx)
 
 		if err != nil {
-			return "", foll, err
+			return newDoc.Id, foll, err
 		}
 
 		err = json.Unmarshal(*res.Source, &foll) //unmarshal type RawMessage into user struct
 
 		fmt.Println("FOLLOW DOC:", foll)
-		return newID.Id, foll, err
+		return newDoc.Id, foll, err
 	}
 
 	for _, hit := range searchResult.Hits.Hits {
