@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -17,7 +18,7 @@ import (
 func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey string, isBell bool) error {
 
 	ctx := context.Background()
-
+	fmt.Println("USERID NUF:", userID)
 	exists, err := eclient.IndexExists(globals.FollowIndex).Do(ctx)
 	if err != nil {
 		return err
@@ -37,6 +38,7 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	var bellMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
+		fmt.Println("CASE FOLLOWERS, LINE 41")
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
 		if len(foll.UserFollowers) == 0 {
@@ -62,6 +64,7 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	case "following":
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
+		fmt.Println("CASE FOLLOWING, LINE 67")
 		if len(foll.UserFollowing) == 0 {
 			var newMap = make(map[string]bool)
 			newMap[newKey] = isBell
