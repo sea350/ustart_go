@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -23,14 +22,12 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[11:])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 		log.Println(err)
 	}
 
 	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 		log.Println(err)
 	}
 
@@ -40,9 +37,8 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.UserFollowers {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-
+			log.Println(idKey)
 			log.Println(err)
 			continue
 		}
@@ -54,9 +50,8 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.ProjectFollowers {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-
+			log.Println(idKey)
 			log.Println(err)
 			continue
 		}
@@ -69,10 +64,9 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.UserFollowing {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 			log.Println(err)
+			log.Println(idKey)
 			continue
 		}
 		heads2 = append(heads2, head)
@@ -81,10 +75,9 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.ProjectFollowing {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			fmt.Println(fmt.Sprintf("err middleware/profile/followerspage: line 36, index %d", idKey))
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 			log.Println(err)
+			log.Println(idKey)
 			continue
 		}
 		heads2 = append(heads2, head)
