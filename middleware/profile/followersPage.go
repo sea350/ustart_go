@@ -89,6 +89,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		heads2 = append(heads2, head)
 	}
 
+	getFollow.IsFollowing(client.Eclient, test1.(string), id, "user")
 	numberFollowers := len(followDoc.UserFollowers) + len(followDoc.ProjectFollowers) + len(followDoc.EventFollowers)
 	numberFollowing := len(followDoc.UserFollowing) + len(followDoc.ProjectFollowing) + len(followDoc.EventFollowing)
 	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, Following: numberFollowing, ListOfHeads: heads, ListOfHeads2: heads2}
