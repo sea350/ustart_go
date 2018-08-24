@@ -40,5 +40,5 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
 	client.RenderTemplate(w, r, "events", cs)
-	log.Printf("Clientside is Here: %s\n", cs.Username)
+
 }
