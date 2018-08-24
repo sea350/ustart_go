@@ -33,15 +33,15 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 	if searchResult.Hits.TotalHits > 1 {
 		fmt.Println(userID, searchResult.Hits.TotalHits)
 		return "", foll, errors.New("More than one result found")
-	} else if searchResult.Hits.TotalHits < 1 {
+	} else if searchResult.Hits.TotalHits == 0 {
 		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC WITH TOTALHITS:", searchResult.Hits.TotalHits)
 
 		// var newFollowing = make(map[string]bool)
 		// var newFollowers = make(map[string]bool)
 		// var newBell = make(map[string]bool)
 		var newFollow = types.Follow{
-		// DocID: userID,
-
+			DocID: userID,
+		}
 		// UserFollowers:    newFollowers,
 		// UserFollowing:    newFollowing,
 		// ProjectFollowers: newFollowers,
@@ -51,7 +51,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		// UserBell:         newBell,
 		// ProjectBell:      newBell,
 		// EventBell:        newBell,
-		}
+
 		// Index the document.
 		newDoc, Err := eclient.Index().
 			Index(globals.FollowIndex).
