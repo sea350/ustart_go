@@ -63,20 +63,8 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			log.Println(Err)
 		}
 
-		res, err := eclient.Get(). //Get returns doc type, index, etc.
-						Index(globals.FollowIndex).
-						Type(globals.FollowType).
-						Id(newDoc.Id).
-						Do(ctx)
-
-		if err != nil {
-			return newDoc.Id, foll, err
-		}
-
-		err = json.Unmarshal(*res.Source, &foll) //unmarshal type RawMessage into user struct
-
 		fmt.Println("FOLLOW DOC:", foll)
-		return newDoc.Id, foll, err
+		return newDoc.Id, newFollow, err
 	}
 
 	for _, hit := range searchResult.Hits.Hits {
