@@ -19,7 +19,7 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	id := r.FormValue("docID") //event docID
+	id := r.FormValue("eventID") //event docID
 	fmt.Println("ID", id)
 	evnt, err := get.EventByID(client.Eclient, id)
 	if err != nil {
