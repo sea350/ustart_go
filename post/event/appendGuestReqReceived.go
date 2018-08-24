@@ -27,6 +27,7 @@ func AppendGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 		return errors.New("Event does not exist")
 	}
 
+	println("guestreqreceived 0?", evnt.GuestReqReceived)
 	if len(evnt.GuestReqReceived) == 0 {
 		newReq := make(map[string]int)
 		newReq[userID] = classification
