@@ -92,5 +92,6 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	if err != nil {
 		fmt.Println("LINE 92 ERROR,", err)
 	}
+	fmt.Println("LINE 95, S U C C ")
 	return err
 }
