@@ -28,7 +28,7 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	}
 
 	follID, foll, err := getFollow.ByID(eclient, userID)
-	fmt.Println("FOLLID," follID)
+	fmt.Println("FOLLID,", follID)
 	if err != nil {
 		return err
 	}
