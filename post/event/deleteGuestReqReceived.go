@@ -15,6 +15,10 @@ import (
 func DeleteGuestReqReceived(eclient *elastic.Client, eventID string, userID string) (int, error) {
 	var numRequests int
 	ctx := context.Background()
+
+	EventGuestRequestLock.Lock()
+	defer EventGuestRequestLock.Unlock()
+
 	evnt, err := get.EventByID(eclient, eventID)
 	if err != nil {
 		return numRequests, errors.New("Event does not exist")
