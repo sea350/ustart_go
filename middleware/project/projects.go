@@ -2,6 +2,7 @@ package project
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -135,7 +136,8 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		} else {
-			time.Sleep(2 * time.Second)
+			fmt.Println("Url: ", url)
+			time.Sleep(5 * time.Second)
 			http.Redirect(w, r, "/Projects/"+url, http.StatusFound)
 			return
 		}
