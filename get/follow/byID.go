@@ -18,8 +18,8 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 	ctx := context.Background() //intialize context background
 	var foll types.Follow       //initialize follow
 	var follID string           //initialize follow ID
-	query := elastic.NewBoolQuery()
-	query = query.Must(elastic.NewTermQuery("DocID", strings.ToLower(userID)))
+
+	query := elastic.NewTermQuery("DocID", strings.ToLower(userID))
 	searchResult, err := eclient.Search(). //Get returns doc type, index, etc.
 						Index(globals.FollowIndex).
 						Type(globals.FollowType).
