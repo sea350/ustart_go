@@ -78,13 +78,19 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	default:
 		return errors.New("Invalid field")
 	}
-	fmt.Println("NUF:", followMap)
+	fmt.Println("CURRENT FOLLOW MAP:", followMap)
 
+	var theField string
+	if strings.ToLower(field) == "followers" {
+		theField = "UserFollowers"
+	} else if strings.ToLower(field) == "followers" {
+		theField = "UserFollowing"
+	}
 	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{field: followMap}) //field = Followers or Following, newContent =
+		Doc(map[string]interface{}{theField: followMap}) //field = Followers or Following, newContent =
 
 	//only executes when there is a new bell follower
 	if isBell && strings.ToLower(field) == "followers" {
