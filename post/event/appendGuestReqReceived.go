@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	get "github.com/sea350/ustart_go/get/event"
 	globals "github.com/sea350/ustart_go/globals"
@@ -29,6 +30,7 @@ func AppendGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 	if len(evnt.GuestReqReceived) == 0 {
 		newReq := make(map[string]int)
 		newReq[userID] = classification
+		fmt.Println(newReq[userID])
 		evnt.GuestReqReceived = newReq
 
 	} else {
