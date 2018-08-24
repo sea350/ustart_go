@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -90,10 +89,9 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		heads2 = append(heads2, head)
 	}
 
-	fmt.Println("WANT SOME FLOATING HEAD?")
-	fmt.Println(heads, heads2)
-
-	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), ListOfHeads: heads, ListOfHeads2: heads2}
+	numberFollowers := len(followDoc.UserFollowers) + len(followDoc.ProjectFollowers) + len(followDoc.EventFollowers)
+	numberFollowing := len(followDoc.UserFollowing) + len(followDoc.ProjectFollowing) + len(followDoc.EventFollowing)
+	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, Following: numberFollowing, ListOfHeads: heads, ListOfHeads2: heads2}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
