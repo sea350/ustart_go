@@ -48,7 +48,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			continue
 		}
-		isFollowing, _ := followDoc.UserFollowing[idKey]
+		_, isFollowing := followDoc.UserFollowing[idKey]
 		head.Followed = isFollowing
 		heads = append(heads, head)
 	}
