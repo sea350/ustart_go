@@ -35,10 +35,6 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		return "", foll, errors.New("More than one result found")
 	} else if searchResult.Hits.TotalHits < 1 {
 		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC")
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-		}
 
 		var newFollowing = make(map[string]bool)
 		var newFollowers = make(map[string]bool)
@@ -79,6 +75,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 
 		err = json.Unmarshal(*res.Source, &foll) //unmarshal type RawMessage into user struct
 
+		fmt.Println("FOLLOW DOC:", foll)
 		return newID.Id, foll, err
 	}
 
