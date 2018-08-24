@@ -19,10 +19,9 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-
-	ID := r.FormValue("eventID") //event docID
-	fmt.Println("ID", ID)
-	evnt, err := get.EventByID(client.Eclient, ID)
+	id := r.FormValue("docID") //event docID
+	fmt.Println("ID", id)
+	evnt, err := get.EventByID(client.Eclient, id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
