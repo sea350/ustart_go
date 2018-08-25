@@ -60,7 +60,7 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("postID")
 	comment := r.FormValue("body")
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println(comment)
+	log.Println(postID)
 	contentArray := []rune(comment)
 	err := uses.UserReplyEntry(client.Eclient, docID.(string), postID, contentArray)
 	if err != nil {
