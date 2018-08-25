@@ -92,6 +92,7 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 		Id(follID).
 		Doc(map[string]interface{}{theField: followMap}) //field = Followers or Following, newContent =
 
+	fmt.Println("THE FIELD:", theField)
 	//only executes when there is a new bell follower
 	if isBell && strings.ToLower(field) == "followers" {
 		newFollow.Doc(map[string]interface{}{"UserBell": bellMap})
