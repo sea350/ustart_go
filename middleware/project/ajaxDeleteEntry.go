@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/sea350/ustart_go/delete"
 	get "github.com/sea350/ustart_go/get/entry"
@@ -29,23 +28,20 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 	entry, err := get.EntryByID(client.Eclient, entryID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	err = delete.Entry(client.Eclient, entryID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	//removing refrence to entry in user
 	proj, err := getProj.ProjectByID(client.Eclient, projID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	removeIdx := -1
@@ -66,8 +62,7 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 		err = postProj.UpdateProject(client.Eclient, projID, "EntryIDs", updatedEntries)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 	}
 
@@ -76,8 +71,7 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 		parent, err := get.EntryByID(client.Eclient, entry.ReferenceEntry)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 
 		removeIdx := -1
@@ -98,8 +92,7 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 			err = postEntry.UpdateEntry(client.Eclient, entry.ReferenceEntry, "ReplyIDs", updatedReplies)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				log.Println(err)
 			}
 		}
 	}
@@ -109,8 +102,7 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 		parent, err := get.EntryByID(client.Eclient, entry.ReferenceEntry)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		removeIdx := -1
 		for idx := range parent.ShareIDs {
@@ -130,8 +122,7 @@ func AjaxDeleteEntry(w http.ResponseWriter, r *http.Request) {
 			err = postEntry.UpdateEntry(client.Eclient, entry.ReferenceEntry, "ShareIDs", updatedShares)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				log.Println(err)
 			}
 		}
 	}

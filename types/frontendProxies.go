@@ -96,6 +96,7 @@ type EventAggregate struct {
 	DocID          string         `json:"DocID"`
 	EventData      Events         `json:"EventData"`
 	MemberData     []FloatingHead `json:"MemberData"`
+	GuestData      []FloatingHead `json:"GuestData"`
 	ProjectData    []FloatingHead `json:"ProjectData"`
 	Editable       bool           `json:"Editable"`
 	RequestAllowed bool           `json:"RequestAllowed"`

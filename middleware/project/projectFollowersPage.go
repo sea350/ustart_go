@@ -12,8 +12,8 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//ProjectFollowersPage ... Shows the page for followers
-func ProjectFollowersPage(w http.ResponseWriter, r *http.Request) {
+//FollowersPage ... Shows the page for followers
+func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
