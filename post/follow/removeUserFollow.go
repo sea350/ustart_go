@@ -56,6 +56,8 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 		theField = "UserFollowing"
 	}
 	fmt.Println("THE FIELD:", theField)
+	fmt.Println("FOLLOW MAP:", followMap)
+
 	_, err = eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
