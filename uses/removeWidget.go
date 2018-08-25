@@ -2,7 +2,7 @@ package uses
 
 import (
 	"context"
-	"fmt"
+	"log"
 
 	getEvnt "github.com/sea350/ustart_go/get/event"
 	getProj "github.com/sea350/ustart_go/get/project"
@@ -55,31 +55,31 @@ func RemoveWidget(eclient *elastic.Client, widgetID string, isProject bool, isEv
 		}
 	}
 	//update the user widgets array
-	if pos+1 < len(oldArray) {
-		updatedWidgets = append(oldArray[:pos], oldArray[pos+1:]...)
-	} else {
-		updatedWidgets = oldArray[:pos]
+	if len(oldArray) != 0 {
+		if pos+1 < len(oldArray) {
+			updatedWidgets = append(oldArray[:pos], oldArray[pos+1:]...)
+		} else {
+			updatedWidgets = oldArray[:pos]
+		}
 	}
 
 	if isProject {
-		updateErr := postProj.UpdateProject(eclient, userID, "Widgets", updatedWidgets)
-
-		if updateErr != nil {
-			fmt.Println(updateErr)
-			fmt.Println("this is an error, uses/removeWidget line 50")
+		err := postProj.UpdateProject(eclient, userID, "Widgets", updatedWidgets)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		}
 	} else if isEvent {
-		updateErr := postEvnt.UpdateEvent(eclient, userID, "Widgets", updatedWidgets)
-		if updateErr != nil {
-			fmt.Println(updateErr)
-			fmt.Println("this is an error, uses/removeWidget line 50")
+		err := postEvnt.UpdateEvent(eclient, userID, "Widgets", updatedWidgets)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		}
 	} else {
-		updateErr := postUser.UpdateUser(eclient, userID, "UserWidgets", updatedWidgets)
-
-		if updateErr != nil {
-			fmt.Println(updateErr)
-			fmt.Println("this is an error, uses/removeWidget line 57")
+		err := postUser.UpdateUser(eclient, userID, "UserWidgets", updatedWidgets)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		}
 	}
 
