@@ -7,13 +7,14 @@ import (
 	"os"
 
 	get "github.com/sea350/ustart_go/get/event"
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
 //EventChangeNameAndDescription ...
 //For Events
 func EventChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -27,9 +28,9 @@ func EventChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println(projName, projName)
 
 	//fmt.Println(reflect.TypeOf(blob))
-	evnt, err := get.EventByID(eclient, r.FormValue("eventID"))
+	evnt, err := get.EventByID(client.Eclient, r.FormValue("eventID"))
 	//TODO: DocID
-	err = uses.ChangeEventNameAndDescription(eclient, r.FormValue("eventID"), evntName, evntDesc)
+	err = uses.ChangeEventNameAndDescription(client.Eclient, r.FormValue("eventID"), evntName, evntDesc)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

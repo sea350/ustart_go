@@ -3,15 +3,15 @@ package settings
 import (
 	"log"
 	"net/http"
-	"os"
 
 	get "github.com/sea350/ustart_go/get/event"
-	uses "github.com/sea350/ustart_go/uses"
+	client "github.com/sea350/ustart_go/middleware/client"
+	post "github.com/sea350/ustart_go/post/event"
 )
 
 //EventCategory ...
 func EventCategory(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -23,18 +23,17 @@ func EventCategory(w http.ResponseWriter, r *http.Request) {
 	newCategory := r.FormValue("type_select")
 
 	evntID := r.FormValue("eventID")
-	proj, err := get.EventByID(eclient, evntID)
+	proj, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+		return
 	}
 
-	err = uses.ChangeEventCategory(eclient, evntID, newCategory)
+	err = post.UpdateEvent(client.Eclient, evntID, "Category", newCategory)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	http.Redirect(w, r, "/EventSettings/"+proj.URLName, http.StatusFound)

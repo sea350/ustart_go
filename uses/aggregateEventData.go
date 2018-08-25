@@ -2,7 +2,6 @@ package uses
 
 import (
 	"log"
-	"os"
 
 	getEvent "github.com/sea350/ustart_go/get/event"
 	types "github.com/sea350/ustart_go/types"
@@ -18,16 +17,14 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 	data, err := getEvent.EventByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	eventData.EventData = data
 
 	id, err := getEvent.EventIDByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	eventData.DocID = id
 

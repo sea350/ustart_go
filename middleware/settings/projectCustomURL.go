@@ -14,7 +14,7 @@ import (
 
 //ProjectCustomURL ... pushes a new banner image into ES
 func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -47,7 +47,7 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = uses.ChangeProjectURL(eclient, projID, newURL)
+	err = uses.ChangeProjectURL(client.Eclient, projID, newURL)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

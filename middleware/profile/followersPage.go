@@ -6,6 +6,7 @@ import (
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	get "github.com/sea350/ustart_go/get/user"
+	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
@@ -19,13 +20,18 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[11:])
+	id, err := getUser.IDByUsername(client.Eclient, r.URL.Path[11:])
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	_, followDoc, err := getFollow.ByID(client.Eclient, id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
-	userstruct, err := get.UserByID(client.Eclient, test1.(string))
+	userstruct, err := get.UserByID(client.Eclient, id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -42,7 +48,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			continue
 		}
-		isFollowing, _ := followDoc.UserFollowing[idKey]
+		_, isFollowing := followDoc.UserFollowing[idKey]
 		head.Followed = isFollowing
 		heads = append(heads, head)
 	}
@@ -83,7 +89,10 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		heads2 = append(heads2, head)
 	}
 
-	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), ListOfHeads: heads, ListOfHeads2: heads2}
+	isFollowing, err := getFollow.IsFollowing(client.Eclient, test1.(string), id, "user")
+	numberFollowers := len(followDoc.UserFollowers) + len(followDoc.ProjectFollowers) + len(followDoc.EventFollowers)
+	numberFollowing := len(followDoc.UserFollowing) + len(followDoc.ProjectFollowing) + len(followDoc.EventFollowing)
+	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, FollowingStatus: isFollowing, Following: numberFollowing, ListOfHeads: heads, ListOfHeads2: heads2}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
