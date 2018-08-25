@@ -35,12 +35,14 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 	var followMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
+		fmt.Println("REMOVING FOLLOWERS")
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
 		delete(foll.UserFollowers, deleteKey)
 		followMap = foll.UserFollowers
 
 	case "following":
+		fmt.Println("REMOVING FOLLOWING")
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
 		delete(foll.UserFollowing, deleteKey)
@@ -49,20 +51,20 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 		return errors.New("Invalid field")
 	}
 
-	var theField string
-	if strings.ToLower(field) == "followers" {
-		theField = "UserFollowers"
-	} else if strings.ToLower(field) == "following" {
-		theField = "UserFollowing"
-	}
-	fmt.Println("THE FIELD:", theField)
-	fmt.Println("FOLLOW MAP:", followMap)
+	// var theField string
+	// if strings.ToLower(field) == "followers" {
+	// 	theField = "UserFollowers"
+	// } else if strings.ToLower(field) == "following" {
+	// 	theField = "UserFollowing"
+	// }
+	// fmt.Println("THE FIELD:", theField)
+	// fmt.Println("FOLLOW MAP:", followMap)
 
 	_, err = eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{theField: followMap}). //field = Followers or Following, newContent =
+		Doc(map[string]interface{}{field: followMap}). //field = Followers or Following, newContent =
 		Do(ctx)
 
 	return err
