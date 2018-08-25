@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"time"
 
+	getFollow "github.com/sea350/ustart_go/get/follow"
+	getProject "github.com/sea350/ustart_go/get/project"
 	get "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
@@ -23,9 +25,26 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	projID, err := getProject.ProjectIDByURL(client.Eclient, r.URL.Path[10:])
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	_, follDoc, err := getFollow.ByID(client.Eclient, projID)
+
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
 	var cs client.ClientSide
 
+	isFollowing, err := getFollow.IsFollowing(client.Eclient, test1.(string), projID, "project")
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
+
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -52,7 +71,10 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 	}
-	cs = client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Project: project, Widgets: widgets}
+
+	numberFollowers := len(follDoc.UserFollowers) + len(follDoc.ProjectFollowers) + len(follDoc.EventFollowers)
+	numberFollowing := len(follDoc.UserFollowing) + len(follDoc.ProjectFollowing) + len(follDoc.EventFollowing)
+	cs = client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Followers: numberFollowers, Following: numberFollowing, FollowingStatus: isFollowing, Project: project, Widgets: widgets}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
