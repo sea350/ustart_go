@@ -38,10 +38,13 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	}
 	var cs client.ClientSide
 
-	isFollowing, err := getFollow.IsFollowing(client.Eclient, test1.(string), projID, "project")
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+	followingState := false
+
+	_, exist1 := follDoc.UserFollowers[session.Values["DocID"].(string)]
+	_, exist2 := follDoc.ProjectFollowers[session.Values["DocID"].(string)]
+	_, exist3 := follDoc.EventFollowers[session.Values["DocID"].(string)]
+	if exist1 || exist2 || exist3 {
+		followingState = true
 	}
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 
@@ -74,7 +77,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 
 	numberFollowers := len(follDoc.UserFollowers) + len(follDoc.ProjectFollowers) + len(follDoc.EventFollowers)
 	numberFollowing := len(follDoc.UserFollowing) + len(follDoc.ProjectFollowing) + len(follDoc.EventFollowing)
-	cs = client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Followers: numberFollowers, Following: numberFollowing, FollowingStatus: isFollowing, Project: project, Widgets: widgets}
+	cs = client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Followers: numberFollowers, Following: numberFollowing, FollowingStatus: followingState, Project: project, Widgets: widgets}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")

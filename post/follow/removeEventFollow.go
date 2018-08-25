@@ -47,11 +47,17 @@ func RemoveEventFollow(eclient *elastic.Client, userID string, field string, del
 	default:
 		return errors.New("Invalid field")
 	}
+	var theField string
+	if strings.ToLower(field) == "followers" {
+		theField = "EventFollowers"
+	} else if strings.ToLower(field) == "following" {
+		theField = "EventFollowing"
+	}
 	_, err = eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{field: followMap}). //field = Followers or Following, newContent =
+		Doc(map[string]interface{}{theField: followMap}). //field = Followers or Following, newContent =
 		Do(ctx)
 
 	return err

@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"log"
+
 	delete "github.com/sea350/ustart_go/delete"
 	get "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -15,18 +17,24 @@ func RemoveEntry(eclient *elastic.Client, entryID string) (string, error) {
 
 	entry, err := get.EntryByID(eclient, entryID)
 	if err != nil {
-		panic(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return ``, err
 	}
 
 	err = delete.Entry(eclient, entryID)
 	if err != nil {
-		panic(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return ``, err
 	}
 
 	//removing refrence to entry in user
 	usr, err := getUser.UserByID(eclient, entry.PosterID)
 	if err != nil {
-		panic(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return ``, err
 	}
 
 	removeIdx := -1
@@ -38,15 +46,19 @@ func RemoveEntry(eclient *elastic.Client, entryID string) (string, error) {
 	if removeIdx != -1 {
 		var updatedEntries []string
 		//update the user entries array
-		if removeIdx+1 < len(usr.EntryIDs) {
-			updatedEntries = append(usr.EntryIDs[:removeIdx], usr.EntryIDs[removeIdx+1:]...)
-		} else {
-			updatedEntries = usr.EntryIDs[:removeIdx]
+		if len(usr.EntryIDs) != 0 {
+			if removeIdx+1 < len(usr.EntryIDs) {
+				updatedEntries = append(usr.EntryIDs[:removeIdx], usr.EntryIDs[removeIdx+1:]...)
+			} else {
+				updatedEntries = usr.EntryIDs[:removeIdx]
+			}
 		}
 
 		err = postUser.UpdateUser(eclient, entry.PosterID, "EntryIDs", updatedEntries)
 		if err != nil {
-			panic(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return ``, err
 		}
 	}
 
@@ -55,7 +67,9 @@ func RemoveEntry(eclient *elastic.Client, entryID string) (string, error) {
 
 		parent, err := get.EntryByID(eclient, entry.ReferenceEntry)
 		if err != nil {
-			panic(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return ``, err
 		}
 
 		removeIdx := -1
@@ -75,7 +89,9 @@ func RemoveEntry(eclient *elastic.Client, entryID string) (string, error) {
 
 			err = postEntry.UpdateEntry(eclient, entry.ReferenceEntry, "ReplyIDs", updatedReplies)
 			if err != nil {
-				panic(err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+				return ``, err
 			}
 		}
 	}
@@ -84,7 +100,9 @@ func RemoveEntry(eclient *elastic.Client, entryID string) (string, error) {
 	if entry.Classification == 2 {
 		parent, err := get.EntryByID(eclient, entry.ReferenceEntry)
 		if err != nil {
-			panic(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return ``, err
 		}
 		removeIdx := -1
 		for idx := range parent.ShareIDs {
@@ -103,7 +121,9 @@ func RemoveEntry(eclient *elastic.Client, entryID string) (string, error) {
 
 			err = postEntry.UpdateEntry(eclient, entry.ReferenceEntry, "ShareIDs", updatedShares)
 			if err != nil {
-				panic(err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+				return ``, err
 			}
 		}
 	}
