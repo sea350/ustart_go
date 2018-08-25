@@ -46,10 +46,12 @@ func RemoveEntry(eclient *elastic.Client, entryID string) (string, error) {
 	if removeIdx != -1 {
 		var updatedEntries []string
 		//update the user entries array
-		if removeIdx+1 < len(usr.EntryIDs) {
-			updatedEntries = append(usr.EntryIDs[:removeIdx], usr.EntryIDs[removeIdx+1:]...)
-		} else {
-			updatedEntries = usr.EntryIDs[:removeIdx]
+		if len(usr.EntryIDs) != 0 {
+			if removeIdx+1 < len(usr.EntryIDs) {
+				updatedEntries = append(usr.EntryIDs[:removeIdx], usr.EntryIDs[removeIdx+1:]...)
+			} else {
+				updatedEntries = usr.EntryIDs[:removeIdx]
+			}
 		}
 
 		err = postUser.UpdateUser(eclient, entry.PosterID, "EntryIDs", updatedEntries)
