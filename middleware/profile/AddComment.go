@@ -50,7 +50,6 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 func AddComment2(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	docID, _ := session.Values["DocID"]
-	fmt.Println("WE ARE IN ADDCOMMENT.GO")
 	if docID == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
@@ -60,6 +59,8 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	postID := r.FormValue("postID")
 	comment := r.FormValue("body")
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println(comment)
 	contentArray := []rune(comment)
 	err := uses.UserReplyEntry(client.Eclient, docID.(string), postID, contentArray)
 	if err != nil {
