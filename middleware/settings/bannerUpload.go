@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
 )
 
 //BannerUpload ... pushes a new banner image into ES
 func BannerUpload(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -28,7 +29,7 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 	defer clientFile.Close()
 	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 		//Update the user banner
-		err := post.UpdateUser(eclient, session.Values["DocID"].(string), "Banner", blob)
+		err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "Banner", blob)
 		if err != nil {
 			fmt.Println("err: middleware/settings/bannerUpload line 30\n", err)
 		}
