@@ -1,7 +1,6 @@
 package uses
 
 import (
-	"fmt"
 	"log"
 
 	getEvent "github.com/sea350/ustart_go/get/event"
@@ -48,7 +47,6 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 	}
 	for _, guest := range data.Guests {
 		id := guest.GuestID
-		fmt.Println("id is here", id)
 		guest, err := ConvertUserToFloatingHead(eclient, id)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
