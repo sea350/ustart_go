@@ -54,7 +54,7 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		}
 		//guest.Classification = guest.Role
 		eventData.GuestData = append(eventData.GuestData, guest)
-		if viewerID == guest.GuestID {
+		if viewerID == id {
 			eventData.RequestAllowed = false
 		}
 
