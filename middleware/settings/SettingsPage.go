@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorilla/sessions"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
-	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 //Settings ...
