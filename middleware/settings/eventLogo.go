@@ -3,7 +3,6 @@ package settings
 import (
 	"log"
 	"net/http"
-	"os"
 
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -13,7 +12,7 @@ import (
 
 //EventLogo ...
 func EventLogo(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
@@ -28,8 +27,7 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 	evnt, member, err := get.EventAndMember(client.Eclient, r.FormValue("eventID"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	if uses.HasEventPrivilege("icon", evnt.PrivilegeProfiles, member) {

@@ -46,7 +46,6 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	var newGuest types.EventGuests
 	newGuest.Status = 0
 	newGuest.GuestID = newGuestID
-	newGuest.Visible = true
 	newGuest.Classification = classification
 
 	err = evntPost.AppendGuest(client.Eclient, evntID, newGuest)

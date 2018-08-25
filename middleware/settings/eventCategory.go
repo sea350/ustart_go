@@ -11,7 +11,7 @@ import (
 
 //EventCategory ...
 func EventCategory(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -23,7 +23,7 @@ func EventCategory(w http.ResponseWriter, r *http.Request) {
 	newCategory := r.FormValue("type_select")
 
 	evntID := r.FormValue("eventID")
-	proj, err := get.EventByID(eclient, evntID)
+	proj, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)

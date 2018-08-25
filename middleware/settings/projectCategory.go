@@ -11,7 +11,7 @@ import (
 
 //ProjectCategory ...
 func ProjectCategory(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -23,14 +23,14 @@ func ProjectCategory(w http.ResponseWriter, r *http.Request) {
 	newCategory := r.FormValue("type_select")
 
 	projID := r.FormValue("projectID")
-	proj, err := get.ProjectByID(eclient, projID)
+	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
 
-	err = uses.ChangeProjectCategory(eclient, projID, newCategory)
+	err = uses.ChangeProjectCategory(client.Eclient, projID, newCategory)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

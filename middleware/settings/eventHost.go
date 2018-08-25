@@ -13,7 +13,7 @@ import (
 
 //EventHost ...
 func EventHost(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["eventID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -23,13 +23,13 @@ func EventHost(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	projectID := r.FormValue("projectID")
 	evntID := r.FormValue("eventID")
-	evnt, err := get.EventByID(eclient, evntID)
+	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
 		panic(err)
 	}
-	_, err = getproj.ProjectByID(eclient, projectID)
+	_, err = getproj.ProjectByID(client.Eclient, projectID)
 	if err == nil {
-		err = uses.ChangeEventHost(eclient, evntID, projectID)
+		err = uses.ChangeEventHost(client.Eclient, evntID, projectID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()

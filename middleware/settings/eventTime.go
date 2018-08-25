@@ -15,7 +15,7 @@ import (
 //For Events Time
 //EventTime...
 func EventTime(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -38,9 +38,9 @@ func EventTime(w http.ResponseWriter, r *http.Request) {
 	Eminute, _ := strconv.Atoi(r.FormValue("endDate")[14:16])
 	Edate := time.Date(Eyear, time.Month(Emonth), Eday, Ehour, Eminute, 0, 0, time.UTC)
 
-	evnt, err := get.EventByID(eclient, r.FormValue("eventID"))
+	evnt, err := get.EventByID(client.Eclient, r.FormValue("eventID"))
 	//TODO: DocID
-	err = uses.ChangeEventTime(eclient, r.FormValue("eventID"), Sdate, Edate)
+	err = uses.ChangeEventTime(client.Eclient, r.FormValue("eventID"), Sdate, Edate)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

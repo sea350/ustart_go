@@ -13,7 +13,7 @@ import (
 //ProjectLocation ...
 //For Projects Location
 func ProjectLocation(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["projectID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -28,10 +28,10 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	//   fmt.Println(blob)
 
 	projID := r.FormValue("projectID")
-	proj, err := get.ProjectByID(eclient, projID)
+	proj, err := get.ProjectByID(client.Eclient, projID)
 	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
-	err = uses.ChangeProjectLocation(eclient, projID, country, state, city, zip)
+	err = uses.ChangeProjectLocation(client.Eclient, projID, country, state, city, zip)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

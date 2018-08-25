@@ -11,7 +11,7 @@ import (
 
 //ChangeName ...
 func ChangeName(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -24,7 +24,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	first := html.EscapeString(r.FormValue("fname"))
 	last := html.EscapeString(r.FormValue("lname"))
 
-	err := uses.ChangeFirstAndLastName(eclient, session.Values["DocID"].(string), first, last)
+	err := uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

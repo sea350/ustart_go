@@ -179,6 +179,7 @@ func main() {
 	http.HandleFunc("/EventMakeEntry/", event.MakeEventEntry)
 	http.HandleFunc("/AjaxLoadEventEntries/", event.AjaxLoadEventEntries)
 	http.HandleFunc("/AjaxDeleteEventEntry/", event.AjaxDeleteEventEntry)
+	http.HandleFunc("/AjaxNewGuest/", event.NewGuest)
 
 	//CHAT
 	http.HandleFunc("/ch/", chat.Page)

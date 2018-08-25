@@ -11,7 +11,7 @@ import (
 
 //ProjectBannerUpload ... pushes a new banner image into ES
 func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	//maybe uncomment later:
 	// if test1 == nil {
@@ -28,13 +28,13 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	blob := r.FormValue("banner-data")
 
 	//Get project by ID
-	// proj, err := get.ProjectByID(eclient, r.FormValue("projectID"))
+	// proj, err := get.ProjectByID(client.Eclient, r.FormValue("projectID"))
 	// if err != nil {
 	// 	fmt.Println("err: middleware/settings/projectbannerupload line 33\n", err)
 	// }
 
 	//get the member
-	proj, member, err := get.ProjAndMember(eclient, r.FormValue("projectID"), test1.(string))
+	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err != nil {
 		fmt.Println("err: middleware/settings/projectbannerupload line 40\n", err)
 	}
@@ -45,7 +45,7 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 		defer clientFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 			//Update the project banner
-			err = post.UpdateProject(eclient, r.FormValue("projectID"), "Banner", blob)
+			err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", blob)
 			if err != nil {
 				fmt.Println("err: middleware/settings/projectbannerupload line 50\n", err)
 			}
