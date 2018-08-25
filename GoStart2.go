@@ -108,6 +108,7 @@ func main() {
 	http.HandleFunc("/AjaxDeleteProjectEntry/", project.AjaxDeleteEntry)
 	// http.HandleFunc("/AjaxUserFollowProjectToggle/", project.AjaxToggleFollow)
 	http.HandleFunc("/AjaxUserFollowProjectToggle/", follow.AjaxUserFollowsProject)
+	http.HandleFunc("/ProjectFollowers/", project.ProjectFollowersPage)
 
 	//SETTINGS CHANGES
 	http.HandleFunc("/Settings/", settings.Settings)
