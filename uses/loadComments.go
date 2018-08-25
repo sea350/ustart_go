@@ -2,6 +2,7 @@ package uses
 
 import (
 	"errors"
+	"log"
 
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -38,7 +39,8 @@ func LoadComments(eclient *elastic.Client, entryID string, viewerID string, lowe
 	for i := start; i >= finish; i-- {
 		jEntry, err := ConvertEntryToJournalEntry(eclient, parent.Element.ReplyIDs[i], viewerID, true)
 		if err != nil {
-			return parent, entries, err
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		}
 
 		if !jEntry.Element.Visible && finish > 0 {
