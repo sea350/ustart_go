@@ -33,7 +33,8 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if isFollowing {
+	if !isFollowing {
+		fmt.Println("NOT FOLLOWING, SO TRYING TO FOLLOW")
 		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -42,6 +43,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		fmt.Println("ADDING TO PROJECT FOLLOWERS")
 		err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -49,6 +51,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 			log.Println(dir, err)
 		}
 	} else {
+		fmt.Println("TRYING TO REMOVE FOLLOW")
 		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
