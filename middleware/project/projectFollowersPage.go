@@ -20,7 +20,7 @@ func ProjectFollowersPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	id, err := getProj.ProjectIDByURL(client.Eclient, r.URL.Path[11:])
+	id, err := getProj.ProjectIDByURL(client.Eclient, r.URL.Path[10:])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
