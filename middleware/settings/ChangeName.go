@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"html"
 	"log"
 	"net/http"
@@ -50,6 +51,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	bday := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
 
 	err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
+	fmt.Println("working?", err)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
