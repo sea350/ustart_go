@@ -35,12 +35,14 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 	var followMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
+		fmt.Println("REMOVING FOLLOWERS")
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
 		delete(foll.UserFollowers, deleteKey)
 		followMap = foll.UserFollowers
 
 	case "following":
+		fmt.Println("REMOVING FOLLOWING")
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
 		delete(foll.UserFollowing, deleteKey)
