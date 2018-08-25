@@ -141,7 +141,6 @@ func main() {
 	http.HandleFunc("/leaveProject/", settings.LeaveProject)
 	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
 	http.HandleFunc("/changeMemberClass/", settings.ChangeMemberClass)
-	http.HandleFunc("/UserUpdateDOB/", settings.UserChangeBirthday)
 
 	//REGISTRATIONS
 	http.HandleFunc("/Signup/", registration.Signup)
