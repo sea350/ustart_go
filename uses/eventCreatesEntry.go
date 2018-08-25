@@ -17,6 +17,7 @@ func EventCreatesEntry(eclient *elastic.Client, eventID string, posterID string,
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
+	createdEntry.ReferenceID = eventID
 
 	entryID, err := postEntry.IndexEntry(eclient, createdEntry)
 	if err != nil {
@@ -35,6 +36,7 @@ func EventCreatesReply(eclient *elastic.Client, eventID string, replyID string, 
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
+	createdEntry.ReferenceID = eventID
 
 	entryID, err := postEntry.IndexEntry(eclient, createdEntry)
 	if err != nil {
@@ -58,6 +60,7 @@ func EventCreatesShare(eclient *elastic.Client, eventID string, replyID string, 
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
+	createdEntry.ReferenceID = eventID
 
 	entryID, err := postEntry.IndexEntry(eclient, createdEntry)
 	if err != nil {
