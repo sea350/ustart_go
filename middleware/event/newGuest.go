@@ -26,13 +26,14 @@ func NewGuest(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
-		return
+
 	}
 
 	for i := range event.Guests {
 		if event.Guests[i].GuestID == sessionID.(string) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println("User attempting to join is already a guest")
+			http.Redirect(w, r, "/Event/"+event.URLName, http.StatusFound)
 			return
 		}
 	}
@@ -41,5 +42,7 @@ func NewGuest(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
+	http.Redirect(w, r, "/Event/"+event.URLName, http.StatusFound)
+	return
 
 }
