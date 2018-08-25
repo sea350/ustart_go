@@ -13,7 +13,7 @@ import (
 func EventCreatesEntry(eclient *elastic.Client, eventID string, posterID string, newContent []rune) (string, error) {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = posterID
-	createdEntry.Classification = 0
+	createdEntry.Classification = 6
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
@@ -32,7 +32,7 @@ func EventCreatesEntry(eclient *elastic.Client, eventID string, posterID string,
 func EventCreatesReply(eclient *elastic.Client, eventID string, replyID string, posterID string, newContent []rune) error {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = posterID
-	createdEntry.Classification = 1
+	createdEntry.Classification = 7
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
@@ -56,7 +56,7 @@ func EventCreatesReply(eclient *elastic.Client, eventID string, replyID string, 
 func EventCreatesShare(eclient *elastic.Client, eventID string, replyID string, posterID string, newContent []rune) error {
 	createdEntry := types.Entry{}
 	createdEntry.PosterID = posterID
-	createdEntry.Classification = 2
+	createdEntry.Classification = 8
 	createdEntry.Content = newContent
 	createdEntry.TimeStamp = time.Now()
 	createdEntry.Visible = true
