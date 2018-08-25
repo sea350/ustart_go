@@ -73,11 +73,17 @@ func NewEventFollow(eclient *elastic.Client, eventID string, field string, newKe
 	default:
 		return errors.New("Invalid field")
 	}
+	var theField string
+	if strings.ToLower(field) == "followers" {
+		theField = "EventFollowers"
+	} else if strings.ToLower(field) == "following" {
+		theField = "EventFollowing"
+	}
 	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{field: followMap}) //field = Followers or Following, newContent =
+		Doc(map[string]interface{}{theField: followMap}) //field = Followers or Following, newContent =
 
 	//only executes when there is a new bell follower
 	if isBell && strings.ToLower(field) == "followers" {

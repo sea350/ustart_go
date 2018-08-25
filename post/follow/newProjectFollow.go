@@ -73,11 +73,17 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 	default:
 		return errors.New("Invalid field")
 	}
+	var theField string
+	if strings.ToLower(field) == "followers" {
+		theField = "ProjectFollowers"
+	} else if strings.ToLower(field) == "following" {
+		theField = "ProjectFollowing"
+	}
 	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{field: followMap}) //field = Followers or Following, newContent =
+		Doc(map[string]interface{}{theField: followMap}) //field = Followers or Following, newContent =
 
 	//only executes when there is a new bell follower
 	if isBell && strings.ToLower(field) == "followers" {
