@@ -77,7 +77,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 
 	numberFollowers := len(follDoc.UserFollowers) + len(follDoc.ProjectFollowers) + len(follDoc.EventFollowers)
 	numberFollowing := len(follDoc.UserFollowing) + len(follDoc.ProjectFollowing) + len(follDoc.EventFollowing)
-	cs = client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Followers: numberFollowers, Following: numberFollowing, FollowingStatus: followingState, Project: project, Widgets: widgets}
+	cs = client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), Followers: int(numberFollowers), Following: int(numberFollowing), FollowingStatus: followingState, Project: project, Widgets: widgets}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")

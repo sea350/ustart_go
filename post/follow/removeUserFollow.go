@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -54,6 +55,7 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 	} else if strings.ToLower(field) == "following" {
 		theField = "UserFollowing"
 	}
+	fmt.Println("THE FIELD:", theField)
 	_, err = eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).

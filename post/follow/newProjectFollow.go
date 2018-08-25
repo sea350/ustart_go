@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -79,6 +80,8 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 	} else if strings.ToLower(field) == "following" {
 		theField = "ProjectFollowing"
 	}
+
+	fmt.Println("THE FIELD:", theField)
 	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
