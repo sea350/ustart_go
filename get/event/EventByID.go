@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -23,7 +24,8 @@ func EventByID(eclient *elastic.Client, eventID string) (types.Events, error) {
 		Do(ctx)
 
 	if err != nil {
-		fmt.Printf("Error From EventByID.SearchResult.Get(): %s\n", err.Error())
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return evnt, err
 	}
 

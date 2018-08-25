@@ -151,10 +151,12 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		spoofy := r.FormValue("spotInput")
 		edit := r.FormValue("editID")
 
-		regX := regexp.MustCompile(`<iframe src="https:\/\/open\.spotify\.com\/embed\/[^"]+" width="300" height="380" frameborder="0" allowtransparency="true"><\/iframe>`)
-		if !regX.MatchString(spoofy) {
-			return newWidget, errors.New(`Unusable Spotify Embed Code`)
-		} //Check valid embed code
+		/*
+			regX := regexp.MustCompile(`<iframe src="https:\/\/open\.spotify\.com\/embed\/[^"]+" width="300" height="380" frameborder="0" allowtransparency="true"><\/iframe>`)
+			if !regX.MatchString(spoofy) {
+				return newWidget, errors.New(`Unusable Spotify Embed Code`)
+			} //Check valid embed code
+		*/
 
 		spotifyEmbedCode := template.HTML(spoofy)
 		if edit != `0` {
