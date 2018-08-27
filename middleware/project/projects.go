@@ -143,6 +143,20 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	college := r.FormValue("universityName")
 	customURL := r.FormValue("curl")
 
+	country := r.FormValue("country")
+	state := r.FormValue("state")
+	city := r.FormValue("city")
+	zip := r.FormValue("zip")
+	street := r.FormValue("street")
+
+	var projLocation types.LocStruct
+	projLocation.Street = street
+	projLocation.City = city
+	projLocation.Country = country
+	projLocation.Zip = zip
+	projLocation.State = state
+	projLocation.Street = street
+
 	if title != `` {
 		//proper URL
 		if !uses.ValidUsername(customURL) {
@@ -156,7 +170,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 			return
 
 		}
-		url, err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string), category, college, customURL)
+		url, err := uses.CreateProject(client.Eclient, title, description, session.Values["DocID"].(string), category, college, customURL, projLocation)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
