@@ -31,6 +31,7 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	projID := r.FormValue("projectID")
 	fmt.Println("projiD", projID)
 	fmt.Println("city", city)
+	fmt.Println("city", zip)
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
