@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -14,7 +15,7 @@ import (
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func RemoveProjectFollow(eclient *elastic.Client, userID string, field string, deleteKey string) error {
+func RemoveProjectFollow(eclient *elastic.Client, projID string, field string, deleteKey string) error {
 
 	ctx := context.Background()
 
@@ -26,7 +27,7 @@ func RemoveProjectFollow(eclient *elastic.Client, userID string, field string, d
 		return errors.New("Index does not exist")
 	}
 
-	follID, foll, err := getFollow.ByID(eclient, userID)
+	follID, foll, err := getFollow.ByID(eclient, projID)
 	if err != nil {
 		return err
 	}
@@ -38,7 +39,9 @@ func RemoveProjectFollow(eclient *elastic.Client, userID string, field string, d
 		if len(foll.UserFollowing) == 0 {
 			return errors.New("Nothing to remove from followers")
 		}
+		fmt.Println("SIZE BEFORE:", len(foll.UserFollowers))
 		delete(foll.UserFollowers, deleteKey)
+		fmt.Println("SIZE AFTER:", len(foll.UserFollowers))
 
 	case "following":
 		FollowingLock.Lock()
