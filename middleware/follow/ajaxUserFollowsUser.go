@@ -35,14 +35,14 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 
 	if !isFollowing {
 		fmt.Println("TRYING TO FOLLOW")
-		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false)
+		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "user")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 			return
 		}
 
-		err = postFollow.NewUserFollow(client.Eclient, followingID, "followers", ID.(string), false)
+		err = postFollow.NewUserFollow(client.Eclient, followingID, "followers", ID.(string), false, "user")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)

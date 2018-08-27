@@ -15,7 +15,7 @@ import (
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func NewProjectFollow(eclient *elastic.Client, projID string, field string, newKey string, isBell bool) error {
+func NewProjectFollow(eclient *elastic.Client, projID string, field string, newKey string, isBell bool, followType string) error {
 
 	ctx := context.Background()
 
@@ -40,24 +40,47 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 	case "followers":
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
-		if len(foll.UserFollowers) == 0 {
-			var newMap = make(map[string]bool)
-			newMap[newKey] = isBell
-			followMap = newMap
-			if isBell {
-				var newBell = make(map[string]bool)
-				newBell[newKey] = isBell
-				bellMap = newBell
-			}
-		} else {
-			foll.UserFollowers[newKey] = isBell
-			followMap = foll.ProjectFollowers
+		if followType == "user" {
+			if len(foll.UserFollowers) == 0 {
+				var newMap = make(map[string]bool)
+				newMap[newKey] = isBell
+				followMap = newMap
+				if isBell {
+					var newBell = make(map[string]bool)
+					newBell[newKey] = isBell
+					bellMap = newBell
+				}
+			} else {
+				foll.UserFollowers[newKey] = isBell
+				followMap = foll.ProjectFollowers
 
-			//modify user bell map if bell follower
-			if isBell {
-				foll.ProjectBell[newKey] = isBell
-				bellMap = foll.ProjectBell
+				//modify user bell map if bell follower
+				if isBell {
+					foll.ProjectBell[newKey] = isBell
+					bellMap = foll.ProjectBell
+				}
 			}
+		} else if followType == "project" {
+			if len(foll.ProjectFollowers) == 0 {
+				var newMap = make(map[string]bool)
+				newMap[newKey] = isBell
+				followMap = newMap
+				if isBell {
+					var newBell = make(map[string]bool)
+					newBell[newKey] = isBell
+					bellMap = newBell
+				}
+			} else {
+				foll.ProjectFollowers[newKey] = isBell
+				followMap = foll.ProjectFollowers
+
+				//modify user bell map if bell follower
+				if isBell {
+					foll.ProjectBell[newKey] = isBell
+					bellMap = foll.ProjectBell
+				}
+			}
+
 		}
 
 	case "following":

@@ -15,7 +15,7 @@ import (
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey string, isBell bool) error {
+func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey string, isBell bool, followType string) error {
 
 	ctx := context.Background()
 
@@ -66,14 +66,26 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
 
-		if len(foll.UserFollowing) == 0 {
+		if followType == "user" {
+			if len(foll.UserFollowing) == 0 {
 
-			var newMap = make(map[string]bool)
-			newMap[newKey] = isBell
-			followMap = newMap
-		} else {
-			foll.UserFollowing[newKey] = isBell
-			followMap = foll.UserFollowing
+				var newMap = make(map[string]bool)
+				newMap[newKey] = isBell
+				followMap = newMap
+			} else {
+				foll.UserFollowing[newKey] = isBell
+				followMap = foll.UserFollowing
+			}
+		} else if followType == "project" {
+			if len(foll.ProjectFollowing) == 0 {
+
+				var newMap = make(map[string]bool)
+				newMap[newKey] = isBell
+				followMap = newMap
+			} else {
+				foll.UserFollowing[newKey] = isBell
+				followMap = foll.ProjectFollowing
+			}
 		}
 	default:
 		return errors.New("Invalid field")
@@ -81,9 +93,17 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 
 	var theField string
 	if strings.ToLower(field) == "followers" {
-		theField = "UserFollowers"
+		if followType == "user" {
+			theField = "UserFollowers"
+		} else if followType == "project" {
+			theField = "ProjectFollowers"
+		}
 	} else if strings.ToLower(field) == "following" {
-		theField = "UserFollowing"
+		if followType == "user" {
+			theField = "UserFollowing"
+		} else if followType == "project" {
+			theField = "ProjectFollowing"
+		}
 	}
 	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
