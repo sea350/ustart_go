@@ -26,8 +26,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	projID, err := getProject.ProjectIDByURL(client.Eclient, r.URL.Path[10:])
-	proj, err := getProject.ProjectByID(client.Eclient, projID)
-	fmt.Println("THE PROJECT:", proj)
+
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -50,6 +49,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	}
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 
+	fmt.Println("FollowingState:", followingState)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
