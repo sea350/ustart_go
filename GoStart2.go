@@ -135,7 +135,7 @@ func main() {
 	http.HandleFunc("/ProjectSettings/", settings.Project)
 	http.HandleFunc("/projectBannerUpload/", settings.ProjectBannerUpload)
 	http.HandleFunc("/projectName/", settings.ChangeNameAndDescription)
-	http.HandleFunc("/projectLocation/", settings.ProjectLocation)
+	http.HandleFunc("/projectLocChange/", settings.ProjectLocation)
 	http.HandleFunc("/projectCategory/", settings.ProjectCategory)
 	http.HandleFunc("/projectCustomURL/", settings.ProjectCustomURL)
 	http.HandleFunc("/leaveProject/", settings.LeaveProject)

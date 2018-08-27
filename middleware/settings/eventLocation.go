@@ -30,7 +30,6 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 	zip := r.FormValue("zip")
 	//   fmt.Println(blob)
 
-	fmt.Println("Country", country)
 	evnt, err := get.EventByID(client.Eclient, r.FormValue("eventID"))
 	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
