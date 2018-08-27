@@ -79,14 +79,14 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for idKey := range followDoc.ProjectFollowing {
-		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
+		projHead, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 			log.Println(idKey)
 			continue
 		}
-		heads2 = append(heads2, head)
+		heads2 = append(heads2, projHead)
 	}
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, test1.(string), id, "user")

@@ -38,7 +38,7 @@ func RemoveProjectFollow(eclient *elastic.Client, userID string, field string, d
 		if len(foll.UserFollowing) == 0 {
 			return errors.New("Nothing to remove from followers")
 		}
-		delete(foll.ProjectFollowers, deleteKey)
+		delete(foll.UserFollowers, deleteKey)
 
 	case "following":
 		FollowingLock.Lock()
@@ -46,7 +46,7 @@ func RemoveProjectFollow(eclient *elastic.Client, userID string, field string, d
 		if len(foll.UserFollowing) == 0 {
 			return errors.New("Nothing to remove from following")
 		}
-		delete(foll.ProjectFollowing, deleteKey)
+		delete(foll.UserFollowing, deleteKey)
 
 	default:
 		return errors.New("Invalid field")
