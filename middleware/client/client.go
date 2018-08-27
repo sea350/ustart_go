@@ -31,13 +31,16 @@ type ClientSide struct {
 	ImageCode         string
 	Description       string
 	Followers         int
-	Following         int
+	UserFollowing     int
+	ProjFollowing     int
+	EventFollowing    int
 	ProjectsFollowing int
 	Page              string //DocID of current page
 	FollowingStatus   bool
 	ScrollID          string
 	ListOfHeads       []types.FloatingHead
 	ListOfHeads2      []types.FloatingHead
+	ListOfHeads3      []types.FloatingHead
 	Wall              []types.JournalEntry
 	Widgets           []types.Widget
 	Project           types.ProjectAggregate

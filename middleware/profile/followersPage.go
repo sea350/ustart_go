@@ -98,8 +98,10 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Followers page current heads2:", heads2)
 
 	numberFollowers := len(followDoc.UserFollowers) + len(followDoc.ProjectFollowers) + len(followDoc.EventFollowers)
-	numberFollowing := len(followDoc.UserFollowing) + len(followDoc.ProjectFollowing) + len(followDoc.EventFollowing)
-	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, FollowingStatus: isFollowing, Following: numberFollowing, ListOfHeads: heads, ListOfHeads2: heads2}
+	userFoll := len(followDoc.UserFollowing)
+	projFoll := len(followDoc.ProjectFollowing)
+	eventFoll := len(followDoc.EventFollowing)
+	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, FollowingStatus: isFollowing, UserFollowing: userFoll, ProjFollowing: projFoll, EventFollowing: eventFoll, ListOfHeads: heads, ListOfHeads2: heads2}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
