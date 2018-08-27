@@ -264,6 +264,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	if r.FormValue("widgetSubmit") == `17` {
 		//gallery widget
 		galleryFile, galleryHeader, _ := r.FormFile("galleryImageInput")
+		fmt.Println(galleryFile)
+		fmt.Println(galleryHeader)
 		buffer := make([]byte, 512)
 		_, _ = galleryFile.Read(buffer)
 		defer galleryFile.Close()
