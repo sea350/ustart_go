@@ -32,7 +32,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 
 	if !isFollowing {
 
-		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false)
+		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "project")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
@@ -40,7 +40,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false)
+		err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false, "user")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
