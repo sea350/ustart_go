@@ -15,7 +15,7 @@ import (
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func RemoveUserFollow(eclient *elastic.Client, userID string, field string, deleteKey string) error {
+func RemoveUserFollow(eclient *elastic.Client, userID string, field string, deleteKey string, followType string) error {
 
 	ctx := context.Background()
 
@@ -35,22 +35,39 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 	// var followMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
-		fmt.Println("REMOVING FOLLOWERS")
-		FollowerLock.Lock()
-		defer FollowerLock.Unlock()
-		if len(foll.UserFollowers) == 0 {
-			return errors.New("No followers to remove")
-		}
-		delete(foll.UserFollowers, deleteKey)
+		if followType == "user" {
+			fmt.Println("REMOVING FOLLOWERS")
+			FollowerLock.Lock()
+			defer FollowerLock.Unlock()
+			if len(foll.UserFollowers) == 0 {
+				return errors.New("No followers to remove")
+			}
+			delete(foll.UserFollowers, deleteKey)
 
+		} else if followType == "project" {
+			fmt.Println("REMOVING FOLLOWERS")
+			FollowerLock.Lock()
+			defer FollowerLock.Unlock()
+			if len(foll.ProjectFollowers) == 0 {
+				return errors.New("No followers to remove")
+			}
+			delete(foll.ProjectFollowers, deleteKey)
+		}
 	case "following":
 		fmt.Println("REMOVING FOLLOWING")
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
-		if len(foll.UserFollowing) == 0 {
-			return errors.New("Nothing to remove from following")
+		if followType == "user" {
+			if len(foll.UserFollowing) == 0 {
+				return errors.New("Nothing to remove from following")
+			}
+			delete(foll.UserFollowing, deleteKey)
+		} else if followType == "project" {
+			if len(foll.ProjectFollowing) == 0 {
+				return errors.New("Nothing to remove from following")
+			}
+			delete(foll.ProjectFollowing, deleteKey)
 		}
-		delete(foll.UserFollowing, deleteKey)
 
 	default:
 		return errors.New("Invalid field")
