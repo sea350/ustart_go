@@ -82,6 +82,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		heads2 = append(heads2, head)
 	}
 
+	heads3 := []types.FloatingHead{}
 	for idKey := range followDoc.ProjectFollowing {
 		projHead, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
@@ -90,18 +91,17 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			log.Println(idKey)
 			continue
 		}
-		fmt.Println("Followers page current heads2:", heads2)
-		heads2 = append(heads2, projHead)
+
+		heads3 = append(heads3, projHead)
 	}
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, test1.(string), id, "user")
-	fmt.Println("Followers page current heads2:", heads2)
 
 	numberFollowers := len(followDoc.UserFollowers) + len(followDoc.ProjectFollowers) + len(followDoc.EventFollowers)
 	userFoll := len(followDoc.UserFollowing)
 	projFoll := len(followDoc.ProjectFollowing)
 	eventFoll := len(followDoc.EventFollowing)
-	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, FollowingStatus: isFollowing, UserFollowing: userFoll, ProjFollowing: projFoll, EventFollowing: eventFoll, ListOfHeads: heads, ListOfHeads2: heads2}
+	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, FollowingStatus: isFollowing, UserFollowing: userFoll, ProjFollowing: projFoll, EventFollowing: eventFoll, ListOfHeads: heads, ListOfHeads2: heads2, ListOfHeads3: heads3}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
