@@ -31,33 +31,32 @@ func RemoveEventFollow(eclient *elastic.Client, userID string, field string, del
 		return err
 	}
 
-	var followMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
+		if len(foll.UserFollowing) == 0 {
+			return errors.New("Nothing to remove from followers")
+		}
 		delete(foll.EventFollowers, deleteKey)
-		followMap = foll.EventFollowers
 
 	case "following":
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
+		if len(foll.UserFollowing) == 0 {
+			return errors.New("Nothing to remove from following")
+		}
 		delete(foll.EventFollowing, deleteKey)
-		followMap = foll.EventFollowing
+
 	default:
 		return errors.New("Invalid field")
 	}
-	var theField string
-	if strings.ToLower(field) == "followers" {
-		theField = "EventFollowers"
-	} else if strings.ToLower(field) == "following" {
-		theField = "EventFollowing"
-	}
-	_, err = eclient.Update().
+
+	_, err = eclient.Index().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{theField: followMap}). //field = Followers or Following, newContent =
+		BodyJson(foll). //field = Followers or Following, newContent =
 		Do(ctx)
 
 	return err
