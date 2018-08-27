@@ -2,6 +2,7 @@ package widget
 
 import (
 	"errors"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -268,7 +269,9 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		defer galleryFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || galleryHeader.Size == 0 {
 			name := strings.Split(galleryHeader.Filename, ".")
+			fmt.Println(name)
 			contents := buffer
+			fmt.Println(contents)
 			data = []template.HTML{template.HTML(name[0]), template.HTML(contents)}
 		}
 		classification = 17
