@@ -6,6 +6,7 @@ import (
 
 	chat "github.com/sea350/ustart_go/middleware/chat"
 	dash "github.com/sea350/ustart_go/middleware/dashboard"
+	"github.com/sea350/ustart_go/middleware/entry"
 	event "github.com/sea350/ustart_go/middleware/event"
 	fail "github.com/sea350/ustart_go/middleware/fail"
 	follow "github.com/sea350/ustart_go/middleware/follow"
@@ -56,26 +57,16 @@ func main() {
 	http.HandleFunc("/profile/", profile.ViewProfile)
 	http.HandleFunc("/callme/", profile.Follow)
 	http.HandleFunc("/Like/", profile.Like)
-	http.HandleFunc("/getComments/", profile.GetComments)
-	http.HandleFunc("/AddComment/", profile.AddComment)
-	http.HandleFunc("/AddComment2/", profile.AddComment2)
-	http.HandleFunc("/addPost/", profile.WallAdd)
 	http.HandleFunc("/addSkill/", profile.AddTag)
 	http.HandleFunc("/deleteSkill/", profile.DeleteTag)
 	http.HandleFunc("/addLink/", profile.AddQuickLink)
 	http.HandleFunc("/deleteLink/", profile.DeleteQuickLink)
-	http.HandleFunc("/deletePost/", profile.DeletePost)
-	http.HandleFunc("/editPost/", profile.EditPost)
-	http.HandleFunc("/shareEntry/", profile.ShareEntry)
-	http.HandleFunc("/deleteModal/", profile.GenerateDeleteModal)
-	http.HandleFunc("/getPostComments/", profile.PostComments)
 	http.HandleFunc("/followers/", profile.FollowersPage)
 	http.HandleFunc("/following/", profile.FollowersPage)
 	http.HandleFunc("/toggleProjectInvis/", profile.AjaxChangeProjVisibility)
 	http.HandleFunc("/toggleEventInvis/", profile.AjaxChangeEventVisibility)
-
+	http.HandleFunc("/AjaxUserFollowProjectToggle/", follow.AjaxUserFollowsProject)
 	http.HandleFunc("/testWall/", profile.TestWallPage)
-	http.HandleFunc("/ajaxUserEntries/", profile.AjaxLoadUserEntries)
 	http.HandleFunc("/AjaxUserFollowsUser/", follow.AjaxUserFollowsUser)
 	http.HandleFunc("/AjaxUserFollowsProject/", follow.AjaxUserFollowsProject)
 
@@ -103,11 +94,6 @@ func main() {
 	http.HandleFunc("/AcceptJoinRequest/", project.AcceptJoinRequest)
 	http.HandleFunc("/RejectJoinRequest/", project.RejectJoinRequest)
 	http.HandleFunc("/AjaxLoadProjectFollowers", project.AjaxLoadProjectFollowers)
-	http.HandleFunc("/ProjectMakeEntry/", project.MakeEntry)
-	http.HandleFunc("/AjaxLoadProjectEntries/", project.AjaxLoadProjectEntries)
-	http.HandleFunc("/AjaxDeleteProjectEntry/", project.AjaxDeleteEntry)
-	// http.HandleFunc("/AjaxUserFollowProjectToggle/", project.AjaxToggleFollow)
-	http.HandleFunc("/AjaxUserFollowProjectToggle/", follow.AjaxUserFollowsProject)
 	http.HandleFunc("/ProjectFollowers/", project.FollowersPage)
 
 	//SETTINGS CHANGES
@@ -156,10 +142,6 @@ func main() {
 	http.HandleFunc("/search", search.Page)
 	http.HandleFunc("/AjaxLoadNext/", search.AjaxLoadNext)
 
-	//GENERIC LOAD COMMENTS
-	http.HandleFunc("/AjaxLoadComments/", profile.AjaxLoadComments)
-	http.HandleFunc("/AjaxLoadEntryArr/", profile.AjaxLoadEntries)
-
 	//EVENT
 	http.HandleFunc("/Event/", event.ViewEvent)
 	http.HandleFunc("/AddEvent/", event.AddEvent)
@@ -177,9 +159,6 @@ func main() {
 	http.HandleFunc("/AcceptMemberJoinRequest/", event.AcceptMemberJoinRequest)
 	http.HandleFunc("/RejectGuestJoinRequest/", event.RejectEventGuestJoinRequest)
 	http.HandleFunc("/RejectMemberJoinRequest/", event.RejectEventMemberJoinRequest)
-	http.HandleFunc("/EventMakeEntry/", event.MakeEventEntry)
-	http.HandleFunc("/AjaxLoadEventEntries/", event.AjaxLoadEventEntries)
-	http.HandleFunc("/AjaxDeleteEventEntry/", event.AjaxDeleteEventEntry)
 	http.HandleFunc("/AjaxNewGuest/", event.NewGuest)
 
 	//CHAT
@@ -190,10 +169,25 @@ func main() {
 	http.HandleFunc("/AjaxLoadMoreChat/", chat.AjaxLoadMoreChat)
 	http.HandleFunc("/AjaxChatNotifications/", chat.AjaxNotificationLoad)
 
+	//ENTRIES
+	http.HandleFunc("/AjaxLoadComments/", entry.AjaxLoadComments) //general
+	http.HandleFunc("/editPost/", entry.EditEntry)
+	http.HandleFunc("/addPost/", entry.MakeUserEntry) //user
+	http.HandleFunc("/deletePost/", entry.DeleteEntry)
+	http.HandleFunc("/shareEntry/", entry.ShareEntry)
+	http.HandleFunc("/ajaxUserEntries/", entry.AjaxLoadUserEntries)
+	http.HandleFunc("/getComments/", profile.GetComments)
+	http.HandleFunc("/AddComment/", profile.AddComment)
+	http.HandleFunc("/AddComment2/", profile.AddComment2)
+	http.HandleFunc("/ProjectMakeEntry/", entry.MakeProjectEntry) //project
+	http.HandleFunc("/AjaxDeleteProjectEntry/", project.AjaxDeleteEntry)
+	http.HandleFunc("/AjaxLoadProjectEntries/", entry.AjaxLoadProjectEntries)
+	http.HandleFunc("/EventMakeEntry/", event.MakeEventEntry) //event
+	http.HandleFunc("/AjaxLoadEventEntries/", event.AjaxLoadEventEntries)
+	http.HandleFunc("/AjaxDeleteEventEntry/", event.AjaxDeleteEventEntry)
+
 	//DASHBOARD
 	http.HandleFunc("/dash/", dash.ViewDashboard)
-	//http.HandleFunc("/ch/", chat.Page)
-	// http.HandleFunc("/ws", chat.Run)
 
 	//Notifications
 	http.HandleFunc("/AjaxNotifications/", notification.AjaxNotificationLoad)

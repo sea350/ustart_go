@@ -1,4 +1,4 @@
-package profile
+package entry
 
 import (
 	"encoding/json"
@@ -24,6 +24,7 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 	if wallID == `` {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("WARNING: docID not received")
+		return
 	}
 	scrollID := r.FormValue("scrollID")
 
