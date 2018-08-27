@@ -82,6 +82,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		heads2 = append(heads2, head)
 	}
 
+	fmt.Println("CURRENT PROJECTS FOLLOWING:", followDoc.ProjectFollowing)
 	for idKey := range followDoc.ProjectFollowing {
 		projHead, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
