@@ -273,6 +273,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 			contents := buffer
 			fmt.Println(contents)
 			data = []template.HTML{template.HTML(name[0]), template.HTML(contents)}
+			fmt.Println(data)
 		}
 		classification = 17
 	}
