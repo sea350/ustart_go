@@ -12,6 +12,7 @@ import (
 	get "github.com/sea350/ustart_go/get/user"
 	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
+	postFollow "github.com/sea350/ustart_go/post/follow"
 )
 
 //ViewProfile ... Loads data relevant to profile page and displays it
@@ -52,7 +53,24 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
+	follExists, err := getFollow.FollowExists(client.Eclient, session.Values["DocID"].(string))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	if !follExists {
+		err = postFollow.IndexFollow(client.Eclient, session.Values["DocID"].(string))
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+	}
+
 	_, follDoc, err := getFollow.ByID(client.Eclient, id)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
 	_, exist1 := follDoc.UserFollowers[session.Values["DocID"].(string)]
 	_, exist2 := follDoc.ProjectFollowers[session.Values["DocID"].(string)]
 	_, exist3 := follDoc.EventFollowers[session.Values["DocID"].(string)]

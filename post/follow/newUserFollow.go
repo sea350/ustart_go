@@ -18,7 +18,7 @@ import (
 func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey string, isBell bool) error {
 
 	ctx := context.Background()
-	fmt.Println("USERID NUF:", userID)
+
 	exists, err := eclient.IndexExists(globals.FollowIndex).Do(ctx)
 	if err != nil {
 		return err
@@ -28,7 +28,7 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	}
 
 	follID, foll, err := getFollow.ByID(eclient, userID)
-	fmt.Println("FOLLID,", follID)
+
 	if err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	var bellMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
-		fmt.Println("CASE FOLLOWERS, LINE 41")
+
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
 		if len(foll.UserFollowers) == 0 {
@@ -65,9 +65,9 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	case "following":
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
-		fmt.Println("CASE FOLLOWING, LINE 67")
+
 		if len(foll.UserFollowing) == 0 {
-			fmt.Println("CASE FOLLOWING, LINE 69")
+
 			var newMap = make(map[string]bool)
 			newMap[newKey] = isBell
 			followMap = newMap
@@ -78,7 +78,6 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	default:
 		return errors.New("Invalid field")
 	}
-	fmt.Println("CURRENT FOLLOW MAP:", followMap)
 
 	var theField string
 	if strings.ToLower(field) == "followers" {
@@ -92,7 +91,6 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 		Id(follID).
 		Doc(map[string]interface{}{theField: followMap}) //field = Followers or Following, newContent =
 
-	fmt.Println("THE FIELD:", theField)
 	//only executes when there is a new bell follower
 	if isBell && strings.ToLower(field) == "followers" {
 		newFollow.Doc(map[string]interface{}{"UserBell": bellMap})
@@ -101,6 +99,6 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	if err != nil {
 		fmt.Println("LINE 92 ERROR,", err)
 	}
-	fmt.Println("LINE 95, S U C C ")
+
 	return err
 }

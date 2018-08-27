@@ -40,7 +40,7 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 	case "followers":
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
-		if len(foll.ProjectFollowers) == 0 {
+		if len(foll.UserFollowers) == 0 {
 			var newMap = make(map[string]bool)
 			newMap[newKey] = isBell
 			followMap = newMap
@@ -50,7 +50,7 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 				bellMap = newBell
 			}
 		} else {
-			foll.ProjectFollowers[newKey] = isBell
+			foll.UserFollowers[newKey] = isBell
 			followMap = foll.ProjectFollowers
 
 			//modify user bell map if bell follower
@@ -76,9 +76,9 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 	}
 	var theField string
 	if strings.ToLower(field) == "followers" {
-		theField = "ProjectFollowers"
+		theField = "UserFollowers"
 	} else if strings.ToLower(field) == "following" {
-		theField = "ProjectFollowing"
+		theField = "UserFollowing"
 	}
 
 	fmt.Println("THE FIELD:", theField)
@@ -90,7 +90,7 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 
 	//only executes when there is a new bell follower
 	if isBell && strings.ToLower(field) == "followers" {
-		newFollow.Doc(map[string]interface{}{"ProjectBell": bellMap})
+		newFollow.Doc(map[string]interface{}{"UserBell": bellMap})
 	}
 	_, err = newFollow.Do(ctx)
 	return err

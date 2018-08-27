@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -20,6 +21,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+
 	id, err := getUser.IDByUsername(client.Eclient, r.URL.Path[11:])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -75,21 +77,26 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			log.Println(idKey)
 			continue
 		}
+		fmt.Println("Followers page current heads2:", heads2)
+
 		heads2 = append(heads2, head)
 	}
 
 	for idKey := range followDoc.ProjectFollowing {
-		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
+		projHead, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 			log.Println(idKey)
 			continue
 		}
-		heads2 = append(heads2, head)
+		fmt.Println("Followers page current heads2:", heads2)
+		heads2 = append(heads2, projHead)
 	}
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, test1.(string), id, "user")
+	fmt.Println("Followers page current heads2:", heads2)
+
 	numberFollowers := len(followDoc.UserFollowers) + len(followDoc.ProjectFollowers) + len(followDoc.EventFollowers)
 	numberFollowing := len(followDoc.UserFollowing) + len(followDoc.ProjectFollowing) + len(followDoc.EventFollowing)
 	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, FollowingStatus: isFollowing, Following: numberFollowing, ListOfHeads: heads, ListOfHeads2: heads2}
