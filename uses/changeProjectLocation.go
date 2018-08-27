@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"fmt"
+
 	post "github.com/sea350/ustart_go/post/project"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -16,6 +18,8 @@ func ChangeProjectLocation(eclient *elastic.Client, projectID string, country st
 	newLoc.City = city
 	newLoc.Zip = zip
 
+	fmt.Println("Country", country)
+	fmt.Println("newloc", newLoc)
 	err := post.UpdateProject(eclient, projectID, "Location", newLoc)
 	return err
 

@@ -29,6 +29,8 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	//   fmt.Println(blob)
 
 	projID := r.FormValue("projectID")
+	fmt.Println("projiD", projID)
+	fmt.Println("city", city)
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
@@ -38,7 +40,6 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
-	//TODO: Add in right URL
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 	return
 

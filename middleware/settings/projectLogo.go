@@ -54,7 +54,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 	return
 
 }

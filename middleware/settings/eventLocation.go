@@ -39,7 +39,7 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
-	//TODO: Add in right URL
+
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 	return
 
