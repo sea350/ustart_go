@@ -1,6 +1,7 @@
 package project
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -54,6 +55,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for idKey := range followDoc.ProjectFollowers {
+		fmt.Println("ID KEY:", idKey)
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -61,7 +63,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			continue
 		}
-		isFollowing, _ := followDoc.ProjectFollowing[idKey]
+		_, isFollowing := followDoc.ProjectFollowing[idKey]
 		head.Followed = isFollowing
 		heads = append(heads, head)
 	}
