@@ -59,14 +59,14 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		fmt.Println("TRYING TO UNFOLLOW")
-		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID)
+		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID, "user")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 			return
 		}
 
-		err = postFollow.RemoveUserFollow(client.Eclient, followingID, "followers", ID.(string))
+		err = postFollow.RemoveUserFollow(client.Eclient, followingID, "followers", ID.(string), "user")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)

@@ -48,7 +48,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 
-		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID)
+		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID, "project")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			dir, _ := os.Getwd()
