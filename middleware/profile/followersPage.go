@@ -21,6 +21,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	fmt.Println("YOU ARE IN followersPage.go")
 	id, err := getUser.IDByUsername(client.Eclient, r.URL.Path[11:])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
