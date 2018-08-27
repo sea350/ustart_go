@@ -100,7 +100,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		projHead.Followed, err = getFollow.IsFollowing(client.Eclient, test1.(string), projHead.DocID, "user")
+		projHead.Followed, err = getFollow.IsFollowing(client.Eclient, test1.(string), projHead.DocID, "project")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
