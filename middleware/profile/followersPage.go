@@ -84,6 +84,8 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("CURRENT PROJECTS FOLLOWING:", followDoc.ProjectFollowing)
 	fmt.Println("CURRENT PROJECTS FOLLOWING:", followDoc.UserFollowing)
+	fmt.Println("CURRENT PROJECTS FOLLOWING COUNT:", len(followDoc.ProjectFollowing))
+	fmt.Println("CURRENT PROJECTS FOLLOWING COUNT:", len(followDoc.UserFollowing))
 	for idKey := range followDoc.ProjectFollowing {
 		projHead, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
