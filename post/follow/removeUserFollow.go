@@ -32,39 +32,35 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 		return err
 	}
 
-	var followMap = make(map[string]bool)
+	// var followMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
 		fmt.Println("REMOVING FOLLOWERS")
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
+		if len(foll.UserFollowers) == 0 {
+			return errors.New("No followers to remove")
+		}
 		delete(foll.UserFollowers, deleteKey)
-		followMap = foll.UserFollowers
 
 	case "following":
 		fmt.Println("REMOVING FOLLOWING")
 		FollowingLock.Lock()
 		defer FollowingLock.Unlock()
+		if len(foll.UserFollowing) == 0 {
+			return errors.New("Nothing to remove from following")
+		}
 		delete(foll.UserFollowing, deleteKey)
-		followMap = foll.UserFollowing
+
 	default:
 		return errors.New("Invalid field")
 	}
 
-	var theField string
-	if strings.ToLower(field) == "followers" {
-		theField = "UserFollowers"
-	} else if strings.ToLower(field) == "following" {
-		theField = "UserFollowing"
-	}
-	fmt.Println("THE FIELD:", theField)
-	fmt.Println("FOLLOW MAP:", followMap)
-
-	_, err = eclient.Update().
+	_, err = eclient.Index().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{theField: followMap}). //field = Followers or Following, newContent =
+		BodyJson(foll). //field = Followers or Following, newContent =
 		Do(ctx)
 
 	return err
