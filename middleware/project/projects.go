@@ -39,14 +39,9 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	}
 	var cs client.ClientSide
 
-	followingState := false
+	_, followingState := follDoc.UserFollowers[session.Values["DocID"].(string)]
 
-	_, exist1 := follDoc.UserFollowers[session.Values["DocID"].(string)]
-	_, exist2 := follDoc.ProjectFollowers[session.Values["DocID"].(string)]
-	_, exist3 := follDoc.EventFollowers[session.Values["DocID"].(string)]
-	if exist1 || exist2 || exist3 {
-		followingState = true
-	}
+	fmt.Println("ALL FOLLOWERS:", follDoc.UserFollowers)
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 
 	fmt.Println("FollowingState:", followingState)
