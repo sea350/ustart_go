@@ -79,7 +79,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Println("Followers page current heads2:", heads2)
 
-		head.Followed, err = getFollow.IsFollowing(client.Eclient, id, head.DocID, "user")
+		head.Followed, err = getFollow.IsFollowing(client.Eclient, test1.(string), head.DocID, "user")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
@@ -100,7 +100,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		projHead.Followed, err = getFollow.IsFollowing(client.Eclient, id, projHead.DocID, "user")
+		projHead.Followed, err = getFollow.IsFollowing(client.Eclient, test1.(string), projHead.DocID, "user")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
