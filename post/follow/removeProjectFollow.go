@@ -36,9 +36,6 @@ func RemoveProjectFollow(eclient *elastic.Client, projID string, field string, d
 	case "followers":
 		FollowerLock.Lock()
 		defer FollowerLock.Unlock()
-		if len(foll.UserFollowing) == 0 {
-			return errors.New("Nothing to remove from followers")
-		}
 		fmt.Println("SIZE BEFORE:", len(foll.UserFollowers))
 		delete(foll.UserFollowers, deleteKey)
 		fmt.Println("SIZE AFTER:", len(foll.UserFollowers))
