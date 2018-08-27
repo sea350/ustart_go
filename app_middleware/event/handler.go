@@ -161,8 +161,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			var newGuest types.EventGuests
 			newGuest.GuestID = data.MemberJoinerID
 			newGuest.Status = 0
-			newGuest.Representative = data.Representative
-			newGuest.Visible = true
+			// newGuest.Representative = data.Representative
+			// newGuest.Visible = true
 
 			err3 := evntPost.AppendGuest(eclient, evntID, newGuest)
 
