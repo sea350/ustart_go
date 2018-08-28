@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -26,14 +25,12 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	_, arrayofComments, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	data, err := json.Marshal(arrayofComments)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	fmt.Fprintln(w, string(data))
 }

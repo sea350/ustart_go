@@ -38,7 +38,7 @@ func LoadComments(eclient *elastic.Client, entryID string, viewerID string, lowe
 	start = (len(parent.Element.ReplyIDs) - 1) - lowerBound
 	for i := start; i >= finish; i-- {
 		jEntry, err := ConvertEntryToJournalEntry(eclient, parent.Element.ReplyIDs[i], viewerID, true)
-		if err != nil {
+		if err != nil && err != errors.New("This entry is not visible") {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
