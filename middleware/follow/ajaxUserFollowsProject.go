@@ -1,6 +1,7 @@
 package follow
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -23,6 +24,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 	followingID := r.FormValue("projectID")
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "project")
+	fmt.Println("AJAX isFollowing:", isFollowing)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

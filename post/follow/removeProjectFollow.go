@@ -40,13 +40,13 @@ func RemoveProjectFollow(eclient *elastic.Client, projID string, field string, d
 		delete(foll.UserFollowers, deleteKey)
 		fmt.Println("SIZE AFTER:", len(foll.UserFollowers))
 
-	case "following":
-		FollowingLock.Lock()
-		defer FollowingLock.Unlock()
-		if len(foll.UserFollowing) == 0 {
-			return errors.New("Nothing to remove from following")
-		}
-		delete(foll.UserFollowing, deleteKey)
+	// case "following":
+	// 	FollowingLock.Lock()
+	// 	defer FollowingLock.Unlock()
+	// 	if len(foll.UserFollowing) == 0 {
+	// 		return errors.New("Nothing to remove from following")
+	// 	}
+	// 	delete(foll.UserFollowing, deleteKey)
 
 	default:
 		return errors.New("Invalid field")
