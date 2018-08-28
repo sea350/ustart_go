@@ -35,7 +35,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 
 	if !isFollowing {
 		fmt.Println("TRYING TO FOLLOW")
-		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "user")
+		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "project")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
