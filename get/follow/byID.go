@@ -63,13 +63,24 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			log.Println(Err)
 		}
 
-		 
 		return newDoc.Id, newFollow, err
 	}
 
 	for _, hit := range searchResult.Hits.Hits {
 		err = json.Unmarshal(*hit.Source, &foll) //unmarshal type RawMessage into user struct
 		follID = hit.Id
+	}
+
+	if len(foll.UserFollowers) == 0 {
+		foll.UserFollowers = make(map[string]bool)
+	}
+
+	if len(foll.UserFollowing) == 0 {
+		foll.UserFollowing = make(map[string]bool)
+	}
+
+	if len(foll.ProjectFollowers) == 0 {
+		foll.ProjectFollowers = make(map[string]bool)
 	}
 
 	return follID, foll, err

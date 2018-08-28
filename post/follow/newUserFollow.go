@@ -77,15 +77,8 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 				followMap = foll.UserFollowing
 			}
 		} else if followType == "project" {
-			if len(foll.ProjectFollowing) == 0 {
-
-				var newMap = make(map[string]bool)
-				newMap[newKey] = isBell
-				followMap = newMap
-			} else {
-				foll.UserFollowing[newKey] = isBell
-				followMap = foll.ProjectFollowing
-			}
+			foll.ProjectFollowing[newKey] = isBell
+			followMap = foll.ProjectFollowing
 		}
 	default:
 		return errors.New("Invalid field")
