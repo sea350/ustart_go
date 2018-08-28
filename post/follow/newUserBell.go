@@ -3,18 +3,17 @@ package post
 import (
 	"context"
 	"errors"
-	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//NewBell ...
+//NewUserBell ...
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func NewBell(eclient *elastic.Client, userID string, field string, newKey string) error {
+func NewUserBell(eclient *elastic.Client, userID string, newKey string, isBell bool) error {
 
 	ctx := context.Background()
 
@@ -31,28 +30,31 @@ func NewBell(eclient *elastic.Client, userID string, field string, newKey string
 		return err
 	}
 
-	var followMap = make(map[string]bool)
-	switch strings.ToLower(field) {
-	case "followers":
-		FollowLock.Lock()
-		defer FollowLock.Unlock()
-		foll.UserFollowers[newKey] = false
-		followMap = foll.UserFollowers
+	//  vFollowLock.Lock()
 
-	case "following":
-		FollowLock.Lock()
-		defer FollowLock.Unlock()
-		foll.UserFollowing[newKey] = false
-		followMap = foll.UserFollowing
-	default:
-		return errors.New("Invalid field")
+	var followMap = make(map[string]bool)
+	var bellMap = make(map[string]bool)
+
+	FollowLock.Lock()
+	defer FollowLock.Unlock()
+	foll.UserFollowers[newKey] = isBell
+	followMap = foll.UserFollowers
+	//modify user bell map if bell follower
+	if isBell {
+		foll.UserBell[newKey] = isBell
+		bellMap = foll.UserBell
 	}
-	_, err = eclient.Update().
+
+	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{field: followMap}). //field = Followers or Following, newContent =
-		Do(ctx)
+		Doc(map[string]interface{}{"UserBell": followMap}) //field = Followers or Following, newContent =
 
+	//only executes when there is a new bell follower
+	if isBell {
+		newFollow.Doc(map[string]interface{}{"UserBell": bellMap})
+	}
+	_, err = newFollow.Do(ctx)
 	return err
 }

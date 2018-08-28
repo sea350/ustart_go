@@ -24,7 +24,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 	followingID := r.FormValue("projectID")
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "project")
-	fmt.Println("AJAX isFollowing:", isFollowing)
+
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
@@ -33,6 +33,8 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !isFollowing {
+		fmt.Println("AJAX isFollowing:", isFollowing, "NOT FOLLOWING, ADDING TO:")
+		fmt.Println("USER FOLLOWING")
 
 		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "project")
 		if err != nil {
@@ -42,6 +44,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		fmt.Println("PROJECT FOLLOWERS")
 		err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false, "user")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -50,6 +53,8 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 
+		fmt.Println("AJAX isFollowing:", isFollowing, "FOLLOWING, REMOVING FROM:")
+		fmt.Println("USER FOLLOWING")
 		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID, "project")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -58,6 +63,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		fmt.Println("PROJECT FOLLOWERS")
 		err = postFollow.RemoveProjectFollow(client.Eclient, followingID, "followers", ID.(string))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
