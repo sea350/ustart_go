@@ -23,7 +23,7 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	newJournalEntry.Liked = liked
 
 	entry, err := getEntry.EntryByID(eclient, entryID)
-	if err != nil {
+	if err != nil || !entry.Visible {
 		return newJournalEntry, err
 	}
 	newJournalEntry.Element = entry

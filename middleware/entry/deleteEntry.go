@@ -5,8 +5,9 @@ import (
 	"log"
 	"net/http"
 
+	get "github.com/sea350/ustart_go/get/entry"
 	client "github.com/sea350/ustart_go/middleware/client"
-	uses "github.com/sea350/ustart_go/uses"
+	post "github.com/sea350/ustart_go/post/entry"
 )
 
 //DeleteEntry ... Can delete any post
@@ -19,13 +20,45 @@ func DeleteEntry(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	postid := r.FormValue("postid")
+	entryID := r.FormValue("postid")
 
-	parentID, err := uses.RemoveEntry(client.Eclient, postid)
+	entry, err := get.EntryByID(client.Eclient, entryID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return
 	}
-	fmt.Fprintln(w, parentID)
 
+	err = post.UpdateEntry(client.Eclient, entryID, "Visible", false)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return
+	}
+
+	// err = delete.Entry(eclient, entryID)
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	log.Println(err)
+	// 	return
+	// }
+
+	switch entry.Classification {
+	case 1:
+		err = post.DeleteReplyID(client.Eclient, entry.ReferenceEntry, entryID)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return
+		}
+	case 2:
+		err = post.DeleteShareID(client.Eclient, entry.ReferenceEntry, entryID)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return
+		}
+	}
+
+	fmt.Fprintln(w, entry.ReferenceEntry)
 }
