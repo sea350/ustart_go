@@ -180,11 +180,9 @@ func main() {
 	http.HandleFunc("/AddComment/", profile.AddComment)
 	http.HandleFunc("/AddComment2/", profile.AddComment2)
 	http.HandleFunc("/ProjectMakeEntry/", entry.MakeProjectEntry) //project
-	http.HandleFunc("/AjaxDeleteProjectEntry/", project.AjaxDeleteEntry)
 	http.HandleFunc("/AjaxLoadProjectEntries/", entry.AjaxLoadProjectEntries)
 	http.HandleFunc("/EventMakeEntry/", event.MakeEventEntry) //event
 	http.HandleFunc("/AjaxLoadEventEntries/", event.AjaxLoadEventEntries)
-	http.HandleFunc("/AjaxDeleteEventEntry/", event.AjaxDeleteEventEntry)
 
 	//DASHBOARD
 	http.HandleFunc("/dash/", dash.ViewDashboard)
