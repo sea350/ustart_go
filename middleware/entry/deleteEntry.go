@@ -46,7 +46,7 @@ func DeleteEntry(w http.ResponseWriter, r *http.Request) {
 	switch entry.Classification {
 	case 0:
 		for i := range entry.ShareIDs {
-			err := post.UpdateEntry(client.Eclient, entry.ShareIDs[i], "ReferenceID", ``)
+			err := post.UpdateEntry(client.Eclient, entry.ShareIDs[i], "ReferenceEntry", ``)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
