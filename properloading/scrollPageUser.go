@@ -44,7 +44,7 @@ func ScrollPageUser(eclient *elastic.Client, docID string, viewerID string, scro
 	for _, hit := range res.Hits.Hits {
 		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, true)
 		arrResults = append(arrResults, head)
-		if err != nil {
+		if err != nil && err != errors.New("This entry is not visible") {
 			report = errors.New("One or more problems loading journal entries")
 
 		}

@@ -2,6 +2,7 @@ package profile
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -23,7 +24,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	postID := r.FormValue("PostID")
 	_, arrayofComments, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
-	if err != nil {
+	if err != nil && err != errors.New("This entry is not visible") {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
