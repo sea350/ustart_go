@@ -67,10 +67,6 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	}
 	_, followingState := follDoc.UserFollowers[docID.(string)]
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("userfollowers")
-	log.Println(follDoc.UserFollowers)
-
 	numberFollowers := len(follDoc.UserFollowers)
 	// numberFollowing := len(follDoc.UserFollowing) + len(follDoc.ProjectFollowing) + len(follDoc.EventFollowing)
 	cs = client.ClientSide{UserInfo: userstruct, DOCID: docID.(string), Username: session.Values["Username"].(string), Followers: int(numberFollowers), FollowingStatus: followingState, Project: project, Widgets: widgets}
