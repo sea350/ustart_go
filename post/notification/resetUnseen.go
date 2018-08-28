@@ -6,7 +6,7 @@ import (
 
 //ResetUnseen ... resets unseen to 0
 //needs its own lock for concurrency control
-func ResetUnseen(eclient *elastic.Client, proxyID string, notifID string) error {
+func ResetUnseen(eclient *elastic.Client, proxyID string) error {
 
 	ModifyUnseen.Lock()
 	defer ModifyUnseen.Unlock()
