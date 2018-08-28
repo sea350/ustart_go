@@ -91,7 +91,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	year, _ := strconv.Atoi(r.FormValue("dob")[0:4])
 	month, _ := strconv.Atoi(r.FormValue("dob")[5:7])
 	day, _ := strconv.Atoi(r.FormValue("dob")[8:10])
-	bday := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
+	bday := time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
 
 	country := r.FormValue("country")
 	state := r.FormValue("state")

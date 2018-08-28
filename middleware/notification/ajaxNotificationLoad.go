@@ -48,6 +48,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 		}
 
 		notifAggregate := make(map[string]interface{})
+		notifAggregate["ID"] = id
 		notifAggregate["Data"] = notif
 		notifAggregate["Message"] = msg
 		notifAggregate["URL"] = url
@@ -61,6 +62,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 	sendData := make(map[string]interface{})
 	sendData["notifications"] = notifs
+	sendData["numUnread"] = proxy.NumUnread
 
 	data, err := json.Marshal(sendData)
 	if err != nil {
