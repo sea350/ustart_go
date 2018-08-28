@@ -33,15 +33,15 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 		return err
 	}
 
-	//  vFollowerLock.Lock()
+	//  vFollowLock.Lock()
 
 	var followMap = make(map[string]bool)
 	var bellMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
 
-		FollowerLock.Lock()
-		defer FollowerLock.Unlock()
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
 		if len(foll.UserFollowers) == 0 {
 			var newMap = make(map[string]bool)
 			newMap[newKey] = isBell
@@ -63,8 +63,8 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 		}
 
 	case "following":
-		FollowingLock.Lock()
-		defer FollowingLock.Unlock()
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
 
 		if followType == "user" {
 			if len(foll.UserFollowing) == 0 {

@@ -14,5 +14,5 @@ var EventGuestLock sync.Mutex
 //EventGuestRequestLock ... Use if modifying event guest requests
 var EventGuestRequestLock sync.Mutex
 
-//EventFollowerLock ... a lock for modifying a event's follower array
-var EventFollowerLock sync.Mutex
+//EventFollowLock ... a lock for modifying a event's follower array
+var EventFollowLock sync.Mutex

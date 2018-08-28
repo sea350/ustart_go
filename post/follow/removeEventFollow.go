@@ -33,16 +33,16 @@ func RemoveEventFollow(eclient *elastic.Client, userID string, field string, del
 
 	switch strings.ToLower(field) {
 	case "followers":
-		FollowerLock.Lock()
-		defer FollowerLock.Unlock()
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
 		if len(foll.UserFollowing) == 0 {
 			return errors.New("Nothing to remove from followers")
 		}
 		delete(foll.EventFollowers, deleteKey)
 
 	case "following":
-		FollowingLock.Lock()
-		defer FollowingLock.Unlock()
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
 		if len(foll.UserFollowing) == 0 {
 			return errors.New("Nothing to remove from following")
 		}

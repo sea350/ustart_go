@@ -37,8 +37,8 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 	case "followers":
 		if followType == "user" {
 			fmt.Println("REMOVING FOLLOWERS")
-			FollowerLock.Lock()
-			defer FollowerLock.Unlock()
+			FollowLock.Lock()
+			defer FollowLock.Unlock()
 			if len(foll.UserFollowers) == 0 {
 				return errors.New("No followers to remove")
 			}
@@ -46,8 +46,8 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 
 		} else if followType == "project" {
 			fmt.Println("REMOVING FOLLOWERS")
-			FollowerLock.Lock()
-			defer FollowerLock.Unlock()
+			FollowLock.Lock()
+			defer FollowLock.Unlock()
 			if len(foll.ProjectFollowers) == 0 {
 				return errors.New("No followers to remove")
 			}
@@ -55,8 +55,8 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 		}
 	case "following":
 		fmt.Println("REMOVING FOLLOWING")
-		FollowingLock.Lock()
-		defer FollowingLock.Unlock()
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
 		if followType == "user" {
 			if len(foll.UserFollowing) == 0 {
 				return errors.New("Nothing to remove from following")
