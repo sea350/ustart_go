@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -24,12 +23,16 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	followingID := r.FormValue("projectID")
+	if followingID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(`PROJECT ID NOT PASSED`)
+		return
+	}
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "user")
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 		return
 	}
 
