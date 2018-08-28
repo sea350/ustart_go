@@ -12,8 +12,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//ProxyNotificationByUserID ...
-func ProxyNotificationByUserID(eclient *elastic.Client, userID string) (types.ProxyNotifications, error) {
+//ProxyNotificationByUserID ... returns proxy id and struct
+func ProxyNotificationByUserID(eclient *elastic.Client, userID string) (string, types.ProxyNotifications, error) {
 
 	ctx := context.Background()
 	var proxy types.ProxyNotifications
@@ -28,7 +28,7 @@ func ProxyNotificationByUserID(eclient *elastic.Client, userID string) (types.Pr
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
-			return proxy, err
+			return ``, proxy, err
 		}
 	}
 	termQuery := elastic.NewTermQuery("DocID", strings.ToLower(userID))
@@ -39,35 +39,37 @@ func ProxyNotificationByUserID(eclient *elastic.Client, userID string) (types.Pr
 		Do(ctx)
 
 	if err != nil {
-		return proxy, err
+		return ``, proxy, err
 	}
 
 	if searchResult.TotalHits() == 0 {
 		proxy.Settings.Default()
 		proxy.DocID = userID
 
-		_, err := eclient.Index().
+		res, err := eclient.Index().
 			Index(globals.ProxyNotifIndex).
 			Type(globals.ProxyNotifType).
 			BodyJson(proxy).
 			Do(ctx)
 
 		if err != nil {
-			return types.ProxyNotifications{}, err
+			return res.Id, types.ProxyNotifications{}, err
 		}
-		return proxy, nil
+		return res.Id, proxy, nil
 	}
 	if searchResult.TotalHits() > 1 {
-		return proxy, errors.New("multiple proxies found")
+		return "", proxy, errors.New("multiple proxies found")
 	}
 
+	var id string
 	for _, element := range searchResult.Hits.Hits {
 		Err := json.Unmarshal(*element.Source, &proxy)
+		id = element.Id
 		if Err != nil {
-			return proxy, Err
+			return element.Id, proxy, Err
 		}
 	}
 
-	return proxy, err
+	return id, proxy, err
 
 }

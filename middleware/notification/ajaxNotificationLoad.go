@@ -8,6 +8,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/notification"
 	"github.com/sea350/ustart_go/middleware/client"
+	post "github.com/sea350/ustart_go/post/notification"
 	"github.com/sea350/ustart_go/uses"
 )
 
@@ -22,7 +23,13 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 	var notifs []map[string]interface{}
 
-	proxy, err := get.ProxyNotificationByUserID(client.Eclient, docID.(string))
+	id, proxy, err := get.ProxyNotificationByUserID(client.Eclient, docID.(string))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	err = post.ResetUnseen(client.Eclient, id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
