@@ -63,7 +63,7 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			log.Println(Err)
 		}
 
-		fmt.Println("FOLLOW DOC:", newDoc.Id)
+		 
 		return newDoc.Id, newFollow, err
 	}
 
