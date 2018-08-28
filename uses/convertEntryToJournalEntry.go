@@ -43,7 +43,7 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	newJournalEntry.FirstName = usr.FirstName
 	newJournalEntry.LastName = usr.LastName
 	newJournalEntry.Image = usr.Avatar
-	if entry.Classification == 2 && enableRecursion {
+	if entry.Classification == 2 && enableRecursion && entry.ReferenceEntry != `` {
 		newJournalEntry.ReferenceElement, err = ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry, viewerID, false)
 	}
 
