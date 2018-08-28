@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"errors"
+
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
@@ -23,8 +25,11 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	newJournalEntry.Liked = liked
 
 	entry, err := getEntry.EntryByID(eclient, entryID)
-	if err != nil || !entry.Visible {
+	if err != nil {
 		return newJournalEntry, err
+	}
+	if !entry.Visible {
+		return newJournalEntry, errors.New("This entry is not visible")
 	}
 	newJournalEntry.Element = entry
 	newJournalEntry.NumShares = len(entry.ShareIDs)

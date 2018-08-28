@@ -23,6 +23,7 @@ func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, s
 	projQuery := elastic.NewBoolQuery()
 	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", strings.ToLower(docID)))
 	projQuery = projQuery.Must(elastic.NewTermsQuery("Classification", 3, 5))
+	projQuery = projQuery.Must(elastic.NewTermQuery("Visible", true))
 
 	//yeah....
 
