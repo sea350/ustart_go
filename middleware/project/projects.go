@@ -37,6 +37,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
+
 	var cs client.ClientSide
 
 	_, followingState := follDoc.UserFollowers[session.Values["DocID"].(string)]
