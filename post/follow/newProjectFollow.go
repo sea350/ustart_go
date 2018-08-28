@@ -52,7 +52,7 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 				}
 			} else {
 				foll.UserFollowers[newKey] = isBell
-				followMap = foll.ProjectFollowers
+				followMap = foll.UserFollowers
 
 				//modify user bell map if bell follower
 				if isBell {
