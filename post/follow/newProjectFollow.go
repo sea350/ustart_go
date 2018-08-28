@@ -55,11 +55,13 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 				fmt.Println("SIZE BEFORE", len(foll.UserFollowers))
 				followMap = foll.UserFollowers
 
+				_, exist1 := followMap[newKey]
+				fmt.Println("DOES IT EXIST BEFORE?", exist1)
 				followMap[newKey] = isBell
 
-				_, exist := followMap[newKey]
+				_, exist2 := followMap[newKey]
 				fmt.Println("SIZE AFTER", len(followMap))
-				fmt.Println("DOES IT EXIST?", exist)
+				fmt.Println("DOES IT EXIST AFTER?", exist2)
 				//modify user bell map if bell follower
 				if isBell {
 					bellMap = foll.ProjectBell
@@ -104,19 +106,11 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 	default:
 		return errors.New("Invalid field")
 	}
-	var theField string
-	if strings.ToLower(field) == "followers" {
-		theField = "UserFollowers"
-	} else if strings.ToLower(field) == "following" {
-		theField = "UserFollowing"
-	}
-
-	fmt.Println("THE FIELD:", theField)
 	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{theField: followMap}) //field = Followers or Following, newContent =
+		Doc(map[string]interface{}{"UserFollowers": followMap}) //field = Followers or Following, newContent =
 
 	//only executes when there is a new bell follower
 	if isBell && strings.ToLower(field) == "followers" {
