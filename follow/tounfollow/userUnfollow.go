@@ -10,12 +10,12 @@ import (
 //allows for following a project, profile, or event
 func UserUnfollow(eclient *elastic.Client, hostID string, viewerID string) error {
 	//remove from following
-	err := postFollow.RemoveUserFollow(eclient, viewerID, "UserFollowing", hostID)
+	err := postFollow.RemoveUserFollow(eclient, viewerID, "UserFollowing", hostID, ``)
 	if err != nil {
 		return err
 	}
 	//remove from followers
-	err = postFollow.RemoveUserFollow(eclient, hostID, "Followers", viewerID)
+	err = postFollow.RemoveUserFollow(eclient, hostID, "Followers", viewerID, ``)
 	if err != nil {
 		return err
 	}

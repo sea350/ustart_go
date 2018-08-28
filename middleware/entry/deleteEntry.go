@@ -10,7 +10,7 @@ import (
 	post "github.com/sea350/ustart_go/post/entry"
 )
 
-//DeleteEntry ... Can delete any post
+//DeleteEntry ... Can delete any post NEEDS SECURITY CHECK
 //designed for ajax
 func DeleteEntry(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")

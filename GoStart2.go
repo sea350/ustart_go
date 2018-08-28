@@ -172,8 +172,8 @@ func main() {
 	//ENTRIES
 	http.HandleFunc("/AjaxLoadComments/", entry.AjaxLoadComments) //general
 	http.HandleFunc("/editPost/", entry.EditEntry)
-	http.HandleFunc("/addPost/", entry.MakeUserEntry) //user
 	http.HandleFunc("/deletePost/", entry.DeleteEntry)
+	http.HandleFunc("/addPost/", entry.MakeUserEntry) //user
 	http.HandleFunc("/shareEntry/", entry.ShareEntry)
 	http.HandleFunc("/ajaxUserEntries/", entry.AjaxLoadUserEntries)
 	http.HandleFunc("/getComments/", profile.GetComments)
