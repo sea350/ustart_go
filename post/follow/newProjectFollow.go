@@ -41,34 +41,26 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 		FollowLock.Lock()
 		defer FollowLock.Unlock()
 		if followType == "user" {
-			if len(foll.UserFollowers) == 0 {
-				var newMap = make(map[string]bool)
-				newMap[newKey] = isBell
-				followMap = newMap
-				if isBell {
-					var newBell = make(map[string]bool)
-					newBell[newKey] = isBell
-					bellMap = newBell
-				}
-			} else {
-				fmt.Println("NEW PROJECT FOLLOW ADDING NEW FOLLOWER")
-				fmt.Println("SIZE BEFORE", len(foll.UserFollowers))
-				followMap = foll.UserFollowers
 
-				_, exist1 := followMap[newKey]
-				fmt.Println("DOES IT EXIST BEFORE?", exist1)
-				followMap[newKey] = isBell
+			fmt.Println("NEW PROJECT FOLLOW ADDING NEW FOLLOWER")
+			fmt.Println("SIZE BEFORE", len(foll.UserFollowers))
 
-				_, exist2 := followMap[newKey]
-				fmt.Println("SIZE AFTER", len(followMap))
-				fmt.Println("DOES IT EXIST AFTER?", exist2)
-				//modify user bell map if bell follower
-				if isBell {
-					bellMap = foll.ProjectBell
-					bellMap[newKey] = isBell
+			_, exist1 := foll.UserFollowers[newKey]
+			fmt.Println("DOES IT EXIST BEFORE?", exist1)
+			foll.UserFollowers[newKey] = isBell
 
-				}
+			_, exist2 := foll.UserFollowers[newKey]
+			fmt.Println("SIZE AFTER", len(foll.UserFollowers))
+			fmt.Println("DOES IT EXIST AFTER?", exist2)
+
+			followMap = foll.UserFollowers
+			//modify user bell map if bell follower
+			if isBell {
+				bellMap = foll.ProjectBell
+				bellMap[newKey] = isBell
+
 			}
+
 		} else if followType == "project" {
 			if len(foll.ProjectFollowers) == 0 {
 				var newMap = make(map[string]bool)
