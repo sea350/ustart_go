@@ -8,7 +8,6 @@ import (
 	"time"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
-	getProject "github.com/sea350/ustart_go/get/project"
 	get "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
@@ -25,12 +24,8 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projID, err := getProject.ProjectIDByURL(client.Eclient, r.URL.Path[10:])
+	projID := r.FormValue("projectID")
 
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-	}
 	_, follDoc, err := getFollow.ByID(client.Eclient, projID)
 
 	if err != nil {
