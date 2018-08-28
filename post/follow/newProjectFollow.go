@@ -51,9 +51,12 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 					bellMap = newBell
 				}
 			} else {
+				fmt.Println("NEW PROJECT FOLLOW ADDING NEW FOLLOWER")
+				fmt.Println("SIZE BEFORE", len(foll.UserFollowers))
 				foll.UserFollowers[newKey] = isBell
 				followMap = foll.UserFollowers
 
+				fmt.Println("SIZE BEFORE", len(followMap))
 				//modify user bell map if bell follower
 				if isBell {
 					foll.ProjectBell[newKey] = isBell
