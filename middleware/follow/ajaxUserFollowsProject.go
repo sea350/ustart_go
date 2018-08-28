@@ -9,9 +9,11 @@ import (
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	"github.com/sea350/ustart_go/middleware/client"
 	postFollow "github.com/sea350/ustart_go/post/follow"
+	post "github.com/sea350/ustart_go/post/notification"
+	"github.com/sea350/ustart_go/types"
 )
 
-//AjaxUserFollowsProject ... an ajax call that changes whether a user is actively following a project
+//AjaxUserFollowsProject ... an ajax call that toggles whether a user is actively following another user
 func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	ID, _ := session.Values["DocID"]
@@ -21,9 +23,9 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	followingID := r.FormValue("projectID")
+	followingID := r.FormValue("userID")
 
-	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "project")
+	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "user")
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
@@ -31,79 +33,44 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projectIsFollowed, err := getFollow.IsFollowedBy(client.Eclient, followingID, ID.(string), "user")
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-		return
-	}
-	if isFollowing != projectIsFollowed {
-		if isFollowing {
-			err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false, "user")
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-			}
-		} else {
-			err = postFollow.RemoveProjectFollow(client.Eclient, followingID, "followers", ID.(string))
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-			}
-
+	if !isFollowing {
+		fmt.Println("TRYING TO FOLLOW")
+		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "user")
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return
 		}
 
-		var cs client.ClientSide
-		cs = client.ClientSide{DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), FollowingStatus: !isFollowing}
-		fmt.Println(cs)
+		err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false, "user")
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return
+		}
 
+		var notif types.Notification
+		notif.NewFollower(followingID, ID.(string))
+		_, err := post.IndexNotification(client.Eclient, notif)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return
+		}
 	} else {
-
-		if !isFollowing {
-			fmt.Println("AJAX isFollowing:", isFollowing, "NOT FOLLOWING, ADDING TO:")
-			fmt.Println("USER FOLLOWING")
-
-			err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "project")
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-				return
-			}
-
-			fmt.Println("PROJECT FOLLOWERS")
-			err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false, "user")
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-			}
-		} else {
-
-			fmt.Println("AJAX isFollowing:", isFollowing, "FOLLOWING, REMOVING FROM:")
-			fmt.Println("USER FOLLOWING")
-			err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID, "project")
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-				return
-			}
-
-			fmt.Println("PROJECT FOLLOWERS")
-			err = postFollow.RemoveProjectFollow(client.Eclient, followingID, "followers", ID.(string))
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-			}
+		fmt.Println("TRYING TO UNFOLLOW")
+		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID, "user")
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return
 		}
 
-		var cs client.ClientSide
-		cs = client.ClientSide{DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), FollowingStatus: !isFollowing}
-		fmt.Println(cs)
+		err = postFollow.RemoveProjectFollow(client.Eclient, followingID, "followers", ID.(string))
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
 	}
+
 }
