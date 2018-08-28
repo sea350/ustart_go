@@ -8,6 +8,7 @@ import (
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	"github.com/sea350/ustart_go/middleware/client"
+	// client "github.com/sea350/ustart_go/middleware/client"
 	postFollow "github.com/sea350/ustart_go/post/follow"
 )
 
@@ -65,5 +66,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 			log.Println(dir, err)
 		}
 	}
+
+	cs := client.ClientSide{FollowingStatus: !isFollowing}
 
 }

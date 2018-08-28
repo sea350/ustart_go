@@ -40,7 +40,8 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 
 	var cs client.ClientSide
 
-	_, followingState := follDoc.UserFollowers[session.Values["DocID"].(string)]
+	// _, followingState := follDoc.UserFollowers[session.Values["DocID"].(string)]
+	_, followingState := follDoc.ProjectFollowing[projID]
 
 	fmt.Println("ALL FOLLOWERS:", follDoc.UserFollowers)
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
