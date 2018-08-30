@@ -2,7 +2,6 @@ package event
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -10,19 +9,19 @@ import (
 func FindEventMember(w http.ResponseWriter, r *http.Request) {
 	jsonthis := []string{"Magic Johnson", "Magic White", "Magic Pomper"}
 	jsonnow, _ := json.Marshal(jsonthis)
-	fmt.Fprintln(w, jsonnow)
+	w.Write(jsonnow)
 }
 
 //FindEventGuest ... find event guest
 func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 	jsonthis := []string{"Magic Johnson", "Magic White", "Magic Pomper"}
 	jsonnow, _ := json.Marshal(jsonthis)
-	fmt.Fprintln(w, jsonnow)
+	w.Write(jsonnow)
 }
 
 //FindEventProject ... find event project
 func FindEventProject(w http.ResponseWriter, r *http.Request) {
 	jsonthis := []string{"Magic Johnson", "Magic White", "Magic Pomper"}
 	jsonnow, _ := json.Marshal(jsonthis)
-	fmt.Fprintln(w, jsonnow)
+	w.Write(jsonnow)
 }
