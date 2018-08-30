@@ -160,12 +160,12 @@ func main() {
 	http.HandleFunc("/RejectGuestJoinRequest/", event.RejectEventGuestJoinRequest)
 	http.HandleFunc("/RejectMemberJoinRequest/", event.RejectEventMemberJoinRequest)
 	http.HandleFunc("/AjaxNewGuest/", event.NewGuest)
-	http.HandleFunc("/FindEventGuest/", event.FindEventGuest)
+	http.HandleFunc("/FindEventGuest/", event.FindEventMember)
 	http.HandleFunc("/FindEventMember/", event.FindEventMember)
 	http.HandleFunc("/FindEventProject/", event.FindEventProject)
-	http.HandleFunc("/AddEventGuest/", event.FindEventGuest)
-	http.HandleFunc("/AddEventMember/", event.FindEventMember)
-	http.HandleFunc("/AddEventProject/", event.FindEventProject)
+	http.HandleFunc("/AddEventGuest/", event.AddEventGuestRequest)
+	http.HandleFunc("/AddEventMember/", event.AddEventMemberRequest)
+	http.HandleFunc("/AddEventProject/", event.AddEventProjectRequest)
 
 	//CHAT
 	http.HandleFunc("/ch/", chat.Page)
