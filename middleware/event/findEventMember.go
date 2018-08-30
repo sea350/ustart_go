@@ -32,7 +32,7 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 		Pretty(true).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.Hits.TotalHits) + " results found")
+	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.TotalHits()) + " results found")
 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -62,7 +62,7 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 		Pretty(true).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.Hits.TotalHits) + " results found")
+	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.TotalHits()) + " results found")
 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -92,7 +92,7 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 		Pretty(true).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.Hits.TotalHits) + " results found")
+	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.TotalHits()) + " results found")
 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
