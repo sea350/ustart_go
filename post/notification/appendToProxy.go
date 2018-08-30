@@ -10,14 +10,20 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//AppendToProxy ... appends a new conversation state OR brings a certain conversation state to the back of the list
+//AppendToProxyNotifications ... appends a new conversation state OR brings a certain conversation state to the back of the list
 //needs its own lock for concurrency control
-func AppendToProxy(eclient *elastic.Client, proxyID string, notifID string, seen bool) error {
+func AppendToProxyNotifications(eclient *elastic.Client, proxyID string, notifID string) error {
 
 	ctx := context.Background()
 
 	AppendToProxyLock.Lock()
 	defer AppendToProxyLock.Unlock()
+
+	ModifyUnseen.Lock()
+	defer ModifyUnseen.Unlock()
+
+	ModifyUnread.Lock()
+	defer ModifyUnread.Unlock()
 
 	exists, err := eclient.IndexExists(globals.ProxyNotifIndex).Do(ctx)
 	if err != nil {
@@ -55,11 +61,17 @@ func AppendToProxy(eclient *elastic.Client, proxyID string, notifID string, seen
 		}
 	}
 
-	if !seen {
-		proxy.NumUnread++
+	proxy.NumUnread++
+	proxy.NumUnseen++
+
+	err = UpdateProxyNotifcations(eclient, proxyID, "NotificationCache", proxy.NotificationCache)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return err
 	}
 
-	err = ReindexProxyNotifications(eclient, proxyID, proxy)
+	err = UpdateProxyNotifcations(eclient, proxyID, "NumUnread", proxy.NumUnread)
 
 	return err
 }

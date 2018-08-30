@@ -15,10 +15,10 @@ import (
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey string, isBell bool) error {
+func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey string, isBell bool, followType string) error {
 
 	ctx := context.Background()
-	fmt.Println("USERID NUF:", userID)
+
 	exists, err := eclient.IndexExists(globals.FollowIndex).Do(ctx)
 	if err != nil {
 		return err
@@ -28,20 +28,20 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	}
 
 	follID, foll, err := getFollow.ByID(eclient, userID)
-	fmt.Println("FOLLID,", follID)
+
 	if err != nil {
 		return err
 	}
 
-	//  vFollowerLock.Lock()
+	//  vFollowLock.Lock()
 
 	var followMap = make(map[string]bool)
 	var bellMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
-		fmt.Println("CASE FOLLOWERS, LINE 41")
-		FollowerLock.Lock()
-		defer FollowerLock.Unlock()
+
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
 		if len(foll.UserFollowers) == 0 {
 			var newMap = make(map[string]bool)
 			newMap[newKey] = isBell
@@ -63,26 +63,46 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 		}
 
 	case "following":
-		FollowingLock.Lock()
-		defer FollowingLock.Unlock()
-		fmt.Println("CASE FOLLOWING, LINE 67")
-		if len(foll.UserFollowing) == 0 {
-			fmt.Println("CASE FOLLOWING, LINE 69")
-			var newMap = make(map[string]bool)
-			newMap[newKey] = isBell
-			followMap = newMap
-		} else {
-			foll.UserFollowing[newKey] = isBell
-			followMap = foll.UserFollowing
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
+
+		if followType == "user" {
+			if len(foll.UserFollowing) == 0 {
+
+				var newMap = make(map[string]bool)
+				newMap[newKey] = isBell
+				followMap = newMap
+			} else {
+				foll.UserFollowing[newKey] = isBell
+				followMap = foll.UserFollowing
+			}
+		} else if followType == "project" {
+			foll.ProjectFollowing[newKey] = isBell
+			followMap = foll.ProjectFollowing
 		}
 	default:
 		return errors.New("Invalid field")
+	}
+
+	var theField string
+	if strings.ToLower(field) == "followers" {
+		if followType == "user" {
+			theField = "UserFollowers"
+		} else if followType == "project" {
+			theField = "ProjectFollowers"
+		}
+	} else if strings.ToLower(field) == "following" {
+		if followType == "user" {
+			theField = "UserFollowing"
+		} else if followType == "project" {
+			theField = "ProjectFollowing"
+		}
 	}
 	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{field: followMap}) //field = Followers or Following, newContent =
+		Doc(map[string]interface{}{theField: followMap}) //field = Followers or Following, newContent =
 
 	//only executes when there is a new bell follower
 	if isBell && strings.ToLower(field) == "followers" {
@@ -92,6 +112,6 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	if err != nil {
 		fmt.Println("LINE 92 ERROR,", err)
 	}
-	fmt.Println("LINE 95, S U C C ")
+
 	return err
 }

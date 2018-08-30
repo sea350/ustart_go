@@ -8,6 +8,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/notification"
 	"github.com/sea350/ustart_go/middleware/client"
+	post "github.com/sea350/ustart_go/post/notification"
 	"github.com/sea350/ustart_go/uses"
 )
 
@@ -22,7 +23,14 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 	var notifs []map[string]interface{}
 
-	proxy, err := get.ProxyNotificationByUserID(client.Eclient, docID.(string))
+	id, proxy, err := get.ProxyNotificationByUserID(client.Eclient, docID.(string))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	log.Println("ID:", id)
+
+	err = post.ResetUnseen(client.Eclient, id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -48,6 +56,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 		}
 
 		notifAggregate := make(map[string]interface{})
+		notifAggregate["ID"] = id
 		notifAggregate["Data"] = notif
 		notifAggregate["Message"] = msg
 		notifAggregate["URL"] = url
@@ -61,6 +70,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 	sendData := make(map[string]interface{})
 	sendData["notifications"] = notifs
+	sendData["numUnread"] = proxy.NumUnread
 
 	data, err := json.Marshal(sendData)
 	if err != nil {

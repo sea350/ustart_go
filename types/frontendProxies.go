@@ -31,6 +31,8 @@ type FloatingHead struct {
 	Username       string      `json:"Username"`
 	FirstName      string      `json:"FirstName"`
 	LastName       string      `json:"LastName"`
+	Email          string      `json:"Email"`
+	Tags           []string    `json:"Tags"`
 	Image          string      `json:"Image"`
 	Followed       bool        `json:"Followed"`
 	Bio            []rune      `json:"Bio"`
@@ -40,6 +42,7 @@ type FloatingHead struct {
 	Time           time.Time   `json:"Time"`
 	Read           bool        `json:"Read"`
 	Interface      interface{} `json:"Interface"`
+	Visible        bool        `json:"Visible"`
 	//for projects Username = project URLName
 	//for projects Firstname = project Name
 	//for projects Bio = project Description
@@ -95,6 +98,7 @@ type EventSubWidgets struct {
 type EventAggregate struct {
 	DocID          string         `json:"DocID"`
 	EventData      Events         `json:"EventData"`
+	GuestData      []FloatingHead `json:"GuestData"`
 	MemberData     []FloatingHead `json:"MemberData"`
 	ProjectData    []FloatingHead `json:"ProjectData"`
 	Editable       bool           `json:"Editable"`

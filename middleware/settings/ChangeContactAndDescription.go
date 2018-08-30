@@ -5,12 +5,13 @@ import (
 	"html"
 	"net/http"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
 //ChangeContactAndDescription ...
 func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -46,7 +47,7 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 	descriptionrune := []rune(description)
 
 	userID := session.Values["DocID"].(string)
-	err2 := uses.ChangeContactAndDescription(eclient, userID, phonenumber, pVIS, gender, gVIS, eVIS, descriptionrune)
+	err2 := uses.ChangeContactAndDescription(client.Eclient, userID, phonenumber, pVIS, gender, gVIS, eVIS, descriptionrune)
 	if err2 != nil {
 		fmt.Println(err2)
 	} else {

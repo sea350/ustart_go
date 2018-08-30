@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"errors"
+
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
@@ -26,6 +28,9 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	if err != nil {
 		return newJournalEntry, err
 	}
+	if !entry.Visible {
+		return newJournalEntry, errors.New("This entry is not visible")
+	}
 	newJournalEntry.Element = entry
 	newJournalEntry.NumShares = len(entry.ShareIDs)
 	newJournalEntry.NumLikes = len(entry.Likes)
@@ -38,7 +43,7 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	newJournalEntry.FirstName = usr.FirstName
 	newJournalEntry.LastName = usr.LastName
 	newJournalEntry.Image = usr.Avatar
-	if entry.Classification == 2 && enableRecursion {
+	if entry.Classification == 2 && enableRecursion && entry.ReferenceEntry != `` {
 		newJournalEntry.ReferenceElement, err = ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry, viewerID, false)
 	}
 

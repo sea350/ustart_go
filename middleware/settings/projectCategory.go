@@ -6,16 +6,15 @@ import (
 	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
 //ProjectCategory ...
 func ProjectCategory(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
@@ -23,14 +22,14 @@ func ProjectCategory(w http.ResponseWriter, r *http.Request) {
 	newCategory := r.FormValue("type_select")
 
 	projID := r.FormValue("projectID")
-	proj, err := get.ProjectByID(eclient, projID)
+	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
 
-	err = uses.ChangeProjectCategory(eclient, projID, newCategory)
+	err = uses.ChangeProjectCategory(client.Eclient, projID, newCategory)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

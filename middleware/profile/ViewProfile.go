@@ -10,7 +10,9 @@ import (
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	get "github.com/sea350/ustart_go/get/user"
+	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
+	postFollow "github.com/sea350/ustart_go/post/follow"
 )
 
 //ViewProfile ... Loads data relevant to profile page and displays it
@@ -46,10 +48,32 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	followingState := false
-	_, follDoc, err := getFollow.ByID(client.Eclient, session.Values["DocID"].(string))
-	exist1, _ := follDoc.UserFollowers[session.Values["DocID"].(string)]
-	exist2, _ := follDoc.ProjectFollowers[session.Values["DocID"].(string)]
-	exist3, _ := follDoc.EventFollowers[session.Values["DocID"].(string)]
+
+	id, err := getUser.IDByUsername(client.Eclient, pageUserName)
+	if err != nil {
+		return
+	}
+	follExists, err := getFollow.FollowExists(client.Eclient, session.Values["DocID"].(string))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	if !follExists {
+		err = postFollow.IndexFollow(client.Eclient, session.Values["DocID"].(string))
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+	}
+
+	_, follDoc, err := getFollow.ByID(client.Eclient, id)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	_, exist1 := follDoc.UserFollowers[session.Values["DocID"].(string)]
+	_, exist2 := follDoc.ProjectFollowers[session.Values["DocID"].(string)]
+	_, exist3 := follDoc.EventFollowers[session.Values["DocID"].(string)]
 	if exist1 || exist2 || exist3 {
 		followingState = true
 	}
@@ -88,7 +112,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	temp := string(userstruct.Description)
 
 	numberFollowers := len(follDoc.UserFollowers) + len(follDoc.ProjectFollowers) + len(follDoc.EventFollowers)
-	numberFollowing := len(follDoc.UserFollowing) + len(follDoc.ProjectFollowing) + len(follDoc.EventFollowing)
+
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -106,7 +130,10 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		projHeads = append(projHeads, head)
 	}
 
-	cs := client.ClientSide{UserInfo: userstruct, Wall: jEntries, Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, Following: numberFollowing, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets, ListOfHeads: projHeads}
+	userFoll := len(follDoc.UserFollowing)
+	projFoll := len(follDoc.ProjectFollowing)
+	eventFoll := len(follDoc.EventFollowing)
+	cs := client.ClientSide{UserInfo: userstruct, Wall: jEntries, Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, UserFollowing: userFoll, ProjFollowing: projFoll, EventFollowing: eventFoll, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets, ListOfHeads: projHeads}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")

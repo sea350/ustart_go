@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -14,7 +15,7 @@ import (
 //  Change a single field of the ES Document
 //  Return an error, nil if successful
 //Field can be Followers or Following
-func RemoveUserFollow(eclient *elastic.Client, userID string, field string, deleteKey string) error {
+func RemoveUserFollow(eclient *elastic.Client, userID string, field string, deleteKey string, followType string) error {
 
 	ctx := context.Background()
 
@@ -31,27 +32,52 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 		return err
 	}
 
-	var followMap = make(map[string]bool)
+	// var followMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
-		FollowerLock.Lock()
-		defer FollowerLock.Unlock()
-		delete(foll.UserFollowers, deleteKey)
-		followMap = foll.UserFollowers
+		if followType == "user" {
+			fmt.Println("REMOVING FOLLOWERS")
+			FollowLock.Lock()
+			defer FollowLock.Unlock()
+			if len(foll.UserFollowers) == 0 {
+				return errors.New("No followers to remove")
+			}
+			delete(foll.UserFollowers, deleteKey)
 
+		} else if followType == "project" {
+			fmt.Println("REMOVING FOLLOWERS")
+			FollowLock.Lock()
+			defer FollowLock.Unlock()
+			if len(foll.ProjectFollowers) == 0 {
+				return errors.New("No followers to remove")
+			}
+			delete(foll.ProjectFollowers, deleteKey)
+		}
 	case "following":
-		FollowingLock.Lock()
-		defer FollowingLock.Unlock()
-		delete(foll.UserFollowing, deleteKey)
-		followMap = foll.UserFollowing
+		fmt.Println("REMOVING FOLLOWING")
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
+		if followType == "user" {
+			if len(foll.UserFollowing) == 0 {
+				return errors.New("Nothing to remove from following")
+			}
+			delete(foll.UserFollowing, deleteKey)
+		} else if followType == "project" {
+			if len(foll.ProjectFollowing) == 0 {
+				return errors.New("Nothing to remove from following")
+			}
+			delete(foll.ProjectFollowing, deleteKey)
+		}
+
 	default:
 		return errors.New("Invalid field")
 	}
-	_, err = eclient.Update().
+
+	_, err = eclient.Index().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{field: followMap}). //field = Followers or Following, newContent =
+		BodyJson(foll). //field = Followers or Following, newContent =
 		Do(ctx)
 
 	return err

@@ -14,7 +14,7 @@ import (
 
 //EventCustomURL ... pushes a new banner image into ES
 func EventCustomURL(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -47,7 +47,7 @@ func EventCustomURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = uses.ChangeEventURL(eclient, evntID, newURL)
+	err = uses.ChangeEventURL(client.Eclient, evntID, newURL)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

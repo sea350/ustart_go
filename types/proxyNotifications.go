@@ -4,6 +4,7 @@ package types
 type ProxyNotifications struct {
 	DocID             string               `json:"DocID"`
 	NumUnread         int                  `json:"NumUnread"`
+	NumUnseen         int                  `json:"NumUnseen"`
 	NotificationCache []string             `json:"NotificationCache"` //must be limited to 10
 	Settings          NotificationSettings `json:"Settings"`
 }

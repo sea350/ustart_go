@@ -14,7 +14,7 @@ import (
 //LeaveEventMember ... lets a member leave a event
 //If Rol
 func LeaveEventMember(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -27,7 +27,7 @@ func LeaveEventMember(w http.ResponseWriter, r *http.Request) {
 	evntID := r.FormValue("eventID")
 	newCreator := r.FormValue("newCreator")
 
-	evnt, err := get.EventByID(eclient, evntID)
+	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

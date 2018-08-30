@@ -10,8 +10,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//NtoificationsByUserID ...
-func NtoificationsByUserID(eclient *elastic.Client, userID string) ([]types.Notification, error) {
+//NotificationsByUserID ...
+func NotificationsByUserID(eclient *elastic.Client, userID string) ([]types.Notification, error) {
 
 	ctx := context.Background()
 

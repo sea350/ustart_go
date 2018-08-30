@@ -31,14 +31,14 @@ func NewEventFollow(eclient *elastic.Client, eventID string, field string, newKe
 		return err
 	}
 
-	//  vFollowerLock.Lock()
+	//  vFollowLock.Lock()
 
 	var followMap = make(map[string]bool)
 	var bellMap = make(map[string]bool)
 	switch strings.ToLower(field) {
 	case "followers":
-		FollowerLock.Lock()
-		defer FollowerLock.Unlock()
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
 		if len(foll.EventFollowers) == 0 {
 			var newMap = make(map[string]bool)
 			newMap[newKey] = isBell
@@ -60,8 +60,8 @@ func NewEventFollow(eclient *elastic.Client, eventID string, field string, newKe
 		}
 
 	case "following":
-		FollowingLock.Lock()
-		defer FollowingLock.Unlock()
+		FollowLock.Lock()
+		defer FollowLock.Unlock()
 		if len(foll.EventFollowing) == 0 {
 			var newMap = make(map[string]bool)
 			newMap[newKey] = isBell
@@ -73,11 +73,17 @@ func NewEventFollow(eclient *elastic.Client, eventID string, field string, newKe
 	default:
 		return errors.New("Invalid field")
 	}
+	var theField string
+	if strings.ToLower(field) == "followers" {
+		theField = "EventFollowers"
+	} else if strings.ToLower(field) == "following" {
+		theField = "EventFollowing"
+	}
 	newFollow := eclient.Update().
 		Index(globals.FollowIndex).
 		Type(globals.FollowType).
 		Id(follID).
-		Doc(map[string]interface{}{field: followMap}) //field = Followers or Following, newContent =
+		Doc(map[string]interface{}{theField: followMap}) //field = Followers or Following, newContent =
 
 	//only executes when there is a new bell follower
 	if isBell && strings.ToLower(field) == "followers" {

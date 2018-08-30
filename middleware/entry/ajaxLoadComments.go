@@ -1,7 +1,8 @@
-package profile
+package entry
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -22,7 +23,7 @@ func AjaxLoadComments(w http.ResponseWriter, r *http.Request) {
 
 	parentID := r.FormValue("postID")
 	_, entries, err := uses.LoadComments(client.Eclient, parentID, docID.(string), 0, -1)
-	if err != nil {
+	if err != nil && err != errors.New("This entry is not visible") {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}

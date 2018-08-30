@@ -34,3 +34,35 @@ type Entry struct {
 	ReplyIDs  []string  `json:"ReplyIDs"`
 	Visible   bool      `json:"Visible"`
 }
+
+//UserOriginalEntry ... converts an entry into one configured for an original user post
+func (entry *Entry) UserOriginalEntry(posterID string, content string) {
+
+	entry.PosterID = posterID
+	entry.Classification = 0
+	entry.Content = []rune(content)
+	entry.TimeStamp = time.Now()
+	entry.Visible = true
+}
+
+//UserShareEntry ... converts an entry into one configured for an original share post
+func (entry *Entry) UserShareEntry(posterID string, originalEntryID string, content string) {
+
+	entry.PosterID = posterID
+	entry.Content = []rune(content)
+	entry.ReferenceEntry = originalEntryID
+	entry.TimeStamp = time.Now()
+	entry.Classification = 2
+	entry.Visible = true
+}
+
+//ProjectOriginalEntry ... converts an entry into one configured for an original project post
+func (entry *Entry) ProjectOriginalEntry(posterID string, projectID string, content string) {
+
+	entry.PosterID = posterID
+	entry.Classification = 3
+	entry.Content = []rune(content)
+	entry.TimeStamp = time.Now()
+	entry.Visible = true
+	entry.ReferenceID = projectID
+}

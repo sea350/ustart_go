@@ -1,4 +1,4 @@
-package profile
+package project
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
+	getProj "github.com/sea350/ustart_go/get/project"
 	get "github.com/sea350/ustart_go/get/user"
-	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
@@ -21,8 +21,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-
-	id, err := getUser.IDByUsername(client.Eclient, r.URL.Path[11:])
+	id, err := getProj.ProjectIDByURL(client.Eclient, r.URL.Path[10:])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -56,6 +55,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for idKey := range followDoc.ProjectFollowers {
+		fmt.Println("ID KEY:", idKey)
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -63,7 +63,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			continue
 		}
-		isFollowing, _ := followDoc.ProjectFollowing[idKey]
+		_, isFollowing := followDoc.ProjectFollowing[idKey]
 		head.Followed = isFollowing
 		heads = append(heads, head)
 	}
@@ -77,46 +77,24 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			log.Println(idKey)
 			continue
 		}
-		fmt.Println("Followers page current heads2:", heads2)
-
-		head.Followed, err = getFollow.IsFollowing(client.Eclient, test1.(string), idKey, "user")
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-			log.Println(idKey)
-			continue
-		}
-
 		heads2 = append(heads2, head)
 	}
 
-	heads3 := []types.FloatingHead{}
 	for idKey := range followDoc.ProjectFollowing {
-		projHead, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
+		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 			log.Println(idKey)
 			continue
 		}
-
-		projHead.Followed, err = getFollow.IsFollowing(client.Eclient, test1.(string), idKey, "project")
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-			log.Println(idKey)
-			continue
-		}
-		heads3 = append(heads3, projHead)
+		heads2 = append(heads2, head)
 	}
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, test1.(string), id, "user")
-
 	numberFollowers := len(followDoc.UserFollowers) + len(followDoc.ProjectFollowers) + len(followDoc.EventFollowers)
-	userFoll := len(followDoc.UserFollowing)
-	projFoll := len(followDoc.ProjectFollowing)
-	eventFoll := len(followDoc.EventFollowing)
-	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, FollowingStatus: isFollowing, UserFollowing: userFoll, ProjFollowing: projFoll, EventFollowing: eventFoll, ListOfHeads: heads, ListOfHeads2: heads2, ListOfHeads3: heads3}
+
+	cs := client.ClientSide{UserInfo: userstruct, Page: test1.(string), Followers: numberFollowers, FollowingStatus: isFollowing, ListOfHeads: heads, ListOfHeads2: heads2}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")

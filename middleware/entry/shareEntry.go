@@ -1,4 +1,4 @@
-package profile
+package entry
 
 import (
 	"fmt"
@@ -6,7 +6,8 @@ import (
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
-	uses "github.com/sea350/ustart_go/uses"
+	postEntry "github.com/sea350/ustart_go/post/entry"
+	"github.com/sea350/ustart_go/types"
 )
 
 //ShareEntry ... Creates a new shared entry for user
@@ -20,8 +21,19 @@ func ShareEntry(w http.ResponseWriter, r *http.Request) {
 	}
 
 	originalPost := r.FormValue("postid")
-	newContent := []rune(r.FormValue("content"))
-	err := uses.UserShareEntry(client.Eclient, docID.(string), originalPost, newContent)
+	newContent := r.FormValue("content")
+
+	var entry types.Entry
+	entry.UserShareEntry(docID.(string), originalPost, newContent)
+
+	replyID, err := postEntry.IndexEntry(client.Eclient, entry)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return
+	}
+
+	err = postEntry.AppendShareID(client.Eclient, originalPost, replyID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)

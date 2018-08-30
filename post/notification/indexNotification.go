@@ -39,5 +39,7 @@ func IndexNotification(eclient *elastic.Client, newNotif types.Notification) (st
 	}
 	notifID = idx.Id
 
-	return notifID, nil
+	err = AppendToProxyNotifications(eclient, newNotif.DocID, notifID)
+
+	return notifID, err
 }

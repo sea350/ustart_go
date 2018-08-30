@@ -3,15 +3,16 @@ package settings
 import (
 	"log"
 	"net/http"
-	"os"
 
 	get "github.com/sea350/ustart_go/get/event"
+	client "github.com/sea350/ustart_go/middleware/client"
+	post "github.com/sea350/ustart_go/post/event"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
 //EventLogo ...
 func EventLogo(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
@@ -22,12 +23,11 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 	blob := r.FormValue("image-data")
 
 	//Getting eventID and member
-	evntiD := r.FormValue("eventID")
-	evnt, member, err := get.EventAndMember(eclient, r.FormValue("eventID"), test1.(string))
+	evntID := r.FormValue("eventID")
+	evnt, member, err := get.EventAndMember(client.Eclient, r.FormValue("eventID"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	if uses.HasEventPrivilege("icon", evnt.PrivilegeProfiles, member) {
@@ -36,7 +36,7 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 		_, _ = clientFile.Read(buffer)
 		defer clientFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-			err = uses.ChangeEventLogo(eclient, evntiD, blob)
+			err = post.UpdateEvent(client.Eclient, evntID, "Avatar", blob)
 		}
 	}
 

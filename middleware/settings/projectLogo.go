@@ -6,12 +6,13 @@ import (
 	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
 //ProjectLogo ...
 func ProjectLogo(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		http.Redirect(w, r, "/~", http.StatusFound)
@@ -23,7 +24,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 
 	//Getting projectID and member
 	projID := r.FormValue("projectID")
-	proj, member, err := get.ProjAndMember(eclient, r.FormValue("projectID"), test1.(string))
+	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
@@ -36,7 +37,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		_, _ = clientFile.Read(buffer)
 		defer clientFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-			err = uses.ChangeProjectLogo(eclient, projID, blob)
+			err = uses.ChangeProjectLogo(client.Eclient, projID, blob)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				dir, _ := os.Getwd()
@@ -53,7 +54,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 	return
 
 }

@@ -5,13 +5,16 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"time"
 
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
 //ChangeName ...
 func ChangeName(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -23,8 +26,30 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	first := html.EscapeString(r.FormValue("fname"))
 	last := html.EscapeString(r.FormValue("lname"))
+	dob := html.EscapeString(r.FormValue("dob"))
 
-	err := uses.ChangeFirstAndLastName(eclient, session.Values["DocID"].(string), first, last)
+	month, err := strconv.Atoi(dob[5:7])
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return
+	}
+	day, err := strconv.Atoi(dob[8:10])
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return
+	}
+	year, err := strconv.Atoi(dob[0:4])
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return
+	}
+
+	bday := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
+
+	err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

@@ -53,7 +53,6 @@ func CreateEvent(eclient *elastic.Client, title string, description []rune, make
 	maker.Visible = true
 
 	newEvent.Members = append(newEvent.Members, maker)
-	newEvent.PrivilegeProfiles = append(newEvent.PrivilegeProfiles, SetEventMemberPrivileges(0), SetEventMemberPrivileges(1), SetEventMemberPrivileges(2))
 
 	id, err := eventPost.IndexEvent(eclient, newEvent)
 	if err != nil {

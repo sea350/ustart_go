@@ -6,17 +6,27 @@ import (
 	"net/http"
 	"os"
 
+	getUser "github.com/sea350/ustart_go/get/user"
+	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
 //ChangeLocation ...  changes the user's geographical location in the database
 func ChangeLocation(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
+	}
+
+	_, err := getUser.UserByID(client.Eclient, test1.(string))
+
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	r.ParseForm()
 	countryP := r.FormValue("country")
@@ -45,7 +55,7 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 		zBool = true
 	}
 
-	err := uses.ChangeLocation(eclient, session.Values["DocID"].(string), countryP, conBool, stateP, sBool, cityP, cBool, zipP, zBool)
+	err = uses.ChangeLocation(client.Eclient, session.Values["DocID"].(string), countryP, conBool, stateP, sBool, cityP, cBool, zipP, zBool)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

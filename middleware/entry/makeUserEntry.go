@@ -1,4 +1,4 @@
-package profile
+package entry
 
 import (
 	"encoding/json"
@@ -8,11 +8,14 @@ import (
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
+	postEntry "github.com/sea350/ustart_go/post/entry"
+	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//WallAdd ... Iunno
-func WallAdd(w http.ResponseWriter, r *http.Request) {
+//MakeUserEntry ... makes user original post
+//designed for ajax
+func MakeUserEntry(w http.ResponseWriter, r *http.Request) {
 	// If followingStatus = no
 	session, _ := client.Store.Get(r, "session_please")
 	docID, _ := session.Values["DocID"]
@@ -22,26 +25,28 @@ func WallAdd(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-	// docID := r.FormValue("docID")
+
 	text := html.EscapeString(r.FormValue("text"))
-	textRunes := []rune(text)
-	postID, err := uses.UserNewEntry(client.Eclient, docID.(string), textRunes)
+
+	var entry types.Entry
+	entry.UserOriginalEntry(docID.(string), text)
+
+	entryID, err := postEntry.IndexEntry(client.Eclient, entry)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
-	}
-	postIDArray := []string{postID} // just an array with 1 entry
-	jEntry, err := uses.LoadEntries(client.Eclient, postIDArray, docID.(string))
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		return
 	}
 
+	jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, entryID, docID.(string), true)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
 	data, err := json.Marshal(jEntry)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
-
 	fmt.Fprintln(w, string(data))
 }

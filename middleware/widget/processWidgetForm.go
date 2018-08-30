@@ -2,6 +2,7 @@ package widget
 
 import (
 	"errors"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -85,7 +86,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//soundcloud -- Takes in a Embed Code
 		soundCloud := r.FormValue("scInput")
 
-		regX := regexp.MustCompile(`<iframe width="[0-9%]{0,4}" height="[0-9%]{0,4}" scrolling="no" frameborder="no" allow="autoplay" src="https:\/\/w\.soundcloud\.com\/player\/\?url=https%3A\/\/api\.soundcloud\.com\/tracks\/[0-9]{6,9}&color=%23[0-9a-f]{6}&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true(&visual=true)*"><\/iframe>`)
+		regX := regexp.MustCompile(`<iframe width="[0-9%]{0,4}" height="[0-9%]{0,4}" scrolling="[a-z]+" frameborder="[a-z]+" allow="autoplay" src="https:\/\/w\.soundcloud\.com\/player\/\?url=https%3A\/\/api\.soundcloud\.com\/[a-z]+\/[0-9]{6,9}&color=%23[0-9a-f]{6}&auto_play=[a-z]+&hide_related=[a-z]+&show_comments=[a-z]+&show_user=[a-z]+&show_reposts=[a-z]+&show_teaser=[a-z]+(&visual=[a-z]+)*"><\/iframe>`)
 		if !regX.MatchString(soundCloud) {
 			return newWidget, errors.New(`Unusable Soundcloud Embed Code`)
 		} //Check valid embed code
@@ -151,10 +152,12 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		spoofy := r.FormValue("spotInput")
 		edit := r.FormValue("editID")
 
-		regX := regexp.MustCompile(`<iframe src="https:\/\/open\.spotify\.com\/embed\/[^"]+" width="300" height="380" frameborder="0" allowtransparency="true"><\/iframe>`)
-		if !regX.MatchString(spoofy) {
-			return newWidget, errors.New(`Unusable Spotify Embed Code`)
-		} //Check valid embed code
+		/*
+			regX := regexp.MustCompile(`<iframe src="https:\/\/open\.spotify\.com\/embed\/[^"]+" width="300" height="380" frameborder="0" allowtransparency="true"><\/iframe>`)
+			if !regX.MatchString(spoofy) {
+				return newWidget, errors.New(`Unusable Spotify Embed Code`)
+			} //Check valid embed code
+		*/
 
 		spotifyEmbedCode := template.HTML(spoofy)
 		if edit != `0` {
@@ -254,6 +257,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//github widget username
 
 		username := template.HTML(r.FormValue("username"))
+		fmt.Print("username", username)
 		count := template.HTML(r.FormValue("git-count"))
 		data = []template.HTML{username, count}
 		classification = 16

@@ -195,33 +195,6 @@ func GenerateRandomString(s int) (string, error) {
 	return base64.URLEncoding.EncodeToString(b), err
 }
 
-//UserShareEntry ... CREATES A SHARED ENTRY FROM A USER
-//Requires the user's docID, the parent entry docID and the content of the post
-//Returns an error
-func UserShareEntry(eclient *elastic.Client, userID string, entryID string, content []rune) error {
-
-	var newReply types.Entry
-	newReply.PosterID = userID
-	newReply.Content = content
-	newReply.ReferenceEntry = entryID
-	newReply.TimeStamp = time.Now()
-	newReply.Classification = 2
-	newReply.Visible = true
-
-	replyID, err := postEntry.IndexEntry(eclient, newReply)
-	if err != nil {
-		return err
-	}
-
-	err = postUser.AppendEntryID(eclient, userID, replyID)
-	if err != nil {
-		return err
-	}
-
-	err = postEntry.AppendShareID(eclient, entryID, replyID)
-	return err
-}
-
 //UserLikeEntry ... ALLOWS A USER TO LIKE AN ENTRY
 //Requires the entry's docID, and docID of the person who is liking the entry
 //Returns an error
