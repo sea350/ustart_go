@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/sea350/ustart_go/globals"
@@ -29,10 +30,10 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 	searchResults, err := client.Eclient.Search().
 		Index(globals.UserIndex).
 		Query(query).
-		Pretty(true).
+		Size(5).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.TotalHits()) + " results found")
+	fmt.Println("Debugging MemberFind for " + term + ": " + strconv.FormatInt(searchResults.TotalHits(), 10) + " results found")
 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -59,10 +60,10 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 	searchResults, err := client.Eclient.Search().
 		Index(globals.UserIndex).
 		Query(query).
-		Pretty(true).
+		Size(5).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.TotalHits()) + " results found")
+	fmt.Println("Debugging MemberFind for " + term + ": " + strconv.FormatInt(searchResults.TotalHits(), 10) + " results found")
 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -89,10 +90,10 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 	searchResults, err := client.Eclient.Search().
 		Index(globals.UserIndex).
 		Query(query).
-		Pretty(true).
+		Size(5).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.TotalHits()) + " results found")
+	fmt.Println("Debugging MemberFind for " + term + ": " + strconv.FormatInt(searchResults.TotalHits(), 10) + " results found")
 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
