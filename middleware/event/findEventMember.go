@@ -40,14 +40,19 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []types.FloatingHead
+		var results []types.AutoCompleteObject
 		for _, element := range searchResults.Hits.Hits {
 			head, err1 := uses.ConvertUserToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			results = append(results, head)
+			var eobj types.AutoCompleteObject
+			eobj.Value = head.DocID
+			eobj.Label = head.Username
+			eobj.Desc = head.FirstName + " " + head.LastName
+			eobj.Icon = head.Image
+			results = append(results, eobj)
 		}
 		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
@@ -78,14 +83,19 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []types.FloatingHead
+		var results []types.AutoCompleteObject
 		for _, element := range searchResults.Hits.Hits {
 			head, err1 := uses.ConvertUserToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			results = append(results, head)
+			var eobj types.AutoCompleteObject
+			eobj.Value = head.DocID
+			eobj.Label = head.Username
+			eobj.Desc = head.FirstName + " " + head.LastName
+			eobj.Icon = head.Image
+			results = append(results, eobj)
 		}
 		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
@@ -116,14 +126,19 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []types.FloatingHead
+		var results []types.AutoCompleteObject
 		for _, element := range searchResults.Hits.Hits {
 			head, err1 := uses.ConvertProjectToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			results = append(results, head)
+			var eobj types.AutoCompleteObject
+			eobj.Value = head.DocID
+			eobj.Label = head.FirstName
+			eobj.Desc = head.FirstName
+			eobj.Icon = head.Image
+			results = append(results, eobj)
 		}
 		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
