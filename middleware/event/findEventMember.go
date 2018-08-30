@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/sea350/ustart_go/globals"
@@ -30,10 +32,15 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 		Pretty(true).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + string(len(searchResults.Hits.Hits)) + " results found")
+	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.Hits.TotalHits) + " results found")
 
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+	}
 	if err == nil {
-		jsonnow, _ := json.Marshal(searchResults)
+		jsonnow, _ := json.Marshal(searchResults.Hits.Hits)
 		w.Write(jsonnow)
 	}
 }
@@ -55,10 +62,15 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 		Pretty(true).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + string(len(searchResults.Hits.Hits)) + " results found")
+	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.Hits.TotalHits) + " results found")
 
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+	}
 	if err == nil {
-		jsonnow, _ := json.Marshal(searchResults)
+		jsonnow, _ := json.Marshal(searchResults.Hits.Hits)
 		w.Write(jsonnow)
 	}
 }
@@ -80,10 +92,15 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 		Pretty(true).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + string(len(searchResults.Hits.Hits)) + " results found")
+	fmt.Println("Debugging MemberFind for " + term + ": " + string(searchResults.Hits.TotalHits) + " results found")
 
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+	}
 	if err == nil {
-		jsonnow, _ := json.Marshal(searchResults)
+		jsonnow, _ := json.Marshal(searchResults.Hits.Hits)
 		w.Write(jsonnow)
 	}
 }
