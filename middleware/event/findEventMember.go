@@ -11,19 +11,10 @@ import (
 
 	"github.com/sea350/ustart_go/globals"
 	client "github.com/sea350/ustart_go/middleware/client"
-	"github.com/sea350/ustart_go/middleware/event"
 	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
-
-//EventObject ... object for event
-type EventObject struct {
-	Value string `json:"value"`
-	Label string `json:"label"`
-	Desc  string `json:"desc"`
-	Icon  string `json:"icon"`
-}
 
 //FindEventMember ... find event members
 func FindEventMember(w http.ResponseWriter, r *http.Request) {
@@ -49,14 +40,14 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []event.EventObject
+		var results []types.AutoCompleteObject
 		for _, element := range searchResults.Hits.Hits {
 			head, err1 := uses.ConvertUserToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			eobj := event.EventObject
+			eobj := types.AutoCompleteObject
 			eobj.Value = head.DocID
 			eobj.Label = head.Username
 			eobj.Desc = head.FirstName + " " + head.LastName
@@ -92,14 +83,14 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []types.FloatingHead
+		var results []types.AutoCompleteObject
 		for _, element := range searchResults.Hits.Hits {
 			head, err1 := uses.ConvertUserToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			eobj := event.EventObject
+			eobj := types.AutoCompleteObject
 			eobj.Value = head.DocID
 			eobj.Label = head.Username
 			eobj.Desc = head.FirstName + " " + head.LastName
@@ -135,14 +126,14 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []types.FloatingHead
+		var results []types.AutoCompleteObject
 		for _, element := range searchResults.Hits.Hits {
 			head, err1 := uses.ConvertProjectToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			eobj := event.EventObject
+			eobj := types.AutoCompleteObject
 			eobj.Value = head.DocID
 			eobj.Label = head.FirstName
 			eobj.Desc = head.Bio
