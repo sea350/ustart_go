@@ -3,7 +3,7 @@ package event
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -11,6 +11,7 @@ import (
 
 	"github.com/sea350/ustart_go/globals"
 	client "github.com/sea350/ustart_go/middleware/client"
+	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -39,10 +40,14 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []string
+		var results []types.FloatingHead
 		for _, element := range searchResults.Hits.Hits {
-			results = append(results, element.Id)
-			fmt.Println(element.Id)
+			head, err1 := uses.ConvertProjectToFloatingHead(client.Eclient, element.Id)
+			if err1 != nil {
+				err = errors.New("there was one or more problems loading results")
+				continue
+			}
+			results = append(results, head)
 		}
 		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
@@ -73,10 +78,14 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []string
+		var results []types.FloatingHead
 		for _, element := range searchResults.Hits.Hits {
-			results = append(results, element.Id)
-			fmt.Println(element.Id)
+			head, err1 := uses.ConvertProjectToFloatingHead(client.Eclient, element.Id)
+			if err1 != nil {
+				err = errors.New("there was one or more problems loading results")
+				continue
+			}
+			results = append(results, head)
 		}
 		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
@@ -107,10 +116,14 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []string
+		var results []types.FloatingHead
 		for _, element := range searchResults.Hits.Hits {
-			results = append(results, element.Id)
-			fmt.Println(element.Id)
+			head, err1 := uses.ConvertProjectToFloatingHead(client.Eclient, element.Id)
+			if err1 != nil {
+				err = errors.New("there was one or more problems loading results")
+				continue
+			}
+			results = append(results, head)
 		}
 		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
