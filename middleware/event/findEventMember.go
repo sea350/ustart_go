@@ -3,6 +3,7 @@ package event
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -29,6 +30,8 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 		Pretty(true).
 		Do(ctx)
 
+	fmt.Println("Debugging MemberFind for " + term + ": " + string(len(searchResults.Hits.Hits)) + " results found")
+
 	if err == nil {
 		jsonnow, _ := json.Marshal(searchResults)
 		w.Write(jsonnow)
@@ -52,6 +55,8 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 		Pretty(true).
 		Do(ctx)
 
+	fmt.Println("Debugging MemberFind for " + term + ": " + string(len(searchResults.Hits.Hits)) + " results found")
+
 	if err == nil {
 		jsonnow, _ := json.Marshal(searchResults)
 		w.Write(jsonnow)
@@ -74,6 +79,8 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 		Query(query).
 		Pretty(true).
 		Do(ctx)
+
+	fmt.Println("Debugging MemberFind for " + term + ": " + string(len(searchResults.Hits.Hits)) + " results found")
 
 	if err == nil {
 		jsonnow, _ := json.Marshal(searchResults)
