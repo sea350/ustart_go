@@ -11,7 +11,6 @@ import (
 
 	"github.com/sea350/ustart_go/globals"
 	client "github.com/sea350/ustart_go/middleware/client"
-	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -40,19 +39,14 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []types.AutoCompleteObject
+		var results []string
 		for _, element := range searchResults.Hits.Hits {
 			head, err1 := uses.ConvertUserToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			var eobj types.AutoCompleteObject
-			eobj.Value = head.DocID
-			eobj.Label = head.Username
-			eobj.Desc = head.FirstName + " " + head.LastName
-			eobj.Icon = head.Image
-			results = append(results, eobj)
+			results = append(results, head.Username)
 		}
 		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
@@ -83,19 +77,14 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []types.AutoCompleteObject
+		var results []string
 		for _, element := range searchResults.Hits.Hits {
 			head, err1 := uses.ConvertUserToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			var eobj types.AutoCompleteObject
-			eobj.Value = head.DocID
-			eobj.Label = head.Username
-			eobj.Desc = head.FirstName + " " + head.LastName
-			eobj.Icon = head.Image
-			results = append(results, eobj)
+			results = append(results, head.Username)
 		}
 		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
@@ -126,19 +115,14 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err == nil {
-		var results []types.AutoCompleteObject
+		var results []string
 		for _, element := range searchResults.Hits.Hits {
 			head, err1 := uses.ConvertProjectToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			var eobj types.AutoCompleteObject
-			eobj.Value = head.DocID
-			eobj.Label = head.FirstName
-			eobj.Desc = head.FirstName
-			eobj.Icon = head.Image
-			results = append(results, eobj)
+			results = append(results, head.FirstName)
 		}
 		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
