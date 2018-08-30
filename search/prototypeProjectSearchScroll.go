@@ -56,14 +56,14 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 		if searchBy[2] {
 			query = uses.MultiWildCardQuery(query, "Tags", stringArray, true)
 			for _, element := range stringArray {
-				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
 			}
 		}
 		//ListNeeded
 		if searchBy[3] {
 			query = uses.MultiWildCardQuery(query, "ListNeeded", stringArray, true)
 			for _, element := range stringArray {
-				query = query.Should(elastic.NewFuzzyQuery("ListNeeded", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("ListNeeded", strings.ToLower(element)).Fuzziness(1))
 			}
 		}
 	} else {
@@ -75,7 +75,7 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("ListNeeded", element))
 			for _, element := range stringArray {
-				query = query.Should(elastic.NewFuzzyQuery("ListNeeded", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("ListNeeded", strings.ToLower(element)).Fuzziness(1))
 			}
 		}
 	}
@@ -85,7 +85,7 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("Tags", element))
 			for _, element := range stringArray {
-				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(2))
+				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
 			}
 		}
 	}
