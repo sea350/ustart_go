@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/sea350/ustart_go/globals"
@@ -33,15 +32,19 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 		Size(5).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + strconv.FormatInt(searchResults.TotalHits(), 10) + " results found")
-
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
+
 	if err == nil {
-		jsonnow, _ := json.Marshal(searchResults.Hits.Hits)
+		var results []string
+		for _, element := range searchResults.Hits.Hits {
+			results = append(results, element.Id)
+			fmt.Println(element.Id)
+		}
+		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
 	}
 }
@@ -63,15 +66,19 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 		Size(5).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + strconv.FormatInt(searchResults.TotalHits(), 10) + " results found")
-
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
+
 	if err == nil {
-		jsonnow, _ := json.Marshal(searchResults.Hits.Hits)
+		var results []string
+		for _, element := range searchResults.Hits.Hits {
+			results = append(results, element.Id)
+			fmt.Println(element.Id)
+		}
+		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
 	}
 }
@@ -93,15 +100,19 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 		Size(5).
 		Do(ctx)
 
-	fmt.Println("Debugging MemberFind for " + term + ": " + strconv.FormatInt(searchResults.TotalHits(), 10) + " results found")
-
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
+
 	if err == nil {
-		jsonnow, _ := json.Marshal(searchResults.Hits.Hits)
+		var results []string
+		for _, element := range searchResults.Hits.Hits {
+			results = append(results, element.Id)
+			fmt.Println(element.Id)
+		}
+		jsonnow, _ := json.Marshal(results)
 		w.Write(jsonnow)
 	}
 }
