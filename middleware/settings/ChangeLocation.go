@@ -21,7 +21,7 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userstruct, err := getUser.UserByID(client.Eclient, test1.(string))
+	_, err := getUser.UserByID(client.Eclient, test1.(string))
 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -55,7 +55,7 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 		zBool = true
 	}
 
-	err := uses.ChangeLocation(client.Eclient, session.Values["DocID"].(string), countryP, conBool, stateP, sBool, cityP, cBool, zipP, zBool)
+	err = uses.ChangeLocation(client.Eclient, session.Values["DocID"].(string), countryP, conBool, stateP, sBool, cityP, cBool, zipP, zBool)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
