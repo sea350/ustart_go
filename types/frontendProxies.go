@@ -31,6 +31,8 @@ type FloatingHead struct {
 	Username       string      `json:"Username"`
 	FirstName      string      `json:"FirstName"`
 	LastName       string      `json:"LastName"`
+	Email          string      `json:"Email"`
+	Tags           []string    `json:"Tags"`
 	Image          string      `json:"Image"`
 	Followed       bool        `json:"Followed"`
 	Bio            []rune      `json:"Bio"`
