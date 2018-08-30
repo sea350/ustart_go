@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -18,6 +19,14 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
+	}
+
+	userstruct, err := getUser.UserByID(client.Eclient, test1.(string))
+
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 	r.ParseForm()
 	countryP := r.FormValue("country")

@@ -42,6 +42,7 @@ type FloatingHead struct {
 	Time           time.Time   `json:"Time"`
 	Read           bool        `json:"Read"`
 	Interface      interface{} `json:"Interface"`
+	Visible        bool        `json:"Visible"`
 	//for projects Username = project URLName
 	//for projects Firstname = project Name
 	//for projects Bio = project Description
