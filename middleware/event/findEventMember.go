@@ -7,15 +7,15 @@ import (
 
 //FindEventMember ... find event members
 func FindEventMember(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(w, "Magic Johnson (Member)")
+	fmt.Fprintln(w, "Magic Johnson (Member)")
 }
 
 //FindEventGuest ... find event guest
 func FindEventGuest(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(w, "Magic Johnson (Guest)")
+	fmt.Fprintln(w, "Magic Johnson (Guest)")
 }
 
 //FindEventProject ... find event project
 func FindEventProject(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(w, "Magic Johnson (Project)")
+	fmt.Fprintln(w, "Magic Johnson (Project)")
 }
