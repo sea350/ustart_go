@@ -28,6 +28,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
+	log.Println("ID:", id)
 
 	err = post.ResetUnseen(client.Eclient, id)
 	if err != nil {
