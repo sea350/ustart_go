@@ -163,6 +163,9 @@ func main() {
 	http.HandleFunc("/FindEventGuest/", event.FindEventGuest)
 	http.HandleFunc("/FindEventMember/", event.FindEventMember)
 	http.HandleFunc("/FindEventProject/", event.FindEventProject)
+	http.HandleFunc("/AddEventGuest/", event.FindEventGuest)
+	http.HandleFunc("/AddEventMember/", event.FindEventMember)
+	http.HandleFunc("/AddEventProject/", event.FindEventProject)
 
 	//CHAT
 	http.HandleFunc("/ch/", chat.Page)
