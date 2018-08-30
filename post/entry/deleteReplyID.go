@@ -16,6 +16,7 @@ func DeleteReplyID(eclient *elastic.Client, entryID string, replyID string) erro
 	ctx := context.Background()
 
 	ReplyArrayLock.Lock()
+	defer ReplyArrayLock.Unlock()
 
 	anEntry, err := get.EntryByID(eclient, entryID)
 	if err != nil {
@@ -33,7 +34,7 @@ func DeleteReplyID(eclient *elastic.Client, entryID string, replyID string) erro
 		return errors.New("Reply not found")
 	}
 
-	anEntry.ShareIDs = append(anEntry.ReplyIDs[:idx], anEntry.ReplyIDs[idx+1:]...)
+	anEntry.ReplyIDs = append(anEntry.ReplyIDs[:idx], anEntry.ReplyIDs[idx+1:]...)
 
 	_, err = eclient.Update().
 		Index(globals.EntryIndex).
@@ -42,6 +43,5 @@ func DeleteReplyID(eclient *elastic.Client, entryID string, replyID string) erro
 		Doc(map[string]interface{}{"ReplyIDs": anEntry.ReplyIDs}).
 		Do(ctx)
 
-	defer ReplyArrayLock.Unlock()
 	return err
 }

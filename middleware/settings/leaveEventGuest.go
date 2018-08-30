@@ -13,7 +13,7 @@ import (
 //LeaveEventGuest ... lets a user leave a event
 //If Rol
 func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -25,7 +25,7 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 	leavingUser := r.FormValue("leaverID")
 	evntID := r.FormValue("eventID")
 
-	evnt, err := get.EventByID(eclient, evntID)
+	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

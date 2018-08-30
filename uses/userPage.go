@@ -1,6 +1,7 @@
 package uses
 
 import (
+	getFollow "github.com/sea350/ustart_go/get/follow"
 	get "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -29,6 +30,8 @@ func UserPage(eclient *elastic.Client, username string, viewerID string) (types.
 	if err != nil {
 		return usr, "errors passed 2, viewId is " + viewerID, isFollowed, err
 	}
+
+	isFollowed, err = getFollow.IsFollowing(eclient, userID, viewerID, "user")
 
 	for _, element := range viewer.Following {
 		if element == userID {

@@ -20,8 +20,8 @@ func UserFollowProjectToggle(eclient *elastic.Client, userID string, projectID s
 		return err
 	}
 
-	postProj.FollowerLock.Lock() //make sure no one else changes followers array while we read/write it
-	defer postProj.FollowerLock.Unlock()
+	postProj.FollowLock.Lock() //make sure no one else changes followers array while we read/write it
+	defer postProj.FollowLock.Unlock()
 
 	proj, err := getProj.ProjectByID(eclient, projectID)
 	if err != nil {

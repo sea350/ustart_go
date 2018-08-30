@@ -18,32 +18,36 @@ var Store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 //ClientSide ... This struct represents a user state after he/she has logged in. Some fields may no longer be needed
 //or are unnecessary.
 type ClientSide struct {
-	DOCID           string
-	FirstName       string
-	LastName        string
-	Username        string
-	Avatar          string
-	ErrorOutput     error
-	ErrorStatus     bool
-	UserInfo        types.User
-	Class           string
-	Birthday        string
-	ImageCode       string
-	Description     string
-	Followers       int
-	Following       int
-	Page            string //DocID of current page
-	FollowingStatus bool
-	ScrollID        string
-	ListOfHeads     []types.FloatingHead
-	ListOfHeads2    []types.FloatingHead
-	Wall            []types.JournalEntry
-	Widgets         []types.Widget
-	Project         types.ProjectAggregate
-	Event           types.EventAggregate
-	Dashboard       types.DashboardAggregate
-	Messages        []types.Message
-	Hits            int
+	DOCID             string
+	FirstName         string
+	LastName          string
+	Username          string
+	Avatar            string
+	ErrorOutput       error
+	ErrorStatus       bool
+	UserInfo          types.User
+	Class             string
+	Birthday          string
+	ImageCode         string
+	Description       string
+	Followers         int
+	UserFollowing     int
+	ProjFollowing     int
+	EventFollowing    int
+	ProjectsFollowing int
+	Page              string //DocID of current page
+	FollowingStatus   bool
+	ScrollID          string
+	ListOfHeads       []types.FloatingHead
+	ListOfHeads2      []types.FloatingHead
+	ListOfHeads3      []types.FloatingHead
+	Wall              []types.JournalEntry
+	Widgets           []types.Widget
+	Project           types.ProjectAggregate
+	Event             types.EventAggregate
+	Dashboard         types.DashboardAggregate
+	Messages          []types.Message
+	Hits              int
 }
 
 /* The following line is how HTML is loaded by our application. Note we need the relative link from the location of GoStart2. */

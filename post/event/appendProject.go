@@ -10,8 +10,8 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//AppendProject ... APPENDS A NEW MEMBER TO AN EXISTING PROJECT DOC
-//Requires the project docID and a type Member
+//AppendProject ... Appends project to existing event
+//Requires the project docID and a type EventProjects
 //Returns an error
 func AppendProject(eclient *elastic.Client, eventID string, project types.EventProjects) error {
 	ctx := context.Background()

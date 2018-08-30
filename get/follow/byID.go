@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -14,12 +13,13 @@ import (
 )
 
 //ByID ...
+//
 func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) {
 	ctx := context.Background() //intialize context background
 	var foll types.Follow       //initialize follow
 	var follID string           //initialize follow ID
-	query := elastic.NewBoolQuery()
-	query = query.Must(elastic.NewTermQuery("DocID", strings.ToLower(userID)))
+
+	query := elastic.NewTermQuery("DocID", userID)
 	searchResult, err := eclient.Search(). //Get returns doc type, index, etc.
 						Index(globals.FollowIndex).
 						Type(globals.FollowType).
@@ -33,31 +33,27 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 	if searchResult.Hits.TotalHits > 1 {
 		fmt.Println(userID, searchResult.Hits.TotalHits)
 		return "", foll, errors.New("More than one result found")
-	} else if searchResult.Hits.TotalHits < 1 {
+	} else if searchResult.Hits.TotalHits == 0 {
+		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC WITH TOTALHITS:", searchResult.Hits.TotalHits)
 
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-		}
-
-		var newFollowing = make(map[string]bool)
-		var newFollowers = make(map[string]bool)
-		var newBell = make(map[string]bool)
+		// var newFollowing = make(map[string]bool)
+		// var newFollowers = make(map[string]bool)
+		// var newBell = make(map[string]bool)
 		var newFollow = types.Follow{
 			DocID: userID,
-
-			UserFollowers:    newFollowers,
-			UserFollowing:    newFollowing,
-			ProjectFollowers: newFollowers,
-			ProjectFollowing: newFollowing,
-			EventFollowers:   newFollowers,
-			EventFollowing:   newFollowing,
-			UserBell:         newBell,
-			ProjectBell:      newBell,
-			EventBell:        newBell,
 		}
+		// UserFollowers:    newFollowers,
+		// UserFollowing:    newFollowing,
+		// ProjectFollowers: newFollowers,
+		// ProjectFollowing: newFollowing,
+		// EventFollowers:   newFollowers,
+		// EventFollowing:   newFollowing,
+		// UserBell:         newBell,
+		// ProjectBell:      newBell,
+		// EventBell:        newBell,
+
 		// Index the document.
-		_, Err := eclient.Index().
+		newDoc, Err := eclient.Index().
 			Index(globals.FollowIndex).
 			Type(globals.FollowType).
 			BodyJson(newFollow).
@@ -66,11 +62,25 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(Err)
 		}
+
+		return newDoc.Id, newFollow, err
 	}
 
 	for _, hit := range searchResult.Hits.Hits {
 		err = json.Unmarshal(*hit.Source, &foll) //unmarshal type RawMessage into user struct
 		follID = hit.Id
+	}
+
+	if len(foll.UserFollowers) == 0 {
+		foll.UserFollowers = make(map[string]bool)
+	}
+
+	if len(foll.UserFollowing) == 0 {
+		foll.UserFollowing = make(map[string]bool)
+	}
+
+	if len(foll.ProjectFollowers) == 0 {
+		foll.ProjectFollowers = make(map[string]bool)
 	}
 
 	return follID, foll, err

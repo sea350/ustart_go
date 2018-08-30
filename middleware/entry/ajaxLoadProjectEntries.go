@@ -1,4 +1,4 @@
-package project
+package entry
 
 import (
 	"encoding/json"
@@ -26,22 +26,6 @@ func AjaxLoadProjectEntries(w http.ResponseWriter, r *http.Request) {
 		log.Println("WARNING: docID not received")
 	}
 	scrollID := r.FormValue("scrollID")
-
-	/*
-		proj, err := get.ProjectByID(client.Eclient, wallID)
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
-		}
-
-			entries, err := uses.LoadEntries(client.Eclient, proj.EntryIDs)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
-			}
-	*/
 
 	res, entries, total, err := scrollpkg.ScrollPageProject(client.Eclient, wallID, docID.(string), scrollID)
 	if err != nil {

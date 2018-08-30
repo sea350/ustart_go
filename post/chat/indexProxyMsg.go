@@ -3,7 +3,6 @@ package post
 import (
 	"context"
 	"log"
-	"os"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -20,28 +19,21 @@ func IndexProxyMsg(eclient *elastic.Client, newProxyMsg types.ProxyMessages) (st
 	exists, err := eclient.IndexExists(globals.ProxyMsgIndex).Do(ctx)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	if !exists {
 		_, err := eclient.CreateIndex(globals.ProxyMsgIndex).Do(ctx)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
+			return proxyMsgID, err
 		}
-
 	}
-	idx, Err := eclient.Index().
+	idx, err := eclient.Index().
 		Index(globals.ProxyMsgIndex).
 		Type(globals.ProxyMsgType).
 		BodyJson(newProxyMsg).
 		Do(ctx)
 
-	if Err != nil {
-		return proxyMsgID, Err
-	}
-	proxyMsgID = idx.Id
-
-	return proxyMsgID, nil
+	return idx.Id, err
 }

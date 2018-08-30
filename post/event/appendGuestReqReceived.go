@@ -3,6 +3,8 @@ package post
 import (
 	"context"
 	"errors"
+	"fmt"
+	"log"
 
 	get "github.com/sea350/ustart_go/get/event"
 	globals "github.com/sea350/ustart_go/globals"
@@ -18,12 +20,27 @@ func AppendGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 
 	ctx := context.Background()
 
+	EventGuestRequestLock.Lock()
+	defer EventGuestRequestLock.Unlock()
+
 	evnt, err := get.EventByID(eclient, eventID)
 	if err != nil {
 		return errors.New("Event does not exist")
 	}
 
-	evnt.GuestReqReceived[userID] = classification
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("guestreqreceived 0?", evnt.GuestReqReceived)
+	if len(evnt.GuestReqReceived) == 0 {
+		newReq := make(map[string]int)
+		newReq[userID] = classification
+		fmt.Println(newReq[userID])
+		evnt.GuestReqReceived = newReq
+
+	} else {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("guestrequest not 0", evnt.GuestReqReceived[userID])
+		evnt.GuestReqReceived[userID] = classification
+	}
 
 	_, err = eclient.Update().
 		Index(globals.EventIndex).

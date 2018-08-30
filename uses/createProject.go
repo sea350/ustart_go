@@ -19,7 +19,7 @@ import (
 //CreateProject ... CREATE A NORMAL PROJECT
 //Requires all fundamental information for the new project (title, creator docID, etc ...)
 //Returns an error if there was a problem with database submission
-func CreateProject(eclient *elastic.Client, title string, description []rune, makerID string, category string, college string, customURL string) (string, error) {
+func CreateProject(eclient *elastic.Client, title string, description []rune, makerID string, category string, college string, customURL string, location types.LocStruct) (string, error) {
 	inUse, err := projGet.URLInUse(eclient, customURL)
 	if err != nil {
 		return "", err
@@ -36,6 +36,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	newProj.Avatar = "https://i.imgur.com/TYFKsdi.png"
 	newProj.Category = category
 	newProj.Organization = college
+	newProj.Location = location
 	if customURL != `` {
 		newProj.URLName = customURL
 	}

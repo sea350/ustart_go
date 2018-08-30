@@ -50,6 +50,9 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 		}
 	*/
 
+	if len(usr.LoginWarnings) == 0 {
+		usr.LoginWarnings = make(map[string]types.LoginWarning)
+	}
 	loginData, ipExists := usr.LoginWarnings[addressIP]
 	if ipExists {
 		if loginData.LockoutUntil.After(time.Now()) {

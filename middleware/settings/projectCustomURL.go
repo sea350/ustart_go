@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/sea350/ustart_go/middleware/client"
 
@@ -14,7 +13,7 @@ import (
 
 //ProjectCustomURL ... pushes a new banner image into ES
 func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session_please")
+	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
@@ -29,15 +28,14 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 	inUse, err := get.URLInUse(client.Eclient, newURL)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+		return
 	}
 
 	if inUse {
@@ -47,14 +45,14 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = uses.ChangeProjectURL(eclient, projID, newURL)
+	err = uses.ChangeProjectURL(client.Eclient, projID, newURL)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		return
 	}
 
-	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
-	return
+	http.Redirect(w, r, "/Projects/"+newURL, http.StatusFound)
 
 }

@@ -1,4 +1,4 @@
-package get
+package globals
 
 //ProjectIndex ...
 const ProjectIndex = "test-project_data"
@@ -247,18 +247,6 @@ const MappingConvo = `
 
 const MappingFollow = `
 {
-	"settings" :{
-		"analysis":{
-			"analyzer" : {
-				"casesensitive_text":{
-					"type" : "custom",
-					"tokenizer": "standard"
-				}
-			}
-		}
-	},
-
-
    "mappings":{
         "FOLLOW":{
             "properties":{

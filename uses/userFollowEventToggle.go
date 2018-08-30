@@ -20,8 +20,8 @@ func UserFollowEventToggle(eclient *elastic.Client, userID string, eventID strin
 		return err
 	}
 
-	postEvnt.EventFollowerLock.Lock() //make sure no one else changes followers array while we read/write it
-	defer postEvnt.EventFollowerLock.Unlock()
+	postEvnt.EventFollowLock.Lock() //make sure no one else changes followers array while we read/write it
+	defer postEvnt.EventFollowLock.Unlock()
 
 	evnt, err := getEvnt.EventByID(eclient, eventID)
 	if err != nil {
