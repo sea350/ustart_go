@@ -28,9 +28,9 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	last := html.EscapeString(r.FormValue("lname"))
 	dob := html.EscapeString(r.FormValue("dob"))
 
-	if len(dob) == 0 {
-		return
-	}
+	// if len(dob) == 0 {
+	// 	return
+	// }
 	month, err := strconv.Atoi(dob[5:7])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
