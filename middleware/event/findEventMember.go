@@ -42,7 +42,7 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		var results []types.FloatingHead
 		for _, element := range searchResults.Hits.Hits {
-			head, err1 := uses.ConvertProjectToFloatingHead(client.Eclient, element.Id)
+			head, err1 := uses.ConvertUserToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
@@ -80,7 +80,7 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		var results []types.FloatingHead
 		for _, element := range searchResults.Hits.Hits {
-			head, err1 := uses.ConvertProjectToFloatingHead(client.Eclient, element.Id)
+			head, err1 := uses.ConvertUserToFloatingHead(client.Eclient, element.Id)
 			if err1 != nil {
 				err = errors.New("there was one or more problems loading results")
 				continue
