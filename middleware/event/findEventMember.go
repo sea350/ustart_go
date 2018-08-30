@@ -47,7 +47,7 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			eobj := types.AutoCompleteObject
+			var eobj types.AutoCompleteObject
 			eobj.Value = head.DocID
 			eobj.Label = head.Username
 			eobj.Desc = head.FirstName + " " + head.LastName
@@ -90,7 +90,7 @@ func FindEventGuest(w http.ResponseWriter, r *http.Request) {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			eobj := types.AutoCompleteObject
+			var eobj types.AutoCompleteObject
 			eobj.Value = head.DocID
 			eobj.Label = head.Username
 			eobj.Desc = head.FirstName + " " + head.LastName
@@ -133,10 +133,10 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 				err = errors.New("there was one or more problems loading results")
 				continue
 			}
-			eobj := types.AutoCompleteObject
+			var eobj types.AutoCompleteObject
 			eobj.Value = head.DocID
 			eobj.Label = head.FirstName
-			eobj.Desc = head.Bio
+			eobj.Desc = head.FirstName
 			eobj.Icon = head.Image
 			results = append(results, eobj)
 		}
