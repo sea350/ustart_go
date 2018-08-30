@@ -95,6 +95,7 @@ type EventSubWidgets struct {
 type EventAggregate struct {
 	DocID          string         `json:"DocID"`
 	EventData      Events         `json:"EventData"`
+	GuestData      []FloatingHead `json:"GuestData"`
 	MemberData     []FloatingHead `json:"MemberData"`
 	ProjectData    []FloatingHead `json:"ProjectData"`
 	Editable       bool           `json:"Editable"`

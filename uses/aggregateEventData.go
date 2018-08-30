@@ -62,6 +62,16 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		}
 		eventData.ProjectData = append(eventData.ProjectData, proj)
 	}
+	for _, guest := range data.Guests {
+		id := guest.GuestID
+		gust, err := ConvertUserToFloatingHead(eclient, id)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+		gust.Classification = guest.Status
+		eventData.GuestData = append(eventData.GuestData, gust)
+	}
 
 	return eventData, err
 }
