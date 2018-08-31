@@ -46,6 +46,7 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 	description := html.EscapeString(r.FormValue("inputDesc"))
 	fmt.Println("Description:", description)
 	descriptionrune := []rune(description)
+	fmt.Println("Descriptionrune:", descriptionrune)
 
 	userID := session.Values["DocID"].(string)
 	err2 := uses.ChangeContactAndDescription(client.Eclient, userID, phonenumber, pVIS, gender, gVIS, eVIS, descriptionrune)
