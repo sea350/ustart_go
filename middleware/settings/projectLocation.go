@@ -55,6 +55,8 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
+
+	fmt.Println("/Projects/", proj.URLName)
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 	return
 
