@@ -7,14 +7,16 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
 )
 
 func EmailVerification(w http.ResponseWriter, r *http.Request) {
-	email := r.FormValue("email")
-	emailToken := r.FormValue("verifCode")
+	p := bluemonday.UGCPolicy()
+	email := p.Sanitize(r.FormValue("email"))
+	emailToken := p.Sanitize(r.FormValue("verifCode"))
 
 	var cs client.ClientSide
 
