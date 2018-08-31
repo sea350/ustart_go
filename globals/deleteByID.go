@@ -35,6 +35,9 @@ func DeleteByID(eclient *elastic.Client, docID string, index string) error {
 	case "msg":
 		idx = MsgIndex
 		typ = MsgType
+	case "widget":
+		idx = WidgetIndex
+		typ = WidgetType
 
 	}
 	ctx := context.Background()
