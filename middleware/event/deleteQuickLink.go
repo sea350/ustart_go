@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/event"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/event"
@@ -26,9 +27,10 @@ func DeleteEventQuickLink(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		fmt.Println("this is an err: middleware/event/deleteQuickLink line 24")
 	}
+	p := bluemonday.UGCPolicy()
 
-	deleteTitle := r.FormValue("deleteEventLinkDesc")
-	deleteURL := r.FormValue("deleteEventLink")
+	deleteTitle := p.Sanitize(r.FormValue("deleteEventLinkDesc"))
+	deleteURL := p.Sanitize(r.FormValue("deleteEventLink"))
 
 	var newArr []types.Link
 
