@@ -1,7 +1,6 @@
 package widget
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -34,7 +33,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	newWidget.UserID = session.Values["DocID"].(string)
 
 	if r.FormValue("editID") == `0` {
-		fmt.Println("ADDING NEW WIDGET")
+
 		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget, false, false)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -42,7 +41,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 			log.Println(dir, err)
 		}
 	} else {
-		fmt.Println("REINDEX")
+
 		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)

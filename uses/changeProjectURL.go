@@ -17,6 +17,10 @@ func ChangeProjectURL(eclient *elastic.Client, projectID string, newURL string) 
 	if inUse {
 		return errors.New("That url is already taken")
 	}
-	err = post.UpdateProject(eclient, projectID, "URLName", newURL)
-	return err
+	if ValidUsername(newURL) {
+		err = post.UpdateProject(eclient, projectID, "URLName", newURL)
+		return err
+	} else {
+		return errors.New("Invalid URL!")
+	}
 }
