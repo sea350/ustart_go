@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -35,6 +36,8 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
+
+	fmt.Println("Testing CSS:", userstruct.Description)
 
 	widgets, errs := uses.LoadWidgets(client.Eclient, userstruct.UserWidgets)
 	if len(errs) != 0 {
