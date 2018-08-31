@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/types"
@@ -26,8 +27,11 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 
 	if r.FormValue("widgetSubmit") == `0` {
 		// text
-		title := template.HTML(r.FormValue("customHeader"))
-		description := template.HTML(r.FormValue("customContent"))
+		p := bluemonday.UGCPolicy()
+		html := p.Sanitize(r.FormValue("customHeader"))
+		title := template.HTML(html)
+		htmlDesc := p.Sanitize(r.FormValue("customContent"))
+		description := template.HTML(htmlDesc)
 		data = []template.HTML{title, description}
 		classification = 0
 	}
