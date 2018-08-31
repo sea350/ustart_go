@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/uses"
 )
@@ -18,9 +19,10 @@ func MakeEventEntry(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	p := bluemonday.UGCPolicy()
 
-	eventID := r.FormValue("docID")
-	newContent := []rune(r.FormValue("text"))
+	eventID := p.Sanitize(r.FormValue("docID"))
+	newContent := []rune(p.Sanitize(r.FormValue("text")))
 	newID, err := uses.EventCreatesEntry(client.Eclient, eventID, docID.(string), newContent)
 	if err != nil {
 		fmt.Println("err: middleware/event/makeentries line 26")

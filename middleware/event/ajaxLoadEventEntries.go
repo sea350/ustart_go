@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
 	scrollpkg "github.com/sea350/ustart_go/properloading"
 )
@@ -20,7 +21,9 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	wallID := r.FormValue("userID")
+	p := bluemonday.UGCPolicy()
+
+	wallID := p.Sanitize(r.FormValue("userID"))
 	/*
 		evnt, err := get.EventByID(client.Eclient, wallID)
 		if err != nil {
