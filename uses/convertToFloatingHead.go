@@ -28,6 +28,7 @@ func ConvertUserToFloatingHead(eclient *elastic.Client, userDocID string) (types
 
 	// head.Interface = usr.Tags
 	head.Bio = usr.Description
+	head.Category = usr.Majors[0]
 
 	return head, err
 }
@@ -49,6 +50,7 @@ func ConvertProjectToFloatingHead(eclient *elastic.Client, projectID string) (ty
 	head.Notifications = len(proj.MemberReqReceived)
 	head.Interface = proj.Tags
 	head.Tags = proj.Tags
+	head.Category = proj.Category
 
 	return head, err
 }
@@ -69,6 +71,7 @@ func ConvertEventToFloatingHead(eclient *elastic.Client, eventID string) (types.
 	head.DocID = eventID
 	head.Notifications = len(evnt.MemberReqReceived)
 	head.Interface = evnt.Tags
+	head.Category = evnt.Category
 
 	return head, err
 }

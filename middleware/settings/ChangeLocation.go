@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -21,13 +20,16 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := getUser.UserByID(client.Eclient, test1.(string))
-
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-	}
+	// userstruct, err := getUser.UserByID(client.Eclient, test1.(string))
+	// countryInit := userstruct.Location.CountryVis
+	// cityInit := userstruct.Location.CityVis
+	// stateInit := userstruct.Location.StateVis
+	// zipInit := userstruct.Location.ZipVis
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	dir, _ := os.Getwd()
+	// 	log.Println(dir, err)
+	// }
 	r.ParseForm()
 	countryP := r.FormValue("country")
 	countryPV := r.FormValue("countryVis")
@@ -55,12 +57,13 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 		zBool = true
 	}
 
-	err = uses.ChangeLocation(client.Eclient, session.Values["DocID"].(string), countryP, conBool, stateP, sBool, cityP, cBool, zipP, zBool)
+	err := uses.ChangeLocation(client.Eclient, session.Values["DocID"].(string), countryP, conBool, stateP, sBool, cityP, cBool, zipP, zBool)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
+	// client.ClientSide{countryInit, cityInit, stateInit, zipInit}
 	http.Redirect(w, r, "/Settings/#loccollapse", http.StatusFound)
 	return
 

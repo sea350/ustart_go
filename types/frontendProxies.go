@@ -43,6 +43,7 @@ type FloatingHead struct {
 	Read           bool        `json:"Read"`
 	Interface      interface{} `json:"Interface"`
 	Visible        bool        `json:"Visible"`
+	Category       string      `json:"Category"`
 	//for projects Username = project URLName
 	//for projects Firstname = project Name
 	//for projects Bio = project Description

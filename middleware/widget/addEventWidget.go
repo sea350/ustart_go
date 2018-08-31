@@ -2,7 +2,9 @@ package widget
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	getEvnt "github.com/sea350/ustart_go/get/event"
 
@@ -23,8 +25,9 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 
 	evnt, member, err := getEvnt.EventAndMember(client.Eclient, r.FormValue("eventWidget"), test1.(string))
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("this is an error: middleware/widget/addEventWidget line 24")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
 
 	// newWidget, err := ProcessWidgetForm(r)
@@ -44,8 +47,9 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 		// err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, true)
 		newWidget, err := ProcessWidgetForm(r)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println("this is an error: middleware/widget/addEventWidget line 45")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
 			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 		}
 
@@ -58,14 +62,16 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 
 			err := uses.AddWidget(client.Eclient, r.FormValue("eventWdiget"), newWidget, false, true)
 			if err != nil {
-				fmt.Println(err)
-				fmt.Println("this is an error: middleware/profile/addEventWidget.go 45")
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
 			}
 		} else {
 			err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 			if err != nil {
-				fmt.Println(err)
-				fmt.Println("this is an error: middleware/profile/addWidget.go 51")
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				dir, _ := os.Getwd()
+				log.Println(dir, err)
 			}
 		}
 
