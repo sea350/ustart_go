@@ -2,8 +2,9 @@ package settings
 
 import (
 	"fmt"
-	"html"
 	"net/http"
+
+	"github.com/microcosm-cc/bluemonday"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -19,6 +20,7 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
+	p := bluemonday.UGCPolicy()
 
 	var pVIS bool
 	var gVIS bool
@@ -43,7 +45,7 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 	} else {
 		eVIS = false
 	}
-	description := html.EscapeString(r.FormValue("inputDesc"))
+	description := p.Sanitize(r.FormValue("inputDesc"))
 	fmt.Println("Description:", description)
 	descriptionrune := []rune(description)
 	fmt.Println("Descriptionrune:", descriptionrune)
