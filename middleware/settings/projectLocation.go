@@ -23,9 +23,15 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
+	var vis bool
 	p := bluemonday.UGCPolicy()
 	visibool := r.FormValue("lockThis")
 	cleanVis := p.Sanitize(visibool)
+	if cleanVis == "true" {
+		vis = true
+	} else {
+		vis = false
+	}
 	cleanCountry := p.Sanitize(r.FormValue("country"))
 	country := cleanCountry
 	cleanState := p.Sanitize(r.FormValue("state"))
@@ -43,7 +49,7 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
-	err = uses.ChangeProjectLocation(client.Eclient, projID, country, state, city, zip)
+	err = uses.ChangeProjectLocation(client.Eclient, projID, country, state, city, zip, vis)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
