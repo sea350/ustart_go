@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
 )
@@ -23,7 +24,11 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 
 	ID := session.Values["DocID"].(string)
 
-	tags := strings.Split(r.FormValue("skillArray"), `","`)
+	p := bluemonday.UGCPolicy()
+
+	htmlTags := p.Sanitize(r.FormValue("skillArray"))
+
+	tags := strings.Split(htmlTags, `","`)
 	// fmt.Println("formvalue", r.FormValue("skillArray"))
 	// fmt.Println("tags", tags)
 	//Dont write floating debug text
