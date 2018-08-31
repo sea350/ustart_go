@@ -30,7 +30,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		p := bluemonday.UGCPolicy()
 		html := p.Sanitize(r.FormValue("customHeader"))
 		title := template.HTML(html)
-		description := template.HTML(r.FormValue("customContent"))
+		htmlDesc := p.Sanitize(r.FormValue("customContent"))
+		description := template.HTML(htmlDesc)
 		data = []template.HTML{title, description}
 		classification = 0
 	}
