@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
@@ -29,21 +30,22 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}
 	//r.ParseForm()
+	p := bluemonday.UGCPolicy()
 
-	title := r.FormValue("title")
-	college := r.FormValue("universityName")
-	customURL := r.FormValue("eventurl")
+	title := p.Sanitize(r.FormValue("title"))
+	college := p.Sanitize(r.FormValue("universityName"))
+	customURL := p.Sanitize(r.FormValue("eventurl"))
 	category := r.FormValue("eventCategory")
 
 	//endDateOfEvent
 	//eventLocation
 	country := r.FormValue("country")
 	state := r.FormValue("state")
-	city := r.FormValue("city")
-	zip := r.FormValue("zip")
-	street := r.FormValue("street")
+	city := p.Sanitize(r.FormValue("city"))
+	zip := p.Sanitize(r.FormValue("zip"))
+	street := p.Sanitize(r.FormValue("street"))
 
-	desc := []rune(r.FormValue("event_desc"))
+	desc := []rune(p.Sanitize(r.FormValue("event_desc")))
 
 	Syear, _ := strconv.Atoi(r.FormValue("startDate")[0:4])
 	Smonth, _ := strconv.Atoi(r.FormValue("startDate")[5:7])

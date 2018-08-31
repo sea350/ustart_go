@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -19,11 +20,12 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	p := bluemonday.UGCPolicy()
 
 	r.ParseForm()
 	postID := r.FormValue("followstat")
 	postActual := postID[1:]
-	comment := r.FormValue("commentz")
+	comment := p.Sanitize(r.FormValue("commentz"))
 	id := r.FormValue("id")
 	contentArray := []rune(comment)
 	err := uses.UserReplyEntry(client.Eclient, id, postActual, contentArray)
@@ -55,10 +57,11 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	p := bluemonday.UGCPolicy()
 
 	r.ParseForm()
 	postID := r.FormValue("postID")
-	comment := r.FormValue("body")
+	comment := p.Sanitize(r.FormValue("body"))
 
 	contentArray := []rune(comment)
 	err := uses.UserReplyEntry(client.Eclient, docID.(string), postID, contentArray)

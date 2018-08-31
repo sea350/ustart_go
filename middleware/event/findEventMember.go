@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/globals"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -18,7 +19,8 @@ import (
 
 //FindEventMember ... find event members
 func FindEventMember(w http.ResponseWriter, r *http.Request) {
-	term := r.FormValue("term")
+	p := bluemonday.UGCPolicy()
+	term := p.Sanitize(r.FormValue("term"))
 	var stringTerm []string
 	stringTerm = strings.Split(term, ` `)
 	query := elastic.NewBoolQuery()

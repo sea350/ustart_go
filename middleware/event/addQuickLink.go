@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/event"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/event"
@@ -27,8 +28,9 @@ func AddEventQuickLink(w http.ResponseWriter, r *http.Request) {
 		dir, _ := os.Getwd()
 		log.Println(dir, err)
 	}
+	p := bluemonday.UGCPolicy()
 
-	evnt.QuickLinks = append(evnt.QuickLinks, types.Link{Name: r.FormValue("eventLinkDesc"), URL: r.FormValue("eventLink")})
+	evnt.QuickLinks = append(evnt.QuickLinks, types.Link{Name: p.Sanitize(r.FormValue("eventLinkDesc")), URL: p.Sanitize(r.FormValue("eventLink"))})
 
 	err = post.UpdateEvent(client.Eclient, ID, "QuickLinks", evnt.QuickLinks)
 	if err != nil {

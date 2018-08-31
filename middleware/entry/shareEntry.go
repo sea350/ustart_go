@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	"github.com/sea350/ustart_go/types"
@@ -19,9 +20,10 @@ func ShareEntry(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	p := bluemonday.UGCPolicy()
 
-	originalPost := r.FormValue("postid")
-	newContent := r.FormValue("content")
+	originalPost := p.Sanitize(r.FormValue("postid"))
+	newContent := p.Sanitize(r.FormValue("content"))
 
 	var entry types.Entry
 	entry.UserShareEntry(docID.(string), originalPost, newContent)

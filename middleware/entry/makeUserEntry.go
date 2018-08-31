@@ -3,10 +3,10 @@ package entry
 import (
 	"encoding/json"
 	"fmt"
-	"html"
 	"log"
 	"net/http"
 
+	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	"github.com/sea350/ustart_go/types"
@@ -25,8 +25,9 @@ func MakeUserEntry(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
+	p := bluemonday.UGCPolicy()
 
-	text := html.EscapeString(r.FormValue("text"))
+	text := p.Sanitize(r.FormValue("text"))
 
 	var entry types.Entry
 	entry.UserOriginalEntry(docID.(string), text)

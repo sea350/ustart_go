@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/entry"
 	uses "github.com/sea350/ustart_go/uses"
@@ -20,9 +21,10 @@ func EditEntry(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	p := bluemonday.UGCPolicy()
 
 	postID := r.FormValue("postid")
-	newContent := r.FormValue("content")
+	newContent := p.Sanitize(r.FormValue("content"))
 
 	err := post.UpdateEditEntry(client.Eclient, postID, "Content", []rune(newContent))
 	if err != nil {
