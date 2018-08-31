@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -21,9 +22,10 @@ func ChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+	p := bluemonday.UGCPolicy()
 	r.ParseForm()
-	projName := r.FormValue("pname")
-	projDesc := []rune(r.FormValue("inputDesc"))
+	projName := p.Sanitize(r.FormValue("pname"))
+	projDesc := []rune(p.Sanitize(r.FormValue("inputDesc")))
 	//   fmt.Println(blob)
 	fmt.Println(projName, projName)
 
