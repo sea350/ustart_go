@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -22,10 +23,17 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	country := r.FormValue("country")
-	state := r.FormValue("state")
-	city := r.FormValue("city")
-	zip := r.FormValue("zip")
+	p := bluemonday.UGCPolicy()
+	visibool := r.FormValue("lockThis")
+	cleanVis := p.Sanitize(visibool)
+	cleanCountry := p.Sanitize(r.FormValue("country"))
+	country := cleanCountry
+	cleanState := p.Sanitize(r.FormValue("state"))
+	state := cleanState
+	cleanCity := p.Sanitize(r.FormValue("city"))
+	city := cleanCity
+	cleanZip := p.Sanitize(r.FormValue("zip"))
+	zip := cleanZip
 	//   fmt.Println(blob)
 
 	projID := r.FormValue("projectID")

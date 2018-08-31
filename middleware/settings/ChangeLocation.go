@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -31,11 +32,17 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 	// 	log.Println(dir, err)
 	// }
 	r.ParseForm()
+	p := bluemonday.UGCPolicy()
 	countryP := r.FormValue("country")
+	countryP = p.Sanitize(countryP)
+
 	countryPV := r.FormValue("countryVis")
+	countryPV = p.Sanitize(countryPV)
 	//   fmt.Println(countryPV)
 	stateP := r.FormValue("state")
+	stateP = p.Sanitize(stateP)
 	statePV := r.FormValue("stateVis")
+	statePV = p.Sanitize(statePV)
 	cityP := r.FormValue("city")
 	cityPV := r.FormValue("cityVis")
 	zipP := r.FormValue("zip")

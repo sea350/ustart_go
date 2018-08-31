@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -24,9 +25,17 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	first := html.EscapeString(r.FormValue("fname"))
-	last := html.EscapeString(r.FormValue("lname"))
-	dob := html.EscapeString(r.FormValue("dob"))
+
+	p := bluemonday.UGCPolicy()
+
+	first := p.Sanitize(r.FormValue("fname"))
+	first = html.EscapeString(first)
+
+	last := p.Sanitize(r.FormValue("lname"))
+	last = html.EscapeString(last)
+
+	dob := p.Sanitize(r.FormValue("dob"))
+	dob = html.EscapeString(dob)
 
 	if len(dob) == 0 {
 		return
