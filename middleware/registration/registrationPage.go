@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 	"golang.org/x/crypto/bcrypt"
@@ -39,9 +40,10 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/profile/", http.StatusFound)
 		return
 	}
+	p := bluemonday.UGCPolicy()
 
 	//proper email
-	if !uses.ValidEmail(r.FormValue("inputEmail")) {
+	if !uses.ValidEmail(p.Sanitize(r.FormValue("inputEmail"))) {
 		fmt.Println("This is an error: registrationPage.go, 45")
 		fmt.Println("Invalid email submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
@@ -74,19 +76,18 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	}
 	//	u.FirstName = r.FormValue("firstName")
-	fname := r.FormValue("firstName")
-	lname := r.FormValue("lastName")
-	email := r.FormValue("inputEmail")
-	email = strings.ToLower(email)
+	fname := p.Sanitize(r.FormValue("firstName"))
+	lname := p.Sanitize(r.FormValue("lastName"))
+	email := strings.ToLower(p.Sanitize(r.FormValue("inputEmail")))
 
-	username := r.FormValue("username")
+	username := p.Sanitize(r.FormValue("username"))
 
 	password := r.FormValue("inputPassword")
 	passwordb := []byte(password)
 	hashedPassword, _ := bcrypt.GenerateFromPassword(passwordb, bcrypt.DefaultCost)
-	school := r.FormValue("universityName")
+	school := p.Sanitize(r.FormValue("universityName"))
 	var major []string
-	major = append(major, r.FormValue("majors"))
+	major = append(major, p.Sanitize(r.FormValue("majors")))
 
 	year, _ := strconv.Atoi(r.FormValue("dob")[0:4])
 	month, _ := strconv.Atoi(r.FormValue("dob")[5:7])
@@ -95,8 +96,8 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	country := r.FormValue("country")
 	state := r.FormValue("state")
-	city := r.FormValue("city")
-	zip := r.FormValue("zip")
+	city := p.Sanitize(r.FormValue("city"))
+	zip := p.Sanitize(r.FormValue("zip"))
 	currYear := r.FormValue("year")
 
 	//attempting to catch client IP
