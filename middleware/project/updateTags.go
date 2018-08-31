@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/project"
 )
@@ -20,9 +21,12 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ID := r.FormValue("projectWidget")
+	p := bluemonday.UGCPolicy()
 
-	tags := strings.Split(r.FormValue("skillArray"), `","`)
+	ID := r.FormValue("projectWidget")
+	cleanTags := p.Sanitize(ID)
+
+	tags := strings.Split(cleanTags, `","`)
 	if len(tags) > 0 {
 		tags[0] = strings.Trim(tags[0], `["`)
 		tags[len(tags)-1] = strings.Trim(tags[len(tags)-1], `"]`)

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/microcosm-cc/bluemonday"
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	get "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
@@ -127,29 +128,45 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: docID.(string), Username: session.Values["Username"].(string)}
 
+	p := bluemonday.UGCPolicy()
 	title := r.FormValue("project_title")
+	cleanTitle := p.Sanitize(title)
+
 	description := []rune(r.FormValue("project_desc"))
+	cleanDesc := p.Sanitize(string(description))
+
 	category := r.FormValue("category")
+	cleanCat := p.Sanitize(category)
+
 	college := r.FormValue("universityName")
+	cleanCollege := p.Sanitize(college)
+
 	customURL := r.FormValue("curl")
+	cleanURL := p.Sanitize(customURL)
 
 	country := r.FormValue("country")
+	cleanCountry := p.Sanitize(country)
 	state := r.FormValue("state")
+	cleanState := p.Sanitize(state)
 	city := r.FormValue("city")
+	cleanCity := p.Sanitize(city)
 	zip := r.FormValue("zip")
+	cleanZip := p.Sanitize(zip)
+
 	street := r.FormValue("street")
+	cleanStreet := p.Sanitize(street)
 
 	var projLocation types.LocStruct
-	projLocation.Street = street
-	projLocation.City = city
-	projLocation.Country = country
-	projLocation.Zip = zip
-	projLocation.State = state
-	projLocation.Street = street
+	projLocation.Street = cleanStreet
+	projLocation.City = cleanCity
+	projLocation.Country = cleanCountry
+	projLocation.Zip = cleanZip
+	projLocation.State = cleanState
+	projLocation.Street = cleanStreet
 
 	if title != `` {
 		//proper URL
-		if !uses.ValidUsername(customURL) {
+		if !uses.ValidUsername(cleanURL) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println("Invalid custom project URL")
 			cs.ErrorStatus = true
@@ -160,7 +177,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 			return
 
 		}
-		url, err := uses.CreateProject(client.Eclient, title, description, docID.(string), category, college, customURL, projLocation)
+		url, err := uses.CreateProject(client.Eclient, cleanTitle, []rune(cleanDesc), docID.(string), cleanCat, cleanCollege, cleanURL, projLocation)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
