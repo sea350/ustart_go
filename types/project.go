@@ -19,12 +19,12 @@ type Privileges struct {
 
 //Member ... all member relevant information
 type Member struct {
-	MemberID string    `json:"MemberID"`
-	Role     int       `json:"Role"`
-	JoinDate time.Time `json:"JoinDate"`
-	Title    string    `json:"Title"`
-
-	Visible bool `json:"Visible"`
+	MemberID    string    `json:"MemberID"`
+	Role        int       `json:"Role"`
+	JoinDate    time.Time `json:"JoinDate"`
+	Title       string    `json:"Title"`
+	OfficeTitle string    `json:"OfficeTitle"`
+	Visible     bool      `json:"Visible"`
 }
 
 //Project ... Project relevant data
