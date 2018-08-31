@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/sea350/ustart_go/middleware/client"
 
@@ -49,6 +50,7 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		time.Sleep(2 * time.Second)
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
