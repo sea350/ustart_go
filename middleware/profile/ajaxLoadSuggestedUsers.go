@@ -42,13 +42,11 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	for _, element := range myUser.Projects {
 		arrProjects = append(arrProjects, element.ProjectID)
 	}
-	fmt.Println(arrProjects)
 
 	memberIDs := make([]interface{}, 0)
 	for elements := range arrProjects {
 		memberIDs = append([]interface{}{strings.ToLower(arrProjects[elements])}, memberIDs...)
 	}
-	fmt.Println(memberIDs)
 
 	suggestedUserQuery := elastic.NewBoolQuery()
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
