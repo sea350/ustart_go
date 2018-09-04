@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"encoding/json"
 	"fmt"
 	"html"
 	"log"
@@ -35,18 +34,15 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 	if err2 != nil {
 		fmt.Println(err2)
 	}
+
 	highschoolName := p.Sanitize(r.FormValue("schoolname"))
 	highschoolGrad := p.Sanitize(r.FormValue("highSchoolGradDate"))
+
 	uniName := p.Sanitize(r.FormValue("universityName"))
 	var major []string
 
 	var m Major
-	err := json.Unmarshal([]byte(r.FormValue("majors")), &m.List)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
-	}
+
 	for i := range m.List {
 		m.List[i] = p.Sanitize(m.List[i])
 		m.List[i] = html.EscapeString(m.List[i])
@@ -58,7 +54,7 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 
 	var minor []string
 
-	err = uses.ChangeEducation(client.Eclient, session.Values["DocID"].(string), i, highschoolName, highschoolGrad, uniName, gradDate, major, minor)
+	err := uses.ChangeEducation(client.Eclient, session.Values["DocID"].(string), i, highschoolName, highschoolGrad, uniName, gradDate, major, minor)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
