@@ -39,7 +39,8 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 	log.Println("HS:", highschoolName)
 	highschoolGrad := p.Sanitize(r.FormValue("highSchoolGradDate"))
 	log.Println("HS Grad Date:", highschoolGrad)
-	uniName := p.Sanitize(r.FormValue("universityName"))
+	// uniName := p.Sanitize(r.FormValue("universityName"))
+	uniName := r.FormValue("universityName")
 	log.Println("UNI:", uniName)
 	var major []string
 
