@@ -26,23 +26,26 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 
 	p := bluemonday.UGCPolicy()
 
-	htmlTags := p.Sanitize(r.FormValue("skillArray"))
-
-	tags := strings.Split(htmlTags, `","`)
+	tags := strings.Split(r.FormValue("skillArray"), `","`)
+	var sanitizedTags []string
+	for idx := range tags {
+		sanitizedTags = append(sanitizedTags, p.Sanitize(tags[idx]))
+	}
+	// htmlTags := p.Sanitize(tags)
 	// fmt.Println("formvalue", r.FormValue("skillArray"))
 	// fmt.Println("tags", tags)
 	//Dont write floating debug text
-	if len(tags) > 0 {
-		tags[0] = strings.Trim(tags[0], `["`)
-		tags[len(tags)-1] = strings.Trim(tags[len(tags)-1], `"]`)
+	if len(sanitizedTags) > 0 {
+		sanitizedTags[0] = strings.Trim(sanitizedTags[0], `["`)
+		sanitizedTags[len(sanitizedTags)-1] = strings.Trim(sanitizedTags[len(sanitizedTags)-1], `"]`)
 	}
 
 	for i := range tags {
-		tags[i] = html.EscapeString(tags[i])
+		sanitizedTags[i] = html.EscapeString(sanitizedTags[i])
 		// fmt.Println("tag", i, tags[i])
 	}
 
-	err := post.UpdateUser(client.Eclient, ID, "Tags", tags)
+	err := post.UpdateUser(client.Eclient, ID, "Tags", sanitizedTags)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
