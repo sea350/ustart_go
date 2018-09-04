@@ -25,6 +25,10 @@ func ChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 	r.ParseForm()
 	projName := p.Sanitize(r.FormValue("pname"))
+	if len(projName) < 1 {
+		log.Println("Project name cannot be blank!")
+		return
+	}
 	projDesc := []rune(p.Sanitize(r.FormValue("inputDesc")))
 	//   fmt.Println(blob)
 	fmt.Println(projName, projName)

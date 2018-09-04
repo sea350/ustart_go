@@ -138,18 +138,27 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	cleanCat := p.Sanitize(r.FormValue("category"))
 	if len(cleanCat) == 0 {
 		log.Println("Cannot leave category blank")
+		client.RenderSidebar(w, r, "template2-nil")
+		client.RenderSidebar(w, r, "leftnav-nil")
+		client.RenderTemplate(w, r, "createProject-Nil", cs)
 		return
 	}
 
 	cleanCollege := p.Sanitize(r.FormValue("universityName"))
 	if len(cleanCollege) == 0 {
 		log.Println("Cannot leave college blank")
+		client.RenderSidebar(w, r, "template2-nil")
+		client.RenderSidebar(w, r, "leftnav-nil")
+		client.RenderTemplate(w, r, "createProject-Nil", cs)
 		return
 	}
 
 	cleanURL := p.Sanitize(r.FormValue("curl"))
 	if len(cleanURL) == 0 {
 		log.Println("Cannot leave custom URL blank")
+		client.RenderSidebar(w, r, "template2-nil")
+		client.RenderSidebar(w, r, "leftnav-nil")
+		client.RenderTemplate(w, r, "createProject-Nil", cs)
 		return
 	}
 
