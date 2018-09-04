@@ -11,6 +11,7 @@ import (
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/types"
+	uses "github.com/sea350/ustart_go/uses"
 )
 
 //AddQuickLink ...
@@ -33,6 +34,11 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	htmlLink := p.Sanitize(r.FormValue("userLinkDesc"))
+	isValid := uses.ValidLink(htmlLink)
+	if !isValid {
+		log.Println("Invalid link provided")
+		return
+	}
 	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: html.EscapeString(htmlLink), URL: html.EscapeString(r.FormValue("userLink"))})
 
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", usr.QuickLinks)

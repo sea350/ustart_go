@@ -135,26 +135,33 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	description := []rune(r.FormValue("project_desc"))
 	cleanDesc := p.Sanitize(string(description))
 
-	category := r.FormValue("category")
-	cleanCat := p.Sanitize(category)
+	cleanCat := p.Sanitize(r.FormValue("category"))
+	if len(cleanCat) == 0 {
+		log.Println("Cannot leave category blank")
+		return
+	}
 
-	college := r.FormValue("universityName")
-	cleanCollege := p.Sanitize(college)
+	cleanCollege := p.Sanitize(r.FormValue("universityName"))
+	if len(cleanCollege) == 0 {
+		log.Println("Cannot leave college blank")
+		return
+	}
 
-	customURL := r.FormValue("curl")
-	cleanURL := p.Sanitize(customURL)
+	cleanURL := p.Sanitize(r.FormValue("curl"))
+	if len(cleanURL) == 0 {
+		log.Println("Cannot leave custom URL blank")
+		return
+	}
 
-	country := r.FormValue("country")
-	cleanCountry := p.Sanitize(country)
-	state := r.FormValue("state")
-	cleanState := p.Sanitize(state)
-	city := r.FormValue("city")
-	cleanCity := p.Sanitize(city)
-	zip := r.FormValue("zip")
-	cleanZip := p.Sanitize(zip)
+	cleanCountry := p.Sanitize(r.FormValue("country"))
 
-	street := r.FormValue("street")
-	cleanStreet := p.Sanitize(street)
+	cleanState := p.Sanitize(r.FormValue("state"))
+
+	cleanCity := p.Sanitize(r.FormValue("city"))
+
+	cleanZip := p.Sanitize(r.FormValue("zip"))
+
+	cleanStreet := p.Sanitize(r.FormValue("street"))
 
 	var projLocation types.LocStruct
 	projLocation.Street = cleanStreet
