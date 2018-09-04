@@ -39,7 +39,12 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		log.Println("Invalid link provided")
 		return
 	}
-	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: html.EscapeString(r.FormValue("userLinkDesc")), URL: html.EscapeString(htmlLink)})
+	if len(r.FormValue("userLinkDesc")) == 0 {
+		log.Println("Title cannot be blank")
+	}
+
+	cleanTitle := p.Sanitize(r.FormValue("userLinkDesc"))
+	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: html.EscapeString(cleanTitle), URL: html.EscapeString(htmlLink)})
 
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", usr.QuickLinks)
 	if err != nil {

@@ -1,15 +1,20 @@
 package project
 
 import (
+	"encoding/json"
+	"html"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/project"
 )
+
+type TagStruct struct {
+	Tags []string
+}
 
 //UpdateTags ...
 func UpdateTags(w http.ResponseWriter, r *http.Request) {
@@ -25,19 +30,20 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 
 	ID := r.FormValue("projectWidget")
 
-	tags := strings.Split(ID, `","`)
+	var ts TagStruct
+	err := json.Unmarshal([]byte(ID), &ts.Tags)
 
-	if len(tags) > 0 {
-		tags[0] = strings.Trim(tags[0], `["`)
-		tags[len(tags)-1] = strings.Trim(tags[len(tags)-1], `"]`)
+	if err != nil {
+		log.Println("Could not unmarshal")
+		return
 	}
 
-	var cleanTags []string
-	for idx := range tags {
-		cleanTags = append(cleanTags, p.Sanitize(tags[idx]))
+	for t := range ts.Tags {
+		ts.Tags[t] = p.Sanitize(ts.Tags[t])
+		ts.Tags[t] = html.EscapeString(ts.Tags[t])
 	}
 
-	err := post.UpdateProject(client.Eclient, ID, "Tags", cleanTags)
+	err = post.UpdateProject(client.Eclient, ID, "Tags", ts.Tags)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
