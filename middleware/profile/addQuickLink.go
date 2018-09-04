@@ -33,13 +33,13 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	p := bluemonday.UGCPolicy()
 
-	htmlLink := p.Sanitize(r.FormValue("userLinkDesc"))
+	htmlLink := p.Sanitize(r.FormValue("userLink"))
 	isValid := uses.ValidLink(htmlLink)
 	if !isValid {
 		log.Println("Invalid link provided")
 		return
 	}
-	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: html.EscapeString(htmlLink), URL: html.EscapeString(r.FormValue("userLink"))})
+	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: html.EscapeString(r.FormValue("userLinkDesc")), URL: html.EscapeString(htmlLink)})
 
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", usr.QuickLinks)
 	if err != nil {

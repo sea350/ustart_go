@@ -1,10 +1,12 @@
 package project
 
 import (
+	"html"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/project"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/project"
@@ -29,7 +31,9 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	proj.QuickLinks = append(proj.QuickLinks, types.Link{Name: r.FormValue("projectLinkDesc"), URL: r.FormValue("projectLink")})
+	p := bluemonday.UGCPolicy()
+	cleanProjHTML := p.Sanitize(r.FormValue("projectLink"))
+	proj.QuickLinks = append(proj.QuickLinks, types.Link{Name: html.EscapeString(r.FormValue("projectLinkDesc")), URL: cleanProjHTML})
 
 	err = post.UpdateProject(client.Eclient, ID, "QuickLinks", proj.QuickLinks)
 	if err != nil {
