@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
+
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -22,8 +24,11 @@ func EventChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	evntName := r.FormValue("pname")
-	evntDesc := []rune(r.FormValue("inputDesc"))
+	p := bluemonday.UGCPolicy()
+	evntName := p.Sanitize(r.FormValue("pname"))
+
+	cleanDesc := p.Sanitize(r.FormValue("inputDesc"))
+	evntDesc := []rune(cleanDesc)
 	//   fmt.Println(blob)
 	//fmt.Println(projName, projName)
 

@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/microcosm-cc/bluemonday"
+
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/event"
@@ -20,7 +22,12 @@ func EventCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	newCategory := r.FormValue("type_select")
+	p := bluemonday.UGCPolicy()
+	newCategory := p.Sanitize(r.FormValue("type_select"))
+	if len(newCategory) == 0 {
+		log.Println("Invalid category")
+		return
+	}
 
 	evntID := r.FormValue("eventID")
 	proj, err := get.EventByID(client.Eclient, evntID)

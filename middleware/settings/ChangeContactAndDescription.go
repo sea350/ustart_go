@@ -25,21 +25,23 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 	var pVIS bool
 	var gVIS bool
 	var eVIS bool
-	phonenumber := r.FormValue("pnumber")
-	phonenumbervis := r.FormValue("pnumberVis")
+	phonenumber := p.Sanitize(r.FormValue("pnumber"))
+
+	phonenumbervis := p.Sanitize(r.FormValue("pnumberVis"))
 	if phonenumbervis == "True" {
 		pVIS = true
 	} else {
 		pVIS = false
 	}
-	gender := r.FormValue("gender_select")
-	gendervis := r.FormValue("gender_selectVis")
+	gender := p.Sanitize(r.FormValue("gender_select"))
+	gendervis := p.Sanitize(r.FormValue("gender_selectVis"))
 	if gendervis == "True" {
 		gVIS = true
 	} else {
 		gVIS = false
 	}
-	emailvis := r.FormValue("inputEmailVis")
+	emailvis := p.Sanitize(r.FormValue("inputEmailVis"))
+
 	if emailvis == "True" {
 		eVIS = true
 	} else {

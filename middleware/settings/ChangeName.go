@@ -30,12 +30,19 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 
 	first := p.Sanitize(r.FormValue("fname"))
 	first = html.EscapeString(first)
+	// if len(first) < 1 {
+	// 	log.Println("First name cannot be blank")
 
+	// }
 	last := p.Sanitize(r.FormValue("lname"))
 	last = html.EscapeString(last)
 
 	dob := p.Sanitize(r.FormValue("dob"))
 	dob = html.EscapeString(dob)
+	if len(first) < 1 {
+		log.Println("DOB cannot be blank")
+
+	}
 
 	if len(dob) == 0 {
 		return

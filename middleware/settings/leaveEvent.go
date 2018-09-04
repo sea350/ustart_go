@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
+
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/event"
@@ -23,9 +25,22 @@ func LeaveEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	leavingUser := r.FormValue("leaverID")
-	eventID := r.FormValue("eventID")
-	newCreator := r.FormValue("newCreator")
+	p := bluemonday.UGCPolicy()
+	leavingUser := p.Sanitize(r.FormValue("leaverID"))
+	if len(leavingUser) < 1 {
+		log.Println("This field cannot be left blank!")
+		return
+	}
+	eventID := p.Sanitize(r.FormValue("eventID"))
+	// if len(eventID) < 1{
+	// 	log.Println("This field cannot be left blank!")
+	// 	return
+	// }
+	newCreator := p.Sanitize(r.FormValue("newCreator"))
+	if len(newCreator) < 1 {
+		log.Println("This field cannot be left blank!")
+		return
+	}
 
 	event, err := get.EventByID(client.Eclient, eventID)
 	if err != nil {

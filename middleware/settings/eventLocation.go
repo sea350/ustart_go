@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
+
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -23,11 +25,12 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-	country := r.FormValue("country")
-	state := r.FormValue("state")
-	city := r.FormValue("city")
-	street := r.FormValue("street")
-	zip := r.FormValue("zip")
+	p := bluemonday.UGCPolicy()
+	country := p.Sanitize(r.FormValue("country"))
+	state := p.Sanitize(r.FormValue("state"))
+	city := p.Sanitize(r.FormValue("city"))
+	street := p.Sanitize(r.FormValue("street"))
+	zip := p.Sanitize(r.FormValue("zip"))
 	//   fmt.Println(blob)
 
 	evnt, err := get.EventByID(client.Eclient, r.FormValue("eventID"))

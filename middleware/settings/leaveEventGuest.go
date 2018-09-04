@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
+
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/event"
@@ -22,8 +24,9 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	leavingUser := r.FormValue("leaverID")
-	evntID := r.FormValue("eventID")
+	p := bluemonday.UGCPolicy()
+	leavingUser := p.Sanitize(r.FormValue("leaverID"))
+	evntID := p.Sanitize(r.FormValue("eventID"))
 
 	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {

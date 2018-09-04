@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/microcosm-cc/bluemonday"
+
 	"github.com/sea350/ustart_go/middleware/client"
 
 	get "github.com/sea350/ustart_go/get/project"
@@ -22,8 +24,12 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	newURL := r.FormValue("purl")
-
+	p := bluemonday.UGCPolicy()
+	newURL := p.Sanitize(r.FormValue("purl"))
+	if len(newURL) < 1 {
+		log.Println("URL cannot be blank!")
+		return
+	}
 	projID := r.FormValue("projectID")
 
 	inUse, err := get.URLInUse(client.Eclient, newURL)
