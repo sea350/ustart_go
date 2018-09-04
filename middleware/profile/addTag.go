@@ -2,6 +2,7 @@ package profile
 
 import (
 	"encoding/json"
+	"html"
 	"log"
 	"net/http"
 	"os"
@@ -38,7 +39,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 
 	for t := range ts.Tags {
 		ts.Tags[t] = p.Sanitize(ts.Tags[t])
-		// ts.Tags[t] = html.EscapeString(ts.Tags[t])
+		ts.Tags[t] = html.EscapeString(ts.Tags[t])
 	}
 	// tags := strings.Split(r.FormValue("skillArray"), `","`)
 	// var sanitizedTags []string
