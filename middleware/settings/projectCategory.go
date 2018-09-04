@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/microcosm-cc/bluemonday"
+
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -19,7 +21,8 @@ func ProjectCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	newCategory := r.FormValue("type_select")
+	p := bluemonday.UGCPolicy()
+	newCategory := p.Sanitize(r.FormValue("type_select"))
 
 	projID := r.FormValue("projectID")
 	proj, err := get.ProjectByID(client.Eclient, projID)
