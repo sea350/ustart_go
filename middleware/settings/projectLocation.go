@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/project"
@@ -24,8 +23,9 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	}
 	r.ParseForm()
 	var vis bool
+	log.Println("SETTING UGCPOLICY")
 	p := bluemonday.UGCPolicy()
-	visibool := r.FormValue("lockThis")
+	visibool := r.FormValue("locVis")
 	cleanVis := p.Sanitize(visibool)
 	if cleanVis == "true" {
 		vis = true
@@ -46,14 +46,16 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("projiD", projID)
 	fmt.Println("city", city)
 	fmt.Println("city", zip)
+	log.Println("GETTING PROJECT BY ID")
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
+	log.Println("CHANGING PROJECT LOCATION")
 	err = uses.ChangeProjectLocation(client.Eclient, projID, country, state, city, zip, vis)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		log.Println(err)
 	}
 
 	fmt.Println("/Projects/", proj.URLName)
