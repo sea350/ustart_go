@@ -26,7 +26,6 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	pageUserName := strings.ToLower(r.URL.Path[9:])
 
-	log.Println("THE PAGE USERNAME IS: ", pageUserName)
 	userstruct, errMessage, _, err := uses.UserPage(client.Eclient, pageUserName, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
