@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -18,9 +17,9 @@ func Project(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// projURL := r.URL.Path[17:]
-	projURL, err := get.ProjectByID(client.Eclient, r.FormValue("projectID"))
-	project, err := uses.AggregateProjectData(client.Eclient, projURL.URLName, test1.(string))
+	projURL := r.URL.Path[17:]
+	// projURL, err := get.ProjectByID(client.Eclient, r.FormValue("projectID"))
+	project, err := uses.AggregateProjectData(client.Eclient, projURL, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 
