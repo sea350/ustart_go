@@ -35,6 +35,10 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	htmlLink := p.Sanitize(r.FormValue("userLink"))
 	isValid := uses.ValidLink(htmlLink)
+	if len(htmlLink) == 0 {
+		log.Println("Link cannot be blank")
+		return
+	}
 	if !isValid {
 		log.Println("Invalid link provided")
 		return
