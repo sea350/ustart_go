@@ -1,16 +1,20 @@
 package project
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
 
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/project"
 )
+
+type SkillStruct struct {
+	Skills []string
+}
 
 //UpdateSkills ...
 func UpdateSkills(w http.ResponseWriter, r *http.Request) {
@@ -24,18 +28,20 @@ func UpdateSkills(w http.ResponseWriter, r *http.Request) {
 
 	ID := r.FormValue("projectWidget")
 
-	arrSkills := strings.Split(r.FormValue("skillArray"), `","`)
-	if len(arrSkills) > 0 {
-		arrSkills[0] = strings.Trim(arrSkills[0], `["`)
-		arrSkills[len(arrSkills)-1] = strings.Trim(arrSkills[len(arrSkills)-1], `"]`)
+	p := bluemonday.UGCPolicy()
+
+	var ss SkillStruct
+	err := json.Unmarshal([]byte(ID), &ss.Skills)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+
+		log.Println(err)
 	}
 
-	p := bluemonday.UGCPolicy()
-	var cleanSkills []string
-	for idx := range arrSkills {
-		cleanSkills = append(cleanSkills, p.Sanitize(arrSkills[idx]))
+	for s := range ss.Skills {
+		ss.Skills[s] = p.Sanitize(ss.Skills[s])
 	}
-	err := post.UpdateProject(client.Eclient, ID, "ListNeeded", cleanSkills)
+	err = post.UpdateProject(client.Eclient, ID, "ListNeeded", ss.Skills)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
