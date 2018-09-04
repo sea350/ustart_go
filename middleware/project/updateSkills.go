@@ -6,6 +6,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/microcosm-cc/bluemonday"
+
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/project"
 )
@@ -28,7 +30,12 @@ func UpdateSkills(w http.ResponseWriter, r *http.Request) {
 		arrSkills[len(arrSkills)-1] = strings.Trim(arrSkills[len(arrSkills)-1], `"]`)
 	}
 
-	err := post.UpdateProject(client.Eclient, ID, "ListNeeded", arrSkills)
+	p := bluemonday.UGCPolicy()
+	var cleanSkills []string
+	for idx := range arrSkills {
+		cleanSkills = append(cleanSkills, p.Sanitize(arrSkills[idx]))
+	}
+	err := post.UpdateProject(client.Eclient, ID, "ListNeeded", cleanSkills)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
