@@ -20,7 +20,7 @@ func ChangeEducation(eclient *elastic.Client, userID string, accType int, hs str
 	if err != nil {
 		return err
 	}
-	err = post.UpdateUser(eclient, userID, "University", uni)
+	err = post.UpdateUser(eclient, userID, "UndergradSchool", uni)
 	if err != nil {
 		return err
 	}
