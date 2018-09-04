@@ -61,6 +61,7 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	time.Sleep(2 * time.Second)
 	http.Redirect(w, r, "/Projects/"+newURL, http.StatusFound)
 
 }
