@@ -38,6 +38,8 @@ func AppendToProxyNotificationsByUserID(eclient *elastic.Client, userID string, 
 	}
 
 	proxyID, proxy, err := get.ProxyNotificationByUserID(eclient, userID)
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("proxy ID: " + proxyID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
