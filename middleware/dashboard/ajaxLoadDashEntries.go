@@ -37,11 +37,12 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 		docs = append(docs, i)
 
 	}
+	sID := r.FormValue("scrollID")
 	// followDoc.UserFollowing
 	// followDoc.ProjectFollowing
 	// followDoc.EventFollowing <-- might still be separate?
 	//this is how to get the list of docIDs for the current pages following maps
-	res, entries, total, err := scrollpkg.ScrollPageDash(client.Eclient, docs, docID.(string), "")
+	res, entries, total, err := scrollpkg.ScrollPageDash(client.Eclient, docs, docID.(string), sID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
