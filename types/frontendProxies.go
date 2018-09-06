@@ -54,6 +54,7 @@ type JournalEntry struct {
 	ElementID        string      `json:"ElementID"`
 	FirstName        string      `json:"FirstName"`
 	LastName         string      `json:"LastName"`
+	Username         string      `json:"Username"`
 	Image            string      `json:"Image"`
 	Element          Entry       `json:"Element"`
 	NumReplies       int         `json:"NumReplies"`

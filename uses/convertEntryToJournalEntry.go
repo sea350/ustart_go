@@ -31,6 +31,7 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	if !entry.Visible {
 		return newJournalEntry, errors.New("This entry is not visible")
 	}
+
 	newJournalEntry.Element = entry
 	newJournalEntry.NumShares = len(entry.ShareIDs)
 	newJournalEntry.NumLikes = len(entry.Likes)
@@ -42,6 +43,7 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	}
 	newJournalEntry.FirstName = usr.FirstName
 	newJournalEntry.LastName = usr.LastName
+	newJournalEntry.Username = usr.Username
 	newJournalEntry.Image = usr.Avatar
 	if entry.Classification == 2 && enableRecursion && entry.ReferenceEntry != `` {
 		newJournalEntry.ReferenceElement, err = ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry, viewerID, false)
