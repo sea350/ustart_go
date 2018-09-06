@@ -25,6 +25,7 @@ func ConvertUserToFloatingHead(eclient *elastic.Client, userDocID string) (types
 	head.DocID = userDocID
 	head.Email = usr.Email
 	head.Tags = usr.Tags
+	head.Interface = usr.Tags
 
 	// head.Interface = usr.Tags
 	head.Bio = usr.Description
