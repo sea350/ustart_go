@@ -5,7 +5,7 @@ import (
 	"errors"
 	"log"
 
-	get "github.com/sea350/ustart_go/get/chat"
+	get "github.com/sea350/ustart_go/get/notification"
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -25,7 +25,7 @@ func UpdateProxyNotifications(eclient *elastic.Client, msgID string, field strin
 		return errors.New("Index does not exist")
 	}
 
-	_, err = get.ProxyMsgByID(eclient, msgID)
+	_, err = get.ProxyNotificationByID(eclient, msgID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
