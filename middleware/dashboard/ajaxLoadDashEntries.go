@@ -1,11 +1,11 @@
 package dashboard
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+	"os"
 
+	userGet "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	scrollpkg "github.com/sea350/ustart_go/properloading"
 )
@@ -19,14 +19,6 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	wallID := r.FormValue("userID")
-	/*
-		dash, err := get.DashboardByUserID(client.Eclient, wallID)
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
-		}
-	*/
 
 	//READ THIS:
 	// _, followDoc, err := getFollow.ByID(client.Eclient, wallID)
@@ -45,16 +37,23 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	results := make(map[string]interface{})
-	results["JournalEntries"] = entries
-	results["ScrollID"] = res
-	results["TotalHits"] = total
-
-	data, err := json.Marshal(results)
+	userstruct, err := userGet.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
 	}
+	// results := make(map[string]interface{})
+	// results["JournalEntries"] = entries
+	// results["ScrollID"] = res
+	// results["TotalHits"] = total
 
-	fmt.Fprintln(w, string(data))
+	// data, err := json.Marshal(results)
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	log.Println(err)
+	// }
+
+	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ScrollID: res, Wall: entries, Hits: total}
+	// fmt.Fprintln(w, string(data))
 }
