@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -28,8 +27,7 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "user")
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 		return
 	}
 
@@ -58,7 +56,6 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		fmt.Println("TRYING TO UNFOLLOW")
 		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID, "user")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)

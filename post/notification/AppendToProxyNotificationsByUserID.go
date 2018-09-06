@@ -10,9 +10,9 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//AppendToProxyNotifications ... appends a new conversation state OR brings a certain conversation state to the back of the list
+//AppendToProxyNotificationsByUserID ... appends a new conversation state OR brings a certain conversation state to the back of the list
 //needs its own lock for concurrency control
-func AppendToProxyNotifications(eclient *elastic.Client, proxyID string, notifID string) error {
+func AppendToProxyNotificationsByUserID(eclient *elastic.Client, userID string, notifID string) error {
 
 	ctx := context.Background()
 
@@ -37,7 +37,7 @@ func AppendToProxyNotifications(eclient *elastic.Client, proxyID string, notifID
 		return errors.New("Index does not exist")
 	}
 
-	proxy, err := get.ProxyNotificationByID(eclient, proxyID)
+	proxyID, proxy, err := get.ProxyNotificationByUserID(eclient, userID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
