@@ -66,14 +66,14 @@ func AppendToProxyNotificationsByUserID(eclient *elastic.Client, userID string, 
 	proxy.NumUnread++
 	proxy.NumUnseen++
 
-	err = UpdateProxyNotifcations(eclient, proxyID, "NotificationCache", proxy.NotificationCache)
+	err = UpdateProxyNotifications(eclient, proxyID, "NotificationCache", proxy.NotificationCache)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		return err
 	}
 
-	err = UpdateProxyNotifcations(eclient, proxyID, "NumUnread", proxy.NumUnread)
+	err = UpdateProxyNotifications(eclient, proxyID, "NumUnread", proxy.NumUnread)
 
 	return err
 }

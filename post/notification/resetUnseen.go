@@ -13,7 +13,7 @@ func ResetUnseen(eclient *elastic.Client, proxyID string) error {
 	ModifyUnseen.Lock()
 	defer ModifyUnseen.Unlock()
 
-	err := UpdateProxyNotifcations(eclient, strings.ToLower(proxyID), "NumUnseen", 0)
+	err := UpdateProxyNotifications(eclient, strings.ToLower(proxyID), "NumUnseen", 0)
 
 	return err
 }

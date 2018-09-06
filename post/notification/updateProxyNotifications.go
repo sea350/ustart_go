@@ -9,9 +9,9 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//UpdateProxyNotifcations  ...
+//UpdateProxyNotifications  ...
 //Updates proxy notifications
-func UpdateProxyNotifcations(eclient *elastic.Client, msgID string, field string, newContent interface{}) error {
+func UpdateProxyNotifications(eclient *elastic.Client, msgID string, field string, newContent interface{}) error {
 	ctx := context.Background()
 
 	exists, err := eclient.IndexExists(globals.ProxyNotifIndex).Do(ctx)
