@@ -29,7 +29,7 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	ID := r.FormValue("skillArray")
-	log.Println("TAGS:", ID)
+	theID := r.FormValue("projectWidget")
 	var ts TagStruct
 	err := json.Unmarshal([]byte(ID), &ts.Tags)
 
@@ -43,8 +43,7 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 		ts.Tags[t] = html.EscapeString(ts.Tags[t])
 	}
 
-	log.Println("TS:", ts.Tags)
-	err = post.UpdateProject(client.Eclient, ID, "Tags", ts.Tags)
+	err = post.UpdateProject(client.Eclient, theID, "Tags", ts.Tags)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()

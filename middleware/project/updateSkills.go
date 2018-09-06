@@ -27,11 +27,12 @@ func UpdateSkills(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("projectWidget")
+	skills := r.FormValue("skillArray")
 
 	p := bluemonday.UGCPolicy()
 
 	var ss SkillStruct
-	err := json.Unmarshal([]byte(ID), &ss.Skills)
+	err := json.Unmarshal([]byte(skills), &ss.Skills)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 
