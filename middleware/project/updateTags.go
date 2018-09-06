@@ -29,7 +29,7 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	ID := r.FormValue("skillArray")
-
+	log.Println("TAGS:", ID)
 	var ts TagStruct
 	err := json.Unmarshal([]byte(ID), &ts.Tags)
 
