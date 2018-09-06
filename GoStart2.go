@@ -192,6 +192,7 @@ func main() {
 
 	//DASHBOARD
 	http.HandleFunc("/dash/", dash.ViewDashboard)
+	http.HandleFunc("/AjaxDash/", dash.AjaxLoadDashEntries)
 
 	//Notifications
 	http.HandleFunc("/AjaxNotifications/", notification.AjaxNotificationLoad)
