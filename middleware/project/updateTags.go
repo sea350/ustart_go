@@ -43,6 +43,7 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 		ts.Tags[t] = html.EscapeString(ts.Tags[t])
 	}
 
+	log.Println("TS:", ts.Tags)
 	err = post.UpdateProject(client.Eclient, ID, "Tags", ts.Tags)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
