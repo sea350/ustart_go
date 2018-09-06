@@ -30,9 +30,6 @@ func ProxyMsgByID(eclient *elastic.Client, proxyMsgID string) (types.ProxyMessag
 		return proxyMsg, errors.New("Proxy message not found")
 	}
 	Err := json.Unmarshal(*searchResult.Source, &proxyMsg) //unmarshal type RawMessage into user struct
-	if Err != nil {
-		return proxyMsg, Err
-	} //forward error
 
 	return proxyMsg, Err
 
