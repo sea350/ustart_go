@@ -20,7 +20,7 @@ func ChangeProjectURL(eclient *elastic.Client, projectID string, newURL string) 
 	if ValidUsername(newURL) {
 		err = post.UpdateProject(eclient, projectID, "URLName", newURL)
 		return err
-	} else {
-		return errors.New("Invalid URL!")
 	}
+	return errors.New("Invalid URL")
+
 }
