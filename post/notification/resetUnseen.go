@@ -1,6 +1,8 @@
 package post
 
 import (
+	"strings"
+
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -11,7 +13,7 @@ func ResetUnseen(eclient *elastic.Client, proxyID string) error {
 	ModifyUnseen.Lock()
 	defer ModifyUnseen.Unlock()
 
-	err := UpdateProxyNotifcations(eclient, proxyID, "NumUnseen", 0)
+	err := UpdateProxyNotifcations(eclient, strings.ToLower(proxyID), "NumUnseen", 0)
 
 	return err
 }
