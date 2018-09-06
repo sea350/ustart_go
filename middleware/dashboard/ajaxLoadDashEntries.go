@@ -19,10 +19,10 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	wallID := r.FormValue("userID")
+	// wallID := r.FormValue("userID")
 
 	//READ THIS:
-	_, followDoc, err := getFollow.ByID(client.Eclient, wallID)
+	_, followDoc, err := getFollow.ByID(client.Eclient, docID.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
