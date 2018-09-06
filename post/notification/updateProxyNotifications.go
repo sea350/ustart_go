@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"log"
 
 	get "github.com/sea350/ustart_go/get/chat"
 	globals "github.com/sea350/ustart_go/globals"
@@ -16,6 +17,8 @@ func UpdateProxyNotifications(eclient *elastic.Client, msgID string, field strin
 
 	exists, err := eclient.IndexExists(globals.ProxyNotifIndex).Do(ctx)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return err
 	}
 	if !exists {
@@ -24,6 +27,8 @@ func UpdateProxyNotifications(eclient *elastic.Client, msgID string, field strin
 
 	_, err = get.ProxyMsgByID(eclient, msgID)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return err
 	}
 
