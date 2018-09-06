@@ -3,7 +3,6 @@ package post
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -42,16 +41,7 @@ func NewProjectFollow(eclient *elastic.Client, projID string, field string, newK
 		defer FollowLock.Unlock()
 		if followType == "user" {
 
-			fmt.Println("NEW PROJECT FOLLOW ADDING NEW FOLLOWER")
-			fmt.Println("SIZE BEFORE", len(foll.UserFollowers))
-
-			_, exist1 := foll.UserFollowers[newKey]
-			fmt.Println("DOES IT EXIST BEFORE?", exist1)
 			foll.UserFollowers[newKey] = isBell
-
-			_, exist2 := foll.UserFollowers[newKey]
-			fmt.Println("SIZE AFTER", len(foll.UserFollowers))
-			fmt.Println("DOES IT EXIST AFTER?", exist2)
 
 			followMap = foll.UserFollowers
 			//modify user bell map if bell follower

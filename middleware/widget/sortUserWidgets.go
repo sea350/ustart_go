@@ -1,7 +1,6 @@
 package widget
 
 import (
-	"html"
 	"log"
 	"net/http"
 	"strings"
@@ -22,7 +21,7 @@ func SortUserWidgets(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-	sortedWidgets := html.EscapeString(r.FormValue("sortedWidgets"))
+	sortedWidgets := r.FormValue("sortedWidgets")
 	if r.FormValue("pageID") != session.Values["DocID"].(string) {
 		return
 	}
