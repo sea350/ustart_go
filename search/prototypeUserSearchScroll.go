@@ -70,13 +70,22 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		}
 	}
 	// Tag
+
 	if len(mustTag) > 0 {
-		for _, element := range mustTag {
-			//Check if NewMatchQuery order is correct
-			query = query.Should(elastic.NewMatchQuery("Tags", strings.ToLower(element)))
-			query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
+		tags := make([]interface{}, 0)
+		for tag := range mustTag {
+			tags = append([]interface{}{strings.ToLower(mustTag[tag])}, tags...)
 		}
+
+		query = query.Must(elastic.NewTermsQuery("Tags", tags...))
 	}
+	// if len(mustTag) > 0 {
+	// 	for _, element := range mustTag {
+	// 		//Check if NewMatchQuery order is correct
+	// 		query = query.Should(elastic.NewMatchQuery("Tags", strings.ToLower(element)))
+	// 		query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
+	// 	}
+	// }
 
 	scroll := eclient.Scroll().
 		Index(globals.UserIndex).
