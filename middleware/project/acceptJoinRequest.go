@@ -10,6 +10,7 @@ import (
 	getProj "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
 	postChat "github.com/sea350/ustart_go/post/chat"
+	post "github.com/sea350/ustart_go/post/notification"
 	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
@@ -119,6 +120,10 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+
+	var newNotif types.Notification
+	newNotif.ProjectJoinRequestAccepted(newMemberID, projID)
+	_, err = post.IndexNotification(client.Eclient, newNotif)
 
 	fmt.Fprintln(w, newNumRequests)
 }
