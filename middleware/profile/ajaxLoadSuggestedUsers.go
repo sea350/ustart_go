@@ -1,20 +1,18 @@
 package profile
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 
+	getFollow "github.com/sea350/ustart_go/get/follow"
 	get "github.com/sea350/ustart_go/get/user"
-	"github.com/sea350/ustart_go/globals"
 	client "github.com/sea350/ustart_go/middleware/client"
-	elastic "gopkg.in/olivere/elastic.v5"
+	properloading "github.com/sea350/ustart_go/properloading"
 )
 
-//AjaxLoadEntries ... pulls suggested users based on user's projects and shared skills
+//AjaxLoadSuggestedUsers ... pulls suggested users based on user's projects and shared skills
 func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
@@ -24,44 +22,33 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ID := session.Values["DocID"].(string)
-	ctx := context.Background()
-	myUser, err := get.UserByUsername(client.Eclient, ID)
+	scrollID := r.FormValue("scrollID")
+
+	myUser, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
-	//Get tags from user
-	tags := make([]interface{}, 0)
-	for tag := range myUser.Tags {
-		tags = append([]interface{}{strings.ToLower(myUser.Tags[tag])}, tags...)
-	}
+	_, follDoc, err := getFollow.ByID(client.Eclient, ID)
 
-	//Get mutual project members
-	var arrProjects []string
-	for _, element := range myUser.Projects {
-		arrProjects = append(arrProjects, element.ProjectID)
-	}
+	sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, ID, scrollID)
 
-	memberIDs := make([]interface{}, 0)
-	for elements := range arrProjects {
-		memberIDs = append([]interface{}{strings.ToLower(arrProjects[elements])}, memberIDs...)
-	}
-
-	suggestedUserQuery := elastic.NewBoolQuery()
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", memberIDs...))
-
-	searchResults, _ := client.Eclient.Search().
-		Index(globals.UserIndex).
-		Query(suggestedUserQuery).
-		Do(ctx)
-
-	data, err := json.Marshal(searchResults)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
-	fmt.Println(w, string(data))
+	var results = make(map[string]interface{})
+	results["scrollID"] = sID
+	results["SuggestedUsers"] = heads
+	results["TotalHits"] = hits
+
+	data, err := json.Marshal(results)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	fmt.Fprintln(w, string(data))
 }
