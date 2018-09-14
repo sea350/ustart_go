@@ -3,7 +3,6 @@ package project
 import (
 	"log"
 	"net/http"
-	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -24,8 +23,7 @@ func RequestToJoin(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	for _, memberInfo := range proj.Members {
@@ -43,14 +41,12 @@ func RequestToJoin(w http.ResponseWriter, r *http.Request) {
 	err = userPost.AppendSentProjReq(client.Eclient, test1.(string), ID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	err = projPost.AppendMemberReqReceived(client.Eclient, ID, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

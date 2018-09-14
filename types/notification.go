@@ -50,6 +50,15 @@ func (notif *Notification) NewFollower(followerID string, followingID string) {
 	notif.Timestamp = time.Now()
 }
 
+//ProjectJoinRequestReceived ... creates a notification for when a new user requests to join a project
+func (notif *Notification) ProjectJoinRequestReceived(userID string, applicantID string, projectID string) {
+	notif.Class = 11
+	notif.DocID = userID
+	notif.RedirectToID = applicantID
+	notif.ReferenceIDs = append(notif.ReferenceIDs, projectID)
+	notif.Timestamp = time.Now()
+}
+
 //ProjectJoinRequestAccepted ... creates a notification for when a new user is accepted into a project
 func (notif *Notification) ProjectJoinRequestAccepted(userID string, projectID string) {
 	notif.Class = 12
