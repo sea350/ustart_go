@@ -29,6 +29,7 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 	usrQuery = usrQuery.Must(elastic.NewTermsQuery("PosterID", ids...))
 	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "0"))
 	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "2"))
+	usrQuery = usrQuery.Should(elastic.NewTermQuery("Visible", true))
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
