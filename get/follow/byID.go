@@ -3,7 +3,6 @@ package get
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 
@@ -32,7 +31,21 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 
 	if searchResult.Hits.TotalHits > 1 {
 		fmt.Println(userID, searchResult.Hits.TotalHits)
-		return "", foll, errors.New("More than one result found")
+		for idx, hit := range searchResult.Hits.Hits {
+			if idx < int(searchResult.Hits.TotalHits)-1 {
+				_, err = eclient.Delete().
+					Index(globals.FollowIndex).
+					Type(globals.FollowType).
+					Id(hit.Id).
+					Do(ctx)
+				if err != nil {
+					return "", foll, err
+				}
+			} else {
+				break
+			}
+		}
+
 	} else if searchResult.Hits.TotalHits == 0 {
 		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC WITH TOTALHITS:", searchResult.Hits.TotalHits)
 
