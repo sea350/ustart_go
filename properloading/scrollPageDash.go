@@ -62,9 +62,10 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 		// fmt.Println(hit.Id)
 		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, false)
 		arrResults = append(arrResults, head)
-		if err != nil {
-			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("ISSUE WITH CONVERT FUNCTION")
-
+		if err != nil && err != errors.New("This entry is not visible") {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("ISSUE WITH CONVERT FUNCTION")
+			return res.ScrollId, arrResults, int(res.Hits.TotalHits), err
 		}
 
 		if err == io.EOF {

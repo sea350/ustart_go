@@ -15,6 +15,14 @@ import (
 func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerID string, enableRecursion bool) (types.JournalEntry, error) {
 	var newJournalEntry types.JournalEntry
 
+	entry, err := getEntry.EntryByID(eclient, entryID)
+	if err != nil {
+		return newJournalEntry, err
+	}
+	if !entry.Visible {
+		return newJournalEntry, errors.New("This entry is not visible")
+	}
+
 	newJournalEntry.ElementID = entryID
 
 	liked, err := IsLiked(eclient, entryID, viewerID)
@@ -23,14 +31,6 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	}
 
 	newJournalEntry.Liked = liked
-
-	entry, err := getEntry.EntryByID(eclient, entryID)
-	if err != nil {
-		return newJournalEntry, err
-	}
-	if !entry.Visible {
-		return newJournalEntry, errors.New("This entry is not visible")
-	}
 
 	newJournalEntry.Element = entry
 	newJournalEntry.NumShares = len(entry.ShareIDs)
@@ -46,7 +46,10 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	newJournalEntry.Username = usr.Username
 	newJournalEntry.Image = usr.Avatar
 	if entry.Classification == 2 && enableRecursion && entry.ReferenceEntry != `` {
-		newJournalEntry.ReferenceElement, err = ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry, viewerID, false)
+		jE, err := ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry, viewerID, false)
+		if err == nil {
+			newJournalEntry.ReferenceElement = jE
+		}
 	}
 
 	return newJournalEntry, err
