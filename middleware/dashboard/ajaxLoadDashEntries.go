@@ -3,6 +3,7 @@ package dashboard
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 
@@ -43,7 +44,7 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 	// followDoc.EventFollowing <-- might still be separate?
 	//this is how to get the list of docIDs for the current pages following maps
 	res, entries, total, err := scrollpkg.ScrollPageDash(client.Eclient, docs, docID.(string), sID)
-	if err != nil {
+	if err != nil && err != io.EOF {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
