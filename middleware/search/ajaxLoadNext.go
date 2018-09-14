@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/sea350/ustart_go/middleware/client"
@@ -53,17 +52,19 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		_, _, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
+		totalHits, scrollID, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
-		data, err := json.Marshal(results)
+		sendThis := make(map[string]interface{})
+		sendThis["TotalHits"] = totalHits
+		sendThis["ScrollID"] = scrollID
+		sendThis["Results"] = results
+		data, err := json.Marshal(sendThis)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		fmt.Fprintln(w, string(data))
 	}
@@ -93,17 +94,19 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		_, _, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
+		totalHits, scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
-		data, err := json.Marshal(results)
+		sendThis := make(map[string]interface{})
+		sendThis["TotalHits"] = totalHits
+		sendThis["ScrollID"] = scrollID
+		sendThis["Results"] = results
+		data, err := json.Marshal(sendThis)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		fmt.Fprintln(w, string(data))
 	}
@@ -123,17 +126,19 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		} else {
 			searchBy = append(searchBy, false)
 		}
-		_, _, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
+		totalHits, scrollID, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
-		data, err := json.Marshal(results)
+		sendThis := make(map[string]interface{})
+		sendThis["TotalHits"] = totalHits
+		sendThis["ScrollID"] = scrollID
+		sendThis["Results"] = results
+		data, err := json.Marshal(sendThis)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		fmt.Fprintln(w, string(data))
 	}
@@ -141,14 +146,12 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		data, err := json.Marshal(results)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		fmt.Fprintln(w, string(data))
 	}
