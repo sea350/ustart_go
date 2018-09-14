@@ -6,6 +6,8 @@ import (
 
 	get "github.com/sea350/ustart_go/get/project"
 	globals "github.com/sea350/ustart_go/globals"
+	post "github.com/sea350/ustart_go/post/notification"
+	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -29,6 +31,18 @@ func AppendMemberReqReceived(eclient *elastic.Client, projectID string, userID s
 		Id(projectID).
 		Doc(map[string]interface{}{"MemberReqReceived": proj.MemberReqReceived}). //update project doc with new link appended to array
 		Do(ctx)
+
+	if err != nil {
+		return err
+	}
+
+	for _, mem := range proj.Members {
+		if mem.Role == 0 {
+			var newNotif types.Notification
+			newNotif.ProjectJoinRequestReceived(mem.MemberID, userID, projectID)
+			_, err = post.IndexNotification(eclient, newNotif)
+		}
+	}
 
 	return err
 }
