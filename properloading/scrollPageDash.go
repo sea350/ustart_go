@@ -27,14 +27,14 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 	//set up user query
 	usrQuery := elastic.NewBoolQuery()
 	usrQuery = usrQuery.Must(elastic.NewTermsQuery("PosterID", ids...))
-	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "0"))
-	usrQuery = usrQuery.Should(elastic.NewTermQuery("Classification", "2"))
+	usrQuery = usrQuery.Must(elastic.NewTermsQuery("Classification", 0, 2))
+	usrQuery = usrQuery.Must(elastic.NewTermQuery("Visible", true))
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
-	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "3"))
-	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "5"))
 	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", ids...))
+	projQuery = projQuery.Must(elastic.NewTermsQuery("Classification", 3, 5))
+	projQuery = projQuery.Must(elastic.NewTermQuery("Visible", true))
 	//yeah....
 	finalQuery := usrQuery.Should(projQuery)
 	var arrResults []types.JournalEntry
@@ -64,8 +64,9 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, false)
 		arrResults = append(arrResults, head)
 		if err != nil {
-			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("ISSUE WITH CONVERT FUNCTION")
-
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("ISSUE WITH CONVERT FUNCTION")
+			continue
 		}
 
 		if err == io.EOF {
