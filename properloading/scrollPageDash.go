@@ -33,6 +33,7 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
 	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "3"))
+	projQuery = projQuery.Should(elastic.NewTermQuery("Classification", "5"))
 	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", ids...))
 	//yeah....
 	finalQuery := usrQuery.Should(projQuery)
