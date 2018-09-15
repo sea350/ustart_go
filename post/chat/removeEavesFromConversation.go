@@ -27,6 +27,7 @@ func RemoveEavesFromConversation(eclient *elastic.Client, conversationID string,
 	for i := range convo.Eavesdroppers {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(i)
+		log.Println(len(convo.Eavesdroppers))
 		if convo.Eavesdroppers[i].DocID == eavesID {
 			if i < len(convo.Eavesdroppers)-2 {
 				convo.Eavesdroppers = append(convo.Eavesdroppers[:i], convo.Eavesdroppers[i+1:]...)
