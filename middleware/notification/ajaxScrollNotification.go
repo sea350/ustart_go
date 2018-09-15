@@ -21,14 +21,14 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	scrollID := r.FormValue("scrollID")
-	sID, notifArr, hits, err := properloading.ScrollNotification(client.Eclient, docID.(string), scrollID)
+	sID, notifMap, _, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 	var notifs []map[string]interface{}
 
-	for _, notif := range notifArr {
+	for notifID, notif := range notifMap {
 
 		msg, url, err := uses.GenerateNotifMsgAndLink(client.Eclient, notif)
 		if err != nil {
@@ -38,21 +38,24 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 		}
 
 		notifAggregate := make(map[string]interface{})
-		notifAggregate["ID"] = id
+		notifAggregate["ID"] = notifID
 		notifAggregate["Data"] = notif
 		notifAggregate["Message"] = msg
 		notifAggregate["URL"] = url
+
 		notifs = append(notifs, notifAggregate)
-		count++
-		if count == 5 {
-			break
-		}
+		// count++
+		// if count == 5 {
+		// 	break
+		// }
 
 	}
 
 	sendData := make(map[string]interface{})
 	sendData["notifications"] = notifs
-	sendData["numUnread"] = proxy.NumUnread
+	sendData["scrollID"] = sID
+
+	// sendData["numUnread"] = proxy.NumUnread
 
 	data, err := json.Marshal(sendData)
 	if err != nil {
