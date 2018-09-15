@@ -2,7 +2,6 @@ package uses
 
 import (
 	"log"
-	"os"
 
 	getEvnt "github.com/sea350/ustart_go/get/event"
 	getProj "github.com/sea350/ustart_go/get/project"
@@ -22,16 +21,16 @@ func AddWidget(eclient *elastic.Client, docID string, newWidget types.Widget, is
 		proj, err := getProj.ProjectByID(eclient, docID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
+			return err
 		}
 
 		newWidget.Position = len(proj.Widgets)
 		widgetID, err := post.IndexWidget(eclient, newWidget)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
+			return err
 		}
 
 		updatedWidgets := append(proj.Widgets, widgetID)
@@ -42,15 +41,17 @@ func AddWidget(eclient *elastic.Client, docID string, newWidget types.Widget, is
 	if isEvent {
 		evnt, err := getEvnt.EventByID(eclient, docID)
 		if err != nil {
-			log.Println("Error: uses/addWidget line 40")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
+			return err
 		}
 
 		newWidget.Position = len(evnt.Widgets)
 		widgetID, err := post.IndexWidget(eclient, newWidget)
 		if err != nil {
-			log.Println("Error: uses/addWidget line 47")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
+			return err
 		}
 
 		updatedWidgets := append(evnt.Widgets, widgetID)
@@ -61,14 +62,15 @@ func AddWidget(eclient *elastic.Client, docID string, newWidget types.Widget, is
 	usr, err := getUser.UserByID(eclient, docID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+		return err
 	}
 	newWidget.Position = len(usr.UserWidgets)
 	widgetID, err := post.IndexWidget(eclient, newWidget)
 	if err != nil {
-		log.Panicln("Error: uses/addWidget line 43")
-		log.Panicln(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return err
 	}
 
 	updatedWidgets := append(usr.UserWidgets, widgetID)

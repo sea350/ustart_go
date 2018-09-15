@@ -1,10 +1,8 @@
 package widget
 
 import (
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	getEvnt "github.com/sea350/ustart_go/get/event"
 
@@ -26,8 +24,8 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 	evnt, member, err := getEvnt.EventAndMember(client.Eclient, r.FormValue("eventWidget"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+		http.Redirect(w, r, "/404/", http.StatusFound)
 	}
 
 	// newWidget, err := ProcessWidgetForm(r)
@@ -41,15 +39,18 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 	// newWidget.UserID = r.FormValue("eventWidget")
 
 	if uses.HasEventPrivilege("widget", evnt.PrivilegeProfiles, member) {
-		// if r.FormValue("editID") == `0` {
-		// 	fmt.Println("this is debug text middeware/widget/addEventWidget.go")
-		// 	fmt.Println(r.FormValue("eventWidget"))
-		// err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, true)
+
+		if r.FormValue("eventWidget") == `` {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("Event ID Missing")
+			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+			return
+		}
+
 		newWidget, err := ProcessWidgetForm(r)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 		}
 
@@ -60,24 +61,23 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 			// fmt.Println(r.FormValue("eventWidget"))
 			// fmt.Println(newWidget.Data)
 
-			err := uses.AddWidget(client.Eclient, r.FormValue("eventWdiget"), newWidget, false, true)
+			err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, false, true)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				log.Println(err)
 			}
 		} else {
 			err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				log.Println(err)
 			}
 		}
 
 		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 	} else {
-		fmt.Println("You do not have the privilege to add a widget to this event. Check your privilege. ")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("You do not have the privilege to add a widget to this event. Check your privilege. ")
+		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 	}
-	return
 }
