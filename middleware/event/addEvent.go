@@ -44,6 +44,8 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	city := p.Sanitize(r.FormValue("city"))
 	zip := p.Sanitize(r.FormValue("zip"))
 	street := p.Sanitize(r.FormValue("street"))
+	lat := r.FormValue("lat")
+	lng := r.FormValue("lng")
 
 	desc := []rune(p.Sanitize(r.FormValue("event_desc")))
 
@@ -68,6 +70,8 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 	eventLocation.Zip = zip
 	eventLocation.State = state
 	eventLocation.Street = street
+	eventLocation.Lat = lat
+	eventLocation.Lng = lng
 
 	if title != `` {
 		if !uses.ValidUsername(customURL) {
