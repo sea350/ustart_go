@@ -21,7 +21,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	scrollID := r.FormValue("scrollID")
-	sID, notifMap, hits, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
+	sID, notifMap, _, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -54,6 +54,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	sendData := make(map[string]interface{})
 	sendData["notifications"] = notifs
 	sendData["scrollID"] = sID
+
 	// sendData["numUnread"] = proxy.NumUnread
 
 	data, err := json.Marshal(sendData)
