@@ -39,10 +39,13 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 	// newWidget.UserID = r.FormValue("eventWidget")
 
 	if uses.HasEventPrivilege("widget", evnt.PrivilegeProfiles, member) {
-		// if r.FormValue("editID") == `0` {
-		// 	fmt.Println("this is debug text middeware/widget/addEventWidget.go")
-		// 	fmt.Println(r.FormValue("eventWidget"))
-		// err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, true)
+
+		if r.FormValue("eventWidget") == `` {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("Event ID Missing")
+			return
+		}
+
 		newWidget, err := ProcessWidgetForm(r)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -74,5 +77,4 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("You do not have the privilege to add a widget to this event. Check your privilege. ")
 	}
-	return
 }
