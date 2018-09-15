@@ -17,5 +17,5 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	var cs client.ClientSide
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")
-	client.RenderTemplate(w, r, "notifications", cs)
+	client.RenderTemplate(w, r, "notification", cs)
 }
