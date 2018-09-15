@@ -42,6 +42,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 		notifAggregate["Data"] = notif
 		notifAggregate["Message"] = msg
 		notifAggregate["URL"] = url
+
 		notifs = append(notifs, notifAggregate)
 		// count++
 		// if count == 5 {
@@ -52,6 +53,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 
 	sendData := make(map[string]interface{})
 	sendData["notifications"] = notifs
+	sendData["scrollID"] = sID
 	// sendData["numUnread"] = proxy.NumUnread
 
 	data, err := json.Marshal(sendData)
