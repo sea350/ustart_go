@@ -48,6 +48,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println("checkpoint 1: " + leavingUser)
+	log.Println(test1.(string))
 	var canLeave = false
 	if leavingUser == test1.(string) {
 		//if the current active user wants to leave, they can
