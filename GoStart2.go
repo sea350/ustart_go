@@ -200,6 +200,7 @@ func main() {
 	http.HandleFunc("/AjaxRemoveNotification/", notification.RemoveNotification)
 	http.HandleFunc("/AjaxMarkAsSeen/", notification.MarkAsSeen)
 	http.HandleFunc("/AjaxScrollNotifications/", notification.AjaxScrollNotification)
+	http.HandleFunc("/Notifications/", notification.Page)
 
 	//IMG
 	http.HandleFunc("/img/", img.Display)
