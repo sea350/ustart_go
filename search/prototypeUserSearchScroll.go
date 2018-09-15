@@ -82,7 +82,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 
 	if len(mustTag) > 0 {
 		for _, tag := range mustTag {
-			query = query.Must(elastic.NewTermQuery("Tags", tag))
+			query = query.Must(elastic.NewTermQuery("Tags", strings.ToLower(tag)))
 		}
 	}
 
