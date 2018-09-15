@@ -7,6 +7,8 @@ type LocStruct struct {
 	CountryVis bool   `json:"CountryVis"`
 	State      string `json:"State"`
 	StateVis   bool   `json:"StateVis"`
+	Lng        string `json:"Lng"`
+	Lat        string `json:"Lat"`
 	City       string `json:"City"`
 	CityVis    bool   `json:"CityVis"`
 	Zip        string `json:"Zip"`
