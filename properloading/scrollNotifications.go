@@ -3,7 +3,6 @@ package properloading
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"io"
 	"log"
 
@@ -38,35 +37,33 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 		scroll = scroll.ScrollId(scrollID)
 	}
 
-	res, err := scroll.Do(ctx)
-	if err == io.EOF {
-		return "", mapResults, 0, err //we might need special treatment for EOF error
-	}
-	if err != nil {
+	res, scrollErr := scroll.Do(ctx)
+	// if err == io.EOF {
+	// 	return "", mapResults, 0, err //we might need special treatment for EOF error
+	// }
+	if scrollErr != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-		return "", mapResults, 0, err
+		log.Println(scrollErr)
+		return "", mapResults, 0, scrollErr
 	}
 
 	var notif types.Notification
 
 	for _, hit := range res.Hits.Hits {
 		// fmt.Println(hit.Id)
-		err = json.Unmarshal(*hit.Source, &notif)
+		if scrollErr == io.EOF {
+			continue
+		}
+		err := json.Unmarshal(*hit.Source, &notif)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("ISSUE WITH CONVERT FUNCTION")
+
 			continue
 		}
 
 		mapResults[hit.Id] = notif
 
-		if err == io.EOF {
-			return res.ScrollId, mapResults, int(res.Hits.TotalHits), errors.New("Out of bounds")
-
-		}
-
 	}
 
-	return res.ScrollId, mapResults, int(res.Hits.TotalHits), err
+	return res.ScrollId, mapResults, int(res.Hits.TotalHits), nil
 }
