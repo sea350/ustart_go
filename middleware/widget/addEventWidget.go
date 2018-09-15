@@ -1,7 +1,6 @@
 package widget
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -75,6 +74,7 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 
 		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 	} else {
-		fmt.Println("You do not have the privilege to add a widget to this event. Check your privilege. ")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("You do not have the privilege to add a widget to this event. Check your privilege. ")
 	}
 }
