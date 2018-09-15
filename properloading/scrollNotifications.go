@@ -14,7 +14,7 @@ import (
 
 //ScrollNotifications ...
 //Scrolls through docs being loaded
-func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string) (string, []types.Notification, int, error) {
+func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string) (string, map[string]types.Notification, int, error) {
 
 	ctx := context.Background()
 
@@ -26,7 +26,7 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 
 	//yeah....
 
-	var arrResults []types.Notification
+	var mapResults map[string]types.Notification
 
 	scroll := eclient.Scroll().
 		Index(globals.NotificationIndex).
@@ -40,12 +40,12 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 
 	res, err := scroll.Do(ctx)
 	if err == io.EOF {
-		return "", arrResults, 0, err //we might need special treatment for EOF error
+		return "", mapResults, 0, err //we might need special treatment for EOF error
 	}
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
-		return "", arrResults, 0, err
+		return "", mapResults, 0, err
 	}
 
 	var notif types.Notification
@@ -59,14 +59,14 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 			continue
 		}
 
-		arrResults = append(arrResults, notif)
+		mapResults[hit.Id] = notif
 
 		if err == io.EOF {
-			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("Out of bounds")
+			return res.ScrollId, mapResults, int(res.Hits.TotalHits), errors.New("Out of bounds")
 
 		}
 
 	}
 
-	return res.ScrollId, arrResults, int(res.Hits.TotalHits), err
+	return res.ScrollId, mapResults, int(res.Hits.TotalHits), err
 }

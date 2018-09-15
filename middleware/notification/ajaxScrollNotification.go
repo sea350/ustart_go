@@ -21,14 +21,14 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	scrollID := r.FormValue("scrollID")
-	sID, notifArr, hits, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
+	sID, notifMap, hits, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 	var notifs []map[string]interface{}
 
-	for _, notif := range notifArr {
+	for notifID, notif := range notifMap {
 
 		msg, url, err := uses.GenerateNotifMsgAndLink(client.Eclient, notif)
 		if err != nil {
@@ -38,7 +38,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 		}
 
 		notifAggregate := make(map[string]interface{})
-		notifAggregate["ID"] = id
+		notifAggregate["ID"] = notifID
 		notifAggregate["Data"] = notif
 		notifAggregate["Message"] = msg
 		notifAggregate["URL"] = url
