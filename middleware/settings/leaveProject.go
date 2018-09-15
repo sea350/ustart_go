@@ -3,7 +3,6 @@ package settings
 import (
 	"log"
 	"net/http"
-	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -24,14 +23,25 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	leavingUser := r.FormValue("leaverID")
+
 	projID := r.FormValue("projectID")
+	if projID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Project ID not passed")
+		http.Redirect(w, r, "/404/", http.StatusFound)
+	}
 	newCreator := r.FormValue("newCreator")
 
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+	}
+
+	if leavingUser == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Leaver not specified")
+		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 	}
 
 	var canLeave = false
@@ -56,21 +66,18 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		err = post.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 	} else {
 		err = uses.NewProjectLeader(client.Eclient, projID, leavingUser, newCreator)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		err = post.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 	}
 
