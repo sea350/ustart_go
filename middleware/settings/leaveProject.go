@@ -29,6 +29,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Project ID not passed")
 		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
 	}
 	newCreator := r.FormValue("newCreator")
 
@@ -42,6 +43,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Leaver not specified")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		return
 	}
 
 	var canLeave = false

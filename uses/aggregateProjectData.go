@@ -12,13 +12,15 @@ import (
 //Adds a new widget to the UserWidgets array
 func AggregateProjectData(eclient *elastic.Client, url string, viewerID string) (types.ProjectAggregate, error) {
 	var projectData types.ProjectAggregate
-	projectData.RequestAllowed = true
 
 	data, err := getProject.ProjectByURL(eclient, url)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return projectData, err
 	}
+
+	projectData.RequestAllowed = true
 	projectData.ProjectData = data
 
 	id, err := getProject.ProjectIDByURL(eclient, url)
