@@ -12,10 +12,6 @@ import (
 	post "github.com/sea350/ustart_go/post/project"
 )
 
-type SkillStruct struct {
-	Skills []string
-}
-
 //UpdateSkills ...
 func UpdateSkills(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
@@ -31,18 +27,18 @@ func UpdateSkills(w http.ResponseWriter, r *http.Request) {
 
 	p := bluemonday.UGCPolicy()
 
-	var ss SkillStruct
-	err := json.Unmarshal([]byte(skills), &ss.Skills)
+	var ss []string
+	err := json.Unmarshal([]byte(skills), &ss)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 		log.Println(err)
 	}
 
-	for s := range ss.Skills {
-		ss.Skills[s] = p.Sanitize(ss.Skills[s])
+	for s := range ss {
+		ss[s] = p.Sanitize(ss[s])
 	}
-	err = post.UpdateProject(client.Eclient, ID, "ListNeeded", ss.Skills)
+	err = post.UpdateProject(client.Eclient, ID, "ListNeeded", ss)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
