@@ -31,6 +31,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	}
 	var notifs []map[string]interface{}
 
+	log.Println("MAP:", notifMap)
 	for notifID, notif := range notifMap {
 		log.Println("NOTIF ID:", notifID)
 		msg, url, err := uses.GenerateNotifMsgAndLink(client.Eclient, notif)
