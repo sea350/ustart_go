@@ -37,6 +37,7 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < 3; i++ {
 		sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, ID, scrollID)
 
+		scrollID = sID
 		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
