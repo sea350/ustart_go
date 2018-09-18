@@ -34,9 +34,9 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	_, follDoc, err := getFollow.ByID(client.Eclient, ID)
 
 	var resArr []map[string]interface{}
-	flag := false
+
 	count := 0
-	for flag != true || count < 3 {
+	for count < 3 {
 		sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, ID, scrollID)
 
 		if err != nil && err != io.EOF {
@@ -44,17 +44,15 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 
-		var results = make(map[string]interface{})
-
-		if len(heads) == 0 {
-			flag = true
+		if len(heads) > 0 {
+			var results = make(map[string]interface{})
+			scrollID = sID
+			results["scrollID"] = sID
+			results["SuggestedUsers"] = heads
+			results["TotalHits"] = hits
+			resArr = append(resArr, results)
+			count++
 		}
-		scrollID = sID
-		results["scrollID"] = sID
-		results["SuggestedUsers"] = heads
-		results["TotalHits"] = hits
-		resArr = append(resArr, results)
-		count++
 
 	}
 	data, err := json.Marshal(resArr)
