@@ -54,7 +54,9 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 			resArr = append(resArr, heads...)
 			count++
 		}
-
+		if err == io.EOF {
+			break
+		}
 	}
 
 	sendData := make(map[string]interface{})
