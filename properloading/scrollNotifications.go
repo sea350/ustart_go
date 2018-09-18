@@ -55,7 +55,7 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 			continue
 		}
 		err := json.Unmarshal(*hit.Source, &notif)
-		if err != nil {
+		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 			continue
