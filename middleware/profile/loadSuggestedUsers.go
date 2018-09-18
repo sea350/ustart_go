@@ -37,7 +37,7 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 
 	count := 0
 	for count < 3 {
-		sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, ID, scrollID)
+		sID, heads, _, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, ID, scrollID)
 
 		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -49,7 +49,7 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 			scrollID = sID
 			results["scrollID"] = sID
 			results["SuggestedUsers"] = heads
-			results["TotalHits"] = hits
+			results["TotalHits"] = count
 			resArr = append(resArr, results)
 			count++
 		}
