@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/sea350/ustart_go/middleware/client"
 	properloading "github.com/sea350/ustart_go/properloading"
@@ -23,9 +22,8 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	scrollID := r.FormValue("scrollID")
-	log.Println(docID.(string))
-	log.Println("SCROLLID LENGTH", len(scrollID))
-	sID, notifMap, _, err := properloading.ScrollNotifications(client.Eclient, strings.ToLower(docID.(string)), scrollID)
+
+	sID, notifMap, _, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
 	if err != nil && err != io.EOF {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -33,7 +31,6 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	}
 	var notifs []map[string]interface{}
 
-	log.Println("MAP:", notifMap)
 	for notifID, notif := range notifMap {
 		log.Println("NOTIF ID:", notifID)
 		msg, url, err := uses.GenerateNotifMsgAndLink(client.Eclient, notif)
