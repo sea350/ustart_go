@@ -37,7 +37,7 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	// var resArr []map[string]interface{}
 	var resArr []types.FloatingHead
 	count := 0
-	for count < 3 {
+	for count < 3 && err != io.EOF {
 		sID, heads, _, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, ID, scrollID)
 
 		if err != nil && err != io.EOF {
