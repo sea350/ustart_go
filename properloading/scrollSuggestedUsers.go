@@ -43,9 +43,11 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 	}
 	res, err := searchResults.Do(ctx)
 
-	if err != nil && err != io.EOF {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+	if err != nil {
+		if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
 		return "", nil, 0, err
 	}
 
