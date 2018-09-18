@@ -59,7 +59,7 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 	var heads []types.FloatingHead
 	for _, hits := range res.Hits.Hits {
 		_, exists := followingUsers[hits.Id]
-		if !exists {
+		if !exists && hits.Id != userID {
 			newHead, err := uses.ConvertUserToFloatingHead(eclient, hits.Id)
 			if err == nil {
 				heads = append(heads, newHead)
@@ -75,6 +75,6 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 
 	}
 
-	return res.ScrollId, heads, int(res.Hits.TotalHits), err
+	return res.ScrollId, heads, len(heads), err
 
 }
