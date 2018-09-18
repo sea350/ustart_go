@@ -25,7 +25,7 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 
 	//yeah....
 
-	var mapResults map[string]types.Notification
+	var mapResults = make(map[string]types.Notification)
 
 	scroll := eclient.Scroll().
 		Index(globals.NotificationIndex).
