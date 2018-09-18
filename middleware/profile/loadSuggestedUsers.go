@@ -44,6 +44,9 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var results = make(map[string]interface{})
+		if heads == nil {
+			break
+		}
 		results["scrollID"] = sID
 		results["SuggestedUsers"] = heads
 		results["TotalHits"] = hits
