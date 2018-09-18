@@ -17,13 +17,13 @@ import (
 //LoadSuggestedUsers ... pulls suggested users based on user's projects and shared skills
 func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["Username"]
-	if test1 == nil {
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	ID := session.Values["DocID"].(string)
+	ID := docID.(string)
 	scrollID := r.FormValue("scrollID")
 
 	myUser, err := get.UserByID(client.Eclient, ID)
@@ -39,10 +39,12 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	count := 0
 	for count < 3 && err != io.EOF {
 		sID, heads, _, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, ID, scrollID)
-
 		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
+		}
+		if err == io.EOF {
+			break
 		}
 
 		if len(heads) > 0 {
@@ -53,9 +55,6 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 
 			resArr = append(resArr, heads...)
 			count++
-		}
-		if err == io.EOF {
-			break
 		}
 	}
 
