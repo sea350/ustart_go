@@ -11,6 +11,7 @@ import (
 	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	properloading "github.com/sea350/ustart_go/properloading"
+	types "github.com/sea350/ustart_go/types"
 )
 
 //LoadSuggestedUsers ... pulls suggested users based on user's projects and shared skills
@@ -33,8 +34,8 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 
 	_, follDoc, err := getFollow.ByID(client.Eclient, ID)
 
-	var resArr []map[string]interface{}
-
+	// var resArr []map[string]interface{}
+	var resArr []types.FloatingHead
 	count := 0
 	for count < 3 {
 		sID, heads, _, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, ID, scrollID)
@@ -45,12 +46,12 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(heads) > 0 {
-			var results = make(map[string]interface{})
+			// var results = make(map[string]interface{})
 			scrollID = sID
 			// results["scrollID"] = sID
-			results["SuggestedUsers"] = heads
+			// results["SuggestedUsers"] = heads
 
-			resArr = append(resArr, results)
+			resArr = append(resArr, heads...)
 			count++
 		}
 
