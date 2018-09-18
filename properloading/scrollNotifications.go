@@ -41,7 +41,7 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 	// if err == io.EOF {
 	// 	return "", mapResults, 0, err //we might need special treatment for EOF error
 	// }
-	if scrollErr != nil && scrollErr != io.EOF {
+	if scrollErr != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(scrollErr)
 		return "", mapResults, 0, scrollErr
