@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
-	"github.com/sea350/ustart_go/middleware/client"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -33,19 +32,29 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...))
 
-	searchResults, err := client.Eclient.Scroll().
+	searchResults := eclient.Scroll().
 		Index(globals.UserIndex).
 		Query(suggestedUserQuery).
-		Size(3).
-		Do(ctx)
+		Size(1)
+
+	res, err := searchResults.Do(ctx)
 
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
+	// var usrIDs []string
+	// for _, hits := range res.Hits.Hits {
+
+	// 	_, exists := followingUsers[hits.Id]
+	// 	if !exists{
+	// 		usrIDs = append(usrIDs, hits.Id)
+	// 	}
+	// }
+
 	var heads []types.FloatingHead
-	for _, hits := range searchResults.Hits.Hits {
+	for _, hits := range res.Hits.Hits {
 		_, exists := followingUsers[hits.Id]
 		if !exists {
 			newHead, err := uses.ConvertUserToFloatingHead(eclient, hits.Id)
@@ -63,6 +72,6 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 
 	}
 
-	return searchResults.ScrollId, heads, int(searchResults.Hits.TotalHits), err
+	return res.ScrollId, heads, int(res.Hits.TotalHits), err
 
 }
