@@ -3,6 +3,7 @@ package notification
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 
@@ -23,7 +24,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	scrollID := r.FormValue("scrollID")
 	log.Println(docID.(string))
 	sID, notifMap, _, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
-	if err != nil {
+	if err != nil && err != io.EOF {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
