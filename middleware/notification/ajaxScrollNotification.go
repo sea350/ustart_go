@@ -23,6 +23,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 
 	scrollID := r.FormValue("scrollID")
 	log.Println(docID.(string))
+	log.Println("SCROLLID LENGTH", len(scrollID))
 	sID, notifMap, _, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
 	if err != nil && err != io.EOF {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
