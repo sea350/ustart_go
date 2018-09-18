@@ -21,19 +21,19 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 	notifQuery := elastic.NewBoolQuery()
 	notifQuery = notifQuery.Must(elastic.NewTermQuery("DocID", docID))
 
-	notifQuery = notifQuery.Must(elastic.NewTermQuery("Invisible", false))
+	// notifQuery = notifQuery.Must(elastic.NewTermQuery("Invisible", "false"))
 
 	//yeah....
 
-	var mapResults map[string]types.Notification
+	var mapResults = make(map[string]types.Notification)
 
 	scroll := eclient.Scroll().
 		Index(globals.NotificationIndex).
 		Query(notifQuery).
-		Sort("TimeStamp", false).
+		// Sort("TimeStamp", false).
 		Size(5)
 
-	if scrollID != "" {
+	if len(scrollID) > 0 {
 		scroll = scroll.ScrollId(scrollID)
 	}
 
