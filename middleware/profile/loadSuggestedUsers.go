@@ -47,16 +47,21 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 		if len(heads) > 0 {
 			var results = make(map[string]interface{})
 			scrollID = sID
-			results["scrollID"] = sID
+			// results["scrollID"] = sID
 			results["SuggestedUsers"] = heads
-			results["TotalHits"] = count
+
 			resArr = append(resArr, results)
 			count++
 		}
 
 	}
-	data, err := json.Marshal(resArr)
-	fmt.Println("DATA LENGTH:", len(resArr))
+
+	sendData := make(map[string]interface{})
+	sendData["suggestions"] = resArr
+	sendData["scrollID"] = scrollID
+
+	data, err := json.Marshal(sendData)
+
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
