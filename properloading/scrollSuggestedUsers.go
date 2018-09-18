@@ -37,6 +37,9 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 		Query(suggestedUserQuery).
 		Size(1)
 
+	if len(scrollID) > 0 {
+		searchResults = searchResults.ScrollId(scrollID)
+	}
 	res, err := searchResults.Do(ctx)
 
 	if err != nil {
