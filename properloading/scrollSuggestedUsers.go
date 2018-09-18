@@ -2,6 +2,7 @@ package properloading
 
 import (
 	"context"
+	"io"
 	"log"
 	"strings"
 
@@ -42,9 +43,10 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 	}
 	res, err := searchResults.Do(ctx)
 
-	if err != nil {
+	if err != nil && err != io.EOF {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return "", nil, 0, err
 	}
 
 	// var usrIDs []string
