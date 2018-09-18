@@ -26,11 +26,12 @@ func RemoveEavesFromConversation(eclient *elastic.Client, conversationID string,
 
 	for i := range convo.Eavesdroppers {
 		if convo.Eavesdroppers[i].DocID == eavesID {
-			if i < len(convo.Eavesdroppers)-1 {
+			if i < len(convo.Eavesdroppers)-2 {
 				convo.Eavesdroppers = append(convo.Eavesdroppers[:i], convo.Eavesdroppers[i+1:]...)
 			} else {
 				convo.Eavesdroppers = convo.Eavesdroppers[:i]
 			}
+			break
 		}
 	}
 

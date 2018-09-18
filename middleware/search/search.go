@@ -1,9 +1,9 @@
 package search
 
 import (
+	"io"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/sea350/ustart_go/middleware/client"
@@ -49,10 +49,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 			searchBy = append(searchBy, false)
 		}
 		numHits, scrollID, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
-		if err != nil {
+		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		cs.ListOfHeads = results
 		cs.ScrollID = scrollID
@@ -85,10 +84,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 			searchBy = append(searchBy, false)
 		}
 		numHits, scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
-		if err != nil {
+		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		cs.ListOfHeads = results
 		cs.ScrollID = scrollID
@@ -111,10 +109,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 			searchBy = append(searchBy, false)
 		}
 		numHits, scrollID, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
-		if err != nil {
+		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		cs.ListOfHeads = results
 		cs.ScrollID = scrollID
@@ -122,10 +119,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	}
 	if filter == `skills` {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))
-		if err != nil {
+		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		cs.ListOfHeads = results
 	}

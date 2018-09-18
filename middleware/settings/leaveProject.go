@@ -37,6 +37,8 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
 	}
 
 	if leavingUser == `` {
@@ -46,15 +48,10 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("checkpoint 1: " + leavingUser)
-	log.Println(test1.(string))
 	var canLeave = false
 	if leavingUser == test1.(string) {
 		//if the current active user wants to leave, they can
 		canLeave = true
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("checkpoint 2a")
 	} else {
 		for _, mem := range proj.Members {
 			if mem.MemberID == test1.(string) && mem.Role == 0 {
@@ -68,22 +65,16 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	}
 	if !canLeave {
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("a problem has occurred")
 		return
 	}
 
 	if newCreator == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("checkpoint 3a")
 		err = post.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
 	} else {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("checkpoint 3b")
 		err = uses.NewProjectLeader(client.Eclient, projID, leavingUser, newCreator)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
