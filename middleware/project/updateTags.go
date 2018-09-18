@@ -12,10 +12,6 @@ import (
 	post "github.com/sea350/ustart_go/post/project"
 )
 
-type TagStruct struct {
-	Tags []string
-}
-
 //UpdateTags ...
 func UpdateTags(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
@@ -30,20 +26,20 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 
 	ID := r.FormValue("skillArray")
 	theID := r.FormValue("projectWidget")
-	var ts TagStruct
-	err := json.Unmarshal([]byte(ID), &ts.Tags)
+	var ts []string
+	err := json.Unmarshal([]byte(ID), &ts)
 
 	if err != nil {
 		log.Println("Could not unmarshal")
 		return
 	}
 
-	for t := range ts.Tags {
-		ts.Tags[t] = p.Sanitize(ts.Tags[t])
-		ts.Tags[t] = html.EscapeString(ts.Tags[t])
+	for t := range ts {
+		ts[t] = p.Sanitize(ts[t])
+		ts[t] = html.EscapeString(ts[t])
 	}
 
-	err = post.UpdateProject(client.Eclient, theID, "Tags", ts.Tags)
+	err = post.UpdateProject(client.Eclient, theID, "Tags", ts)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		dir, _ := os.Getwd()
