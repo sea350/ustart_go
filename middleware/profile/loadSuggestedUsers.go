@@ -46,11 +46,12 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 		var results = make(map[string]interface{})
 		if heads == nil {
 			break
+		} else {
+			results["scrollID"] = sID
+			results["SuggestedUsers"] = heads
+			results["TotalHits"] = hits
+			resArr = append(resArr, results)
 		}
-		results["scrollID"] = sID
-		results["SuggestedUsers"] = heads
-		results["TotalHits"] = hits
-		resArr = append(resArr, results)
 	}
 	data, err := json.Marshal(resArr)
 	if err != nil {
