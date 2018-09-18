@@ -58,6 +58,7 @@ func LoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 
 	}
 	data, err := json.Marshal(resArr)
+	fmt.Println("DATA:", data)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
