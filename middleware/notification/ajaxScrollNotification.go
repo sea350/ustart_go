@@ -63,5 +63,6 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
+	log.Println(string(data))
 	fmt.Fprintln(w, string(data))
 }
