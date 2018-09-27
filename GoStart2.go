@@ -69,8 +69,8 @@ func main() {
 	http.HandleFunc("/testWall/", profile.TestWallPage)
 	http.HandleFunc("/AjaxUserFollowsUser/", follow.AjaxUserFollowsUser)
 	http.HandleFunc("/AjaxUserFollowsProject/", follow.AjaxUserFollowsProject)
-	http.HandleFunc("/AjaxUserSuggestions/", profile.AjaxLoadSuggestedUsers)
-	http.HandleFunc("/UserSuggestions/", profile.LoadSuggestedUsers)
+	//http.HandleFunc("/AjaxUserSuggestions/", profile.AjaxLoadSuggestedUsers)
+	//http.HandleFunc("/UserSuggestions/", profile.LoadSuggestedUsers)
 
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
