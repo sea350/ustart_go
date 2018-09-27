@@ -24,8 +24,8 @@ type Entry struct {
 	//class 7 = event comment
 	//class 8 = event share
 	Content        []rune `json:"Content"`
-	ReferenceEntry string `json:"ReferenceEntry"`
-	ReferenceID    string `json:"ReferenceID"`
+	ReferenceEntry string `json:"ReferenceEntry"` //Refers to parent entry's ID
+	ReferenceID    string `json:"ReferenceID"`    //ID of project or event
 
 	MediaRef  string    `json:"MediaRef"`
 	TimeStamp time.Time `json:"TimeStamp"`

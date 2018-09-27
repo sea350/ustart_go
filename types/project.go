@@ -33,7 +33,7 @@ type Project struct {
 	URLName           string       `json:"URLName"`
 	Members           []Member     `json:"Members"`
 	Location          LocStruct    `json:"Location"`
-	EntryIDs          []string     `json:"EntryIDs"`
+	EntryIDs          []string     `json:"EntryIDs"` //Obsolete
 	Category          string       `json:"Category"`
 	ListNeeded        []string     `json:"ListNeeded"`
 	CreationDate      time.Time    `json:"CreationDate"`
@@ -52,7 +52,7 @@ type Project struct {
 	Organization      string       `json:"Organization"`
 	Widgets           []string     `json:"Widgets"`
 	PrivilegeProfiles []Privileges `json:"PrivilegeProfiles"`
-	FollowedUsers     []string     `json:"FollowedUsers"`
+	FollowedUsers     []string     `json:"FollowedUsers"` //DELETE ME I AM OBSOLETE
 	Subchats          []Subchat    `json:"Subchats"`
 	ProxyMessagesID   string       `json:"ProxyMessagesID"`
 	EventIDs          []string     `json:"EventIDs"`

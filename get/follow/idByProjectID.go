@@ -7,18 +7,17 @@ import (
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
-	//post "github.com/sea350/ustart_go/post"
 )
 
-//IDByUserID ...  Gets follow ID by user ID
-//Requires the user's ID
-//Returns the follow ID and error
-func IDByUserID(eclient *elastic.Client, userID string) (string, error) {
+//IDByProjectID ... Gets a follow object by project ID
+//Takes in a project ID
+//Returns the Follow ID
+func IDByProjectID(eclient *elastic.Client, projectID string) (string, error) {
 	ctx := context.Background() //intialize context background
 	var followID string
 	query := elastic.NewBoolQuery()
-	query = query.Must(elastic.NewTermQuery("DocID", strings.ToLower(userID)))
-	searchResult, err := eclient.Search(). //Get returns doc type, index, etc.
+	query = query.Must(elastic.NewTermQuery("DocID", strings.ToLower(projectID)))
+	searchResult, err := eclient.Search(). //Get returns doc type,s index, etc.
 						Index(globals.FollowIndex).
 						Type(globals.FollowType).
 						Do(ctx)
@@ -38,5 +37,4 @@ func IDByUserID(eclient *elastic.Client, userID string) (string, error) {
 	}
 
 	return followID, err
-
 }

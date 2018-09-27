@@ -4,7 +4,7 @@ package types
 //Stores maps for followers and following
 type Follow struct {
 	DocID            string          `json:"DocID"`
-	UserFollowers    map[string]bool `json:"UserFollowers"`
+	UserFollowers    map[string]bool `json:"UserFollowers"` //List of users who are following the entity
 	UserFollowing    map[string]bool `json:"UserFollowing"`
 	ProjectFollowers map[string]bool `json:"ProjectFollowers"`
 	ProjectFollowing map[string]bool `json:"ProjectFollowing"`

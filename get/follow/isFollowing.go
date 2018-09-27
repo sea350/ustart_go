@@ -12,7 +12,7 @@ import (
 
 //IsFollowing ...
 //Determines if specific doc id is being followed
-
+//Returns a boolean if the docID is being followed
 func IsFollowing(eclient *elastic.Client, userID string, followID string, followType string) (bool, error) {
 	_, follows, err := ByID(eclient, userID)
 	if err != nil {
