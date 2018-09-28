@@ -54,6 +54,7 @@ func ConvertProjectToFloatingHead(eclient *elastic.Client, projectID string) (ty
 	head.Tags = proj.Tags
 	head.Category = proj.Category
 	head.Classification = 2
+	head.Time = proj.CreationDate
 
 	return head, err
 }
