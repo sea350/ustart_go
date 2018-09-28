@@ -3,7 +3,7 @@ package get
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"log"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -38,11 +38,10 @@ func SingleStringField(eclient *elastic.Client, queryField string, queryTerm str
 
 	}
 
-	// fmt.Println()
-
 	// var usr types.User
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 
 	}
 	return string(data), err
@@ -77,11 +76,10 @@ func SingleStringField(eclient *elastic.Client, queryField string, queryTerm str
 
 // 	}
 
-// 	// fmt.Println()
-// 	fmt.Println(string(data))
 // 	// var usr types.User
 // 	if err != nil {
-// 		fmt.Println(err)
+// 		log.SetFlags(log.LstdFlags | log.Lshortfile)
+//		log.Println(err)
 
 // 	}
 // 	return []string(data), err

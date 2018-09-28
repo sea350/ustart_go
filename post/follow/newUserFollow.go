@@ -3,7 +3,7 @@ package post
 import (
 	"context"
 	"errors"
-	"fmt"
+	"log"
 	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -110,7 +110,8 @@ func NewUserFollow(eclient *elastic.Client, userID string, field string, newKey 
 	}
 	_, err = newFollow.Do(ctx)
 	if err != nil {
-		fmt.Println("LINE 92 ERROR,", err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	return err

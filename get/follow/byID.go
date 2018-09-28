@@ -3,7 +3,6 @@ package get
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -30,7 +29,6 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 	}
 
 	if searchResult.Hits.TotalHits > 1 {
-		fmt.Println(userID, searchResult.Hits.TotalHits)
 		for idx, hit := range searchResult.Hits.Hits {
 			if idx < int(searchResult.Hits.TotalHits)-1 {
 				_, err = eclient.Delete().
@@ -47,8 +45,6 @@ func ByID(eclient *elastic.Client, userID string) (string, types.Follow, error) 
 		}
 
 	} else if searchResult.Hits.TotalHits == 0 {
-		fmt.Println("TRYING TO CREATE NEW FOLLOWDOC WITH TOTALHITS:", searchResult.Hits.TotalHits)
-
 		// var newFollowing = make(map[string]bool)
 		// var newFollowers = make(map[string]bool)
 		// var newBell = make(map[string]bool)

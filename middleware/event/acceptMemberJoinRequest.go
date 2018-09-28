@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -26,14 +27,14 @@ func AcceptMemberJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	newNumRequests, err := uses.RemoveEventRequest(client.Eclient, evntID, newMemberID)
 	if err != nil {
-		fmt.Println("err middleware/event/acceptmemberjoinrequest line 27")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	err = userPost.AppendEvent(client.Eclient, newMemberID, types.EventInfo{EventID: evntID, Visible: true})
 	if err != nil {
-		fmt.Println("err middleware/event/acceptmemberjoinrequest line 33")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	theRole := r.FormValue("role")
@@ -52,8 +53,8 @@ func AcceptMemberJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	err = evntPost.AppendMember(client.Eclient, evntID, newMember)
 	if err != nil {
-		fmt.Println("err middleware/event/acceptmemberjoinrequest line 46")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)
