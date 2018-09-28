@@ -13,6 +13,7 @@ import (
 	post "github.com/sea350/ustart_go/post/user"
 )
 
+//EmailVerification ... shrug
 func EmailVerification(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 	email := p.Sanitize(r.FormValue("email"))
