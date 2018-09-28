@@ -3,6 +3,7 @@ package get
 import (
 	"context"
 	"errors"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -17,7 +18,7 @@ func UserIDByEmail(eclient *elastic.Client, email string) (string, error) {
 
 	//termQuery := elastic.NewTermQuery("Username",username)
 
-	termQuery := elastic.NewTermQuery("Email", email)
+	termQuery := elastic.NewTermQuery("Email", strings.ToLower(email))
 	searchResult, err := eclient.Search().
 		Index(globals.UserIndex).
 		Query(termQuery).
