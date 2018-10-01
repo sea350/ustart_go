@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/gorilla/sessions"
-	"github.com/sea350/ustart_go/types"
-	uses "github.com/sea350/ustart_go/uses"
+	"github.com/sea350/ustart_go/backend/types"
+	uses "github.com/sea350/ustart_go/backend/uses"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 )

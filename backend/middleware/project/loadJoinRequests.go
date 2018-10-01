@@ -1,0 +1,58 @@
+package project
+
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/sea350/ustart_go/backend/uses"
+
+	get "github.com/sea350/ustart_go/backend/get/project"
+	"github.com/sea350/ustart_go/backend/middleware/client"
+	types "github.com/sea350/ustart_go/backend/types"
+)
+
+//LoadJoinRequests ...
+func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
+	session, _ := client.Store.Get(r, "session_please")
+	test1, _ := session.Values["Username"]
+	if test1 == nil {
+		// No username in session
+		http.Redirect(w, r, "/~", http.StatusFound)
+		return
+	}
+
+	ID := r.FormValue("projID") //projectID
+	var heads []types.FloatingHead
+
+	proj, err := get.ProjectByID(client.Eclient, ID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+	}
+
+	for index, userID := range proj.MemberReqReceived {
+		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
+		if err != nil {
+
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			dir, _ := os.Getwd()
+			log.Println(dir, err)
+			fmt.Println(fmt.Sprintf("err: middleware/project/loadjoinrequest, Line 35, index %d", index))
+		}
+		heads = append(heads, head)
+	}
+
+	data, err := json.Marshal(heads)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		dir, _ := os.Getwd()
+		log.Println(dir, err)
+	}
+
+	fmt.Fprintln(w, string(data))
+
+}

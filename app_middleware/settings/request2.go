@@ -1,7 +1,7 @@
 package settings
 
 import (
-	types "github.com/sea350/ustart_go/types"
+	types "github.com/sea350/ustart_go/backend/types"
 )
 
 type form struct {

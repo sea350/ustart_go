@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/sessions"
-	post "github.com/sea350/ustart_go/post/user"
-	uses "github.com/sea350/ustart_go/uses"
+	post "github.com/sea350/ustart_go/backend/post/user"
+	uses "github.com/sea350/ustart_go/backend/uses"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 )

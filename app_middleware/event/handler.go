@@ -8,11 +8,11 @@ import (
 	"strconv"
 	"time"
 
-	get "github.com/sea350/ustart_go/get/event"
-	evntPost "github.com/sea350/ustart_go/post/event"
-	userPost "github.com/sea350/ustart_go/post/user"
-	"github.com/sea350/ustart_go/types"
-	uses "github.com/sea350/ustart_go/uses"
+	get "github.com/sea350/ustart_go/backend/get/event"
+	evntPost "github.com/sea350/ustart_go/backend/post/event"
+	userPost "github.com/sea350/ustart_go/backend/post/user"
+	"github.com/sea350/ustart_go/backend/types"
+	uses "github.com/sea350/ustart_go/backend/uses"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 )

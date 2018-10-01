@@ -6,7 +6,7 @@ import (
 	"net"
 	"net/http"
 
-	get "github.com/sea350/ustart_go/get/user"
+	get "github.com/sea350/ustart_go/backend/get/user"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 

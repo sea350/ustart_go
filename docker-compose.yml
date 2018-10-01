@@ -6,6 +6,8 @@ services:
       - ELASTIC_HOST=elastic
     networks:
       - es
+    ports:
+      - '5000:5000'
   
   elastic:
     image: elasticsearch
@@ -23,7 +25,6 @@ services:
 
 networks:
   es:
-    driver: local
 
 volumes:
   esVol:

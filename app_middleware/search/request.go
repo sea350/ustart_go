@@ -1,6 +1,6 @@
 package search
 
-import "github.com/sea350/ustart_go/types"
+import "github.com/sea350/ustart_go/backend/types"
 
 type form struct {
 	Term     string               `json:"Term"`

@@ -3,7 +3,7 @@ package project
 import (
 	"fmt"
 
-	"github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/backend/types"
 )
 
 type response struct {

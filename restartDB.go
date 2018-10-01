@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	globals "github.com/sea350/ustart_go/globals"
+	globals "github.com/sea350/ustart_go/backend/globals"
 )
 
 //var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))

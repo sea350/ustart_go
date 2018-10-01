@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/gorilla/sessions"
-	search "github.com/sea350/ustart_go/search"
-	types "github.com/sea350/ustart_go/types"
+	search "github.com/sea350/ustart_go/backend/search"
+	types "github.com/sea350/ustart_go/backend/types"
 
 	elastic "gopkg.in/olivere/elastic.v5"
 )

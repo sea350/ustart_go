@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	uses "github.com/sea350/ustart_go/uses"
+	uses "github.com/sea350/ustart_go/backend/uses"
 	"golang.org/x/crypto/bcrypt"
 	elastic "gopkg.in/olivere/elastic.v5"
 )

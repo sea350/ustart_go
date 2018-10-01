@@ -3,7 +3,7 @@ package email
 import (
 	"encoding/json"
 	"io"
-	//uses "github.com/sea350/ustart_go/uses"
+	//uses "github.com/sea350/ustart_go/backend/uses"
 )
 
 type form struct {
