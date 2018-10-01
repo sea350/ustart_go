@@ -25,6 +25,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	var classification int
 	var newWidget types.Widget
 
+	edit := r.FormValue("editID")
+
 	if r.FormValue("widgetSubmit") == `0` {
 		// text
 		p := bluemonday.UGCPolicy()
@@ -60,7 +62,6 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//instagram -- Takes in an instagram post URL
 
 		insta := r.FormValue("instagramInput")
-		edit := r.FormValue("editID")
 
 		// regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z0-9\-\_]{11}\/*`)
 		// regX := regexp.MustCompile(`https?:\/\/(www\.)?instagram\.com\/([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)`)
@@ -158,7 +159,6 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	if r.FormValue("widgetSubmit") == `10` {
 		//spoofy -- Embed code
 		spoofy := r.FormValue("spotInput")
-		edit := r.FormValue("editID")
 
 		/*
 			regX := regexp.MustCompile(`<iframe src="https:\/\/open\.spotify\.com\/embed\/[^"]+" width="300" height="380" frameborder="0" allowtransparency="true"><\/iframe>`)
@@ -185,7 +185,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	if r.FormValue("widgetSubmit") == `11` {
 		//anchor -- Requires link that's almost impossible to get
 		ank := r.FormValue("arInput")
-		edit := r.FormValue("editID")
+
 		/*
 			regX := regexp.MustCompile(``)
 			if !regX.MatchString(ank) {
@@ -193,7 +193,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 			} //Check valid embed code
 		*/
 		input := template.HTML(ank)
-		if r.FormValue("editID") != `0` {
+		if edit != `0` {
 			widget, err := get.WidgetByID(client.Eclient, edit)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
