@@ -29,19 +29,25 @@ func RemoveWidget(eclient *elastic.Client, widgetID string, isProject bool, isEv
 	if isProject {
 		proj, err := getProj.ProjectByID(eclient, userID)
 		if err != nil {
-			panic(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return err
 		}
 		oldArray = proj.Widgets
 	} else if isEvent {
 		event, err := getEvnt.EventByID(eclient, userID)
 		if err != nil {
-			panic(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return err
 		}
 		oldArray = event.Widgets
 	} else {
 		usr, err := getUser.UserByID(eclient, userID)
 		if err != nil {
-			panic(err)
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			return err
 		}
 		oldArray = usr.UserWidgets
 	}
