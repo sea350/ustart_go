@@ -25,6 +25,9 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pageUserName := strings.ToLower(r.URL.Path[9:])
+	if pageUserName == `` {
+		return
+	}
 
 	userstruct, errMessage, _, err := uses.UserPage(client.Eclient, pageUserName, docID.(string))
 	if err != nil {
