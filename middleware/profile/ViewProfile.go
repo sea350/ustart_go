@@ -25,11 +25,12 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pageUserName := strings.ToLower(r.URL.Path[9:])
+	if pageUserName == "_blank" {
+		return
+	}
 
 	userstruct, errMessage, _, err := uses.UserPage(client.Eclient, pageUserName, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(pageUserName)
 		log.Println(err)
 		log.Println("User Error: " + errMessage)
 		http.Redirect(w, r, "/404/", http.StatusFound)
