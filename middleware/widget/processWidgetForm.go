@@ -63,8 +63,6 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//instagram -- Takes in an instagram post URL
 
 		insta := r.FormValue("instagramInput")
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(r.FormValue("instagramInput"))
 
 		// regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z0-9\-\_]{11}\/*`)
 
@@ -75,8 +73,6 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		testArray := []string{}
 		err := json.Unmarshal([]byte(insta), &testArray)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("could not unmarshall")
 			input := template.HTML(insta)
 			if edit != `0` {
 				widget, err := get.WidgetByID(client.Eclient, edit)
