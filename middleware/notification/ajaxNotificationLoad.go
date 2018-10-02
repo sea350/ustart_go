@@ -54,9 +54,6 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(msg)
-
 		notifAggregate := make(map[string]interface{})
 		notifAggregate["ID"] = id
 		notifAggregate["Data"] = notif
