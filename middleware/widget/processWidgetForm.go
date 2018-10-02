@@ -174,19 +174,26 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 				return newWidget, errors.New(`Unusable Spotify Embed Code`)
 			} //Check valid embed code
 		*/
+		testArray := []string{}
+		err := json.Unmarshal([]byte(spoofy), &testArray)
+		if err != nil {
+			input := template.HTML(spoofy)
+			if edit != `0` {
+				widget, err := get.WidgetByID(client.Eclient, edit)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+					return newWidget, err
+				}
 
-		spotifyEmbedCode := template.HTML(spoofy)
-		if edit != `0` {
-			widget, err := get.WidgetByID(client.Eclient, edit)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				return newWidget, err
+				data = append(widget.Data, input)
+			} else {
+				data = []template.HTML{input}
 			}
-
-			data = append(widget.Data, spotifyEmbedCode)
 		} else {
-			data = []template.HTML{spotifyEmbedCode}
+			for _, elem := range testArray {
+				data = append(data, template.HTML(elem))
+			}
 		}
 		classification = 10
 	}
@@ -200,18 +207,26 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 				return newWidget, errors.New(`Invalid widget embed code`)
 			} //Check valid embed code
 		*/
-		input := template.HTML(ank)
-		if edit != `0` {
-			widget, err := get.WidgetByID(client.Eclient, edit)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				return newWidget, err
-			}
+		testArray := []string{}
+		err := json.Unmarshal([]byte(ank), &testArray)
+		if err != nil {
+			input := template.HTML(ank)
+			if edit != `0` {
+				widget, err := get.WidgetByID(client.Eclient, edit)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+					return newWidget, err
+				}
 
-			data = append(widget.Data, input)
+				data = append(widget.Data, input)
+			} else {
+				data = []template.HTML{input}
+			}
 		} else {
-			data = []template.HTML{input}
+			for _, elem := range testArray {
+				data = append(data, template.HTML(elem))
+			}
 		}
 		classification = 11
 	}
