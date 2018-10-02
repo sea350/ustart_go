@@ -14,6 +14,7 @@ import (
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	postFollow "github.com/sea350/ustart_go/post/follow"
+	postNotif "github.com/sea350/ustart_go/post/notification"
 	postUser "github.com/sea350/ustart_go/post/user"
 	postWarning "github.com/sea350/ustart_go/post/warning"
 	types "github.com/sea350/ustart_go/types"
@@ -165,6 +166,14 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	}
 	newProxy := types.ProxyMessages{DocID: id, Class: 1}
 	proxyID, err := postChat.IndexProxyMsg(eclient, newProxy)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	newProxyNotif := types.ProxyNotifications{DocID: id}
+	newProxyNotif.Settings.Default()
+	_, err = postNotif.IndexProxyNotification(eclient, newProxyNotif)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
