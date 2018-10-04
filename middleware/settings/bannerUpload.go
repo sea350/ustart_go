@@ -19,25 +19,32 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	clientFile, header, err := r.FormFile("raw-banner")
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-		http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
-		return
-	}
 
-	blob := r.FormValue("banner-data")
-	buffer := make([]byte, 512)
-	_, _ = clientFile.Read(buffer)
-	defer clientFile.Close()
-	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-		//Update the user banner
+	clientFile, header, err := r.FormFile("raw-banner")
+	switch err {
+	case nil:
+		blob := r.FormValue("banner-data")
+		buffer := make([]byte, 512)
+		_, _ = clientFile.Read(buffer)
+		defer clientFile.Close()
+		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
+			//Update the user banner
+			err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "Banner", blob)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
+		}
+	case http.ErrMissingFile:
+		blob := r.FormValue("banner-data")
 		err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "Banner", blob)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
+	default:
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
