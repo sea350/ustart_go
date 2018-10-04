@@ -44,6 +44,10 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 		client.RenderTemplate(w, r, "projectsF", cs)
 		return
 	}
+	if !project.ProjectData.Visible {
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
+	}
 
 	widgets, errs := uses.LoadWidgets(client.Eclient, project.ProjectData.Widgets)
 	if len(errs) > 0 {
