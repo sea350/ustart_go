@@ -1,13 +1,13 @@
 package registration
 
 import (
+	"errors"
 	"log"
 	"net/http"
 	"time"
 
-	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/microcosm-cc/bluemonday"
-
+	"github.com/sea350/ustart_go/middleware/client"
 
 	get "github.com/sea350/ustart_go/get/user"
 	post "github.com/sea350/ustart_go/post/user"
@@ -45,7 +45,10 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 
-		if emailInUse {
+		if !emailInUse {
+			cs.ErrorOutput = errors.New("Invalid email")
+			cs.ErrorStatus = true
+		} else {
 			token, err := uses.GenerateRandomString(32)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
