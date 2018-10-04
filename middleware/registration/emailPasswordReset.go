@@ -7,6 +7,8 @@ import (
 	"time"
 
 	"github.com/sea350/ustart_go/middleware/client"
+	"github.com/microcosm-cc/bluemonday"
+
 
 	get "github.com/sea350/ustart_go/get/user"
 	post "github.com/sea350/ustart_go/post/user"
@@ -27,7 +29,9 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	email := r.FormValue("email")
+	p := bluemonday.UGCPolicy()
+
+	email := p.Sanitize(r.FormValue("email"))
 
 	var cs client.ClientSide
 

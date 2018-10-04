@@ -13,6 +13,9 @@ import (
 	post "github.com/sea350/ustart_go/post/user"
 )
 
+//EmailVerification ... Takes in W and R
+//Takes in the form data (email and auth-token) from user and checks if it is correct
+//Returns error if false
 func EmailVerification(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 	email := p.Sanitize(r.FormValue("email"))
