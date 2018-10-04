@@ -2,6 +2,7 @@ package registration
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -46,10 +47,12 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if !emailInUse {
+			fmt.Println("1")
 			cs.ErrorOutput = errors.New("Authentication token invalid")
 			cs.ErrorStatus = true
 			return
 		} else {
+			fmt.Println("2")
 			token, err := uses.GenerateRandomString(32)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -61,6 +64,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 			userID, err := get.UserIDByEmail(client.Eclient, email)
 			if err != nil {
+				fmt.Println("3")
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 				cs.ErrorStatus = true
@@ -70,6 +74,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", time.Now())
 			if err != nil {
+				fmt.Println("4")
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 				cs.ErrorStatus = true
@@ -79,6 +84,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", token)
 			if err != nil {
+				fmt.Println("5")
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 				cs.ErrorStatus = true
@@ -88,6 +94,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 			user, err := get.UserByID(client.Eclient, userID)
 			if err != nil {
+				fmt.Println("6")
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 				cs.ErrorStatus = true
@@ -107,6 +114,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 					"contenttres":   "CHANGE PASSWORD",
 					"contentquatro": "a password reset"})
 			cs.Sent = "Email successfully sent!"
+			fmt.Println("7")
 		}
 	}
 }
