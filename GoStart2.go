@@ -53,6 +53,16 @@ func main() {
 	http.HandleFunc("/logout/", login.Logout)
 	http.HandleFunc("/unverified/", login.Unverified)
 
+	//REGISTRATIONS
+	http.HandleFunc("/Signup/", registration.Signup)
+	http.HandleFunc("/Registration/Type/", registration.RegisterType)
+	http.HandleFunc("/registrationcomplete/", registration.Complete)
+	http.HandleFunc("/welcome/", registration.Registration)
+	http.HandleFunc("/Activation/", registration.EmailVerification)
+	http.HandleFunc("/ResetPassword/", registration.ResetPassword)
+	http.HandleFunc("/SendPasswordResetEmail/", registration.SendPasswordResetEmail)
+	http.HandleFunc("/ResendVerificationEmail/", registration.ResendVerificationEmail)
+
 	// USER PROFILE AND INTERACTIONS
 	http.HandleFunc("/profile/", profile.ViewProfile)
 	http.HandleFunc("/callme/", profile.Follow)
@@ -81,6 +91,7 @@ func main() {
 	http.HandleFunc("/deleteEventWidget/", widget.DeleteWidgetEvent)
 	http.HandleFunc("/deleteLinkFromWidget/", widget.EditWidgetDataDelete)
 	http.HandleFunc("/sortUserWidgets/", widget.SortUserWidgets)
+	http.HandleFunc("/sortProjectWidgets/", widget.SortProjectWidgets)
 
 	//PROJECT INTERACTIONS
 	http.HandleFunc("/Projects/", project.ProjectsPage)
@@ -130,16 +141,6 @@ func main() {
 	http.HandleFunc("/leaveProject/", settings.LeaveProject)
 	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
 	http.HandleFunc("/changeMemberClass/", settings.ChangeMemberClass)
-
-	//REGISTRATIONS
-	http.HandleFunc("/Signup/", registration.Signup)
-	http.HandleFunc("/Registration/Type/", registration.RegisterType)
-	http.HandleFunc("/registrationcomplete/", registration.Complete)
-	http.HandleFunc("/welcome/", registration.Registration)
-	http.HandleFunc("/Activation/", registration.EmailVerification)
-	http.HandleFunc("/ResetPassword/", registration.ResetPassword)
-	http.HandleFunc("/SendPasswordResetEmail/", registration.SendPasswordResetEmail)
-	http.HandleFunc("/ResendVerificationEmail/", registration.ResendVerificationEmail)
 
 	//SEARCH
 	http.HandleFunc("/search", search.Page)
