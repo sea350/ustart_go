@@ -47,10 +47,8 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 		if !emailInUse {
 			fmt.Println("1")
-			// cs = client.ClientSide{ErrorOutput: errors.New("Invalid Email"), ErrorStatus: true}
-			// client.RenderSidebar(w, r, "templateNoUser2")
-			// client.RenderTemplate(w, r, "reset-forgot-pw", cs)
-			fmt.Fprintln(w, "Invalid email")
+			cs = client.ClientSide{ErrorOutput: err, ErrorStatus: true}
+			return
 		} else {
 			fmt.Println("2")
 			token, err := uses.GenerateRandomString(32)
