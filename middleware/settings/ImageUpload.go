@@ -32,9 +32,11 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("------------------------CASE 1A------------------------")
 			err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 			if err != nil {
+				fmt.Println("------------------------CASE 1AA------------------------")
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 			} else {
+				fmt.Println("------------------------CASE 1AB------------------------")
 				session.Values["Avatar"] = blob
 				session.Save(r, w)
 			}
