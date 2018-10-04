@@ -48,6 +48,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		if !emailInUse {
 			cs.ErrorOutput = errors.New("Invalid email")
 			cs.ErrorStatus = true
+			return
 		} else {
 			token, err := uses.GenerateRandomString(32)
 			if err != nil {
