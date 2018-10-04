@@ -2,10 +2,8 @@ package registration
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -22,18 +20,13 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	err := r.ParseForm()
-	if err != nil {
-		fmt.Println("error:", err)
-	}
 
-	cs := client.ClientSide{ErrorStatus: false}
+	r.ParseForm()
+
+	cs := client.ClientSide{}
 
 	email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
 	emailedToken := r.FormValue("verifCode")
@@ -41,47 +34,73 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	user, err := getUser.UserByEmail(client.Eclient, email)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
+		cs.ErrorOutput = errors.New("A problem has occurred")
+		cs.ErrorStatus = true
+		client.RenderSidebar(w, r, "templateNoUser2")
+		client.RenderTemplate(w, r, "reset-new-pass", cs)
 		return
 	}
 
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("debug 1")
 	// If the time since authentication code was input is less than 1 hour
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
 		newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
+			cs.ErrorOutput = errors.New("A problem has occurred")
+			cs.ErrorStatus = true
+			client.RenderSidebar(w, r, "templateNoUser2")
+			client.RenderTemplate(w, r, "reset-new-pass", cs)
 			return
 		}
+
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("debug 2")
+
 		userID, err := getUser.UserIDByEmail(client.Eclient, email)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
+			cs.ErrorOutput = errors.New("A problem has occurred")
+			cs.ErrorStatus = true
+			client.RenderSidebar(w, r, "templateNoUser2")
+			client.RenderTemplate(w, r, "reset-new-pass", cs)
 			return
 		}
+
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("debug 3")
 
 		err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
+			cs.ErrorOutput = errors.New("A problem has occurred")
+			cs.ErrorStatus = true
+			client.RenderSidebar(w, r, "templateNoUser2")
+			client.RenderTemplate(w, r, "reset-new-pass", cs)
 			return
 		}
+
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("debug 4")
+
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
+
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("debug 5")
 
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 
 		http.Redirect(w, r, "/~", http.StatusFound)
@@ -89,6 +108,8 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		cs.ErrorOutput = errors.New("Authentication token invalid")
 		cs.ErrorStatus = true
 	}
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("debug 0")
 	client.RenderSidebar(w, r, "templateNoUser2")
 	client.RenderTemplate(w, r, "reset-new-pass", cs)
 }
