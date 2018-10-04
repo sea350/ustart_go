@@ -69,7 +69,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 	sendData := make(map[string]interface{})
 	sendData["notifications"] = notifs
-	sendData["numUnread"] = proxy.NumUnread
+	sendData["numUnread"] = proxy.NumUnseen
 
 	data, err := json.Marshal(sendData)
 	if err != nil {

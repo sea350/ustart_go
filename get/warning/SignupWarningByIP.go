@@ -3,7 +3,7 @@ package get
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"log"
 
 	post "github.com/sea350/ustart_go/post/index"
 	"github.com/sea350/ustart_go/types"
@@ -29,11 +29,8 @@ func startIndex(eclient *elastic.Client) error {
 
 	_, err := eclient.CreateIndex("ipindex").BodyString(ipMapping).Do(ctx)
 	if err != nil {
-		fmt.Println("Could not create", ipMapping)
-		return err
-
-	} else {
-		fmt.Println(ipMapping, "created")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Could not create", ipMapping)
 	}
 	return err
 
@@ -64,19 +61,19 @@ func SingupWarningByIP(eclient *elastic.Client, addressIP string) (types.SignupW
 	if searchResult.Hits.TotalHits == 0 {
 		err1 := post.AddToIndexSignWarning(eclient, signWarning)
 		return signWarning, err1
-	} else {
-		var ipID string
-		for _, res := range searchResult.Hits.Hits {
-			ipID = res.Id
-			break
-		}
-
-		initSignWarning, err2 := eclient.Get().Index("ipindex").Id(ipID).Do(ctx)
-		if err2 != nil {
-			panic(err2)
-		}
-
-		err3 := json.Unmarshal(*initSignWarning.Source, &signWarning)
-		return signWarning, err3
 	}
+	var ipID string
+	for _, res := range searchResult.Hits.Hits {
+		ipID = res.Id
+		break
+	}
+
+	initSignWarning, err2 := eclient.Get().Index("ipindex").Id(ipID).Do(ctx)
+	if err2 != nil {
+		panic(err2)
+	}
+
+	err3 := json.Unmarshal(*initSignWarning.Source, &signWarning)
+	return signWarning, err3
+
 }

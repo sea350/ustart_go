@@ -3,7 +3,6 @@ package post
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -36,9 +35,7 @@ func RemoveProjectFollow(eclient *elastic.Client, projID string, field string, d
 	case "followers":
 		FollowLock.Lock()
 		defer FollowLock.Unlock()
-		fmt.Println("SIZE BEFORE:", len(foll.UserFollowers))
 		delete(foll.UserFollowers, deleteKey)
-		fmt.Println("SIZE AFTER:", len(foll.UserFollowers))
 
 	// case "following":
 	// 	FollowLock.Lock()

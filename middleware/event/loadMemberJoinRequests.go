@@ -3,6 +3,7 @@ package event
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -23,29 +24,28 @@ func LoadMemberJoinRequests(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("eventID") //eventID
-	fmt.Println("debug text middlware/event/loadjoinrequests line 24")
-	fmt.Println(ID)
+
 	var heads []types.FloatingHead
 
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("err: middleware/event/loadjoinrequest Line 26")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	for index, userID := range evnt.MemberReqReceived {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
 		if err != nil {
-			fmt.Println(err)
-			fmt.Println(fmt.Sprintf("err: middleware/event/loadjoinrequest, Line 35, index %d", index))
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(fmt.Sprintf("err: middleware/event/loadjoinrequest, Line 35, index %d", index))
 		}
 		heads = append(heads, head)
 	}
 
 	data, err := json.Marshal(heads)
 	if err != nil {
-		fmt.Println("err: middleware/project/loadjoinrequest, Line 45")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, string(data))

@@ -3,7 +3,6 @@ package post
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strings"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -36,7 +35,6 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 	switch strings.ToLower(field) {
 	case "followers":
 		if followType == "user" {
-			fmt.Println("REMOVING FOLLOWERS")
 			FollowLock.Lock()
 			defer FollowLock.Unlock()
 			if len(foll.UserFollowers) == 0 {
@@ -45,7 +43,6 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 			delete(foll.UserFollowers, deleteKey)
 
 		} else if followType == "project" {
-			fmt.Println("REMOVING FOLLOWERS")
 			FollowLock.Lock()
 			defer FollowLock.Unlock()
 			if len(foll.ProjectFollowers) == 0 {
@@ -54,7 +51,6 @@ func RemoveUserFollow(eclient *elastic.Client, userID string, field string, dele
 			delete(foll.ProjectFollowers, deleteKey)
 		}
 	case "following":
-		fmt.Println("REMOVING FOLLOWING")
 		FollowLock.Lock()
 		defer FollowLock.Unlock()
 		if followType == "user" {

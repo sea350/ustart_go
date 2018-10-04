@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -77,7 +76,6 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 			log.Println(idKey)
 			continue
 		}
-		fmt.Println("Followers page current heads2:", heads2)
 
 		head.Followed, err = getFollow.IsFollowing(client.Eclient, test1.(string), idKey, "user")
 		if err != nil {

@@ -3,6 +3,7 @@ package event
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -23,14 +24,13 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("eventID") //eventID
-	fmt.Println("debug text middlware/event/loadjoinrequests line 24")
-	fmt.Println(ID)
+
 	var heads []types.FloatingHead
 
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println("err: middleware/event/loadjoinrequest Line 26")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	for index, userID := range evnt.GuestReqReceived {

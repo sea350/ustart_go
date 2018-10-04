@@ -15,6 +15,8 @@ var Eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 //Store ...
 var Store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
+var htmlPath = "/ustart/ustart_front/"
+
 //ClientSide ... This struct represents a user state after he/she has logged in. Some fields may no longer be needed
 //or are unnecessary.
 type ClientSide struct {
@@ -48,23 +50,8 @@ type ClientSide struct {
 	Dashboard         types.DashboardAggregate
 	Messages          []types.Message
 	Hits              int
+	Sent              string
 }
-
-/* The following line is how HTML is loaded by our application. Note we need the relative link from the location of GoStart2. */
-var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/followerlist-nil.html", "/ustart/ustart_front/Membership-Nil.html",
-	"/ustart/ustart_front/settings-Nil.html", "/ustart/ustart_front/inbox-Nil.html", "/ustart/ustart_front/nil-index2.html",
-	"/ustart/ustart_front/createProject-Nil.html", "/ustart/ustart_front/manageprojects-Nil.html",
-	"/ustart/ustart_front/projectsF.html", "/ustart/ustart_front/new-reg-nil.html",
-	"/ustart/ustart_front/loginerror-nil.html", "/ustart/ustart_front/templateNoUser2.html",
-	"/ustart/ustart_front/profile-nil.html", "/ustart/ustart_front/template2-nil.html",
-	"/ustart/ustart_front/template-footer-nil.html", "/ustart/ustart_front/regcomplete-nil.html",
-	"/ustart/ustart_front/project_settings_F.html", "/ustart/ustart_front/reset-forgot-pw.html", "/ustart/ustart_front/leftnav-nil.html",
-	"/ustart/ustart_front/ManageProjectMembersF.html", "/ustart/ustart_front/followerlist-nil.html", "/ustart/ustart_front/404.html",
-	"/ustart/ustart_front/search-nil.html", "/ustart/ustart_front/reg-got-verified.html",
-	"/ustart/ustart_front/reset-new-pass.html", "/ustart/ustart_front/cuzsteventoldmeto.html",
-	"/ustart/ustart_front/events.html", "/ustart/ustart_front/eventStart.html", "/ustart/ustart_front/eventManager.html",
-	"/ustart/ustart_front/chat.html", "/ustart/ustart_front/dashboard.html", "/ustart/ustart_front/eventSettings.html",
-	"/ustart/ustart_front/resend-email.html", "/ustart/ustart_front/notification.html"))
 
 //RenderTemplate ... This function does the actual rendering of HTML pages. Note it takes in a struct (type ClientSide).
 //You will need to continually send data to the pages and this is accomplished via the struct.
@@ -85,7 +72,9 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, cs Clie
 	if session.Values["Avatar"] != nil {
 		cs.Avatar = session.Values["Avatar"].(string)
 	}
-	err := templates.ExecuteTemplate(w, tmpl+".html", cs)
+
+	template := htype.Must(htype.ParseFiles(htmlPath + tmpl + ".html"))
+	err := template.ExecuteTemplate(w, tmpl+".html", cs)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -110,7 +99,9 @@ func RenderSidebar(w http.ResponseWriter, r *http.Request, tmpl string) {
 	if session.Values["Avatar"] != nil {
 		cs.Avatar = session.Values["Avatar"].(string)
 	}
-	err := templates.ExecuteTemplate(w, tmpl+".html", cs)
+
+	template := htype.Must(htype.ParseFiles(htmlPath + tmpl + ".html"))
+	err := template.ExecuteTemplate(w, tmpl+".html", cs)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

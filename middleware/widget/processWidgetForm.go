@@ -1,6 +1,7 @@
 package widget
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
@@ -24,6 +25,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	var data []template.HTML
 	var classification int
 	var newWidget types.Widget
+
+	edit := r.FormValue("editID")
 
 	if r.FormValue("widgetSubmit") == `0` {
 		// text
@@ -60,31 +63,37 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//instagram -- Takes in an instagram post URL
 
 		insta := r.FormValue("instagramInput")
-		edit := r.FormValue("editID")
 
 		// regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z0-9\-\_]{11}\/*`)
-		// regX := regexp.MustCompile(`https?:\/\/(www\.)?instagram\.com\/([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)`)
-		// regX := regexp.MustCompile(`(https?:\/\/www\.)?instagram\.com(\/p\/\w+\/?)`)
-		// regX := regexp.MustCompile(`https?:\/\/www\.instagram\.com\/p\/[A-Za-z\-\_0-9]{0,16}\/*+`)
 
 		// if !regX.MatchString(insta) {
 		// 	return newWidget, errors.New(`Unusable Instagram URL`)
 		// } //Check valid URL
 
-		input := template.HTML(insta)
-		if edit != `0` {
-			widget, err := get.WidgetByID(client.Eclient, edit)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				return newWidget, err
-			}
+		testArray := []string{}
+		err := json.Unmarshal([]byte(insta), &testArray)
+		if err != nil {
+			input := template.HTML(insta)
+			if edit != `0` {
+				widget, err := get.WidgetByID(client.Eclient, edit)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+					return newWidget, err
+				}
 
-			data = append(widget.Data, input)
+				data = append(widget.Data, input)
+			} else {
+				data = []template.HTML{input}
+			}
 		} else {
-			data = []template.HTML{input}
+			for _, elem := range testArray {
+				data = append(data, template.HTML(elem))
+			}
 		}
+
 		classification = 4
+
 	}
 	if r.FormValue("widgetSubmit") == `5` {
 		//soundcloud -- Takes in a Embed Code
@@ -158,7 +167,6 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	if r.FormValue("widgetSubmit") == `10` {
 		//spoofy -- Embed code
 		spoofy := r.FormValue("spotInput")
-		edit := r.FormValue("editID")
 
 		/*
 			regX := regexp.MustCompile(`<iframe src="https:\/\/open\.spotify\.com\/embed\/[^"]+" width="300" height="380" frameborder="0" allowtransparency="true"><\/iframe>`)
@@ -166,44 +174,59 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 				return newWidget, errors.New(`Unusable Spotify Embed Code`)
 			} //Check valid embed code
 		*/
+		testArray := []string{}
+		err := json.Unmarshal([]byte(spoofy), &testArray)
+		if err != nil {
+			input := template.HTML(spoofy)
+			if edit != `0` {
+				widget, err := get.WidgetByID(client.Eclient, edit)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+					return newWidget, err
+				}
 
-		spotifyEmbedCode := template.HTML(spoofy)
-		if edit != `0` {
-			widget, err := get.WidgetByID(client.Eclient, edit)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				return newWidget, err
+				data = append(widget.Data, input)
+			} else {
+				data = []template.HTML{input}
 			}
-
-			data = append(widget.Data, spotifyEmbedCode)
 		} else {
-			data = []template.HTML{spotifyEmbedCode}
+			for _, elem := range testArray {
+				data = append(data, template.HTML(elem))
+			}
 		}
 		classification = 10
 	}
 	if r.FormValue("widgetSubmit") == `11` {
 		//anchor -- Requires link that's almost impossible to get
 		ank := r.FormValue("arInput")
-		edit := r.FormValue("editID")
+
 		/*
 			regX := regexp.MustCompile(``)
 			if !regX.MatchString(ank) {
 				return newWidget, errors.New(`Invalid widget embed code`)
 			} //Check valid embed code
 		*/
-		input := template.HTML(ank)
-		if r.FormValue("editID") != `0` {
-			widget, err := get.WidgetByID(client.Eclient, edit)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				return newWidget, err
-			}
+		testArray := []string{}
+		err := json.Unmarshal([]byte(ank), &testArray)
+		if err != nil {
+			input := template.HTML(ank)
+			if edit != `0` {
+				widget, err := get.WidgetByID(client.Eclient, edit)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+					return newWidget, err
+				}
 
-			data = append(widget.Data, input)
+				data = append(widget.Data, input)
+			} else {
+				data = []template.HTML{input}
+			}
 		} else {
-			data = []template.HTML{input}
+			for _, elem := range testArray {
+				data = append(data, template.HTML(elem))
+			}
 		}
 		classification = 11
 	}

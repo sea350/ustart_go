@@ -69,16 +69,6 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 			query = query.Should(elastic.NewFuzzyQuery("Majors", strings.ToLower(element)).Fuzziness(1))
 		}
 	}
-	// Tag
-
-	// if len(mustTag) > 0 {
-	// 	tags := make([]interface{}, 0)
-	// 	for tag := range mustTag {
-	// 		tags = append([]interface{}{strings.ToLower(mustTag[tag])}, tags...)
-	// 	}
-
-	// 	query = query.Must(elastic.NewTermsQuery("Tags", tags...))
-	// }
 
 	if len(mustTag) > 0 {
 		for _, tag := range mustTag {
