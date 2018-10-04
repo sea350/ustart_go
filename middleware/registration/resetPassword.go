@@ -42,8 +42,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("debug 1")
 	// If the time since authentication code was input is less than 1 hour
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
 		newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
@@ -57,9 +55,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("debug 2")
-
 		userID, err := getUser.UserIDByEmail(client.Eclient, email)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -70,9 +65,6 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			client.RenderTemplate(w, r, "reset-new-pass", cs)
 			return
 		}
-
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("debug 3")
 
 		err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
 		if err != nil {
@@ -85,17 +77,11 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("debug 4")
-
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
-
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("debug 5")
 
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
 		if err != nil {
@@ -108,8 +94,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		cs.ErrorOutput = errors.New("Authentication token invalid")
 		cs.ErrorStatus = true
 	}
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("debug 0")
+
 	client.RenderSidebar(w, r, "templateNoUser2")
 	client.RenderTemplate(w, r, "reset-new-pass", cs)
 }
