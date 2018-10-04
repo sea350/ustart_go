@@ -1,6 +1,7 @@
 package registration
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -31,8 +32,6 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	email := p.Sanitize(r.FormValue("email"))
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("debug email: " + email)
 
 	var cs client.ClientSide
 
@@ -46,7 +45,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 		if !emailInUse {
 			fmt.Println("1")
-			cs = client.ClientSide{ErrorOutput: err, ErrorStatus: true}
+			cs = client.ClientSide{ErrorOutput: errors.New("No email found"), ErrorStatus: true}
 			client.RenderSidebar(w, r, "templateNoUser2")
 			client.RenderTemplate(w, r, "reset-forgot-pw", cs)
 			return
