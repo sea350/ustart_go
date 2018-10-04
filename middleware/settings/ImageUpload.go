@@ -19,15 +19,26 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	clientFile, header, err := r.FormFile("raw-image")
-
 	blob := r.FormValue("image-data")
-	if err != nil {
+
+	clientFile, header, err := r.FormFile("raw-image")
+	if err == http.ErrMissingFile {
+		err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		} else {
+			session.Values["Avatar"] = blob
+			session.Save(r, w)
+		}
+		http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
+	} else if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
 		return
 	}
+
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
 	buffer := make([]byte, 512)
 	_, _ = clientFile.Read(buffer)
@@ -35,7 +46,8 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 		err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 		if err != nil {
-
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		} else {
 			session.Values["Avatar"] = blob
 			session.Save(r, w)
