@@ -34,15 +34,17 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 
 	sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, ID, scrollID)
 
+	var results = make(map[string]interface{})
+
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
-	var results = make(map[string]interface{})
 	results["scrollID"] = sID
 	results["SuggestedUsers"] = heads
 	results["TotalHits"] = hits
+	results["error"] = err
 
 	data, err := json.Marshal(results)
 	if err != nil {
