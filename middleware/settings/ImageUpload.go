@@ -15,7 +15,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		fmt.Println(test1)
-		http.Redirect(w, r, "/Settings/", http.StatusFound)
+		http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
 		return
 	}
 	r.ParseForm()
