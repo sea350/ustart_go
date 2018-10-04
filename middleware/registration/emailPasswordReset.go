@@ -32,7 +32,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 	email := p.Sanitize(r.FormValue("email"))
 
-	var cs client.ClientSide
+	cs := client.ClientSide{}
 
 	//If the email isn't blank and it is in use...
 	if email != "" {
