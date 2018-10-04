@@ -32,6 +32,9 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(`NO URL PASSED`)
 	}
+	if url == `_blank` {
+		return
+	}
 
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], docID.(string))
 	if err != nil {
