@@ -30,6 +30,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		defer clientFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 			fmt.Println("------------------------CASE 1A------------------------")
+			fmt.Println("Blob== ", blob)
 			err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 			if err != nil {
 				fmt.Println("------------------------CASE 1AA------------------------")
