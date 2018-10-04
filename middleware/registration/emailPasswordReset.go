@@ -48,8 +48,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 		if !emailInUse {
 			fmt.Println("1")
-			cs.ErrorOutput = errors.New("Authentication token invalid")
-			cs.ErrorStatus = true
+			cs = client.ClientSide{ErrorOutput: errors.New("Invalid Email"), ErrorStatus: true}
 			return
 		} else {
 			fmt.Println("2")
