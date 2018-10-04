@@ -19,15 +19,16 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	clientFile, header, err := r.FormFile("raw-image")
 
-	blob := r.FormValue("image-data")
-	if err != nil {
+	clientFile, header, err := r.FormFile("raw-image")
+	if err != nil && err != http.ErrMissingFile {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
 		return
 	}
+	blob := r.FormValue("image-data")
+
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
 	buffer := make([]byte, 512)
 	_, _ = clientFile.Read(buffer)
