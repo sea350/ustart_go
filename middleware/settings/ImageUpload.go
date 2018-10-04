@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -21,11 +20,32 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	}
 	r.ParseForm()
 	blob := r.FormValue("image-data")
-
 	clientFile, header, err := r.FormFile("raw-image")
-	fmt.Println("Error:", err)
-	if err == errors.New("http: no such file") {
+	switch err {
+	case nil:
 		fmt.Println("------------------------CASE 1------------------------")
+		//Checking if image is valid by checking the first 512 bytes for correct image signature
+		buffer := make([]byte, 512)
+		_, _ = clientFile.Read(buffer)
+		defer clientFile.Close()
+		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
+			fmt.Println("------------------------CASE 1A------------------------")
+			err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			} else {
+				session.Values["Avatar"] = blob
+				session.Save(r, w)
+			}
+		} else {
+			fmt.Println("------------------------CASE 1B------------------------")
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("invalid file upload")
+		}
+	case http.ErrMissingFile:
+		fmt.Println("------------------------CASE 2------------------------")
+
 		err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -35,33 +55,12 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 			session.Save(r, w)
 		}
 		http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
-	} else if err != nil {
-		fmt.Println("------------------------CASE 2------------------------")
+	default:
+		fmt.Println("------------------------CASE 3------------------------")
+
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
-		return
-	}
-
-	fmt.Println("------------------------CASE 3------------------------")
-
-	//Checking if image is valid by checking the first 512 bytes for correct image signature
-	buffer := make([]byte, 512)
-	_, _ = clientFile.Read(buffer)
-	defer clientFile.Close()
-	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-		fmt.Println("------------------------CASE 4------------------------")
-		err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-		} else {
-			session.Values["Avatar"] = blob
-			session.Save(r, w)
-		}
-	} else {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("invalid file upload")
 	}
 
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
