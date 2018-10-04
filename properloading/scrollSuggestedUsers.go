@@ -75,6 +75,9 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 				continue
 
 			}
+		} else {
+			return ScrollSuggestedUsers(eclient, tagArray, projects, followingUsers, userID, res.ScrollId)
+
 		}
 
 	}

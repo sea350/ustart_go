@@ -19,6 +19,8 @@ func Nuke(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	defer http.Redirect(w, r, "/~", http.StatusFound)
+
 	projID := r.FormValue("projectID")
 	if projID == `` {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
