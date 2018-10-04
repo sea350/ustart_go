@@ -32,7 +32,10 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 	email := p.Sanitize(r.FormValue("email"))
 
-	cs := client.ClientSide{}
+	var cs client.ClientSide
+
+	defer client.RenderSidebar(w, r, "templateNoUser2")
+	defer client.RenderTemplate(w, r, "reset-forgot-pw", cs)
 
 	//If the email isn't blank and it is in use...
 	if email != "" {
@@ -43,11 +46,8 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if !emailInUse {
-			cs.ErrorOutput = errors.New("Invalid email")
+			cs.ErrorOutput = errors.New("Authentication token invalid")
 			cs.ErrorStatus = true
-
-			client.RenderSidebar(w, r, "templateNoUser2")
-			client.RenderTemplate(w, r, "reset-forgot-pw", cs)
 			return
 		} else {
 			token, err := uses.GenerateRandomString(32)
@@ -56,8 +56,6 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 				cs.ErrorStatus = true
 				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
 				return
 			}
 
@@ -67,8 +65,6 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 				cs.ErrorStatus = true
 				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
 				return
 			}
 
@@ -78,8 +74,6 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 				cs.ErrorStatus = true
 				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
 				return
 			}
 
@@ -89,8 +83,6 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 				cs.ErrorStatus = true
 				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
 				return
 			}
 
@@ -100,8 +92,6 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 				cs.ErrorStatus = true
 				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
 				return
 			}
 
