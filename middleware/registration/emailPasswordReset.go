@@ -2,7 +2,6 @@ package registration
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -23,8 +22,6 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-
-		log.Println(test1)
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
@@ -44,86 +41,81 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if !emailInUse {
-			fmt.Println("1")
 			cs = client.ClientSide{ErrorOutput: errors.New("No email found"), ErrorStatus: true}
 			client.RenderSidebar(w, r, "templateNoUser2")
 			client.RenderTemplate(w, r, "reset-forgot-pw", cs)
 			return
-		} else {
-			fmt.Println("2")
-			token, err := uses.GenerateRandomString(32)
-			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				cs.ErrorStatus = true
-				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
-				return
-			}
-
-			userID, err := get.UserIDByEmail(client.Eclient, email)
-			if err != nil {
-				fmt.Println("3")
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				cs.ErrorStatus = true
-				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
-				return
-			}
-
-			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", time.Now())
-			if err != nil {
-				fmt.Println("4")
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				cs.ErrorStatus = true
-				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
-				return
-			}
-
-			err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", token)
-			if err != nil {
-				fmt.Println("5")
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				cs.ErrorStatus = true
-				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
-				return
-			}
-
-			user, err := get.UserByID(client.Eclient, userID)
-			if err != nil {
-				fmt.Println("6")
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				cs.ErrorStatus = true
-				cs.ErrorOutput = err
-				client.RenderSidebar(w, r, "templateNoUser2")
-				client.RenderTemplate(w, r, "reset-forgot-pw", cs)
-				return
-			}
-
-			subject := "Your password-reset link"
-			link := "http://ustart.today:5002/ResetPassword/?email=" + email + "&verifCode=" + token
-			r := uses.NewRequest([]string{email}, subject)
-			r.Send(
-				"/ustart/ustart_front/email_template.html", map[string]string{
-					"username":      user.Username,
-					"link":          link,
-					"contentjuan":   "We received a request to reset your password for your Ustart Account. We would love to assist you!",
-					"contentdos":    "Simply click the button below to set a new password",
-					"contenttres":   "CHANGE PASSWORD",
-					"contentquatro": "a password reset"})
-			cs.Sent = "Email successfully sent!"
-			fmt.Println("7")
 		}
+		token, err := uses.GenerateRandomString(32)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			cs.ErrorStatus = true
+			cs.ErrorOutput = err
+			client.RenderSidebar(w, r, "templateNoUser2")
+			client.RenderTemplate(w, r, "reset-forgot-pw", cs)
+			return
+		}
+
+		userID, err := get.UserIDByEmail(client.Eclient, email)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			cs.ErrorStatus = true
+			cs.ErrorOutput = err
+			client.RenderSidebar(w, r, "templateNoUser2")
+			client.RenderTemplate(w, r, "reset-forgot-pw", cs)
+			return
+		}
+
+		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", time.Now())
+		if err != nil {
+
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			cs.ErrorStatus = true
+			cs.ErrorOutput = err
+			client.RenderSidebar(w, r, "templateNoUser2")
+			client.RenderTemplate(w, r, "reset-forgot-pw", cs)
+			return
+		}
+
+		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", token)
+		if err != nil {
+
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			cs.ErrorStatus = true
+			cs.ErrorOutput = err
+			client.RenderSidebar(w, r, "templateNoUser2")
+			client.RenderTemplate(w, r, "reset-forgot-pw", cs)
+			return
+		}
+
+		user, err := get.UserByID(client.Eclient, userID)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			cs.ErrorStatus = true
+			cs.ErrorOutput = err
+			client.RenderSidebar(w, r, "templateNoUser2")
+			client.RenderTemplate(w, r, "reset-forgot-pw", cs)
+			return
+		}
+
+		subject := "Your password-reset link"
+		link := "http://ustart.today:5002/ResetPassword/?email=" + email + "&verifCode=" + token
+		r := uses.NewRequest([]string{email}, subject)
+		r.Send(
+			"/ustart/ustart_front/email_template.html", map[string]string{
+				"username":      user.Username,
+				"link":          link,
+				"contentjuan":   "We received a request to reset your password for your Ustart Account. We would love to assist you!",
+				"contentdos":    "Simply click the button below to set a new password",
+				"contenttres":   "CHANGE PASSWORD",
+				"contentquatro": "a password reset"})
+		cs.Sent = "Email successfully sent!"
+
 	}
 	client.RenderSidebar(w, r, "templateNoUser2")
 	client.RenderTemplate(w, r, "reset-forgot-pw", cs)
