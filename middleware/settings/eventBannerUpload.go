@@ -2,6 +2,7 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -23,17 +24,26 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 	// }
 
 	r.ParseForm()
-	clientFile, header, err := r.FormFile("raw-banner")
-	blob := r.FormValue("banner-data")
-
-	//Get event by ID
-	//evnt, err := get.EventbyID(client.Eclient, r.FormValue("eventID"))
-	// if err != nil {
-	// 	fmt.Println("err: middleware/settings/eventBannerUpload line 33\n", err)
-	// }
 
 	//get the member
 	evnt, member, err := get.EventAndMember(client.Eclient, r.FormValue("eventID"), test1.(string))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
+		return
+	}
+
+	//Get image upload
+	clientFile, header, err := r.FormFile("raw-banner")
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
+		return
+	}
+	blob := r.FormValue("banner-data")
+
 	//check privilege
 	if uses.HasEventPrivilege("banner", evnt.PrivilegeProfiles, member) {
 		buffer := make([]byte, 512)
@@ -43,7 +53,8 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 			//Update the event banner
 			err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Banner", blob)
 			if err != nil {
-				fmt.Println("err: middleware/settings/eventbannerupload line 50\n", err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 			}
 		} else {
 			fmt.Println("err: middleware/settings/eventbannerupload invalid file upload")
@@ -52,8 +63,6 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("err: middleware/settings/eventLogo  you have no permission to change event banner")
 	}
-	fmt.Println("EVENT", evnt)
-	fmt.Println("EVENT URLNAME", evnt.URLName)
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 	return
 }

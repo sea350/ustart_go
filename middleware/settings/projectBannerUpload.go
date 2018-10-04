@@ -2,6 +2,7 @@ package settings
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/project"
@@ -14,31 +15,27 @@ import (
 func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-	//maybe uncomment later:
-	// if test1 == nil {
-	// 	fmt.Println(test1)
-	// 	http.Redirect(w, r, "/~", http.StatusFound)
-	// 	return
-	// }
 
 	r.ParseForm()
-	clientFile, header, err := r.FormFile("raw-banner")
-	if err != nil {
-		fmt.Println("err: middleware/settings/projectBannerUpload line 26\n", err)
-	}
-	blob := r.FormValue("banner-data")
-
-	//Get project by ID
-	// proj, err := get.ProjectByID(client.Eclient, r.FormValue("projectID"))
-	// if err != nil {
-	// 	fmt.Println("err: middleware/settings/projectbannerupload line 33\n", err)
-	// }
 
 	//get the member
 	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err != nil {
-		fmt.Println("err: middleware/settings/projectbannerupload line 40\n", err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err, "Project or Member not found")
+		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		return
 	}
+
+	blob := r.FormValue("banner-data")
+	clientFile, header, err := r.FormFile("raw-banner")
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		return
+	}
+
 	//check privilege
 	if uses.HasPrivilege("banner", proj.PrivilegeProfiles, member) {
 		buffer := make([]byte, 512)
@@ -48,13 +45,15 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 			//Update the project banner
 			err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", blob)
 			if err != nil {
-				fmt.Println("err: middleware/settings/projectbannerupload line 50\n", err)
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 			}
 		} else {
 			fmt.Println("err: middleware/settings/projectBannerUpload invalid file upload")
 		}
 
 	} else {
+
 		fmt.Println("err: middleware/settings/projectLogo  you have no permission to change project banner")
 	}
 

@@ -23,8 +23,9 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 
 	blob := r.FormValue("image-data")
 	if err != nil {
-		fmt.Println("err: middleware/settings/imageupload line 23\n", err)
-		http.Redirect(w, r, "/~", http.StatusFound)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
 		return
 	}
 	//Checking if image is valid by checking the first 512 bytes for correct image signature
@@ -34,8 +35,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 		err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+
 		} else {
 			session.Values["Avatar"] = blob
 			session.Save(r, w)
