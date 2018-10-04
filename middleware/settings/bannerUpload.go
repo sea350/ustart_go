@@ -21,6 +21,8 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 	clientFile, header, err := r.FormFile("raw-banner")
 	if err != nil {
 		fmt.Println("err: middleware/settings/projectBannerUpload line 14\n", err)
+		http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
+		return
 	}
 
 	blob := r.FormValue("banner-data")
