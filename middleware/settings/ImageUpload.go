@@ -22,7 +22,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	blob := r.FormValue("image-data")
 
 	clientFile, header, err := r.FormFile("raw-image")
-	if err == http.ErrMissingFile {
+	if err.Error() == "http: no such file" {
 		err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
