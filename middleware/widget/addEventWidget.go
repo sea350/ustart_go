@@ -1,6 +1,7 @@
 package widget
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -36,6 +37,7 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 			return
 		}
+		fmt.Println("processwidget",ProcessWidgetForm(r))
 
 		newWidget, err := ProcessWidgetForm(r)
 		if err != nil {
@@ -46,6 +48,8 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 
 		newWidget.UserID = r.FormValue("eventWidget")
 
+		fmt.Println("return value for event Widget", newWidget.UserID)
+
 		if r.FormValue("editID") == `0` {
 			err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, false, true)
 			if err != nil {
@@ -54,12 +58,14 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 			}
 		} else {
 			err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
+
+			fmt.Println("line 60, ", err)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 			}
 		}
-
+		fmt.Println("working until here???????")
 		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 	} else {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
