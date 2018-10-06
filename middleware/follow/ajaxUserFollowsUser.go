@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
+	getUser "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
 	postFollow "github.com/sea350/ustart_go/post/follow"
 	post "github.com/sea350/ustart_go/post/notification"
@@ -22,6 +23,14 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	followingID := r.FormValue("userID")
+	if followingID == `` {
+		return
+	}
+
+	_, err := getUser.UserByID(client.Eclient, followingID)
+	if err != nil {
+		return
+	}
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "user")
 	if err != nil {
