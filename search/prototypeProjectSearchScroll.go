@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -29,13 +30,15 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	ctx := context.Background()
 
 	var results []types.FloatingHead
-	var searchArr []string
+	var stringArray []string
 	query := elastic.NewBoolQuery()
 
-	stringArray := strings.Split(searchTerm, ` `)
-	for _, element := range stringArray {
-		searchArr = append(searchArr, strings.ToLower(element))
+	err := json.Unmarshal([]byte(searchTerm), &stringArray)
+	if err != nil {
+		return 0, "", results, err
 	}
+
+	query = query.Must(elastic.NewTermQuery("Visible", true))
 
 	if len(searchBy) >= 4 {
 		//Name
