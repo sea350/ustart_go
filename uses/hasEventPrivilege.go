@@ -7,7 +7,7 @@ import (
 )
 
 //HasEventPrivilege ...
-//Returns bool to represent whether member is project leader
+//Returns bool to represent whether member is event leader
 //ALso returns index of member
 func HasEventPrivilege(privilege string, privs []types.EventPrivileges, member types.EventMembers) bool {
 

@@ -25,21 +25,11 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
-		http.Redirect(w, r, "/404/", http.StatusFound)
 	}
-
-	// newWidget, err := ProcessWidgetForm(r)
-	// if err != nil {
-	// 	fmt.Println("this is an error: middleware/widget/addEventWidget 31")
-	// 	fmt.Println(err)
-	// 	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
-	// 	return
-	// }
-
-	// newWidget.UserID = r.FormValue("eventWidget")
 
 	if uses.HasEventPrivilege("widget", evnt.PrivilegeProfiles, member) {
 
+		/* empty eventWidget */
 		if r.FormValue("eventWidget") == `` {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println("Event ID Missing")
@@ -57,10 +47,6 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 		newWidget.UserID = r.FormValue("eventWidget")
 
 		if r.FormValue("editID") == `0` {
-			// fmt.Println("this is debug text middeware/widget/addeventwidget.go")
-			// fmt.Println(r.FormValue("eventWidget"))
-			// fmt.Println(newWidget.Data)
-
 			err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, false, true)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)

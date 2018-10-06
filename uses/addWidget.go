@@ -1,6 +1,7 @@
 package uses
 
 import (
+	"fmt"
 	"log"
 
 	getEvnt "github.com/sea350/ustart_go/get/event"
@@ -47,6 +48,7 @@ func AddWidget(eclient *elastic.Client, docID string, newWidget types.Widget, is
 		}
 
 		newWidget.Position = len(evnt.Widgets)
+		fmt.Println("newWidget.Position", newWidget.Position)
 		widgetID, err := post.IndexWidget(eclient, newWidget)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
