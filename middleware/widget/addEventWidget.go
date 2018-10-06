@@ -16,6 +16,7 @@ import (
 func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
+	fmt.println(test1)
 	if test1 == nil {
 		//No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
@@ -37,7 +38,6 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 			return
 		}
-		fmt.Println("processwidget",ProcessWidgetForm(r))
 
 		newWidget, err := ProcessWidgetForm(r)
 		if err != nil {
@@ -48,7 +48,6 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 
 		newWidget.UserID = r.FormValue("eventWidget")
 
-		fmt.Println("return value for event Widget", newWidget.UserID)
 
 		if r.FormValue("editID") == `0` {
 			err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, false, true)
@@ -65,7 +64,6 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 		}
-		fmt.Println("working until here???????")
 		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 	} else {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
