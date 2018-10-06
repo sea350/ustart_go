@@ -17,7 +17,7 @@ import (
 //returns if the chat is valid, the actual id of conversation, docID of the second dmer if dm, and error
 func ChatVerifyURL(eclient *elastic.Client, url string, viewerID string) (bool, string, string, error) {
 	usr, err := get.UserByID(eclient, viewerID)
-	if err != nil {
+	if err != nil || url == `` {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		return false, ``, ``, err
