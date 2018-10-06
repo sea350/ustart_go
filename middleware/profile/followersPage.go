@@ -21,6 +21,10 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if r.URL.Path[11:] == `_blank` {
+		return
+	}
+
 	id, err := getUser.IDByUsername(client.Eclient, r.URL.Path[11:])
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
