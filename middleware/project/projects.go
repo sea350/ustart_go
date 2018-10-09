@@ -2,7 +2,6 @@ package project
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -144,7 +143,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 
 	cleanCat := p.Sanitize(r.FormValue("category"))
 	if len(cleanCat) == 0 {
-		log.Println("Cannot leave category blank")
+		//log.Println("Cannot leave category blank")
 		client.RenderSidebar(w, r, "template2-nil")
 		client.RenderSidebar(w, r, "leftnav-nil")
 		client.RenderTemplate(w, r, "createProject-Nil", cs)
@@ -207,7 +206,6 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		} else {
-			fmt.Println("Url: ", url)
 			time.Sleep(2 * time.Second)
 			http.Redirect(w, r, "/Projects/"+url, http.StatusFound)
 			return
