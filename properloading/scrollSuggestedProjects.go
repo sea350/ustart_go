@@ -12,9 +12,9 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//ScrollSuggestedUsers ...
+//ScrollSuggestedProjects ...
 //Scrolls through docs being loaded
-func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string) (string, []types.FloatingHead, int, error) {
+func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, projects []types.ProjectInfo, followingProjects map[string]bool, userID string, scrollID string) (string, []types.FloatingHead, int, error) {
 
 	ctx := context.Background()
 	tags := make([]interface{}, 0)
@@ -30,17 +30,17 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 	}
 
 	followIDs := make([]interface{}, 0)
-	for id := range followingUsers {
+	for id := range followingProjects {
 		followIDs = append([]interface{}{strings.ToLower(id)}, projectIDs...)
 	}
 
 	suggestedUserQuery := elastic.NewBoolQuery()
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...))
+	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", projectIDs...))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 
 	searchResults := eclient.Scroll().
-		Index(globals.UserIndex).
+		Index(globals.ProjectIndex).
 		Query(suggestedUserQuery).
 		Size(1)
 
@@ -68,9 +68,9 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 
 	var heads []types.FloatingHead
 	for _, hits := range res.Hits.Hits {
-		_, exists := followingUsers[hits.Id]
+		_, exists := followingProjects[hits.Id]
 		if !exists && hits.Id != userID {
-			newHead, err := uses.ConvertUserToFloatingHead(eclient, hits.Id)
+			newHead, err := uses.ConvertProjectToFloatingHead(eclient, hits.Id)
 			if err == nil {
 				heads = append(heads, newHead)
 
@@ -82,7 +82,7 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 
 			}
 		} else {
-			return ScrollSuggestedUsers(eclient, tagArray, projects, followingUsers, userID, res.ScrollId)
+			return ScrollSuggestedProjects(eclient, tagArray, projects, followingProjects, userID, res.ScrollId)
 
 		}
 
