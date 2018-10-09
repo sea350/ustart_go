@@ -34,15 +34,15 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 		followIDs = append([]interface{}{strings.ToLower(id)}, projectIDs...)
 	}
 
-	suggestedUserQuery := elastic.NewBoolQuery()
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
-	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", projectIDs...))
-	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
-	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visisble", true))
+	suggQuery := elastic.NewBoolQuery()
+	suggQuery = suggQuery.Should(elastic.NewTermsQuery("Tags", tags...))
+	suggQuery = suggQuery.MustNot(elastic.NewTermsQuery("_id", projectIDs...))
+	suggQuery = suggQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
+	suggQuery = suggQuery.Must(elastic.NewTermQuery("Visisble", true))
 
 	searchResults := eclient.Scroll().
 		Index(globals.ProjectIndex).
-		Query(suggestedUserQuery).
+		Query(suggQuery).
 		Size(1)
 
 	if len(scrollID) > 0 {
