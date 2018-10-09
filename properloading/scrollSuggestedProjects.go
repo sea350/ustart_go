@@ -38,6 +38,7 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", projectIDs...))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
+	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("Visisble", true))
 
 	searchResults := eclient.Scroll().
 		Index(globals.ProjectIndex).
