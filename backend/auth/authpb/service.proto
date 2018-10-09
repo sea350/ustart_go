@@ -1,0 +1,57 @@
+syntax="proto3";
+
+package auth.service;
+
+import "models.proto";
+
+option go_package= "authpb";
+
+service Auth {
+  rpc Authenticate(AuthenticateRequest) returns (AuthenticateResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse);
+  rpc Lookup(LookupRequest) returns (LookupResponse);
+}
+
+message Empty{}
+
+message AuthenticateRequest {
+  auth.models.UUID UUID = 1;
+  string Challenge = 2;
+}
+
+message AuthenticateResponse {}
+
+message RegisterRequest{
+  string Username = 1;
+  string Password = 2;
+}
+
+message RegisterResponse{
+  auth.models.UUID UUID = 1;
+}
+
+message DeleteRequest {
+  auth.models.UUID UUID = 1;
+  string Challenge = 2;
+}
+
+message DeleteResponse {}
+
+message ChangePasswordRequest {
+  auth.models.UUID UUID = 1;
+  string Challenge = 2;
+  string NewPassword = 3;
+}
+
+message ChangePasswordResponse {}
+
+message LookupRequest{
+  string Username = 1;
+}
+
+message LookupResponse{
+  auth.models.UUID UUID = 1;
+}
+

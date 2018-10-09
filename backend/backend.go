@@ -45,14 +45,14 @@ func (srv *Server) Run() error {
 
 	http.HandleFunc("/Inbox/", inbox.Inbox)
 
-	//LOGIN & LOGOUT
+	// login/out
 	http.HandleFunc("/loginerror/", login.Error)
 	http.HandleFunc("/", login.Home)
 	http.HandleFunc("/profilelogin/", login.Login)
 	http.HandleFunc("/logout/", login.Logout)
 	http.HandleFunc("/unverified/", login.Unverified)
 
-	// USER PROFILE AND INTERACTIONS
+	// generic user interactions
 	http.HandleFunc("/profile/", profile.ViewProfile)
 	http.HandleFunc("/callme/", profile.Follow)
 	http.HandleFunc("/Like/", profile.Like)
@@ -71,7 +71,7 @@ func (srv *Server) Run() error {
 	//http.HandleFunc("/AjaxUserSuggestions/", profile.AjaxLoadSuggestedUsers)
 	//http.HandleFunc("/UserSuggestions/", profile.LoadSuggestedUsers)
 
-	//WIDGET INTERACTIONS
+	// widgets
 	http.HandleFunc("/addWidget/", widget.AddWidget)
 	http.HandleFunc("/addProjectWidget/", widget.AddProjectWidget)
 	http.HandleFunc("/addEventWidget/", widget.AddEventWidget)
@@ -81,7 +81,7 @@ func (srv *Server) Run() error {
 	http.HandleFunc("/deleteLinkFromWidget/", widget.EditWidgetDataDelete)
 	http.HandleFunc("/sortUserWidgets/", widget.SortUserWidgets)
 
-	//PROJECT INTERACTIONS
+	// projects
 	http.HandleFunc("/Projects/", project.ProjectsPage)
 	http.HandleFunc("/MyProjects/", project.MyProjects)
 	http.HandleFunc("/CreateProjectPage/", project.CreateProjectPage)
@@ -98,7 +98,7 @@ func (srv *Server) Run() error {
 	http.HandleFunc("/ProjectFollowers/", project.FollowersPage)
 	http.HandleFunc("/DeleteProject/", project.Nuke)
 
-	//SETTINGS CHANGES
+	// settings
 	http.HandleFunc("/Settings/", settings.Settings)
 	http.HandleFunc("/ImageUpload/", settings.ImageUpload)
 	http.HandleFunc("/changeName/", settings.ChangeName)
@@ -130,7 +130,7 @@ func (srv *Server) Run() error {
 	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
 	http.HandleFunc("/changeMemberClass/", settings.ChangeMemberClass)
 
-	//REGISTRATIONS
+	// user registration
 	http.HandleFunc("/Signup/", registration.Signup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
@@ -140,11 +140,11 @@ func (srv *Server) Run() error {
 	http.HandleFunc("/SendPasswordResetEmail/", registration.SendPasswordResetEmail)
 	http.HandleFunc("/ResendVerificationEmail/", registration.ResendVerificationEmail)
 
-	//SEARCH
+	// search
 	http.HandleFunc("/search", search.Page)
 	http.HandleFunc("/AjaxLoadNext/", search.AjaxLoadNext)
 
-	//EVENT
+	// events
 	http.HandleFunc("/Event/", event.ViewEvent)
 	http.HandleFunc("/AddEvent/", event.AddEvent)
 	http.HandleFunc("/StartEvent/", event.StartEvent)
@@ -169,7 +169,7 @@ func (srv *Server) Run() error {
 	http.HandleFunc("/AddEventMember/", event.AddEventMemberRequest)
 	http.HandleFunc("/AddEventProject/", event.AddEventProjectRequest)
 
-	//CHAT
+	// chat
 	http.HandleFunc("/ch/", chat.Page)
 	http.HandleFunc("/ws/", chat.HandleConnections) //weebsocket
 	http.HandleFunc("/cN/", chat.HandleChatClients) //websocket
@@ -177,7 +177,7 @@ func (srv *Server) Run() error {
 	http.HandleFunc("/AjaxLoadMoreChat/", chat.AjaxLoadMoreChat)
 	http.HandleFunc("/AjaxChatNotifications/", chat.AjaxNotificationLoad)
 
-	//ENTRIES
+	// entries
 	http.HandleFunc("/AjaxLoadComments/", entry.AjaxLoadComments) //general
 	http.HandleFunc("/editPost/", entry.EditEntry)
 	http.HandleFunc("/deletePost/", entry.DeleteEntry)
@@ -192,18 +192,18 @@ func (srv *Server) Run() error {
 	http.HandleFunc("/EventMakeEntry/", event.MakeEventEntry) //event
 	http.HandleFunc("/AjaxLoadEventEntries/", event.AjaxLoadEventEntries)
 
-	//DASHBOARD
+	// dashboard
 	http.HandleFunc("/dash/", dash.ViewDashboard)
 	http.HandleFunc("/AjaxDash/", dash.AjaxLoadDashEntries)
 
-	//Notifications
+	// notifs
 	http.HandleFunc("/AjaxNotifications/", notification.AjaxNotificationLoad)
 	http.HandleFunc("/AjaxRemoveNotification/", notification.RemoveNotification)
 	http.HandleFunc("/AjaxMarkAsSeen/", notification.MarkAsSeen)
 	http.HandleFunc("/AjaxScrollNotifications/", notification.AjaxScrollNotification)
 	http.HandleFunc("/Notifications/", notification.Page)
 
-	//IMG
+	// images
 	http.HandleFunc("/img/", img.Display)
 
 	log.Printf("Listening on %s\n", srv.port)

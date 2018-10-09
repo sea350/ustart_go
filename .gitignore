@@ -5,3 +5,5 @@ cmd/web/web
 # Logs
 backend_log.txt
 webserver_log.txt
+
+*.pb.go

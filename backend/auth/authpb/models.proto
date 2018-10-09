@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package auth.models;
+
+option go_package= "authpb";
+
+message UUID {
+  string UUID = 1;
+}
