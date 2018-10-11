@@ -21,7 +21,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+	proj, _, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err, "Project or Member not found")
@@ -89,7 +89,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Getting projectID and member
-	proj, _, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+	proj, _, err = get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err, "Project or Member not found")
