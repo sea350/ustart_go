@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -21,7 +22,8 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 
 	//Getting projectID and member
 	projID := r.FormValue("projectID")
-	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+	fmt.Println("ProjectID is", projID)
+	proj, member, err := get.ProjAndMember(client.Eclient, projID, test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
