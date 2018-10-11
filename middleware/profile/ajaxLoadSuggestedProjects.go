@@ -49,7 +49,7 @@ func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 	}
 
 	results["scrollID"] = sID
-	results["SuggestedUsers"] = heads
+	results["SuggestedProjects"] = heads
 	results["TotalHits"] = hits
 	results["error"] = err
 
