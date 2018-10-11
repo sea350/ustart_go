@@ -26,12 +26,12 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 
 	projectIDs := make([]interface{}, 0)
 	for elements := range projects {
-		projectIDs = append([]interface{}{strings.ToLower(projects[elements].ProjectID)}, projectIDs...)
+		projectIDs = append([]interface{}{projects[elements].ProjectID}, projectIDs...)
 	}
 
 	followIDs := make([]interface{}, 0)
 	for id := range followingProjects {
-		followIDs = append([]interface{}{strings.ToLower(id)}, followIDs...)
+		followIDs = append([]interface{}{id}, followIDs...)
 	}
 
 	suggQuery := elastic.NewBoolQuery()
