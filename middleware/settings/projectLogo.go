@@ -30,21 +30,11 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 
 	}
-	// fmt.Println("ProjectID is", r.FormValue("projectID"))
 
-	fmt.Println("ProjectID line 34 is", r.FormValue("projectID"))
 	switch err {
 	case nil:
+		fmt.Println("Case 1")
 		blob := r.FormValue("image-data")
-		//Getting projectID and member
-		// proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
-		// if err != nil {
-		// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-		// 	log.Println(err, "Project or Member not found")
-		// 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
-
-		// }
-		fmt.Println("ProjectID is", r.FormValue("projectID"))
 		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
 			//Checking if image is valid by checking the first 512 bytes for correct image signature
 			buffer := make([]byte, 512)
@@ -65,15 +55,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			log.Println(err, "You do not have permission to change project logo")
 		}
 	case http.ErrMissingFile:
-		//Getting projectID and member
-		// proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
-		// if err != nil {
-		// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-		// 	log.Println(err, "Project or Member not found")
-		// 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
-
-		// }
-		fmt.Println("ProjectID is", r.FormValue("projectID"))
+		fmt.Println("Case 2")
 		blob := r.FormValue("image-data")
 		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
 			err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), blob)
@@ -86,19 +68,10 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			log.Println(err, "You do not have permission to change project logo")
 		}
 	default:
+		fmt.Println("Case 3")
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
-
-	// //Getting projectID and member
-	// proj, _, err = get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
-	// if err != nil {
-	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	// 	log.Println(err, "Project or Member not found")
-	// 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
-
-	// }
-	// fmt.Println("ProjectID is", r.FormValue("projectID"))
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 }
