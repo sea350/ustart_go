@@ -2,6 +2,7 @@ package properloading
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log"
 	"strings"
@@ -56,7 +57,10 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 	}
 
 	res, err := searchResults.Do(ctx)
-	if err != nil && err != io.EOF || res.Hits.TotalHits == 0 {
+	if err != nil {
+		if err == io.EOF {
+			fmt.Println(res.Hits.TotalHits)
+		}
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		return "", nil, 0, err
