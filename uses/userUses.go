@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"os"
 
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -107,15 +106,13 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	newUsr.LastName = lname
 	newUsr.Email = email
 	newUsr.Username = username
-
 	//New user verification process
 	newUsr.Verified = false
 	// SendVerificationEmail(email)
 	token, err := GenerateRandomString(32)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 	newUsr.AuthenticationCode = token
 	subject := "Your verification link"
@@ -131,7 +128,113 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	newUsr.University = school
 	newUsr.Majors = major
 	newUsr.Dob = bday
+	newLoc := types.LocStruct{}
+	newLoc.Country = country
+	newLoc.State = state
+	newLoc.City = city
+	newLoc.Zip = zip
+	newUsr.Location = newLoc
+	newUsr.Visible = true
+	newUsr.AccCreation = time.Now()
+	if currYear == "Freshman" {
+		newUsr.Class = 0
+	} else if currYear == "Sophomore" {
+		newUsr.Class = 1
+	} else if currYear == "Junior" {
+		newUsr.Class = 2
+	} else if currYear == "Senior" {
+		newUsr.Class = 3
+	} else if currYear == "Graduate" {
+		newUsr.Class = 4
+	} else {
+		newUsr.Class = 5
+	}
 
+	id, retErr := postUser.IndexUser(eclient, newUsr)
+	if retErr != nil {
+		return retErr
+	}
+
+	errFollow := postFollow.IndexFollow(eclient, id)
+	if errFollow != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(errFollow)
+	}
+	newProxy := types.ProxyMessages{DocID: id, Class: 1}
+	proxyID, err := postChat.IndexProxyMsg(eclient, newProxy)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	newProxyNotif := types.ProxyNotifications{DocID: id}
+	newProxyNotif.Settings.Default()
+	_, err = postNotif.IndexProxyNotification(eclient, newProxyNotif)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	err = postUser.UpdateUser(eclient, id, "ProxyMessages", proxyID)
+
+	return err
+}
+
+//GuestSignUpBasic ... Signup function for guests (non-NYU users)
+func GuestSignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string, guestCode string) error {
+	inUse, err := getUser.EmailInUse(eclient, email)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	if inUse {
+		return errors.New("Error: Email is in use ")
+	}
+
+	//Check for valid guest email address
+	if !ValidGuestEmail(email) {
+		return errors.New("Error: Invalid email")
+	}
+
+	inUse, err = getUser.UsernameInUse(eclient, username)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	if inUse {
+		return errors.New("Error: Username is in use")
+	}
+
+	//-------------------------------------WIP------------------------------------
+	// validGuestcode, err :=
+
+	newUsr := types.User{}
+	newUsr.Avatar = "https://i.imgur.com/TYFKsdi.png"
+	newUsr.FirstName = fname
+	newUsr.LastName = lname
+	newUsr.Email = email
+	newUsr.Username = username
+	newUsr.Verified = false
+	token, err := GenerateRandomString(32)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+	newUsr.AuthenticationCode = token
+
+	subject := "Your verification link"
+	link := "http://ustart.today:5002/Activation/?email=" + email + "&verifCode=" + token
+	r := NewRequest([]string{email}, subject)
+	r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": username, "link": link,
+		"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
+		"contentdos":    "Simply click the button below to verify your account",
+		"contenttres":   "VERIFY ACCOUNT",
+		"contentquatro": "a new account"})
+
+	newUsr.Password = password
+	newUsr.University = school
+	newUsr.Majors = major
+	newUsr.Dob = bday
 	newLoc := types.LocStruct{}
 	newLoc.Country = country
 	newLoc.State = state
