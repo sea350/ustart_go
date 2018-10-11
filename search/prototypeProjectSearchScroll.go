@@ -34,6 +34,8 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 
 	err := json.Unmarshal([]byte(searchTerm), &stringArray)
 	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return 0, "", results, err
 	}
 
