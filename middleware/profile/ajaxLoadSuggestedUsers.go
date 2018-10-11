@@ -3,6 +3,7 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 
@@ -58,8 +59,7 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, uID, scrollID)
-
-	if err != nil {
+	if err != nil && err != io.EOF {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
