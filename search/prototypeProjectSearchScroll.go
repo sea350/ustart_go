@@ -2,7 +2,6 @@ package search
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -32,12 +31,7 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	var stringArray []string
 	query := elastic.NewBoolQuery()
 
-	err := json.Unmarshal([]byte(searchTerm), &stringArray)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-		return 0, "", results, err
-	}
+	stringArray = strings.Split(searchTerm, ",")
 
 	query = query.Must(elastic.NewTermQuery("Visible", true))
 
