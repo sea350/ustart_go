@@ -14,19 +14,23 @@ import (
 func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
+	if test1 == nil {
+		http.Redirect(w, r, "/~", http.StatusFound)
+		return
+	}
 
 	r.ParseForm()
+	clientFile, header, err := r.FormFile("raw-banner")
 
 	//Get the project and member
-	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
-	if err != nil {
+	proj, member, err1 := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+	if err1 != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err, "Project or Member not found")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
 
-	clientFile, header, err := r.FormFile("raw-banner")
 	switch err {
 	case nil:
 		blob := r.FormValue("banner-data")
@@ -71,5 +75,5 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 }

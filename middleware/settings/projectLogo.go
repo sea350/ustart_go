@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -20,20 +19,18 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-
 	clientFile, header, err := r.FormFile("raw-image")
 
 	proj, member, err1 := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err1 != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err, "Project or Member not found")
-		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 
 	}
 
 	switch err {
 	case nil:
-		fmt.Println("Case 1")
 		blob := r.FormValue("image-data")
 		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
 			//Checking if image is valid by checking the first 512 bytes for correct image signature
@@ -55,7 +52,6 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			log.Println(err, "You do not have permission to change project logo")
 		}
 	case http.ErrMissingFile:
-		fmt.Println("Case 2")
 		blob := r.FormValue("image-data")
 		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
 			err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), blob)
@@ -68,10 +64,9 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			log.Println(err, "You do not have permission to change project logo")
 		}
 	default:
-		fmt.Println("Case 3")
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
-	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 }
