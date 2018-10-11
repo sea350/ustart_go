@@ -1,50 +1,80 @@
 package profile
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 
+	getFollow "github.com/sea350/ustart_go/get/follow"
 	get "github.com/sea350/ustart_go/get/user"
-	"github.com/sea350/ustart_go/globals"
 	client "github.com/sea350/ustart_go/middleware/client"
-	elastic "gopkg.in/olivere/elastic.v5"
+	"github.com/sea350/ustart_go/properloading"
 )
 
-//AjaxLoadProjects ... Pulls suggested projects based on skills required
+//AjaxLoadSuggestedProjects ... Pulls suggested projects based on skills required
 func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["Username"]
-	if test1 == nil {
+	docID, _ := session.Values["DocID"]
+	if docID == nil {
 		// No username in session
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
-	ID := session.Values["DocID"].(string)
-	ctx := context.Background()
-	myUser, err := get.UserByUsername(client.Eclient, ID)
+
+	uID := docID.(string)
+	scrollID := r.FormValue("scrollID")
+	projID := r.FormValue("docID")
+	if projID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Project Doc ID not passed in")
+		return
+	}
+
+	var results = make(map[string]interface{})
+
+	myUser, err := get.UserByID(client.Eclient, uID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		results["error"] = err
+		data, err := json.Marshal(results)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+
+		fmt.Fprintln(w, string(data))
+		return
+	}
+
+	_, follDoc, err := getFollow.ByID(client.Eclient, uID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		results["error"] = err
+		data, err := json.Marshal(results)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+
+		fmt.Fprintln(w, string(data))
+		return
+	}
+
+	sID, heads, hits, err := properloading.ScrollSuggestedProjects(client.Eclient, myUser.Tags, myUser.Projects, follDoc.ProjectFollowing, uID, scrollID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
-	arrSkills := make([]interface{}, 0)
-	for element := range myUser.Tags {
-		arrSkills = append([]interface{}{strings.ToLower(myUser.Tags[element])}, arrSkills...)
-	}
+	results["scrollID"] = sID
+	results["SuggestedUsers"] = heads
+	results["TotalHits"] = hits
+	results["error"] = err
 
-	suggestedProjectQuery := elastic.NewBoolQuery()
-	suggestedProjectQuery = suggestedProjectQuery.Should(elastic.NewTermsQuery("ListNeeded", arrSkills...))
-
-	searchResults, _ := client.Eclient.Search().
-		Index(globals.ProjectIndex).
-		Query(suggestedProjectQuery).
-		Do(ctx)
-
-	data, err := json.Marshal(searchResults)
+	data, err := json.Marshal(results)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)

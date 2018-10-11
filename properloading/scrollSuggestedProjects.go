@@ -36,57 +36,42 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 
 	suggQuery := elastic.NewBoolQuery()
 	suggQuery = suggQuery.Should(elastic.NewTermsQuery("Tags", tags...))
+	suggQuery = suggQuery.Should(elastic.NewTermsQuery("ListNeeded", tags...))
 	suggQuery = suggQuery.MustNot(elastic.NewTermsQuery("_id", projectIDs...))
 	suggQuery = suggQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 	suggQuery = suggQuery.Must(elastic.NewTermQuery("Visisble", true))
 
+	amt := 1
+	if scrollID == `` {
+		amt = 3
+	}
+
 	searchResults := eclient.Scroll().
 		Index(globals.ProjectIndex).
 		Query(suggQuery).
-		Size(1)
+		Size(amt)
 
-	if len(scrollID) > 0 {
+	if scrollID != `` {
 		searchResults = searchResults.ScrollId(scrollID)
 	}
-	res, err := searchResults.Do(ctx)
 
-	if err != nil {
-		if err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-		}
+	res, err := searchResults.Do(ctx)
+	if err != nil && err != io.EOF {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return "", nil, 0, err
 	}
 
-	// var usrIDs []string
-	// for _, hits := range res.Hits.Hits {
-
-	// 	_, exists := followingUsers[hits.Id]
-	// 	if !exists{
-	// 		usrIDs = append(usrIDs, hits.Id)
-	// 	}
-	// }
-
 	var heads []types.FloatingHead
 	for _, hits := range res.Hits.Hits {
-		_, exists := followingProjects[hits.Id]
-		if !exists && hits.Id != userID {
-			newHead, err := uses.ConvertProjectToFloatingHead(eclient, hits.Id)
-			if err == nil {
-				heads = append(heads, newHead)
-
-			} else {
-
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				continue
-
-			}
-		} else {
-			return ScrollSuggestedProjects(eclient, tagArray, projects, followingProjects, userID, res.ScrollId)
-
+		newHead, err := uses.ConvertProjectToFloatingHead(eclient, hits.Id)
+		if err == nil {
+			heads = append(heads, newHead)
+		} else if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			continue
 		}
-
 	}
 
 	return res.ScrollId, heads, len(heads), err

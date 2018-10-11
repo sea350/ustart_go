@@ -39,51 +39,36 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 
+	amt := 1
+	if scrollID == `` {
+		amt = 3
+	}
+
 	searchResults := eclient.Scroll().
 		Index(globals.UserIndex).
 		Query(suggestedUserQuery).
-		Size(1)
+		Size(amt)
 
 	if len(scrollID) > 0 {
 		searchResults = searchResults.ScrollId(scrollID)
 	}
-	res, err := searchResults.Do(ctx)
 
-	if err != nil {
-		if err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-		}
+	res, err := searchResults.Do(ctx)
+	if err != nil && err != io.EOF {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return "", nil, 0, err
 	}
 
-	// var usrIDs []string
-	// for _, hits := range res.Hits.Hits {
-
-	// 	_, exists := followingUsers[hits.Id]
-	// 	if !exists{
-	// 		usrIDs = append(usrIDs, hits.Id)
-	// 	}
-	// }
-
 	var heads []types.FloatingHead
 	for _, hits := range res.Hits.Hits {
-		_, exists := followingUsers[hits.Id]
-		if !exists && hits.Id != userID {
-			newHead, err := uses.ConvertUserToFloatingHead(eclient, hits.Id)
-			if err == nil {
-				heads = append(heads, newHead)
-
-			} else {
-
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-				continue
-
-			}
+		newHead, err := uses.ConvertUserToFloatingHead(eclient, hits.Id)
+		if err == nil {
+			heads = append(heads, newHead)
 		} else {
-			return ScrollSuggestedUsers(eclient, tagArray, projects, followingUsers, userID, res.ScrollId)
-
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+			continue
 		}
 
 	}
