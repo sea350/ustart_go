@@ -23,8 +23,8 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 
 	clientFile, header, err := r.FormFile("raw-image")
 
-	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
-	if err != nil {
+	proj, member, err1 := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+	if err1 != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err, "Project or Member not found")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
