@@ -41,9 +41,9 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 
 	amt := 1
-	// if scrollID == `` {
-	// 	amt = 3
-	// }
+	if scrollID == `` {
+		amt = 3
+	}
 
 	searchResults := eclient.Scroll().
 		Index(globals.UserIndex).
