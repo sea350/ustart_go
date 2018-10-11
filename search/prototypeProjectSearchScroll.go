@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"os"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -110,13 +109,12 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	}
 
 	res, err := scroll.Do(ctx)
-	if err == io.EOF {
+	if !(err == io.EOF && res != nil) && err != nil {
+		if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
 		return 0, "", results, err
-	}
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
 	}
 
 	for _, element := range res.Hits.Hits {
