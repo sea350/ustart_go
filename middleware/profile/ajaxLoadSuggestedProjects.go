@@ -24,12 +24,6 @@ func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 
 	uID := docID.(string)
 	scrollID := r.FormValue("scrollID")
-	projID := r.FormValue("docID")
-	if projID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Project Doc ID not passed in")
-		return
-	}
 
 	var results = make(map[string]interface{})
 
