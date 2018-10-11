@@ -21,7 +21,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	proj, _, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err, "Project or Member not found")
@@ -35,13 +35,13 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	case nil:
 		blob := r.FormValue("image-data")
 		//Getting projectID and member
-		proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err, "Project or Member not found")
-			http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		// proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+		// if err != nil {
+		// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+		// 	log.Println(err, "Project or Member not found")
+		// 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 
-		}
+		// }
 		fmt.Println("ProjectID is", r.FormValue("projectID"))
 		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
 			//Checking if image is valid by checking the first 512 bytes for correct image signature
@@ -64,13 +64,13 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		}
 	case http.ErrMissingFile:
 		//Getting projectID and member
-		proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err, "Project or Member not found")
-			http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		// proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+		// if err != nil {
+		// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+		// 	log.Println(err, "Project or Member not found")
+		// 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 
-		}
+		// }
 		fmt.Println("ProjectID is", r.FormValue("projectID"))
 		blob := r.FormValue("image-data")
 		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
@@ -88,15 +88,15 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	//Getting projectID and member
-	proj, _, err = get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err, "Project or Member not found")
-		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+	// //Getting projectID and member
+	// proj, _, err = get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	log.Println(err, "Project or Member not found")
+	// 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 
-	}
-	fmt.Println("ProjectID is", r.FormValue("projectID"))
+	// }
+	// fmt.Println("ProjectID is", r.FormValue("projectID"))
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 }
