@@ -31,6 +31,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ProjectID is", r.FormValue("projectID"))
 
 	clientFile, header, err := r.FormFile("raw-image")
+	fmt.Println("ProjectID line 34 is", r.FormValue("projectID"))
 	switch err {
 	case nil:
 		blob := r.FormValue("image-data")
