@@ -31,7 +31,9 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	var stringArray []string
 	query := elastic.NewBoolQuery()
 
-	stringArray = strings.Split(searchTerm, ",")
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println(searchTerm)
+	stringArray = strings.Split(searchTerm, " ")
 
 	query = query.Must(elastic.NewTermQuery("Visible", true))
 
