@@ -31,7 +31,7 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 
 	followIDs := make([]interface{}, 0)
 	for id := range followingProjects {
-		followIDs = append([]interface{}{strings.ToLower(id)}, projectIDs...)
+		followIDs = append([]interface{}{strings.ToLower(id)}, followIDs...)
 	}
 
 	suggQuery := elastic.NewBoolQuery()
@@ -56,7 +56,7 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 	}
 
 	res, err := searchResults.Do(ctx)
-	if err != nil && err != io.EOF {
+	if err != nil && err != io.EOF || res.Hits.TotalHits == 0 {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		return "", nil, 0, err

@@ -31,8 +31,10 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 
 	followIDs := make([]interface{}, 0)
 	for id := range followingUsers {
-		followIDs = append([]interface{}{strings.ToLower(id)}, projectIDs...)
+		followIDs = append([]interface{}{strings.ToLower(id)}, followIDs...)
 	}
+
+	followIDs = append([]interface{}{strings.ToLower(userID)}, followIDs...)
 
 	suggestedUserQuery := elastic.NewBoolQuery()
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
@@ -54,7 +56,7 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 	}
 
 	res, err := searchResults.Do(ctx)
-	if err != nil && err != io.EOF {
+	if err != nil && err != io.EOF || res.Hits.TotalHits == 0 {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		return "", nil, 0, err
