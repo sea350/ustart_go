@@ -58,5 +58,5 @@ func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	fmt.Println(w, string(data))
+	fmt.Fprintln(w, string(data))
 }
