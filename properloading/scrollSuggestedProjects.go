@@ -52,7 +52,7 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 		Query(suggQuery).
 		Size(amt)
 
-	if scrollID != `` {
+	if len(scrollID) > 0 {
 		searchResults = searchResults.ScrollId(scrollID)
 	}
 
