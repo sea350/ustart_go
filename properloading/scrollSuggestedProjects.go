@@ -56,7 +56,7 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 	}
 
 	res, err := searchResults.Do(ctx)
-	if err != nil && err != io.EOF || res.Hits.TotalHits == 0 {
+	if err != nil && err != io.EOF || res.TotalHits() == 0 {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		return "", nil, 0, err
