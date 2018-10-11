@@ -21,6 +21,15 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
+	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err, "Project or Member not found")
+		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+
+	}
+	fmt.Println("ProjectID is", r.FormValue("projectID"))
+
 	clientFile, header, err := r.FormFile("raw-image")
 	switch err {
 	case nil:
