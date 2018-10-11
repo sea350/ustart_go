@@ -31,14 +31,6 @@ func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
-		results["error"] = err
-		data, err := json.Marshal(results)
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-		}
-
-		fmt.Fprintln(w, string(data))
 		return
 	}
 
@@ -46,14 +38,6 @@ func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
-		results["error"] = err
-		data, err := json.Marshal(results)
-		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-		}
-
-		fmt.Fprintln(w, string(data))
 		return
 	}
 
