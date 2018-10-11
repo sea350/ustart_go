@@ -18,16 +18,18 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+
 	r.ParseForm()
 
 	//Getting projectID and member
-	projID := r.FormValue("projectID")
-	fmt.Println("ProjectID is", projID)
-	proj, member, err := get.ProjAndMember(client.Eclient, projID, test1.(string))
+	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		log.Println(err, "Project or Member not found")
+		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+
 	}
+	fmt.Println("ProjectID is", r.FormValue("projectID"))
 
 	clientFile, header, err := r.FormFile("raw-image")
 	switch err {
@@ -39,7 +41,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			_, _ = clientFile.Read(buffer)
 			defer clientFile.Close()
 			if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-				err = uses.ChangeProjectLogo(client.Eclient, projID, blob)
+				err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), blob)
 				if err != nil {
 					log.SetFlags(log.LstdFlags | log.Lshortfile)
 					log.Println(err)
@@ -55,7 +57,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	case http.ErrMissingFile:
 		blob := r.FormValue("image-data")
 		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
-			err = uses.ChangeProjectLogo(client.Eclient, projID, blob)
+			err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), blob)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
