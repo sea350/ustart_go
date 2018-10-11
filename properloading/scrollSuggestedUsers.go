@@ -29,12 +29,11 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 		projectIDs = append([]interface{}{strings.ToLower(projects[elements].ProjectID)}, projectIDs...)
 	}
 
+	followingUsers[userID] = true
 	followIDs := make([]interface{}, 0)
 	for id := range followingUsers {
 		followIDs = append([]interface{}{strings.ToLower(id)}, followIDs...)
 	}
-
-	followIDs = append([]interface{}{strings.ToLower(userID)}, followIDs...)
 
 	suggestedUserQuery := elastic.NewBoolQuery()
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
