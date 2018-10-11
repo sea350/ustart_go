@@ -59,11 +59,11 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			} else {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println("Invalid file upload")
+				log.Println(err, "Invalid file upload")
 			}
 		} else {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("You do not have permission to change event banner")
+			log.Println(err, "You do not have permission to change event banner")
 		}
 
 	default:
