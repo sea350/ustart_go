@@ -12,6 +12,10 @@ import (
 func UpdateGuestCode(eclient *elastic.Client, codeID string, field string, newContent interface{}) error {
 	ctx := context.Background()
 
+	if field == "Users" {
+		appendUserIDLock.Lock()
+	}
+
 	exists, err := eclient.IndexExists(globals.GuestCodeIndex).Do(ctx)
 	if err != nil {
 		return err
@@ -25,5 +29,7 @@ func UpdateGuestCode(eclient *elastic.Client, codeID string, field string, newCo
 		Id(codeID).
 		Doc(map[string]interface{}{field: newContent}).
 		Do(ctx)
+
+	defer appendUserIDLock.Unlock()
 	return err
 }
