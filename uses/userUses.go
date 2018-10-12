@@ -8,11 +8,13 @@ import (
 	"math"
 
 	getEntry "github.com/sea350/ustart_go/get/entry"
+	getGuestCode "github.com/sea350/ustart_go/get/guestCode"
 	getUser "github.com/sea350/ustart_go/get/user"
 	getWarning "github.com/sea350/ustart_go/get/warning"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	postFollow "github.com/sea350/ustart_go/post/follow"
+	updateCode "github.com/sea350/ustart_go/post/guestCode"
 	postNotif "github.com/sea350/ustart_go/post/notification"
 	postUser "github.com/sea350/ustart_go/post/user"
 	postWarning "github.com/sea350/ustart_go/post/warning"
@@ -205,8 +207,16 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 		return errors.New("Error: Username is in use")
 	}
 
-	//-------------------------------------WIP------------------------------------
-	// validGuestcode, err :=
+	//Gets GuestCode object and also check if guest code is valid
+	guestObj, err := getGuestCode.GuestCodeByID(eclient, guestCode)
+	if err != nil {
+		return err
+	}
+
+	validGuestcode, err := ValidGuestCode(eclient, guestCode)
+	if !validGuestcode {
+		return errors.New("Error: Invalid code")
+	}
 
 	newUsr := types.User{}
 	newUsr.Avatar = "https://i.imgur.com/TYFKsdi.png"
@@ -280,6 +290,14 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+	}
+
+	//Add user to GuestCode array
+	tempUserArray := guestObj.Users
+	tempUserArray = append(tempUserArray, id)
+	err = updateCode.UpdateGuestCode(eclient, guestCode, "Users", tempUserArray)
+	if err != nil {
+		return err
 	}
 
 	err = postUser.UpdateUser(eclient, id, "ProxyMessages", proxyID)

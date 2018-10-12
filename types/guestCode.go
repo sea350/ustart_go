@@ -8,7 +8,7 @@ type GuestCode struct {
 	Description    string    `json:"Description"`
 	NumUses        int       `json:"NumUses"`
 	Expiration     time.Time `json:"Expiration"`
-	Users          []int     `json:"Users"` //List of user IDs
+	Users          []string  `json:"Users"` //List of user IDs
 	Classification int       `json:"Classification"`
 	/*
 		0: Does not expire
