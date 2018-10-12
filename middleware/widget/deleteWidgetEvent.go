@@ -30,6 +30,6 @@ func DeleteWidgetEvent(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
-	http.Redirect(w, r, "/Events/"+eventURL, http.StatusFound)
+	http.Redirect(w, r, "/Event/"+eventURL, http.StatusFound)
 	return
 }
