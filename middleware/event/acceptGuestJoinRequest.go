@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	evntPost "github.com/sea350/ustart_go/post/event"
@@ -23,13 +22,18 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	evntID := r.FormValue("eventID")
-	newGuestID := r.FormValue("userID")
-	classification, err := strconv.Atoi(r.FormValue("classification"))
-	if err != nil {
+	if evntID == `` {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		log.Println("WARNING: event ID not received")
 		return
 	}
+	newGuestID := r.FormValue("userID")
+	if newGuestID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("WARNING: new member ID not received")
+		return
+	}
+	//classification, err := strconv.Atoi(r.FormValue("classification"))
 
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newGuestID, classification)
 	if err != nil {
@@ -46,7 +50,7 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	var newGuest types.EventGuests
 	newGuest.Status = 0
 	newGuest.GuestID = newGuestID
-	newGuest.Classification = classification
+	newGuest.Classification = 1
 
 	err = evntPost.AppendGuest(client.Eclient, evntID, newGuest)
 	if err != nil {
