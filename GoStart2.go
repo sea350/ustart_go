@@ -92,6 +92,7 @@ func main() {
 	http.HandleFunc("/deleteLinkFromWidget/", widget.EditWidgetDataDelete)
 	http.HandleFunc("/sortUserWidgets/", widget.SortUserWidgets)
 	http.HandleFunc("/sortProjectWidgets/", widget.SortProjectWidgets)
+	http.HandleFunc("/sortEventWidgets/", widget.SortEventWidgets)
 
 	//PROJECT INTERACTIONS
 	http.HandleFunc("/Projects/", project.ProjectsPage)
