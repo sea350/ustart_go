@@ -2,8 +2,8 @@ package types
 
 import "time"
 
-//SignUpCode ... Special codes used for signup
-type SignUpCode struct {
+//GuestCode ... Special codes used for signup
+type GuestCode struct {
 	Code           string    `json:"Code"`
 	Description    string    `json:"Description"`
 	NumUses        int       `json:"NumUses"`

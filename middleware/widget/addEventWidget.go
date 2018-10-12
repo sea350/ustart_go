@@ -24,7 +24,6 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 	}
 
 	evnt, member, err := getEvnt.EventAndMember(client.Eclient, r.FormValue("eventWidget"), test1.(string))
-	fmt.Println("evnt", evnt)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -36,20 +35,18 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 		if r.FormValue("eventWidget") == `` {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println("Event ID Missing")
-			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
 
 		newWidget, err := ProcessWidgetForm(r)
-		fmt.Println("newWidget", newWidget)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
-			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 		}
 
 		newWidget.UserID = r.FormValue("eventWidget")
-		fmt.Println("newWidget.UserID", newWidget.UserID)
 		if r.FormValue("editID") == `0` {
 			err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, false, true)
 			if err != nil {
@@ -65,11 +62,10 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 		}
-		fmt.Println("CAN YOU COME HERE?")
-		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	} else {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("You do not have the privilege to add a widget to this event. Check your privilege. ")
-		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	}
 }

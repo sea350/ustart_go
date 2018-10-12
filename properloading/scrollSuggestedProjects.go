@@ -2,7 +2,6 @@ package properloading
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
 	"strings"
@@ -27,12 +26,12 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 
 	projectIDs := make([]interface{}, 0)
 	for elements := range projects {
-		projectIDs = append([]interface{}{strings.ToLower(projects[elements].ProjectID)}, projectIDs...)
+		projectIDs = append([]interface{}{projects[elements].ProjectID}, projectIDs...)
 	}
 
 	followIDs := make([]interface{}, 0)
 	for id := range followingProjects {
-		followIDs = append([]interface{}{strings.ToLower(id)}, followIDs...)
+		followIDs = append([]interface{}{id}, followIDs...)
 	}
 
 	suggQuery := elastic.NewBoolQuery()
@@ -57,12 +56,11 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 	}
 
 	res, err := searchResults.Do(ctx)
-	if err != nil {
-		if err == io.EOF {
-			fmt.Println(res.Hits.TotalHits)
+	if !(err == io.EOF && res != nil) && err != nil {
+		if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
 		}
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
 		return "", nil, 0, err
 	}
 

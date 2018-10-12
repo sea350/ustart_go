@@ -2,12 +2,10 @@ package search
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"log"
-	"os"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -33,10 +31,7 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	var stringArray []string
 	query := elastic.NewBoolQuery()
 
-	err := json.Unmarshal([]byte(searchTerm), &stringArray)
-	if err != nil {
-		return 0, "", results, err
-	}
+	stringArray = strings.Split(searchTerm, " ")
 
 	query = query.Must(elastic.NewTermQuery("Visible", true))
 
@@ -110,13 +105,12 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	}
 
 	res, err := scroll.Do(ctx)
-	if err == io.EOF {
+	if !(err == io.EOF && res != nil) && err != nil {
+		if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
 		return 0, "", results, err
-	}
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
 	}
 
 	for _, element := range res.Hits.Hits {

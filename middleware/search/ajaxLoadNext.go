@@ -3,6 +3,7 @@ package search
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -53,7 +54,7 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 			searchBy = append(searchBy, false)
 		}
 		totalHits, scrollID, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
-		if err != nil {
+		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
@@ -95,7 +96,7 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 			searchBy = append(searchBy, false)
 		}
 		totalHits, scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
-		if err != nil {
+		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
@@ -127,7 +128,7 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 			searchBy = append(searchBy, false)
 		}
 		totalHits, scrollID, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
-		if err != nil {
+		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
@@ -144,7 +145,7 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 	}
 	if filter == `skills` {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))
-		if err != nil {
+		if err != nil && err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}

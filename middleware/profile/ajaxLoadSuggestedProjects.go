@@ -3,6 +3,7 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 
@@ -42,13 +43,13 @@ func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sID, heads, hits, err := properloading.ScrollSuggestedProjects(client.Eclient, myUser.Tags, myUser.Projects, follDoc.ProjectFollowing, uID, scrollID)
-	if err != nil {
+	if err != nil && err != io.EOF {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
 	results["scrollID"] = sID
-	results["SuggestedUsers"] = heads
+	results["SuggestedProjects"] = heads
 	results["TotalHits"] = hits
 	results["error"] = err
 
