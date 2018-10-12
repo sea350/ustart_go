@@ -24,16 +24,16 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	//get the member and member
-	evnt, member, err := get.EventAndMember(client.Eclient, r.FormValue("eventID"), test1.(string))
-	if err != nil {
+	//Get image upload
+	clientFile, header, err := r.FormFile("raw-banner")
+	//get the member and member, have to put this after getting image upload or it wont work (idk why)
+	evnt, member, err1 := get.EventAndMember(client.Eclient, r.FormValue("eventID"), test1.(string))
+	if err1 != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		log.Println(err1)
 		http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 	}
 
-	//Get image upload
-	clientFile, header, err := r.FormFile("raw-banner")
 	switch err {
 	case nil:
 		blob := r.FormValue("banner-data")
