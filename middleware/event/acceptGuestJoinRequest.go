@@ -33,9 +33,9 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 		log.Println("WARNING: new member ID not received")
 		return
 	}
-	//classification, err := strconv.Atoi(r.FormValue("classification"))
+	//classification, err := strconv.Atoi(r.FormValue("classification")) GUEST ARE classification 1 right??
 
-	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newGuestID, classification)
+	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newGuestID, 1)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
