@@ -36,7 +36,7 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 		if r.FormValue("eventWidget") == `` {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println("Event ID Missing")
-			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
 
@@ -45,7 +45,7 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
-			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 		}
 
 		newWidget.UserID = r.FormValue("eventWidget")
@@ -65,11 +65,10 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 		}
-		fmt.Println("CAN YOU COME HERE?")
-		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	} else {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("You do not have the privilege to add a widget to this event. Check your privilege. ")
-		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	}
 }
