@@ -1,6 +1,7 @@
 package widget
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -30,6 +31,7 @@ func DeleteWidgetEvent(w http.ResponseWriter, r *http.Request) {
 		log.Println(dir, err)
 	}
 
+	fmt.Print("eventURL", eventURL)
 	http.Redirect(w, r, "/Event/"+eventURL, http.StatusFound)
 	return
 }
