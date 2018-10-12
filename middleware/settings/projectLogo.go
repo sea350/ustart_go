@@ -3,7 +3,6 @@ package settings
 import (
 	"log"
 	"net/http"
-	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -18,43 +17,56 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/~", http.StatusFound)
 		return
 	}
+
 	r.ParseForm()
 	clientFile, header, err := r.FormFile("raw-image")
-	blob := r.FormValue("image-data")
 
-	//Getting projectID and member
-	projID := r.FormValue("projectID")
-	proj, member, err := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
-	if err != nil {
+	proj, member, err1 := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
+	if err1 != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err, "Project or Member not found")
+		http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
+
 	}
 
-	if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
-		//Checking if image is valid by checking the first 512 bytes for correct image signature
-		buffer := make([]byte, 512)
-		_, _ = clientFile.Read(buffer)
-		defer clientFile.Close()
-		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-			err = uses.ChangeProjectLogo(client.Eclient, projID, blob)
-			if err != nil {
+	switch err {
+	case nil:
+		blob := r.FormValue("image-data")
+		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
+			//Checking if image is valid by checking the first 512 bytes for correct image signature
+			buffer := make([]byte, 512)
+			_, _ = clientFile.Read(buffer)
+			defer clientFile.Close()
+			if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
+				err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), blob)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+				}
+			} else {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				log.Println(err)
 			}
 		} else {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err, "You do not have permission to change project logo")
 		}
-	} else {
+	case http.ErrMissingFile:
+		blob := r.FormValue("image-data")
+		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
+			err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), blob)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
+		} else {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err, "You do not have permission to change project logo")
+		}
+	default:
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
-	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
-	return
-
+	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 }

@@ -12,9 +12,9 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//ScrollSuggestedUsers ...
+//ScrollSuggestedProjects ...
 //Scrolls through docs being loaded
-func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string) (string, []types.FloatingHead, int, error) {
+func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, projects []types.ProjectInfo, followingProjects map[string]bool, userID string, scrollID string) (string, []types.FloatingHead, int, error) {
 
 	ctx := context.Background()
 	tags := make([]interface{}, 0)
@@ -26,19 +26,20 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 
 	projectIDs := make([]interface{}, 0)
 	for elements := range projects {
-		projectIDs = append([]interface{}{strings.ToLower(projects[elements].ProjectID)}, projectIDs...)
+		projectIDs = append([]interface{}{projects[elements].ProjectID}, projectIDs...)
 	}
 
-	followingUsers[userID] = true
 	followIDs := make([]interface{}, 0)
-	for id := range followingUsers {
+	for id := range followingProjects {
 		followIDs = append([]interface{}{id}, followIDs...)
 	}
 
-	suggestedUserQuery := elastic.NewBoolQuery()
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...))
-	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
+	suggQuery := elastic.NewBoolQuery()
+	suggQuery = suggQuery.Should(elastic.NewTermsQuery("Tags", tags...))
+	suggQuery = suggQuery.Should(elastic.NewTermsQuery("ListNeeded", tags...))
+	suggQuery = suggQuery.MustNot(elastic.NewTermsQuery("_id", projectIDs...))
+	suggQuery = suggQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
+	suggQuery = suggQuery.Must(elastic.NewTermQuery("Visisble", true))
 
 	amt := 1
 	if scrollID == `` {
@@ -46,8 +47,8 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 	}
 
 	searchResults := eclient.Scroll().
-		Index(globals.UserIndex).
-		Query(suggestedUserQuery).
+		Index(globals.ProjectIndex).
+		Query(suggQuery).
 		Size(amt)
 
 	if len(scrollID) > 0 {
@@ -65,15 +66,14 @@ func ScrollSuggestedUsers(eclient *elastic.Client, tagArray []string, projects [
 
 	var heads []types.FloatingHead
 	for _, hits := range res.Hits.Hits {
-		newHead, err := uses.ConvertUserToFloatingHead(eclient, hits.Id)
+		newHead, err := uses.ConvertProjectToFloatingHead(eclient, hits.Id)
 		if err == nil {
 			heads = append(heads, newHead)
-		} else {
+		} else if err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 			continue
 		}
-
 	}
 
 	return res.ScrollId, heads, len(heads), err
