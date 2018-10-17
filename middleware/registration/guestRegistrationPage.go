@@ -14,6 +14,15 @@ import (
 	bcrypt "golang.org/x/crypto/bcrypt"
 )
 
+//GuestRegisterType ...
+func GuestRegisterType(w http.ResponseWriter, r *http.Request) {
+	// cs := client.ClientSide{}
+	//----------------------WIP-----------------
+	//Need to add correct template for guest registration
+	//client.RenderTemplate(w, r, "templateNoUser2", cs)
+	//client.RenderTemplate(w, r, "Membership-Nil", cs)
+}
+
 //GuestRegistration ... Separate registration page for guests (non-NYU users)
 func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
