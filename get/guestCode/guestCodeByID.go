@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
+	"strings"
 
 	"github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -16,7 +17,7 @@ func GuestCodeByID(eclient *elastic.Client, codeID string) (types.GuestCode, err
 	ctx := context.Background()
 	var guestCode types.GuestCode
 
-	newQuery := elastic.NewTermsQuery("Code", codeID)
+	newQuery := elastic.NewTermsQuery("Code", strings.ToLower(codeID))
 	searchResults, err := eclient.Search().
 		Index(globals.GuestCodeIndex).
 		Query(newQuery).
