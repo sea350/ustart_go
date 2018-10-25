@@ -196,7 +196,8 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 
 	//Check for valid guest email address
 	if !ValidGuestEmail(email) {
-		return errors.New("Error: Invalid email")
+		// return errors.New("Error: Invalid email")
+		return err
 	}
 
 	inUse, err = getUser.UsernameInUse(eclient, username)
@@ -206,7 +207,8 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 		return err
 	}
 	if inUse {
-		return errors.New("Error: Username is in use")
+		// return errors.New("Error: Username is in use")
+		return err
 	}
 
 	//Gets GuestCode object and also check if guest code is valid
@@ -217,7 +219,8 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 
 	validGuestcode, err := ValidGuestCode(eclient, guestCode)
 	if !validGuestcode {
-		return errors.New("Error: Invalid code")
+		//return errors.New("Error: Invalid code")
+		return err
 	}
 
 	newUsr := types.User{}
