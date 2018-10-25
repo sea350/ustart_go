@@ -188,6 +188,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return errors.New("Error checking if email is in Use")
 	}
 	if inUse {
 		return errors.New("Error: Email is in use ")
@@ -202,6 +203,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return err
 	}
 	if inUse {
 		return errors.New("Error: Username is in use")
@@ -229,6 +231,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return err
 	}
 	newUsr.AuthenticationCode = token
 
@@ -276,12 +279,14 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	if errFollow != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(errFollow)
+		return errFollow
 	}
 	newProxy := types.ProxyMessages{DocID: id, Class: 1}
 	proxyID, err := postChat.IndexProxyMsg(eclient, newProxy)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return err
 	}
 
 	newProxyNotif := types.ProxyNotifications{DocID: id}
@@ -290,6 +295,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return err
 	}
 
 	//Add user to GuestCode array
