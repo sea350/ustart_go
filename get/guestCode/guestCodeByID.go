@@ -3,6 +3,7 @@ package get
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	"github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -13,15 +14,26 @@ import (
 func GuestCodeByID(eclient *elastic.Client, codeID string) (types.GuestCode, error) {
 	ctx := context.Background()
 	var guestCode types.GuestCode
-	searchResults, err := eclient.Get().
+
+	newQuery := elastic.NewTermsQuery("Code", codeID)
+	searchResults, err := eclient.Search().
 		Index(globals.GuestCodeIndex).
-		Type(globals.GuestCodeType).
-		Id(codeID).
+		Query(newQuery).
 		Do(ctx)
 	if err != nil {
 		return guestCode, err
 	}
 
-	err = json.Unmarshal(*searchResults.Source, &guestCode)
+	if searchResults.Hits.TotalHits != 1 {
+		return guestCode, errors.New("Not 1 result")
+	}
+	for _, hit := range searchResults.Hits.Hits {
+		err = json.Unmarshal(*hit.Source, &guestCode)
+		if err != nil {
+			return guestCode, err
+		}
+		break
+	}
+
 	return guestCode, err
 }
