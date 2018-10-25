@@ -27,7 +27,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	//proper email
-	if !uses.ValidEmail(p.Sanitize(r.FormValue("inputEmail"))) {
+	if !uses.ValidGuestEmail(p.Sanitize(r.FormValue("inputEmail"))) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Invalid email submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
