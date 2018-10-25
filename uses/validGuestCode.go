@@ -41,10 +41,11 @@ func ValidGuestCode(eclient *elastic.Client, guestCode string) (bool, error) {
 	if codeObj.Expiration.Before(time.Now()) {
 		return false, errors.New("Code Expired")
 	}
-	if codeObj.NumUses-len(codeObj.Users) < 1 {
-		return false, errors.New("Exceeded number of uses")
-	}
-
+	/*
+		if codeObj.NumUses-len(codeObj.Users) < 1 {
+			return false, errors.New("Exceeded number of uses")
+		}
+	*/
 	return true, err
 
 }
