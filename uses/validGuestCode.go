@@ -3,6 +3,7 @@ package uses
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	getCode "github.com/sea350/ustart_go/get/guestCode"
@@ -14,7 +15,7 @@ import (
 func ValidGuestCode(eclient *elastic.Client, guestCode string) (bool, error) {
 	ctx := context.Background()
 
-	termQuery := elastic.NewTermQuery("Code", guestCode)
+	termQuery := elastic.NewTermQuery("Code", strings.ToLower(guestCode))
 	var codeID string
 
 	searchResult, err := eclient.Search().
