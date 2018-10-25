@@ -55,6 +55,7 @@ func main() {
 
 	//REGISTRATIONS
 	http.HandleFunc("/Signup/", registration.Signup)
+	http.HandleFunc("/GuestSignup", registration.GuestSignup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
 	http.HandleFunc("/welcome/", registration.Registration)
