@@ -3,6 +3,7 @@ package uses
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	getCode "github.com/sea350/ustart_go/get/guestCode"
@@ -42,6 +43,7 @@ func ValidGuestCode(eclient *elastic.Client, guestCode string) (bool, error) {
 			return false, errors.New("Code Expired")
 		}*/
 	if codeObj.NumUses-len(codeObj.Users) < 1 {
+		fmt.Println(codeObj.NumUses - len(codeObj.Users))
 		return false, errors.New("Exceeded number of uses")
 	}
 
