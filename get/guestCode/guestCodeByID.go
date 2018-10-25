@@ -27,7 +27,7 @@ func GuestCodeByID(eclient *elastic.Client, codeID string) (types.GuestCode, err
 	}
 
 	if searchResults.Hits.TotalHits != 1 {
-		log.Println(searchResults.Hits.Hits, " results")
+		log.Println(searchResults.Hits.TotalHits, " results")
 		return guestCode, errors.New("Not 1 result")
 	}
 	for _, hit := range searchResults.Hits.Hits {
