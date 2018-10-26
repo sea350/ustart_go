@@ -30,8 +30,7 @@ func main() {
 	fmt.Print("Enter Number of uses (leave empty if there are unlimited number of uses): ")
 	numUses, _ := reader.ReadString('\n')
 	//Check if numUses is an int
-	var isInteger = false
-	for isInteger(numUses) {
+	for !isInt(numUses) {
 		fmt.Print("You did not enter a number, please try again: ")
 		numUses, _ = reader.ReadString('\n')
 	}
