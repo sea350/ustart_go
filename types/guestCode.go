@@ -4,11 +4,11 @@ import "time"
 
 //GuestCode ... Special codes used for signup
 type GuestCode struct {
-	Code           string    `json:"Code"`
+	Code           string    `json:"Code"` //Takes the DocID of the GuestCode
 	Description    string    `json:"Description"`
 	NumUses        int       `json:"NumUses"`
 	Expiration     time.Time `json:"Expiration"`
-	Users          []string  `json:"Users"` //List of user IDs
+	Users          []string  `json:"Users"` //List of user IDs who have used this code
 	Classification int       `json:"Classification"`
 	/*
 		0: Does not expire
