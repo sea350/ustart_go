@@ -36,6 +36,7 @@ func IndexGuestCode(eclient *elastic.Client, guestCode types.GuestCode) (string,
 		Index(globals.GuestCodeIndex).
 		Type(globals.GuestCodeType).
 		BodyJson(guestCode).
+		Id(guestCode.Code).
 		Do(ctx)
 	if err != nil {
 		return ID, err
