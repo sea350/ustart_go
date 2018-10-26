@@ -14,6 +14,7 @@ func UpdateGuestCode(eclient *elastic.Client, codeID string, field string, newCo
 
 	if field == "Users" {
 		appendUserIDLock.Lock()
+		defer appendUserIDLock.Unlock()
 	}
 
 	exists, err := eclient.IndexExists(globals.GuestCodeIndex).Do(ctx)
@@ -30,6 +31,5 @@ func UpdateGuestCode(eclient *elastic.Client, codeID string, field string, newCo
 		Doc(map[string]interface{}{field: newContent}).
 		Do(ctx)
 
-	defer appendUserIDLock.Unlock()
 	return err
 }
