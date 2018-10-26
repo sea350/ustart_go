@@ -50,7 +50,7 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	var newGuest types.EventGuests
 	newGuest.Status = 0
 	newGuest.GuestID = newGuestID
-	newGuest.Classification = 1
+	newGuest.Classification = 1 //classification 1 for guest
 
 	err = evntPost.AppendGuest(client.Eclient, evntID, newGuest)
 	if err != nil {
