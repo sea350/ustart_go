@@ -26,37 +26,6 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	}
 	p := bluemonday.UGCPolicy()
 
-	//proper email
-	if !uses.ValidGuestEmail(p.Sanitize(r.FormValue("inputEmail"))) {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Invalid email submitted")
-		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
-		client.RenderTemplate(w, r, "templateNoUser2", cs)
-		client.RenderTemplate(w, r, "new-guest-reg", cs)
-		return
-	}
-
-	//proper username
-	if !uses.ValidUsername(r.FormValue("username")) {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Invalid username submitted")
-		cs := client.ClientSide{ErrorOutput: errors.New("Invalid username submitted"), ErrorStatus: true}
-		client.RenderTemplate(w, r, "templateNoUser2", cs)
-		client.RenderTemplate(w, r, "new-guest-reg", cs)
-		return
-
-	}
-
-	//proper birth date
-	if !uses.ValidDate(r.FormValue("dob")) {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Invalid date of birth submitted")
-		cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
-		client.RenderTemplate(w, r, "templateNoUser2", cs)
-		client.RenderTemplate(w, r, "new-guest-reg", cs)
-		return
-	}
-
 	fname := p.Sanitize(r.FormValue("firstName"))
 	lname := p.Sanitize(r.FormValue("lastName"))
 	email := strings.ToLower(p.Sanitize(r.FormValue("inputEmail")))
@@ -77,6 +46,44 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	city := p.Sanitize(r.FormValue("city"))
 	zip := p.Sanitize(r.FormValue("zip"))
 	currYear := r.FormValue("year")
+
+	//if the form is blank just render w/o returning errors
+	if email == `` && username == `` {
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-guest-reg", cs)
+		return
+	}
+
+	//proper email
+	if !uses.ValidGuestEmail(emial) {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Invalid email submitted")
+		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-guest-reg", cs)
+		return
+	}
+
+	//proper username
+	if !uses.ValidUsername(username) {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Invalid username submitted")
+		cs := client.ClientSide{ErrorOutput: errors.New("Invalid username submitted"), ErrorStatus: true}
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-guest-reg", cs)
+		return
+
+	}
+
+	//proper birth date
+	if !uses.ValidDate(r.FormValue("dob")) {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Invalid date of birth submitted")
+		cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-guest-reg", cs)
+		return
+	}
 
 	err2 := uses.GuestSignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear, guestCode)
 	if err2 != nil {
