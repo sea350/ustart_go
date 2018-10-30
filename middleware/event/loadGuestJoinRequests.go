@@ -34,6 +34,7 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for index, userID := range evnt.GuestReqReceived {
+		//user
 		if userID == 1 {
 			head, err := uses.ConvertUserToFloatingHead(client.Eclient, index)
 			if err != nil {
@@ -42,6 +43,7 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 			}
 			heads = append(heads, head)
 		}
+		//project
 		if userID == 2 {
 			head, err := uses.ConvertProjectToFloatingHead(client.Eclient, index)
 			if err != nil {

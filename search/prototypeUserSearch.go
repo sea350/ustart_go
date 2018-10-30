@@ -38,6 +38,8 @@ func PrototypeUserSearch(eclient *elastic.Client, searchTerm string, sortBy int,
 	//, "Description", "URLName", "Tags"
 	// query := elastic.NewMultiMatchQuery(searchTerm, "FirstName", "LastName")
 
+	query = query.Must(elastic.NewTermQuery("Verified", true))
+
 	if len(searchBy) >= 3 {
 		//Name
 		if searchBy[0] {

@@ -29,9 +29,12 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("event ID", id)
+	for _, receivedReq := range evnt.MemberReqReceived {
+		if receivedReq == test1.(string) {
+			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
+			return
+		}
+	}
 
 	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
 	if err != nil {

@@ -14,7 +14,7 @@ import (
 )
 
 //ManageEvents ...
-func ManageEvents(w http.ResponseWriter, r *http.Request) {
+func MyEvents(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]

@@ -2,6 +2,7 @@ package registration
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -26,7 +27,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	//proper email
-	if !uses.ValidEmail(p.Sanitize(r.FormValue("inputEmail"))) {
+	if !uses.ValidGuestEmail(p.Sanitize(r.FormValue("inputEmail"))) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Invalid email submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
@@ -92,4 +93,23 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+//GuestSignup ... tests for an existing docId in sesson, if no id then render signup, if there is id redirect to profile
+func GuestSignup(w http.ResponseWriter, r *http.Request) {
+	client.Store.MaxAge(8640 * 7)
+	session, _ := client.Store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+
+	if test1 != nil {
+		fmt.Println(test1)
+		fmt.Println("this is debug code: guestRegistrationPage.go 105")
+		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
+		return
+	}
+
+	session.Save(r, w)
+	cs := client.ClientSide{ErrorStatus: false}
+	client.RenderTemplate(w, r, "templateNoUser2", cs)
+	client.RenderTemplate(w, r, "new-guest-reg", cs)
 }
