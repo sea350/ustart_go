@@ -26,6 +26,14 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	}
 	p := bluemonday.UGCPolicy()
 
+	//if the form is blank just render w/o returning errors
+	if r.FormValue("inputEmail") == `` && r.FormValue("username") == `` {
+		cs := client.ClientSide{}
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-guest-reg", cs)
+		return
+	}
+
 	fname := p.Sanitize(r.FormValue("firstName"))
 	lname := p.Sanitize(r.FormValue("lastName"))
 	email := strings.ToLower(p.Sanitize(r.FormValue("inputEmail")))
@@ -46,14 +54,6 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	city := p.Sanitize(r.FormValue("city"))
 	zip := p.Sanitize(r.FormValue("zip"))
 	currYear := r.FormValue("year")
-
-	//if the form is blank just render w/o returning errors
-	if email == `` && username == `` {
-		cs := client.ClientSide{}
-		client.RenderTemplate(w, r, "templateNoUser2", cs)
-		client.RenderTemplate(w, r, "new-guest-reg", cs)
-		return
-	}
 
 	//proper email
 	if !uses.ValidGuestEmail(email) {
