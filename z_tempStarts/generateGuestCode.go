@@ -99,7 +99,7 @@ func main() {
 		if expiration == "" {
 			break
 		} else {
-			date := strings.Split(expiration, "/")
+			date = strings.Split(expiration, "/")
 		}
 	}
 	if expiration != "" {
