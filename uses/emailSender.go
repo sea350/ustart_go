@@ -68,11 +68,10 @@ func (r *Request) sendMail() bool {
 		"To":      {Recipient},
 		"Subject": {Subject},
 		// "X-SES-Configuration-SET": {ConfigSet},
-		"X-SES_MESSAGE-TAGS": {globals.Em
-			ailTags},
+		"X-SES_MESSAGE-TAGS": {globals.EmailTags},
 	})
 
-	d := gomail.NewPlainDialer(globals.Host, globals.SendEmailPort, SMTPUser, SMTPPass)
+	d := gomail.NewPlainDialer(globals.Host, globals.SendMailPort, globals.SMTPUser, globals.SMTPPass)
 
 	// Display an error message if something goes wrong; otherwise,
 	// display a message confirming that the message was sent.
