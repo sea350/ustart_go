@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/client"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -104,7 +105,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		}
 
 		subject := "Your password-reset link"
-		link := globals.SiteURL + ":" + globals.Port + "ResetPassword/?email=" + email + "&verifCode=" + token
+		link := globals.SiteURL + ":" + string(globals.Port) + "ResetPassword/?email=" + email + "&verifCode=" + token
 		r := uses.NewRequest([]string{email}, subject)
 		r.Send(
 			"/ustart/ustart_front/email_template.html", map[string]string{
