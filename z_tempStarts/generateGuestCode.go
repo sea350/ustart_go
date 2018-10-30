@@ -40,7 +40,7 @@ func main() {
 	newCode = newCode[:len(newCode)-1]
 	if newCode == "" {
 		//Autogenerate code
-		newCode = randStringBytes(12)
+		newCode = randStringBytes(8)
 	}
 
 	//Take in description
