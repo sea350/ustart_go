@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"strconv"
 
@@ -20,6 +21,16 @@ func isInt(input string) bool {
 	return true
 }
 
+const letterBytes = "ABCDEFGHJKLMNPQRSTUVWXYZ1234567890"
+
+func randStringBytes(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	return string(b)
+}
+
 func main() {
 	var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))
 
@@ -29,6 +40,7 @@ func main() {
 	newCode = newCode[:len(newCode)-1]
 	if newCode == "" {
 		//Autogenerate code
+		newCode = randStringBytes(12)
 	}
 
 	//Take in description
@@ -89,6 +101,8 @@ func main() {
 	_, err := post.IndexGuestCode(eclient, newGuestCode)
 	if err != nil {
 		fmt.Println(err)
+	} else {
+		fmt.Println("Success!")
 	}
 
 }
