@@ -114,13 +114,13 @@ func main() {
 
 	switch {
 	case numUses == "" && expiration == "":
-		classification = 0
+		classification = 0 //permanent
 	case numUses != "" && expiration == "":
-		classification = 1
+		classification = 1 //limited uses, no expiration
 	case numUses == "" && expiration != "":
-		classification = 2
+		classification = 2 //unlimited uses, expiration
 	case numUses != "" && expiration != "":
-		classification = 3
+		classification = 3 //limited uses, expiration
 	}
 
 	fmt.Println("newCode: ", newCode)
