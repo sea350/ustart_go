@@ -212,5 +212,5 @@ func main() {
 	//IMG
 	http.HandleFunc("/img/", img.Display)
 
-	http.ListenAndServe(":"+currentPort, nil)
+	http.ListenAndServe(":"+string(globals.Port), nil)
 }
