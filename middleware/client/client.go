@@ -5,12 +5,13 @@ import (
 	"net/http"
 
 	sessions "github.com/gorilla/sessions"
+	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 //Eclient ... Reference to the ElasticSearch
-var Eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
+var Eclient, err = elastic.NewClient(elastic.SetURL(globals.ClientURL))
 
 //Store ...
 var Store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
