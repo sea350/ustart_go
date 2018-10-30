@@ -15,12 +15,12 @@ const (
 	MIME = "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
 
 	Sender     = "ustarttestemail@gmail.com"
-	SenderName = "USTART"
+	SenderName = "U•START"
 	// var serve = "smtp.gmail.com"
 	SMTPUser     = "ustarttestemail@gmail.com"
 	SMTPPass     = "Ust@rt20!8~~"
 	Host         = "smtp.gmail.com"
 	SendMailPort = 587 //alternatively: 25
-	Tags         = "genre=test,genre2=test2"
+	EmailTags    = "genre=test,genre2=test2"
 	SenderEmail  = "ustarttestemail@gmail.com"
 )
