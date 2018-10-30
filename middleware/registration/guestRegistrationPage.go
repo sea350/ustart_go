@@ -49,6 +49,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 
 	//if the form is blank just render w/o returning errors
 	if email == `` && username == `` {
+		cs := client.ClientSide{}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-guest-reg", cs)
 		return
