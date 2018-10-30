@@ -7,6 +7,8 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
+	"time"
 
 	post "github.com/sea350/ustart_go/post/guestCode"
 	"github.com/sea350/ustart_go/types"
@@ -76,6 +78,31 @@ func main() {
 	fmt.Print("Enter Expiration date in MM/DD/YYYY format (leave empty if code does not expire): ")
 	expiration, _ := reader.ReadString('\n')
 	expiration = expiration[:len(expiration)-1]
+
+	date := strings.Split(expiration, "/")
+	var dateTime time.Time
+	invalid := true
+	for invalid {
+		if len(date) == 3 {
+			if len(date[0]) == 2 && len(date[1]) == 2 && len(date[2]) == 4 {
+				if isInt(date[0]) && isInt(date[1]) && isInt(date[2]) {
+					year, _ := strconv.Atoi(date[2])
+					month, _ := strconv.Atoi(date[0])
+					day, _ := strconv.Atoi(date[1])
+					dateTime = time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
+					break
+				}
+			}
+		}
+		fmt.Print("Date is in an improper format, enter a valid format or leave blank:")
+		expiration, _ = reader.ReadString('\n')
+		expiration = expiration[:len(numUses)-1]
+		if expiration == "" {
+			break
+		} else {
+			date := strings.Split(expiration, "/")
+		}
+	}
 	//Use magic regex to check format of expiration date
 
 	var classification int
@@ -94,10 +121,10 @@ func main() {
 	fmt.Println("newCode: ", newCode)
 	fmt.Println("newDesc: ", newDesc)
 	fmt.Println("numUses: ", intNumUses)
-	fmt.Println("expiration: ", expiration)
+	fmt.Println("expiration: ", dateTime)
 	fmt.Println("classification: ", classification)
 
-	newGuestCode := types.GuestCode{Code: newCode, Description: newDesc, NumUses: intNumUses, Classification: classification}
+	newGuestCode := types.GuestCode{Code: newCode, Description: newDesc, NumUses: intNumUses, Classification: classification, Expiration: dateTime}
 	_, err := post.IndexGuestCode(eclient, newGuestCode)
 	if err != nil {
 		fmt.Println(err)
