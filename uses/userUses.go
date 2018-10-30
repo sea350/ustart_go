@@ -215,7 +215,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	//Gets GuestCode object and also check if guest code is valid
 	guestObj, err := getGuestCode.GuestCodeByID(eclient, guestCode)
 	if err != nil {
-		return err
+		return errors.New("There was a problem finding your code")
 	}
 
 	validGuestcode, err := ValidGuestCode(eclient, guestCode)
