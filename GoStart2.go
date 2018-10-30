@@ -4,6 +4,7 @@ import (
 	"flag"
 	"net/http"
 
+	"github.com/sea350/ustart_go/globals"
 	chat "github.com/sea350/ustart_go/middleware/chat"
 	dash "github.com/sea350/ustart_go/middleware/dashboard"
 	"github.com/sea350/ustart_go/middleware/entry"
@@ -33,7 +34,7 @@ func main() {
 		The other being the relative link on the actual html pages
 	*/
 	// fs := http.FileServer(http.Dir("/home/rr2396/www/"))
-	_, _ = http.Get(globals.SiteURL + globals.Port "/KillUstartPlsNoUserinoCappucinoDeniro")
+	_, _ = http.Get(globals.SiteURL + string(globals.Port) + "/KillUstartPlsNoUserinoCappucinoDeniro")
 	fs := http.FileServer(http.Dir("/ustart/ustart_front/"))
 	// http.Handle("/www/", http.StripPrefix("/www/", fs))
 	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
