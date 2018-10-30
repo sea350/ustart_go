@@ -33,6 +33,17 @@ func randStringBytes(n int) string {
 	return string(b)
 }
 
+func dateIsValid(date []string) bool {
+	if len(date) == 3 {
+		if len(date[0]) == 2 && len(date[1]) == 2 && len(date[2]) == 4 {
+			if isInt(date[0]) && isInt(date[1]) && isInt(date[2]) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func main() {
 	var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))
 
@@ -81,19 +92,7 @@ func main() {
 
 	date := strings.Split(expiration, "/")
 	var dateTime time.Time
-	invalid := true
-	for invalid {
-		if len(date) == 3 {
-			if len(date[0]) == 2 && len(date[1]) == 2 && len(date[2]) == 4 {
-				if isInt(date[0]) && isInt(date[1]) && isInt(date[2]) {
-					year, _ := strconv.Atoi(date[2])
-					month, _ := strconv.Atoi(date[0])
-					day, _ := strconv.Atoi(date[1])
-					dateTime = time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
-					break
-				}
-			}
-		}
+	for !dateIsValid(date) {
 		fmt.Print("Date is in an improper format, enter a valid format or leave blank:")
 		expiration, _ = reader.ReadString('\n')
 		expiration = expiration[:len(numUses)-1]
@@ -102,6 +101,12 @@ func main() {
 		} else {
 			date := strings.Split(expiration, "/")
 		}
+	}
+	if expiration != "" {
+		year, _ := strconv.Atoi(date[2])
+		month, _ := strconv.Atoi(date[0])
+		day, _ := strconv.Atoi(date[1])
+		dateTime = time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
 	}
 	//Use magic regex to check format of expiration date
 
