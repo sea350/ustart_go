@@ -105,7 +105,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		}
 
 		subject := "Your password-reset link"
-		link := globals.SiteURL + ":" + string(globals.Port) + "ResetPassword/?email=" + email + "&verifCode=" + token
+		link := globals.SiteURL + ":" + string(globals.Port) + "/ResetPassword/?email=" + email + "&verifCode=" + token
 		r := uses.NewRequest([]string{email}, subject)
 		r.Send(
 			"/ustart/ustart_front/email_template.html", map[string]string{
