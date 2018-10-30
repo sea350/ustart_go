@@ -1,7 +1,7 @@
 package globals
 
 const (
-	Port = 5002
+	Port = "5002"
 
 	//Elastic Client
 	//var Eclient, clientErr = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
