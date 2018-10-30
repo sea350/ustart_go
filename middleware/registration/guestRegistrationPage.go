@@ -56,7 +56,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//proper email
-	if !uses.ValidGuestEmail(emial) {
+	if !uses.ValidGuestEmail(email) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Invalid email submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
