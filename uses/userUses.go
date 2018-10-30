@@ -11,6 +11,7 @@ import (
 	getGuestCode "github.com/sea350/ustart_go/get/guestCode"
 	getUser "github.com/sea350/ustart_go/get/user"
 	getWarning "github.com/sea350/ustart_go/get/warning"
+	globals "github.com/sea350/ustart_go/globals"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	postFollow "github.com/sea350/ustart_go/post/follow"
@@ -118,7 +119,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	}
 	newUsr.AuthenticationCode = token
 	subject := "Your verification link"
-	link := "http://ustart.today:5002/Activation/?email=" + email + "&verifCode=" + token
+	link := globals.SiteURL + string(globals.Port) + "/Activation/?email=" + email + "&verifCode=" + token
 	r := NewRequest([]string{email}, subject)
 	r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": username, "link": link,
 		"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
@@ -239,7 +240,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	newUsr.AuthenticationCode = token
 
 	subject := "Your verification link"
-	link := "http://ustart.today:5002/Activation/?email=" + email + "&verifCode=" + token
+	link := globals.SiteURL + ":" + string(globals.Port) + "/Activation/?email=" + email + "&verifCode=" + token
 	r := NewRequest([]string{email}, subject)
 	r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": username, "link": link,
 		"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",

@@ -17,9 +17,10 @@ const (
 	Sender     = "ustarttestemail@gmail.com"
 	SenderName = "USTART"
 	// var serve = "smtp.gmail.com"
-	SMTPUser     = "AKIAJNA5EV7IQ5NA6GMQ"
-	SMTPPass     = "AlfAq8CoUxc9Vx/FxgRLuYkpgdGuR3ZDCqVM9BoXtDs/"
-	Host         = "email-smtp.us-east-1.amazonaws.com"
+	SMTPUser     = "ustarttestemail@gmail.com"
+	SMTPPass     = "Ust@rt20!8~~"
+	Host         = "smtp.gmail.com"
 	SendMailPort = 587 //alternatively: 25
 	Tags         = "genre=test,genre2=test2"
+	SenderEmail  = "ustarttestemail@gmail.com"
 )

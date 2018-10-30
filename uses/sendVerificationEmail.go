@@ -5,6 +5,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/sea350/ustart_go/globals"
+
 	getUser "github.com/sea350/ustart_go/get/user"
 	postUser "github.com/sea350/ustart_go/post/user"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -57,7 +59,7 @@ func SendVerificationEmail(eclient *elastic.Client, email string) {
 		}
 
 		subject := "Your verification link"
-		link := globals.SiteURL + ":" + globals.Port + "/Activation/?email=" + email + "&verifCode=" + token
+		link := globals.SiteURL + ":" + string(globals.Port) + "/Activation/?email=" + email + "&verifCode=" + token
 		r := NewRequest([]string{email}, subject)
 		r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": user.Username, "link": link,
 			"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
