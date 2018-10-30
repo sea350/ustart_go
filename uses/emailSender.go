@@ -2,13 +2,14 @@ package uses
 
 import (
 	"bytes"
+	"fmt"
+	"net/smtp"
 
-	"github.com/sea350/ustart_go/globals"
 	// "fmt"
 	"html/template"
 	"log"
 
-	"github.com/go-gomail/gomail"
+	"github.com/sea350/ustart_go/globals"
 	// "net/smtp"
 )
 
@@ -44,50 +45,50 @@ func (r *Request) parseTemplate(fileName string, data interface{}) error {
 	return nil
 }
 
-// func (r *Request) sendMail() bool {
-// 	body := "To: " + r.to[0] + "\r\nSubject: " + r.subject + "\r\n" + MIME + "\r\n" + r.body
-// 	SMTP := fmt.Sprintf("%s:%d", "smtp.gmail.com", 587)
-// 	if err := smtp.SendMail(SMTP, smtp.PlainAuth("", "ustarttestemail@gmail.com", "Ust@rt20!8~~", "smtp.gmail.com"), "ustarttestemail@gmail.com", r.to, []byte(body)); err != nil {
-// 		return false
-// 	}
-// 	return true
-// }
-
 func (r *Request) sendMail() bool {
-	body := "To: " + r.to[0] + "\r\nSubject: " + r.subject + "\r\n" + MIME + "\r\n" + r.body
-	// SMTP := fmt.Sprintf("%s:%d", Host, Port) //587)
-
-	Recipient := r.to[0]
-	Subject := r.subject
-
-	m := gomail.NewMessage()
-	m.SetBody("text/html", body)
-	// m.AddAlternative("text/plain", body)
-	m.SetHeaders(map[string][]string{
-		"From":    {m.FormatAddress(globals.Sender, globals.SenderName)},
-		"To":      {Recipient},
-		"Subject": {Subject},
-		// "X-SES-Configuration-SET": {ConfigSet},
-		"X-SES_MESSAGE-TAGS": {globals.EmailTags},
-	})
-
-	d := gomail.NewPlainDialer(globals.Host, globals.SendMailPort, globals.SMTPUser, globals.SMTPPass)
-
-	// Display an error message if something goes wrong; otherwise,
-	// display a message confirming that the message was sent.
-	if err := d.DialAndSend(m); err != nil {
-		log.Println(err)
+	body := "To: " + r.to[0] + "\r\nSubject: " + r.subject + "\r\n" + globals.MIME + "\r\n" + r.body
+	SMTP := fmt.Sprintf("%s:%d", "smtp.gmail.com", 587)
+	if err := smtp.SendMail(SMTP, smtp.PlainAuth("", globals.SenderEmail, globals.SMTPPass, globals.Host), globals.SenderName, r.to, []byte(body)); err != nil {
 		return false
 	}
-
-	log.Println("Email sent!")
 	return true
-
-	// if err := smtp.SendMail(SMTP, smtp.PlainAuth("", "ustarttestemail@gmail.com", "Ust@rt20!8~~", host), "ustarttestemail@gmail.com", r.to, []byte(body)); err != nil {
-	// 	return false
-	// }
-
 }
+
+// func (r *Request) sendMail() bool {
+// 	body := "To: " + r.to[0] + "\r\nSubject: " + r.subject + "\r\n" + MIME + "\r\n" + r.body
+// 	// SMTP := fmt.Sprintf("%s:%d", Host, Port) //587)
+
+// 	Recipient := r.to[0]
+// 	Subject := r.subject
+
+// 	m := gomail.NewMessage()
+// 	m.SetBody("text/html", body)
+// 	// m.AddAlternative("text/plain", body)
+// 	m.SetHeaders(map[string][]string{
+// 		"From":    {m.FormatAddress(globals.Sender, globals.SenderName)},
+// 		"To":      {Recipient},
+// 		"Subject": {Subject},
+// 		// "X-SES-Configuration-SET": {ConfigSet},
+// 		"X-SES_MESSAGE-TAGS": {globals.EmailTags},
+// 	})
+
+// 	d := gomail.NewPlainDialer(globals.Host, globals.SendMailPort, globals.SMTPUser, globals.SMTPPass)
+
+// 	// Display an error message if something goes wrong; otherwise,
+// 	// display a message confirming that the message was sent.
+// 	if err := d.DialAndSend(m); err != nil {
+// 		log.Println(err)
+// 		return false
+// 	}
+
+// 	log.Println("Email sent!")
+// 	return true
+
+// 	// if err := smtp.SendMail(SMTP, smtp.PlainAuth("", "ustarttestemail@gmail.com", "Ust@rt20!8~~", host), "ustarttestemail@gmail.com", r.to, []byte(body)); err != nil {
+// 	// 	return false
+// 	// }
+
+// }
 
 //Send ...
 func (r *Request) Send(templateName string, items interface{}) {
