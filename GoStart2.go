@@ -59,6 +59,7 @@ func main() {
 	http.HandleFunc("/GuestSignup/", registration.GuestSignup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
+	http.HandleFunc("/GuestRegistrationComplete/", registration.GuestComplete)
 	http.HandleFunc("/welcome/", registration.Registration)
 	http.HandleFunc("/GuestRegistration/", registration.GuestRegistration)
 	http.HandleFunc("/Activation/", registration.EmailVerification)

@@ -15,6 +15,13 @@ import (
 	bcrypt "golang.org/x/crypto/bcrypt"
 )
 
+// GuestComplete ...
+func GuestComplete(w http.ResponseWriter, r *http.Request) {
+	cs := client.ClientSide{}
+	client.RenderTemplate(w, r, "templateNoUser2", cs)
+	client.RenderTemplate(w, r, "regcomplete-guest-nil", cs)
+}
+
 //GuestRegistration ... Separate registration page for guests (non-NYU users)
 func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
@@ -97,7 +104,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err2 == nil {
-		http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
+		http.Redirect(w, r, "/GuestRegistrationComplete/", http.StatusFound)
 		return
 	}
 
