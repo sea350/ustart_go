@@ -35,7 +35,7 @@ func main() {
 	*/
 	// fs := http.FileServer(http.Dir("/home/rr2396/www/"))
 	_, _ = http.Get(globals.SiteURL + ":" + globals.Port + "/KillUstartPlsNoUserinoCappucinoDeniro")
-	fs := http.FileServer(http.Dir("/ustart/ustart_front/"))
+	fs := http.FileServer(http.Dir(globals.HTMLPath))
 	// http.Handle("/www/", http.StripPrefix("/www/", fs))
 	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
 	/*
