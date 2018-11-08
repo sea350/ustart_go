@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"log"
 	"net/http"
 
 	"github.com/sea350/ustart_go/globals"
@@ -24,6 +25,7 @@ import (
 )
 
 // var currentPort = globals.Port
+var htmlPath = "/home/ec2-user/go/src/github.com/sea350/ustart_front/"
 
 func main() {
 	flag.Parse()
@@ -33,9 +35,11 @@ func main() {
 		In executeTemplates you will need to make the same changes
 		The other being the relative link on the actual html pages
 	*/
+	log.Println("AWS GoStart2")
 	// fs := http.FileServer(http.Dir("/home/rr2396/www/"))
 	_, _ = http.Get(globals.SiteURL + ":" + globals.Port + "/KillUstartPlsNoUserinoCappucinoDeniro")
-	fs := http.FileServer(http.Dir("/ustart/ustart_front/"))
+	fs := http.FileServer(http.Dir(htmlPath))
+	log.Println("HTMLPath:", htmlPath)
 	// http.Handle("/www/", http.StripPrefix("/www/", fs))
 	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
 	/*
@@ -59,6 +63,7 @@ func main() {
 	http.HandleFunc("/GuestSignup/", registration.GuestSignup)
 	http.HandleFunc("/Registration/Type/", registration.RegisterType)
 	http.HandleFunc("/registrationcomplete/", registration.Complete)
+	http.HandleFunc("/GuestRegistrationComplete/", registration.GuestComplete)
 	http.HandleFunc("/welcome/", registration.Registration)
 	http.HandleFunc("/GuestRegistration/", registration.GuestRegistration)
 	http.HandleFunc("/Activation/", registration.EmailVerification)
