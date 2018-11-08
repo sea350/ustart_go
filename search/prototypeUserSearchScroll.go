@@ -106,7 +106,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		results = append(results, head)
 	}
 
-	fmt.Println(int(res.Hits.TotalHits), res.ScrollId, results, err)
+	fmt.Println(int(res.Hits.TotalHits), res.ScrollId, err)
 
 	return int(res.Hits.TotalHits), res.ScrollId, results, err
 }
