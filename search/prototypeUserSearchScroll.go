@@ -3,6 +3,7 @@ package search
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"strings"
@@ -104,6 +105,8 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		}
 		results = append(results, head)
 	}
+
+	fmt.Println(int(res.Hits.TotalHits), res.ScrollId, results, err)
 
 	return int(res.Hits.TotalHits), res.ScrollId, results, err
 }
