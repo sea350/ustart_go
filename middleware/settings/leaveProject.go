@@ -3,6 +3,7 @@ package settings
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -23,6 +24,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	leavingUser := r.FormValue("leaverID")
+	leavingUser = strings.Trim(leavingUser, "/")
 
 	projID := r.FormValue("projectID")
 	if projID == `` {
@@ -64,6 +66,8 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !canLeave {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("User attempting to leave was not permitted, check variables and try again.")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}

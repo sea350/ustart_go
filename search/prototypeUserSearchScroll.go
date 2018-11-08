@@ -3,6 +3,7 @@ package search
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"strings"
@@ -24,6 +25,13 @@ mustLoc 	-> Location that the result must have
 searchTerm 	-> The term user is inputting
 */
 func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortBy int, searchBy []bool, mustMajor []string, mustTag []string, mustLoc []types.LocStruct, scrollID string) (int, string, []types.FloatingHead, error) {
+	fmt.Println("SearchTerm: ", searchTerm)
+	fmt.Println("SortBy: ", sortBy)
+	fmt.Println("SearchBy: ", searchBy)
+	fmt.Println("MustMajor: ", mustMajor)
+	fmt.Println("mustTag: ", mustTag)
+	fmt.Println("mustLoc: ", mustLoc)
+	fmt.Println("ScrollID: ", scrollID)
 	ctx := context.Background()
 	var results []types.FloatingHead
 	var searchArr []string
@@ -42,23 +50,24 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 				query = query.Should(elastic.NewFuzzyQuery("FirstName", strings.ToLower(element)).Fuzziness(1))
 				query = query.Should(elastic.NewFuzzyQuery("LastName", strings.ToLower(element)).Fuzziness(1))
 			}
-		}
-		//Username
-		if searchBy[1] {
-			query = uses.MultiWildCardQuery(query, "Username", searchArr, true)
+		} /*
+			//Username
+			if searchBy[1] {
+				query = uses.MultiWildCardQuery(query, "Username", searchArr, true)
 
-			for _, element := range searchArr {
-				query = query.Should(elastic.NewFuzzyQuery("Username", strings.ToLower(element)).Fuzziness(1))
-			}
-		}
-		//Tags
-		if searchBy[2] {
-			query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
+				for _, element := range searchArr {
+					query = query.Should(elastic.NewFuzzyQuery("Username", strings.ToLower(element)).Fuzziness(1))
+				}
 
-			for _, element := range searchArr {
-				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
 			}
-		}
+			//Tags
+			if searchBy[2] {
+				query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
+
+				for _, element := range searchArr {
+					query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
+				}
+			}*/
 	} else {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("WARNING: searchBy array is too short")
@@ -104,6 +113,8 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		}
 		results = append(results, head)
 	}
+
+	fmt.Println(int(res.Hits.TotalHits), res.ScrollId, err)
 
 	return int(res.Hits.TotalHits), res.ScrollId, results, err
 }
