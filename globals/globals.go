@@ -182,22 +182,22 @@ const MappingUsr = `
 // }`
 
 // //MappingWidget ... widget mapping
-// const MappingWidget = `
-// {
-//     "mappings":{
-//         "WIDGET":{
-//             "properties":{
-//                 "UserID":{
-//                     "type":"keyword"
-//                 },
-// 				"Classification":{
-// 					"type":"keyword"
-// 				}
+const MappingWidget = `
+{
+    "mappings":{
+        "WIDGET":{
+            "properties":{
+                "UserID":{
+                    "type":"keyword"
+                },
+				"Classification":{
+					"type":"keyword"
+				}
 
-//             }
-//         }
-//     }
-// }`
+            }
+        }
+    }
+}`
 
 //MappingProject ... project mapping
 const projMapping = `
