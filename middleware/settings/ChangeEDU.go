@@ -14,6 +14,7 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
+//Major ...
 type Major struct {
 	List []string
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -24,6 +25,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	leavingUser := r.FormValue("leaverID")
+	leavingUser = strings.Trim(leavingUser, "/")
 
 	projID := r.FormValue("projectID")
 	if projID == `` {
