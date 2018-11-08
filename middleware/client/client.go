@@ -1,6 +1,7 @@
 package client
 
 import (
+	"fmt"
 	htype "html/template"
 	"net/http"
 
@@ -68,6 +69,7 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, cs Clie
 		cs.Username = session.Values["Username"].(string)
 	}
 	if session.Values["DocID"] != nil {
+		fmt.Println(session.Values["DocID"].(string) + " is being rendered")
 		cs.DOCID = session.Values["DocID"].(string)
 	}
 	if session.Values["Avatar"] != nil {
