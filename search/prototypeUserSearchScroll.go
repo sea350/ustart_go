@@ -34,41 +34,40 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 	fmt.Println("ScrollID: ", scrollID)
 	ctx := context.Background()
 	var results []types.FloatingHead
-	//var searchArr []string
+	var searchArr []string
 	query := elastic.NewBoolQuery()
-	//searchArr = strings.Split(searchTerm, ` `)
+	searchArr = strings.Split(searchTerm, ` `)
 
 	query = query.Must(elastic.NewTermQuery("Verified", true))
 
 	if len(searchBy) >= 3 {
 		//Name
-		/*
-			if searchBy[0] {
-				query = uses.MultiWildCardQuery(query, "FirstName", searchArr, true)
-				query = uses.MultiWildCardQuery(query, "LastName", searchArr, true)
+		if searchBy[0] {
+			query = uses.MultiWildCardQuery(query, "FirstName", searchArr, true)
+			query = uses.MultiWildCardQuery(query, "LastName", searchArr, true)
 
-				for _, element := range searchArr {
-					query = query.Should(elastic.NewFuzzyQuery("FirstName", strings.ToLower(element)).Fuzziness(1))
-					query = query.Should(elastic.NewFuzzyQuery("LastName", strings.ToLower(element)).Fuzziness(1))
-				}
+			for _, element := range searchArr {
+				query = query.Should(elastic.NewFuzzyQuery("FirstName", strings.ToLower(element)).Fuzziness(1))
+				query = query.Should(elastic.NewFuzzyQuery("LastName", strings.ToLower(element)).Fuzziness(1))
 			}
-				//Username
-				if searchBy[1] {
-					query = uses.MultiWildCardQuery(query, "Username", searchArr, true)
+		}
+		//Username
+		if searchBy[1] {
+			query = uses.MultiWildCardQuery(query, "Username", searchArr, true)
 
-					for _, element := range searchArr {
-						query = query.Should(elastic.NewFuzzyQuery("Username", strings.ToLower(element)).Fuzziness(1))
-					}
+			for _, element := range searchArr {
+				query = query.Should(elastic.NewFuzzyQuery("Username", strings.ToLower(element)).Fuzziness(1))
+			}
 
-				}
-				//Tags
-				if searchBy[2] {
-					query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
+		}
+		//Tags
+		if searchBy[2] {
+			query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
 
-					for _, element := range searchArr {
-						query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
-					}
-				}*/
+			for _, element := range searchArr {
+				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
+			}
+		}
 	} else {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("WARNING: searchBy array is too short")
