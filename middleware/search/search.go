@@ -28,8 +28,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchlistmajors"))
 	searchSkills := uses.ConvertStrToStrArr(r.FormValue("searchlistskills")) //array
 
-	fmt.println("Filter: ", filter)
-	fmt.Println("Query: " query)
+	fmt.Println("Filter: ", filter)
+	fmt.Println("Query: ", query)
 	if filter == `projects` {
 		if r.FormValue("searchbyprojectname") != `` {
 			searchBy = append(searchBy, true)
