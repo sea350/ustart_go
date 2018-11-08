@@ -64,6 +64,8 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !canLeave {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("User attempting to leave was not permitted, check variables and try again.")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
