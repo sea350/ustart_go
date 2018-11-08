@@ -25,6 +25,13 @@ mustLoc 	-> Location that the result must have
 searchTerm 	-> The term user is inputting
 */
 func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortBy int, searchBy []bool, mustMajor []string, mustTag []string, mustLoc []types.LocStruct, scrollID string) (int, string, []types.FloatingHead, error) {
+	fmt.Println("SearchTerm: ", searchTerm)
+	fmt.Println("SortBy: ", sortBy)
+	fmt.Println("SearchBy: ", searchBy)
+	fmt.Println("MustMajor: ", mustMajor)
+	fmt.Println("mustTag: ", mustTag)
+	fmt.Println("mustLoc: ", mustLoc)
+	fmt.Println("ScrollID: ", scrollID)
 	ctx := context.Background()
 	var results []types.FloatingHead
 	var searchArr []string
