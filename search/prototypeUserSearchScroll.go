@@ -34,9 +34,9 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 	fmt.Println("ScrollID: ", scrollID)
 	ctx := context.Background()
 	var results []types.FloatingHead
-	var searchArr []string
+	//var searchArr []string
 	query := elastic.NewBoolQuery()
-	searchArr = strings.Split(searchTerm, ` `)
+	//searchArr = strings.Split(searchTerm, ` `)
 
 	query = query.Must(elastic.NewTermQuery("Verified", true))
 
