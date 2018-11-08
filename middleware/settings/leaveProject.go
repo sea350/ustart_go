@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -50,9 +49,6 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
-
-	fmt.Println("leaving user: " + leavingUser)
-	fmt.Println("current user: " + test1.(string))
 
 	var canLeave = false
 	if leavingUser == test1.(string) {
