@@ -96,6 +96,9 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		cs.Hits = numHits
 	}
 	if filter == `users` {
+		fmt.Println("searchbypersonname: ", searchbypersonname)
+		fmt.Println("searchbyusername: ", searchbyusername)
+		fmt.Println("searchbyskills: ", searchbyskills)
 		if r.FormValue("searchbypersonname") != `` {
 			searchBy = append(searchBy, true)
 		} else {
