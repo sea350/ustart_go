@@ -87,86 +87,209 @@ const FollowType = "FOLLOW"
 //MappingUsr ... user mapping
 const MappingUsr = `
 {
+	"settings": {
+		"analysis": {
+		   "analyzer": {
+			  "my_analyzer": {
+				 "type": "custom",
+				 "filter": [
+					"lowercase"
+				 ],
+				 "tokenizer": "whitespace"
+			  }
+		   }
+		}
+	 },
+
     "mappings":{
         "USER":{
             "properties":{
                 "Email":{
-					"type":"keyword",
-					
-                },
+                    "type":"keyword"
+				},
                 "Username":{
-					"type":"keyword",
-					
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}
                 },
 				"FirstName":{
-					"type": "keyword",
-					
+					"type": "text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}
 				},
 				"LastName":{
-					"type":"keyword",
-					
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}
+				},
+				"Tags":{
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}
 				}
-				
+				 
                 
             }
         }
     }
 }`
 
-//MappingWidget ... widget mapping
-const MappingWidget = `
-{
-    "mappings":{
-        "WIDGET":{
-            "properties":{
-                "UserID":{
-                    "type":"keyword"
-                },
-				"Classification":{
-					"type":"keyword"
-				}
+// const MappingUsr = `
+// {
+//     "mappings":{
+//         "USER":{
+//             "properties":{
+//                 "Email":{
+// 					"type":"keyword",
 
-                
-            }
-        }
-    }
-}`
+//                 },
+//                 "Username":{
+// 					"type":"keyword",
+
+//                 },
+// 				"FirstName":{
+// 					"type": "keyword",
+
+// 				},
+// 				"LastName":{
+// 					"type":"keyword",
+
+// 				}
+
+//             }
+//         }
+//     }
+// }`
+
+// //MappingWidget ... widget mapping
+// const MappingWidget = `
+// {
+//     "mappings":{
+//         "WIDGET":{
+//             "properties":{
+//                 "UserID":{
+//                     "type":"keyword"
+//                 },
+// 				"Classification":{
+// 					"type":"keyword"
+// 				}
+
+//             }
+//         }
+//     }
+// }`
 
 //MappingProject ... project mapping
-const MappingProject = `
+const projMapping = `
 {
-	"settings" :{
-		"analysis":{
-			"analyzer" : {
-				"casesensitive_text":{
-					"type" : "custom",
-					"tokenizer": "standard"
-				}
-			}
+	"settings": {
+		"analysis": {
+		   "analyzer": {
+			  "my_analyzer": {
+				 "type": "custom",
+				 "filter": [
+					"lowercase"
+				 ],
+				 "tokenizer": "whitespace"
+			  }
+		   }
 		}
-	},
+	 },
+
 
     "mappings":{
         "PROJECT":{
             "properties":{
 				"Name":{
-					"type":"keyword"
-
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}					 
 				},
-
                 "URLName":{
-					"type":"keyword"
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}		
 					
 				},
 				"Tags":{
-					"type":"keyword"
-
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}
 				}
 			}
-			
         }
     }
 }`
+
+// const MappingProject = `
+// {
+// 	"settings" :{
+// 		"analysis":{
+// 			"analyzer" : {
+// 				"casesensitive_text":{
+// 					"type" : "custom",
+// 					"tokenizer": "standard"
+// 				}
+// 			}
+// 		}
+// 	},
+
+//     "mappings":{
+//         "PROJECT":{
+//             "properties":{
+// 				"Name":{
+// 					"type":"keyword"
+
+// 				},
+
+//                 "URLName":{
+// 					"type":"keyword"
+
+// 				},
+// 				"Tags":{
+// 					"type":"keyword"
+
+// 				}
+// 			}
+
+//         }
+//     }
+// }`
 
 //MappingEvent ... event mapping
 const MappingEvent = `
