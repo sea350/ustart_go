@@ -7,13 +7,14 @@ import (
 	"net/http"
 
 	"github.com/lib/pq"
+	"github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/fail"
 )
 
 var livePort = "5000"
-var templates = htype.Must(htype.ParseFiles("/ustart/ustart_front/nil-index2.html",
-	"/ustart/ustart_front/template2-nil.html",
-	"/ustart/ustart_front/index1.html"))
+var templates = htype.Must(htype.ParseFiles(globals.HTMLPATH+"nil-index2.html",
+	globals.HTMLPATH+"template2-nil.html",
+	globals.HTMLPATH+"index1.html"))
 
 func main() {
 	/*
@@ -24,7 +25,7 @@ func main() {
 	*/
 	// fs := http.FileServer(http.Dir("/home/rr2396/www/"))
 	_, _ = http.Get("http://ustart.today:" + livePort + "/KillUstartPlsNoUserinoCappucinoDeniro")
-	fs := http.FileServer(http.Dir("/ustart/ustart_front/"))
+	fs := http.FileServer(http.Dir(globals.HTMLPATH + ""))
 
 	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
 	/*

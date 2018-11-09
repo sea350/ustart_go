@@ -61,7 +61,7 @@ func SendVerificationEmail(eclient *elastic.Client, email string) {
 		subject := "Your verification link"
 		link := globals.SiteURL + ":" + globals.Port + "/Activation/?email=" + email + "&verifCode=" + token
 		r := NewRequest([]string{email}, subject)
-		r.Send("/ustart/ustart_front/email_template.html", map[string]string{"username": user.Username, "link": link,
+		r.Send(globals.HTMLPATH"email_template.html", map[string]string{"username": user.Username, "link": link,
 			"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
 			"contentdos":    "Simply click the button below to verify your account",
 			"contenttres":   "VERIFY ACCOUNT",

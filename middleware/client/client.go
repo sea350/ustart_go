@@ -11,12 +11,12 @@ import (
 )
 
 //Eclient ... Reference to the ElasticSearch
-var Eclient, err = elastic.NewClient(elastic.SetURL(globals.ClientURL))
+var Eclient, err = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 //Store ...
 var Store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
-var htmlPath = "/ustart/ustart_front/"
+var htmlPath = globals.HTMLPATH
 
 //ClientSide ... This struct represents a user state after he/she has logged in. Some fields may no longer be needed
 //or are unnecessary.

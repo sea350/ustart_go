@@ -110,7 +110,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Link: ", link)
 		r := uses.NewRequest([]string{email}, subject)
 		r.Send(
-			"/ustart/ustart_front/email_template.html", map[string]string{
+			globals.HTMLPATH+"email_template.html", map[string]string{
 				"username":      user.Username,
 				"link":          link,
 				"contentjuan":   "We received a request to reset your password for your Ustart Account. We would love to assist you!",
