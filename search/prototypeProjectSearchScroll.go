@@ -33,7 +33,7 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 
 	stringArray = strings.Split(searchTerm, " ")
 
-	query = query.Must(elastic.NewTermQuery("Visible", true))
+	query = query.MustNot(elastic.NewTermQuery("Visible", false))
 
 	if len(searchBy) >= 4 {
 		//Name
