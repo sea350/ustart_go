@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"log"
 	"net/http"
 
 	"github.com/sea350/ustart_go/globals"
@@ -39,6 +40,9 @@ func main() {
 	/*
 		The following are all the handlers we have so fart.
 	*/
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("Dialing up...")
 
 	http.HandleFunc("/404/", fail.Fail)
 	http.HandleFunc("/KillUstartPlsNoUserinoCappucinoDeniro", fail.KillSwitch)
