@@ -79,12 +79,16 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	}
 	// Tag
 	if len(mustTag) > 0 {
-		tags := make([]interface{}, 0)
-		for tag := range mustTag {
-			tags = append([]interface{}{strings.ToLower(mustTag[tag])}, tags...)
-		}
+		// tags := make([]interface{}, 0)
+		// for tag := range mustTag {
+		// 	tags = append([]interface{}{strings.ToLower(mustTag[tag])}, tags...)
+		// }
 
-		query = query.Must(elastic.NewTermsQuery("Tags", tags...))
+		// query = query.Must(elastic.NewTermsQuery("Tags", tags...))
+
+		for _, tag := range mustTag {
+			query = query.Must(elastic.NewTermQuery("Tags", strings.ToLower(tag)))
+		}
 		// for _, element := range mustTag {
 
 		// 	//Check if NewMatchQuery order is correct
