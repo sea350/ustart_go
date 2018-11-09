@@ -39,8 +39,8 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 			query = uses.MultiWildCardQuery(query, "LastName", searchArr, true)
 
 			for _, element := range searchArr {
-				query = query.Should(elastic.NewFuzzyQuery("FirstName", strings.ToLower(element)).Fuzziness(1))
-				query = query.Should(elastic.NewFuzzyQuery("LastName", strings.ToLower(element)).Fuzziness(1))
+				query = query.Should(elastic.NewFuzzyQuery("FirstName", strings.ToLower(element)).Fuzziness("AUTO"))
+				query = query.Should(elastic.NewFuzzyQuery("LastName", strings.ToLower(element)).Fuzziness("AUTO"))
 			}
 		}
 		//Username
@@ -48,7 +48,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 			query = uses.MultiWildCardQuery(query, "Username", searchArr, true)
 
 			for _, element := range searchArr {
-				query = query.Should(elastic.NewFuzzyQuery("Username", strings.ToLower(element)).Fuzziness(1))
+				query = query.Should(elastic.NewFuzzyQuery("Username", strings.ToLower(element)).Fuzziness("AUTO"))
 			}
 
 		}
@@ -57,7 +57,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 			query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
 
 			for _, element := range searchArr {
-				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness(1))
+				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness("AUTO"))
 			}
 		}
 	} else {
@@ -69,7 +69,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		for _, element := range mustMajor {
 			//Check if NewMatchQuery order is correct
 			query = query.Must(elastic.NewMatchQuery("Majors", strings.ToLower(element)))
-			query = query.Should(elastic.NewFuzzyQuery("Majors", strings.ToLower(element)).Fuzziness(1))
+			query = query.Should(elastic.NewFuzzyQuery("Majors", strings.ToLower(element)).Fuzziness("AUTO"))
 		}
 	}
 
