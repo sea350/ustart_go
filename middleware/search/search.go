@@ -1,7 +1,6 @@
 package search
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -28,8 +27,6 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchlistmajors"))
 	searchSkills := uses.ConvertStrToStrArr(r.FormValue("searchlistskills")) //array
 
-	fmt.Println("Filter: ", filter)
-	fmt.Println("Query: ", query)
 	if filter == `projects` {
 		if r.FormValue("searchbyprojectname") != `` {
 			searchBy = append(searchBy, true)
@@ -96,9 +93,6 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		cs.Hits = numHits
 	}
 	if filter == `users` {
-		fmt.Println("searchbypersonname: ", r.FormValue("searchbypersonname"))
-		fmt.Println("searchbyusername: ", r.FormValue("searchbyusername"))
-		fmt.Println("searchbyskills: ", r.FormValue("searchbyskills"))
 		if r.FormValue("searchbypersonname") != `` {
 			searchBy = append(searchBy, true)
 		} else {
