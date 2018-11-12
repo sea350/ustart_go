@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	htype "html/template"
 	"net/http"
 
@@ -75,7 +74,6 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, cs Clie
 		cs.Avatar = session.Values["Avatar"].(string)
 	}
 
-	fmt.Println("Rendering path: " + htmlPath + tmpl)
 	template := htype.Must(htype.ParseFiles(htmlPath + tmpl + ".html"))
 	err := template.ExecuteTemplate(w, tmpl+".html", cs)
 	if err != nil {
