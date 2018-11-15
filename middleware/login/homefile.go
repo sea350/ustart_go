@@ -17,6 +17,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	if test1 != nil {
 		http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
 	}
+	if r.URL.Path != "/" {
+		http.Redirect(w, r, "/404/", http.StatusFound)
+	}
 	session.Save(r, w)
 	cs := client.ClientSide{}
 	client.RenderTemplate(w, r, "templateNoUser2", cs)

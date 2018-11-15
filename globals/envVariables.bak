@@ -1,0 +1,35 @@
+package globals
+
+const (
+	//Port is the current operative port
+	Port = "5002"
+
+	//ClientURL is the elastic client url
+	ClientURL = "https://vpc-ustart-es-ho7jd4ahrgusb6zp2j6qvecvtu.us-east-1.es.amazonaws.com"
+
+	//SiteURL is the site domain
+	SiteURL = "http://ustart.today"
+
+	//HTMLPATH is how to get to the html filed from the working directory
+	HTMLPATH = "../ustart_front/"
+
+	//MIME is a pokemon
+	MIME = "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
+
+	//Sender ...
+	Sender = "ustarttestemail@gmail.com"
+	//SenderName ...
+	SenderName = "U•START"
+	//SMTPUser ...
+	SMTPUser = "AKIAJNA5EV7IQ5NA6GMQ"
+	//SMTPPass ..
+	SMTPPass = "AlfAq8CoUxc9Vx/FxgRLuYkpgdGuR3ZDCqVM9BoXtDs/"
+	//Host ...
+	Host = "email-smtp.us-east-1.amazonaws.com"
+	//SendMailPort ...
+	SendMailPort = 587 //alternatively: 25
+	//EmailTags ...
+	EmailTags = "genre=test,genre2=test2"
+	//SenderEmail ...
+	SenderEmail = "ustarttestemail@gmail.com"
+)
