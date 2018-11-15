@@ -47,9 +47,9 @@ func (r *Request) parseTemplate(fileName string, data interface{}) error {
 
 func (r *Request) sendMail() bool {
 	body := "To: " + r.to[0] + "\r\nSubject: " + r.subject + "\r\n" + globals.MIME + "\r\n" + r.body
-	SMTP := fmt.Sprintf("%s:%d", globals.Host, 587)
-	if err := smtp.SendMail(SMTP, smtp.PlainAuth("", globals.SenderEmail, globals.SMTPPass, globals.Host), globals.SenderEmail, r.to, []byte(body)); err != nil {
-		log.Println(globals.Host, globals.SenderEmail, globals.SendMailPort, globals.SMTPUser)
+	SMTP := fmt.Sprintf("%s:%d", globals.Host, globals.SendMailPort)
+	if err := smtp.SendMail(SMTP, smtp.PlainAuth(globals.SMTPUser, globals.SenderEmail, globals.SMTPPass, globals.Host), globals.SenderEmail, r.to, []byte(body)); err != nil {
+		// log.Println(globals.Host, globals.SenderEmail, globals.SendMailPort, globals.SMTPUser)
 		log.Println(err)
 		return false
 	}
