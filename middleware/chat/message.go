@@ -3,6 +3,7 @@ package chat
 import (
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -15,6 +16,7 @@ import (
 var clients = make(map[*websocket.Conn]bool) // connected clients
 var chatroom = make(map[string](map[*websocket.Conn]string))
 var broadcast = make(chan types.Message) // broadcast channel
+var convoLock sync.Mutex
 
 // Configure the upgrader
 var upgrader = websocket.Upgrader{
@@ -136,7 +138,8 @@ func handleMessages() {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
 		// Send it out to every client that is currently connected
-
+		convoLock.Lock()
+		defer convoLock.Unlock()
 		// log.SetFlags(log.LstdFlags | log.Lshortfile)
 		// log.Println(msg.ConversationID)
 		// _, exists := chatroom[msg.ConversationID]
