@@ -11,8 +11,6 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-
 //ProjectsByTime ...
 //Searching projects within a specific time range
 func ProjectsByTime(eclient *elastic.Client, minTime string, maxTime string) {

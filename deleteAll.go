@@ -6,11 +6,12 @@ import (
 	"log"
 	"os"
 
+	"github.com/sea350/ustart_go/middleware/client"
+
 	globals "github.com/sea350/ustart_go/globals"
-	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))
+var eclient = client.Eclient
 
 //DeleteAll ... nukes all indexes in ES
 func DeleteAll() {

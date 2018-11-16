@@ -11,8 +11,6 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//var eclient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
-
 //EventsByTime ...
 //Searching events within a specific time range
 func EventsByTime(eclient *elastic.Client, minTime string, maxTime string) {

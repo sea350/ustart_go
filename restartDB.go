@@ -9,8 +9,6 @@ import (
 	globals "github.com/sea350/ustart_go/globals"
 )
 
-//var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("http://localhost:9200"))
-
 const usrMapping = `
 {
     "mappings":{
