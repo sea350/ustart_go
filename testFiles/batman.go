@@ -431,16 +431,17 @@ func main() {
 	indices = append(indices, globals.EntryIndex)
 	indices = append(indices, globals.WidgetIndex)
 	indices = append(indices, globals.FollowIndex)
-	// fmt.Println(globals.FollowIndex)
-	indices = append(indices, globals.EventIndex)
+	// // fmt.Println(globals.FollowIndex)
+	// indices = append(indices, globals.EventIndex)
 	// indices = append(indices, )
 	// indices = append(indices, )
 	// {globals.MsgIndex, globals.ConvoIndex, globals.ProxyMsgIndex}
 	//no chat atm
 	indices = append(indices, globals.MsgIndex, globals.ConvoIndex, globals.ProxyMsgIndex)
 
-	indices = append(indices, globals.NotificationIndex, globals.ProxyNotifIndex, globals.GuestCodeIndex, globals.GuestCodeType)
+	indices = append(indices, globals.NotificationIndex, globals.ProxyNotifIndex, globals.GuestCodeIndex)
 
+	// indices = append(indices, globals.GuestCodeIndex)
 	// delete phase
 	for _, index := range indices {
 		deleteIndex(eclient, index)
