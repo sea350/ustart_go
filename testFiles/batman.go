@@ -1,5 +1,3 @@
-
-
 package main
 
 import (
@@ -316,23 +314,23 @@ const convoMapping = `
     }
 }`
 
-//func deleteIndex(eclient *elastic.Client, index string) {
+func deleteIndex(eclient *elastic.Client, index string) {
 
-	//fmt.Println(globals.EntryIndex)
+	fmt.Println(globals.EntryIndex)
 
-//	ctx := context.Background()
-//	deleteIndex, err := eclient.DeleteIndex(index).Do(ctx)
-//	if err != nil {
-//		// Handle error
-//		fmt.Println(err)
-//		fmt.Println(index)
-//	} else {
-//		fmt.Println(index, "deleted")
-//	}
-//	if !deleteIndex.Acknowledged {
-//		// Not acknowledged
-//	}
-//}
+	ctx := context.Background()
+	deleteIndex, err := eclient.DeleteIndex(index).Do(ctx)
+	if err != nil {
+		// Handle error
+		fmt.Println(err)
+		fmt.Println(index)
+	} else {
+		fmt.Println(index, "deleted")
+	}
+	if !deleteIndex.Acknowledged {
+		// Not acknowledged
+	}
+}
 
 func startIndex(eclient *elastic.Client, index string) {
 	fmt.Println(index)
@@ -441,11 +439,12 @@ func main() {
 	//no chat atm
 	indices = append(indices, globals.MsgIndex, globals.ConvoIndex, globals.ProxyMsgIndex)
 
-	indices = append(indices, globals.NotificationIndex, globals.ProxyNotifIndex)
+	indices = append(indices, globals.NotificationIndex, globals.ProxyNotifIndex, globals.GuestCodeIndex, globals.GuestCodeType)
+
 	// delete phase
-	// for _, index := range indices {
-	// 	deleteIndex(eclient, index)
-	// }
+	for _, index := range indices {
+		deleteIndex(eclient, index)
+	}
 	// deleteIndex(eclient, globals.ConvoIndex)
 	// restore phase
 	for _, index := range indices {
@@ -458,4 +457,3 @@ func main() {
 	// }
 
 }
-
