@@ -94,22 +94,27 @@ func main() {
 
 	date := strings.Split(expiration, "/")
 	var dateTime time.Time
-	for !dateIsValid(date) {
-		fmt.Print("Date is in an improper format, enter a valid format or leave blank:")
-		expiration, _ = reader.ReadString('\n')
-		expiration = expiration[:len(numUses)-1]
-		if expiration == "" {
-			break
-		} else {
-			date = strings.Split(expiration, "/")
+	if expiration == "" {
+		dateTime = time.Date(6000, time.Month(1), 1, 1, 1, 1, 1, time.UTC)
+	} else {
+		for !dateIsValid(date) {
+			fmt.Print("Date is in an improper format, enter a valid format or leave blank:")
+			expiration, _ = reader.ReadString('\n')
+			expiration = expiration[:len(numUses)-1]
+			if expiration == "" {
+				break
+			} else {
+				date = strings.Split(expiration, "/")
+			}
+		}
+		if expiration != "" {
+			year, _ := strconv.Atoi(date[2])
+			month, _ := strconv.Atoi(date[0])
+			day, _ := strconv.Atoi(date[1])
+			dateTime = time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
 		}
 	}
-	if expiration != "" {
-		year, _ := strconv.Atoi(date[2])
-		month, _ := strconv.Atoi(date[0])
-		day, _ := strconv.Atoi(date[1])
-		dateTime = time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
-	}
+
 	//Use magic regex to check format of expiration date
 
 	var classification int
