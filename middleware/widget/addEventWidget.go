@@ -19,7 +19,7 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("test1", test1)
 	if test1 == nil {
 		//No username in session
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 

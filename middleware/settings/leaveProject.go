@@ -19,7 +19,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	if test1 == nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(test1)
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 

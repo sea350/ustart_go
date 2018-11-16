@@ -89,7 +89,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 	} else {
 		cs.ErrorOutput = errors.New("Authentication token invalid")
 		cs.ErrorStatus = true

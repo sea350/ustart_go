@@ -17,7 +17,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 	ID, _ := session.Values["DocID"]
 	if ID == nil {
 		// No username in session
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 

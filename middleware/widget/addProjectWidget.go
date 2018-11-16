@@ -17,7 +17,7 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["Username"]
 	if test1 == nil {
 		// No username in session
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
