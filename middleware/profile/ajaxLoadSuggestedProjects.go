@@ -19,7 +19,7 @@ func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 	docID, _ := session.Values["DocID"]
 	if docID == nil {
 		// No username in session
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 

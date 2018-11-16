@@ -15,7 +15,7 @@ func Inbox(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 	// if no docid then redirect to main page
 	if test1 == nil {
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 	// if conditions of redirect are met, the next 4 lines do not execute

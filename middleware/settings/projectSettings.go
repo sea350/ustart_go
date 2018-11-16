@@ -13,7 +13,7 @@ func Project(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 

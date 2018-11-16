@@ -24,7 +24,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 

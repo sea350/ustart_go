@@ -16,7 +16,7 @@ func NewGuest(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	sessionID, _ := session.Values["DocID"]
 	if sessionID == nil {
-		http.Redirect(w, r, "/~", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
