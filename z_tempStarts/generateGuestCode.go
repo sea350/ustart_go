@@ -40,6 +40,8 @@ func dateIsValid(date []string) bool {
 				return true
 			}
 		}
+	} else if len(date) == 0 {
+		return true
 	}
 	return false
 }
