@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sea350/ustart_go/middleware/client"
+
 	globals "github.com/sea350/ustart_go/globals"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postUser "github.com/sea350/ustart_go/post/user"
@@ -11,7 +13,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-var eclient, _ = elastic.NewSimpleClient(elastic.SetURL("https://vpc-ustart-es-ho7jd4ahrgusb6zp2j6qvecvtu.us-east-1.es.amazonaws.com"))
+var eclient = client.Eclient
 
 const usrMapping = `
 {
