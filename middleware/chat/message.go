@@ -137,13 +137,6 @@ func handleMessages() {
 	for {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
-		// Send it out to every client that is currently connected
-		convoLock.Lock()
-		defer convoLock.Unlock()
-		// log.SetFlags(log.LstdFlags | log.Lshortfile)
-		// log.Println(msg.ConversationID)
-		// _, exists := chatroom[msg.ConversationID]
-		// log.Println(exists)
 
 		for clnt, docID := range chatroom[msg.ConversationID] {
 			err := clnt.WriteJSON(msg)
