@@ -70,7 +70,7 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 			cs.ErrorStatus = true
-			cs.ErrorOutput = errors.New("err: middleware/registration/emailVerification line 34")
+			cs.ErrorOutput = err
 		}
 	} else {
 		cs.ErrorStatus = true

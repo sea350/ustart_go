@@ -2,7 +2,6 @@ package uses
 
 import (
 	"log"
-	"os"
 	"time"
 
 	"github.com/sea350/ustart_go/globals"
@@ -19,8 +18,7 @@ func SendVerificationEmail(eclient *elastic.Client, email string) {
 	userID, err := getUser.UserIDByEmail(eclient, email)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 		return
 	}
 
@@ -28,8 +26,7 @@ func SendVerificationEmail(eclient *elastic.Client, email string) {
 	user, err := getUser.UserByID(eclient, userID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 		return
 	}
 
@@ -37,24 +34,21 @@ func SendVerificationEmail(eclient *elastic.Client, email string) {
 		token, err := GenerateRandomString(32)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 			return
 		}
 
 		err = postUser.UpdateUser(eclient, userID, "AuthenticationCode", token)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 			return
 		}
 
 		err = postUser.UpdateUser(eclient, userID, "AuthenticationCodeTime", time.Now())
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 			return
 		}
 
