@@ -13,10 +13,14 @@ import (
 	"github.com/sea350/ustart_go/uses"
 )
 
+type room struct {
+	sockets map[*websocket.Conn]string
+	lock    sync.Mutex
+}
+
 var clients = make(map[*websocket.Conn]bool) // connected clients
-var chatroom = make(map[string](map[*websocket.Conn]string))
+var chatroom = make(map[string]*room)
 var broadcast = make(chan types.Message) // broadcast channel
-var convoLock sync.Mutex
 
 // Configure the upgrader
 var upgrader = websocket.Upgrader{
@@ -54,8 +58,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	// Make sure we close the connection when the function returns
 	defer ws.Close()
 
-	// Register our new client
-	if chatURL == `` {
+	/*IF YOU WAND GLOBAL CHAT ENABLED, DO THIS
+		if chatURL == `` {
 		_, exists := chatroom[``]
 		if !exists {
 			temp := make(map[*websocket.Conn]string)
@@ -66,16 +70,21 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			temp[ws] = docID.(string)
 			chatroom[``] = temp
 		}
-	} else if actualChatID != `` {
+	} else
+	*/
+
+	// Register our new client
+	if actualChatID != `` {
 		_, exists := chatroom[actualChatID]
 		if !exists {
 			temp := make(map[*websocket.Conn]string)
 			temp[ws] = docID.(string)
-			chatroom[actualChatID] = temp
+
+			chatroom[actualChatID] = &room{sockets: temp}
 		} else {
-			temp := chatroom[actualChatID]
+			temp := chatroom[actualChatID].sockets
 			temp[ws] = docID.(string)
-			chatroom[actualChatID] = temp
+			chatroom[actualChatID] = &room{sockets: temp}
 		}
 		err = postChat.MarkAsRead(client.Eclient, docID.(string), actualChatID)
 		if err != nil {
@@ -91,7 +100,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			delete(chatroom[actualChatID], ws)
+			delete(chatroom[actualChatID].sockets, ws)
 			break
 		}
 		if len(msg.Content) > 500 {
@@ -110,7 +119,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			actualChatID = newConvoID
 			temp := make(map[*websocket.Conn]string)
 			temp[ws] = docID.(string)
-			chatroom[actualChatID] = temp
+			chatroom[actualChatID] = &room{sockets: temp}
 			msg.ConversationID = actualChatID
 
 		} else if actualChatID != `` && chatURL != `` {
@@ -137,13 +146,16 @@ func handleMessages() {
 	for {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
+		chatroom[msg.ConversationID].lock.Lock()
+		defer chatroom[msg.ConversationID].lock.Unlock()
 
-		for clnt, docID := range chatroom[msg.ConversationID] {
+		for clnt, docID := range chatroom[msg.ConversationID].sockets {
+
 			err := clnt.WriteJSON(msg)
 			if err != nil {
 				log.Printf("error: %v", err)
 				clnt.Close()
-				delete(chatroom[msg.ConversationID], clnt)
+				delete(chatroom[msg.ConversationID].sockets, clnt)
 				return
 			}
 			err = postChat.MarkAsRead(client.Eclient, docID, msg.ConversationID)
