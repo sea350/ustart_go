@@ -29,6 +29,20 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+func sendAndNotify(msg types.Message, notif chatNotif, notify []string) {
+	chatroom[msg.ConversationID].lock.Lock()
+	defer chatroom[msg.ConversationID].lock.Unlock()
+	// Send the newly received message to the broadcast channel
+	broadcast <- msg
+
+	//send notification here
+
+	for _, id := range notify {
+		notif.UserID = id
+		chatBroadcast <- notif
+	}
+}
+
 //HandleConnections ...
 func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
@@ -129,19 +143,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 		}
-		chatroom[msg.ConversationID].lock.Lock()
-		defer chatroom[msg.ConversationID].lock.Unlock()
-		// Send the newly received message to the broadcast channel
-		broadcast <- msg
-
-		//send notification here
 		notif.ChatID = actualChatID
-		for _, id := range notifyThese {
-			notif.UserID = id
-			chatBroadcast <- notif
-		}
-
-		chatroom[msg.ConversationID].lock.Unlock()
+		sendAndNotify(msg, notif, notifyThese)
 	}
 }
 
