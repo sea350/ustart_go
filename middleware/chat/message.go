@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"sync"
@@ -149,14 +150,19 @@ func handleMessages() {
 		chatroom[msg.ConversationID].lock.Lock()
 		defer chatroom[msg.ConversationID].lock.Unlock()
 
+		fmt.Println("Pass 1")
+
 		for clnt, docID := range chatroom[msg.ConversationID].sockets {
+
+			fmt.Println("Pass 2")
 
 			err := clnt.WriteJSON(msg)
 			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Printf("error: %v", err)
 				clnt.Close()
 				delete(chatroom[msg.ConversationID].sockets, clnt)
-				return
+				continue
 			}
 			err = postChat.MarkAsRead(client.Eclient, docID, msg.ConversationID)
 			if err != nil {
@@ -165,5 +171,7 @@ func handleMessages() {
 			}
 
 		}
+
+		fmt.Println("Pass 3")
 	}
 }
