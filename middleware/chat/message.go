@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"sync"
@@ -130,7 +129,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 		}
-
+		chatroom[msg.ConversationID].lock.Lock()
+		defer chatroom[msg.ConversationID].lock.Unlock()
 		// Send the newly received message to the broadcast channel
 		broadcast <- msg
 
@@ -140,6 +140,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			notif.UserID = id
 			chatBroadcast <- notif
 		}
+
+		chatroom[msg.ConversationID].lock.Unlock()
 	}
 }
 
@@ -147,13 +149,8 @@ func handleMessages() {
 	for {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
-		chatroom[msg.ConversationID].lock.Lock()
-
-		fmt.Println("Pass 1")
 
 		for clnt, docID := range chatroom[msg.ConversationID].sockets {
-
-			fmt.Println("Pass 2")
 
 			err := clnt.WriteJSON(msg)
 			if err != nil {
@@ -171,7 +168,5 @@ func handleMessages() {
 
 		}
 
-		chatroom[msg.ConversationID].lock.Unlock()
-		fmt.Println("Pass 3")
 	}
 }
