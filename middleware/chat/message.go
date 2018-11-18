@@ -148,7 +148,6 @@ func handleMessages() {
 		// Grab the next message from the broadcast channel
 		msg := <-broadcast
 		chatroom[msg.ConversationID].lock.Lock()
-		defer chatroom[msg.ConversationID].lock.Unlock()
 
 		fmt.Println("Pass 1")
 
@@ -172,6 +171,7 @@ func handleMessages() {
 
 		}
 
+		chatroom[msg.ConversationID].lock.Unlock()
 		fmt.Println("Pass 3")
 	}
 }
