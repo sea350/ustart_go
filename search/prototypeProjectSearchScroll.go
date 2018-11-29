@@ -67,6 +67,7 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	} else {
 		fmt.Println("WARNING: searchBy array is too short")
 	}
+	/* major actually searches category
 	// Major
 	if len(mustMajor) > 0 {
 		for _, element := range mustMajor {
@@ -77,6 +78,18 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 			}
 		}
 	}
+	*/
+	//WARNING major doesnt actually search list needed, it searches category
+	if len(mustMajor) > 0 {
+		for _, element := range mustMajor {
+			//Check if NewMatchQuery order is correct
+			query = query.Must(elastic.NewMatchQuery("Category", element))
+			for _, element := range stringArray {
+				query = query.Should(elastic.NewFuzzyQuery("Category", strings.ToLower(element)).Fuzziness("AUTO"))
+			}
+		}
+	}
+
 	// Tag
 	if len(mustTag) > 0 {
 		// tags := make([]interface{}, 0)
