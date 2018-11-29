@@ -11,6 +11,7 @@ import (
 )
 
 //DeleteQuickLink ...
+//designed for ajax
 func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["Username"]
@@ -19,7 +20,6 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	username := test1.(string)
 	ID := session.Values["DocID"].(string)
 
 	usr, err := get.UserByID(client.Eclient, ID)
@@ -31,6 +31,12 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	deleteTitle := r.FormValue("userLinkDesc")
 	deleteURL := r.FormValue("userLink")
 
+	if deleteURL == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Crucial data was not passed in, now exiting")
+		return
+	}
+
 	var newArr []types.Link
 
 	if len(usr.QuickLinks) <= 1 {
@@ -39,7 +45,6 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
-		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 		return
 	}
 
@@ -55,7 +60,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	if target == -1 {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Deleted object not found")
-		newArr = usr.QuickLinks
+		return
 	} else if (target + 1) < len(usr.QuickLinks) {
 		newArr = append(usr.QuickLinks[:target], usr.QuickLinks[(target+1):]...)
 	} else {
@@ -68,6 +73,5 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 	return
 }
