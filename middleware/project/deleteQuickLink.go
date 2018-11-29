@@ -21,6 +21,11 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("projectID")
+	if ID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Crucial data was not passed in, now exiting")
+		return
+	}
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
@@ -31,29 +36,40 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	deleteTitle := r.FormValue("deleteProjectLinkDesc")
 	deleteURL := r.FormValue("deleteProjectLink")
 
+	// if deleteTitle == `` {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	log.Println("WARNING: link title is blank")
+	// }
+	if deleteURL == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Crucial data was not passed in, now exiting")
+		return
+	}
+
 	var newArr []types.Link
 
-	if len(proj.QuickLinks) == 1 {
+	if len(proj.QuickLinks) <= 1 {
 		err := post.UpdateProject(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
-		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
 
 	target := -1
 	for index, link := range proj.QuickLinks {
+
 		if link.Name == deleteTitle && link.URL == deleteURL {
 			target = index
 			break
 		}
 	}
+
 	if target == -1 {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Deleted object not found")
-		newArr = proj.QuickLinks
+		return
 	} else if (target + 1) < len(proj.QuickLinks) {
 		newArr = append(proj.QuickLinks[:target], proj.QuickLinks[(target+1):]...)
 	} else {
@@ -66,6 +82,5 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 	return
 }
