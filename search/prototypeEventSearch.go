@@ -3,7 +3,7 @@ package search
 import (
 	"context"
 	"errors"
-	"fmt"
+	"log"
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
@@ -34,13 +34,10 @@ func PrototypeEventSearch(eclient *elastic.Client, searchTerm string, sortBy int
 		searchArr = append(searchArr, strings.ToLower(element))
 	}
 
-	fmt.Println("SEARCHING:", stringArray)
-
 	if len(searchBy) >= 4 {
 		//Name
 		if searchBy[0] {
 			query = uses.MultiWildCardQuery(query, "Name", stringArray, true)
-			fmt.Println("SEARCHING BY NAME")
 			for _, element := range stringArray {
 				query = query.Should(elastic.NewFuzzyQuery("Name", strings.ToLower(element)).Fuzziness(2))
 			}
@@ -67,7 +64,8 @@ func PrototypeEventSearch(eclient *elastic.Client, searchTerm string, sortBy int
 			}
 		}
 	} else {
-		fmt.Println("WARNING: searchBy array is too short")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("WARNING: searchBy array is too short")
 	}
 	// Major
 	if len(mustMajor) > 0 {
