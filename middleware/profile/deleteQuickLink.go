@@ -31,14 +31,14 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	deleteTitle := r.FormValue("userLinkDesc")
 	deleteURL := r.FormValue("userLink")
 
+	if deleteTitle == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("WARNING: link title is blank")
+	}
 	if deleteURL == `` {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Crucial data was not passed in, now exiting")
 		return
-	}
-	if deleteTitle == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("WARNING: link title is blank")
 	}
 
 	var newArr []types.Link
