@@ -1,10 +1,8 @@
 package project
 
 import (
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	get "github.com/sea350/ustart_go/get/project"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -27,8 +25,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	deleteTitle := r.FormValue("deleteProjectLinkDesc")
@@ -40,8 +37,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		err := post.UpdateProject(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			log.Println(err)
 		}
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
@@ -55,8 +51,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if target == -1 {
-		fmt.Println("deleted object not found")
-		fmt.Println("this is an err, middleware/profile/deleteQuickLink line 57")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Deleted object not found")
 		newArr = proj.QuickLinks
 	} else if (target + 1) < len(proj.QuickLinks) {
 		newArr = append(proj.QuickLinks[:target], proj.QuickLinks[(target+1):]...)
@@ -67,8 +63,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	err = post.UpdateProject(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
