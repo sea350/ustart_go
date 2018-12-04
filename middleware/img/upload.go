@@ -2,9 +2,9 @@ package img
 
 import (
 	"encoding/base64"
-	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -12,12 +12,37 @@ import (
 func Upload(w http.ResponseWriter, r *http.Request) {
 	data := "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAACklEQVR4nGNiAAAABgADNjd8qAAAAABJRU5ErkJggg=="
 	// The actual image starts after the ","
+	arr := []string{}
 	i := strings.Index(data, ",")
 	if i < 0 {
 		log.Fatal("no comma")
+	} else {
+		arr = strings.Split(data, `,`)
+
 	}
 	// pass reader to NewDecoder
-	dec := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data[i+1:]))
-	w.Header().Set("Content-Type", "image/png")
-	io.Copy(w, dec)
+	//dec := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data[i+1:]))
+	dec, err := base64.StdEncoding.DecodeString(arr[1])
+	if err != nil {
+		panic(err)
+	}
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("debug text " + arr[1])
+	//convert decoder to file
+	f, err := os.Create("myfilename")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	if _, err := f.Write(dec); err != nil {
+		panic(err)
+	}
+	if err := f.Sync(); err != nil {
+		panic(err)
+	}
+
+	// w.Header().Set("Content-Type", "image/png")
+	// io.Copy(w, dec)
 }
