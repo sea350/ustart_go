@@ -214,6 +214,7 @@ func main() {
 
 	//IMG
 	http.HandleFunc("/img/", img.Display)
+	http.HandleFunc("/uplImg/", img.Upload)
 
 	http.ListenAndServe(":"+globals.Port, nil)
 }
