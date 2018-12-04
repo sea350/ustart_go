@@ -30,6 +30,10 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 			//duplicate in AWS with docID as filename
 			_, err = uses.UploadToS3(blob, test1.(string))
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
 			err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -44,6 +48,12 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		}
 	case http.ErrMissingFile:
 		blob := r.FormValue("image-data")
+		//duplicate in AWS with docID as filename
+		_, err = uses.UploadToS3(blob, test1.(string))
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
 		err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), blob, true, ``, "Avatar")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
