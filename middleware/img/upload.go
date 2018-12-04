@@ -30,7 +30,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println("debug text " + arr[1])
 	//convert decoder to file
-	f, err := os.Create("myfilename")
+	f, err := os.Create("myfilename.png")
 	if err != nil {
 		panic(err)
 	}
@@ -39,10 +39,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	if _, err := f.Write(dec); err != nil {
 		panic(err)
 	}
-	if err := f.Sync(); err != nil {
-		panic(err)
-	}
 
 	// w.Header().Set("Content-Type", "image/png")
-	// io.Copy(w, dec)
+	// io.(w, dec)
 }
