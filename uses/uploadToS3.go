@@ -43,7 +43,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	}
 
 	// The session the S3 Uploader will use
-	sess := session.Must(session.NewSession())
+	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("us-east-2")}))
 
 	// Create an uploader with the session and default options
 	uploader := s3manager.NewUploader(sess)
