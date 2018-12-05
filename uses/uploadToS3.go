@@ -1,8 +1,10 @@
 package uses
 
 import (
+	"bytes"
 	"encoding/base64"
 	"fmt"
+	"image/png"
 	"log"
 	"os"
 	"strconv"
@@ -37,16 +39,19 @@ func UploadToS3(based64 string, filename string) (string, error) {
 		panic(err)
 	}
 
-	//convert decoder to file
-	f, err := os.Create(filename + ".png")
+	r := bytes.NewReader(dec)
+	img, err := png.Decode(r)
 	if err != nil {
-		panic(err)
+		panic("Bad png")
 	}
-	defer f.Close()
 
-	if _, err := f.Write(dec); err != nil {
-		panic(err)
+	//convert decoder to file
+	f, err := os.OpenFile(filename+".png", os.O_WRONLY|os.O_CREATE, 0777)
+	if err != nil {
+		panic("Cannot open file")
 	}
+
+	png.Encode(f, img)
 
 	// The session the S3 Uploader will use
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("us-east-1"), Credentials: credentials.NewStaticCredentials("AKIAJILB2MI6CPZKYOFA", "dgyZx0eLnJhXue/UBS9BWXvPycOAYjX60M3NJzTP", "")}))
