@@ -51,8 +51,8 @@ func UploadToS3(based64 string, filename string) (string, error) {
 
 	// Upload the file to S3.
 	result, err := uploader.Upload(&s3manager.UploadInput{
-		Bucket: aws.String("arn:aws:s3:::ustart-bucket"),
-		Key:    aws.String(`AKIAIUTR3SDBQJPINNGA`),
+		Bucket: aws.String("ustart-bucket"),
+		Key:    aws.String(`AKIAJILB2MI6CPZKYOFA`),
 		Body:   f,
 	})
 	if err != nil {
