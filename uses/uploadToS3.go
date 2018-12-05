@@ -32,7 +32,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Index and len() thereof: " + strconv.Itoa(index) + "|| " + strconv.Itoa(len(elem)))
 	}
-	dec, err := base64.StdEncoding.DecodeString(based64)
+	dec, err := base64.StdEncoding.DecodeString(arr[1])
 	if err != nil {
 		panic(err)
 	}
