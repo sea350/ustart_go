@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -27,6 +28,10 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	}
 	// pass reader to NewDecoder
 	//dec := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data[i+1:]))
+	for index, elem := range arr {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Index and len() thereof: " + strconv.Itoa(index) + "|| " + strconv.Itoa(len(elem)))
+	}
 	dec, err := base64.StdEncoding.DecodeString(arr[1])
 	if err != nil {
 		panic(err)
@@ -52,7 +57,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	// Upload the file to S3.
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String("ustart-bucket"),
-		Key:    aws.String(`AKIAJILB2MI6CPZKYOFA`),
+		Key:    aws.String(filename + ".png"),
 		Body:   f,
 	})
 	if err != nil {
