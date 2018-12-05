@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
@@ -43,7 +44,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	}
 
 	// The session the S3 Uploader will use
-	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("us-east-2")}))
+	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("us-east-1"), Credentials: credentials.NewStaticCredentials("AKIAJILB2MI6CPZKYOFA", "dgyZx0eLnJhXue/UBS9BWXvPycOAYjX60M3NJzTP", "")}))
 
 	// Create an uploader with the session and default options
 	uploader := s3manager.NewUploader(sess)
