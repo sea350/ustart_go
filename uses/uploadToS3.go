@@ -32,7 +32,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println("Index and len() thereof: " + strconv.Itoa(index) + "|| " + strconv.Itoa(len(elem)))
 	}
-	dec, err := base64.StdEncoding.DecodeString(arr[1])
+	dec, err := base64.StdEncoding.DecodeString(based64)
 	if err != nil {
 		panic(err)
 	}
@@ -66,7 +66,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 
 	url = result.UploadID
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("Debug text: " + result.Location + "|| " + result.UploadID)
+	log.Println("Debug text: " + result.Location)
 
 	return url, nil
 
