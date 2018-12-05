@@ -46,7 +46,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	}
 
 	//convert decoder to file
-	f, err := os.OpenFile(filename+".png", os.O_WRONLY|os.O_CREATE, 0666)
+	f, err := os.OpenFile(filename+".png", os.O_WRONLY, 0666)
 	if err != nil {
 		panic("Cannot open file")
 	}
