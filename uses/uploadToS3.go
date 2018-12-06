@@ -13,7 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 //UploadToS3 ...
@@ -56,10 +56,13 @@ func UploadToS3(based64 string, filename string) (string, error) {
 		panic(err)
 	}
 
-	fi, err := f.Stat()
-	if err != nil {
-		panic(err)
-	}
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println(f)
+
+	// fi, err := f.Stat()
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	// fmt.Printf("The file is %d bytes long", fi.Size())
 
@@ -67,26 +70,22 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("us-east-1"), Credentials: credentials.NewStaticCredentials("AKIAJILB2MI6CPZKYOFA", "dgyZx0eLnJhXue/UBS9BWXvPycOAYjX60M3NJzTP", "")}))
 
 	// Create an uploader with the session and default options
-	uploader := s3.New(sess)
+	uploader := s3manager.NewUploader(sess)
 
 	// Upload the file to S3.
-	result, err := uploader.PutObject(&s3.PutObjectInput{
-		Bucket:        aws.String("ustart-bucket"),
-		Key:           aws.String(filename + ".png"),
-		Body:          f,
-		ContentType:   aws.String("image/png"),
-		ContentLength: aws.Int64(fi.Size()),
+	result, err := uploader.Upload(&s3manager.UploadInput{
+		Bucket:      aws.String("ustart-bucket"),
+		Key:         aws.String(filename + ".png"),
+		Body:        f,
+		ContentType: aws.String("image/png"),
 	})
 	if err != nil {
 		return url, fmt.Errorf("failed to upload file, %v", err)
 	}
 
-	// url = result.UploadID
-	// log.SetFlags(log.LstdFlags | log.Lshortfile)
-	// log.Println("Debug text: " + result.Location)
+	url = result.UploadID
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("Debug text: ")
-	log.Println(result)
+	log.Println("Debug text: " + result.Location)
 
 	return url, nil
 
