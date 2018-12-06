@@ -4,9 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
-	"image/png"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 
@@ -40,24 +38,24 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	}
 
 	r := bytes.NewReader(dec)
-	img, err := png.Decode(r)
-	if err != nil {
-		panic("Bad png")
-	}
+	// img, err := png.Decode(r)
+	// if err != nil {
+	// 	panic("Bad png")
+	// }
 
-	//convert decoder to file
-	f, err := os.Create(filename + ".png")
-	if err != nil {
-		panic("Cannot open file")
-	}
+	// //convert decoder to file
+	// f, err := os.Create(filename + ".png")
+	// if err != nil {
+	// 	panic("Cannot open file")
+	// }
 
-	err = png.Encode(f, img)
-	if err != nil {
-		panic(err)
-	}
+	// err = png.Encode(f, img)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println(r)
+	// log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// log.Println(r)
 
 	// fi, err := f.Stat()
 	// if err != nil {
@@ -76,7 +74,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket:      aws.String("ustart-bucket"),
 		Key:         aws.String(filename + ".png"),
-		Body:        f,
+		Body:        r,
 		ContentType: aws.String("image/png"),
 	})
 	if err != nil {
