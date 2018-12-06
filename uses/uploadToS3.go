@@ -57,7 +57,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	}
 
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println(f)
+	log.Println(r)
 
 	// fi, err := f.Stat()
 	// if err != nil {
