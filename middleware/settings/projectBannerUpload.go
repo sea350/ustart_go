@@ -40,7 +40,12 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 			defer clientFile.Close()
 			if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 				//Update the project banner
-				err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", blob)
+				url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-banner")
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+				}
+				err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", url)
 				if err != nil {
 					log.SetFlags(log.LstdFlags | log.Lshortfile)
 					log.Println(err)
@@ -57,7 +62,12 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 		blob := r.FormValue("banner-data")
 		if uses.HasPrivilege("banner", proj.PrivilegeProfiles, member) {
 			//Update the project banner
-			err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", blob)
+			url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-banner")
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
+			err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", url)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)

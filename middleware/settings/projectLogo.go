@@ -38,7 +38,12 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			_, _ = clientFile.Read(buffer)
 			defer clientFile.Close()
 			if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-				err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), blob)
+				url, err := uses.UploadToS3(blob, r.FormValue("projectID"))
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+				}
+				err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), url)
 				if err != nil {
 					log.SetFlags(log.LstdFlags | log.Lshortfile)
 					log.Println(err)
@@ -54,7 +59,12 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	case http.ErrMissingFile:
 		blob := r.FormValue("image-data")
 		if uses.HasPrivilege("icon", proj.PrivilegeProfiles, member) {
-			err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), blob)
+			url, err := uses.UploadToS3(blob, r.FormValue("projectID"))
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
+			err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), url)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
