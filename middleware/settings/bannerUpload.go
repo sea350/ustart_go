@@ -7,6 +7,7 @@ import (
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
+	uses "github.com/sea350/ustart_go/uses"
 )
 
 //BannerUpload ... pushes a new banner image into ES
@@ -27,9 +28,14 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		buffer := make([]byte, 512)
 		_, _ = clientFile.Read(buffer)
 		defer clientFile.Close()
+		url, err := uses.UploadToS3(blob, test1.(string)+"-banner")
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 			//Update the user banner
-			err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "Banner", blob)
+			err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "Banner", url)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
@@ -37,7 +43,12 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		}
 	case http.ErrMissingFile:
 		blob := r.FormValue("banner-data")
-		err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "Banner", blob)
+		url, err := uses.UploadToS3(blob, test1.(string)+"-banner")
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+		err = post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "Banner", url)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
