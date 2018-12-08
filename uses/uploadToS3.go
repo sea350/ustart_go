@@ -38,31 +38,6 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	}
 
 	r := bytes.NewReader(dec)
-	// img, err := png.Decode(r)
-	// if err != nil {
-	// 	panic("Bad png")
-	// }
-
-	// //convert decoder to file
-	// f, err := os.Create(filename + ".png")
-	// if err != nil {
-	// 	panic("Cannot open file")
-	// }
-
-	// err = png.Encode(f, img)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// log.SetFlags(log.LstdFlags | log.Lshortfile)
-	// log.Println(r)
-
-	// fi, err := f.Stat()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// fmt.Printf("The file is %d bytes long", fi.Size())
 
 	// The session the S3 Uploader will use
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("us-east-1"), Credentials: credentials.NewStaticCredentials("AKIAJILB2MI6CPZKYOFA", "dgyZx0eLnJhXue/UBS9BWXvPycOAYjX60M3NJzTP", "")}))
@@ -81,9 +56,9 @@ func UploadToS3(based64 string, filename string) (string, error) {
 		return url, fmt.Errorf("failed to upload file, %v", err)
 	}
 
-	url = result.UploadID
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("Debug text: " + result.Location)
+	url = result.Location
+	// log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// log.Println("Debug text: " + result.Location)
 
 	return url, nil
 
