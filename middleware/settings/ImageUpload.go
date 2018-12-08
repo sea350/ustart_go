@@ -39,7 +39,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
 			} else {
-				session.Values["Avatar"] = blob
+				session.Values["Avatar"] = url
 				session.Save(r, w)
 			}
 		} else {
@@ -59,7 +59,7 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		} else {
-			session.Values["Avatar"] = blob
+			session.Values["Avatar"] = url
 			session.Save(r, w)
 		}
 	default:
