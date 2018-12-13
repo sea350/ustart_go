@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/sea350/ustart_go/globals"
 )
 
 //UploadToS3 ...
@@ -35,14 +36,14 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	r := bytes.NewReader(dec)
 
 	// The session the S3 Uploader will use
-	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("us-east-1"), Credentials: credentials.NewStaticCredentials("AKIAJILB2MI6CPZKYOFA", "dgyZx0eLnJhXue/UBS9BWXvPycOAYjX60M3NJzTP", "")}))
+	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(globals.S3Region), Credentials: credentials.NewStaticCredentials(globals.S3CredID, globals.S3CredSecret, globals.S3CredToken)}))
 
 	// Create an uploader with the session and default options
 	uploader := s3manager.NewUploader(sess)
 
 	// Upload the file to S3.
 	result, err := uploader.Upload(&s3manager.UploadInput{
-		Bucket:      aws.String("ustart-bucket"),
+		Bucket:      aws.String(globals.S3BucketName),
 		Key:         aws.String(filename + ".png"),
 		Body:        r,
 		ContentType: aws.String("image/png"),

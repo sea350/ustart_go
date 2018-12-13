@@ -1,3 +1,8 @@
+# How to define envVariable.go
+
+## Copy the following into envVariables.go and fill out the specified feilds
+
+
 package globals
 
 const (
@@ -5,7 +10,7 @@ const (
 	Port = "5002"
 
 	//ClientURL is the elastic client url
-	ClientURL = "https://vpc-ustart-es-ho7jd4ahrgusb6zp2j6qvecvtu.us-east-1.es.amazonaws.com"
+	ClientURL = "" //FILL THIS IN
 
 	//SiteURL is the site domain
 	SiteURL = "http://ustart.today"
@@ -21,9 +26,9 @@ const (
 	//SenderName ...
 	SenderName = "U•START"
 	//SMTPUser ...
-	SMTPUser = "AKIAJNA5EV7IQ5NA6GMQ"
+	SMTPUser = "" //FILL THIS IN
 	//SMTPPass ..
-	SMTPPass = "AlfAq8CoUxc9Vx/FxgRLuYkpgdGuR3ZDCqVM9BoXtDs/"
+	SMTPPass = "" //FILL THIS IN
 	//Host ...
 	Host = "email-smtp.us-east-1.amazonaws.com"
 	//SendMailPort ...
@@ -32,4 +37,20 @@ const (
 	EmailTags = "genre=test,genre2=test2"
 	//SenderEmail ...
 	SenderEmail = "ustarttestemail@gmail.com"
+
+	//S3 GLOBALS
+
+	//S3Region The geographic AWS region the S3 instance resides
+	S3Region = "us-east-1"
+
+	//The credentials needed to acess S3 instance
+
+	//S3CredID ID
+	S3CredID = "" //FILL THIS IN
+	//S3CredSecret Secret
+	S3CredSecret = ""//FILL THIS IN
+	//S3CredToken Token
+	S3CredToken = ""
+	//S3BucketName The name of the bucket itself
+	S3BucketName = "ustart-bucket"
 )

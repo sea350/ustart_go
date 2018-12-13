@@ -12,7 +12,6 @@ import (
 	event "github.com/sea350/ustart_go/middleware/event"
 	fail "github.com/sea350/ustart_go/middleware/fail"
 	follow "github.com/sea350/ustart_go/middleware/follow"
-	img "github.com/sea350/ustart_go/middleware/img"
 	inbox "github.com/sea350/ustart_go/middleware/inbox"
 	login "github.com/sea350/ustart_go/middleware/login"
 	"github.com/sea350/ustart_go/middleware/notification"
@@ -213,8 +212,8 @@ func main() {
 	http.HandleFunc("/Notifications/", notification.Page)
 
 	//IMG
-	http.HandleFunc("/img/", img.Display)
-	http.HandleFunc("/uplImg/", img.Upload)
+	//http.HandleFunc("/img/", img.Display)
+	//http.HandleFunc("/uplImg/", img.Upload)
 
 	http.ListenAndServe(":"+globals.Port, nil)
 }
