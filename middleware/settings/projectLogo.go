@@ -9,7 +9,7 @@ import (
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//ProjectLogo ...
+//ProjectLogo Upload a new Project image icon
 func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -42,6 +42,8 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 				if err != nil {
 					log.SetFlags(log.LstdFlags | log.Lshortfile)
 					log.Println(err)
+					http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
+					return
 				}
 				err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), url)
 				if err != nil {
@@ -63,6 +65,8 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
+				http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
+				return
 			}
 			err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), url)
 			if err != nil {

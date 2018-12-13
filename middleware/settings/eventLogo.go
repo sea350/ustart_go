@@ -40,7 +40,14 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 			_, _ = clientFile.Read(buffer)
 			defer clientFile.Close()
 			if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-				err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Avatar", blob)
+				url, err := uses.UploadToS3(blob, r.FormValue("eventID"))
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+					http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
+					return
+				}
+				err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Avatar", url)
 				if err != nil {
 					log.SetFlags(log.LstdFlags | log.Lshortfile)
 					log.Println(err)
@@ -53,7 +60,14 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 	case http.ErrMissingFile:
 		//If file is not uploading (resizing original image)
 		if uses.HasEventPrivilege("icon", evnt.PrivilegeProfiles, member) {
-			err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Avatar", blob)
+			url, err := uses.UploadToS3(blob, r.FormValue("eventID"))
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+				http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
+				return
+			}
+			err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Avatar", url)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)

@@ -33,6 +33,8 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
+				http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
+				return
 			}
 			err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), url, true, ``, "Avatar")
 			if err != nil {
@@ -53,6 +55,8 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
+			http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
+			return
 		}
 		err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), url, true, ``, "Avatar")
 		if err != nil {
