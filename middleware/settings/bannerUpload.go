@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
@@ -58,5 +59,6 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
+	time.Sleep(2 * time.Second)
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
 }

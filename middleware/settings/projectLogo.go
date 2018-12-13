@@ -3,6 +3,7 @@ package settings
 import (
 	"log"
 	"net/http"
+	"time"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -82,5 +83,6 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
+	time.Sleep(2 * time.Second)
 	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 }

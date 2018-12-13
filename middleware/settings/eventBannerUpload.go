@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 
@@ -43,7 +44,14 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 			_, _ = clientFile.Read(buffer)
 			defer clientFile.Close()
 			if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-				err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Banner", blob)
+				url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"banner")
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+					http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
+					return
+				}
+				err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Banner", url)
 				if err != nil {
 					log.SetFlags(log.LstdFlags | log.Lshortfile)
 					log.Println(err)
@@ -60,7 +68,14 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 		//If file is not uploaded
 		blob := r.FormValue("banner-data")
 		if uses.HasEventPrivilege("banner", evnt.PrivilegeProfiles, member) {
-			err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Banner", blob)
+			url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"banner")
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+				http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
+				return
+			}
+			err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Banner", url)
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
@@ -74,5 +89,6 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
+	time.Sleep(2 * time.Second)
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 }

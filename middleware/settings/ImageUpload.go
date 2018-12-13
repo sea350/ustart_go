@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -71,5 +72,6 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
+	time.Sleep(2 * time.Second)
 	http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
 }
