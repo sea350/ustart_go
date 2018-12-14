@@ -2,7 +2,7 @@
 
 ## Copy the following into envVariables.go and fill out the specified feilds
 
-
+```
 package globals
 
 const (
@@ -54,3 +54,4 @@ const (
 	//S3BucketName The name of the bucket itself
 	S3BucketName = "ustart-bucket"
 )
+```
