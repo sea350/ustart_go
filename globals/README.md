@@ -2,7 +2,7 @@
 
 ## Create a new [Go] file using the name "envVariables"
 
-Copy the following feilds into that new file and fill in any feild marked in the comments
+Copy the following code into that new file and fill in any feild marked in the comments
 
 ```
 package globals
