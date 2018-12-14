@@ -1,6 +1,6 @@
 # How to define envVariable.go
 
-## Copy the following into envVariables.go and fill out the specified feilds
+## Create a new [Go] file using the name "envVarieables"
 
 ```
 package globals
