@@ -44,14 +44,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	//Check if user is verified
 	user, _ := get.UserByEmail(client.Eclient, email)
 
-	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
+	successful, sessionInfo, err := uses.Login(client.Eclient, email, passwordb, clientIP)
 
-	if err2 != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-	}
-
-	if !successful {
+	if !successful || err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		client.RenderTemplate(w, r, "templateNoUser2", client.ClientSide{ErrorStatus: true, ErrorOutput: err})
