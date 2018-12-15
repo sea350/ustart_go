@@ -3,7 +3,6 @@ package search
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -41,7 +40,6 @@ func PrototypeEventSearchScroll(eclient *elastic.Client, searchTerm string, sort
 		//Name
 		if searchBy[0] {
 			query = uses.MultiWildCardQuery(query, "Name", stringArray, true)
-			fmt.Println("SEARCHING BY NAME")
 			for _, element := range stringArray {
 				query = query.Should(elastic.NewFuzzyQuery("Name", strings.ToLower(element)).Fuzziness(2))
 			}
@@ -68,7 +66,8 @@ func PrototypeEventSearchScroll(eclient *elastic.Client, searchTerm string, sort
 			}
 		}
 	} else {
-		fmt.Println("WARNING: searchBy array is too short")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("WARNING: searchBy array is too short")
 	}
 	// Major
 	if len(mustMajor) > 0 {
