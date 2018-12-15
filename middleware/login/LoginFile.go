@@ -52,11 +52,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !successful {
-		cs := client.ClientSide{ErrorStatus: true}
-		fmt.Println(successful)
-		fmt.Println("This is an error, LoginFile.go: 55")
-		client.RenderTemplate(w, r, "templateNoUser2", cs)
-		client.RenderTemplate(w, r, "loginerror-nil", cs)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		client.RenderTemplate(w, r, "templateNoUser2", client.ClientSide{ErrorStatus: true, ErrorOutput: err})
+		client.RenderTemplate(w, r, "loginerror-nil", client.ClientSide{ErrorStatus: true, ErrorOutput: err})
 		return
 	}
 
