@@ -18,10 +18,17 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id := r.FormValue("eventID") //event docID
+	if id == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Event ID not passed in")
+		return
+	}
+
 	evnt, err := get.EventByID(client.Eclient, id)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return
 	}
 	for _, guestInfo := range evnt.Guests {
 		if guestInfo.GuestID == test1.(string) {
