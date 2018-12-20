@@ -157,7 +157,7 @@ func main() {
 	http.HandleFunc("/AddEvent/", event.AddEvent)
 	http.HandleFunc("/StartEvent/", event.StartEvent)
 	http.HandleFunc("/MyEvents/", event.MyEvents)
-	//http.HandleFunc("/ManageEvents/", event.manageEvents)
+	http.HandleFunc("/ManageEvents/", event.ManageEvents)
 	http.HandleFunc("/UpdateEventTags/", event.UpdateEventTags)
 	http.HandleFunc("/AddEventLink/", event.AddEventQuickLink)
 	http.HandleFunc("/DeleteEventLink/", event.DeleteEventQuickLink)
