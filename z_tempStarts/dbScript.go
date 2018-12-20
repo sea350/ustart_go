@@ -560,16 +560,11 @@ func main() {
 					startIndex(eclient, index)
 				}
 			case "redo":
-				commands = []string{}
-
+				commands = []string{} 
 		}
 	}
 
 	
 
-	// err := clearUserProxies(eclient)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
+	
 }
