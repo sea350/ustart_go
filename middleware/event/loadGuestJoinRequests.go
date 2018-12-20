@@ -38,8 +38,8 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 		if userID == 1 {
 			head, err := uses.ConvertUserToFloatingHead(client.Eclient, index)
 			if err != nil {
-				fmt.Println(err)
-				fmt.Println(fmt.Sprintf("err: middleware/event/loadjoinrequest, Line 35, index %s", index))
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 			}
 			heads = append(heads, head)
 		}
@@ -47,8 +47,8 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 		if userID == 2 {
 			head, err := uses.ConvertProjectToFloatingHead(client.Eclient, index)
 			if err != nil {
-				fmt.Println(err)
-				fmt.Println(fmt.Sprintf("err: middleware/event/loadprojjoinrequest, Line 40, index %s", index))
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
 			}
 			heads = append(heads, head)
 		}
@@ -57,8 +57,8 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(heads)
 	if err != nil {
-		fmt.Println("err: middleware/project/loadjoinrequest, Line 45")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, string(data))
