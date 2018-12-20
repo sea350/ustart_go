@@ -24,6 +24,11 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ID := r.FormValue("eventID") //eventID
+	if ID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Event ID not passed in")
+		return
+	}
 
 	var heads []types.FloatingHead
 
@@ -31,6 +36,7 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return
 	}
 
 	for index, userID := range evnt.GuestReqReceived {
