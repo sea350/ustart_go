@@ -16,6 +16,9 @@ func DeleteGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 	var numRequests int
 	ctx := context.Background()
 
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	EventGuestRequestLock.Lock()
 	defer EventGuestRequestLock.Unlock()
 

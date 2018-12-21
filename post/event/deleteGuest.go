@@ -18,6 +18,9 @@ func DeleteGuest(eclient *elastic.Client, eventID string, userID string) error {
 
 	ctx := context.Background()
 
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	EventGuestLock.Lock()
 	defer EventGuestLock.Unlock()
 

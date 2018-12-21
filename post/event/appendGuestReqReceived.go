@@ -18,6 +18,9 @@ func AppendGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 
 	ctx := context.Background()
 
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	EventGuestRequestLock.Lock()
 	defer EventGuestRequestLock.Unlock()
 
