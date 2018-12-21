@@ -6,7 +6,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
-	userPost "github.com/sea350/ustart_go/post/user"
+	post "github.com/sea350/ustart_go/post/event"
 )
 
 //GuestRequestToJoin ... PUBLIC no need for request received
@@ -32,8 +32,8 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("Debug check 1/2")
+	// log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// log.Println("Debug check 1/2")
 
 	for _, guestInfo := range evnt.Guests {
 		if guestInfo.GuestID == test1.(string) {
@@ -52,14 +52,14 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
+	err = post.AppendGuestReqReceived(client.Eclient, id, test1.(string), 1)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("Debug check 2/2")
+	// log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// log.Println("Debug check 2/2")
 
 	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 
