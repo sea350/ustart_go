@@ -32,12 +32,16 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, guestInfo := range evnt.Guests {
 		if guestInfo.GuestID == test1.(string) {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("user is already a guest")
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
 	}
 	for _, receivedReq := range evnt.MemberReqReceived {
 		if receivedReq == test1.(string) {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("user has already sent a request")
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
