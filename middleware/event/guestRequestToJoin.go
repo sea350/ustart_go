@@ -17,6 +17,7 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
+
 	id := r.FormValue("eventID") //event docID
 	if id == `` {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -30,6 +31,10 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("Debug check 1/2")
+
 	for _, guestInfo := range evnt.Guests {
 		if guestInfo.GuestID == test1.(string) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -52,6 +57,10 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 	}
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("Debug check 2/2")
+
 	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 
 }
