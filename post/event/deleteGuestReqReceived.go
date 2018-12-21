@@ -29,11 +29,11 @@ func DeleteGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 
 	delete(evnt.GuestReqReceived, userID)
 
-	_, err = eclient.Update().
+	_, err = eclient.Index().
 		Index(globals.EventIndex).
 		Type(globals.EventType).
 		Id(eventID).
-		Doc(map[string]interface{}{"GuestReqReceived": evnt.GuestReqReceived}).
+		BodyJson(evnt).
 		Do(ctx)
 
 	return len(evnt.GuestReqReceived), err
