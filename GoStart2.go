@@ -162,6 +162,7 @@ func main() {
 	http.HandleFunc("/AddEventLink/", event.AddEventQuickLink)
 	http.HandleFunc("/DeleteEventLink/", event.DeleteEventQuickLink)
 	http.HandleFunc("/LoadGuestJoinRequests/", event.LoadGuestJoinRequests)
+	http.HandleFunc("/LoadEventRequests/", event.LoadJoinRequests)
 	http.HandleFunc("/LoadMemberJoinRequests/", event.LoadMemberJoinRequests)
 	http.HandleFunc("/GuestRequestToJoin/", event.GuestRequestToJoin)
 	http.HandleFunc("/MemberRequestToJoin/", event.MemberRequestToJoin)
