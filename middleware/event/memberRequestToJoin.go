@@ -37,7 +37,7 @@ func MemberRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		if memberInfo.MemberID == test1.(string) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println("user is already a member")
-			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
 	}
@@ -45,7 +45,7 @@ func MemberRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		if receivedReq == test1.(string) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println("user's request already received")
-			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
 	}
@@ -61,6 +61,6 @@ func MemberRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
+	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	return
 }
