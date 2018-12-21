@@ -74,7 +74,7 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	marshall := make(map[string][]types.FloatingHead)
 	marshall["GuestRequests"] = heads
-	marshall["GuestRequests"] = heads2
+	marshall["MemberRequests"] = heads2
 
 	data, err := json.Marshal(marshall)
 	if err != nil {
