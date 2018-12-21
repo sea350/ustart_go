@@ -1,7 +1,7 @@
 package event
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/event"
@@ -19,37 +19,46 @@ func MemberRequestToJoin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ID := r.FormValue("eventID") //event docID
-	fmt.Println(ID)
-	fmt.Println("debug text requesttojoin line 23")
+	id := r.FormValue("eventID") //event docID
+	if id == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Event ID not passed in")
+		return
+	}
 
-	evnt, err := get.EventByID(client.Eclient, ID)
+	evnt, err := get.EventByID(client.Eclient, id)
 	if err != nil {
-		fmt.Println("err middleware/event/guestrequesttojoin line25")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return
 	}
 
 	for _, memberInfo := range evnt.Members {
 		if memberInfo.MemberID == test1.(string) {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("user is already a member")
 			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 			return
 		}
 	}
 	for _, receivedReq := range evnt.MemberReqReceived {
 		if receivedReq == test1.(string) {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println("user's request already received")
 			http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 			return
 		}
 	}
-	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), ID)
+
+	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
 	if err != nil {
-		fmt.Println("err middleware/event/guestrequesttojoin line42")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
-	err = evntPost.AppendMemberReqReceived(client.Eclient, ID, test1.(string))
+	err = evntPost.AppendMemberReqReceived(client.Eclient, id, test1.(string))
 	if err != nil {
-		fmt.Println("err middleware/event/guestrequesttojoin line47")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
