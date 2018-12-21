@@ -43,7 +43,7 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	for _, receivedReq := range evnt.GuestReqReceived {
+	for receivedReq := range evnt.GuestReqReceived {
 		if receivedReq == test1.(string) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println("user has already sent a request")
