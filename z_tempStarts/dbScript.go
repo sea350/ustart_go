@@ -552,8 +552,7 @@ func main() {
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "start entries"){
+			}else if strings.HasPrefix(input, "start entries"){
 				indices = append(indices, globals.EntryIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
