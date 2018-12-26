@@ -1,8 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	postChat "github.com/sea350/ustart_go/post/chat"
@@ -319,6 +323,7 @@ func deleteIndex(eclient *elastic.Client, index string) {
 	//fmt.Println(globals.EntryIndex)
 
 	ctx := context.Background()
+	log.Println("Current index being deleted:", index)
 	deleteIndex, err := eclient.DeleteIndex(index).Do(ctx)
 	if err != nil {
 		// Handle error
@@ -333,7 +338,7 @@ func deleteIndex(eclient *elastic.Client, index string) {
 }
 
 func startIndex(eclient *elastic.Client, index string) {
-	fmt.Println(index)
+	log.Println("Current index being started:", index)
 	mapping := "DNE"
 	switch index {
 	case globals.UserIndex:
@@ -420,8 +425,10 @@ func clearUserProxies(eclient *elastic.Client) error {
 	return nil
 }
 
-
 var help = make(map[string]string)
+
+func main() {
+
 	help["help"] = "pretty self-explanatory"
 	help["wipe"] = "clears database and restarts all indices"
 	help["delete"] = "clears database"
@@ -441,13 +448,9 @@ var help = make(map[string]string)
 	//help["remove"] = "removes command from list"
 	help["redo"] = "clears current command list"
 
-func main() {
 	indices := []string{}
 	commands := []string{}
 
-
-
-	
 	for {
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("Welcome to your database service. For help, please input 'help' ")
@@ -459,114 +462,116 @@ func main() {
 			fmt.Println(commands)
 			os.Exit(0)
 		} else if err != nil {
-			log.Println(err)
+			log.Println("Error encountered:", err)
+
 			os.Exit(0)
 		} else if strings.HasPrefix(input, "help") {
 			for key, val := range help {
 				fmt.Println(key, ": ", val)
 			}
 			commands = append(commands, input)
-		}else{
+		} else {
+			fmt.Println("Command will be performed")
 			commands = append(commands, input)
 			switch input {
-			case "wipe":
-				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificatonIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
+			case strings.HasPrefix(input, "wipe"):
+				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				// delete phase
 				for _, index := range indices {
+
 					deleteIndex(eclient, index)
 				}
-				
+
 				// restore phase
 				for _, index := range indices {
+
 					startIndex(eclient, index)
 				}
-			case "delete":
-				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificatonIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
+			case strings.HasPrefix(input, "delete"):
+				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case  "start":
-				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificatonIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
+			case strings.HasPrefix(input, "start"):
+				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "delete user":
-				globals.
+			case strings.HasPrefix(input, "delete user"):
+
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
 
-			case "delete project":
+			case strings.HasPrefix(input, "delete project"):
 				indices = append(indices, globals.ProjectIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case "delete event":
+			case strings.HasPrefix(input, "delete event"):
 				indices = append(indices, globals.EventIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case "delete widget":
+			case strings.HasPrefix(input, "delete widget"):
 				indices = append(indices, globals.WidgetIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case "delete entries":
-				indices = append(indices, globals.EntriesIndex)
+			case strings.HasPrefix(input, "delete entries"):
+				indices = append(indices, globals.EntryIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case "delete chat":
+			case strings.HasPrefix(input, "delete chat"):
 				proxyErr := clearUserProxies(eclient)
-				if proxyErr != nil{
+				if proxyErr != nil {
 					log.Println(proxyErr)
 				}
 				indices = append(indices, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-		
-			case "start user":
+
+			case strings.HasPrefix(input, "start user"):
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "delete project":
+			case strings.HasPrefix(input, "start project"):
 				indices = append(indices, globals.ProjectIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "start event":
+			case strings.HasPrefix(input, "start event"):
 				indices = append(indices, globals.EventIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "start widget":
+			case strings.HasPrefix(input, "start widget"):
 				indices = append(indices, globals.WidgetIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "start entries":
-				indices = append(indices, globals.EntriesIndex)
+			case strings.HasPrefix(input, "start entries"):
+				indices = append(indices, globals.EntryIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "start chat":
-				
-				if proxyErr != nil{
-					log.Println(proxyErr)
-				}
+			case strings.HasPrefix(input, "start chat"):
+
 				indices = append(indices, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "redo":
-				commands = []string{} 
+			case strings.HasPrefix(input, "redo"):
+				commands = []string{}
+			default:
+				log.Println("Command invalid")
+			}
+
 		}
 	}
 
-	
-
-	
 }
