@@ -422,6 +422,10 @@ func clearUserProxies(eclient *elastic.Client) error {
 
 
 var help = make(map[string]string)
+	
+
+func main() {
+	
 	help["help"] = "pretty self-explanatory"
 	help["wipe"] = "clears database and restarts all indices"
 	help["delete"] = "clears database"
@@ -440,8 +444,7 @@ var help = make(map[string]string)
 	help["stop"] = "end of input"
 	//help["remove"] = "removes command from list"
 	help["redo"] = "clears current command list"
-
-func main() {
+	
 	indices := []string{}
 	commands := []string{}
 
@@ -491,7 +494,7 @@ func main() {
 					startIndex(eclient, index)
 				}
 			case "delete user":
-				globals.
+				
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
