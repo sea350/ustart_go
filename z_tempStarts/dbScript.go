@@ -534,7 +534,7 @@ func main() {
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "delete project":
+			case "start project":
 				indices = append(indices, globals.ProjectIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
