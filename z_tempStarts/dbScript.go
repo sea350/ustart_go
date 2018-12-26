@@ -421,7 +421,7 @@ func clearUserProxies(eclient *elastic.Client) error {
 }
 
 
-help := make(map[string]string)
+var help = make(map[string]string)
 	help["help"] = "pretty self-explanatory"
 	help["wipe"] = "clears database and restarts all indices"
 	help["delete"] = "clears database"
@@ -447,7 +447,7 @@ func main() {
 
 
 
-	commands := []string{}
+	
 	for {
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("Welcome to your database service. For help, please input 'help' ")
@@ -491,10 +491,12 @@ func main() {
 					startIndex(eclient, index)
 				}
 			case "delete user":
+				globals.
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
+
 			case "delete project":
 				indices = append(indices, globals.ProjectIndex)
 				for _, index := range indices {
