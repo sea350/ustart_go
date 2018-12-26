@@ -461,7 +461,8 @@ func main() {
 			fmt.Println(commands)
 			os.Exit(0)
 		} else if err != nil {
-			log.Println(err)
+			log.Println("Error encountered:", err)
+
 			os.Exit(0)
 		} else if strings.HasPrefix(input, "help") {
 			for key, val := range help {
@@ -469,6 +470,7 @@ func main() {
 			}
 			commands = append(commands, input)
 		} else {
+			fmt.Println("Command will be performed")
 			commands = append(commands, input)
 			switch input {
 			case "wipe":
