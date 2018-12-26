@@ -487,7 +487,7 @@ func main() {
 
 					startIndex(eclient, index)
 				}
-			}
+			
 			else if strings.HasPrefix(input, "delete"){
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				for _, index := range indices {
@@ -586,6 +586,7 @@ func main() {
 			else:
 				log.Println("Command invalid")
 			}
+		}
 
 		}
 	}
