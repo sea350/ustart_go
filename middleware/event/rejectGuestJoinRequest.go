@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -31,14 +30,14 @@ func RejectEventGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 		log.Println("Critical information not passed in")
 		return
 	}
-	classification, err := strconv.Atoi(r.FormValue("classification"))
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-		return
-	}
+	// classification, err := strconv.Atoi(r.FormValue("classification"))
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	log.Println(err)
+	// 	return
+	// }
 
-	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newMemberID, classification)
+	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newMemberID, 1)
 	if err != nil {
 		fmt.Println("err middleware/event/rejectguestjoinrequest line 27")
 		fmt.Println(err)
