@@ -18,15 +18,21 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println(r.URL.Path[7:])
+
 	event, err := uses.AggregateEventData(client.Eclient, r.URL.Path[7:], test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		//log.Println(err)
+		log.Println(err)
+		return
 	}
 	widgets, errs := uses.LoadWidgets(client.Eclient, event.EventData.Widgets)
 	if len(errs) > 0 {
 		log.Println("there were one or more errors loading widgets")
 		for _, eror := range errs {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(eror)
 		}
 	}
