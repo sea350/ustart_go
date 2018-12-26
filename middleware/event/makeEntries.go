@@ -3,6 +3,7 @@ package event
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -25,20 +26,20 @@ func MakeEventEntry(w http.ResponseWriter, r *http.Request) {
 	newContent := []rune(p.Sanitize(r.FormValue("text")))
 	newID, err := uses.EventCreatesEntry(client.Eclient, eventID, docID.(string), newContent)
 	if err != nil {
-		fmt.Println("err: middleware/event/makeentries line 26")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, docID.(string), true)
 	if err != nil {
-		fmt.Println("err: middleware/event/makeentries line 32")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	data, err := json.Marshal(jEntry)
 	if err != nil {
-		fmt.Println("err: middleware/event/makeentries line 38")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, string(data))

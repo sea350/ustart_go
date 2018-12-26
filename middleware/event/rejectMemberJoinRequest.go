@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -22,8 +23,8 @@ func RejectEventMemberJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	newNumRequests, err := uses.RemoveEventRequest(client.Eclient, evntID, newMemberID)
 	if err != nil {
-		fmt.Println("err middleware/event/rejectmemberjoinrequest line 27")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

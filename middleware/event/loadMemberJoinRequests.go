@@ -37,7 +37,7 @@ func LoadMemberJoinRequests(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(fmt.Sprintf("err: middleware/event/loadjoinrequest, Line 35, index %d", index))
+			log.Println(fmt.Sprintf("error loading index %d", index))
 		}
 		heads = append(heads, head)
 	}

@@ -39,8 +39,8 @@ func RejectEventGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newMemberID, 1)
 	if err != nil {
-		fmt.Println("err middleware/event/rejectguestjoinrequest line 27")
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Critical information not passed in")
 	}
 
 	fmt.Fprintln(w, newNumRequests)
