@@ -13,8 +13,11 @@ import (
 //  Add a new Event to ES.
 //  Returns an error, nil if successful
 func ReindexEvent(eclient *elastic.Client, eventID string, newEvent types.Events) error {
-
 	ctx := context.Background()
+
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	exists, err := eclient.IndexExists(globals.EventIndex).Do(ctx)
 	if err != nil {
 		return err

@@ -16,6 +16,9 @@ import (
 func AppendProject(eclient *elastic.Client, eventID string, project types.EventProjects) error {
 	ctx := context.Background()
 
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	EventMemberLock.Lock()
 	defer EventMemberLock.Unlock()
 

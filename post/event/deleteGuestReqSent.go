@@ -19,13 +19,16 @@ func DeleteGuestReqSent(eclient *elastic.Client, eventID string, userID string) 
 		return errors.New("Event does not exist")
 	}
 
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	delete(evnt.GuestReqSent, userID)
 
-	_, err = eclient.Update().
+	_, err = eclient.Index().
 		Index(globals.EventIndex).
 		Type(globals.EventType).
 		Id(eventID).
-		Doc(map[string]interface{}{"GuestReqSent": evnt.GuestReqSent}).
+		BodyJson(evnt).
 		Do(ctx)
 
 	return err

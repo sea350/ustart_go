@@ -18,6 +18,9 @@ func DeleteMember(eclient *elastic.Client, eventID string, userID string) error 
 
 	ctx := context.Background()
 
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	EventMemberLock.Lock()
 	defer EventMemberLock.Unlock()
 

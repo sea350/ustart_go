@@ -3,6 +3,7 @@ package post
 import (
 	"context"
 	"errors"
+	"log"
 
 	get "github.com/sea350/ustart_go/get/event"
 	globals "github.com/sea350/ustart_go/globals"
@@ -16,6 +17,9 @@ func DeleteGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 	var numRequests int
 	ctx := context.Background()
 
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	EventGuestRequestLock.Lock()
 	defer EventGuestRequestLock.Unlock()
 
@@ -24,13 +28,16 @@ func DeleteGuestReqReceived(eclient *elastic.Client, eventID string, userID stri
 		return numRequests, errors.New("Event does not exist")
 	}
 
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("attempting to remove following id: " + userID)
+
 	delete(evnt.GuestReqReceived, userID)
 
-	_, err = eclient.Update().
+	_, err = eclient.Index().
 		Index(globals.EventIndex).
 		Type(globals.EventType).
 		Id(eventID).
-		Doc(map[string]interface{}{"GuestReqReceived": evnt.GuestReqReceived}).
+		BodyJson(evnt).
 		Do(ctx)
 
 	return len(evnt.GuestReqReceived), err

@@ -16,6 +16,9 @@ import (
 func AppendMember(eclient *elastic.Client, eventID string, member types.EventMembers) error {
 	ctx := context.Background()
 
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	EventMemberLock.Lock()
 	defer EventMemberLock.Unlock()
 

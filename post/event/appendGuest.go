@@ -16,6 +16,9 @@ import (
 func AppendGuest(eclient *elastic.Client, eventID string, guest types.EventGuests) error {
 	ctx := context.Background()
 
+	GenericEventUpdateLock.Lock()
+	defer GenericEventUpdateLock.Unlock()
+
 	EventGuestLock.Lock()
 	defer EventGuestLock.Unlock()
 

@@ -1,8 +1,6 @@
 package post
 
 import (
-	"errors"
-
 	get "github.com/sea350/ustart_go/get/user"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -15,9 +13,8 @@ func AppendSentEventReq(eclient *elastic.Client, usrID string, eventID string) e
 	defer EventLock.Unlock()
 
 	usr, err := get.UserByID(eclient, usrID)
-
 	if err != nil {
-		return errors.New("User does not exist")
+		return err
 	}
 
 	usr.SentEventReq = append(usr.SentEventReq, eventID)

@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -19,10 +20,21 @@ func RejectEventGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	evntID := r.FormValue("eventID")
+	if evntID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Critical information not passed in")
+		return
+	}
 	newMemberID := r.FormValue("userID")
+	if newMemberID == `` {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Critical information not passed in")
+		return
+	}
 	classification, err := strconv.Atoi(r.FormValue("classification"))
 	if err != nil {
-		fmt.Println(err)
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return
 	}
 

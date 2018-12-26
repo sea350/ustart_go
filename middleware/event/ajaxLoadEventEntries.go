@@ -3,9 +3,9 @@ package event
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -42,11 +42,9 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 	*/
 
 	res, entries, total, err := scrollpkg.ScrollPageEvents(client.Eclient, []string{wallID}, docID.(string), "")
-	if err != nil {
-		fmt.Println(res)
+	if err != nil && err != io.EOF {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	results := make(map[string]interface{})
@@ -57,8 +55,7 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(results)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, string(data))
