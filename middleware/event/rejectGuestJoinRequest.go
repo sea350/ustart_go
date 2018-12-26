@@ -40,7 +40,7 @@ func RejectEventGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newMemberID, 1)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Critical information not passed in")
+		log.Println(err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

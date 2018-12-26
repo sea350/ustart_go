@@ -70,5 +70,23 @@ func AggregateEventData(eclient *elastic.Client, url string, viewerID string) (t
 		eventData.ProjectData = append(eventData.ProjectData, proj)
 	}
 
+	if eventData.RequestAllowed {
+		for guestID := range data.GuestReqReceived {
+			if guestID == viewerID {
+				eventData.RequestAllowed = false
+				break
+			}
+		}
+	}
+
+	if eventData.RequestAllowed {
+		for _, memReq := range data.MemberReqReceived {
+			if memReq == viewerID {
+				eventData.RequestAllowed = false
+				break
+			}
+		}
+	}
+
 	return eventData, err
 }
