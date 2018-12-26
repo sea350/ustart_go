@@ -1,8 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	postChat "github.com/sea350/ustart_go/post/chat"
@@ -420,12 +424,10 @@ func clearUserProxies(eclient *elastic.Client) error {
 	return nil
 }
 
-
 var help = make(map[string]string)
-	
 
 func main() {
-	
+
 	help["help"] = "pretty self-explanatory"
 	help["wipe"] = "clears database and restarts all indices"
 	help["delete"] = "clears database"
@@ -444,13 +446,10 @@ func main() {
 	help["stop"] = "end of input"
 	//help["remove"] = "removes command from list"
 	help["redo"] = "clears current command list"
-	
+
 	indices := []string{}
 	commands := []string{}
 
-
-
-	
 	for {
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("Welcome to your database service. For help, please input 'help' ")
@@ -469,7 +468,7 @@ func main() {
 				fmt.Println(key, ": ", val)
 			}
 			commands = append(commands, input)
-		}else{
+		} else {
 			commands = append(commands, input)
 			switch input {
 			case "wipe":
@@ -478,7 +477,7 @@ func main() {
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-				
+
 				// restore phase
 				for _, index := range indices {
 					startIndex(eclient, index)
@@ -488,13 +487,13 @@ func main() {
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case  "start":
+			case "start":
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificatonIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
 			case "delete user":
-				
+
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
@@ -522,14 +521,14 @@ func main() {
 				}
 			case "delete chat":
 				proxyErr := clearUserProxies(eclient)
-				if proxyErr != nil{
+				if proxyErr != nil {
 					log.Println(proxyErr)
 				}
 				indices = append(indices, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-		
+
 			case "start user":
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
@@ -556,8 +555,8 @@ func main() {
 					startIndex(eclient, index)
 				}
 			case "start chat":
-				
-				if proxyErr != nil{
+
+				if proxyErr != nil {
 					log.Println(proxyErr)
 				}
 				indices = append(indices, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex)
@@ -565,11 +564,9 @@ func main() {
 					startIndex(eclient, index)
 				}
 			case "redo":
-				commands = []string{} 
+				commands = []string{}
+			}
 		}
 	}
 
-	
-
-	
 }
