@@ -323,6 +323,7 @@ func deleteIndex(eclient *elastic.Client, index string) {
 	//fmt.Println(globals.EntryIndex)
 
 	ctx := context.Background()
+	log.Println("Current index being deleted:", index)
 	deleteIndex, err := eclient.DeleteIndex(index).Do(ctx)
 	if err != nil {
 		// Handle error
@@ -337,7 +338,7 @@ func deleteIndex(eclient *elastic.Client, index string) {
 }
 
 func startIndex(eclient *elastic.Client, index string) {
-	fmt.Println(index)
+	log.Println("Current index being started:", index)
 	mapping := "DNE"
 	switch index {
 	case globals.UserIndex:
@@ -477,13 +478,13 @@ func main() {
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				// delete phase
 				for _, index := range indices {
-					log.Println("Current index being deleted:", index)
+
 					deleteIndex(eclient, index)
 				}
 
 				// restore phase
 				for _, index := range indices {
-					log.Println("Current index being started:", index)
+
 					startIndex(eclient, index)
 				}
 			case "delete":
@@ -567,6 +568,7 @@ func main() {
 			case "redo":
 				commands = []string{}
 			}
+
 		}
 	}
 
