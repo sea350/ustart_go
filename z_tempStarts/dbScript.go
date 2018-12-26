@@ -474,7 +474,7 @@ func main() {
 			fmt.Println("Command will be performed")
 			commands = append(commands, input)
 			switch input {
-			case "wipe":
+			case strings.HasPrefix(input, "wipe"):
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				// delete phase
 				for _, index := range indices {
@@ -487,44 +487,44 @@ func main() {
 
 					startIndex(eclient, index)
 				}
-			case "delete":
+			case strings.HasPrefix(input, "delete"):
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case "start":
+			case strings.HasPrefix(input, "start"):
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "delete user":
+			case strings.HasPrefix(input, "delete user"):
 
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
 
-			case "delete project":
+			case strings.HasPrefix(input, "delete project"):
 				indices = append(indices, globals.ProjectIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case "delete event":
+			case strings.HasPrefix(input, "delete event"):
 				indices = append(indices, globals.EventIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case "delete widget":
+			case strings.HasPrefix(input, "delete widget"):
 				indices = append(indices, globals.WidgetIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case "delete entries":
+			case strings.HasPrefix(input, "delete entries"):
 				indices = append(indices, globals.EntryIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			case "delete chat":
+			case strings.HasPrefix(input, "delete chat"):
 				proxyErr := clearUserProxies(eclient)
 				if proxyErr != nil {
 					log.Println(proxyErr)
@@ -534,38 +534,38 @@ func main() {
 					deleteIndex(eclient, index)
 				}
 
-			case "start user":
+			case strings.HasPrefix(input, "start user"):
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "start project":
+			case strings.HasPrefix(input, "start project"):
 				indices = append(indices, globals.ProjectIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "start event":
+			case strings.HasPrefix(input, "start event"):
 				indices = append(indices, globals.EventIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "start widget":
+			case strings.HasPrefix(input, "start widget"):
 				indices = append(indices, globals.WidgetIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "start entries":
+			case strings.HasPrefix(input, "start entries"):
 				indices = append(indices, globals.EntryIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "start chat":
+			case strings.HasPrefix(input, "start chat"):
 
 				indices = append(indices, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			case "redo":
+			case strings.HasPrefix(input, "redo"):
 				commands = []string{}
 			default:
 				log.Println("Command invalid")
