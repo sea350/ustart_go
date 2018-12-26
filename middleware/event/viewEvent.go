@@ -19,9 +19,6 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println(r.URL.Path[7:])
-
 	event, err := uses.AggregateEventData(client.Eclient, r.URL.Path[7:], test1.(string))
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
