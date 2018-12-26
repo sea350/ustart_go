@@ -487,52 +487,43 @@ func main() {
 
 					startIndex(eclient, index)
 				}
-			
-			else if strings.HasPrefix(input, "delete"){
+			}else if strings.HasPrefix(input, "delete"){
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "start"){
+			}else if strings.HasPrefix(input, "start"){
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "delete user"){
+			}else if strings.HasPrefix(input, "delete user"){
 
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			}
-
-			else if strings.HasPrefix(input, "delete project"){
+			}else if strings.HasPrefix(input, "delete project"){
 				indices = append(indices, globals.ProjectIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "delete event"){
+			}else if strings.HasPrefix(input, "delete event"){
 				indices = append(indices, globals.EventIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "delete widget"){
+			}else if strings.HasPrefix(input, "delete widget"){
 				indices = append(indices, globals.WidgetIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "delete entries"){
+			}else if strings.HasPrefix(input, "delete entries"){
 				indices = append(indices, globals.EntryIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "delete chat"){
+			}else if strings.HasPrefix(input, "delete chat"){
 				proxyErr := clearUserProxies(eclient)
 				if proxyErr != nil {
 					log.Println(proxyErr)
@@ -541,27 +532,22 @@ func main() {
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			}
-
-			else if strings.HasPrefix(input, "start user"){
+			}else if strings.HasPrefix(input, "start user"){
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "start project"){
+			}else if strings.HasPrefix(input, "start project"){
 				indices = append(indices, globals.ProjectIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "start event"){
+			}else if strings.HasPrefix(input, "start event"){
 				indices = append(indices, globals.EventIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "start widget"){
+			}else if strings.HasPrefix(input, "start widget"){
 				indices = append(indices, globals.WidgetIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
@@ -572,18 +558,15 @@ func main() {
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "start chat"){
+			}else if strings.HasPrefix(input, "start chat"){
 
 				indices = append(indices, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex)
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			}
-			else if strings.HasPrefix(input, "redo"){
+			}else if strings.HasPrefix(input, "redo"){
 				commands = []string{}
-			}
-			else:
+			}else{
 				log.Println("Command invalid")
 			}
 		}
