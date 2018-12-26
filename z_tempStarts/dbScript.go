@@ -567,9 +567,9 @@ func main() {
 				}
 			case "redo":
 				commands = []string{}
+			default:
+				log.Println("Command invalid")
 			}
-		default:
-			log.Println("Command invalid")
 
 		}
 	}
