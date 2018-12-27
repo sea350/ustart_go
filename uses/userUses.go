@@ -120,7 +120,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	// newUsr.AuthenticationCode = token
 	// subject := "Your verification link"
 	// //link := globals.SiteURL + ":" + globals.Port + "/Activation/?email=" + email + "&verifCode=" + token
-	// link := "https://" + globals.SiteURL + "/Activation/?email=" + email + "&verifCode=" + token
+	// link := globals.SiteURL + "/Activation/?email=" + email + "&verifCode=" + token
 	// r := NewRequest([]string{email}, subject)
 	// r.Send(globals.HTMLPATH+"email_template.html", map[string]string{"username": username, "link": link,
 	// 	"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
