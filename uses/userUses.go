@@ -113,21 +113,21 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	//New user verification process
 	newUsr.Verified = false
 	// SendVerificationEmail(email)
-	token, err := GenerateRandomString(32)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-	}
-	newUsr.AuthenticationCode = token
-	subject := "Your verification link"
-	//link := globals.SiteURL + ":" + globals.Port + "/Activation/?email=" + email + "&verifCode=" + token
-	link := "https://" + globals.SiteURL + "/Activation/?email=" + email + "&verifCode=" + token
-	r := NewRequest([]string{email}, subject)
-	r.Send(globals.HTMLPATH+"email_template.html", map[string]string{"username": username, "link": link,
-		"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
-		"contentdos":    "Simply click the button below to verify your account",
-		"contenttres":   "VERIFY ACCOUNT",
-		"contentquatro": "a new account"})
+	// token, err := GenerateRandomString(32)
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	log.Println(err)
+	// }
+	// newUsr.AuthenticationCode = token
+	// subject := "Your verification link"
+	// //link := globals.SiteURL + ":" + globals.Port + "/Activation/?email=" + email + "&verifCode=" + token
+	// link := "https://" + globals.SiteURL + "/Activation/?email=" + email + "&verifCode=" + token
+	// r := NewRequest([]string{email}, subject)
+	// r.Send(globals.HTMLPATH+"email_template.html", map[string]string{"username": username, "link": link,
+	// 	"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
+	// 	"contentdos":    "Simply click the button below to verify your account",
+	// 	"contenttres":   "VERIFY ACCOUNT",
+	// 	"contentquatro": "a new account"})
 
 	newUsr.Password = password
 	newUsr.University = school
@@ -181,6 +181,12 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	}
 
 	err = postUser.UpdateUser(eclient, id, "ProxyMessages", proxyID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	SendVerificationEmail(eclient, email)
 
 	return err
 }
