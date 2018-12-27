@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
+	getEvent "github.com/sea350/ustart_go/get/event"
 	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/uses"
 )
@@ -23,11 +24,36 @@ func MakeEventEntry(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	eventID := p.Sanitize(r.FormValue("docID"))
+	if eventID == "" {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println("Critical data not passed in")
+	}
 	newContent := []rune(p.Sanitize(r.FormValue("text")))
+
+	event, err := getEvent.EventByID(client.Eclient, eventID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+		return
+	}
+
+	var isMem bool
+	for _, mem := range event.Members {
+		if mem.MemberID == docID.(string) {
+			isMem = true
+			break
+		}
+	}
+
+	if !isMem {
+		return
+	}
+
 	newID, err := uses.EventCreatesEntry(client.Eclient, eventID, docID.(string), newContent)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
+		return
 	}
 
 	jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, docID.(string), true)
