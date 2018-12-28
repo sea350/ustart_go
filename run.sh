@@ -1,3 +1,4 @@
+#!/bin/bash
 # This script will run the webserver and backend service on the local machine.
 
 # First, we build the services
