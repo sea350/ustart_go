@@ -36,7 +36,7 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
-		err = uses.DeleteFromS3(usr.Avatar)
+		err = uses.DeleteFromS3(usr.Banner)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
@@ -63,7 +63,7 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
-		err = uses.DeleteFromS3(usr.Avatar)
+		err = uses.DeleteFromS3(usr.Banner)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)

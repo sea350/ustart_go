@@ -18,8 +18,8 @@ func DeleteFromS3(url string) error {
 	splt := strings.Split(url, "/")
 	key := splt[len(splt)-1]
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("Debug text: attempting to delete " + key)
+	// log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// log.Println("Debug text: attempting to delete " + key)
 
 	// The session the S3 Uploader will use
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(globals.S3Region), Credentials: credentials.NewStaticCredentials(globals.S3CredID, globals.S3CredSecret, globals.S3CredToken)}))
