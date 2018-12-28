@@ -11,7 +11,6 @@ import (
 	getGuestCode "github.com/sea350/ustart_go/get/guestCode"
 	getUser "github.com/sea350/ustart_go/get/user"
 	getWarning "github.com/sea350/ustart_go/get/warning"
-	globals "github.com/sea350/ustart_go/globals"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	postFollow "github.com/sea350/ustart_go/post/follow"
@@ -113,20 +112,21 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	//New user verification process
 	newUsr.Verified = false
 	// SendVerificationEmail(email)
-	token, err := GenerateRandomString(32)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-	}
-	newUsr.AuthenticationCode = token
-	subject := "Your verification link"
-	link := globals.SiteURL + ":" + globals.Port + "/Activation/?email=" + email + "&verifCode=" + token
-	r := NewRequest([]string{email}, subject)
-	r.Send(globals.HTMLPATH+"email_template.html", map[string]string{"username": username, "link": link,
-		"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
-		"contentdos":    "Simply click the button below to verify your account",
-		"contenttres":   "VERIFY ACCOUNT",
-		"contentquatro": "a new account"})
+	// token, err := GenerateRandomString(32)
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	log.Println(err)
+	// }
+	// newUsr.AuthenticationCode = token
+	// subject := "Your verification link"
+	// //link := globals.SiteURL + ":" + globals.Port + "/Activation/?email=" + email + "&verifCode=" + token
+	// link := globals.SiteURL + "/Activation/?email=" + email + "&verifCode=" + token
+	// r := NewRequest([]string{email}, subject)
+	// r.Send(globals.HTMLPATH+"email_template.html", map[string]string{"username": username, "link": link,
+	// 	"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
+	// 	"contentdos":    "Simply click the button below to verify your account",
+	// 	"contenttres":   "VERIFY ACCOUNT",
+	// 	"contentquatro": "a new account"})
 
 	newUsr.Password = password
 	newUsr.University = school
@@ -180,6 +180,12 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	}
 
 	err = postUser.UpdateUser(eclient, id, "ProxyMessages", proxyID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	SendVerificationEmail(eclient, email)
 
 	return err
 }
@@ -233,22 +239,22 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	newUsr.Email = email
 	newUsr.Username = username
 	newUsr.Verified = false
-	token, err := GenerateRandomString(32)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-		return err
-	}
-	newUsr.AuthenticationCode = token
+	// token, err := GenerateRandomString(32)
+	// if err != nil {
+	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 	log.Println(err)
+	// 	return err
+	// }
+	// newUsr.AuthenticationCode = token
 
-	subject := "Your verification link"
-	link := globals.SiteURL + ":" + globals.Port + "/Activation/?email=" + email + "&verifCode=" + token
-	r := NewRequest([]string{email}, subject)
-	r.Send(globals.HTMLPATH+"email_template.html", map[string]string{"username": username, "link": link,
-		"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
-		"contentdos":    "Simply click the button below to verify your account",
-		"contenttres":   "VERIFY ACCOUNT",
-		"contentquatro": "a new account"})
+	// subject := "Your verification link"
+	// link := globals.SiteURL + ":" + globals.Port + "/Activation/?email=" + email + "&verifCode=" + token
+	// r := NewRequest([]string{email}, subject)
+	// r.Send(globals.HTMLPATH+"email_template.html", map[string]string{"username": username, "link": link,
+	// 	"contentjuan":   "We received a request to activate your Ustart Account. We would love to assist you!",
+	// 	"contentdos":    "Simply click the button below to verify your account",
+	// 	"contenttres":   "VERIFY ACCOUNT",
+	// 	"contentquatro": "a new account"})
 
 	newUsr.Password = password
 	newUsr.University = school
@@ -313,6 +319,12 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	}
 
 	err = postUser.UpdateUser(eclient, id, "ProxyMessages", proxyID)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	SendVerificationEmail(eclient, email)
 
 	return err
 }
