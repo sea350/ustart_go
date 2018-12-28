@@ -428,7 +428,7 @@ func main() {
 	// indices := []string{globals.ConvoIndex}
 	// indices := []string{globals.ProxyMsgIndex}
 	var indices []string
-	indices = append(indices, globals.UserIndex)
+	// indices = append(indices, globals.UserIndex)
 	indices = append(indices, globals.ProjectIndex)
 	indices = append(indices, globals.EntryIndex)
 	indices = append(indices, globals.WidgetIndex)
