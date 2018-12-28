@@ -16,3 +16,4 @@ echo "Backend service called.  Follow logs with \`tail -f start.txt\`"
 
 echo "Services spawned.  Exiting..."
 
+sh $HOME/go/src/github.com/sea350/ustart_go/z_tempStarts/serverRestore.sh  -c
