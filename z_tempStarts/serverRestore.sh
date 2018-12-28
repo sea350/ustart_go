@@ -1,4 +1,4 @@
-if lsof -Pi :5200 -sTCP:LISTEN -t >/dev/null ; then
+if lsof -Pi :5002 -sTCP:LISTEN -t >/dev/null ; then
     echo "running"
 else
     echo "not running"
