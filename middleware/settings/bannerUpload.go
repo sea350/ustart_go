@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
 	uses "github.com/sea350/ustart_go/uses"
@@ -29,7 +30,19 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		buffer := make([]byte, 512)
 		_, _ = clientFile.Read(buffer)
 		defer clientFile.Close()
-		url, err := uses.UploadToS3(blob, test1.(string)+"-banner")
+
+		usr, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+		err = uses.DeleteFromS3(usr.Avatar)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+
+		url, err := uses.UploadToS3(blob, test1.(string)+"-"+time.Now().String()+"-banner")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
@@ -44,7 +57,19 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		}
 	case http.ErrMissingFile:
 		blob := r.FormValue("banner-data")
-		url, err := uses.UploadToS3(blob, test1.(string)+"-banner")
+
+		usr, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+		err = uses.DeleteFromS3(usr.Avatar)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+
+		url, err := uses.UploadToS3(blob, test1.(string)+"-"+time.Now().String()+"-banner")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
