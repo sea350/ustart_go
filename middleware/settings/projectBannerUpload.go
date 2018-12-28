@@ -41,7 +41,13 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 			defer clientFile.Close()
 			if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 				//Update the project banner
-				url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-banner")
+				err = uses.DeleteFromS3(proj.Banner)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+				}
+
+				url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-"+time.Now().String()+"-banner")
 				if err != nil {
 					log.SetFlags(log.LstdFlags | log.Lshortfile)
 					log.Println(err)
@@ -63,7 +69,13 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 		blob := r.FormValue("banner-data")
 		if uses.HasPrivilege("banner", proj.PrivilegeProfiles, member) {
 			//Update the project banner
-			url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-banner")
+			err = uses.DeleteFromS3(proj.Banner)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
+
+			url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-"+time.Now().String()+"-banner")
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)

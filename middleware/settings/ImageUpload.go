@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	get "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
@@ -30,7 +31,18 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 		defer clientFile.Close()
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 			//duplicate in AWS with docID as filename
-			url, err := uses.UploadToS3(blob, test1.(string))
+			usr, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
+			err = uses.DeleteFromS3(usr.Avatar)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
+
+			url, err := uses.UploadToS3(blob, test1.(string)+"-"+time.Now().String())
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
@@ -52,7 +64,18 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	case http.ErrMissingFile:
 		blob := r.FormValue("image-data")
 		//duplicate in AWS with docID as filename
-		url, err := uses.UploadToS3(blob, test1.(string))
+		usr, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+		err = uses.DeleteFromS3(usr.Avatar)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+
+		url, err := uses.UploadToS3(blob, test1.(string)+"-"+time.Now().String())
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)

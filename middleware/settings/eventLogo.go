@@ -41,7 +41,13 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 			_, _ = clientFile.Read(buffer)
 			defer clientFile.Close()
 			if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
-				url, err := uses.UploadToS3(blob, r.FormValue("eventID"))
+				err = uses.DeleteFromS3(evnt.Avatar)
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+				}
+
+				url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"-"+time.Now().String())
 				if err != nil {
 					log.SetFlags(log.LstdFlags | log.Lshortfile)
 					log.Println(err)
@@ -61,7 +67,13 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 	case http.ErrMissingFile:
 		//If file is not uploading (resizing original image)
 		if uses.HasEventPrivilege("icon", evnt.PrivilegeProfiles, member) {
-			url, err := uses.UploadToS3(blob, r.FormValue("eventID"))
+			err = uses.DeleteFromS3(evnt.Avatar)
+			if err != nil {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
+
+			url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"-"+time.Now().String())
 			if err != nil {
 				log.SetFlags(log.LstdFlags | log.Lshortfile)
 				log.Println(err)
