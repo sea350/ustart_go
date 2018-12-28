@@ -31,6 +31,17 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		_, _ = clientFile.Read(buffer)
 		defer clientFile.Close()
 
+		usr, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+		err = uses.DeleteFromS3(usr.Avatar)
+		if err != nil {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
+
 		url, err := uses.UploadToS3(blob, test1.(string)+"-"+time.Now().String()+"-banner")
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
