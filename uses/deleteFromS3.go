@@ -1,8 +1,8 @@
 package uses
 
 import (
-	"html"
 	"log"
+	urlPackage "net/url"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -19,7 +19,7 @@ func DeleteFromS3(url string) error {
 	splt := strings.Split(url, "/")
 	key := splt[len(splt)-1]
 
-	key = html.UnescapeString(key)
+	key, _ = urlPackage.QueryUnescape(key)
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println("Debug text: attempting to delete " + key)
 
