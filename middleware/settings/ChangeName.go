@@ -2,9 +2,9 @@ package settings
 
 import (
 	"html"
-	
+
 	"net/http"
-	
+
 	"strconv"
 	"time"
 
@@ -18,9 +18,6 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		
-
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -40,7 +37,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	dob := p.Sanitize(r.FormValue("dob"))
 	dob = html.EscapeString(dob)
 	if len(first) < 1 {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"DOB cannot be blank")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "DOB cannot be blank")
 
 	}
 
@@ -49,19 +46,19 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	}
 	month, err := strconv.Atoi(dob[5:7])
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 	day, err := strconv.Atoi(dob[8:10])
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 	year, err := strconv.Atoi(dob[0:4])
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
@@ -70,7 +67,6 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 
 	err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}

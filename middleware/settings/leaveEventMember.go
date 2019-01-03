@@ -1,9 +1,7 @@
 package settings
 
 import (
-	
 	"net/http"
-	
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -19,8 +17,7 @@ func LeaveEventMember(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+test1)
+
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -32,7 +29,6 @@ func LeaveEventMember(w http.ResponseWriter, r *http.Request) {
 
 	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
@@ -58,21 +54,18 @@ func LeaveEventMember(w http.ResponseWriter, r *http.Request) {
 	if newCreator == `` {
 		err = post.DeleteMember(client.Eclient, evntID, leavingUser)
 		if err != nil {
-			
-	
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	} else {
 		err = uses.NewEventLeader(client.Eclient, evntID, leavingUser, newCreator)
 		if err != nil {
-			
-	
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		err = post.DeleteMember(client.Eclient, evntID, leavingUser)
 		if err != nil {
-			
-	
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}

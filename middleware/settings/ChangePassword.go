@@ -1,9 +1,7 @@
 package settings
 
 import (
-	
 	"net/http"
-	
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -14,9 +12,6 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		
-
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -27,7 +22,6 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	newpb := []byte(newp)
 	err := uses.ChangePassword(client.Eclient, session.Values["DocID"].(string), oldpb, newpb)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}

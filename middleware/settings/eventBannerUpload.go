@@ -1,8 +1,6 @@
 package settings
 
 import (
-	"fmt"
-	
 	"net/http"
 	"time"
 
@@ -18,7 +16,6 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -30,8 +27,8 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 	//get the eventID and member, have to put this after getting image upload or it wont work (idk why)
 	evnt, member, err1 := get.EventAndMember(client.Eclient, r.FormValue("eventID"), test1.(string))
 	if err1 != nil {
-		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+err1)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err1)
 		http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 	}
 
@@ -47,29 +44,29 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 
 				err = uses.DeleteFromS3(evnt.Banner)
 				if err != nil {
-					
+
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				}
 
 				url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"-"+time.Now().String()+"-banner")
 				if err != nil {
-					
+
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 					http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 					return
 				}
 				err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Banner", url)
 				if err != nil {
-					
+
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				}
 			} else {
-				
-						client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Invalid file upload")
+
+				client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid file upload")
 			}
 		} else {
-			
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+)
+
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | err: " + "Unknown error encountered")
 		}
 	case http.ErrMissingFile:
 		//If file is not uploaded
@@ -77,28 +74,28 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 		if uses.HasEventPrivilege("banner", evnt.PrivilegeProfiles, member) {
 			err = uses.DeleteFromS3(evnt.Banner)
 			if err != nil {
-				
+
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 
 			url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"-"+time.Now().String()+"-banner")
 			if err != nil {
-				
+
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 				return
 			}
 			err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Banner", url)
 			if err != nil {
-				
+
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 		} else {
-			
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have permission to change event banner")
+
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "You do not have permission to change event banner")
 		}
 	default:
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 

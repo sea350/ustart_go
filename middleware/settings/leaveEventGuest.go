@@ -1,9 +1,7 @@
 package settings
 
 import (
-	
 	"net/http"
-	
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -18,8 +16,7 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+test1)
+
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -30,7 +27,6 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 
 	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
@@ -55,7 +51,6 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 
 	err = post.DeleteGuest(client.Eclient, evntID, leavingUser)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
