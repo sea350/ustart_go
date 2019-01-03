@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	
+
 	"net/http"
 	"regexp"
 	"strings"
@@ -77,8 +77,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 			if edit != `0` {
 				widget, err := get.WidgetByID(client.Eclient, edit)
 				if err != nil {
-					
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+					client.Logger.Println("err: ", err)
 					return newWidget, err
 				}
 
@@ -181,8 +181,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 			if edit != `0` {
 				widget, err := get.WidgetByID(client.Eclient, edit)
 				if err != nil {
-					
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+					client.Logger.Println("err: ", err)
 					return newWidget, err
 				}
 
@@ -214,8 +214,8 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 			if edit != `0` {
 				widget, err := get.WidgetByID(client.Eclient, edit)
 				if err != nil {
-					
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+					client.Logger.Println("err: ", err)
 					return newWidget, err
 				}
 

@@ -1,7 +1,6 @@
 package event
 
 import (
-	
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -21,16 +20,16 @@ func ViewEvent(w http.ResponseWriter, r *http.Request) {
 
 	event, err := uses.AggregateEventData(client.Eclient, r.URL.Path[7:], test1.(string))
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 	widgets, errs := uses.LoadWidgets(client.Eclient, event.EventData.Widgets)
 	if len(errs) > 0 {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"there were one or more errors loading widgets")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "there were one or more errors loading widgets")
 		for _, eror := range errs {
-			
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+eror)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", eror)
 		}
 	}
 
