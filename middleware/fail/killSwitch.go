@@ -2,7 +2,7 @@ package fail
 
 import (
 	"net/http"
-	
+	"os"
 )
 
 //KillSwitch ... kills process

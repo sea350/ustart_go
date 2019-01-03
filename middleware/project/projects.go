@@ -2,7 +2,7 @@ package project
 
 import (
 	"errors"
-	
+
 	"net/http"
 	"time"
 
@@ -28,8 +28,8 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 
 	url := r.URL.Path[10:]
 	if url == `` {
-		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+`NO URL PASSED`)
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + `NO URL PASSED`)
 	}
 	if url == `_blank` {
 		return
@@ -37,7 +37,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], docID.(string))
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
@@ -53,15 +53,15 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 
 	widgets, errs := uses.LoadWidgets(client.Eclient, project.ProjectData.Widgets)
 	if len(errs) > 0 {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"there were one or more errors loading widgets")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "there were one or more errors loading widgets")
 		for _, eror := range errs {
-			
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+eror)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", eror)
 		}
 	}
 	userstruct, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
@@ -69,7 +69,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 
 	_, follDoc, err := getFollow.ByID(client.Eclient, project.DocID)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	_, followingState := follDoc.UserFollowers[docID.(string)]
@@ -96,7 +96,7 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 	var cs client.ClientSide
 	userstruct, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
@@ -108,7 +108,7 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 	for _, projectInfo := range userstruct.Projects {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projectInfo.ProjectID)
 		if err != nil {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		heads = append(heads, head)
@@ -129,7 +129,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	}
 	userstruct, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: docID.(string), Username: session.Values["Username"].(string)}
@@ -152,7 +152,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 
 	cleanCollege := p.Sanitize(r.FormValue("universityName"))
 	if len(cleanCollege) == 0 {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Cannot leave college blank")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Cannot leave college blank")
 		client.RenderSidebar(w, r, "template2-nil")
 		client.RenderSidebar(w, r, "leftnav-nil")
 		client.RenderTemplate(w, r, "createProject-Nil", cs)
@@ -161,7 +161,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 
 	cleanURL := p.Sanitize(r.FormValue("curl"))
 	if len(cleanURL) == 0 {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Cannot leave custom URL blank")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Cannot leave custom URL blank")
 		client.RenderSidebar(w, r, "template2-nil")
 		client.RenderSidebar(w, r, "leftnav-nil")
 		client.RenderTemplate(w, r, "createProject-Nil", cs)
@@ -189,8 +189,8 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	if title != `` {
 		//proper URL
 		if !uses.ValidUsername(cleanURL) {
-			
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Invalid custom project URL")
+
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid custom project URL")
 			cs.ErrorStatus = true
 			cs.ErrorOutput = errors.New("Invalid custom project URL")
 			client.RenderSidebar(w, r, "template2-nil")
@@ -201,7 +201,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 		}
 		url, err := uses.CreateProject(client.Eclient, cleanTitle, []rune(cleanDesc), docID.(string), cleanCat, cleanCollege, cleanURL, projLocation)
 		if err != nil {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
