@@ -3,7 +3,7 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -30,20 +30,20 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 	contentArray := []rune(comment)
 	err := uses.UserReplyEntry(client.Eclient, id, postActual, contentArray)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	_, cmts, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	data, err := json.Marshal(cmts)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	fmt.Fprintln(w, string(data))
 }
@@ -66,20 +66,20 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 	contentArray := []rune(comment)
 	err := uses.UserReplyEntry(client.Eclient, docID.(string), postID, contentArray)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	_, cmts, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	data, err := json.Marshal(cmts)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

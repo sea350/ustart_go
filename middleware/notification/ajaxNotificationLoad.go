@@ -3,7 +3,7 @@ package notification
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/notification"
@@ -25,22 +25,22 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 	id, proxy, err := get.ProxyNotificationByUserID(client.Eclient, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	err = post.ResetUnseen(client.Eclient, id)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	count := 0
 	for _, id := range proxy.NotificationCache {
 		notif, err := get.NotificationByID(client.Eclient, id)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			continue
 		}
 		if notif.Invisible {
@@ -49,8 +49,8 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 		msg, url, err := uses.GenerateNotifMsgAndLink(client.Eclient, notif)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			continue
 		}
 
@@ -73,8 +73,8 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(sendData)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

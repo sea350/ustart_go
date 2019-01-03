@@ -3,9 +3,9 @@ package chat
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
-	"os"
+	
 	"strconv"
 
 	"github.com/sea350/ustart_go/uses"
@@ -25,22 +25,21 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 	chatID := r.FormValue("chatID")
 	idxStr := r.FormValue("index")
 	if chatID == `` || idxStr == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(`WARNING: chat ID or index not submitted`)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+`WARNING: chat ID or index not submitted`)
 		return
 	}
 
 	idx, err := strconv.Atoi(idxStr)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	valid, actualChatID, _, err := uses.ChatVerifyURL(client.Eclient, chatID, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	if !valid {
 		return
@@ -48,8 +47,8 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 
 	newIdx, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, idx, 50)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
@@ -59,9 +58,9 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(sendThis)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

@@ -1,7 +1,7 @@
 package follow
 
 import (
-	"log"
+	
 	"net/http"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -23,30 +23,30 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 
 	followingID := r.FormValue("projectID")
 	if followingID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(`PROJECT ID NOT PASSED`)
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+`PROJECT ID NOT PASSED`)
 		return
 	}
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "project")
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	if !isFollowing {
 		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "project")
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			return
 		}
 
 		err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false, "user")
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			return
 		}
 
@@ -54,22 +54,22 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		notif.NewFollower(followingID, ID.(string))
 		_, err := post.IndexNotification(client.Eclient, notif)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			return
 		}
 	} else {
 		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID, "project")
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			return
 		}
 
 		err = postFollow.RemoveProjectFollow(client.Eclient, followingID, "followers", ID.(string))
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 

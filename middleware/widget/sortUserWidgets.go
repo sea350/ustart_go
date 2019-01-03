@@ -1,7 +1,7 @@
 package widget
 
 import (
-	"log"
+	
 	"net/http"
 	"strings"
 
@@ -34,7 +34,7 @@ func SortUserWidgets(w http.ResponseWriter, r *http.Request) {
 
 	err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "UserWidgets", ids)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 }

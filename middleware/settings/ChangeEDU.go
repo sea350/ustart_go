@@ -3,9 +3,9 @@ package settings
 import (
 	"fmt"
 	"html"
-	"log"
+	
 	"net/http"
-	"os"
+	
 	"strconv"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -37,12 +37,12 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 	}
 
 	highschoolName := p.Sanitize(r.FormValue("schoolname"))
-	log.Println("HS:", highschoolName)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"HS:", highschoolName)
 	highschoolGrad := p.Sanitize(r.FormValue("highSchoolGradDate"))
-	log.Println("HS Grad Date:", highschoolGrad)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"HS Grad Date:", highschoolGrad)
 	// uniName := p.Sanitize(r.FormValue("universityName"))
 	uniName := r.FormValue("universityName")
-	log.Println("UNI:", uniName)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"UNI:", uniName)
 	var major []string
 
 	var m Major
@@ -55,15 +55,15 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 	major = append(major, r.FormValue("majors"))
 	//	Year := r.FormValue("year")
 	gradDate := p.Sanitize(r.FormValue("uniGradDate"))
-	log.Println("UNI Grad Date:", gradDate)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"UNI Grad Date:", gradDate)
 
 	var minor []string
 
 	err := uses.ChangeEducation(client.Eclient, session.Values["DocID"].(string), i, highschoolName, highschoolGrad, uniName, gradDate, major, minor)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	http.Redirect(w, r, "/Settings/#educollapse", http.StatusFound)
 	return

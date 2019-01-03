@@ -2,7 +2,7 @@ package registration
 
 import (
 	"errors"
-	"log"
+
 	"net"
 	"net/http"
 	"strconv"
@@ -44,8 +44,8 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	//proper email
 	if !uses.ValidEmail(p.Sanitize(r.FormValue("inputEmail"))) {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Invalid email submitted")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid email submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)
@@ -55,8 +55,8 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	//proper username
 	if !uses.ValidUsername(r.FormValue("username")) {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Invalid username submitted")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid username submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid username submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)
@@ -66,8 +66,8 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	//proper birth date
 	if !uses.ValidDate(r.FormValue("dob")) {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Invalid birthdate submitted")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid birthdate submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)
@@ -103,13 +103,13 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	var clientIP string
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Printf("Userip: %q is not IP:port\n", r.RemoteAddr)
+
+		client.Logger.Printf("Userip: %q is not IP:port\n", r.RemoteAddr)
 	}
 	userIP := net.ParseIP(ip)
 	if userIP == nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Printf("UserIp: %q is not IP:port\n", r.RemoteAddr)
+
+		client.Logger.Printf("UserIp: %q is not IP:port\n", r.RemoteAddr)
 	} else {
 		clientIP = userIP.String()
 	}
@@ -117,8 +117,8 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear, clientIP)
 
 	if err2 != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err2)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err2)
 		cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)
@@ -139,8 +139,8 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 
 	if test1 != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(test1)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", test1)
 		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
 		return
 	}

@@ -1,9 +1,9 @@
 package event
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	postEvent "github.com/sea350/ustart_go/post/event"
@@ -26,8 +26,8 @@ func AddEventProject(w http.ResponseWriter, r *http.Request) {
 
 	err := postEvent.AppendProject(client.Eclient, eventID, project)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 } //end of AddEventProject

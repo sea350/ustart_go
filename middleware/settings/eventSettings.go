@@ -1,9 +1,9 @@
 package settings
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
@@ -21,9 +21,9 @@ func Event(w http.ResponseWriter, r *http.Request) {
 	evntURL := r.URL.Path[15:]
 	event, err := uses.AggregateEventData(client.Eclient, evntURL, test1.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	var isAdmin = false

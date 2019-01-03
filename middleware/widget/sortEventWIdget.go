@@ -2,7 +2,7 @@ package widget
 
 import (
 	"encoding/json"
-	"log"
+	
 	"net/http"
 
 	getEvent "github.com/sea350/ustart_go/get/event"
@@ -26,8 +26,8 @@ func SortEventWidgets(w http.ResponseWriter, r *http.Request) {
 	sortedWidgets := r.FormValue("sortedWidgets")
 	eventURL := r.FormValue("pageID")
 	if eventURL == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Event URL not passed in")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Event URL not passed in")
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
@@ -37,34 +37,34 @@ func SortEventWidgets(w http.ResponseWriter, r *http.Request) {
 	arr := []string{}
 	err := json.Unmarshal([]byte(sortedWidgets), &arr)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	id, err := getEvent.EventIDByURL(client.Eclient, eventURL)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	event, member, err := getEvent.EventAndMember(client.Eclient, id, docID.(string))
 
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	if uses.HasEventPrivilege("widget", event.PrivilegeProfiles, member) {
 		err = post.UpdateEvent(client.Eclient, id, "Widgets", arr)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	} else {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("You do not have the privilege to add a widget to this event. Check your privilege.")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have the privilege to add a widget to this event. Check your privilege.")
 	}
 }

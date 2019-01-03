@@ -2,9 +2,9 @@ package settings
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -27,7 +27,7 @@ func EventCustomURL(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 	newURL := p.Sanitize(r.FormValue("purl"))
 	if len(newURL) < 1 {
-		log.Println("Cannot have a blank URL!")
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Cannot have a blank URL!")
 		return
 
 	}
@@ -36,30 +36,30 @@ func EventCustomURL(w http.ResponseWriter, r *http.Request) {
 
 	inUse, err := get.EventURLInUse(client.Eclient, newURL)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	if inUse {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("URL IS IN USE, ERROR NOT PROPERLY HANDLED REDIRECTING TO EVENT PAGE")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"URL IS IN USE, ERROR NOT PROPERLY HANDLED REDIRECTING TO EVENT PAGE")
 		http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 		return
 	}
 
 	err = uses.ChangeEventURL(client.Eclient, evntID, newURL)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)

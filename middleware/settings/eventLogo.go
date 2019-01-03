@@ -1,7 +1,7 @@
 package settings
 
 import (
-	"log"
+	
 	"net/http"
 	"time"
 
@@ -27,8 +27,8 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 	//get the eventID and member, have to put this after getting image upload or it wont work (idk why)
 	evnt, member, err1 := get.EventAndMember(client.Eclient, r.FormValue("eventID"), test1.(string))
 	if err1 != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	blob := r.FormValue("image-data")
@@ -43,56 +43,56 @@ func EventLogo(w http.ResponseWriter, r *http.Request) {
 			if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 				err = uses.DeleteFromS3(evnt.Avatar)
 				if err != nil {
-					log.SetFlags(log.LstdFlags | log.Lshortfile)
-					log.Println(err)
+					
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				}
 
 				url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"-"+time.Now().String())
 				if err != nil {
-					log.SetFlags(log.LstdFlags | log.Lshortfile)
-					log.Println(err)
+					
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 					http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 					return
 				}
 				err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Avatar", url)
 				if err != nil {
-					log.SetFlags(log.LstdFlags | log.Lshortfile)
-					log.Println(err)
+					
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				}
 			}
 		} else {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("You do not have permission to change event logo")
+			
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have permission to change event logo")
 		}
 	case http.ErrMissingFile:
 		//If file is not uploading (resizing original image)
 		if uses.HasEventPrivilege("icon", evnt.PrivilegeProfiles, member) {
 			err = uses.DeleteFromS3(evnt.Avatar)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 
 			url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"-"+time.Now().String())
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 				return
 			}
 			err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Avatar", url)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 
 		} else {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("You do not have permission to change event logo")
+			
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have permission to change event logo")
 		}
 	default:
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	time.Sleep(2 * time.Second)

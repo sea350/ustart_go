@@ -2,9 +2,9 @@ package event
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
-	"os"
+	
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -34,8 +34,8 @@ func UpdateEventTags(w http.ResponseWriter, r *http.Request) {
 
 	err := post.UpdateEvent(client.Eclient, ID, "Tags", tags)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 }

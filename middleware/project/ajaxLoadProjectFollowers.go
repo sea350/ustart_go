@@ -1,7 +1,6 @@
 package project
 
 import (
-	"log"
 	"net/http"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -21,19 +20,19 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	}
 	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[10:])
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	heads := []types.FloatingHead{}
@@ -42,9 +41,9 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.UserFollowers {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-			log.Println("index " + idKey)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "index " + idKey)
 			continue
 		}
 		isFollowing, _ := followDoc.UserFollowing[idKey]
@@ -55,9 +54,9 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.ProjectFollowers {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-			log.Println("index " + idKey)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "index " + idKey)
 			continue
 		}
 		isFollowing, _ := followDoc.ProjectFollowing[idKey]
@@ -69,9 +68,9 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.UserFollowing {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("index " + idKey)
-			log.Println(err)
+
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "index " + idKey)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			continue
 		}
 		heads2 = append(heads2, head)
@@ -80,9 +79,9 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	for idKey := range followDoc.ProjectFollowing {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("index " + idKey)
-			log.Println(err)
+
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "index " + idKey)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			continue
 		}
 		heads2 = append(heads2, head)

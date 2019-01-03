@@ -1,7 +1,7 @@
 package event
 
 import (
-	"log"
+	
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/event"
@@ -21,30 +21,30 @@ func MemberRequestToJoin(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("eventID") //event docID
 	if id == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Event ID not passed in")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Event ID not passed in")
 		return
 	}
 
 	evnt, err := get.EventByID(client.Eclient, id)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	for _, memberInfo := range evnt.Members {
 		if memberInfo.MemberID == test1.(string) {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("user is already a member")
+			
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"user is already a member")
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
 	}
 	for _, receivedReq := range evnt.MemberReqReceived {
 		if receivedReq == test1.(string) {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("user's request already received")
+			
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"user's request already received")
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
@@ -52,13 +52,13 @@ func MemberRequestToJoin(w http.ResponseWriter, r *http.Request) {
 
 	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	err = evntPost.AppendMemberReqReceived(client.Eclient, id, test1.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)

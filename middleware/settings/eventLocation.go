@@ -2,9 +2,9 @@ package settings
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -38,9 +38,9 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 	//TODO: DocID
 	err = uses.ChangeEventLocation(client.Eclient, r.FormValue("eventID"), country, state, city, street, zip)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)

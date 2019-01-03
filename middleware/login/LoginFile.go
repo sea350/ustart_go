@@ -2,7 +2,7 @@ package login
 
 import (
 	"fmt"
-	"log"
+	
 	"net"
 	"net/http"
 	"strings"
@@ -47,8 +47,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	successful, sessionInfo, err := uses.Login(client.Eclient, email, passwordb, clientIP)
 
 	if !successful || err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		client.RenderTemplate(w, r, "templateNoUser2", client.ClientSide{ErrorStatus: true, ErrorOutput: err})
 		client.RenderTemplate(w, r, "loginerror-nil", client.ClientSide{ErrorStatus: true, ErrorOutput: err})
 		return
@@ -58,8 +58,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		session.Values["Email"] = user.Email
 		session.Save(r, w)
 		http.Redirect(w, r, "/unverified/", http.StatusFound)
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("User not verified")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"User not verified")
 		return
 	}
 

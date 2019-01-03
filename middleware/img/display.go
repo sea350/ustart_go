@@ -2,7 +2,7 @@ package img
 
 import (
 	"io"
-	"log"
+
 	"net/http"
 
 	getImg "github.com/sea350/ustart_go/get/img"
@@ -15,8 +15,8 @@ func Display(w http.ResponseWriter, r *http.Request) {
 
 	img, err := getImg.ByID(client.Eclient, id)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("err: ", err)
 	}
 	io.WriteString(w, img.Image)
 }

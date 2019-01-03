@@ -1,9 +1,9 @@
 package event
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -22,8 +22,8 @@ func AjaxEventToggleFollow(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.UserFollowEventToggle(client.Eclient, test1.(string), eventID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 }

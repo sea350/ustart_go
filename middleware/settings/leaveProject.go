@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"log"
 	"net/http"
 	"strings"
 
@@ -17,8 +16,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(test1)
+
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -28,8 +26,8 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 
 	projID := r.FormValue("projectID")
 	if projID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Project ID not passed")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Project ID not passed")
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
@@ -37,15 +35,15 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
 
 	if leavingUser == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Leaver not specified")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Leaver not specified")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
@@ -59,15 +57,15 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 			if mem.MemberID == test1.(string) && mem.Role == 0 {
 				//if the current acessing user is creator, they can do whatever they want
 				canLeave = true
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println("checkpoint 2b")
+
+				client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "checkpoint 2b")
 				break
 			}
 		}
 	}
 	if !canLeave {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("User attempting to leave was not permitted, check variables and try again.")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "User attempting to leave was not permitted, check variables and try again.")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
@@ -75,19 +73,19 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	if newCreator == `` {
 		err = post.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	} else {
 		err = uses.NewProjectLeader(client.Eclient, projID, leavingUser, newCreator)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		err = post.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 

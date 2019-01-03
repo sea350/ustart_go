@@ -2,7 +2,9 @@ package client
 
 import (
 	htype "html/template"
+	"log"
 	"net/http"
+	"os"
 
 	sessions "github.com/gorilla/sessions"
 	globals "github.com/sea350/ustart_go/globals"
@@ -17,6 +19,9 @@ var Eclient, err = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 var Store = sessions.NewCookieStore([]byte("RIU3389D1")) // code
 
 var htmlPath = globals.HTMLPATH
+
+//Logger is the logger that should be used for all things middleware
+var Logger = log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile)
 
 //ClientSide ... This struct represents a user state after he/she has logged in. Some fields may no longer be needed
 //or are unnecessary.

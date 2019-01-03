@@ -1,9 +1,9 @@
 package widget
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/widget"
@@ -23,9 +23,9 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 
 	newWidget, err := ProcessWidgetForm(r)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 		return
 	}
@@ -36,17 +36,17 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 
 		err := uses.AddWidget(client.Eclient, session.Values["DocID"].(string), newWidget, false, false)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	} else {
 
 		err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 

@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"log"
+
 	"net/http"
-	"os"
+
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -19,6 +19,11 @@ import (
 
 //FindEventMember ... find event members
 func FindEventMember(w http.ResponseWriter, r *http.Request) {
+	session, _ := client.Store.Get(r, "session_please")
+	test1, _ := session.Values["DocID"]
+	if test1 == nil {
+		return
+	}
 	p := bluemonday.UGCPolicy()
 	term := p.Sanitize(r.FormValue("term"))
 	var stringTerm []string
@@ -36,9 +41,8 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 		Do(ctx)
 
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	if err == nil {
@@ -67,9 +71,8 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 
 	}
 

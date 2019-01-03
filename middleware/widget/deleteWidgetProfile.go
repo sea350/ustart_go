@@ -1,7 +1,7 @@
 package widget
 
 import (
-	"log"
+	
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -22,8 +22,8 @@ func DeleteWidgetProfile(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false, false)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)

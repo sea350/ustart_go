@@ -3,7 +3,7 @@ package event
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -29,23 +29,23 @@ func LoadMemberJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	for index, userID := range evnt.MemberReqReceived {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(fmt.Sprintf("error loading index %d", index))
+			
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+fmt.Sprintf("error loading index %d", index))
 		}
 		heads = append(heads, head)
 	}
 
 	data, err := json.Marshal(heads)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, string(data))

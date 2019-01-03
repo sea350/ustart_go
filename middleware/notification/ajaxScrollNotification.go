@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	
 	"net/http"
 
 	"github.com/sea350/ustart_go/middleware/client"
@@ -25,8 +25,8 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 
 	sID, notifMap, _, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
 	if err != nil && err != io.EOF {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 
 	}
 	var notifs []map[string]interface{}
@@ -34,8 +34,8 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	for notifID, notif := range notifMap {
 		msg, url, err := uses.GenerateNotifMsgAndLink(client.Eclient, notif)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			continue
 		}
 
@@ -61,8 +61,8 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(sendData)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, string(data))

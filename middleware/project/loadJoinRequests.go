@@ -3,9 +3,9 @@ package project
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -29,18 +29,18 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	for index, userID := range proj.MemberReqReceived {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
 		if err != nil {
 
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			fmt.Println(fmt.Sprintf("err: middleware/project/loadjoinrequest, Line 35, index %d", index))
 		}
 		heads = append(heads, head)
@@ -48,9 +48,9 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(heads)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, string(data))

@@ -3,9 +3,9 @@ package project
 import (
 	"encoding/json"
 	"html"
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -30,7 +30,7 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal([]byte(ID), &ts)
 
 	if err != nil {
-		log.Println("Could not unmarshal")
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Could not unmarshal")
 		return
 	}
 
@@ -41,8 +41,8 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 
 	err = post.UpdateProject(client.Eclient, theID, "Tags", ts)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 }

@@ -2,7 +2,7 @@ package event
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -23,28 +23,28 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	evntID := r.FormValue("eventID")
 	if evntID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("WARNING: event ID not received")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"WARNING: event ID not received")
 		return
 	}
 	newGuestID := r.FormValue("userID")
 	if newGuestID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("WARNING: new member ID not received")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"WARNING: new member ID not received")
 		return
 	}
 	//classification, err := strconv.Atoi(r.FormValue("classification")) GUEST ARE classification 1 right??
 
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newGuestID, 1)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	err = userPost.AppendEvent(client.Eclient, newGuestID, types.EventInfo{EventID: evntID, Visible: true})
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	var newGuest types.EventGuests
@@ -54,8 +54,8 @@ func AcceptGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	err = evntPost.AppendGuest(client.Eclient, evntID, newGuest)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

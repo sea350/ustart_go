@@ -2,7 +2,7 @@ package settings
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -50,9 +50,9 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 
 	err = uses.ChangeProjectLocation(client.Eclient, projID, country, state, city, zip, vis)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		
 
-		log.Println(err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Println("/Projects/", proj.URLName)

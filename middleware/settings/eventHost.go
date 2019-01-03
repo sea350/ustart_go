@@ -2,9 +2,9 @@ package settings
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	get "github.com/sea350/ustart_go/get/event"
 	getproj "github.com/sea350/ustart_go/get/project"
@@ -32,9 +32,9 @@ func EventHost(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		err = uses.ChangeEventHost(client.Eclient, evntID, projectID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 	//TODO: Add in right URL

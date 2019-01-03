@@ -1,9 +1,7 @@
 package settings
 
 import (
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -19,8 +17,7 @@ func LeaveEvent(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(test1)
+
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -28,25 +25,24 @@ func LeaveEvent(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 	leavingUser := p.Sanitize(r.FormValue("leaverID"))
 	if len(leavingUser) < 1 {
-		log.Println("This field cannot be left blank!")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "This field cannot be left blank!")
 		return
 	}
 	eventID := p.Sanitize(r.FormValue("eventID"))
 	// if len(eventID) < 1{
-	// 	log.Println("This field cannot be left blank!")
+	// 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"This field cannot be left blank!")
 	// 	return
 	// }
 	newCreator := p.Sanitize(r.FormValue("newCreator"))
 	if len(newCreator) < 1 {
-		log.Println("This field cannot be left blank!")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "This field cannot be left blank!")
 		return
 	}
 
 	event, err := get.EventByID(client.Eclient, eventID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	var canLeave = false
@@ -70,22 +66,19 @@ func LeaveEvent(w http.ResponseWriter, r *http.Request) {
 	if newCreator == `` {
 		err = post.DeleteMember(client.Eclient, eventID, leavingUser)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	} else {
 		err = uses.NewEventLeader(client.Eclient, eventID, leavingUser, newCreator)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		err = post.DeleteMember(client.Eclient, eventID, leavingUser)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 

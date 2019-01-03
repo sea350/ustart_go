@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -16,8 +15,7 @@ func EventCategory(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(test1)
+
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -25,22 +23,22 @@ func EventCategory(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 	newCategory := p.Sanitize(r.FormValue("type_select"))
 	if len(newCategory) == 0 {
-		log.Println("Invalid category")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid category")
 		return
 	}
 
 	evntID := r.FormValue("eventID")
 	proj, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	err = post.UpdateEvent(client.Eclient, evntID, "Category", newCategory)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	http.Redirect(w, r, "/EventSettings/"+proj.URLName, http.StatusFound)

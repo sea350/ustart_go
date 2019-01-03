@@ -2,7 +2,6 @@ package project
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -28,43 +27,43 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	projID := r.FormValue("projectID")
 	if projID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("WARNING: project ID not received")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "WARNING: project ID not received")
 		return
 	}
 	newMemberID := r.FormValue("userID")
 	if newMemberID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("WARNING: new member ID not received")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "WARNING: new member ID not received")
 		return
 	}
 
 	newNumRequests, err := uses.RemoveRequest(client.Eclient, projID, newMemberID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	proj, err := getProj.ProjectByID(client.Eclient, projID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	for i := range proj.Members {
 		if proj.Members[i].MemberID == newMemberID {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("USER IS ALREADY A MEMBER")
+
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "USER IS ALREADY A MEMBER")
 			return
 		}
 	}
 
 	err = userPost.AppendProject(client.Eclient, newMemberID, types.ProjectInfo{ProjectID: projID, Visible: true})
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
@@ -86,15 +85,15 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	err = projPost.AppendMember(client.Eclient, projID, newMember)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	convo, err := getChat.ConvoByID(client.Eclient, proj.Subchats[0].ConversationID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
@@ -102,22 +101,22 @@ func AcceptJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	err = postChat.UpdateConvo(client.Eclient, proj.Subchats[0].ConversationID, "Eavesdroppers", convo.Eavesdroppers)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	proxyID, err := getChat.ProxyIDByUserID(client.Eclient, newMemberID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	err = postChat.AppendToProxy(client.Eclient, proxyID, proj.Subchats[0].ConversationID, false)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 

@@ -1,9 +1,9 @@
 package settings
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -26,9 +26,9 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 
 	project, err := get.ProjectByID(client.Eclient, projectID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	var isCreator, _ = uses.IsLeader(client.Eclient, projectID, test1.(string))
@@ -53,14 +53,14 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 				if member.Role != 0 && newRank != "Creator" {
 					err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
 				} else {
-					log.Println("You do not have permission to change member class of this project")
+							client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have permission to change member class of this project")
 				}
 			}
 
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 
 			}
 		}

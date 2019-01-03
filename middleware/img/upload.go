@@ -2,10 +2,13 @@ package img
 
 import (
 	"encoding/base64"
-	"log"
-	"net/http"
 	"os"
+
+	"net/http"
+
 	"strings"
+
+	"github.com/sea350/ustart_go/middleware/client"
 )
 
 //Upload ... draws only image
@@ -15,7 +18,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	arr := []string{}
 	i := strings.Index(data, ",")
 	if i < 0 {
-		log.Fatal("no comma")
+		client.Logger.Fatal("no comma")
 	} else {
 		arr = strings.Split(data, `,`)
 
@@ -27,8 +30,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("debug text " + arr[1])
+	client.Logger.Println("debug text " + arr[1])
 	//convert decoder to file
 	f, err := os.Create("myfilename.png")
 	if err != nil {

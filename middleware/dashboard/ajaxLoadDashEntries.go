@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	
 	"net/http"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -25,8 +25,8 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 	//READ THIS:
 	_, followDoc, err := getFollow.ByID(client.Eclient, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	var docs []string
@@ -45,8 +45,8 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 	//this is how to get the list of docIDs for the current pages following maps
 	res, entries, total, err := scrollpkg.ScrollPageDash(client.Eclient, docs, docID.(string), sID)
 	if err != nil && err != io.EOF {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	results := make(map[string]interface{})
@@ -56,8 +56,8 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(results)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	// cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ScrollID: res, Wall: entries, Hits: total}

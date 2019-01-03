@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -30,7 +29,7 @@ func HandleChatClients(w http.ResponseWriter, r *http.Request) {
 	// Upgrade initial GET request to a websocket
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Fatal(err)
+		client.Logger.Fatal(err)
 	}
 	// Make sure we close the connection when the function returns
 	defer ws.Close()
@@ -67,14 +66,14 @@ func HandleChatAlert() {
 		for clnt := range chatClients[alert.UserID] {
 			head, err := uses.ConvertChatToFloatingHead(client.Eclient, alert.ChatID, alert.UserID)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+
+				client.Logger.Println("DocID: "+alert.UserID+" | err: %s", err)
 				continue
 			}
 
 			err = clnt.WriteJSON(head)
 			if err != nil {
-				//log.Printf("error: %v", err)
+				//client.Logger.Printf("error: %v", err)
 				clnt.Close()
 				delete(chatClients[alert.UserID], clnt)
 			}

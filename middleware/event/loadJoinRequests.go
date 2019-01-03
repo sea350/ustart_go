@@ -3,7 +3,7 @@ package event
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -25,8 +25,8 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	ID := r.FormValue("eventID") //eventID
 	if ID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Event ID not passed in")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Event ID not passed in")
 		return
 	}
 
@@ -34,8 +34,8 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
@@ -44,8 +44,8 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 		if userID == 1 {
 			head, err := uses.ConvertUserToFloatingHead(client.Eclient, index)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 			heads = append(heads, head)
 		}
@@ -53,8 +53,8 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 		if userID == 2 {
 			head, err := uses.ConvertProjectToFloatingHead(client.Eclient, index)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 			heads = append(heads, head)
 		}
@@ -66,8 +66,8 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 	for index, userID := range evnt.MemberReqReceived {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(fmt.Sprintf("error : problem loading index %d", index))
+			
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+fmt.Sprintf("error : problem loading index %d", index))
 		}
 		heads2 = append(heads2, head)
 	}
@@ -78,8 +78,8 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(marshall)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, string(data))

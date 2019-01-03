@@ -2,9 +2,9 @@ package settings
 
 import (
 	"html"
-	"log"
+
 	"net/http"
-	"os"
+
 	"strconv"
 	"time"
 
@@ -18,9 +18,6 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -31,7 +28,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	first := p.Sanitize(r.FormValue("fname"))
 	first = html.EscapeString(first)
 	// if len(first) < 1 {
-	// 	log.Println("First name cannot be blank")
+	// 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"First name cannot be blank")
 
 	// }
 	last := p.Sanitize(r.FormValue("lname"))
@@ -40,7 +37,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	dob := p.Sanitize(r.FormValue("dob"))
 	dob = html.EscapeString(dob)
 	if len(first) < 1 {
-		log.Println("DOB cannot be blank")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "DOB cannot be blank")
 
 	}
 
@@ -49,20 +46,20 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	}
 	month, err := strconv.Atoi(dob[5:7])
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 	day, err := strconv.Atoi(dob[8:10])
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 	year, err := strconv.Atoi(dob[0:4])
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
@@ -70,9 +67,8 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 
 	err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	http.Redirect(w, r, "/Settings/#namecollapse", http.StatusFound)
 	return

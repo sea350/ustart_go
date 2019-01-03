@@ -1,7 +1,7 @@
 package widget
 
 import (
-	"log"
+	
 	"net/http"
 
 	getProj "github.com/sea350/ustart_go/get/project"
@@ -23,15 +23,15 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 
 	project, member, err := getProj.ProjAndMember(client.Eclient, r.FormValue("projectWidget"), test1.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	if uses.HasPrivilege("widget", project.PrivilegeProfiles, member) {
 		newWidget, err := ProcessWidgetForm(r)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			return
 		}
@@ -41,21 +41,21 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		if r.FormValue("editID") == `0` {
 			err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true, false)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 		} else {
 			err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 		}
 
 		http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 	} else {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("You do not have the privilege to add a widget to this project. Check your privilege. ")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have the privilege to add a widget to this project. Check your privilege. ")
 	}
 	return
 }

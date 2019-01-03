@@ -2,9 +2,9 @@ package project
 
 import (
 	"encoding/json"
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -30,9 +30,9 @@ func UpdateSkills(w http.ResponseWriter, r *http.Request) {
 	var ss []string
 	err := json.Unmarshal([]byte(skills), &ss)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		
 
-		log.Println(err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	for s := range ss {
@@ -40,8 +40,8 @@ func UpdateSkills(w http.ResponseWriter, r *http.Request) {
 	}
 	err = post.UpdateProject(client.Eclient, ID, "ListNeeded", ss)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 }

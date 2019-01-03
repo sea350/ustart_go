@@ -3,7 +3,7 @@ package chat
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -22,8 +22,8 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 	heads, numUnread, err := uses.ChatAggregateNotifications(client.Eclient, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	sendData := make(map[string]interface{})
@@ -32,8 +32,8 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(sendData)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

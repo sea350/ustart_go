@@ -3,7 +3,7 @@ package profile
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/entry"
@@ -22,40 +22,40 @@ func Like(w http.ResponseWriter, r *http.Request) {
 
 	entryID := r.FormValue("PostID")
 	if entryID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("WARNING: no entry Id passed in")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"WARNING: no entry Id passed in")
 		return
 	}
 
 	likeStatus, err := uses.IsLiked(client.Eclient, entryID, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	if likeStatus == true {
 		err := uses.UserUnlikeEntry(client.Eclient, entryID, docID.(string))
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	} else {
 		err := uses.UserLikeEntry(client.Eclient, entryID, docID.(string))
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 
 	entry, err := get.EntryByID(client.Eclient, entryID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	data, err := json.Marshal(len(entry.Likes))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

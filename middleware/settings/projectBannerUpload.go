@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"log"
 	"net/http"
 	"time"
 
@@ -26,8 +25,8 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	//Get the project and member
 	proj, member, err1 := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err1 != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err, "Project or Member not found")
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s Project or Member not found", err)
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
@@ -43,27 +42,27 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 				//Update the project banner
 				err = uses.DeleteFromS3(proj.Banner)
 				if err != nil {
-					log.SetFlags(log.LstdFlags | log.Lshortfile)
-					log.Println(err)
+
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				}
 
 				url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-"+time.Now().String()+"-banner")
 				if err != nil {
-					log.SetFlags(log.LstdFlags | log.Lshortfile)
-					log.Println(err)
+
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				}
 				err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", url)
 				if err != nil {
-					log.SetFlags(log.LstdFlags | log.Lshortfile)
-					log.Println(err)
+
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				}
 			} else {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println("Invalid file upload")
+
+				client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid file upload")
 			}
 		} else {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("You do not have permission to change event banner")
+
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "You do not have permission to change event banner")
 		}
 	case http.ErrMissingFile:
 		blob := r.FormValue("banner-data")
@@ -71,31 +70,31 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 			//Update the project banner
 			err = uses.DeleteFromS3(proj.Banner)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 
 			url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-"+time.Now().String()+"-banner")
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 			err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", url)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			} else {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err, "Invalid file upload")
+
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s Invalid file upload", err)
 			}
 		} else {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err, "You do not have permission to change event banner")
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s You do not have permission to change event banner", err)
 		}
 
 	default:
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	time.Sleep(2 * time.Second)

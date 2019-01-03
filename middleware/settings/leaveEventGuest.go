@@ -1,9 +1,7 @@
 package settings
 
 import (
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -18,8 +16,7 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(test1)
+
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -30,9 +27,8 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 
 	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	var canLeave = false
@@ -55,9 +51,8 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 
 	err = post.DeleteGuest(client.Eclient, evntID, leavingUser)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)

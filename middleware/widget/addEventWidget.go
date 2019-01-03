@@ -2,7 +2,7 @@ package widget
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	getEvnt "github.com/sea350/ustart_go/get/event"
@@ -25,24 +25,24 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 
 	evnt, member, err := getEvnt.EventAndMember(client.Eclient, r.FormValue("eventWidget"), test1.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	if uses.HasEventPrivilege("widget", evnt.PrivilegeProfiles, member) {
 
 		/* empty eventWidget */
 		if r.FormValue("eventWidget") == `` {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("Event ID Missing")
+			
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Event ID Missing")
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 			return
 		}
 
 		newWidget, err := ProcessWidgetForm(r)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 		}
 
@@ -50,22 +50,22 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 		if r.FormValue("editID") == `0` {
 			err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, false, true)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 		} else {
 			err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 
 			fmt.Println("line 60, ", err)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 		}
 		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	} else {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("You do not have the privilege to add a widget to this event. Check your privilege. ")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have the privilege to add a widget to this event. Check your privilege. ")
 		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 	}
 }

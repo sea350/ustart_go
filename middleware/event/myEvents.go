@@ -1,7 +1,7 @@
 package event
 
 import (
-	"log"
+	
 	"net/http"
 
 	getEvent "github.com/sea350/ustart_go/get/event"
@@ -26,8 +26,8 @@ func MyEvents(w http.ResponseWriter, r *http.Request) {
 
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	for _, eventInfo := range userstruct.Events {
@@ -47,8 +47,8 @@ func MyEvents(w http.ResponseWriter, r *http.Request) {
 		}
 		head, err := uses.ConvertEventToFloatingHead(client.Eclient, eventInfo.EventID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		heads = append(heads, head)
 

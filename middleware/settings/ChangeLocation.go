@@ -2,9 +2,9 @@ package settings
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/microcosm-cc/bluemonday"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -27,9 +27,9 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 	// stateInit := userstruct.Location.StateVis
 	// zipInit := userstruct.Location.ZipVis
 	// if err != nil {
-	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	// 	dir, _ := os.Getwd()
-	// 	log.Println(dir, err)
+	// 	
+	// 	_ := os.Getwd()
+	// 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+err)
 	// }
 	r.ParseForm()
 	p := bluemonday.UGCPolicy()
@@ -66,9 +66,9 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.ChangeLocation(client.Eclient, session.Values["DocID"].(string), countryP, conBool, stateP, sBool, cityP, cBool, zipP, zBool)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	// client.ClientSide{countryInit, cityInit, stateInit, zipInit}
 	http.Redirect(w, r, "/Settings/#loccollapse", http.StatusFound)

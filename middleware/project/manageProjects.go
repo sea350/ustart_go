@@ -1,9 +1,9 @@
 package project
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	getProj "github.com/sea350/ustart_go/get/project"
 	get "github.com/sea350/ustart_go/get/user"
@@ -26,17 +26,17 @@ func ManageProjects(w http.ResponseWriter, r *http.Request) {
 
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	for _, projectInfo := range userstruct.Projects {
 		var isAdmin = false
 		proj, err := getProj.ProjectByID(client.Eclient, projectInfo.ProjectID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 
 		for _, memberInfo := range proj.Members {
@@ -51,9 +51,9 @@ func ManageProjects(w http.ResponseWriter, r *http.Request) {
 		}
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projectInfo.ProjectID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		heads = append(heads, head)
 	}

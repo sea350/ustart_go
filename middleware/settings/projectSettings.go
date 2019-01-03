@@ -1,7 +1,7 @@
 package settings
 
 import (
-	"log"
+	
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -21,9 +21,9 @@ func Project(w http.ResponseWriter, r *http.Request) {
 	// projURL, err := get.ProjectByID(client.Eclient, r.FormValue("projectID"))
 	project, err := uses.AggregateProjectData(client.Eclient, projURL, test1.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		
 
-		log.Println(err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	var isAdmin = false

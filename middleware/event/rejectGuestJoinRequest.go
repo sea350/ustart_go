@@ -2,7 +2,7 @@ package event
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -20,27 +20,27 @@ func RejectEventGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 
 	evntID := r.FormValue("eventID")
 	if evntID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Critical information not passed in")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Critical information not passed in")
 		return
 	}
 	newMemberID := r.FormValue("userID")
 	if newMemberID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Critical information not passed in")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Critical information not passed in")
 		return
 	}
 	// classification, err := strconv.Atoi(r.FormValue("classification"))
 	// if err != nil {
-	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	// 	log.Println(err)
+	// 	
+	// 	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	// 	return
 	// }
 
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newMemberID, 1)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

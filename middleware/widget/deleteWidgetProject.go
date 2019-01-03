@@ -1,7 +1,7 @@
 package widget
 
 import (
-	"log"
+	
 	"net/http"
 
 	getProj "github.com/sea350/ustart_go/get/project"
@@ -24,8 +24,8 @@ func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 	projectURL := r.FormValue("deleteProjectURL")
 	widgetID := r.FormValue("deleteID")
 	if projectURL == `` || widgetID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Critical information was not passed in.")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Critical information was not passed in.")
 		return
 	}
 
@@ -35,8 +35,8 @@ func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 
 	project, member, err := getProj.ProjAndMember(client.Eclient, id, test1.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
@@ -44,12 +44,12 @@ func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 		_, err := get.WidgetByID(client.Eclient, widgetID)
 		err = uses.RemoveWidget(client.Eclient, widgetID, true, false)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	} else {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("You do not have the privilege to add a widget to this project. Check your privilege.")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have the privilege to add a widget to this project. Check your privilege.")
 	}
 
 }
