@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"log"
+	
 	"net/http"
-	"os"
+	
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -36,9 +36,9 @@ func FindEventMember(w http.ResponseWriter, r *http.Request) {
 		Do(ctx)
 
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	if err == nil {
@@ -67,9 +67,9 @@ func FindEventProject(w http.ResponseWriter, r *http.Request) {
 
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 
 	}
 

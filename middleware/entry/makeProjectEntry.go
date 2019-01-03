@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html"
-	"log"
+	
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/project"
@@ -31,8 +31,8 @@ func MakeProjectEntry(w http.ResponseWriter, r *http.Request) {
 	proj, member, err := get.ProjAndMember(client.Eclient, projectID, docID.(string))
 
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	if uses.HasPrivilege("post", proj.PrivilegeProfiles, member) {
@@ -41,25 +41,25 @@ func MakeProjectEntry(w http.ResponseWriter, r *http.Request) {
 
 		entryID, err := postEntry.IndexEntry(client.Eclient, entry)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 
 		err = post.AppendEntryID(client.Eclient, projectID, entryID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 
 		jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, entryID, docID.(string), true)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		data, err := json.Marshal(jEntry)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		fmt.Fprintln(w, string(data))
 	}

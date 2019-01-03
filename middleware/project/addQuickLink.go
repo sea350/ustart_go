@@ -2,9 +2,8 @@ package project
 
 import (
 	"html"
-	"log"
+
 	"net/http"
-	"os"
 
 	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/project"
@@ -27,32 +26,30 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	p := bluemonday.UGCPolicy()
 	cleanProjHTML := p.Sanitize(r.FormValue("projectLink"))
 	if len(cleanProjHTML) == 0 {
-		log.Println("Link cannot be blank")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Link cannot be blank")
 	}
 	isValid := uses.ValidLink(cleanProjHTML)
 	if !isValid {
-		log.Println("Invalid link provided")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid link provided")
 		return
 	}
 	cleanTitle := p.Sanitize(r.FormValue("projectLinkDesc"))
 	if len(cleanTitle) == 0 {
-		log.Println("Title cannot be blank")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Title cannot be blank")
 	}
 	proj.QuickLinks = append(proj.QuickLinks, types.Link{Name: html.EscapeString(cleanTitle), URL: html.EscapeString(cleanProjHTML)})
 
 	err = post.UpdateProject(client.Eclient, ID, "QuickLinks", proj.QuickLinks)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 }

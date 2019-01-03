@@ -1,9 +1,9 @@
 package settings
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	get "github.com/sea350/ustart_go/get/event"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -26,9 +26,9 @@ func ChangeEventMemberClass(w http.ResponseWriter, r *http.Request) {
 
 	event, err := get.EventByID(client.Eclient, eventID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	var isCreator, _ = uses.IsEventLeader(client.Eclient, eventID, test1.(string))
@@ -53,14 +53,14 @@ func ChangeEventMemberClass(w http.ResponseWriter, r *http.Request) {
 				if member.Role != 0 && newRank != "Creator" {
 					err = post.UpdateEvent(client.Eclient, eventID, "Members", event.Members)
 				} else {
-					log.Println("You do not have permission to change member class of this event")
+							client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have permission to change member class of this event")
 				}
 			}
 
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 
 			}
 		}

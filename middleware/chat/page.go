@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"log"
+	
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -24,8 +24,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 
 	valid, _, _, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	if !valid {
 		http.Redirect(w, r, "/404/", http.StatusFound)

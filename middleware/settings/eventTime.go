@@ -2,9 +2,9 @@ package settings
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
-	"os"
+	
 	"strconv"
 	"time"
 
@@ -48,9 +48,9 @@ func EventTime(w http.ResponseWriter, r *http.Request) {
 	//TODO: DocID
 	err = uses.ChangeEventTime(client.Eclient, r.FormValue("eventID"), Sdate, Edate)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	//TODO: Add in right URL
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)

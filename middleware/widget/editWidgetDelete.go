@@ -2,9 +2,9 @@ package widget
 
 import (
 	"html/template"
-	"log"
+	
 	"net/http"
-	"os"
+	
 	"strings"
 
 	get "github.com/sea350/ustart_go/get/widget"
@@ -38,17 +38,17 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	oldWidget, err := get.WidgetByID(client.Eclient, r.FormValue("editID"))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	if len(oldWidget.Data) == 1 && (oldWidget.Classification != 15 && oldWidget.Classification != 16) {
 		err = uses.RemoveWidget(client.Eclient, r.FormValue("editID"), isProject, isEvent)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		if isProject {
 			http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
@@ -72,7 +72,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	var newArr []template.HTML
 	if target == -1 {
-		log.Println("Error: middleware/widget/editWidgetDelete line 61 - deleted object not found")
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Error: middleware/widget/editWidgetDelete line 61 - deleted object not found")
 		newArr = oldWidget.Data
 	} else if (target + 1) < len(oldWidget.Data) {
 		newArr = append(oldWidget.Data[:target], oldWidget.Data[(target+1):]...)
@@ -82,9 +82,9 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 
 	err = uses.EditWidget(client.Eclient, r.FormValue("editID"), newArr)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	if isProject {
 		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)

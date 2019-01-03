@@ -2,7 +2,7 @@ package widget
 
 import (
 	"encoding/json"
-	"log"
+	
 	"net/http"
 
 	getProj "github.com/sea350/ustart_go/get/project"
@@ -26,8 +26,8 @@ func SortProjectWidgets(w http.ResponseWriter, r *http.Request) {
 	sortedWidgets := r.FormValue("sortedWidgets")
 	projectURL := r.FormValue("pageID")
 	if projectURL == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Project URL not passed in")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Project URL not passed in")
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
@@ -37,33 +37,33 @@ func SortProjectWidgets(w http.ResponseWriter, r *http.Request) {
 	arr := []string{}
 	err := json.Unmarshal([]byte(sortedWidgets), &arr)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	id, err := getProj.ProjectIDByURL(client.Eclient, projectURL)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	project, member, err := getProj.ProjAndMember(client.Eclient, id, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	if uses.HasPrivilege("widget", project.PrivilegeProfiles, member) {
 		err = post.UpdateProject(client.Eclient, id, "Widgets", arr)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	} else {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("You do not have the privilege to add a widget to this project. Check your privilege.")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have the privilege to add a widget to this project. Check your privilege.")
 	}
 }

@@ -1,7 +1,7 @@
 package project
 
 import (
-	"log"
+	
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/project"
@@ -22,27 +22,27 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	ID := r.FormValue("projectID")
 	if ID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Crucial data was not passed in, now exiting")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Crucial data was not passed in, now exiting")
 		return
 	}
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	deleteTitle := r.FormValue("deleteProjectLinkDesc")
 	deleteURL := r.FormValue("deleteProjectLink")
 
 	// if deleteTitle == `` {
-	// 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	// 	log.Println("WARNING: link title is blank")
+	// 	
+	// 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"WARNING: link title is blank")
 	// }
 	if deleteURL == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Crucial data was not passed in, now exiting")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Crucial data was not passed in, now exiting")
 		return
 	}
 
@@ -51,8 +51,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	if len(proj.QuickLinks) <= 1 {
 		err := post.UpdateProject(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		return
 	}
@@ -67,8 +67,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if target == -1 {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Deleted object not found")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Deleted object not found")
 		return
 	} else if (target + 1) < len(proj.QuickLinks) {
 		newArr = append(proj.QuickLinks[:target], proj.QuickLinks[(target+1):]...)
@@ -78,8 +78,8 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	err = post.UpdateProject(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	return

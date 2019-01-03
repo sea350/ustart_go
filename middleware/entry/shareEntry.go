@@ -2,7 +2,7 @@ package entry
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -30,15 +30,15 @@ func ShareEntry(w http.ResponseWriter, r *http.Request) {
 
 	replyID, err := postEntry.IndexEntry(client.Eclient, entry)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	err = postEntry.AppendShareID(client.Eclient, originalPost, replyID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, originalPost)

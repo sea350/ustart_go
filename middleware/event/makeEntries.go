@@ -3,7 +3,7 @@ package event
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -25,15 +25,15 @@ func MakeEventEntry(w http.ResponseWriter, r *http.Request) {
 
 	eventID := p.Sanitize(r.FormValue("docID"))
 	if eventID == "" {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Critical data not passed in")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Critical data not passed in")
 	}
 	newContent := []rune(p.Sanitize(r.FormValue("text")))
 
 	event, err := getEvent.EventByID(client.Eclient, eventID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
@@ -51,21 +51,21 @@ func MakeEventEntry(w http.ResponseWriter, r *http.Request) {
 
 	newID, err := uses.EventCreatesEntry(client.Eclient, eventID, docID.(string), newContent)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, newID, docID.(string), true)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	data, err := json.Marshal(jEntry)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, string(data))

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	
 	"net/http"
 	"strings"
 
@@ -55,8 +55,8 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		}
 		totalHits, scrollID, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
 		if err != nil && err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		sendThis := make(map[string]interface{})
 		sendThis["TotalHits"] = totalHits
@@ -64,8 +64,8 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		sendThis["Results"] = results
 		data, err := json.Marshal(sendThis)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		fmt.Fprintln(w, string(data))
 	}
@@ -97,8 +97,8 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		}
 		totalHits, scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
 		if err != nil && err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		sendThis := make(map[string]interface{})
 		sendThis["TotalHits"] = totalHits
@@ -106,8 +106,8 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		sendThis["Results"] = results
 		data, err := json.Marshal(sendThis)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		fmt.Fprintln(w, string(data))
 	}
@@ -129,8 +129,8 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		}
 		totalHits, scrollID, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, scrollID)
 		if err != nil && err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		sendThis := make(map[string]interface{})
 		sendThis["TotalHits"] = totalHits
@@ -138,21 +138,21 @@ func AjaxLoadNext(w http.ResponseWriter, r *http.Request) {
 		sendThis["Results"] = results
 		data, err := json.Marshal(sendThis)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		fmt.Fprintln(w, string(data))
 	}
 	if filter == `skills` {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))
 		if err != nil && err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		data, err := json.Marshal(results)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		fmt.Fprintln(w, string(data))
 	}

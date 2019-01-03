@@ -1,7 +1,7 @@
 package event
 
 import (
-	"log"
+	
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/event"
@@ -24,23 +24,23 @@ func NewGuest(w http.ResponseWriter, r *http.Request) {
 
 	event, err := get.EventByID(client.Eclient, eventID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 
 	}
 
 	for i := range event.Guests {
 		if event.Guests[i].GuestID == sessionID.(string) {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("User attempting to join is already a guest")
+			
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"User attempting to join is already a guest")
 			http.Redirect(w, r, "/Event/"+event.URLName, http.StatusFound)
 			return
 		}
 	}
 	err = post.AppendGuest(client.Eclient, eventID, types.EventGuests{GuestID: sessionID.(string), Status: 1})
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	http.Redirect(w, r, "/Event/"+event.URLName, http.StatusFound)
 	return

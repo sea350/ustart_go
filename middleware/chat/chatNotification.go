@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"log"
+	
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -67,8 +67,8 @@ func HandleChatAlert() {
 		for clnt := range chatClients[alert.UserID] {
 			head, err := uses.ConvertChatToFloatingHead(client.Eclient, alert.ChatID, alert.UserID)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				continue
 			}
 

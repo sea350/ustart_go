@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	
 	"net/http"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -30,22 +30,22 @@ func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 
 	myUser, err := get.UserByID(client.Eclient, uID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	_, follDoc, err := getFollow.ByID(client.Eclient, uID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	sID, heads, hits, err := properloading.ScrollSuggestedProjects(client.Eclient, myUser.Tags, myUser.Projects, follDoc.ProjectFollowing, uID, scrollID)
 	if err != nil && err != io.EOF {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	results["scrollID"] = sID
@@ -55,8 +55,8 @@ func AjaxLoadSuggestedProjects(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(results)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, string(data))

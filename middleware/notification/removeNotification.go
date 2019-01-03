@@ -1,7 +1,7 @@
 package notification
 
 import (
-	"log"
+	
 	"net/http"
 
 	"github.com/sea350/ustart_go/middleware/client"
@@ -19,14 +19,14 @@ func RemoveNotification(w http.ResponseWriter, r *http.Request) {
 
 	notifID := r.FormValue("notifID")
 	if notifID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("Blank notification ID")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Blank notification ID")
 		return
 	}
 
 	err := post.UpdateNotification(client.Eclient, notifID, "Invisible", true)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 }

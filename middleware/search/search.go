@@ -2,7 +2,7 @@ package search
 
 import (
 	"io"
-	"log"
+	
 	"net/http"
 	"strings"
 
@@ -50,8 +50,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		numHits, scrollID, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil && err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		cs.ListOfHeads = results
 		cs.ScrollID = scrollID
@@ -85,8 +85,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		numHits, scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil && err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		cs.ListOfHeads = results
 		cs.ScrollID = scrollID
@@ -110,8 +110,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		numHits, scrollID, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil && err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		cs.ListOfHeads = results
 		cs.ScrollID = scrollID
@@ -120,8 +120,8 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	if filter == `skills` {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))
 		if err != nil && err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		cs.ListOfHeads = results
 	}

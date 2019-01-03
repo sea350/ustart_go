@@ -2,9 +2,9 @@ package settings
 
 import (
 	"fmt"
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/project"
@@ -26,7 +26,7 @@ func ChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	projName := p.Sanitize(r.FormValue("pname"))
 	if len(projName) < 1 {
-		log.Println("Project name cannot be blank!")
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Project name cannot be blank!")
 		return
 	}
 	projDesc := []rune(p.Sanitize(r.FormValue("inputDesc")))
@@ -38,9 +38,9 @@ func ChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 	//TODO: DocID
 	err = uses.ProjectNameAndDescription(client.Eclient, r.FormValue("projectID"), projName, projDesc)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	//TODO: Add in right URL
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

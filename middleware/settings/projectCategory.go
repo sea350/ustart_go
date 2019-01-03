@@ -1,9 +1,9 @@
 package settings
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -27,16 +27,16 @@ func ProjectCategory(w http.ResponseWriter, r *http.Request) {
 	projID := r.FormValue("projectID")
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	err = uses.ChangeProjectCategory(client.Eclient, projID, newCategory)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

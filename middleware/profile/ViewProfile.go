@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"log"
+	
 	"net/http"
 	"strings"
 
@@ -31,23 +31,23 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	userstruct, errMessage, _, err := uses.UserPage(client.Eclient, pageUserName, docID.(string))
 	if err != nil {
-		log.Println(err)
-		log.Println("User Error: " + errMessage)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"User Error: " + errMessage)
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
 
 	widgets, errs := uses.LoadWidgets(client.Eclient, userstruct.UserWidgets)
 	if len(errs) != 0 {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("one or more errors have occured in loading widgets")
-		log.Println(errs)
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"one or more errors have occured in loading widgets")
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+errs)
 	}
 
 	jEntries, err := uses.LoadEntries(client.Eclient, userstruct.EntryIDs, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	followingState := false
 
@@ -57,21 +57,21 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	follExists, err := getFollow.FollowExists(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	if !follExists {
 		err = postFollow.IndexFollow(client.Eclient, session.Values["DocID"].(string))
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 
 	_, follDoc, err := getFollow.ByID(client.Eclient, id)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	_, exist1 := follDoc.UserFollowers[session.Values["DocID"].(string)]
 	_, exist2 := follDoc.ProjectFollowers[session.Values["DocID"].(string)]
@@ -107,8 +107,8 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 
 	viewingDOC, err := get.IDByUsername(client.Eclient, strings.ToLower(pageUserName))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	temp := string(userstruct.Description)
@@ -116,16 +116,16 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	numberFollowers := len(follDoc.UserFollowers) + len(follDoc.ProjectFollowers) + len(follDoc.EventFollowers)
 
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	var projHeads []types.FloatingHead
 	for _, projID := range userstruct.Projects {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projID.ProjectID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			continue
 		}
 		head.Followed = projID.Visible

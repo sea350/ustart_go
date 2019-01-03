@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -27,24 +27,24 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 	/*
 		evnt, err := get.EventByID(client.Eclient, wallID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 
 
 			entries, err := uses.LoadEntries(client.Eclient, evnt.EntryIDs)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 	*/
 
 	res, entries, total, err := scrollpkg.ScrollPageEvents(client.Eclient, []string{wallID}, docID.(string), "")
 	if err != nil && err != io.EOF {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	results := make(map[string]interface{})
@@ -54,8 +54,8 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(results)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, string(data))

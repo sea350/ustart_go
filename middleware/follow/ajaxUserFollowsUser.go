@@ -1,7 +1,7 @@
 package follow
 
 import (
-	"log"
+	
 	"net/http"
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
@@ -34,23 +34,23 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "user")
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	if !isFollowing {
 		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "user")
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			return
 		}
 
 		err = postFollow.NewUserFollow(client.Eclient, followingID, "followers", ID.(string), false, "user")
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			return
 		}
 
@@ -58,22 +58,22 @@ func AjaxUserFollowsUser(w http.ResponseWriter, r *http.Request) {
 		notif.NewFollower(followingID, ID.(string))
 		_, err := post.IndexNotification(client.Eclient, notif)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			return
 		}
 	} else {
 		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID, "user")
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			return
 		}
 
 		err = postFollow.RemoveUserFollow(client.Eclient, followingID, "followers", ID.(string), "user")
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 

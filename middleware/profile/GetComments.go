@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -25,13 +25,13 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("PostID")
 	_, arrayofComments, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil && err != errors.New("This entry is not visible") {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	data, err := json.Marshal(arrayofComments)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

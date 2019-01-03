@@ -3,7 +3,7 @@ package entry
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -34,20 +34,20 @@ func MakeUserEntry(w http.ResponseWriter, r *http.Request) {
 
 	entryID, err := postEntry.IndexEntry(client.Eclient, entry)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, entryID, docID.(string), true)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	data, err := json.Marshal(jEntry)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

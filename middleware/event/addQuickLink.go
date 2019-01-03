@@ -1,9 +1,9 @@
 package event
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	"github.com/microcosm-cc/bluemonday"
 	get "github.com/sea350/ustart_go/get/event"
@@ -24,9 +24,9 @@ func AddEventQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	p := bluemonday.UGCPolicy()
 
@@ -34,8 +34,8 @@ func AddEventQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	err = post.UpdateEvent(client.Eclient, ID, "QuickLinks", evnt.QuickLinks)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 }

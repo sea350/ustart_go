@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"log"
+	
 	"net/http"
 	"sync"
 	"time"
@@ -57,8 +57,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	//security checks before socket is opened
 	valid, actualChatID, dmTargetUserID, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	if !valid {
 		return
@@ -102,8 +102,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 		err = postChat.MarkAsRead(client.Eclient, docID.(string), actualChatID)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 
@@ -125,8 +125,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		if actualChatID == `` && chatURL != `` {
 			newConvoID, err := uses.ChatFirst(client.Eclient, msg, docID.(string), dmTargetUserID)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 			notifyThese = append(notifyThese, dmTargetUserID)
 			notifyThese = append(notifyThese, docID.(string))
@@ -139,8 +139,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		} else if actualChatID != `` && chatURL != `` {
 			notifyThese, err = uses.ChatSend(client.Eclient, msg)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 		}
 		notif.ChatID = actualChatID
@@ -157,7 +157,7 @@ func handleMessages() {
 
 			err := clnt.WriteJSON(msg)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				
 				log.Printf("error: %v", err)
 				clnt.Close()
 				delete(chatroom[msg.ConversationID].sockets, clnt)
@@ -165,8 +165,8 @@ func handleMessages() {
 			}
 			err = postChat.MarkAsRead(client.Eclient, docID, msg.ConversationID)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
+				
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 
 		}

@@ -1,7 +1,7 @@
 package event
 
 import (
-	"log"
+	
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -24,8 +24,8 @@ func DeleteEventQuickLink(w http.ResponseWriter, r *http.Request) {
 	ID := r.FormValue("eventID")
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	p := bluemonday.UGCPolicy()
 
@@ -37,8 +37,8 @@ func DeleteEventQuickLink(w http.ResponseWriter, r *http.Request) {
 	if len(evnt.QuickLinks) == 1 {
 		err := post.UpdateEvent(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 		return
@@ -53,8 +53,8 @@ func DeleteEventQuickLink(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if target == -1 {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("deleted object not found")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"deleted object not found")
 		newArr = evnt.QuickLinks
 	} else if (target + 1) < len(evnt.QuickLinks) {
 		newArr = append(evnt.QuickLinks[:target], evnt.QuickLinks[(target+1):]...)
@@ -64,8 +64,8 @@ func DeleteEventQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	err = post.UpdateEvent(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)

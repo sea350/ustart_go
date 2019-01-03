@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -22,8 +22,8 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 
 	wallID := r.FormValue("userID")
 	if wallID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("WARNING: docID not received")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"WARNING: docID not received")
 		return
 	}
 	scrollID := r.FormValue("scrollID")
@@ -31,8 +31,8 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, wallID, test1.(string), scrollID)
 	if err != nil {
 		if err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err) //we might need special treatment for EOF error
+			
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err) //we might need special treatment for EOF error
 		}
 	}
 
@@ -43,8 +43,8 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(results)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	fmt.Fprintln(w, string(data))

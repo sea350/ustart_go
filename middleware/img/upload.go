@@ -2,9 +2,9 @@ package img
 
 import (
 	"encoding/base64"
-	"log"
+	
 	"net/http"
-	"os"
+	
 	"strings"
 )
 
@@ -27,8 +27,8 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("debug text " + arr[1])
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"debug text " + arr[1])
 	//convert decoder to file
 	f, err := os.Create("myfilename.png")
 	if err != nil {

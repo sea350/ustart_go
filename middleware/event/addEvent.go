@@ -2,9 +2,9 @@ package event
 
 import (
 	"errors"
-	"log"
+	
 	"net/http"
-	"os"
+	
 	"strconv"
 	"time"
 
@@ -75,8 +75,8 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 
 	if title != `` {
 		if !uses.ValidUsername(customURL) {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("Invalid custom event URL")
+			
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Invalid custom event URL")
 			cs.ErrorStatus = true
 			cs.ErrorOutput = errors.New("Invalid custom event URL")
 			client.RenderSidebar(w, r, "template2-nil")
@@ -86,9 +86,9 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 		}
 		url, err := uses.CreateEvent(client.Eclient, title, desc, test1.(string), category, eventLocation, startDateOfEvent, endDateOfEvent, college, customURL)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		} else {
 			time.Sleep(2 * time.Second)
 			http.Redirect(w, r, "/Event/"+url, http.StatusFound)

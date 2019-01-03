@@ -1,7 +1,7 @@
 package project
 
 import (
-	"log"
+	
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/project"
@@ -23,15 +23,15 @@ func Nuke(w http.ResponseWriter, r *http.Request) {
 
 	projID := r.FormValue("projectID")
 	if projID == `` {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("No project ID passed in")
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"No project ID passed in")
 		return
 	}
 
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
@@ -46,13 +46,13 @@ func Nuke(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !permission {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println("User ID " + docID.(string) + "does not have authorization to delete project " + projID)
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"User ID " + docID.(string) + "does not have authorization to delete project " + projID)
 		return
 	}
 	err = post.InvisProject(client.Eclient, projID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+		
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 }

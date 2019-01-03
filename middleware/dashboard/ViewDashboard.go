@@ -1,9 +1,9 @@
 package dashboard
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	userGet "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -20,9 +20,9 @@ func ViewDashboard(w http.ResponseWriter, r *http.Request) {
 
 	userstruct, err := userGet.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	// fmt.Println("URL IS ", r.URL.Path[7:])
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}

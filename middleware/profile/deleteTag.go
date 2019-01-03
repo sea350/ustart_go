@@ -1,9 +1,9 @@
 package profile
 
 import (
-	"log"
+	
 	"net/http"
-	"os"
+	
 
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -24,9 +24,9 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		dir, _ := os.Getwd()
-		log.Println(dir, err)
+		
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	deleteTag := r.FormValue("UNKNOWN")
@@ -37,9 +37,9 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		if len(usr.Tags) == 1 {
 			err := post.UpdateUser(client.Eclient, ID, "Tags", newArr)
 			if err != nil {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				dir, _ := os.Getwd()
-				log.Println(dir, err)
+				
+		
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 			return
 		}
@@ -54,8 +54,8 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if target == -1 {
-			log.Println("Error: middleware/profile/deleteTag line 54")
-			log.Println("Deleted object not found")
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Error: middleware/profile/deleteTag line 54")
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Deleted object not found")
 			newArr = usr.Tags
 		} else if (target + 1) < len(usr.Tags) {
 			newArr = append(usr.Tags[:target], usr.Tags[(target+1):]...)
@@ -65,9 +65,9 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 		err = post.UpdateUser(client.Eclient, ID, "Tags", newArr)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			dir, _ := os.Getwd()
-			log.Println(dir, err)
+			
+	
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
 }
