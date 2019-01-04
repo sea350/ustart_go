@@ -3,7 +3,6 @@ package widget
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"html/template"
 
 	"net/http"
@@ -288,7 +287,6 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//github widget username
 
 		username := template.HTML(r.FormValue("username"))
-		fmt.Print("username", username)
 		count := template.HTML(r.FormValue("git-count"))
 		data = []template.HTML{username, count}
 		classification = 16

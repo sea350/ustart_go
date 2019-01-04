@@ -1,10 +1,7 @@
 package widget
 
 import (
-	"fmt"
-	
 	"net/http"
-	
 
 	"github.com/sea350/ustart_go/get/widget"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -26,12 +23,10 @@ func DeleteWidgetEvent(w http.ResponseWriter, r *http.Request) {
 	_, err := get.WidgetByID(client.Eclient, r.FormValue("deleteID"))
 	err = uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false, true)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
-	fmt.Print("eventURL", eventURL)
 	http.Redirect(w, r, "/Event/"+eventURL, http.StatusFound)
 	return
 }

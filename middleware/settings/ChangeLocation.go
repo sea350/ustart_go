@@ -24,9 +24,7 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 	// zipInit := userstruct.Location.ZipVis
 	// if err != nil {
 	//
-	// 	_ := os.Getwd()
-	// 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+err)
-	// }
+
 	r.ParseForm()
 	p := bluemonday.UGCPolicy()
 	countryP := r.FormValue("country")
@@ -34,7 +32,6 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 
 	countryPV := r.FormValue("countryVis")
 	countryPV = p.Sanitize(countryPV)
-	//   fmt.Println(countryPV)
 	stateP := r.FormValue("state")
 	stateP = p.Sanitize(stateP)
 	statePV := r.FormValue("stateVis")

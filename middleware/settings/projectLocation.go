@@ -1,8 +1,6 @@
 package settings
 
 import (
-	"fmt"
-	
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -17,7 +15,6 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -40,22 +37,18 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	city := cleanCity
 	cleanZip := p.Sanitize(r.FormValue("zip"))
 	zip := cleanZip
-	//   fmt.Println(blob)
 
 	projID := r.FormValue("projectID")
 
 	proj, err := get.ProjectByID(client.Eclient, projID)
-	//fmt.Println(reflect.TypeOf(blob))
 	//TODO: DocID
 
 	err = uses.ChangeProjectLocation(client.Eclient, projID, country, state, city, zip, vis)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
-	fmt.Println("/Projects/", proj.URLName)
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 	return
 

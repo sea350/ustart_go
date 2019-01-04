@@ -1,8 +1,6 @@
 package settings
 
 import (
-	"fmt"
-	
 	"net/http"
 	"time"
 
@@ -16,7 +14,6 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/Settings/", http.StatusFound)
 		return
 	}
@@ -33,65 +30,65 @@ func ImageUpload(w http.ResponseWriter, r *http.Request) {
 			//duplicate in AWS with docID as filename
 			usr, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 			if err != nil {
-				
+
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 			err = uses.DeleteFromS3(usr.Avatar)
 			if err != nil {
-				
+
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			}
 
 			url, err := uses.UploadToS3(blob, test1.(string)+"-"+time.Now().String())
 			if err != nil {
-				
+
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 				http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
 				return
 			}
 			err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), url, true, ``, "Avatar")
 			if err != nil {
-				
+
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			} else {
 				session.Values["Avatar"] = url
 				session.Save(r, w)
 			}
 		} else {
-			
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"invalid file upload")
+
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "invalid file upload")
 		}
 	case http.ErrMissingFile:
 		blob := r.FormValue("image-data")
 		//duplicate in AWS with docID as filename
 		usr, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 		if err != nil {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 		err = uses.DeleteFromS3(usr.Avatar)
 		if err != nil {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 
 		url, err := uses.UploadToS3(blob, test1.(string)+"-"+time.Now().String())
 		if err != nil {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			http.Redirect(w, r, "/Settings/#avatarcollapse", http.StatusFound)
 			return
 		}
 		err = uses.ChangeAccountImagesAndStatus(client.Eclient, session.Values["DocID"].(string), url, true, ``, "Avatar")
 		if err != nil {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		} else {
 			session.Values["Avatar"] = url
 			session.Save(r, w)
 		}
 	default:
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 

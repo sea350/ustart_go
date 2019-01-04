@@ -1,8 +1,6 @@
 package settings
 
 import (
-	"fmt"
-	
 	"net/http"
 	"time"
 
@@ -19,7 +17,6 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -27,34 +24,34 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 	newURL := p.Sanitize(r.FormValue("purl"))
 	if len(newURL) < 1 {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"URL cannot be blank!")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "URL cannot be blank!")
 		return
 	}
 	projID := r.FormValue("projectID")
 
 	inUse, err := get.URLInUse(client.Eclient, newURL)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		return
 	}
 
 	if inUse {
-		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"URL IS IN USE, ERROR NOT PROPERLY HANDLED REDIRECTING TO PROJECT PAGE")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "URL IS IN USE, ERROR NOT PROPERLY HANDLED REDIRECTING TO PROJECT PAGE")
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
 
 	err = uses.ChangeProjectURL(client.Eclient, projID, newURL)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		time.Sleep(2 * time.Second)
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

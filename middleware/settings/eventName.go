@@ -1,10 +1,7 @@
 package settings
 
 import (
-	"fmt"
-	
 	"net/http"
-	
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -19,7 +16,6 @@ func EventChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -29,16 +25,11 @@ func EventChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 
 	cleanDesc := p.Sanitize(r.FormValue("inputDesc"))
 	evntDesc := []rune(cleanDesc)
-	//   fmt.Println(blob)
-	//fmt.Println(projName, projName)
 
-	//fmt.Println(reflect.TypeOf(blob))
 	evnt, err := get.EventByID(client.Eclient, r.FormValue("eventID"))
 	//TODO: DocID
 	err = uses.ChangeEventNameAndDescription(client.Eclient, r.FormValue("eventID"), evntName, evntDesc)
 	if err != nil {
-		
-
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	//TODO: Add in right URL

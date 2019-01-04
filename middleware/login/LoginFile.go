@@ -1,8 +1,6 @@
 package login
 
 import (
-	"fmt"
-
 	"net"
 	"net/http"
 	"strings"
@@ -81,7 +79,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 // func LoggedIn (w http.ResponseWriter, r *http.Request){
 // 	session, _ := client.Store.Get(r, "session_please")
-// 	//	fmt.Println(session.Values["FirstName"].(string))
 // 	cs := ClientSide{FirstName:session.Values["FirstName"].(string)}
 // 	session.Save(r, w)
 // 	renderTemplate(w,"template2-nil",cs)
@@ -106,23 +103,21 @@ func Error(w http.ResponseWriter, r *http.Request) {
 	var clientIP string
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+		client.Logger.Printf("userip: %q | err: %s \n", r.RemoteAddr, err)
 	}
 	userIP := net.ParseIP(ip)
 	if userIP == nil {
-		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+		client.Logger.Printf("userip: %q | err: %s \n", r.RemoteAddr, err)
 	} else {
 		clientIP = userIP.String()
 	}
 
 	successful, sessionInfo, err2 := uses.Login(client.Eclient, email, passwordb, clientIP)
 	if err2 != nil {
-		fmt.Println(err2)
-
+		client.Logger.Printf("userip: %q | err: %s \n", r.RemoteAddr, err2)
 	}
 
 	if successful == true {
-		fmt.Println("login successful")
 		session.Values["DocID"] = sessionInfo.DocID
 		session.Values["FirstName"] = sessionInfo.FirstName
 		session.Values["LastName"] = sessionInfo.LastName
@@ -136,13 +131,7 @@ func Error(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if successful == false {
-		fmt.Println("did not login successful")
-		var errorL bool
-		errorL = true
-		fmt.Println("errorL is ")
-		fmt.Print(errorL)
 		http.Redirect(w, r, "/loginerror-nil/", http.StatusFound)
-
 	}
 
 }
