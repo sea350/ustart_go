@@ -56,7 +56,6 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	//security checks before socket is opened
 	valid, actualChatID, dmTargetUserID, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
-
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	if !valid {
@@ -112,6 +111,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			delete(chatroom[actualChatID].sockets, ws)
 			break
 		}
