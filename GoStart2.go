@@ -35,7 +35,7 @@ func main() {
 	_, _ = http.Get(globals.SiteURL + ":" + globals.Port + "/KillUstartPlsNoUserinoCappucinoDeniro")
 	fs := http.FileServer(http.Dir(globals.HTMLPATH))
 	// http.Handle("/www/", http.StripPrefix("/www/", fs))
-	http.Handle("/aws_start/", http.StripPrefix("/aws_start/", fs))
+	http.Handle("/ustart_aws/", http.StripPrefix("/ustart_aws/", fs))
 	/*
 		The following are all the handlers we have so fart.
 	*/
