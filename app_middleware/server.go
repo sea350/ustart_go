@@ -33,9 +33,9 @@ func main() {
 	*/
 	//fs := http.FileServer(http.Dir("/home/rr2396/www/"))
 	_, _ = http.Get("http://ustart.today:" + currentPort + "/KillUstartPlsNoUserinoCappucinoDeniro")
-	fs := http.FileServer(http.Dir("/ustart/ustart_aws/"))
+	fs := http.FileServer(http.Dir("/ustart/ustart_front/"))
 	http.Handle("/www/", http.StripPrefix("/www/", fs))
-	http.Handle("/ustart_aws/", http.StripPrefix("/ustart_aws/", fs))
+	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
 
 	http.HandleFunc("/404/", fail.Fail)
 	http.HandleFunc("/KillUstartPlsNoUserinoCappucinoDeniro", fail.KillSwitch)

@@ -27,7 +27,7 @@ func main() {
 	_, _ = http.Get("http://ustart.today:" + livePort + "/KillUstartPlsNoUserinoCappucinoDeniro")
 	fs := http.FileServer(http.Dir(globals.HTMLPATH + ""))
 
-	http.Handle("/ustart_aws/", http.StripPrefix("/ustart_aws/", fs))
+	http.Handle("/ustart_front/", http.StripPrefix("/ustart_front/", fs))
 	/*
 		The following are all the handlers we have so fart.
 	*/

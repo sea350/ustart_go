@@ -18,7 +18,7 @@ const (
 	SiteURL = "http://ustart.today"
 
 	//HTMLPATH is how to get to the html filed from the working directory
-	HTMLPATH = "../ustart_aws/"
+	HTMLPATH = "../ustart_front/"
 
 	//MIME is a pokemon
 	MIME = "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
