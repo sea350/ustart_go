@@ -101,7 +101,6 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 		err = postChat.MarkAsRead(client.Eclient, docID.(string), actualChatID)
 		if err != nil {
-
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}
