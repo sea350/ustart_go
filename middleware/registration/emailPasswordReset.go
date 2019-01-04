@@ -38,7 +38,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		emailInUse, err := get.EmailInUse(client.Eclient, email)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("Email: "+email+" | err: %s", err)
 		}
 
 		if !emailInUse {
@@ -50,7 +50,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		token, err := uses.GenerateRandomString(32)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("Email: "+email+" | err: %s", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 			client.RenderSidebar(w, r, "templateNoUser2")
@@ -61,7 +61,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		userID, err := get.UserIDByEmail(client.Eclient, email)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("Email: "+email+" | err: %s", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 			client.RenderSidebar(w, r, "templateNoUser2")
@@ -72,7 +72,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", time.Now())
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+userID+" | err: %s", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 			client.RenderSidebar(w, r, "templateNoUser2")
@@ -83,7 +83,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", token)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+userID+" | err: %s", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 			client.RenderSidebar(w, r, "templateNoUser2")
@@ -94,7 +94,7 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 		user, err := get.UserByID(client.Eclient, userID)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+userID+" | err: %s", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 			client.RenderSidebar(w, r, "templateNoUser2")

@@ -2,7 +2,7 @@ package registration
 
 import (
 	"errors"
-	
+
 	"net/http"
 	"strings"
 	"time"
@@ -33,8 +33,8 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 	user, err := getUser.UserByEmail(client.Eclient, email)
 	if err != nil {
-		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+		client.Logger.Println("Email: "+email+" | err: %s", err)
 		cs.ErrorOutput = errors.New("A problem has occurred")
 		cs.ErrorStatus = true
 		client.RenderSidebar(w, r, "templateNoUser2")
@@ -46,8 +46,8 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
 		newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
 		if err != nil {
-			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+			client.Logger.Println("Email: "+email+" | err: %s", err)
 			cs.ErrorOutput = errors.New("A problem has occurred")
 			cs.ErrorStatus = true
 			client.RenderSidebar(w, r, "templateNoUser2")
@@ -57,8 +57,8 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 		userID, err := getUser.UserIDByEmail(client.Eclient, email)
 		if err != nil {
-			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+			client.Logger.Println("Email: "+email+" | err: %s", err)
 			cs.ErrorOutput = errors.New("A problem has occurred")
 			cs.ErrorStatus = true
 			client.RenderSidebar(w, r, "templateNoUser2")
@@ -68,8 +68,8 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 		err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
 		if err != nil {
-			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+			client.Logger.Println("DocID: "+userID+" | err: %s", err)
 			cs.ErrorOutput = errors.New("A problem has occurred")
 			cs.ErrorStatus = true
 			client.RenderSidebar(w, r, "templateNoUser2")
@@ -79,14 +79,14 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
 		if err != nil {
-			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+			client.Logger.Println("DocID: "+userID+" | err: %s", err)
 		}
 
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
 		if err != nil {
-			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+			client.Logger.Println("DocID: "+userID+" | err: %s", err)
 		}
 
 		http.Redirect(w, r, "/", http.StatusFound)
