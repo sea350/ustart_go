@@ -2,7 +2,6 @@ package registration
 
 import (
 	"errors"
-	"fmt"
 
 	"net/http"
 	"strconv"
@@ -117,8 +116,6 @@ func GuestSignup(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 
 	if test1 != nil {
-		fmt.Println(test1)
-		fmt.Println("this is debug code: guestRegistrationPage.go 105")
 		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
 		return
 	}

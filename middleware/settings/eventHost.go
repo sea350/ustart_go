@@ -1,10 +1,7 @@
 package settings
 
 import (
-	"fmt"
-	
 	"net/http"
-	
 
 	get "github.com/sea350/ustart_go/get/event"
 	getproj "github.com/sea350/ustart_go/get/project"
@@ -17,7 +14,6 @@ func EventHost(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["eventID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -26,14 +22,12 @@ func EventHost(w http.ResponseWriter, r *http.Request) {
 	evntID := r.FormValue("eventID")
 	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
-		panic(err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	_, err = getproj.ProjectByID(client.Eclient, projectID)
 	if err == nil {
 		err = uses.ChangeEventHost(client.Eclient, evntID, projectID)
 		if err != nil {
-			
-	
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 		}
 	}

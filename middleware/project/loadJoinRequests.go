@@ -35,9 +35,7 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 	for index, userID := range proj.MemberReqReceived {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
 		if err != nil {
-
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
-			fmt.Println(fmt.Sprintf("err: middleware/project/loadjoinrequest, Line 35, index %d", index))
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s | index %d", err, index)
 		}
 		heads = append(heads, head)
 	}

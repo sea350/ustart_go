@@ -1,10 +1,7 @@
 package settings
 
 import (
-	"fmt"
-	
 	"net/http"
-	
 
 	"github.com/microcosm-cc/bluemonday"
 
@@ -19,7 +16,6 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -31,14 +27,12 @@ func EventLocation(w http.ResponseWriter, r *http.Request) {
 	city := p.Sanitize(r.FormValue("city"))
 	street := p.Sanitize(r.FormValue("street"))
 	zip := p.Sanitize(r.FormValue("zip"))
-	//   fmt.Println(blob)
 
 	evnt, err := get.EventByID(client.Eclient, r.FormValue("eventID"))
-	//fmt.Println(reflect.TypeOf(blob))
+
 	//TODO: DocID
 	err = uses.ChangeEventLocation(client.Eclient, r.FormValue("eventID"), country, state, city, street, zip)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}

@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -15,7 +14,6 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 == nil {
-		fmt.Println(test1)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -48,16 +46,13 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 		eVIS = false
 	}
 	description := p.Sanitize(r.FormValue("inputDesc"))
-	fmt.Println("Description:", description)
 	descriptionrune := []rune(description)
-	fmt.Println("Descriptionrune:", descriptionrune)
 
 	userID := session.Values["DocID"].(string)
 	err2 := uses.ChangeContactAndDescription(client.Eclient, userID, phonenumber, pVIS, gender, gVIS, eVIS, descriptionrune)
 	if err2 != nil {
-		fmt.Println(err2)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err2)
 	} else {
 		http.Redirect(w, r, "/Settings/#desccollapse", http.StatusFound)
-		return
 	}
 }

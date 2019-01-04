@@ -2,7 +2,7 @@ package login
 
 import (
 	"fmt"
-	
+
 	"net"
 	"net/http"
 	"strings"
@@ -27,11 +27,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var clientIP string
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+		client.Logger.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
 	}
 	userIP := net.ParseIP(ip)
 	if userIP == nil {
-		fmt.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
+		client.Logger.Printf("userip: %q is not IP:port\n", r.RemoteAddr)
 	} else {
 		clientIP = userIP.String()
 	}
@@ -47,8 +47,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	successful, sessionInfo, err := uses.Login(client.Eclient, email, passwordb, clientIP)
 
 	if !successful || err != nil {
-		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+		client.Logger.Println("Email: "+email+" | err: %s", err)
 		client.RenderTemplate(w, r, "templateNoUser2", client.ClientSide{ErrorStatus: true, ErrorOutput: err})
 		client.RenderTemplate(w, r, "loginerror-nil", client.ClientSide{ErrorStatus: true, ErrorOutput: err})
 		return
@@ -58,8 +58,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		session.Values["Email"] = user.Email
 		session.Save(r, w)
 		http.Redirect(w, r, "/unverified/", http.StatusFound)
-		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"User not verified")
+
+		client.Logger.Println("DocID: " + sessionInfo.DocID + " | " + "User not verified")
 		return
 	}
 
@@ -98,8 +98,7 @@ func Error(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	//	var password []byte
 	password := r.FormValue("password")
-	fmt.Println("DEBUG: middleware/LoginFile.go line: 80-81")
-	fmt.Println(password)
+
 	//	hashedPassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	passwordb := []byte(password)
 
