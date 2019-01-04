@@ -118,7 +118,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	if err2 != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err2)
+		client.Logger.Println("Email: "+email+" | err at signup: %s", err2)
 		cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)
