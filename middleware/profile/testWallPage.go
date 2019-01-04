@@ -21,20 +21,20 @@ func TestWallPage(w http.ResponseWriter, r *http.Request) {
 	wallUsername := r.URL.Path[10:]
 	wallID, err := get.IDByUsername(client.Eclient, wallUsername)
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	user, err := get.UserByID(client.Eclient, wallID)
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs, docID.(string))
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	viewer, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	cs := client.ClientSide{UserInfo: user, Page: wallID, Wall: entries, ImageCode: viewer.Avatar}

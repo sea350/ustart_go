@@ -24,7 +24,7 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	heads := []types.FloatingHead{}
@@ -33,7 +33,7 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+idKey)
 			continue
 		}
@@ -44,7 +44,7 @@ func FollowingPage(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+idKey)
 			continue
 		}

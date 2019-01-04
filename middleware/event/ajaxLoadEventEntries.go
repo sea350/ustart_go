@@ -29,7 +29,7 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			
 	
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 
 
@@ -37,14 +37,14 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				
 		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 	*/
 
 	res, entries, total, err := scrollpkg.ScrollPageEvents(client.Eclient, []string{wallID}, docID.(string), "")
 	if err != nil && err != io.EOF {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	results := make(map[string]interface{})
@@ -55,7 +55,7 @@ func AjaxLoadEventEntries(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(results)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	fmt.Fprintln(w, string(data))

@@ -118,7 +118,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	if err2 != nil {
 
-		client.Logger.Println("Email: "+email+" | err at signup: %s", err2)
+		client.Logger.Println("Email: "+email+" | err at signup: ", err2)
 		cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)
@@ -140,7 +140,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	if test1 != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", test1)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", test1)
 		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
 		return
 	}

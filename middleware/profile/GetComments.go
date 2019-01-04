@@ -26,12 +26,12 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	_, arrayofComments, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil && err != errors.New("This entry is not visible") {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	data, err := json.Marshal(arrayofComments)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

@@ -47,19 +47,19 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	month, err := strconv.Atoi(dob[5:7])
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 	day, err := strconv.Atoi(dob[8:10])
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 	year, err := strconv.Atoi(dob[0:4])
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -68,7 +68,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	http.Redirect(w, r, "/Settings/#namecollapse", http.StatusFound)
 	return

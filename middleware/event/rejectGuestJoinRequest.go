@@ -33,14 +33,14 @@ func RejectEventGuestJoinRequest(w http.ResponseWriter, r *http.Request) {
 	// classification, err := strconv.Atoi(r.FormValue("classification"))
 	// if err != nil {
 	// 	
-	// 	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+	// 	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	// 	return
 	// }
 
 	newNumRequests, err := uses.RemoveGuestRequest(client.Eclient, evntID, newMemberID, 1)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

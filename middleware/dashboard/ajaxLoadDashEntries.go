@@ -26,7 +26,7 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 	_, followDoc, err := getFollow.ByID(client.Eclient, docID.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	var docs []string
@@ -46,7 +46,7 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 	res, entries, total, err := scrollpkg.ScrollPageDash(client.Eclient, docs, docID.(string), sID)
 	if err != nil && err != io.EOF {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	results := make(map[string]interface{})
@@ -57,7 +57,7 @@ func AjaxLoadDashEntries(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(results)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	// cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string), ScrollID: res, Wall: entries, Hits: total}

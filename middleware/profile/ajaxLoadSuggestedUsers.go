@@ -31,12 +31,12 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	myUser, err := get.UserByID(client.Eclient, uID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		results["error"] = err
 		data, err := json.Marshal(results)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 
 		fmt.Fprintln(w, string(data))
@@ -46,12 +46,12 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	_, follDoc, err := getFollow.ByID(client.Eclient, uID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		results["error"] = err
 		data, err := json.Marshal(results)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 
 		fmt.Fprintln(w, string(data))
@@ -61,7 +61,7 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Tags, myUser.Projects, follDoc.UserFollowing, uID, scrollID)
 	if err != nil && err != io.EOF {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	results["scrollID"] = sID
@@ -72,7 +72,7 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(results)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	fmt.Fprintln(w, string(data))

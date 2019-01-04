@@ -28,7 +28,7 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	var canLeave = false
@@ -52,7 +52,7 @@ func LeaveEventGuest(w http.ResponseWriter, r *http.Request) {
 	err = post.DeleteGuest(client.Eclient, evntID, leavingUser)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)

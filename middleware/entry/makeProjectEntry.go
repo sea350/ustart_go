@@ -32,7 +32,7 @@ func MakeProjectEntry(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	if uses.HasPrivilege("post", proj.PrivilegeProfiles, member) {
@@ -42,24 +42,24 @@ func MakeProjectEntry(w http.ResponseWriter, r *http.Request) {
 		entryID, err := postEntry.IndexEntry(client.Eclient, entry)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 
 		err = post.AppendEntryID(client.Eclient, projectID, entryID)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 
 		jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, entryID, docID.(string), true)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		data, err := json.Marshal(jEntry)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		fmt.Fprintln(w, string(data))
 	}

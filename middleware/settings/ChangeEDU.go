@@ -31,7 +31,7 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 	typeAcc := p.Sanitize(r.FormValue("type_select"))
 	i, err2 := strconv.Atoi(typeAcc)
 	if err2 != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err2)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err2)
 	}
 
 	highschoolName := p.Sanitize(r.FormValue("schoolname"))
@@ -55,7 +55,7 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.ChangeEducation(client.Eclient, session.Values["DocID"].(string), i, highschoolName, highschoolGrad, uniName, gradDate, major, minor)
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	http.Redirect(w, r, "/Settings/#educollapse", http.StatusFound)
 	return

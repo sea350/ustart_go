@@ -26,13 +26,13 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 	id, proxy, err := get.ProxyNotificationByUserID(client.Eclient, docID.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	err = post.ResetUnseen(client.Eclient, id)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	count := 0
@@ -40,7 +40,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 		notif, err := get.NotificationByID(client.Eclient, id)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			continue
 		}
 		if notif.Invisible {
@@ -50,7 +50,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 		msg, url, err := uses.GenerateNotifMsgAndLink(client.Eclient, notif)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			continue
 		}
 
@@ -74,7 +74,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(sendData)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

@@ -28,7 +28,7 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 	evnt, member, err1 := get.EventAndMember(client.Eclient, r.FormValue("eventID"), test1.(string))
 	if err1 != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err1)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err1)
 		http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 	}
 
@@ -45,20 +45,20 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 				err = uses.DeleteFromS3(evnt.Banner)
 				if err != nil {
 
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				}
 
 				url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"-"+time.Now().String()+"-banner")
 				if err != nil {
 
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 					http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 					return
 				}
 				err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Banner", url)
 				if err != nil {
 
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				}
 			} else {
 
@@ -75,20 +75,20 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 			err = uses.DeleteFromS3(evnt.Banner)
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 
 			url, err := uses.UploadToS3(blob, r.FormValue("eventID")+"-"+time.Now().String()+"-banner")
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)
 				return
 			}
 			err = post.UpdateEvent(client.Eclient, r.FormValue("eventID"), "Banner", url)
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		} else {
 
@@ -96,7 +96,7 @@ func EventBannerUpload(w http.ResponseWriter, r *http.Request) {
 		}
 	default:
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	time.Sleep(2 * time.Second)

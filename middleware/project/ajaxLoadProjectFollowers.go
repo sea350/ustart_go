@@ -21,18 +21,18 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[10:])
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], test1.(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	userstruct, err := get.UserByID(client.Eclient, test1.(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	heads := []types.FloatingHead{}
@@ -42,7 +42,7 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "index " + idKey)
 			continue
 		}
@@ -55,7 +55,7 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "index " + idKey)
 			continue
 		}
@@ -70,7 +70,7 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 
 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "index " + idKey)
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			continue
 		}
 		heads2 = append(heads2, head)
@@ -81,7 +81,7 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 
 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "index " + idKey)
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			continue
 		}
 		heads2 = append(heads2, head)

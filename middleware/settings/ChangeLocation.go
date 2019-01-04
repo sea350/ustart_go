@@ -60,7 +60,7 @@ func ChangeLocation(w http.ResponseWriter, r *http.Request) {
 	err := uses.ChangeLocation(client.Eclient, session.Values["DocID"].(string), countryP, conBool, stateP, sBool, cityP, cBool, zipP, zBool)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	// client.ClientSide{countryInit, cityInit, stateInit, zipInit}
 	http.Redirect(w, r, "/Settings/#loccollapse", http.StatusFound)

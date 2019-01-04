@@ -38,7 +38,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], docID.(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 		client.RenderSidebar(w, r, "template2-nil")
@@ -56,13 +56,13 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "there were one or more errors loading widgets")
 		for _, eror := range errs {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", eror)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", eror)
 		}
 	}
 	userstruct, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 	}
@@ -70,7 +70,7 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	_, follDoc, err := getFollow.ByID(client.Eclient, project.DocID)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	_, followingState := follDoc.UserFollowers[docID.(string)]
 
@@ -97,7 +97,7 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 	userstruct, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 		client.RenderSidebar(w, r, "template2-nil")
@@ -109,7 +109,7 @@ func MyProjects(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertProjectToFloatingHead(client.Eclient, projectInfo.ProjectID)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		heads = append(heads, head)
 	}
@@ -130,7 +130,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 	userstruct, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: docID.(string), Username: session.Values["Username"].(string)}
 
@@ -202,7 +202,7 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 		url, err := uses.CreateProject(client.Eclient, cleanTitle, []rune(cleanDesc), docID.(string), cleanCat, cleanCollege, cleanURL, projLocation)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		} else {

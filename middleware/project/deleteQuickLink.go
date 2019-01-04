@@ -30,7 +30,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	deleteTitle := r.FormValue("deleteProjectLinkDesc")
@@ -52,7 +52,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		err := post.UpdateProject(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		return
 	}
@@ -79,7 +79,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	err = post.UpdateProject(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	return

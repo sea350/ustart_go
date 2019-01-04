@@ -30,7 +30,7 @@ func EventChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 	//TODO: DocID
 	err = uses.ChangeEventNameAndDescription(client.Eclient, r.FormValue("eventID"), evntName, evntDesc)
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	//TODO: Add in right URL
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)

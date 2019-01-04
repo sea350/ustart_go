@@ -28,7 +28,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	var isCreator, _ = uses.IsLeader(client.Eclient, projectID, test1.(string))
@@ -60,7 +60,7 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				
 		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 
 			}
 		}

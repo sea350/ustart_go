@@ -29,7 +29,7 @@ func MemberRequestToJoin(w http.ResponseWriter, r *http.Request) {
 	evnt, err := get.EventByID(client.Eclient, id)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -53,12 +53,12 @@ func MemberRequestToJoin(w http.ResponseWriter, r *http.Request) {
 	err = userPost.AppendSentEventReq(client.Eclient, test1.(string), id)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	err = evntPost.AppendMemberReqReceived(client.Eclient, id, test1.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)

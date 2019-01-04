@@ -25,7 +25,7 @@ func DeleteEventQuickLink(w http.ResponseWriter, r *http.Request) {
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	p := bluemonday.UGCPolicy()
 
@@ -38,7 +38,7 @@ func DeleteEventQuickLink(w http.ResponseWriter, r *http.Request) {
 		err := post.UpdateEvent(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)
 		return
@@ -65,7 +65,7 @@ func DeleteEventQuickLink(w http.ResponseWriter, r *http.Request) {
 	err = post.UpdateEvent(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	http.Redirect(w, r, "/Events/"+evnt.URLName, http.StatusFound)

@@ -46,7 +46,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	if !successful || err != nil {
 
-		client.Logger.Println("Email: "+email+" | err: %s", err)
+		client.Logger.Println("Email: "+email+" | err: ", err)
 		client.RenderTemplate(w, r, "templateNoUser2", client.ClientSide{ErrorStatus: true, ErrorOutput: err})
 		client.RenderTemplate(w, r, "loginerror-nil", client.ClientSide{ErrorStatus: true, ErrorOutput: err})
 		return

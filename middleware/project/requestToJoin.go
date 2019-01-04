@@ -23,7 +23,7 @@ func RequestToJoin(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	for _, memberInfo := range proj.Members {
@@ -41,12 +41,12 @@ func RequestToJoin(w http.ResponseWriter, r *http.Request) {
 	err = userPost.AppendSentProjReq(client.Eclient, test1.(string), ID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	err = projPost.AppendMemberReqReceived(client.Eclient, ID, test1.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

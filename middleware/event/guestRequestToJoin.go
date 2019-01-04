@@ -28,7 +28,7 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 	evnt, err := get.EventByID(client.Eclient, id)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -55,7 +55,7 @@ func GuestRequestToJoin(w http.ResponseWriter, r *http.Request) {
 	err = post.AppendGuestReqReceived(client.Eclient, id, test1.(string), 1)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	// 

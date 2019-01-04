@@ -46,7 +46,7 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 	err = uses.ChangeProjectLocation(client.Eclient, projID, country, state, city, zip, vis)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

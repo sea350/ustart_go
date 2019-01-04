@@ -33,13 +33,13 @@ func EventCustomURL(w http.ResponseWriter, r *http.Request) {
 	inUse, err := get.EventURLInUse(client.Eclient, newURL)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	if inUse {
@@ -52,7 +52,7 @@ func EventCustomURL(w http.ResponseWriter, r *http.Request) {
 	err = uses.ChangeEventURL(client.Eclient, evntID, newURL)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)

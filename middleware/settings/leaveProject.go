@@ -36,7 +36,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
@@ -74,18 +74,18 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		err = post.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	} else {
 		err = uses.NewProjectLeader(client.Eclient, projID, leavingUser, newCreator)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		err = post.DeleteMember(client.Eclient, projID, leavingUser)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
 

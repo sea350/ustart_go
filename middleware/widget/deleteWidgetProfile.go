@@ -23,7 +23,7 @@ func DeleteWidgetProfile(w http.ResponseWriter, r *http.Request) {
 	err := uses.RemoveWidget(client.Eclient, r.FormValue("deleteID"), false, false)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	http.Redirect(w, r, "/profile/"+username, http.StatusFound)

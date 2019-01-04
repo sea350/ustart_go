@@ -30,32 +30,32 @@ func Like(w http.ResponseWriter, r *http.Request) {
 	likeStatus, err := uses.IsLiked(client.Eclient, entryID, docID.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	if likeStatus == true {
 		err := uses.UserUnlikeEntry(client.Eclient, entryID, docID.(string))
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	} else {
 		err := uses.UserLikeEntry(client.Eclient, entryID, docID.(string))
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
 
 	entry, err := get.EntryByID(client.Eclient, entryID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	data, err := json.Marshal(len(entry.Likes))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

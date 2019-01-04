@@ -22,7 +22,7 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 	evnt, member, err := getEvnt.EventAndMember(client.Eclient, r.FormValue("eventWidget"), test1.(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	if uses.HasEventPrivilege("widget", evnt.PrivilegeProfiles, member) {
@@ -38,7 +38,7 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 		newWidget, err := ProcessWidgetForm(r)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)
 		}
 
@@ -46,12 +46,12 @@ func AddEventWidget(w http.ResponseWriter, r *http.Request) {
 		if r.FormValue("editID") == `0` {
 			err := uses.AddWidget(client.Eclient, r.FormValue("eventWidget"), newWidget, false, true)
 			if err != nil {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		} else {
 			err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 			if err != nil {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		}
 		http.Redirect(w, r, "/Event/"+evnt.URLName, http.StatusFound)

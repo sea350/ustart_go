@@ -31,7 +31,7 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 	userID, err := get.UserIDByEmail(client.Eclient, email)
 	if err != nil {
 
-		client.Logger.Println("Email: "+email+" | err: %s", err)
+		client.Logger.Println("Email: "+email+" | err: ", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 		client.RenderSidebar(w, r, "templateNoUser2")
@@ -42,7 +42,7 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 	user, err := get.UserByEmail(client.Eclient, email)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+userID+" | err: %s", err)
+		client.Logger.Println("DocID: "+userID+" | err: ", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 		client.RenderSidebar(w, r, "templateNoUser2")
@@ -58,7 +58,7 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 		err = post.UpdateUser(client.Eclient, userID, "Verified", true)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+userID+" | err: %s", err)
+			client.Logger.Println("DocID: "+userID+" | err: ", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 			client.RenderSidebar(w, r, "templateNoUser2")
@@ -68,7 +68,7 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+userID+" | err: %s", err)
+			client.Logger.Println("DocID: "+userID+" | err: ", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		}

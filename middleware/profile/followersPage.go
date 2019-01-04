@@ -28,18 +28,18 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 	id, err := getUser.IDByUsername(client.Eclient, r.URL.Path[11:])
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	_, followDoc, err := getFollow.ByID(client.Eclient, id)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	userstruct, err := get.UserByID(client.Eclient, id)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	heads := []types.FloatingHead{}
@@ -50,7 +50,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+idKey)
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			continue
 		}
 		_, isFollowing := followDoc.UserFollowing[idKey]
@@ -63,7 +63,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+idKey)
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			continue
 		}
 		isFollowing, _ := followDoc.ProjectFollowing[idKey]
@@ -76,7 +76,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+idKey)
 			continue
 		}
@@ -84,7 +84,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		head.Followed, err = getFollow.IsFollowing(client.Eclient, test1.(string), idKey, "user")
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+idKey)
 			continue
 		}
@@ -97,7 +97,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		projHead, err := uses.ConvertProjectToFloatingHead(client.Eclient, idKey)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+idKey)
 			continue
 		}
@@ -105,7 +105,7 @@ func FollowersPage(w http.ResponseWriter, r *http.Request) {
 		projHead.Followed, err = getFollow.IsFollowing(client.Eclient, test1.(string), idKey, "project")
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+idKey)
 			continue
 		}

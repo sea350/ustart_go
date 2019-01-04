@@ -19,7 +19,7 @@ func ViewDashboard(w http.ResponseWriter, r *http.Request) {
 	userstruct, err := userGet.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string), Username: session.Values["Username"].(string)}

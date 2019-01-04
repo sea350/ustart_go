@@ -31,14 +31,14 @@ func ShareEntry(w http.ResponseWriter, r *http.Request) {
 	replyID, err := postEntry.IndexEntry(client.Eclient, entry)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	err = postEntry.AppendShareID(client.Eclient, originalPost, replyID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	fmt.Fprintln(w, originalPost)

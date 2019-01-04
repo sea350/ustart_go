@@ -38,14 +38,14 @@ func SortEventWidgets(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal([]byte(sortedWidgets), &arr)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	id, err := getEvent.EventIDByURL(client.Eclient, eventURL)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -53,7 +53,7 @@ func SortEventWidgets(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -61,7 +61,7 @@ func SortEventWidgets(w http.ResponseWriter, r *http.Request) {
 		err = post.UpdateEvent(client.Eclient, id, "Widgets", arr)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	} else {
 		

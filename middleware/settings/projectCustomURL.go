@@ -32,13 +32,13 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 	inUse, err := get.URLInUse(client.Eclient, newURL)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	proj, err := get.ProjectByID(client.Eclient, projID)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -52,7 +52,7 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 	err = uses.ChangeProjectURL(client.Eclient, projID, newURL)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		time.Sleep(2 * time.Second)
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return

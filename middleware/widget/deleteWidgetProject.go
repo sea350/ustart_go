@@ -36,7 +36,7 @@ func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 	project, member, err := getProj.ProjAndMember(client.Eclient, id, test1.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -45,7 +45,7 @@ func DeleteWidgetProject(w http.ResponseWriter, r *http.Request) {
 		err = uses.RemoveWidget(client.Eclient, widgetID, true, false)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	} else {
 		

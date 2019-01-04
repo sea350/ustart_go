@@ -27,7 +27,7 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	p := bluemonday.UGCPolicy()
@@ -49,7 +49,7 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 	err = post.UpdateProject(client.Eclient, ID, "QuickLinks", proj.QuickLinks)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 }

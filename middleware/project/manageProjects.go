@@ -28,7 +28,7 @@ func ManageProjects(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	for _, projectInfo := range userstruct.Projects {
 		var isAdmin = false
@@ -36,7 +36,7 @@ func ManageProjects(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			
 	
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 
 		for _, memberInfo := range proj.Members {
@@ -53,7 +53,7 @@ func ManageProjects(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			
 	
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		heads = append(heads, head)
 	}

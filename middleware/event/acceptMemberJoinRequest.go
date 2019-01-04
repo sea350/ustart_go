@@ -28,13 +28,13 @@ func AcceptMemberJoinRequest(w http.ResponseWriter, r *http.Request) {
 	newNumRequests, err := uses.RemoveEventRequest(client.Eclient, evntID, newMemberID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	err = userPost.AppendEvent(client.Eclient, newMemberID, types.EventInfo{EventID: evntID, Visible: true})
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	theRole := r.FormValue("role")
@@ -54,7 +54,7 @@ func AcceptMemberJoinRequest(w http.ResponseWriter, r *http.Request) {
 	err = evntPost.AppendMember(client.Eclient, evntID, newMember)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	fmt.Fprintln(w, newNumRequests)

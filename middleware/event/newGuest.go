@@ -25,7 +25,7 @@ func NewGuest(w http.ResponseWriter, r *http.Request) {
 	event, err := get.EventByID(client.Eclient, eventID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 
 	}
 
@@ -40,7 +40,7 @@ func NewGuest(w http.ResponseWriter, r *http.Request) {
 	err = post.AppendGuest(client.Eclient, eventID, types.EventGuests{GuestID: sessionID.(string), Status: 1})
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	http.Redirect(w, r, "/Event/"+event.URLName, http.StatusFound)
 	return

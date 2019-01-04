@@ -25,7 +25,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		http.Redirect(w, r, "/profile/"+username, http.StatusFound)
 		return
 	}
@@ -38,7 +38,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			
 	
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	} else {
 
@@ -46,7 +46,7 @@ func AddWidget(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			
 	
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
 

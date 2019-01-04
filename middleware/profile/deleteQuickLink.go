@@ -25,7 +25,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	deleteTitle := r.FormValue("userLinkDesc")
@@ -47,7 +47,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 		err := post.UpdateUser(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		return
 	}
@@ -74,7 +74,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	return

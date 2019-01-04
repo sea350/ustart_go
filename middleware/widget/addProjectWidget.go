@@ -24,14 +24,14 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	project, member, err := getProj.ProjAndMember(client.Eclient, r.FormValue("projectWidget"), test1.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	if uses.HasPrivilege("widget", project.PrivilegeProfiles, member) {
 		newWidget, err := ProcessWidgetForm(r)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			http.Redirect(w, r, "/Projects/"+project.URLName, http.StatusFound)
 			return
 		}
@@ -42,13 +42,13 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 			err := uses.AddWidget(client.Eclient, r.FormValue("projectWidget"), newWidget, true, false)
 			if err != nil {
 				
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		} else {
 			err := post.ReindexWidget(client.Eclient, r.FormValue("editID"), newWidget)
 			if err != nil {
 				
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		}
 

@@ -32,14 +32,14 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 
 	idx, err := strconv.Atoi(idxStr)
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	valid, actualChatID, _, err := uses.ChatVerifyURL(client.Eclient, chatID, docID.(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	if !valid {
 		return
@@ -48,7 +48,7 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 	newIdx, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, idx, 50)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -60,7 +60,7 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

@@ -38,21 +38,21 @@ func SortProjectWidgets(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal([]byte(sortedWidgets), &arr)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	id, err := getProj.ProjectIDByURL(client.Eclient, projectURL)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	project, member, err := getProj.ProjAndMember(client.Eclient, id, docID.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -60,7 +60,7 @@ func SortProjectWidgets(w http.ResponseWriter, r *http.Request) {
 		err = post.UpdateProject(client.Eclient, id, "Widgets", arr)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	} else {
 		

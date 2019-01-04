@@ -24,7 +24,7 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 	proj, member, err1 := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err1 != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s Project or Member not found", err)
+		client.Logger.Printf("DocID: "+session.Values["DocID"].(string)+" | err: %s Project or Member not found \n", err)
 		http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 
 	}
@@ -41,13 +41,13 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 				err = uses.DeleteFromS3(proj.Avatar)
 				if err != nil {
 
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				}
 
 				url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-"+time.Now().String())
 				if err != nil {
 
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 					http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 					return
 				}
@@ -55,15 +55,15 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 				err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), url)
 				if err != nil {
 
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				}
 			} else {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		} else {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s You do not have permission to change project logo", err)
+			client.Logger.Printf("DocID: "+session.Values["DocID"].(string)+" | err: %s You do not have permission to change project logo \n", err)
 		}
 	case http.ErrMissingFile:
 		blob := r.FormValue("image-data")
@@ -71,13 +71,13 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			err = uses.DeleteFromS3(proj.Avatar)
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 
 			url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-"+time.Now().String())
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 				return
 			}
@@ -85,15 +85,15 @@ func ProjectLogo(w http.ResponseWriter, r *http.Request) {
 			err = uses.ChangeProjectLogo(client.Eclient, r.FormValue("projectID"), url)
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		} else {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s You do not have permission to change project logo", err)
+			client.Logger.Printf("DocID: "+session.Values["DocID"].(string)+" | err: %s You do not have permission to change project logo \n", err)
 		}
 	default:
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	time.Sleep(2 * time.Second)

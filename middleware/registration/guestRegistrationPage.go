@@ -95,7 +95,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	err2 := uses.GuestSignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear, guestCode)
 	if err2 != nil {
 
-		client.Logger.Println("Email: "+email+" | err at signup: %s", err2)
+		client.Logger.Println("Email: "+email+" | err at signup: ", err2)
 		cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-guest-reg", cs)

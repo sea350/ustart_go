@@ -25,7 +25,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	valid, _, _, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	if !valid {
 		http.Redirect(w, r, "/404/", http.StatusFound)

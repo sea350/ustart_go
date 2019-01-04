@@ -51,7 +51,7 @@ func ChangeContactAndDescription(w http.ResponseWriter, r *http.Request) {
 	userID := session.Values["DocID"].(string)
 	err2 := uses.ChangeContactAndDescription(client.Eclient, userID, phonenumber, pVIS, gender, gVIS, eVIS, descriptionrune)
 	if err2 != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err2)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err2)
 	} else {
 		http.Redirect(w, r, "/Settings/#desccollapse", http.StatusFound)
 	}

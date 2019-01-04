@@ -29,14 +29,14 @@ func ProjectCategory(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	err = uses.ChangeProjectCategory(client.Eclient, projID, newCategory)
 	if err != nil {
 		
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

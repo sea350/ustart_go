@@ -40,7 +40,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	if len(oldWidget.Data) == 1 && (oldWidget.Classification != 15 && oldWidget.Classification != 16) {
@@ -48,7 +48,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			
 	
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		if isProject {
 			http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)
@@ -84,7 +84,7 @@ func EditWidgetDataDelete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	if isProject {
 		http.Redirect(w, r, "/Projects/"+projectURL, http.StatusFound)

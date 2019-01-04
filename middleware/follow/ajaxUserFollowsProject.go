@@ -31,7 +31,7 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 	isFollowing, err := getFollow.IsFollowing(client.Eclient, ID.(string), followingID, "project")
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -39,14 +39,14 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		err = postFollow.NewUserFollow(client.Eclient, ID.(string), "following", followingID, false, "project")
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			return
 		}
 
 		err = postFollow.NewProjectFollow(client.Eclient, followingID, "followers", ID.(string), false, "user")
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			return
 		}
 
@@ -55,21 +55,21 @@ func AjaxUserFollowsProject(w http.ResponseWriter, r *http.Request) {
 		_, err := post.IndexNotification(client.Eclient, notif)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			return
 		}
 	} else {
 		err = postFollow.RemoveUserFollow(client.Eclient, ID.(string), "following", followingID, "project")
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			return
 		}
 
 		err = postFollow.RemoveProjectFollow(client.Eclient, followingID, "followers", ID.(string))
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
 

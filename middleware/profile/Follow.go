@@ -29,21 +29,21 @@ func Follow(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	if isFollowed == true {
 		// err := usesFollow.UserUnfollow(client.Eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
 			
 	
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	} else {
 		// err := uses.UserFollow(client.Eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
 			
 	
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
 

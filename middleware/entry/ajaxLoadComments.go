@@ -25,13 +25,13 @@ func AjaxLoadComments(w http.ResponseWriter, r *http.Request) {
 	_, entries, err := uses.LoadComments(client.Eclient, parentID, docID.(string), 0, -1)
 	if err != nil && err != errors.New("This entry is not visible") {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	data, err := json.Marshal(entries)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	fmt.Fprintln(w, string(data))

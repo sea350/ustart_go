@@ -22,13 +22,13 @@ func EventHost(w http.ResponseWriter, r *http.Request) {
 	evntID := r.FormValue("eventID")
 	evnt, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	_, err = getproj.ProjectByID(client.Eclient, projectID)
 	if err == nil {
 		err = uses.ChangeEventHost(client.Eclient, evntID, projectID)
 		if err != nil {
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
 	//TODO: Add in right URL

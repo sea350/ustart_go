@@ -31,14 +31,14 @@ func EventCategory(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.EventByID(client.Eclient, evntID)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	err = post.UpdateEvent(client.Eclient, evntID, "Category", newCategory)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	http.Redirect(w, r, "/EventSettings/"+proj.URLName, http.StatusFound)

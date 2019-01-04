@@ -67,7 +67,7 @@ func HandleChatAlert() {
 			head, err := uses.ConvertChatToFloatingHead(client.Eclient, alert.ChatID, alert.UserID)
 			if err != nil {
 
-				client.Logger.Println("DocID: "+alert.UserID+" | err: %s", err)
+				client.Logger.Println("DocID: "+alert.UserID+" | err: ", err)
 				continue
 			}
 

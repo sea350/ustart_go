@@ -31,19 +31,19 @@ func AddComment(w http.ResponseWriter, r *http.Request) {
 	err := uses.UserReplyEntry(client.Eclient, id, postActual, contentArray)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	_, cmts, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	data, err := json.Marshal(cmts)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	fmt.Fprintln(w, string(data))
 }
@@ -67,19 +67,19 @@ func AddComment2(w http.ResponseWriter, r *http.Request) {
 	err := uses.UserReplyEntry(client.Eclient, docID.(string), postID, contentArray)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	_, cmts, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	data, err := json.Marshal(cmts)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

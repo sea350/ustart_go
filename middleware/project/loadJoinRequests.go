@@ -29,13 +29,13 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	for index, userID := range proj.MemberReqReceived {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
 		if err != nil {
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s | index %d", err, index)
+			client.Logger.Printf("DocID: "+session.Values["DocID"].(string)+" | err: %s | index %d \n", err, index)
 		}
 		heads = append(heads, head)
 	}
@@ -43,7 +43,7 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(heads)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	fmt.Fprintln(w, string(data))

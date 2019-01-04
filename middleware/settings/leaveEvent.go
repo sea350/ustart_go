@@ -42,7 +42,7 @@ func LeaveEvent(w http.ResponseWriter, r *http.Request) {
 	event, err := get.EventByID(client.Eclient, eventID)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	var canLeave = false
@@ -67,18 +67,18 @@ func LeaveEvent(w http.ResponseWriter, r *http.Request) {
 		err = post.DeleteMember(client.Eclient, eventID, leavingUser)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	} else {
 		err = uses.NewEventLeader(client.Eclient, eventID, leavingUser, newCreator)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		err = post.DeleteMember(client.Eclient, eventID, leavingUser)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
 

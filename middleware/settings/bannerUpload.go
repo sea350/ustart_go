@@ -31,25 +31,25 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		usr, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		err = uses.DeleteFromS3(usr.Banner)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 
 		url, err := uses.UploadToS3(blob, test1.(string)+"-"+time.Now().String()+"-banner")
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		if http.DetectContentType(buffer)[0:5] == "image" || header.Size == 0 {
 			//Update the user banner
 			err := post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "Banner", url)
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		}
 	case http.ErrMissingFile:
@@ -58,27 +58,27 @@ func BannerUpload(w http.ResponseWriter, r *http.Request) {
 		usr, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		err = uses.DeleteFromS3(usr.Banner)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 
 		url, err := uses.UploadToS3(blob, test1.(string)+"-"+time.Now().String()+"-banner")
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		err = post.UpdateUser(client.Eclient, session.Values["DocID"].(string), "Banner", url)
 		if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	default:
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	time.Sleep(2 * time.Second)

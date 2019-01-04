@@ -30,7 +30,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 	valid, actualChatID, otherUsr, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	if !valid {
 		return
@@ -40,7 +40,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		idx, msgs, err := uses.ChatLoad(client.Eclient, actualChatID, -1, 50)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			return
 		}
 		agg["Messages"] = msgs
@@ -49,7 +49,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		chat, err := getChat.ConvoByID(client.Eclient, actualChatID)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			return
 		}
 
@@ -59,7 +59,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 			head, err := uses.ConvertUserToFloatingHead(client.Eclient, chat.Eavesdroppers[idx].DocID)
 			if err != nil {
 				
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 
 			temp[chat.Eavesdroppers[idx].DocID] = head
@@ -70,7 +70,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, otherUsr)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		temp := make(map[string]types.FloatingHead)
 		temp[otherUsr] = head
@@ -78,7 +78,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 		head, err = uses.ConvertUserToFloatingHead(client.Eclient, docID.(string))
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		temp[docID.(string)] = head
 		agg["Eavesdroppers"] = temp
@@ -87,7 +87,7 @@ func InitialChat(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(agg)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	fmt.Fprintln(w, string(data))
 }

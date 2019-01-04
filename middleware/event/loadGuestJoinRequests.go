@@ -35,7 +35,7 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 	evnt, err := get.EventByID(client.Eclient, ID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
@@ -45,7 +45,7 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 			head, err := uses.ConvertUserToFloatingHead(client.Eclient, index)
 			if err != nil {
 				
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 			heads = append(heads, head)
 		}
@@ -54,7 +54,7 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 			head, err := uses.ConvertProjectToFloatingHead(client.Eclient, index)
 			if err != nil {
 				
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 			heads = append(heads, head)
 		}
@@ -64,7 +64,7 @@ func LoadGuestJoinRequests(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(heads)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	fmt.Fprintln(w, string(data))

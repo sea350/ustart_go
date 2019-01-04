@@ -26,7 +26,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	sID, notifMap, _, err := properloading.ScrollNotifications(client.Eclient, docID.(string), scrollID)
 	if err != nil && err != io.EOF {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 
 	}
 	var notifs []map[string]interface{}
@@ -35,7 +35,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 		msg, url, err := uses.GenerateNotifMsgAndLink(client.Eclient, notif)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			continue
 		}
 
@@ -62,7 +62,7 @@ func AjaxScrollNotification(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(sendData)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	fmt.Fprintln(w, string(data))

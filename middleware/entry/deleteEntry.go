@@ -25,21 +25,21 @@ func DeleteEntry(w http.ResponseWriter, r *http.Request) {
 	entry, err := get.EntryByID(client.Eclient, entryID)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	err = post.UpdateEntry(client.Eclient, entryID, "Visible", false)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	// err = delete.Entry(eclient, entryID)
 	// if err != nil {
 	// 	
-	// 	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+	// 	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	// 	return
 	// }
 
@@ -49,21 +49,21 @@ func DeleteEntry(w http.ResponseWriter, r *http.Request) {
 			err := post.UpdateEntry(client.Eclient, entry.ShareIDs[i], "ReferenceEntry", ``)
 			if err != nil {
 				
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		}
 	case 1:
 		err = post.DeleteReplyID(client.Eclient, entry.ReferenceEntry, entryID)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			return
 		}
 	case 2:
 		err = post.DeleteShareID(client.Eclient, entry.ReferenceEntry, entryID)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
 

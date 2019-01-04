@@ -26,7 +26,7 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 	proj, member, err1 := get.ProjAndMember(client.Eclient, r.FormValue("projectID"), test1.(string))
 	if err1 != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s Project or Member not found", err)
+		client.Logger.Printf("DocID: "+session.Values["DocID"].(string)+" | err: %s Project or Member not found \n", err)
 		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
 		return
 	}
@@ -43,18 +43,18 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 				err = uses.DeleteFromS3(proj.Banner)
 				if err != nil {
 
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				}
 
 				url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-"+time.Now().String()+"-banner")
 				if err != nil {
 
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				}
 				err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", url)
 				if err != nil {
 
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				}
 			} else {
 
@@ -71,30 +71,30 @@ func ProjectBannerUpload(w http.ResponseWriter, r *http.Request) {
 			err = uses.DeleteFromS3(proj.Banner)
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 
 			url, err := uses.UploadToS3(blob, r.FormValue("projectID")+"-"+time.Now().String()+"-banner")
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 			err = post.UpdateProject(client.Eclient, r.FormValue("projectID"), "Banner", url)
 			if err != nil {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			} else {
 
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s Invalid file upload", err)
+				client.Logger.Printf("DocID: "+session.Values["DocID"].(string)+" | err: %s Invalid file upload \n", err)
 			}
 		} else {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s You do not have permission to change event banner", err)
+			client.Logger.Printf("DocID: "+session.Values["DocID"].(string)+" | err: %s You do not have permission to change event banner \n", err)
 		}
 
 	default:
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	time.Sleep(2 * time.Second)

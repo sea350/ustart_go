@@ -56,7 +56,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	//security checks before socket is opened
 	valid, actualChatID, dmTargetUserID, err := uses.ChatVerifyURL(client.Eclient, chatURL, docID.(string))
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	if !valid {
 		return
@@ -100,7 +100,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 		err = postChat.MarkAsRead(client.Eclient, docID.(string), actualChatID)
 		if err != nil {
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
 
@@ -111,7 +111,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			delete(chatroom[actualChatID].sockets, ws)
 			break
 		}
@@ -124,7 +124,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			client.Logger.Println("Debug text: chat ID = " + actualChatID + " | chatUrl = " + chatURL)
 			newConvoID, err := uses.ChatFirst(client.Eclient, msg, docID.(string), dmTargetUserID)
 			if err != nil {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				continue
 			}
 			notifyThese = append(notifyThese, dmTargetUserID)
@@ -138,7 +138,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		} else if actualChatID != `` && chatURL != `` {
 			notifyThese, err = uses.ChatSend(client.Eclient, msg)
 			if err != nil {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				continue
 			}
 		} else {
@@ -168,7 +168,7 @@ func handleMessages() {
 			err = postChat.MarkAsRead(client.Eclient, docID, msg.ConversationID)
 			if err != nil {
 
-				client.Logger.Println("DocID: "+docID+" | err: %s", err)
+				client.Logger.Println("DocID: "+docID+" | err: ", err)
 			}
 
 		}

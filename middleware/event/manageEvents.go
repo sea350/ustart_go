@@ -25,14 +25,14 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 	userstruct, err := get.UserByID(client.Eclient, session.Values["DocID"].(string))
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	for _, eventInfo := range userstruct.Events {
 		var isAdmin = false
 		event, err := getEvent.EventByID(client.Eclient, eventInfo.EventID)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 
 		for _, memberInfo := range event.Members {
@@ -48,7 +48,7 @@ func ManageEvents(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertEventToFloatingHead(client.Eclient, eventInfo.EventID)
 		if err != nil {
 			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		heads = append(heads, head)
 	}

@@ -46,7 +46,7 @@ func EventTime(w http.ResponseWriter, r *http.Request) {
 	err = uses.ChangeEventTime(client.Eclient, r.FormValue("eventID"), Sdate, Edate)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	//TODO: Add in right URL
 	http.Redirect(w, r, "/EventSettings/"+evnt.URLName, http.StatusFound)

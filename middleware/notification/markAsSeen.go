@@ -27,6 +27,6 @@ func MarkAsSeen(w http.ResponseWriter, r *http.Request) {
 	err := post.UpdateNotification(client.Eclient, notifID, "Seen", true)
 	if err != nil {
 		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 }

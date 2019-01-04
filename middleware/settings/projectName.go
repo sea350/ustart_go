@@ -31,7 +31,7 @@ func ChangeNameAndDescription(w http.ResponseWriter, r *http.Request) {
 	//TODO: DocID
 	err = uses.ProjectNameAndDescription(client.Eclient, r.FormValue("projectID"), projName, projDesc)
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	//TODO: Add in right URL
 	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)

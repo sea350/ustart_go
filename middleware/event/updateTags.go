@@ -32,6 +32,6 @@ func UpdateEventTags(w http.ResponseWriter, r *http.Request) {
 	err := post.UpdateEvent(client.Eclient, ID, "Tags", tags)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 }
