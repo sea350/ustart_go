@@ -2,7 +2,7 @@ package registration
 
 import (
 	"errors"
-	
+
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -30,8 +30,8 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 
 	userID, err := get.UserIDByEmail(client.Eclient, email)
 	if err != nil {
-		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+		client.Logger.Println("Email: "+email+" | err: %s", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 		client.RenderSidebar(w, r, "templateNoUser2")
@@ -41,8 +41,8 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 
 	user, err := get.UserByEmail(client.Eclient, email)
 	if err != nil {
-		
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+		client.Logger.Println("DocID: "+userID+" | err: %s", err)
 		cs.ErrorStatus = true
 		cs.ErrorOutput = err
 		client.RenderSidebar(w, r, "templateNoUser2")
@@ -57,8 +57,8 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 	if emailToken == user.AuthenticationCode {
 		err = post.UpdateUser(client.Eclient, userID, "Verified", true)
 		if err != nil {
-			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+			client.Logger.Println("DocID: "+userID+" | err: %s", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 			client.RenderSidebar(w, r, "templateNoUser2")
@@ -67,8 +67,8 @@ func EmailVerification(w http.ResponseWriter, r *http.Request) {
 		}
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
 		if err != nil {
-			
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+
+			client.Logger.Println("DocID: "+userID+" | err: %s", err)
 			cs.ErrorStatus = true
 			cs.ErrorOutput = err
 		}
