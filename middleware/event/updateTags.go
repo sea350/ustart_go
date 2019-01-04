@@ -1,10 +1,8 @@
 package event
 
 import (
-	"fmt"
-	
 	"net/http"
-	
+
 	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
@@ -24,7 +22,6 @@ func UpdateEventTags(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	ID := r.FormValue("eventWidget")
-	fmt.Println("THIS IS THE ID:", ID)
 
 	tags := strings.Split(p.Sanitize(r.FormValue("skillArray")), `","`)
 	if len(tags) > 0 {
@@ -34,7 +31,6 @@ func UpdateEventTags(w http.ResponseWriter, r *http.Request) {
 
 	err := post.UpdateEvent(client.Eclient, ID, "Tags", tags)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}

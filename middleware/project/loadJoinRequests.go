@@ -3,9 +3,8 @@ package project
 import (
 	"encoding/json"
 	"fmt"
-	
+
 	"net/http"
-	
 
 	"github.com/sea350/ustart_go/uses"
 
@@ -29,7 +28,6 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
@@ -38,8 +36,6 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 		head, err := uses.ConvertUserToFloatingHead(client.Eclient, userID)
 		if err != nil {
 
-			
-	
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 			fmt.Println(fmt.Sprintf("err: middleware/project/loadjoinrequest, Line 35, index %d", index))
 		}
@@ -48,7 +44,6 @@ func LoadJoinRequests(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(heads)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}

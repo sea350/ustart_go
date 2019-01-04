@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/sea350/ustart_go/uses"
@@ -22,24 +21,20 @@ func TestWallPage(w http.ResponseWriter, r *http.Request) {
 	wallUsername := r.URL.Path[10:]
 	wallID, err := get.IDByUsername(client.Eclient, wallUsername)
 	if err != nil {
-		fmt.Println("err middleware/profile/testwallpage line 22")
-		fmt.Println(err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	user, err := get.UserByID(client.Eclient, wallID)
 	if err != nil {
-		fmt.Println("err middleware/profile/testwallpage line 28")
-		fmt.Println(err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 	entries, err := uses.LoadEntries(client.Eclient, user.EntryIDs, docID.(string))
 	if err != nil {
-		fmt.Println("err middleware/profile/testwallpage line 35")
-		fmt.Println(err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	viewer, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
-		fmt.Println("err middleware/profile/testwallpage line 41")
-		fmt.Println(err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
 	}
 
 	cs := client.ClientSide{UserInfo: user, Page: wallID, Wall: entries, ImageCode: viewer.Avatar}
