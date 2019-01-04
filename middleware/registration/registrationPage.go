@@ -45,7 +45,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	//proper email
 	if !uses.ValidEmail(p.Sanitize(r.FormValue("inputEmail"))) {
 
-		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid email submitted")
+		client.Logger.Println("Email: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid email submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)
