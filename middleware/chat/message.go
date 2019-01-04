@@ -111,7 +111,8 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+			//client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+			//DONT REPORT THIS ERROR
 			delete(chatroom[actualChatID].sockets, ws)
 			break
 		}
