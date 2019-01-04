@@ -121,10 +121,11 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 
 		msg = types.Message{SenderID: docID.(string), TimeStamp: time.Now(), Content: msg.Content, ConversationID: actualChatID}
 		if actualChatID == `` && chatURL != `` {
+			client.Logger.Println("Debug text: chat ID = " + actualChatID + " | chatUrl = " + chatURL)
 			newConvoID, err := uses.ChatFirst(client.Eclient, msg, docID.(string), dmTargetUserID)
 			if err != nil {
-
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				continue
 			}
 			notifyThese = append(notifyThese, dmTargetUserID)
 			notifyThese = append(notifyThese, docID.(string))
@@ -137,9 +138,12 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		} else if actualChatID != `` && chatURL != `` {
 			notifyThese, err = uses.ChatSend(client.Eclient, msg)
 			if err != nil {
-
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: %s", err)
+				continue
 			}
+		} else {
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | err: Unexpected condition met")
+			continue
 		}
 		notif.ChatID = actualChatID
 		sendAndNotify(msg, notif, notifyThese)
