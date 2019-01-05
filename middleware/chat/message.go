@@ -17,9 +17,10 @@ type room struct {
 	lock    sync.Mutex
 }
 
-var clients = make(map[*websocket.Conn]bool) // connected clients
+//var clients = make(map[*websocket.Conn]bool) // connected clients
 var chatroom = make(map[string]*room)
 var broadcast = make(chan types.Message) // broadcast channel
+var startChatLocks = make(map[string]*sync.Mutex)
 
 // Configure the upgrader
 var upgrader = websocket.Upgrader{
@@ -70,6 +71,11 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	// Make sure we close the connection when the function returns
 	defer ws.Close()
 
+	_, registered := startChatLocks[docID.(string)]
+	if !registered {
+		startChatLocks[docID.(string)] = &sync.Mutex{}
+	}
+
 	/*IF YOU WAND GLOBAL CHAT ENABLED, DO THIS
 		if chatURL == `` {
 		_, exists := chatroom[``]
@@ -113,8 +119,19 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			//client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			//DONT REPORT THIS ERROR
-			delete(chatroom[actualChatID].sockets, ws)
+			_, exists := chatroom[actualChatID].sockets[ws]
+			if exists {
+				delete(chatroom[actualChatID].sockets, ws)
+			}
+			_, exists = startChatLocks[docID.(string)]
+			if exists {
+				delete(startChatLocks, docID.(string))
+			}
 			break
+		}
+
+		if actualChatID == `` && chatURL != `` { // this needs to be done outside because the variables are liable to change
+			startChatLocks[docID.(string)].Lock()
 		}
 		if len(msg.Content) > 500 {
 			continue
@@ -126,6 +143,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			newConvoID, err := uses.ChatFirst(client.Eclient, msg, docID.(string), dmTargetUserID)
 			if err != nil {
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+				startChatLocks[docID.(string)].Unlock()
 				continue
 			}
 			notifyThese = append(notifyThese, dmTargetUserID)
@@ -135,6 +153,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			temp[ws] = docID.(string)
 			chatroom[actualChatID] = &room{sockets: temp}
 			msg.ConversationID = actualChatID
+			startChatLocks[docID.(string)].Unlock()
 
 		} else if actualChatID != `` && chatURL != `` {
 			notifyThese, err = uses.ChatSend(client.Eclient, msg)

@@ -3,9 +3,9 @@ package chat
 import (
 	"encoding/json"
 	"fmt"
-	
+
 	"net/http"
-	
+
 	"strconv"
 
 	"github.com/sea350/ustart_go/uses"
@@ -26,7 +26,7 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 	idxStr := r.FormValue("index")
 	if chatID == `` || idxStr == `` {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+`WARNING: chat ID or index not submitted`)
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + `Error: chat ID or index not submitted`)
 		return
 	}
 
@@ -58,7 +58,6 @@ func AjaxLoadMoreChat(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(sendThis)
 	if err != nil {
-
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
