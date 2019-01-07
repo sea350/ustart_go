@@ -119,12 +119,16 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			//client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			//DONT REPORT THIS ERROR
-			_, exists := chatroom[actualChatID].sockets[ws]
-			if exists {
-				delete(chatroom[actualChatID].sockets, ws)
+			_, exists1 := chatroom[actualChatID]
+			if exists1 {
+				_, exists2 := chatroom[actualChatID].sockets[ws]
+				if exists2 {
+					delete(chatroom[actualChatID].sockets, ws)
+				}
+
 			}
-			_, exists = startChatLocks[docID.(string)]
-			if exists {
+			_, exists3 := startChatLocks[docID.(string)]
+			if exists3 {
 				delete(startChatLocks, docID.(string))
 			}
 			break
