@@ -433,16 +433,16 @@ func main() {
 	help["wipe"] = "clears database and restarts all indices"
 	help["delete"] = "clears database"
 	help["start"] = "starts indices"
-	help["delete user"] = "wipes user index"
-	help["delete project"] = "wipes project index"
-	help["delete event"] = "wipes event index"
-	help["delete widget"] = "wipes widget index"
-	help["delete chat"] = "wipes all chat related indices (Proxy Messages, Messages, and Conversation indices)"
-	help["delete entries"] = "wipes all entries"
+	help["deluser"] = "wipes user index"
+	help["delproject"] = "wipes project index"
+	help["delevent"] = "wipes event index"
+	help["delwidget"] = "wipes widget index"
+	help["delchat"] = "wipes all chat related indices (Proxy Messages, Messages, and Conversation indices)"
+	help["delentries"] = "wipes all entries"
 	help["start user"] = "starts user index"
 	help["start project"] = "starts project index"
-	help["delete event"] = "wipes event index"
-	help["delete widget"] = "wipes widget index"
+	help["delevent"] = "wipes event index"
+	help["delwidget"] = "wipes widget index"
 	help["start chat"] = "starts all chat related indices (Proxy Messages, Messages, and Conversation indices)"
 	help["stop"] = "end of input"
 	//help["remove"] = "removes command from list"
@@ -497,33 +497,33 @@ func main() {
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			} else if strings.HasPrefix(input, "delete user") {
+			} else if strings.HasPrefix(input, "deluser") {
 
 				indices = append(indices, globals.UserIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			} else if strings.HasPrefix(input, "delete project") {
+			} else if strings.HasPrefix(input, "delproject") {
 				indices = append(indices, globals.ProjectIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			} else if strings.HasPrefix(input, "delete event") {
+			} else if strings.HasPrefix(input, "delevent") {
 				indices = append(indices, globals.EventIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			} else if strings.HasPrefix(input, "delete widget") {
+			} else if strings.HasPrefix(input, "delwidget") {
 				indices = append(indices, globals.WidgetIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			} else if strings.HasPrefix(input, "delete entries") {
+			} else if strings.HasPrefix(input, "delentries") {
 				indices = append(indices, globals.EntryIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
 				}
-			} else if strings.HasPrefix(input, "delete chat") {
+			} else if strings.HasPrefix(input, "delchat") {
 				proxyErr := clearUserProxies(eclient)
 				if proxyErr != nil {
 					log.Println(proxyErr)
