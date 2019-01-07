@@ -557,7 +557,7 @@ func main() {
 				for _, index := range indices {
 					startIndex(eclient, index)
 				}
-			} else if strings.HasPrefix(input, "start chat") {
+			} else if strings.HasPrefix(input, "stchat") {
 
 				indices = append(indices, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex)
 				for _, index := range indices {
