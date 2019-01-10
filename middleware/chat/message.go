@@ -66,7 +66,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 	// Upgrade initial GET request to a websocket
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		client.Logger.Fatal(err)
+		client.Logger.Panic(err)
 	}
 	// Make sure we close the connection when the function returns
 	defer ws.Close()

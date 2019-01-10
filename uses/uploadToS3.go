@@ -22,7 +22,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	var arr []string
 	i := strings.Index(based64, ",")
 	if i < 0 {
-		log.Fatal("no comma")
+		log.Panic("no comma")
 	} else {
 		arr = strings.Split(based64, `,`)
 	}

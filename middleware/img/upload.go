@@ -18,7 +18,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	arr := []string{}
 	i := strings.Index(data, ",")
 	if i < 0 {
-		client.Logger.Fatal("no comma")
+		client.Logger.Panic("no comma")
 	} else {
 		arr = strings.Split(data, `,`)
 

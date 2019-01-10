@@ -96,7 +96,7 @@ func (r *Request) sendMail() bool {
 func (r *Request) Send(templateName string, items interface{}) {
 	err := r.parseTemplate(templateName, items)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	if ok := r.sendMail(); ok {
 		log.Printf("Email has been sent to %s\n", r.to)
