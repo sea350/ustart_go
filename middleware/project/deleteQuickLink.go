@@ -25,7 +25,6 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	deleteTitle := r.FormValue("deleteProjectLinkDesc")
 	deleteURL := r.FormValue("deleteProjectLink")
 	if ID == `` || deleteURL == `` {
-
 		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Crucial data was not passed in, now exiting")
 		return
 	}
