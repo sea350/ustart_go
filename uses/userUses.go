@@ -185,6 +185,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		log.Println(err)
 	}
 
+	time.Sleep(30 * time.Second)
 	SendVerificationEmail(eclient, email)
 
 	return err
@@ -324,6 +325,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 		log.Println(err)
 	}
 
+	time.Sleep(30 * time.Second)
 	SendVerificationEmail(eclient, email)
 
 	return err
