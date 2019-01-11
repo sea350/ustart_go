@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"image"
+	"image/png"
 	"log"
 	"strings"
 
@@ -11,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/nfnt/resize"
 	"github.com/sea350/ustart_go/globals"
 )
 
@@ -34,6 +37,22 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	}
 
 	r := bytes.NewReader(dec)
+	img, _, err := image.Decode(r)
+	if err != nil {
+		return url, err
+	}
+
+	imgPrime := resize.Resize(512, 0, img, resize.Lanczos3)
+
+	buff := new(bytes.Buffer)
+
+	// encode image to buffer
+	err = png.Encode(buff, imgPrime)
+	if err != nil {
+		return url, err
+	}
+	// convert buffer to reader
+	reader := bytes.NewReader(buff.Bytes())
 
 	// The session the S3 Uploader will use
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(globals.S3Region), Credentials: credentials.NewStaticCredentials(globals.S3CredID, globals.S3CredSecret, globals.S3CredToken)}))
@@ -45,7 +64,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(globals.S3BucketName),
 		Key:         aws.String(filename + ".png"),
-		Body:        r,
+		Body:        reader,
 		ContentType: aws.String("image/png"),
 	})
 	if err != nil {
