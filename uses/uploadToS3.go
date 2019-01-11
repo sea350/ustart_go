@@ -42,7 +42,7 @@ func UploadToS3(based64 string, filename string) (string, error) {
 		return url, err
 	}
 
-	imgPrime := resize.Resize(512, 0, img, resize.Lanczos3)
+	imgPrime := resize.Resize(0, 1024, img, resize.Lanczos3)
 
 	buff := new(bytes.Buffer)
 
