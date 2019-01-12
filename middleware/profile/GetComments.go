@@ -25,6 +25,7 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("PostID")
 	if postID == `` {
 		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Critical data not passed in")
+		return
 	}
 
 	_, arrayofComments, err := uses.LoadComments(client.Eclient, postID, docID.(string), 0, -1)
