@@ -86,6 +86,7 @@ func main() {
 	http.HandleFunc("/AjaxUserFollowsProject/", follow.AjaxUserFollowsProject)
 	http.HandleFunc("/AjaxUserSuggestions/", profile.AjaxLoadSuggestedUsers)
 	http.HandleFunc("/AjaxProjectSuggestions/", profile.AjaxLoadSuggestedProjects)
+	http.HandleFunc("/AjaxMentorSuggestions/", profile.AjaxLoadSuggestedMentors)
 
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
