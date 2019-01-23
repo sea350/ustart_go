@@ -134,11 +134,16 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		if actualChatID == `` && chatURL != `` { // this needs to be done outside because the variables are liable to change
-			startChatLocks[docID.(string)].Lock()
+		if !uses.SpamProtecc(docID.(string)) {
+			continue
 		}
+
 		if len(msg.Content) > 500 {
 			continue
+		}
+
+		if actualChatID == `` && chatURL != `` { // this needs to be done outside because the variables are liable to change
+			startChatLocks[docID.(string)].Lock()
 		}
 
 		msg = types.Message{SenderID: docID.(string), TimeStamp: time.Now(), Content: msg.Content, ConversationID: actualChatID}
@@ -162,10 +167,12 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		} else if actualChatID != `` && chatURL != `` {
 			notifyThese, err = uses.ChatSend(client.Eclient, msg)
 			if err != nil {
+				startChatLocks[docID.(string)].Unlock()
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 				continue
 			}
 		} else {
+			startChatLocks[docID.(string)].Unlock()
 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | err: Unexpected condition met")
 			continue
 		}

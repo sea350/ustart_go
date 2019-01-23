@@ -86,6 +86,7 @@ func main() {
 	http.HandleFunc("/AjaxUserFollowsProject/", follow.AjaxUserFollowsProject)
 	http.HandleFunc("/AjaxUserSuggestions/", profile.AjaxLoadSuggestedUsers)
 	http.HandleFunc("/AjaxProjectSuggestions/", profile.AjaxLoadSuggestedProjects)
+	http.HandleFunc("/AjaxMentorSuggestions/", profile.AjaxLoadSuggestedMentors)
 
 	//WIDGET INTERACTIONS
 	http.HandleFunc("/addWidget/", widget.AddWidget)
@@ -117,6 +118,7 @@ func main() {
 	http.HandleFunc("/DeleteProject/", project.Nuke)
 
 	//SETTINGS CHANGES
+	//profile
 	http.HandleFunc("/Settings/", settings.Settings)
 	http.HandleFunc("/ImageUpload/", settings.ImageUpload)
 	http.HandleFunc("/changeName/", settings.ChangeName)
@@ -125,6 +127,7 @@ func main() {
 	http.HandleFunc("/changeEDU/", settings.ChangeEDU)
 	http.HandleFunc("/UpdateDescription/", settings.ChangeContactAndDescription)
 	http.HandleFunc("/BannerUpload/", settings.BannerUpload)
+	//events
 	http.HandleFunc("/EventSettings/", settings.Event)
 	http.HandleFunc("/eventBannerUpload/", settings.EventBannerUpload)
 	http.HandleFunc("/eventName/", settings.EventChangeNameAndDescription)
@@ -138,6 +141,7 @@ func main() {
 	http.HandleFunc("/eventLogo/", settings.EventLogo)
 	http.HandleFunc("/changeEventMemberClass/", settings.ChangeEventMemberClass)
 	http.HandleFunc("/eventHost/", settings.EventHost)
+	//projects
 	http.HandleFunc("/ProjectSettings/", settings.Project)
 	http.HandleFunc("/projectBannerUpload/", settings.ProjectBannerUpload)
 	http.HandleFunc("/projectName/", settings.ChangeNameAndDescription)

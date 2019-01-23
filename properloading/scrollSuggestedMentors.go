@@ -12,9 +12,9 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//ScrollSuggestedUsers ...
+//ScrollSuggestedMentors ...
 //Scrolls through docs being loaded
-func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string) (string, []types.FloatingHead, int, error) {
+func ScrollSuggestedMentors(eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string) (string, []types.FloatingHead, int, error) {
 
 	ctx := context.Background()
 	tags := make([]interface{}, 0)
@@ -41,6 +41,8 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 
 	if class == 5 {
+		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
+	} else {
 		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Class", 5))
 	}
 

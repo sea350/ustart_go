@@ -13,8 +13,8 @@ import (
 	properloading "github.com/sea350/ustart_go/properloading"
 )
 
-//AjaxLoadSuggestedUsers ... pulls suggested users based on user's projects and shared skills
-func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
+//AjaxLoadSuggestedMentors ... pulls suggested users based on user's projects and shared skills
+func AjaxLoadSuggestedMentors(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	docID, _ := session.Values["DocID"]
 	if docID == nil {
@@ -58,7 +58,7 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Class, myUser.Tags, myUser.Projects, follDoc.UserFollowing, uID, scrollID)
+	sID, heads, hits, err := properloading.ScrollSuggestedMentors(client.Eclient, myUser.Class, myUser.Tags, myUser.Projects, follDoc.UserFollowing, uID, scrollID)
 	if err != nil && err != io.EOF {
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)

@@ -150,8 +150,10 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		newUsr.Class = 3
 	} else if currYear == "Graduate" {
 		newUsr.Class = 4
-	} else {
+	} else if currYear == "Alumni" {
 		newUsr.Class = 5
+	} else {
+		newUsr.Class = -1
 	}
 
 	id, retErr := postUser.IndexUser(eclient, newUsr)
@@ -279,8 +281,10 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 		newUsr.Class = 3
 	} else if currYear == "Graduate" {
 		newUsr.Class = 4
-	} else {
+	} else if currYear == "Alumni" {
 		newUsr.Class = 5
+	} else {
+		newUsr.Class = -1
 	}
 
 	id, retErr := postUser.IndexUser(eclient, newUsr)
