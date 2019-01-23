@@ -216,5 +216,6 @@ func main() {
 	//http.HandleFunc("/img/", img.Display)
 	//http.HandleFunc("/uplImg/", img.Upload)
 
-	http.ListenAndServe(":"+globals.Port, nil)
+	// http.ListenAndServe(":"+globals.Port, nil)
+	net.Listen("tcp4", "127.0.0.1:5002")
 }
