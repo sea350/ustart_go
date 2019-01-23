@@ -42,6 +42,8 @@ func ScrollSuggestedMentors(eclient *elastic.Client, class int, tagArray []strin
 
 	if class == 5 {
 		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
+	} else {
+		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Class", 5))
 	}
 
 	amt := 1
