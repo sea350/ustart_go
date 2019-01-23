@@ -38,11 +38,10 @@ func SpamProtecc(userID string) bool {
 			log.lastTimestamps = append(log.lastTimestamps, timeSent)
 			lastTransacts[userID] = log
 			return true
-		} else {
-			log.lockoutUntil = timeSent.Add(lockoutSeconds * time.Second)
-			lastTransacts[userID] = log
-			return false
 		}
+		log.lockoutUntil = timeSent.Add(lockoutSeconds * time.Second)
+		lastTransacts[userID] = log
+		return false
 	}
 
 	return true
