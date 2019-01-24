@@ -3,7 +3,7 @@ package antispam
 import "time"
 
 //define policy here
-var journalRecord = spamRecord{
+var journalRecord = &spamRecord{
 	record: make(map[string]timelog),
 	spamPolicy: policy{
 		frequency:     2,

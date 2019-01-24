@@ -20,7 +20,7 @@ type spamRecord struct {
 
 //spamProtecc is meant to be run when you need generic spam control spam control,
 //returns true if you are permitted to continue, false if you should be locked out
-func spamProtecc(userID string, trackRecord spamRecord) bool {
+func spamProtecc(userID string, trackRecord *spamRecord) bool {
 
 	timeSent := time.Now()
 
