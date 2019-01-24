@@ -26,11 +26,14 @@ func ChangePassword(eclient *elastic.Client, userID string, oldPass []byte, newP
 		return errors.New("Invalid old password")
 	}*/
 	newHashedPass, err := bcrypt.GenerateFromPassword(newPass, 10)
-	err = post.UpdateUser(eclient, userID, "Password", newHashedPass)
+	// err = post.UpdateUser(eclient, userID, "Password", newHashedPass)
+	usr.Password = newHashedPass
 
+	clearWarnings := make(map[string]types.LoginWarning)
+	usr.LoginWarnings = clearWarnings
 	//Clear login lockout counter
 	if err == nil {
-		err = post.UpdateUser(eclient, userID, "LoginWarnings", []types.LoginWarning{})
+		err = post.ReindexUser(eclient, userID, userID, usr)
 	}
 
 	return err
