@@ -134,6 +134,8 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	userFoll := len(follDoc.UserFollowing)
 	projFoll := len(follDoc.ProjectFollowing)
 	eventFoll := len(follDoc.EventFollowing)
+	userstruct.Password = []byte{}
+	userstruct.Email = "Censored"
 	cs := client.ClientSide{UserInfo: userstruct, Wall: jEntries, Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, UserFollowing: userFoll, ProjFollowing: projFoll, EventFollowing: eventFoll, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets, ListOfHeads: projHeads}
 
 	client.RenderSidebar(w, r, "template2-nil")
