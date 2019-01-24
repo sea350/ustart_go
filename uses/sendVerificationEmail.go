@@ -15,6 +15,9 @@ import (
 //Requires the user's email address
 //Returns if the email failed to send
 func SendVerificationEmail(eclient *elastic.Client, email string) {
+
+	time.Sleep(30 * time.Second)
+
 	userID, err := getUser.UserIDByEmail(eclient, email)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
