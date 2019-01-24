@@ -29,6 +29,7 @@ func MakeUserEntry(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	if !antispam.AntiJournalSpam(docID.(string)) {
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | This user is attempting to spam")
 		return
 	}
 

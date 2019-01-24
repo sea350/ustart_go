@@ -136,6 +136,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if !antispam.AntiChatSpam(docID.(string)) {
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | This user is attempting to spam")
 			continue
 		}
 
