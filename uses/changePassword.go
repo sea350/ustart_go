@@ -33,7 +33,7 @@ func ChangePassword(eclient *elastic.Client, userID string, oldPass []byte, newP
 	usr.LoginWarnings = clearWarnings
 	//Clear login lockout counter
 	if err == nil {
-		err = post.ReindexUser(eclient, userID, userID, usr)
+		err = post.ReindexUser(eclient, userID, usr)
 	}
 
 	return err
