@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/sea350/ustart_go/antispam"
 	"github.com/sea350/ustart_go/middleware/client"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	"github.com/sea350/ustart_go/types"
@@ -134,7 +135,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		if !uses.SpamProtecc(docID.(string)) {
+		if !antispam.AntiChatSpam(docID.(string)) {
 			continue
 		}
 

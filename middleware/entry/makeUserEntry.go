@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/sea350/ustart_go/antispam"
 	client "github.com/sea350/ustart_go/middleware/client"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	"github.com/sea350/ustart_go/types"
@@ -27,7 +28,7 @@ func MakeUserEntry(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	p := bluemonday.UGCPolicy()
 
-	if !uses.SpamProtecc(docID.(string)) {
+	if !antispam.AntiJournalSpam(docID.(string)) {
 		return
 	}
 
