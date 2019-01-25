@@ -40,6 +40,7 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
+	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
 	if class == 5 {
 		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
 	}
