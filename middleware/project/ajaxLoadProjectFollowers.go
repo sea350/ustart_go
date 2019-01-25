@@ -19,10 +19,6 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.URL.Path[10:] == "_blank" {
-		return
-	}
-
 	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[10:])
 	if err != nil {
 
