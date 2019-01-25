@@ -31,10 +31,11 @@ func spamProtecc(userID string, trackRecord *spamRecord) bool {
 		return true
 	}
 
+	if timeSent.Before(log.lockoutUntil) {
+		return false
+	}
+
 	if len(log.lastTimestamps) >= trackRecord.spamPolicy.frequency {
-		if timeSent.Before(log.lockoutUntil) {
-			return false
-		}
 		if log.lastTimestamps[0].Add(trackRecord.spamPolicy.withinTime).Before(timeSent) {
 			log.lastTimestamps = log.lastTimestamps[1 : trackRecord.spamPolicy.frequency-1]
 			log.lastTimestamps = append(log.lastTimestamps, timeSent)
@@ -46,5 +47,7 @@ func spamProtecc(userID string, trackRecord *spamRecord) bool {
 		return false
 	}
 
+	log.lastTimestamps = append(log.lastTimestamps, timeSent)
+	trackRecord.record[userID] = log
 	return true
 }
