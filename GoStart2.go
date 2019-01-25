@@ -127,6 +127,8 @@ func main() {
 	http.HandleFunc("/changeEDU/", settings.ChangeEDU)
 	http.HandleFunc("/UpdateDescription/", settings.ChangeContactAndDescription)
 	http.HandleFunc("/BannerUpload/", settings.BannerUpload)
+	http.HandleFunc("/AjaxToggleUserActive/", settings.AjaxToggleUserActive)
+
 	//events
 	http.HandleFunc("/EventSettings/", settings.Event)
 	http.HandleFunc("/eventBannerUpload/", settings.EventBannerUpload)

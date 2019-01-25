@@ -18,6 +18,7 @@ func AjaxLoadProjectFollowers(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
+
 	_, followDoc, err := getFollow.ByID(client.Eclient, r.URL.Path[10:])
 	if err != nil {
 
