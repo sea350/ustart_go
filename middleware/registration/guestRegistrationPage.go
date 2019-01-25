@@ -55,10 +55,10 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	month, _ := strconv.Atoi(r.FormValue("dob")[5:7])
 	day, _ := strconv.Atoi(r.FormValue("dob")[8:10])
 	bday := time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
-	country := r.FormValue("country")
-	state := r.FormValue("state")
-	city := p.Sanitize(r.FormValue("city"))
-	zip := p.Sanitize(r.FormValue("zip"))
+	// country := r.FormValue("country")
+	// state := r.FormValue("state")
+	// city := p.Sanitize(r.FormValue("city"))
+	// zip := p.Sanitize(r.FormValue("zip"))
 	currYear := r.FormValue("year")
 
 	//proper email
