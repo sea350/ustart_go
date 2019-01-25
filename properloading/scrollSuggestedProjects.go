@@ -39,7 +39,7 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 	suggQuery = suggQuery.Should(elastic.NewTermsQuery("ListNeeded", tags...))
 	suggQuery = suggQuery.MustNot(elastic.NewTermsQuery("_id", projectIDs...))
 	suggQuery = suggQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
-	suggQuery = suggQuery.Must(elastic.NewTermQuery("Visisble", true))
+	suggQuery = suggQuery.Must(elastic.NewTermQuery("Visible", true))
 
 	amt := 1
 	if scrollID == `` {

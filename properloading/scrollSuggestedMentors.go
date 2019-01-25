@@ -39,6 +39,7 @@ func ScrollSuggestedMentors(eclient *elastic.Client, class int, tagArray []strin
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...))
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
+	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("_id", userID))
 	// suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Class", 5))
