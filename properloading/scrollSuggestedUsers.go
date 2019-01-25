@@ -39,8 +39,10 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
-
-	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
+	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
+	if class == 5 {
+		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
+	}
 
 	amt := 1
 	if scrollID == `` {
@@ -63,6 +65,33 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 			log.Println(err)
 		}
 		return "", nil, 0, err
+	}
+
+	if res.Hits.TotalHits == 0 { //if no results just start recommending random
+		suggestedUserQuery = elastic.NewBoolQuery()
+		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
+		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
+		amt := 1
+		if scrollID == `` {
+			amt = 3
+		}
+		searchResults = eclient.Scroll().
+			Index(globals.UserIndex).
+			Query(suggestedUserQuery).
+			Size(amt)
+
+		if len(scrollID) > 0 {
+			searchResults = searchResults.ScrollId(scrollID)
+		}
+
+		res, err = searchResults.Do(ctx)
+		if !(err == io.EOF && res != nil) && err != nil {
+			if err != io.EOF {
+				log.SetFlags(log.LstdFlags | log.Lshortfile)
+				log.Println(err)
+			}
+			return "", nil, 0, err
+		}
 	}
 
 	var heads []types.FloatingHead

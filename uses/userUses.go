@@ -139,6 +139,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	newLoc.Zip = zip
 	newUsr.Location = newLoc
 	newUsr.Visible = true
+	newUsr.Status = true
 	newUsr.AccCreation = time.Now()
 	if currYear == "Freshman" {
 		newUsr.Class = 0
@@ -269,6 +270,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	newLoc.Zip = zip
 	newUsr.Location = newLoc
 	newUsr.Visible = true
+	newUsr.Status = true
 	newUsr.AccCreation = time.Now()
 	if currYear == "Freshman" {
 		newUsr.Class = 0
