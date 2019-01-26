@@ -23,7 +23,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	err := uses.ChangePassword(client.Eclient, session.Values["DocID"].(string), oldpb, newpb)
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err, "| ABOUT TO RETURN")
 		return
 	}
 	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
