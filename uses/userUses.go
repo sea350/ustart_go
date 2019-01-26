@@ -28,7 +28,7 @@ import (
 //SignUpBasic ... A basic user signup process
 //Requires all basic signup feilds (email, password ...)
 //Returns an error if there was a problem with database submission
-func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, school string, major []string, bday time.Time, currYear string, addressIP string) error{//, country string, state string, city string, zip string) error {
+func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, school string, major []string, bday time.Time, currYear string, addressIP string) error { //, country string, state string, city string, zip string) error {
 
 	newSignWarning, err := getWarning.SingupWarningByIP(eclient, addressIP)
 	if err != nil {
@@ -194,7 +194,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 }
 
 //GuestSignUpBasic ... Signup function for guests (non-NYU users)
-func GuestSignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string,country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string, guestCode string, country string, state string, city string, zip string) error { //country string, state string, city string, zip string
+func GuestSignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string, guestCode string) error { //country string, state string, city string, zip string
 	inUse, err := getUser.EmailInUse(eclient, email)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
