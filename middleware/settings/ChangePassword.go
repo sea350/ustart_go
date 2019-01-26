@@ -26,6 +26,8 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err, "| ABOUT TO RETURN")
 		return
 	}
+	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err, "| BROKE OUT OF RETURN ")
+
 	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
 	return
 
