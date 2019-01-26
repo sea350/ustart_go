@@ -18,11 +18,15 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	oldp := r.FormValue("oldpass")
 	newp := r.FormValue("confirmpass")
+
+	if oldp == `` && newp == `` {
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Critical data not passed in")
+		return
+	}
 	oldpb := []byte(oldp)
 	newpb := []byte(newp)
 	err := uses.ChangePassword(client.Eclient, session.Values["DocID"].(string), oldpb, newpb)
 	if err != nil {
-
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err, "| ABOUT TO RETURN")
 		return
 	}
