@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"fmt"
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -27,11 +28,11 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	newpb := []byte(newp)
 	err := uses.ChangePassword(client.Eclient, session.Values["DocID"].(string), oldpb, newpb)
 	if err != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err, "| ABOUT TO RETURN")
+		fmt.Fprintf("Change password failed")
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
-	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err, "| BROKE OUT OF RETURN ")
-
+	fmt.Fprintf("Change password successful!")
 	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
 	return
 
