@@ -102,7 +102,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	}
 
 	newUsr := types.User{}
-	newUsr.Avatar = "https://i.imgur.com/OLguDYQ.png"
+	newUsr.Avatar = "https://i.imgur.com/8BnkFLO.png"
 	newUsr.Banner = "https://i.imgur.com/XTj1t1J.png"
 
 	newUsr.FirstName = fname
@@ -235,7 +235,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	}
 
 	newUsr := types.User{}
-	newUsr.Avatar = "https://i.imgur.com/OLguDYQ.png"
+	newUsr.Avatar = "https://i.imgur.com/8BnkFLO.png"
 	newUsr.Banner = "https://i.imgur.com/XTj1t1J.png"
 	newUsr.FirstName = fname
 	newUsr.LastName = lname
