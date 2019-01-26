@@ -76,7 +76,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		usr, err := getUser.ByID(client.Elient, userID)
+		usr, err := getUser.UserByID(client.Eclient, userID)
 
 		usr.Password = newHashedPass
 		// err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
