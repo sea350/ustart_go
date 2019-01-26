@@ -44,7 +44,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 	if len(dob) == 0 {
 		var bday time.Time
 		bday, _ := time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
-		err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
+		err := uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
 		if err != nil {
 
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
@@ -70,7 +70,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 		}
 
 		bday := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
-		err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
+		err := uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
 		if err != nil {
 
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
