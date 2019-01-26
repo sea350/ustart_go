@@ -22,7 +22,6 @@ func ScrollPageUser(eclient *elastic.Client, docID string, viewerID string, scro
 	usrQuery = usrQuery.Must(elastic.NewTermQuery("PosterID", strings.ToLower(docID)))
 	usrQuery = usrQuery.Must(elastic.NewTermsQuery("Classification", 0, 2))
 	usrQuery = usrQuery.Must(elastic.NewTermQuery("Visible", true))
-	usrQuery = usrQuery.Must(elastic.NewTermQuery("Status", true))
 
 	var arrResults []types.JournalEntry
 
