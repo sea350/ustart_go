@@ -76,30 +76,39 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
-		if err != nil {
+		usr, err := getUser.ByID(client.Elient, userID)
 
-			client.Logger.Println("DocID: "+userID+" | err: ", err)
-			cs.ErrorOutput = errors.New("A problem has occurred")
-			cs.ErrorStatus = true
-			client.RenderSidebar(w, r, "templateNoUser2")
-			client.RenderTemplate(w, r, "reset-new-pass", cs)
-			return
-		}
+		usr.Password = newHashedPass
+		// err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
+		// if err != nil {
 
-		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
-		if err != nil {
+		// 	client.Logger.Println("DocID: "+userID+" | err: ", err)
+		// 	cs.ErrorOutput = errors.New("A problem has occurred")
+		// 	cs.ErrorStatus = true
+		// 	client.RenderSidebar(w, r, "templateNoUser2")
+		// 	client.RenderTemplate(w, r, "reset-new-pass", cs)
+		// 	return
+		// }
 
-			client.Logger.Println("DocID: "+userID+" | err: ", err)
-		}
+		usr.AuthenticationCode = nil
 
-		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
-		if err != nil {
+		// err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
+		// if err != nil {
 
-			client.Logger.Println("DocID: "+userID+" | err: ", err)
-		}
+		// 	client.Logger.Println("DocID: "+userID+" | err: ", err)
+		// }
+		usr.AuthenticationCodeTime = nil
 
-		err = post.UpdateUser(client.Eclient, userID, "LoginWarnings", make(map[string]types.LoginWarning))
+		// err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
+		// if err != nil {
+
+		// 	client.Logger.Println("DocID: "+userID+" | err: ", err)
+		// }
+
+		usr.LoginWarnings = make(map[string]types.LoginWarning)
+
+		// err = post.UpdateUser(client.Eclient, userID, "LoginWarnings", make(map[string]types.LoginWarning))
+		err = post.ReindexUser(client.Eclient, userID, usr)
 		if err != nil {
 
 			client.Logger.Println("DocID: "+userID+" | err: ", err)
