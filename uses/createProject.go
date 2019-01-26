@@ -33,7 +33,8 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	newProj.Description = description
 	newProj.Visible = true
 	newProj.CreationDate = time.Now()
-	newProj.Avatar = "https://i.imgur.com/TYFKsdi.png"
+	newProj.Avatar = "https://i.imgur.com/OLguDYQ.png"
+	newProj.Banner = "https://i.imgur.com/XTj1t1J.png"
 	newProj.Category = category
 	newProj.Organization = college
 	newProj.Location = location
