@@ -2,7 +2,7 @@ package entry
 
 import (
 	"fmt"
-	
+
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/entry"
@@ -21,24 +21,28 @@ func DeleteEntry(w http.ResponseWriter, r *http.Request) {
 	}
 
 	entryID := r.FormValue("postid")
+	if entryID == `` {
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Critical data not passed in")
+		return
+	}
 
 	entry, err := get.EntryByID(client.Eclient, entryID)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	err = post.UpdateEntry(client.Eclient, entryID, "Visible", false)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		return
 	}
 
 	// err = delete.Entry(eclient, entryID)
 	// if err != nil {
-	// 	
+	//
 	// 	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	// 	return
 	// }
@@ -48,21 +52,21 @@ func DeleteEntry(w http.ResponseWriter, r *http.Request) {
 		for i := range entry.ShareIDs {
 			err := post.UpdateEntry(client.Eclient, entry.ShareIDs[i], "ReferenceEntry", ``)
 			if err != nil {
-				
+
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 		}
 	case 1:
 		err = post.DeleteReplyID(client.Eclient, entry.ReferenceEntry, entryID)
 		if err != nil {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			return
 		}
 	case 2:
 		err = post.DeleteShareID(client.Eclient, entry.ReferenceEntry, entryID)
 		if err != nil {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
