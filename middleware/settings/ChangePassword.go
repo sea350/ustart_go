@@ -1,13 +1,15 @@
 package settings
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
 )
 
-//ChangePassword ...
+//ChangePassword ... designed for ajax
 func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
@@ -20,19 +22,35 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	newp := r.FormValue("confirmpass")
 
 	if oldp == `` && newp == `` {
+
 		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Critical data not passed in")
+		data, err := json.Marshal("Critical data not passed in")
+		if err != nil {
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		}
+		fmt.Fprintln(w, string(data))
 		return
 	}
 	oldpb := []byte(oldp)
 	newpb := []byte(newp)
 	err := uses.ChangePassword(client.Eclient, session.Values["DocID"].(string), oldpb, newpb)
 	if err != nil {
-		client.Logger.Printf("Change password failed")
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		data, err := json.Marshal(err)
+		if err != nil {
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		}
+		fmt.Fprintln(w, string(data))
 		return
 	}
-	client.Logger.Printf("Change password successful!")
-	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
+
+	data, err := json.Marshal("Success!")
+	if err != nil {
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+	}
+
+	fmt.Fprintln(w, string(data))
+
 	return
 
 }
