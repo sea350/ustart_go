@@ -43,7 +43,7 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 
 	if len(dob) == 0 {
 		var bday time.Time
-		bday, _ = time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
+		bday = time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
 		err := uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
 		if err != nil {
 
