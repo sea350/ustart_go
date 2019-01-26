@@ -10,6 +10,7 @@ import (
 	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
+	"github.com/sea350/ustart_go/types"
 	bcrypt "golang.org/x/crypto/bcrypt"
 )
 
@@ -30,6 +31,15 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 	email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
 	emailedToken := r.FormValue("verifCode")
+
+	if email == `` {
+		client.Logger.Println("")
+		cs.ErrorOutput = errors.New("Inusfficient data passed in")
+		cs.ErrorStatus = true
+		client.RenderSidebar(w, r, "templateNoUser2")
+		client.RenderTemplate(w, r, "reset-new-pass", cs)
+		return
+	}
 
 	user, err := getUser.UserByEmail(client.Eclient, email)
 	if err != nil {
@@ -84,6 +94,12 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		}
 
 		err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
+		if err != nil {
+
+			client.Logger.Println("DocID: "+userID+" | err: ", err)
+		}
+
+		err = post.UpdateUser(client.Eclient, userID, "LoginWarnings", make(map[string]types.LoginWarning))
 		if err != nil {
 
 			client.Logger.Println("DocID: "+userID+" | err: ", err)
