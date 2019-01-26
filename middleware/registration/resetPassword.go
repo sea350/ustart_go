@@ -90,14 +90,15 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		// 	return
 		// }
 
-		usr.AuthenticationCode = nil
+		usr.AuthenticationCode = ""
 
 		// err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
 		// if err != nil {
 
 		// 	client.Logger.Println("DocID: "+userID+" | err: ", err)
 		// }
-		usr.AuthenticationCodeTime = nil
+		var newTime time.Time
+		usr.AuthenticationCodeTime = newTime
 
 		// err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
 		// if err != nil {
