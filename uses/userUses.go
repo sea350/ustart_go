@@ -28,7 +28,7 @@ import (
 //SignUpBasic ... A basic user signup process
 //Requires all basic signup feilds (email, password ...)
 //Returns an error if there was a problem with database submission
-func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string, addressIP string) error {
+func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, school string, major []string, bday time.Time, currYear string, addressIP string) error { //, country string, state string, city string, zip string) error {
 
 	newSignWarning, err := getWarning.SingupWarningByIP(eclient, addressIP)
 	if err != nil {
@@ -102,8 +102,8 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	}
 
 	newUsr := types.User{}
-	newUsr.Avatar = "https://i.imgur.com/TYFKsdi.png"
-	newUsr.Banner = "https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/20882995_716470841896823_2067565050010385700_n.jpg?_nc_cat=104&_nc_ht=scontent-lga3-1.xx&oh=358772e4047c100765f12c22b72efd68&oe=5C83172C"
+	newUsr.Avatar = "https://i.imgur.com/8BnkFLO.png"
+	newUsr.Banner = "https://i.imgur.com/XTj1t1J.png"
 
 	newUsr.FirstName = fname
 	newUsr.LastName = lname
@@ -133,12 +133,13 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	newUsr.Majors = major
 	newUsr.Dob = bday
 	newLoc := types.LocStruct{}
-	newLoc.Country = country
-	newLoc.State = state
-	newLoc.City = city
-	newLoc.Zip = zip
+	// newLoc.Country = country
+	// newLoc.State = state
+	// newLoc.City = city
+	// newLoc.Zip = zip
 	newUsr.Location = newLoc
 	newUsr.Visible = true
+	newUsr.Status = true
 	newUsr.AccCreation = time.Now()
 	if currYear == "Freshman" {
 		newUsr.Class = 0
@@ -193,7 +194,7 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 }
 
 //GuestSignUpBasic ... Signup function for guests (non-NYU users)
-func GuestSignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string, guestCode string) error {
+func GuestSignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, country string, state string, city string, zip string, school string, major []string, bday time.Time, currYear string, guestCode string) error { //country string, state string, city string, zip string
 	inUse, err := getUser.EmailInUse(eclient, email)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -234,8 +235,8 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	}
 
 	newUsr := types.User{}
-	newUsr.Avatar = "https://i.imgur.com/TYFKsdi.png"
-	newUsr.Banner = "https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/20882995_716470841896823_2067565050010385700_n.jpg?_nc_cat=104&_nc_ht=scontent-lga3-1.xx&oh=358772e4047c100765f12c22b72efd68&oe=5C83172C"
+	newUsr.Avatar = "https://i.imgur.com/8BnkFLO.png"
+	newUsr.Banner = "https://i.imgur.com/XTj1t1J.png"
 	newUsr.FirstName = fname
 	newUsr.LastName = lname
 	newUsr.Email = email
@@ -269,6 +270,7 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	newLoc.Zip = zip
 	newUsr.Location = newLoc
 	newUsr.Visible = true
+	newUsr.Status = true
 	newUsr.AccCreation = time.Now()
 	if currYear == "Freshman" {
 		newUsr.Class = 0

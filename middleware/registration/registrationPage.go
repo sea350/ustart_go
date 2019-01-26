@@ -93,10 +93,10 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	day, _ := strconv.Atoi(r.FormValue("dob")[8:10])
 	bday := time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
 
-	country := r.FormValue("country")
-	state := r.FormValue("state")
-	city := p.Sanitize(r.FormValue("city"))
-	zip := p.Sanitize(r.FormValue("zip"))
+	// country := r.FormValue("country")
+	// state := r.FormValue("state")
+	// city := p.Sanitize(r.FormValue("city"))
+	// zip := p.Sanitize(r.FormValue("zip"))
 	currYear := r.FormValue("year")
 
 	//attempting to catch client IP
@@ -114,7 +114,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		clientIP = userIP.String()
 	}
 
-	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear, clientIP)
+	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP) // country, state, city, zip,
 
 	if err2 != nil {
 
