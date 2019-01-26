@@ -24,6 +24,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		return
 	}
 	http.Redirect(w, r, "/profile/"+session.Values["Username"].(string), http.StatusFound)
 	return
