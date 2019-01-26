@@ -43,7 +43,12 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 
 	if len(dob) == 0 {
 		var bday time.Time
-		bday := time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
+		bday, _ := time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
+		err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
+		if err != nil {
+
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		}
 	} else {
 		month, err := strconv.Atoi(dob[5:7])
 		if err != nil {
@@ -65,12 +70,13 @@ func ChangeName(w http.ResponseWriter, r *http.Request) {
 		}
 
 		bday := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
-	}
-	err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
-	if err != nil {
+		err = uses.ChangeFirstAndLastName(client.Eclient, session.Values["DocID"].(string), first, last, bday)
+		if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		}
 	}
+
 	http.Redirect(w, r, "/Settings/#namecollapse", http.StatusFound)
 	return
 
