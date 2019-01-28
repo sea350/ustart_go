@@ -26,10 +26,10 @@ func ChangeEducation(eclient *elastic.Client, userID string, accType int, uni st
 	if err != nil {
 		return err
 	}
-	err = post.UpdateUser(eclient, userID, "CollegeGradDate", hsGrad)
-	if err != nil {
-		return err
-	}
+	// err = post.UpdateUser(eclient, userID, "CollegeGradDate", hsGrad)
+	// if err != nil {
+	// 	return err
+	// }
 	err = post.UpdateUser(eclient, userID, "Majors", major)
 	if err != nil {
 		return err
