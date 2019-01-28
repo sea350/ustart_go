@@ -31,9 +31,10 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	// email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
 	email := r.FormValue("email")
 	emailedToken := r.FormValue("verifCode")
-
+	pass := []byte(r.FormValue("password"))
 	if email == `` {
 		client.Logger.Println("THE EMAIL IS:", email)
+		client.Logger.Println("THE PASS IS:", pass)
 		cs.ErrorOutput = errors.New("Inusfficient data passed in")
 		cs.ErrorStatus = true
 		client.RenderSidebar(w, r, "templateNoUser2")
@@ -54,7 +55,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 	// If the time since authentication code was input is less than 1 hour
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
-		newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
+		newHashedPass, err := bcrypt.GenerateFromPassword(pass, 10)
 		if err != nil {
 			client.Logger.Println("BCRYPT ERROR")
 			client.Logger.Println("Email: "+email+" | err: ", err)
