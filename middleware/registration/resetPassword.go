@@ -33,7 +33,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	emailedToken := r.FormValue("verifCode")
 
 	if email == `` {
-		client.Logger.Println("")
+		client.Logger.Println("THE EMAIL IS:", email)
 		cs.ErrorOutput = errors.New("Inusfficient data passed in")
 		cs.ErrorStatus = true
 		client.RenderSidebar(w, r, "templateNoUser2")
