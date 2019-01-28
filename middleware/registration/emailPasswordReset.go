@@ -104,8 +104,8 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 
 		subject := "Your password-reset link"
 		link := globals.SiteURL + "/ResetPassword/?email=" + email + "&verifCode=" + token
-		r := uses.NewRequest([]string{email}, subject)
-		r.Send(
+		ree := uses.NewRequest([]string{email}, subject)
+		ree.Send(
 			globals.HTMLPATH+"email_template.html", map[string]string{
 				"username":      user.Username,
 				"link":          link,
@@ -113,8 +113,9 @@ func SendPasswordResetEmail(w http.ResponseWriter, r *http.Request) {
 				"contentdos":    "Simply click the button below to set a new password",
 				"contenttres":   "CHANGE PASSWORD",
 				"contentquatro": "a password reset"})
-		cs.Sent = "Email successfully sent!"
 
+		http.Redirect(w, r, "/SendPassResetConfirm/", http.StatusFound)
+		return
 	}
 	client.RenderSidebar(w, r, "templateNoUser2")
 	client.RenderTemplate(w, r, "reset-forgot-pw", cs)

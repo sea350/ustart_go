@@ -66,6 +66,7 @@ func main() {
 	http.HandleFunc("/Activation/", registration.EmailVerification)
 	http.HandleFunc("/ResetPassword/", registration.ResetPassword)
 	http.HandleFunc("/SendPasswordResetEmail/", registration.SendPasswordResetEmail)
+	http.HandleFunc("/SendPassResetConfirm/", registration.SendPassResetConfirm)
 	http.HandleFunc("/ResendVerificationEmail/", registration.ResendVerificationEmail)
 
 	// USER PROFILE AND INTERACTIONS
