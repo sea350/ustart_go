@@ -46,7 +46,7 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 
 	major = append(major, r.FormValue("majors"))
 	Year := r.FormValue("year")
-	gradDate := p.Sanitize(r.FormValue("uniGradDate"))
+	// gradDate := p.Sanitize(r.FormValue("uniGradDate"))
 	//client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"UNI Grad Date:", gradDate)
 
 	var minor []string
