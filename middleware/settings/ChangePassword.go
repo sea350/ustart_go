@@ -21,13 +21,17 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	oldp := r.FormValue("oldpass")
 	newp := r.FormValue("confirmpass")
 
+	res := make(map[string]string)
+
 	if oldp == `` && newp == `` {
 
 		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Critical data not passed in")
-		data, err := json.Marshal("Critical data not passed in")
+		res["error"] = "Critical data not passed in"
+		data, err := json.Marshal(res)
 		if err != nil {
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
+
 		fmt.Fprintln(w, string(data))
 		return
 	}
@@ -39,7 +43,6 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
-	res := make(map[string]string)
 	res["error"] = err.Error()
 
 	data, err := json.Marshal(res)
