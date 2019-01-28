@@ -47,7 +47,7 @@ func ChangeEducation(eclient *elastic.Client, userID string, uni string, major [
 		classInt = 3
 	case "graduate":
 		classInt = 4
-	case "alumin":
+	case "alumni":
 		classInt = 5
 	}
 
