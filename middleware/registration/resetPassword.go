@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"net/http"
-	"strings"
 	"time"
 
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -29,7 +28,8 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 	cs := client.ClientSide{}
 
-	email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
+	// email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
+	email := r.FormValue("email")
 	emailedToken := r.FormValue("verifCode")
 
 	if email == `` {
