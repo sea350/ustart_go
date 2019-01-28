@@ -31,7 +31,9 @@ func ChangeEducation(eclient *elastic.Client, userID string, uni string, major [
 		return err
 	}
 	err = post.UpdateUser(eclient, userID, "Minors", minor)
-	return err
+	if err != nil {
+		return err
+	}
 
 	classInt := -1
 	switch strings.ToLower(class) {
@@ -45,7 +47,7 @@ func ChangeEducation(eclient *elastic.Client, userID string, uni string, major [
 		classInt = 3
 	case "graduate":
 		classInt = 4
-	case "alumin":
+	case "alumni":
 		classInt = 5
 	}
 
