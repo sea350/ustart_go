@@ -70,6 +70,6 @@ func AjaxProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 
 	res["error"] = "success"
 	time.Sleep(2 * time.Second)
-	http.Redirect(w, r, "/ProjectSettings/"+newURL, http.StatusFound)
+	http.Redirect(w, r, "/Projects/"+newURL, http.StatusFound)
 
 }
