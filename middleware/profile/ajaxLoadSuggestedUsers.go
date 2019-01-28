@@ -58,7 +58,7 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Class, myUser.Tags, myUser.Projects, follDoc.UserFollowing, uID, scrollID)
+	sID, heads, hits, err := properloading.ScrollSuggestedUsers(client.Eclient, myUser.Class, myUser.Tags, myUser.Projects, follDoc.UserFollowing, uID, scrollID, myUser.Majors, myUser.University)
 	if err != nil && err != io.EOF {
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
