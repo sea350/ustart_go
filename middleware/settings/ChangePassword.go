@@ -39,8 +39,8 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
-	res := make(map[string]error)
-	res["error"] = err
+	res := make(map[string]string)
+	res["error"] = err.Error()
 
 	data, err := json.Marshal(res)
 	if err != nil {
