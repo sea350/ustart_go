@@ -40,10 +40,11 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 
 	err := uses.ChangePassword(client.Eclient, session.Values["DocID"].(string), oldpb, newpb)
 	if err != nil {
+		res["error"] = err.Error()
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+	} else {
+		res["error"] = "success"
 	}
-
-	res["error"] = err.Error()
 
 	data, err := json.Marshal(res)
 	if err != nil {
