@@ -44,7 +44,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		classification = 1
 	}
 	if r.FormValue("widgetSubmit") == `2` {
-		//calendar WIP
+		//
 		image := template.HTML(r.FormValue("UNKNOWN"))
 		data = []template.HTML{image}
 		classification = 2
@@ -280,7 +280,7 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 		//calendar widget
 
 		calendarInput := r.FormValue("gCalEmbed")
-		regX := regexp.MustCompile(`^(([^<>()[].,;:\s@\"]+(.[^<>()[].,;:\s@\"]+)*)|(\".+\"))@(([^<>()[].,;:\s@\"]+.)+[^<>()[].,;:\s@\"]{2,})$`)
+		regX := regexp.MustCompile(`[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}`)
 		if !regX.MatchString(calendarInput) {
 			return newWidget, errors.New(`Email did not match valid email criteria`)
 		} //Check valid embed code
