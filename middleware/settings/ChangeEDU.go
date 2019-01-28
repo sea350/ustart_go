@@ -5,8 +5,6 @@ import (
 
 	"net/http"
 
-	"strconv"
-
 	"github.com/microcosm-cc/bluemonday"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -28,14 +26,14 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 	}
 	r.ParseForm()
 	p := bluemonday.UGCPolicy()
-	typeAcc := p.Sanitize(r.FormValue("type_select"))
-	i, err2 := strconv.Atoi(typeAcc)
-	if err2 != nil {
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err2)
-	}
+	// typeAcc := p.Sanitize(r.FormValue("type_select"))
+	// i, err2 := strconv.Atoi(typeAcc)
+	// if err2 != nil {
+	// 	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err2)
+	// }
 
-	highschoolName := p.Sanitize(r.FormValue("schoolname"))
-	highschoolGrad := p.Sanitize(r.FormValue("highSchoolGradDate"))
+	// highschoolName := p.Sanitize(r.FormValue("schoolname"))
+	// highschoolGrad := p.Sanitize(r.FormValue("highSchoolGradDate"))
 	uniName := r.FormValue("universityName")
 	var major []string
 
