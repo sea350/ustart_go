@@ -51,7 +51,7 @@ func ChangeEDU(w http.ResponseWriter, r *http.Request) {
 
 	var minor []string
 
-	err := uses.ChangeEducation(client.Eclient, session.Values["DocID"].(string), i, highschoolName, highschoolGrad, uniName, gradDate, major, minor, Year)
+	err := uses.ChangeEducation(client.Eclient, session.Values["DocID"].(string), i, uniName, gradDate, major, minor, Year)
 	if err != nil {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}

@@ -8,20 +8,20 @@ import (
 )
 
 //ChangeEducation ...
-func ChangeEducation(eclient *elastic.Client, userID string, accType int, hs string, hsGrad string, uni string, uniGrad string, major []string, minor []string, class string) error {
+func ChangeEducation(eclient *elastic.Client, userID string, accType int, uni string, uniGrad string, major []string, minor []string, class string) error {
 
 	err := post.UpdateUser(eclient, userID, "AccType", accType)
 	if err != nil {
 		return err
 	}
-	err = post.UpdateUser(eclient, userID, "HighSchool", hs)
-	if err != nil {
-		return err
-	}
-	err = post.UpdateUser(eclient, userID, "HSGradDate", hsGrad)
-	if err != nil {
-		return err
-	}
+	// err = post.UpdateUser(eclient, userID, "HighSchool", hs)
+	// if err != nil {
+	// 	return err
+	// }
+	// err = post.UpdateUser(eclient, userID, "HSGradDate", hsGrad)
+	// if err != nil {
+	// 	return err
+	// }
 	err = post.UpdateUser(eclient, userID, "UndergradSchool", uni)
 	if err != nil {
 		return err
