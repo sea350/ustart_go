@@ -45,7 +45,7 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 	if inUse {
 
 		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "URL IS IN USE, ERROR NOT PROPERLY HANDLED REDIRECTING TO PROJECT PAGE")
-		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 		return
 	}
 
@@ -54,11 +54,11 @@ func ProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		time.Sleep(2 * time.Second)
-		http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+		http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 		return
 	}
 
 	time.Sleep(2 * time.Second)
-	http.Redirect(w, r, "/Projects/"+newURL, http.StatusFound)
+	http.Redirect(w, r, "/ProjectSettings/"+newURL, http.StatusFound)
 
 }

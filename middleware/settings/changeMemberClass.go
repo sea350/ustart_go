@@ -1,9 +1,7 @@
 package settings
 
 import (
-	
 	"net/http"
-	
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -26,7 +24,6 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 
 	project, err := get.ProjectByID(client.Eclient, projectID)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
@@ -53,13 +50,11 @@ func ChangeMemberClass(w http.ResponseWriter, r *http.Request) {
 				if member.Role != 0 && newRank != "Creator" {
 					err = post.UpdateProject(client.Eclient, projectID, "Members", project.Members)
 				} else {
-							client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"You do not have permission to change member class of this project")
+					client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "You do not have permission to change member class of this project")
 				}
 			}
 
 			if err != nil {
-				
-		
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 
 			}
