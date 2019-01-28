@@ -87,6 +87,7 @@ func InvisProject(eclient *elastic.Client, projID string) error {
 		Type(globals.ProjectType).
 		Id(projID).
 		Doc(map[string]interface{}{"Visible": false}).
+		Doc(map[string]interface{}{"URLName": ""}).
 		Do(ctx)
 
 	return err
