@@ -49,7 +49,7 @@ func ChangeEducation(eclient *elastic.Client, userID string, uni string, major [
 		classInt = 5
 	}
 
-	err = post.UpdateUser(eclient, userID, "Class", clasInt)
+	err = post.UpdateUser(eclient, userID, "Class", classInt)
 	return err
 
 }
