@@ -4,12 +4,12 @@
 # First, we build the services
 now=`date +%Y_%m_%d_%H_%M_%S`
 
-go build -o "start$now" GoStart2.go
+go build -o "start_$now" GoStart2.go
 
 # Set environment variables
 
 # Next, we execute them
-./"start$now" &> "log_$now.txt" &disown
+./"start_$now" &> "log_$now.txt" &disown
 
 echo $?
 
