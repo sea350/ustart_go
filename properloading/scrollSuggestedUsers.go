@@ -14,7 +14,7 @@ import (
 
 //ScrollSuggestedUsers ...
 //Scrolls through docs being loaded
-func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string, majors []interface{}, school string) (string, []types.FloatingHead, int, error) {
+func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string, majors []string, school string) (string, []types.FloatingHead, int, error) {
 
 	ctx := context.Background()
 	tags := make([]interface{}, 0)
@@ -35,10 +35,15 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 		followIDs = append([]interface{}{id}, followIDs...)
 	}
 
+	majorsInterface := make([]interface{}, 0)
+	for elements := range majors {
+		majorsInterface = append([]interface{}{strings.ToLower(majors[elements])}, majorsInterface...)
+	}
+
 	suggestedUserQuery := elastic.NewBoolQuery()
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...))
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Majors", majors...))
+	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Majors", majorsInterface...))
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
