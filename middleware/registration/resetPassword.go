@@ -76,9 +76,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		usr, err := getUser.UserByID(client.Eclient, userID)
-
-		usr.Password = newHashedPass
+		user.Password = newHashedPass
 		// err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
 		// if err != nil {
 
@@ -90,7 +88,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		// 	return
 		// }
 
-		usr.AuthenticationCode = ""
+		user.AuthenticationCode = ""
 
 		// err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
 		// if err != nil {
@@ -98,7 +96,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		// 	client.Logger.Println("DocID: "+userID+" | err: ", err)
 		// }
 		var newTime time.Time
-		usr.AuthenticationCodeTime = newTime
+		user.AuthenticationCodeTime = newTime
 
 		// err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
 		// if err != nil {
@@ -106,10 +104,10 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		// 	client.Logger.Println("DocID: "+userID+" | err: ", err)
 		// }
 
-		usr.LoginWarnings = make(map[string]types.LoginWarning)
+		user.LoginWarnings = make(map[string]types.LoginWarning)
 
 		// err = post.UpdateUser(client.Eclient, userID, "LoginWarnings", make(map[string]types.LoginWarning))
-		err = post.ReindexUser(client.Eclient, userID, usr)
+		err = post.ReindexUser(client.Eclient, userID, user)
 		if err != nil {
 
 			client.Logger.Println("DocID: "+userID+" | err: ", err)
