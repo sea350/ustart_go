@@ -68,13 +68,13 @@ func AjaxProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res["error"] = "success"
-	data, err := json.Marshal(res)
-	if err != nil {
-		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Issue storing custom URL")
+	// res["error"] = "success"
+	// data, err := json.Marshal(res)
+	// if err != nil {
+	// 	client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Issue storing custom URL")
 
-	}
-	fmt.Fprintln(w, string(data))
+	// }
+	// fmt.Fprintln(w, string(data))
 	time.Sleep(2 * time.Second)
 	http.Redirect(w, r, "/ProjectSettings/"+newURL, http.StatusFound)
 
