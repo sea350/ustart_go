@@ -55,41 +55,45 @@ func Login(eclient *elastic.Client, userEmail string, password []byte, addressIP
 	passErr := bcrypt.CompareHashAndPassword(usr.Password, password)
 
 	if passErr != nil {
-		//If password incorrect, the following evaluation on login lockout procedure is done
-		//If IP doesn't exist, this a New Warning for a New IP Address. Else we are simply updating an existing one our usr
-
-		if !ipExists {
-			var newWarning types.LoginWarning
-			newWarning.IPAddress = addressIP
-			newWarning.NumberAttempts = newWarning.NumberAttempts + 1
-			newWarning.LastAttempt = time.Now()
-			loginData = newWarning
-			usr.LoginWarnings[addressIP] = loginData
-		}
-
-		if ipExists {
-			if time.Since(loginData.LastAttempt) >= (time.Hour * 168) {
-				loginData.NumberAttempts = 0
-				loginData.LockoutCounter = 0
-			}
-			loginData.NumberAttempts = loginData.NumberAttempts + 1
-			loginData.LastAttempt = time.Now()
-			if loginData.NumberAttempts > 5 {
-				loginData.LockoutCounter = loginData.LockoutCounter + 1
-				loginData.LockoutUntil = loginData.LastAttempt.Add(time.Minute * 5 * time.Duration(lockoutOP(loginData.LockoutCounter)))
-				loginData.NumberAttempts = 0
-			}
-			usr.LoginWarnings[addressIP] = loginData
-		}
-
-		//Update in Elastic Search Client all of our Login Warning information
-
-		err2 := post.UpdateUser(eclient, uID, "LoginWarnings", usr.LoginWarnings)
-		if err != nil {
-			return false, userSession, err2
-		}
-		return false, userSession, passErr
+		return loginSucessful, userSession, errors.New("Invalid Password")
 	}
+
+	// if passErr != nil {
+	// 	//If password incorrect, the following evaluation on login lockout procedure is done
+	// 	//If IP doesn't exist, this a New Warning for a New IP Address. Else we are simply updating an existing one our usr
+
+	// 	if !ipExists {
+	// 		var newWarning types.LoginWarning
+	// 		newWarning.IPAddress = addressIP
+	// 		newWarning.NumberAttempts = newWarning.NumberAttempts + 1
+	// 		newWarning.LastAttempt = time.Now()
+	// 		loginData = newWarning
+	// 		usr.LoginWarnings[addressIP] = loginData
+	// 	}
+
+	// 	if ipExists {
+	// 		if time.Since(loginData.LastAttempt) >= (time.Hour * 168) {
+	// 			loginData.NumberAttempts = 0
+	// 			loginData.LockoutCounter = 0
+	// 		}
+	// 		loginData.NumberAttempts = loginData.NumberAttempts + 1
+	// 		loginData.LastAttempt = time.Now()
+	// 		if loginData.NumberAttempts > 5 {
+	// 			loginData.LockoutCounter = loginData.LockoutCounter + 1
+	// 			loginData.LockoutUntil = loginData.LastAttempt.Add(time.Minute * 5)
+	// 			loginData.NumberAttempts = 0
+	// 		}
+	// 		usr.LoginWarnings[addressIP] = loginData
+	// 	}
+
+	// 	//Update in Elastic Search Client all of our Login Warning information
+
+	// 	err2 := post.UpdateUser(eclient, uID, "LoginWarnings", usr.LoginWarnings)
+	// 	if err != nil {
+	// 		return false, userSession, err2
+	// 	}
+	// 	return false, userSession, passErr
+	// }
 
 	loginSucessful = true
 	userSession.FirstName = usr.FirstName

@@ -49,7 +49,7 @@ func ProjectLocation(w http.ResponseWriter, r *http.Request) {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
-	http.Redirect(w, r, "/Projects/"+proj.URLName, http.StatusFound)
+	http.Redirect(w, r, "/ProjectSettings/"+proj.URLName, http.StatusFound)
 	return
 
 }
