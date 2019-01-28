@@ -1,9 +1,7 @@
 package profile
 
 import (
-	
 	"net/http"
-	
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -27,22 +25,17 @@ func Follow(w http.ResponseWriter, r *http.Request) {
 	//check if following
 	isFollowed, err := getFollow.IsFollowing(client.Eclient, userID, session.Values["DocID"].(string), "user") //uses.IsFollowed(client.Eclient, userID, session.Values["DocID"].(string))
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	if isFollowed == true {
 		// err := usesFollow.UserUnfollow(client.Eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
-			
-	
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	} else {
 		// err := uses.UserFollow(client.Eclient, userID, session.Values["DocID"].(string))
 		if err != nil {
-			
-	
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}
