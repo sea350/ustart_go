@@ -122,7 +122,9 @@ func ProcessWidgetForm(r *http.Request) (types.Widget, error) {
 	}
 	if r.FormValue("widgetSubmit") == `7` {
 		//codepen -- Embed code
-		regX := regexp.MustCompile(`iframe height='[0-9%]{0,4}' scrolling='no' title='(.*?)' src='\/\/codepen\.io\/(.*?)\/embed\/(.*?)\/?height=[0-9%]{0,4}&theme-id=(.*?)&default-tab=(.*?)' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https:\/\/codepen.io\/(.*?)\/pen\/(.*?)\/'>(.*?)<\/a> by (.*?)\(<a href='https:\/\/codepen.io\/(.*?)'>@(.*?)<\/a>\) on <a href='https:\/\/codepen.io'>CodePen<\/a>.(\W)?<\/iframe>`)
+		// regX := regexp.MustCompile(`iframe height='[0-9%]{0,4}' scrolling='no' title='(.*?)' src='\/\/codepen\.io\/(.*?)\/embed\/(.*?)\/?height=[0-9%]{0,4}&theme-id=(.*?)&default-tab=(.*?)' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https:\/\/codepen.io\/(.*?)\/pen\/(.*?)\/'>(.*?)<\/a> by (.*?)\(<a href='https:\/\/codepen.io\/(.*?)'>@(.*?)<\/a>\) on <a href='https:\/\/codepen.io'>CodePen<\/a>.(\W)?<\/iframe>`)
+		regX := regexp.MustCompile(`iframe height='[0-9%]{0,4}' scrolling='no' title='(.*?)' src='\/\/codepen\.io\/(.*?)\/embed\/(.*?)\/?height=[0-9%]{0,4}&theme-id=(.*?)&default-tab=(.*?)' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https:\/\/codepen\.io\/[^\/]*\/pen\/.+'>(.*?)<\/a> by (.*?)\(<a href='https:\/\/codepen\.io\/[^\/]*\/pen\/.+'>@(.*?)<\/a>\) on <a href='https:\/\/codepen\.io\/[^\/]*\/pen\/.+'>CodePen<\/a>.(\W)?<\/iframe>`)
+
 		if !regX.MatchString(r.FormValue("codepenInput")) {
 			return newWidget, errors.New(`Unusable CodePen Embed`)
 		}
