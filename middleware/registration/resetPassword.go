@@ -56,7 +56,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
 		newHashedPass, err := bcrypt.GenerateFromPassword([]byte(r.FormValue("password")), 10)
 		if err != nil {
-
+			client.Logger.Println("BCRYPT ERROR")
 			client.Logger.Println("Email: "+email+" | err: ", err)
 			cs.ErrorOutput = errors.New("A problem has occurred")
 			cs.ErrorStatus = true
