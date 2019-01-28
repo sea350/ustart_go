@@ -33,18 +33,16 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	}
 	oldpb := []byte(oldp)
 	newpb := []byte(newp)
+
 	err := uses.ChangePassword(client.Eclient, session.Values["DocID"].(string), oldpb, newpb)
 	if err != nil {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
-		data, err := json.Marshal(err)
-		if err != nil {
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
-		}
-		fmt.Fprintln(w, string(data))
-		return
 	}
 
-	data, err := json.Marshal("Success!")
+	res := make(map[string]error)
+	res["error"] = err
+
+	data, err := json.Marshal(res)
 	if err != nil {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
