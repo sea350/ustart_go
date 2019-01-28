@@ -8,7 +8,7 @@ import (
 )
 
 //ChangeEducation ...
-func ChangeEducation(eclient *elastic.Client, userID string, accType int, hs string, hsGrad string, uni string, uniGrad string, major []string, minor []string, class string) error {
+func ChangeEducation(eclient *elastic.Client, userID string, accType int, hs string, hsGrad string, uni string, uniGrad string, major []string, minor []string, class int) error {
 
 	err := post.UpdateUser(eclient, userID, "AccType", accType)
 	if err != nil {
@@ -52,6 +52,6 @@ func ChangeEducation(eclient *elastic.Client, userID string, accType int, hs str
 	case "alumni":
 		classInt = 5
 	}
-	err = post.UpdateUser(eclient, userID, "Class", classInt)
+	err = post.UpdateUser(eclient, userID, "Class", class)
 	return err
 }
