@@ -6,7 +6,7 @@ import (
 )
 
 //ChangeEducation ...
-func ChangeEducation(eclient *elastic.Client, userID string, uni string, uniGrad string, major []string, minor []string, class string) error {
+func ChangeEducation(eclient *elastic.Client, userID string, uni string, major []string, minor []string, class string) error {
 
 	// err = post.UpdateUser(eclient, userID, "HighSchool", hs)
 	// if err != nil {
