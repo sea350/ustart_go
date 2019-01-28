@@ -152,6 +152,8 @@ func main() {
 	http.HandleFunc("/projectLocChange/", settings.ProjectLocation)
 	http.HandleFunc("/projectCategory/", settings.ProjectCategory)
 	http.HandleFunc("/projectCustomURL/", settings.ProjectCustomURL)
+	http.HandleFunc("/AjaxProjectCustomURL/", settings.AjaxProjectCustomURL)
+
 	http.HandleFunc("/leaveProject/", settings.LeaveProject)
 	http.HandleFunc("/projectLogo/", settings.ProjectLogo)
 	http.HandleFunc("/changeMemberClass/", settings.ChangeMemberClass)
