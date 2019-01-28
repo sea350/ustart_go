@@ -46,7 +46,7 @@ func AjaxProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 
 	res := make(map[string]string)
 	if inUse {
-		res["result"] = "Project URL is currently in use"
+		res["error"] = "Project URL is currently in use"
 		data, err := json.Marshal(res)
 		if err != nil {
 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Issue storing custom URL")
@@ -68,7 +68,7 @@ func AjaxProjectCustomURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res["result"] = "Project URL successfully changed!"
+	res["error"] = "success!"
 	time.Sleep(2 * time.Second)
 	http.Redirect(w, r, "/ProjectSettings/"+newURL, http.StatusFound)
 
