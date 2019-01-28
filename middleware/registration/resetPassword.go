@@ -1,16 +1,9 @@
 package registration
 
 import (
-	"errors"
-
 	"net/http"
-	"time"
 
-	getUser "github.com/sea350/ustart_go/get/user"
 	client "github.com/sea350/ustart_go/middleware/client"
-	post "github.com/sea350/ustart_go/post/user"
-	"github.com/sea350/ustart_go/types"
-	bcrypt "golang.org/x/crypto/bcrypt"
 )
 
 //ResetPassword ... Reset's user's password
@@ -24,101 +17,7 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r.ParseForm()
-
 	cs := client.ClientSide{}
-
-	// email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
-	email := r.FormValue("femail")
-	emailedToken := r.FormValue("verifCode")
-	pass := []byte(r.FormValue("epicstore"))
-	if email == `` {
-		client.Logger.Println("THE EMAIL IS:", email)
-		client.Logger.Println("THE PASS IS:", pass)
-		cs.ErrorOutput = errors.New("Inusfficient data passed in")
-		cs.ErrorStatus = true
-		client.RenderSidebar(w, r, "templateNoUser2")
-		client.RenderTemplate(w, r, "reset-new-pass", cs)
-		return
-	}
-
-	user, err := getUser.UserByEmail(client.Eclient, email)
-	if err != nil {
-
-		client.Logger.Println("Email: "+email+" | err: ", err)
-		cs.ErrorOutput = errors.New("A problem has occurred")
-		cs.ErrorStatus = true
-		client.RenderSidebar(w, r, "templateNoUser2")
-		client.RenderTemplate(w, r, "reset-new-pass", cs)
-		return
-	}
-
-	// If the time since authentication code was input is less than 1 hour
-	if time.Since(user.AuthenticationCodeTime) < (time.Second*3600) && emailedToken == user.AuthenticationCode && r.FormValue("password") != `` {
-		newHashedPass, err := bcrypt.GenerateFromPassword(pass, 10)
-		if err != nil {
-			client.Logger.Println("BCRYPT ERROR")
-			client.Logger.Println("Email: "+email+" | err: ", err)
-			cs.ErrorOutput = errors.New("A problem has occurred")
-			cs.ErrorStatus = true
-			client.RenderSidebar(w, r, "templateNoUser2")
-			client.RenderTemplate(w, r, "reset-new-pass", cs)
-			return
-		}
-
-		userID, err := getUser.UserIDByEmail(client.Eclient, email)
-		if err != nil {
-
-			client.Logger.Println("Email: "+email+" | err: ", err)
-			cs.ErrorOutput = errors.New("A problem has occurred")
-			cs.ErrorStatus = true
-			client.RenderSidebar(w, r, "templateNoUser2")
-			client.RenderTemplate(w, r, "reset-new-pass", cs)
-			return
-		}
-
-		user.Password = newHashedPass
-		// err = post.UpdateUser(client.Eclient, userID, "Password", newHashedPass)
-		// if err != nil {
-
-		// 	client.Logger.Println("DocID: "+userID+" | err: ", err)
-		// 	cs.ErrorOutput = errors.New("A problem has occurred")
-		// 	cs.ErrorStatus = true
-		// 	client.RenderSidebar(w, r, "templateNoUser2")
-		// 	client.RenderTemplate(w, r, "reset-new-pass", cs)
-		// 	return
-		// }
-
-		user.AuthenticationCode = ""
-
-		// err = post.UpdateUser(client.Eclient, userID, "AuthenticationCode", nil)
-		// if err != nil {
-
-		// 	client.Logger.Println("DocID: "+userID+" | err: ", err)
-		// }
-		var newTime time.Time
-		user.AuthenticationCodeTime = newTime
-
-		// err = post.UpdateUser(client.Eclient, userID, "AuthenticationCodeTime", nil)
-		// if err != nil {
-
-		// 	client.Logger.Println("DocID: "+userID+" | err: ", err)
-		// }
-
-		user.LoginWarnings = make(map[string]types.LoginWarning)
-
-		// err = post.UpdateUser(client.Eclient, userID, "LoginWarnings", make(map[string]types.LoginWarning))
-		err = post.ReindexUser(client.Eclient, userID, user)
-		if err != nil {
-
-			client.Logger.Println("DocID: "+userID+" | err: ", err)
-		}
-
-		http.Redirect(w, r, "/", http.StatusFound)
-	} else {
-		cs.ErrorOutput = errors.New("Authentication token invalid")
-		cs.ErrorStatus = true
-	}
 
 	client.RenderSidebar(w, r, "templateNoUser2")
 	client.RenderTemplate(w, r, "reset-new-pass", cs)
