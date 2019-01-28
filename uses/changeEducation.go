@@ -1,6 +1,8 @@
 package uses
 
 import (
+	"strings"
+
 	post "github.com/sea350/ustart_go/post/user"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -29,6 +31,25 @@ func ChangeEducation(eclient *elastic.Client, userID string, uni string, major [
 		return err
 	}
 	err = post.UpdateUser(eclient, userID, "Minors", minor)
+	return err
+
+	classInt := -1
+	switch strings.ToLower(class) {
+	case "freshman":
+		classInt = 0
+	case "sophomore":
+		classInt = 1
+	case "junior":
+		classInt = 2
+	case "senior":
+		classInt = 3
+	case "graduate":
+		classInt = 4
+	case "alumin":
+		classInt = 5
+	}
+
+	err = post.UpdateUser(eclient, userID, "Class", clasInt)
 	return err
 
 }
