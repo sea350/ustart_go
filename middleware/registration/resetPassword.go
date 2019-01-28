@@ -29,9 +29,9 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	cs := client.ClientSide{}
 
 	// email := strings.ToLower(r.FormValue("email")) // we only client.Store lowercase emails in the db
-	email := r.FormValue("email")
+	email := r.FormValue("femail")
 	emailedToken := r.FormValue("verifCode")
-	pass := []byte(r.FormValue("password"))
+	pass := []byte(r.FormValue("epicstore"))
 	if email == `` {
 		client.Logger.Println("THE EMAIL IS:", email)
 		client.Logger.Println("THE PASS IS:", pass)
