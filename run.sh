@@ -2,13 +2,14 @@
 # This script will run the webserver and backend service on the local machine.
 
 # First, we build the services
+now=`date +%Y_%m_%d_%H_%M_%S`
 
-go build -o start GoStart2.go
+go build -o "start$_now" GoStart2.go
 
 # Set environment variables
 
 # Next, we execute them
-./start &> start.txt &disown
+./"start$_now" &> "log_$_now.txt" &disown
 
 echo $?
 
