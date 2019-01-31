@@ -38,7 +38,7 @@ func IndexBadge(eclient *elastic.Client, newBadge types.Badge) (string, error) {
 	}
 
 	// Index the document.
-	newBadge, Err := eclient.Index().
+	_, Err := eclient.Index().
 		Index(globals.BadgeIndex).
 		Type(globals.BadgeType).
 		BodyJson(newBadge).
