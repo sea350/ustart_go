@@ -24,7 +24,7 @@ func UpdateBadge(eclient *elastic.Client, badgeID string, field string, newConte
 		return errors.New("Index does not exist")
 	}
 
-	_, err = get.BadgeByID(eclient, userID)
+	_, err = get.BadgeByID(eclient, badgeID)
 	if err != nil {
 		return err
 	}
