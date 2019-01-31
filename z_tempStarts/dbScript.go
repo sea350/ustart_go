@@ -321,14 +321,6 @@ const convoMapping = `
 }`
 
 
-//Preload for badge testing
-var ustart types.Badge
-ustart.Id = "USTART"
-ustart.Type = "USTART"
-ustart.ImageLink = "https://s3.amazonaws.com/ustart-default/U_badge.png"
-ustart.Roster = []string{"rr2396@nyu.edu", "sea350@nyu.edu", "yh1112@nyu.edu", "mrb588@nyu.edu"}
-ustart.Tags = []string{"USTART Administrator", "USTART Dev"}
-
 
 func deleteIndex(eclient *elastic.Client, index string) {
 
@@ -441,6 +433,14 @@ func clearUserProxies(eclient *elastic.Client) error {
 var help = make(map[string]string)
 
 func main() {
+
+	//Preload for badge testing
+	var ustart types.Badge
+	ustart.Id = "USTART"
+	ustart.Type = "USTART"
+	ustart.ImageLink = "https://s3.amazonaws.com/ustart-default/U_badge.png"
+	ustart.Roster = []string{"rr2396@nyu.edu", "sea350@nyu.edu", "yh1112@nyu.edu", "mrb588@nyu.edu"}
+	ustart.Tags = []string{"USTART Administrator", "USTART Dev"}
 
 	help["help"] = "pretty self-explanatory"
 	help["wipe"] = "clears database and restarts all indices"
