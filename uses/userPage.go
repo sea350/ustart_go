@@ -23,12 +23,12 @@ func UserPage(eclient *elastic.Client, username string, viewerID string) (types.
 
 	usr, err = get.UserByID(eclient, userID)
 	if err != nil {
-		return usr, "errors passed 1, userId is " + userID, isFollowed, err
+		return usr, "errors passed 1, userId is " + userID, isFollowed, nil, err
 	}
 
 	viewer, err := get.UserByID(eclient, viewerID)
 	if err != nil {
-		return usr, "errors passed 2, viewId is " + viewerID, isFollowed, err
+		return usr, "errors passed 2, viewId is " + viewerID, isFollowed, nil, err
 	}
 
 	usrBadges, err := LoadBadgeProxies(eclient, usr.BadgeIDs)

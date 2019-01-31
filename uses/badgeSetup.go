@@ -26,7 +26,7 @@ func BadgeSetup(eclient *elastic.Client, email string) ([]string, []string, erro
 
 	var badge types.Badge
 	if err != nil {
-		return nil, badge, err
+		return nil, nil, err
 	}
 	var result string
 	var tags []string
