@@ -43,7 +43,7 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		}
 
 		target := -1
-		isAllowed, err := uses.TagAllowed(client.Eclient, strings.ToLower(deleteTag))
+		isAllowed := uses.TagAllowed(client.Eclient, strings.ToLower(deleteTag))
 
 		if isAllowed {
 
