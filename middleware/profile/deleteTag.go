@@ -1,13 +1,13 @@
 package profile
 
 import (
-	
 	"net/http"
-	
+	"strings"
 
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
+	uses "github.com/sea350/ustart_go/post/uses"
 )
 
 //DeleteTag ...
@@ -24,7 +24,6 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
@@ -37,25 +36,32 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		if len(usr.Tags) == 1 {
 			err := post.UpdateUser(client.Eclient, ID, "Tags", newArr)
 			if err != nil {
-				
-		
+
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 			}
 			return
 		}
 
 		target := -1
-		for index, tag := range usr.Tags {
+		isAllowed, err := uses.TagAllowed(client.Eclient, strings.ToLower(deleteTag))
+		if err != nil {
+			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+			return
+		}
+		if isAllowed {
 
-			if tag == deleteTag {
-				target = index
-				break
+			for index, tag := range usr.Tags {
+
+				if tag == deleteTag {
+					target = index
+					break
+				}
 			}
 		}
 
 		if target == -1 {
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Error: middleware/profile/deleteTag line 54")
-					client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Deleted object not found")
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Error: middleware/profile/deleteTag line 54")
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Deleted object not found")
 			newArr = usr.Tags
 		} else if (target + 1) < len(usr.Tags) {
 			newArr = append(usr.Tags[:target], usr.Tags[(target+1):]...)
@@ -65,8 +71,7 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 
 		err = post.UpdateUser(client.Eclient, ID, "Tags", newArr)
 		if err != nil {
-			
-	
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 	}

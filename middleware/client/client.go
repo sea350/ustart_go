@@ -56,6 +56,7 @@ type ClientSide struct {
 	Dashboard         types.DashboardAggregate
 	Messages          []types.Message
 	Hits              int
+	Badges            []types.BadgeProxy
 	Sent              string
 }
 

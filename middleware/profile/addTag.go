@@ -3,12 +3,14 @@ package profile
 import (
 	"encoding/json"
 	"html"
+	"strings"
 
 	"net/http"
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
+	uses "github.com/sea350/ustart_go/post/uses"
 )
 
 //TagStruct ... who knows at this point
@@ -37,12 +39,23 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 
 	p := bluemonday.UGCPolicy()
 
+	var validTags []string
 	for t := range ts.Tags {
 		ts.Tags[t] = p.Sanitize(ts.Tags[t])
 		ts.Tags[t] = html.EscapeString(ts.Tags[t])
+		isAllowed, err := uses.TagAllowed(client.Eclient, strings.ToLower(ts.Tags[t]))
+
+		if err != nil {
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Error in chekcing tag validity")
+			return
+		}
+
+		if isAllowed {
+			validTags = append(validTags, ts.Tags[t])
+		}
 	}
 
-	err = post.UpdateUser(client.Eclient, ID, "Tags", ts.Tags)
+	err = post.UpdateUser(client.Eclient, ID, "Tags", validTags)
 	if err != nil {
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)

@@ -28,6 +28,11 @@ func ConvertUserToFloatingHead(eclient *elastic.Client, userDocID string) (types
 	head.Classification = 1
 	head.Interface = usr.Tags
 
+	badgeProxies, err := LoadBadgeProxies(eclient, usr.BadgeIDs)
+	if err != nil {
+		panic(err)
+	}
+	head.Badges = badgeProxies
 	// head.Interface = usr.Tags
 	head.Bio = usr.Description
 	head.Category = usr.Majors[0]

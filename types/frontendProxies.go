@@ -6,6 +6,11 @@ import (
 
 //WARNING: NOT FOR DATABASE USE
 
+type BadgeProxy struct {
+	Type string `json:"Type"`
+	Link string `json:"Link"`
+}
+
 //AppSessionUser ...
 type AppSessionUser struct {
 	FirstName string `json:"FirstName"`
@@ -28,22 +33,23 @@ type SessionUser struct {
 
 //FloatingHead ... All data needed for a generic user icon
 type FloatingHead struct {
-	Username       string      `json:"Username"`
-	FirstName      string      `json:"FirstName"`
-	LastName       string      `json:"LastName"`
-	Email          string      `json:"Email"`
-	Tags           []string    `json:"Tags"`
-	Image          string      `json:"Image"`
-	Followed       bool        `json:"Followed"`
-	Bio            []rune      `json:"Bio"`
-	DocID          string      `json:"DocID"`
-	Classification int         `json:"Classification"`
-	Notifications  int         `json:"Notifications"`
-	Time           time.Time   `json:"Time"`
-	Read           bool        `json:"Read"`
-	Interface      interface{} `json:"Interface"`
-	Visible        bool        `json:"Visible"`
-	Category       string      `json:"Category"`
+	Username       string       `json:"Username"`
+	FirstName      string       `json:"FirstName"`
+	LastName       string       `json:"LastName"`
+	Email          string       `json:"Email"`
+	Tags           []string     `json:"Tags"`
+	Image          string       `json:"Image"`
+	Followed       bool         `json:"Followed"`
+	Bio            []rune       `json:"Bio"`
+	DocID          string       `json:"DocID"`
+	Classification int          `json:"Classification"`
+	Notifications  int          `json:"Notifications"`
+	Time           time.Time    `json:"Time"`
+	Read           bool         `json:"Read"`
+	Interface      interface{}  `json:"Interface"`
+	Visible        bool         `json:"Visible"`
+	Category       string       `json:"Category"`
+	Badges         []BadgeProxy `json:"Badges"`
 	//for projects Username = project URLName
 	//for projects Firstname = project Name
 	//for projects Bio = project Description

@@ -10,7 +10,7 @@ import (
 //UserPage ... Loads relevant information for the User page
 //Requires username and the docID of the person viewing the page
 //Returns a typer User, the user's docID, whether or not the viewer is following the person and an error
-func UserPage(eclient *elastic.Client, username string, viewerID string) (types.User, string, bool, error) {
+func UserPage(eclient *elastic.Client, username string, viewerID string) (types.User, string, bool, []types.BadgeProxy, error) {
 
 	var usr types.User
 
@@ -31,6 +31,7 @@ func UserPage(eclient *elastic.Client, username string, viewerID string) (types.
 		return usr, "errors passed 2, viewId is " + viewerID, isFollowed, err
 	}
 
+	usrBadges, err := LoadBadgeProxies(eclient, usr.BadgeIDs)
 	isFollowed, err = getFollow.IsFollowing(eclient, userID, viewerID, "user")
 
 	for _, element := range viewer.Following {
@@ -40,5 +41,5 @@ func UserPage(eclient *elastic.Client, username string, viewerID string) (types.
 		}
 	}
 
-	return usr, "errors passed 3", isFollowed, err
+	return usr, "errors passed 3", isFollowed, usrBadges, err
 }

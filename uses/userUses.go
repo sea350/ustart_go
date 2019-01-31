@@ -140,6 +140,15 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	newUsr.Location = newLoc
 	newUsr.Visible = true
 	newUsr.Status = true
+
+	badgeIDs, badgeTags, err := BadgeSetup(eclient, email)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	newUsr.Tags = badgeTags
+	newUsr.BadgeIDs = badgeIDs
 	newUsr.AccCreation = time.Now()
 	if currYear == "Freshman" {
 		newUsr.Class = 0

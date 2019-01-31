@@ -15,7 +15,7 @@ func Settings(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	userstruct, _, _, _ := uses.UserPage(client.Eclient, session.Values["Username"].(string), session.Values["DocID"].(string))
+	userstruct, _, _, _, _ := uses.UserPage(client.Eclient, session.Values["Username"].(string), session.Values["DocID"].(string))
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string)}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderTemplate(w, r, "settings-Nil", cs)

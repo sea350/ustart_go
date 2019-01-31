@@ -28,7 +28,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userstruct, errMessage, _, err := uses.UserPage(client.Eclient, pageUserName, docID.(string))
+	userstruct, errMessage, _, badgeProxies, err := uses.UserPage(client.Eclient, pageUserName, docID.(string))
 	if err != nil {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "User Error: " + errMessage)
@@ -136,7 +136,7 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	eventFoll := len(follDoc.EventFollowing)
 	userstruct.Password = []byte{}
 	userstruct.Email = "Censored"
-	cs := client.ClientSide{UserInfo: userstruct, Wall: jEntries, Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, UserFollowing: userFoll, ProjFollowing: projFoll, EventFollowing: eventFoll, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets, ListOfHeads: projHeads}
+	cs := client.ClientSide{UserInfo: userstruct, Wall: jEntries, Birthday: birthdayline, Class: ClassYear, Description: temp, Followers: numberFollowers, UserFollowing: userFoll, ProjFollowing: projFoll, EventFollowing: eventFoll, Page: viewingDOC, FollowingStatus: followingState, Widgets: widgets, ListOfHeads: projHeads, Badges: badgeProxies}
 
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderSidebar(w, r, "leftnav-nil")

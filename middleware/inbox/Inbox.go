@@ -20,7 +20,7 @@ func Inbox(w http.ResponseWriter, r *http.Request) {
 	}
 	// if conditions of redirect are met, the next 4 lines do not execute
 	// if docid exists then data is retreived from the uses.UserPage function and rendered accordingly
-	userstruct, _, _, _ := uses.UserPage(client.Eclient, session.Values["Username"].(string), session.Values["DocID"].(string))
+	userstruct, _, _, _, _ := uses.UserPage(client.Eclient, session.Values["Username"].(string), session.Values["DocID"].(string))
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: session.Values["DocID"].(string)}
 	client.RenderSidebar(w, r, "template2-nil")
 	client.RenderTemplate(w, r, "inbox-Nil", cs)

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/sea350/ustart_go/post/badge"
+	"github.com/rogpeppe/godef/go/types"
 	"bufio"
 	"context"
 	"fmt"
@@ -318,6 +320,16 @@ const convoMapping = `
     }
 }`
 
+
+//Preload for badge testing
+var ustart types.Badge
+ustart.Id = "USTART"
+ustart.Type = "USTART"
+ustart.ImageLink = "https://s3.amazonaws.com/ustart-default/U_badge.png"
+ustart.Roster = []string{"rr2396@nyu.edu", "sea350@nyu.edu", "yh1112@nyu.edu", "mrb588@nyu.edu"}
+ustart.Tags = []string{"USTART Administrator", "USTART Dev"}
+
+
 func deleteIndex(eclient *elastic.Client, index string) {
 
 	//fmt.Println(globals.EntryIndex)
@@ -351,7 +363,8 @@ func startIndex(eclient *elastic.Client, index string) {
 		mapping = eventMapping
 	case globals.ConvoIndex:
 		mapping = globals.MappingConvo
-
+	case globals.BadgeIndex:
+		mapping = globals.MappingBadge
 	case globals.FollowIndex:
 		mapping = globals.MappingFollow
 
@@ -475,7 +488,7 @@ func main() {
 			commands = append(commands, input)
 
 			if strings.HasPrefix(input, "wipe") {
-				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
+				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex,globals.BadgeIndex)
 				// delete phase
 				for _, index := range indices {
 
@@ -488,15 +501,29 @@ func main() {
 					startIndex(eclient, index)
 				}
 			} else if strings.HasPrefix(input, "delete") {
-				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
+				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex, globals.BadgeIndex)
 				for _, index := range indices {
 					deleteIndex(eclient, index)
+					if err != nil {
+						continue
+					}
 				}
 			} else if strings.HasPrefix(input, "start") {
-				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex)
+				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex), globals.BadgeIndex)
 				for _, index := range indices {
+					if err != nil {
+						log.Println(err)
+						continue
+					}
 					startIndex(eclient, index)
 				}
+				_, err := post.IndexBadge(eclient,ustart)
+				if err != nil {
+					log.Println(err)
+					
+				}
+
+
 			} else if strings.HasPrefix(input, "deluser") {
 
 				indices = append(indices, globals.UserIndex)
