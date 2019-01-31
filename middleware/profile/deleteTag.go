@@ -7,7 +7,7 @@ import (
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
-	uses "github.com/sea350/ustart_go/post/uses"
+	uses "github.com/sea350/ustart_go/uses"
 )
 
 //DeleteTag ...

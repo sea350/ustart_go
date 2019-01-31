@@ -10,7 +10,7 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
-	uses "github.com/sea350/ustart_go/post/uses"
+	uses "github.com/sea350/ustart_go/uses"
 )
 
 //TagStruct ... who knows at this point
