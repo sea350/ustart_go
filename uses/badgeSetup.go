@@ -14,7 +14,7 @@ import (
 
 //BadgeSetup ...
 //Takes care of badge-related modifications and returns relevant tags
-func BadgeSetup(eclient *elastic.Client, email string) ([]string, []string, err) {
+func BadgeSetup(eclient *elastic.Client, email string) ([]string, []string, error) {
 	ctx := context.Background()
 
 	//username:= EmailToUsername(email) //for username query
@@ -39,7 +39,7 @@ func BadgeSetup(eclient *elastic.Client, email string) ([]string, []string, err)
 			log.Println(err)
 			continue
 		} else {
-			tags = append(tags, badge.Tags)
+			tags = append(tags, badge.Tags...)
 			badgeIDs = append(badgeIDs, result)
 		}
 

@@ -18,7 +18,7 @@ func UserPage(eclient *elastic.Client, username string, viewerID string) (types.
 
 	userID, err := get.IDByUsername(eclient, username)
 	if err != nil {
-		return usr, "errors passed 0, username is " + username, isFollowed, err
+		return usr, "errors passed 0, username is " + username, isFollowed, nil, err
 	}
 
 	usr, err = get.UserByID(eclient, userID)

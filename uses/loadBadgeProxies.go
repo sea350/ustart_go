@@ -11,13 +11,14 @@ import (
 
 //BadgeSetup ...
 //Takes care of badge-related modifications and returns relevant tags
-func LoadBadgeProxies(eclient *elastic.Eclient, badgeIDs []string) ([]types.BadgeProxy, err) {
+func LoadBadgeProxies(eclient *elastic.Client, badgeIDs []string) ([]types.BadgeProxy, error) {
 	var bProxies []types.BadgeProxy
 	var bProxy types.BadgeProxy
 	if len(badgeIDs) == 0 {
-		return bProxies, err
+		return bProxies, nil
 	}
 
+	var err error
 	for i := range badgeIDs {
 		badge, err := get.BadgeByID(eclient, badgeIDs[i])
 		if err != nil {

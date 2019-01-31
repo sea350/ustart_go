@@ -2,6 +2,7 @@ package uses
 
 import (
 	"context"
+	"log"
 
 	globals "github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -21,9 +22,10 @@ func TagAllowed(eclient *elastic.Client, newTag string) bool {
 		Do(ctx)
 
 	if err != nil {
-		return false, err
+		log.Println(err)
+		return false
 	}
 
-	return searchResult.Hits.TotalHits == 0, err
+	return res.Hits.TotalHits == 0
 
 }
