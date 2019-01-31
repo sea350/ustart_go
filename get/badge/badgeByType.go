@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 
-	get "github.com/sea350/ustart_go/get/badge"
-
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -37,7 +35,7 @@ func BadgeByType(eclient *elastic.Client, badgeType string) (types.Badge, error)
 	if len(result) == 0 {
 		return badge, errors.New("ID Not found")
 	}
-	badge, err = get.BadgeByID(eclient, result)
+	badge, err = BadgeByID(eclient, result)
 
 	return badge, err
 
