@@ -21,8 +21,9 @@ func BadgeByType(eclient *elastic.Client, badgeType string) (types.Badge, error)
 						Query(bQuery).
 						Do(ctx)
 
+	var badge types.Badge
 	if err != nil {
-		return false, err
+		return badge, err
 	}
 
 	var result string
