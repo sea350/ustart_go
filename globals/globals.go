@@ -87,6 +87,41 @@ const FollowType = "FOLLOW"
 const BadgeIndex = "test-badge_index"
 const BadgeType = "BADGE"
 
+//MappingBadge...
+
+const MappingBadge = `
+{
+	"settings": {
+		"analysis": {
+		   "analyzer": {
+			  "my_analyzer": {
+				 "type": "custom",
+				 "filter": [
+					"lowercase"
+			  ],
+				 "tokenizer": "whitespace"
+			  }
+		   }
+		}
+	 },
+
+	"mappings"{
+		"BADGE":{
+			"Tags":{
+				"type":"text",
+				"analyzer":"my_analyzer",
+				"fields":{
+					"raw":{
+						"type":"keyword"
+						
+					}
+				}
+			}
+
+		}
+	}
+}`
+
 //MappingUsr ... user mapping
 const MappingUsr = `
 {
@@ -390,50 +425,4 @@ const MappingFollow = `
 			
         }
     }
-}`
-
-//MappingBadge...
-
-const MappingBadge = `
-{
-	"settings": {
-		"analysis": {
-		   "analyzer": {
-			  "my_analyzer": {
-				 "type": "custom",
-				 "filter": [
-					"lowercase"
-			  ],
-				 "tokenizer": "whitespace"
-			  }
-		   }
-		}
-	 },
-
-	"mappings"{
-		"BADGE":{
-			"Type":{
-				"type":"text",
-				"analyzer":"my_analyzer",
-				"fields":{
-					"raw":{
-						"type":"keyword"
-						
-					}
-				}
-			},
-
-			"Tags":{
-				"type":"text",
-				"analyzer":"my_analyzer",
-				"fields":{
-					"raw":{
-						"type":"keyword"
-						
-					}
-				}
-			}
-
-		}
-	}
 }`
