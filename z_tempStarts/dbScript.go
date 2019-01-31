@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/sea350/ustart_go/post/badge"
-	"github.com/rogpeppe/godef/go/types"
+	
 	"bufio"
 	"context"
 	"fmt"
