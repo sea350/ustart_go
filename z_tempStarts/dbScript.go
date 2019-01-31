@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/sea350/ustart_go/post/badge"
-	
+	post "github.com/sea350/ustart_go/post/badge"
+
 	"bufio"
 	"context"
 	"fmt"
@@ -320,8 +320,6 @@ const convoMapping = `
     }
 }`
 
-
-
 func deleteIndex(eclient *elastic.Client, index string) {
 
 	//fmt.Println(globals.EntryIndex)
@@ -488,7 +486,7 @@ func main() {
 			commands = append(commands, input)
 
 			if strings.HasPrefix(input, "wipe") {
-				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex,globals.BadgeIndex)
+				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex, globals.BadgeIndex)
 				// delete phase
 				for _, index := range indices {
 
@@ -509,7 +507,7 @@ func main() {
 					}
 				}
 			} else if strings.HasPrefix(input, "start") {
-				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex), globals.BadgeIndex)
+				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex, globals.BadgeIndex)
 				for _, index := range indices {
 					if err != nil {
 						log.Println(err)
@@ -517,12 +515,11 @@ func main() {
 					}
 					startIndex(eclient, index)
 				}
-				_, err := post.IndexBadge(eclient,ustart)
+				_, err := post.IndexBadge(eclient, ustart)
 				if err != nil {
 					log.Println(err)
-					
-				}
 
+				}
 
 			} else if strings.HasPrefix(input, "deluser") {
 
