@@ -105,19 +105,9 @@ const MappingBadge = `
 		}
 	 },
 
-	"mappings"{
+	"mappings":{
 		"BADGE":{
 			"properties":{
-				"Tags":{
-					"type":"text",
-					"analyzer":"my_analyzer",
-					"fields":{
-						"raw":{
-							"type":"keyword"
-							
-						}
-					}
-				},
 				"Type":{
 					"type":"text",
 					"analyzer":"my_analyzer",
@@ -127,7 +117,18 @@ const MappingBadge = `
 							
 						}
 					}
+				},
+				"Tags":{
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}
 				}
+				
 			}
 
 		}
