@@ -98,7 +98,7 @@ const MappingBadge = `
 				 "type": "custom",
 				 "filter": [
 					"lowercase"
-			  ],
+			      ],
 				 "tokenizer": "whitespace"
 			  }
 		   }
