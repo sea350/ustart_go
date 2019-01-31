@@ -107,13 +107,25 @@ const MappingBadge = `
 
 	"mappings"{
 		"BADGE":{
-			"Tags":{
-				"type":"text",
-				"analyzer":"my_analyzer",
-				"fields":{
-					"raw":{
-						"type":"keyword"
-						
+			"properties":{
+				"Tags":{
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}
+				},
+				"Type":{
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
 					}
 				}
 			}
