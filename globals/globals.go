@@ -401,9 +401,9 @@ const MappingBadge = `
 		   "analyzer": {
 			  "my_analyzer": {
 				 "type": "custom",
-				 "filter": {
+				 "filter": [
 					"lowercase"
-			  },
+			  ],
 				 "tokenizer": "whitespace"
 			  }
 		   }
