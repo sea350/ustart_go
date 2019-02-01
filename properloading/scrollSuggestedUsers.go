@@ -47,6 +47,7 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
+	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
 	if class == 5 {
 		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
@@ -78,6 +79,8 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	if res.Hits.TotalHits == 0 { //if no results just start recommending random
 		suggestedUserQuery = elastic.NewBoolQuery()
 		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
+		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
+		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
 		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 		amt := 1
 		if scrollID == `` {
