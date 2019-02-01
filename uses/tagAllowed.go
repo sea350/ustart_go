@@ -27,7 +27,7 @@ func TagAllowed(eclient *elastic.Client, usrID, newTag string) bool {
 	}
 
 	var badgeID string
-	for hit := range res.Hits.Hits {
+	for _, hit := range res.Hits.Hits {
 		badgeID = hit.Id
 		break
 	}
