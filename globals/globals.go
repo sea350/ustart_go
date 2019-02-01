@@ -107,7 +107,10 @@ const MappingBadge = `
 
 	"mappings":{
 		"BADGE":{
-			"properties":{
+			"properties":{"
+				"Email":{
+					"type":"keyword"
+				},
 				"Type":{
 					"type":"text",
 					"analyzer":"my_analyzer",
