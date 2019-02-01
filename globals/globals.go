@@ -107,7 +107,7 @@ const MappingBadge = `
 
 	"mappings":{
 		"BADGE":{
-			"properties":{"
+			"properties":{
 				"Roster":{
 					"type":"text",
 					"analyzer":"my_analyzer",
