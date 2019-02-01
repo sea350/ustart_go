@@ -54,6 +54,8 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 			}
+		} else {
+			return
 		}
 
 		// for index, tag := range usr.Tags {
@@ -66,7 +68,8 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		if target == -1 {
 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Error: middleware/profile/deleteTag line 54")
 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Deleted object not found")
-			newArr = usr.Tags
+			return
+
 		} else if (target + 1) < len(usr.Tags) {
 			newArr = append(usr.Tags[:target], usr.Tags[(target+1):]...)
 		} else {
