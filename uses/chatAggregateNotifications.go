@@ -13,7 +13,7 @@ import (
 )
 
 //ChatAggregateNotifications ... Executes all necessary database interactions to pull chat notifs
-func ChatAggregateNotifications(eclient *elastic.Client, usrID string) ([]types.FloatingHead, int, error) {
+func ChatAggregateNotifications(eclient *elastic.Client, usrID string, index int) ([]types.FloatingHead, int, error) {
 
 	var notifs []types.FloatingHead
 	var numUnread int
@@ -57,7 +57,17 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string) ([]types.
 
 		numUnread = proxy.NumUnread
 
-		for i := len(proxy.Conversations) - 1; i >= 0; i-- {
+		length := len(proxy.Conversations)
+		startAt := (length - 1) - index
+		if startAt <= 0 {
+			return notifs, numUnread, err
+		}
+		endAt := (length - 1) - (index + 20)
+		if endAt < 0 {
+			endAt = 0
+		}
+
+		for i := startAt - 1; i >= endAt; i-- {
 			head, err := ConvertChatToFloatingHead(client.Eclient, proxy.Conversations[i].ConvoID, usrID)
 			if err == nil {
 				head.Read = proxy.Conversations[i].Read
