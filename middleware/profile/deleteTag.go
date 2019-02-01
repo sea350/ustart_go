@@ -54,9 +54,11 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		// 	}
 		// }
 
-		if tag == deleteTag {
-			target = index
-			break
+		for index, tag := range usr.Tags {
+			if tag == deleteTag {
+				target = index
+				break
+			}
 		}
 
 		if target == -1 {
