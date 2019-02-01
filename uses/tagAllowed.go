@@ -31,7 +31,7 @@ func TagAllowed(eclient *elastic.Client, usrID, newTag string) bool {
 		badgeID = hit.Id
 		break
 	}
-	hasBadge := false
+
 	userBadgeQuery := elastic.NewBoolQuery()
 	userBadgeQuery = userBadgeQuery.Must(elastic.NewTermQuery("BadgeIDs", badgeID)).Must(elastic.NewTermQuery("_id", usrID))
 
