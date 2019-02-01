@@ -109,7 +109,14 @@ const MappingBadge = `
 		"BADGE":{
 			"properties":{"
 				"Roster":{
-					"type":"keyword"
+					"type":"text",
+					"analyzer":"my_analyzer",
+					"fields":{
+						"raw":{
+							"type":"keyword"
+							
+						}
+					}
 				},
 				"Type":{
 					"type":"text",
