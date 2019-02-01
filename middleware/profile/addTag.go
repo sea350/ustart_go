@@ -50,6 +50,15 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	badgeTags, err := uses.BadgeSetupWID(client.Eclient, ID)
+	if err != nil {
+
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+	}
+
+	if len(badgeTags) > 0 {
+		validTags = append(badgeTags, validTags...)
+	}
 	err = post.UpdateUser(client.Eclient, ID, "Tags", validTags)
 	if err != nil {
 
