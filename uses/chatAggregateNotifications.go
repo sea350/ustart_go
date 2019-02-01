@@ -67,7 +67,7 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string, index int
 			endAt = 0
 		}
 
-		for i := startAt - 1; i >= endAt; i-- {
+		for i := startAt; i >= endAt; i-- {
 			head, err := ConvertChatToFloatingHead(client.Eclient, proxy.Conversations[i].ConvoID, usrID)
 			if err == nil {
 				head.Read = proxy.Conversations[i].Read
