@@ -127,11 +127,18 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
+
 	userstruct, err := get.UserByID(client.Eclient, docID.(string))
 	if err != nil {
-
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		cookie := http.Cookie{Name: session.Values["DocID"].(string), Value: "user", MaxAge: -1, Path: "/"}
+		http.SetCookie(w, &cookie)
+		session.Values = make(map[interface{}]interface{})
+		session.Save(r, w)
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
 	}
+
 	cs := client.ClientSide{UserInfo: userstruct, DOCID: docID.(string), Username: session.Values["Username"].(string)}
 
 	p := bluemonday.UGCPolicy()
