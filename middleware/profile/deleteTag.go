@@ -2,10 +2,12 @@ package profile
 
 import (
 	"net/http"
+	"strings"
 
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
+	uses "github.com/sea350/ustart_go/uses"
 )
 
 //DeleteTag ...
@@ -41,25 +43,25 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		}
 
 		target := -1
-		// isAllowed := uses.TagAllowed(client.Eclient, ID, strings.ToLower(deleteTag))
+		isAllowed := uses.TagAllowed(client.Eclient, strings.ToLower(deleteTag))
 
-		// if isAllowed {
+		if isAllowed {
 
-		// 	for index, tag := range usr.Tags {
+			for index, tag := range usr.Tags {
 
-		// 		if tag == deleteTag {
-		// 			target = index
-		// 			break
-		// 		}
-		// 	}
-		// }
-
-		for index, tag := range usr.Tags {
-			if tag == deleteTag {
-				target = index
-				break
+				if strings.ToLower(tag) == strings.ToLower(deleteTag) {
+					target = index
+					break
+				}
 			}
 		}
+
+		// for index, tag := range usr.Tags {
+		// 	if tag == deleteTag {
+		// 		target = index
+		// 		break
+		// 	}
+		// }
 
 		if target == -1 {
 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Error: middleware/profile/deleteTag line 54")

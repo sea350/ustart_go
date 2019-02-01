@@ -10,7 +10,7 @@ import (
 )
 
 //ByID ...
-func TagAllowed(eclient *elastic.Client, usrID, newTag string) bool {
+func TagAllowed(eclient *elastic.Client, newTag string) bool {
 	ctx := context.Background()
 
 	tagQuery := elastic.NewTermQuery("Tags", newTag)
@@ -26,26 +26,26 @@ func TagAllowed(eclient *elastic.Client, usrID, newTag string) bool {
 		return false
 	}
 
-	var badgeID string
-	for _, hit := range res.Hits.Hits {
-		badgeID = hit.Id
-		break
-	}
+	// var badgeID string
+	// for _, hit := range res.Hits.Hits {
+	// 	badgeID = hit.Id
+	// 	break
+	// }
 
-	userBadgeQuery := elastic.NewBoolQuery()
-	userBadgeQuery = userBadgeQuery.Must(elastic.NewTermQuery("BadgeIDs", badgeID)).Must(elastic.NewTermQuery("_id", usrID))
+	// userBadgeQuery := elastic.NewBoolQuery()
+	// userBadgeQuery = userBadgeQuery.Must(elastic.NewTermQuery("BadgeIDs", badgeID)).Must(elastic.NewTermQuery("_id", usrID))
 
-	badgeRes, err := eclient.Search().
-		Index(globals.BadgeIndex).
-		Type(globals.BadgeType).
-		Query(userBadgeQuery).
-		Do(ctx)
+	// badgeRes, err := eclient.Search().
+	// 	Index(globals.BadgeIndex).
+	// 	Type(globals.BadgeType).
+	// 	Query(userBadgeQuery).
+	// 	Do(ctx)
 
-	if err != nil {
-		log.Println(err)
-		return false
-	}
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return false
+	// }
 
-	return res.Hits.TotalHits == 0 && badgeRes.Hits.TotalHits == 1
+	return res.Hits.TotalHits == 0 //&& badgeRes.Hits.TotalHits == 1
 
 }
