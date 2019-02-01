@@ -18,7 +18,7 @@ func BadgeSetupWID(eclient *elastic.Client, userID string) ([]string, error) {
 
 	usr, err := getUser.UserByID(eclient, userID)
 
-	var result string
+	// var result string
 	var tags []string
 
 	for _, id := range usr.BadgeIDs {
@@ -33,7 +33,7 @@ func BadgeSetupWID(eclient *elastic.Client, userID string) ([]string, error) {
 
 		}
 
-		badge, err := get.BadgeByID(eclient, result)
+		badge, err := get.BadgeByID(eclient, searchResult.Id)
 		if err != nil {
 			log.Println(err)
 			continue
