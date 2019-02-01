@@ -43,7 +43,7 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 	for t := range ts.Tags {
 		ts.Tags[t] = p.Sanitize(ts.Tags[t])
 		ts.Tags[t] = html.EscapeString(ts.Tags[t])
-		isAllowed := uses.TagAllowed(client.Eclient, strings.ToLower(ts.Tags[t]))
+		isAllowed := uses.TagAllowed(client.Eclient, ID, strings.ToLower(ts.Tags[t]))
 
 		if isAllowed {
 			validTags = append(validTags, ts.Tags[t])
