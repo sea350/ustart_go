@@ -54,6 +54,8 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 			}
+		} else {
+			return
 		}
 
 		// for index, tag := range usr.Tags {
@@ -64,6 +66,10 @@ func DeleteTag(w http.ResponseWriter, r *http.Request) {
 		// }
 
 		if target == -1 {
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Error: middleware/profile/deleteTag line 54")
+			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Deleted object not found")
+			return
+
 			if isAllowed {
 				client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "err: Deleted object not found")
 			}
