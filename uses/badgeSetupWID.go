@@ -33,7 +33,7 @@ func BadgeSetupWID(eclient *elastic.Client, userID string) ([]string, error) {
 
 		}
 
-		badge, err = get.BadgeByID(eclient, result)
+		badge, err := get.BadgeByID(eclient, result)
 		if err != nil {
 			log.Println(err)
 			continue
