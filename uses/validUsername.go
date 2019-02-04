@@ -7,8 +7,6 @@ import (
 	"github.com/TwinProduction/go-away"
 )
 
-var blacklistedUsernames = []string{"admin", "administrator", "support", "ustart", "ustartsupport", "ustart_support", "ustartadmin", "ustart_admin", "ustartadministrator", "ustart_administrator"}
-
 //ValidUsername ... checks if the username entered is properly formatted
 func ValidUsername(uname string) bool {
 	//checking for proper email format
@@ -27,4 +25,22 @@ func ValidUsername(uname string) bool {
 
 	return goaway.IsProfane(uname)
 
+}
+
+var blacklistedUsernames = []string{
+	"admin",
+	"administrator",
+	"support",
+	"ustart",
+	"ustartsupport",
+	"ustart_support",
+	"ustartadmin",
+	"ustart_admin",
+	"ustartadministrator",
+	"ustart_administrator",
+	"rozbiani",
+	"ryanteyomrozbiani",
+	"teyom",
+	"teyomrozbiani",
+	"ryan",
 }
