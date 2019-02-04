@@ -9,7 +9,7 @@ import (
 	//post "github.com/sea350/ustart_go/post"
 )
 
-//ByID ...
+//TagAllowed ...
 func TagAllowed(eclient *elastic.Client, newTag string) bool {
 	ctx := context.Background()
 

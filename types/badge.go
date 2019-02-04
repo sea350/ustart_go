@@ -1,9 +1,8 @@
 package types
 
-//Img ... image, class lets you know wether the image is randomly accessible or needs permissions
-//ie, ustart used images vs user used images in public domain
+//Badge ... something that was so easy it could've been written without warnings by a 5th grader but since min wrote it, it had 3 leaving steven to fix it
 type Badge struct {
-	Id          string   `json:Id`
+	ID          string   `json:"ID"`
 	Type        string   `json:"Type"`
 	Roster      []string `json:"Roster"`
 	ImageLink   string   `json:"ImageLink"`

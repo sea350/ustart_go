@@ -11,7 +11,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//BadgeSetupWID...
+//BadgeSetupWID ...
 //Takes care of badge-related modifications and returns relevant tags
 func BadgeSetupWID(eclient *elastic.Client, userID string) ([]string, error) {
 	ctx := context.Background()
