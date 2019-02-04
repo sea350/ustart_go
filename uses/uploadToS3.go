@@ -47,7 +47,8 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	buff := new(bytes.Buffer)
 
 	// encode image to buffer
-	err = png.Encode(buff, imgPrime)
+	enc := png.Encoder{CompressionLevel: -3}
+	err = enc.Encode(buff, imgPrime)
 	if err != nil {
 		return url, err
 	}

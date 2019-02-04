@@ -13,7 +13,7 @@ go build -o "start_$now" GoStart2.go
 
 echo $?
 
-echo "Backend service called.  Follow logs with \`tail -f start.txt\`"
+echo "Backend service called.  Follow logs with \`tail -f log_$now.txt\`"
 
 echo "Services spawned.  Exiting..."
 
