@@ -42,12 +42,12 @@ func IndexBadge(eclient *elastic.Client, newBadge types.Badge) (string, error) {
 		Index(globals.BadgeIndex).
 		Type(globals.BadgeType).
 		BodyJson(newBadge).
-		Id(newBadge.Id).
+		Id(newBadge.ID).
 		Do(ctx)
 
 	if Err != nil {
 		return ID, Err
 	}
 
-	return newBadge.Id, nil
+	return newBadge.ID, nil
 }
