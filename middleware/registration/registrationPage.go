@@ -56,7 +56,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	//proper username
 	if !uses.ValidUsername(r.FormValue("username")) {
 
-		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid username submitted")
+		client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid username submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid username submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)
@@ -67,7 +67,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	//proper birth date
 	if !uses.ValidDate(r.FormValue("dob")) {
 
-		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid birthdate submitted")
+		client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid birthdate submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-reg-nil", cs)

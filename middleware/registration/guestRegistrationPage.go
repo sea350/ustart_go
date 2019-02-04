@@ -64,7 +64,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	//proper email
 	if !uses.ValidGuestEmail(email) {
 
-		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid email submitted")
+		client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid email submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid email submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-guest-reg", cs)
@@ -74,7 +74,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	//proper username
 	if !uses.ValidUsername(username) {
 
-		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid username submitted")
+		client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid username submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid username submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-guest-reg", cs)
@@ -85,7 +85,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	//proper birth date
 	if !uses.ValidDate(r.FormValue("dob")) {
 
-		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid date of birth submitted")
+		client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid date of birth submitted")
 		cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
 		client.RenderTemplate(w, r, "templateNoUser2", cs)
 		client.RenderTemplate(w, r, "new-guest-reg", cs)
