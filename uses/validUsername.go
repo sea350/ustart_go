@@ -3,8 +3,6 @@ package uses
 import (
 	"regexp"
 	"strings"
-
-	"github.com/TwinProduction/go-away"
 )
 
 //ValidUsername ... checks if the username entered is properly formatted
@@ -23,7 +21,7 @@ func ValidUsername(uname string) bool {
 		}
 	}
 
-	return goaway.IsProfane(uname)
+	return true
 
 }
 
