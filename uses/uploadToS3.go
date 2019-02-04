@@ -3,9 +3,8 @@ package uses
 import (
 	"bytes"
 	"encoding/base64"
+	"errors"
 	"fmt"
-	"image"
-	"image/png"
 	"log"
 	"strings"
 
@@ -13,7 +12,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"github.com/nfnt/resize"
 	"github.com/sea350/ustart_go/globals"
 )
 
@@ -31,29 +29,38 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	}
 	// pass reader to NewDecoder
 	//dec := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data[i+1:]))
+	var imageType []string
+	if arr[0] == "data:image/png;base64" {
+		imageType = []string{".png", "image/png"}
+	} else if arr[0] == "data:image/jpeg;base64" {
+		imageType = []string{".jpg", "image/jpeg"}
+	} else {
+		panic(errors.New("unexpected file type"))
+	}
+
 	dec, err := base64.StdEncoding.DecodeString(arr[1])
 	if err != nil {
 		panic(err)
 	}
 
 	r := bytes.NewReader(dec)
-	img, _, err := image.Decode(r)
-	if err != nil {
-		return url, err
-	}
+	// img, _, err := image.Decode(r)
+	// if err != nil {
+	// 	return url, err
+	// }
 
-	imgPrime := resize.Resize(0, uint(img.Bounds().Dy()), img, resize.Lanczos3)
+	// imgPrime := resize.Resize(0, uint(img.Bounds().Dy()), img, resize.Lanczos3)
 
-	buff := new(bytes.Buffer)
+	// buff := new(bytes.Buffer)
 
-	// encode image to buffer
-	enc := png.Encoder{CompressionLevel: -3}
-	err = enc.Encode(buff, imgPrime)
-	if err != nil {
-		return url, err
-	}
-	// convert buffer to reader
-	reader := bytes.NewReader(buff.Bytes())
+	// // encode image to buffer
+	// enc := png.Encoder{CompressionLevel: -3}
+	// err = enc.Encode(buff, imgPrime)
+	// if err != nil {
+	// 	return url, err
+	// }
+	// // convert buffer to reader
+	// reader = bytes.NewReader(buff.Bytes())
 
 	// The session the S3 Uploader will use
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String(globals.S3Region), Credentials: credentials.NewStaticCredentials(globals.S3CredID, globals.S3CredSecret, globals.S3CredToken)}))
@@ -64,9 +71,9 @@ func UploadToS3(based64 string, filename string) (string, error) {
 	// Upload the file to S3.
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket:      aws.String(globals.S3BucketName),
-		Key:         aws.String(filename + ".png"),
-		Body:        reader,
-		ContentType: aws.String("image/png"),
+		Key:         aws.String(filename + imageType[0]),
+		Body:        r,
+		ContentType: aws.String(imageType[1]),
 	})
 	if err != nil {
 		return url, fmt.Errorf("failed to upload file, %v", err)
