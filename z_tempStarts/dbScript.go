@@ -437,8 +437,8 @@ func main() {
 	ustart.ID = "USTART"
 	ustart.Type = "USTART"
 	ustart.ImageLink = "https://s3.amazonaws.com/ustart-default/U_badge.png"
-	ustart.Roster = []string{"rr2396@nyu.edu", "sea350@nyu.edu", "yh1112@nyu.edu", "mrb588@nyu.edu"}
-	ustart.Tags = []string{"USTART_Administrator", "USTART_Dev"}
+	ustart.Roster = []string{"rr2396@nyu.edu", "sea350@nyu.edu", "yh1112@nyu.edu", "mrb588@nyu.edu", "steven.armanios@nyu.edu"}
+	ustart.Tags = []string{"USTARTAdministrator", "USTARTDev"}
 
 	help["help"] = "pretty self-explanatory"
 	help["wipe"] = "clears database and restarts all indices"
