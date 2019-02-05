@@ -16,7 +16,7 @@ import (
 
 //ModifyBadge...
 //Takes care of badge-related modifications and returns relevant tags
-func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrID string) ( error) {
+func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrID string, newVal string) ( error) {
 	ctx := context.Background()
 	
 	badge, err := get.BadgeByType(eclient, badgeType)
@@ -45,6 +45,11 @@ func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrID
 			log.Panicln(err)
 			return err
 		}
+	case "image":
+		err = postBadge.UpdateBadge(eclient, badgeID, "ImageLink", newVal)
+		if err != nil {
+			log.Panicln(err)
+			return err
 	
 	}
 
