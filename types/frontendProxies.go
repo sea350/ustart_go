@@ -6,6 +6,7 @@ import (
 
 //WARNING: NOT FOR DATABASE USE
 
+//BadgeProxy ...
 type BadgeProxy struct {
 	Type string `json:"Type"`
 	Link string `json:"Link"`
@@ -57,17 +58,18 @@ type FloatingHead struct {
 
 //JournalEntry ... All data needed to display an entry
 type JournalEntry struct {
-	ElementID        string      `json:"ElementID"`
-	FirstName        string      `json:"FirstName"`
-	LastName         string      `json:"LastName"`
-	Username         string      `json:"Username"`
-	Image            string      `json:"Image"`
-	Element          Entry       `json:"Element"`
-	NumReplies       int         `json:"NumReplies"`
-	NumLikes         int         `json:"NumLikes"`
-	NumShares        int         `json:"NumShares"`
-	Liked            bool        `json:"Liked"`
-	ReferenceElement interface{} `json:"ReferenceElement"`
+	ElementID        string       `json:"ElementID"`
+	FirstName        string       `json:"FirstName"`
+	LastName         string       `json:"LastName"`
+	Username         string       `json:"Username"`
+	Image            string       `json:"Image"`
+	Element          Entry        `json:"Element"`
+	NumReplies       int          `json:"NumReplies"`
+	NumLikes         int          `json:"NumLikes"`
+	NumShares        int          `json:"NumShares"`
+	Liked            bool         `json:"Liked"`
+	ReferenceHead    FloatingHead `json:"ReferenceHead"`
+	ReferenceElement interface{}  `json:"ReferenceElement"`
 }
 
 //ProjectSubWidgets ... data specific to each project being displayed on the projects widget

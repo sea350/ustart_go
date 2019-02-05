@@ -150,7 +150,7 @@ func HandleConnections(w http.ResponseWriter, r *http.Request) {
 
 		msg = types.Message{SenderID: docID.(string), TimeStamp: time.Now(), Content: msg.Content, ConversationID: actualChatID}
 		if actualChatID == `` && chatURL != `` {
-			client.Logger.Println("Debug text: chat ID = " + actualChatID + " | chatUrl = " + chatURL)
+			//client.Logger.Println("Debug text: chat ID = " + actualChatID + " | chatUrl = " + chatURL)
 			newConvoID, err := uses.ChatFirst(client.Eclient, msg, docID.(string), dmTargetUserID)
 			if err != nil {
 				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)

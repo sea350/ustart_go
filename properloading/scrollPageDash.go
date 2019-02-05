@@ -36,7 +36,9 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 	projQuery = projQuery.Must(elastic.NewTermsQuery("Classification", 3, 5))
 	projQuery = projQuery.Must(elastic.NewTermQuery("Visible", true))
 	//yeah....
-	finalQuery := usrQuery.Should(projQuery)
+	finalQuery := elastic.NewBoolQuery()
+	finalQuery = finalQuery.Should(usrQuery)
+	finalQuery = finalQuery.Should(projQuery)
 	var arrResults []types.JournalEntry
 
 	scroll := eclient.Scroll().

@@ -9,7 +9,7 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
-//BadgeSetup ...
+//LoadBadgeProxies ...
 //Takes care of badge-related modifications and returns relevant tags
 func LoadBadgeProxies(eclient *elastic.Client, badgeIDs []string) ([]types.BadgeProxy, error) {
 	var bProxies []types.BadgeProxy

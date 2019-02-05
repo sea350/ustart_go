@@ -45,6 +45,12 @@ func ConvertEntryToJournalEntry(eclient *elastic.Client, entryID string, viewerI
 	newJournalEntry.LastName = usr.LastName
 	newJournalEntry.Username = usr.Username
 	newJournalEntry.Image = usr.Avatar
+	if entry.Classification == 3 || entry.Classification == 4 || entry.Classification == 5 {
+		head, err := ConvertProjectToFloatingHead(eclient, entry.ReferenceID)
+		if err == nil {
+			newJournalEntry.ReferenceHead = head
+		}
+	}
 	if entry.Classification == 2 && enableRecursion && entry.ReferenceEntry != `` {
 		jE, err2 := ConvertEntryToJournalEntry(eclient, entry.ReferenceEntry, viewerID, false)
 		if err2 == nil {

@@ -174,6 +174,15 @@ func CreateProjectPage(w http.ResponseWriter, r *http.Request) {
 		client.RenderTemplate(w, r, "createProject-Nil", cs)
 		return
 	}
+	if !uses.ValidUsername(cleanURL) {
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid url")
+		cs.ErrorStatus = true
+		cs.ErrorOutput = errors.New("Invalid url")
+		client.RenderSidebar(w, r, "template2-nil")
+		client.RenderSidebar(w, r, "leftnav-nil")
+		client.RenderTemplate(w, r, "createProject-Nil", cs)
+		return
+	}
 
 	cleanCountry := p.Sanitize(r.FormValue("country"))
 
