@@ -9,6 +9,8 @@ import (
 
 //MonkaTOS ... only renders TOS page
 func MonkaTOS(w http.ResponseWriter, r *http.Request) {
+	cs := client.ClientSide{}
+
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
@@ -21,9 +23,12 @@ func MonkaTOS(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/", http.StatusFound)
 			return
 		}
+		client.RenderSidebar(w, r, "template2-nil")
+		client.RenderSidebar(w, r, "leftnav-nil")
+		client.RenderTemplate(w, r, "tos", cs)
+		return
 	}
 
-	cs := client.ClientSide{}
 	client.RenderTemplate(w, r, "templateNoUser2", cs)
 	client.RenderTemplate(w, r, "nil-index2", cs)
 	client.RenderTemplate(w, r, "tos", cs)
