@@ -54,7 +54,7 @@ func main() {
 	http.HandleFunc("/profilelogin/", login.Login)
 	http.HandleFunc("/logout/", login.Logout)
 	http.HandleFunc("/unverified/", login.Unverified)
-	http.HandleFunc("/monkaTOS/", login.MonkaTOS)
+	http.HandleFunc("/termsofservice/", login.MonkaTOS)
 
 	//REGISTRATIONS
 	http.HandleFunc("/Signup/", registration.Signup)

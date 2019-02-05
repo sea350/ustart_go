@@ -29,7 +29,6 @@ func MonkaTOS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client.RenderTemplate(w, r, "templateNoUser2", cs)
-	client.RenderTemplate(w, r, "nil-index2", cs)
+	client.RenderSidebar(w, r, "templateNoUser2")
 	client.RenderTemplate(w, r, "tos", cs)
 }
