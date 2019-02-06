@@ -106,17 +106,17 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		id = customURL
 	}
 
-	var initMsg types.Message{
-		SenderID       : makerID,
-		ConversationID :convoID,
-		TimeStamp      : time.Now(),
-		Content        : "Welcome to your new project!",
-		Hidden         :false,      
-		}
-		err = uses.ChatSend(eclient)
-		if err != nil {
-			return id, err
-		}
+	var initMsg types.Message{}
+	initMsg.SenderID = makerID
+	initMsg.ConversationID =convoID
+	initMsg.TimeStamp      = time.Now()
+	initMsg.Content        = "Welcome to your new project!"
+	initMsg.Hidden         =false
+		
+	err = uses.ChatSend(eclient)
+	if err != nil {
+		return id, err
+	}
 
 	return id, err
 
