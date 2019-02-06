@@ -82,11 +82,17 @@ func InvisProject(eclient *elastic.Client, projID string) error {
 
 	//INSERT REMOVE EVENT DEPENDANCIES HERE
 
-	_, err = eclient.Update().
+	_, _ = eclient.Update().
 		Index(globals.ProjectIndex).
 		Type(globals.ProjectType).
 		Id(projID).
 		Doc(map[string]interface{}{"Visible": false}).
+		Do(ctx)
+
+	_, err = eclient.Update().
+		Index(globals.ProjectIndex).
+		Type(globals.ProjectType).
+		Id(projID).
 		Doc(map[string]interface{}{"URLName": ""}).
 		Do(ctx)
 

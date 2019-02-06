@@ -28,8 +28,8 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 
 	url := r.URL.Path[10:]
 	if url == `` {
-
-		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + `NO URL PASSED`)
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
 	}
 	if url == `_blank` {
 		return
