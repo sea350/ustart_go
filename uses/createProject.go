@@ -110,7 +110,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	initMsg.Content = "Welcome to your new project!"
 	initMsg.Hidden = false
 
-	err = uses.ChatSend(eclient)
+	err = ChatSend(eclient)
 	if err != nil {
 		return id, err
 	}
