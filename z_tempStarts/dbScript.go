@@ -395,7 +395,7 @@ func startIndex(eclient *elastic.Client, index string) error {
 		}
 
 	}
-	return err
+	return nil
 
 }
 
