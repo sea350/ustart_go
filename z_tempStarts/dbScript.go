@@ -369,8 +369,7 @@ func startIndex(eclient *elastic.Client, index string) error {
 		fmt.Println(mapping)
 		if err != nil {
 			// Handle error
-			fmt.Println("Mapping:")
-			fmt.Println(mapping)
+
 			fmt.Println(err)
 			fmt.Println("Could not create", index)
 			return err
@@ -383,8 +382,7 @@ func startIndex(eclient *elastic.Client, index string) error {
 		_, err := eclient.CreateIndex(index).Do(ctx)
 		if err != nil {
 			// Handle error
-			fmt.Println("Mapping:")
-			fmt.Println(mapping)
+
 			fmt.Println(err)
 
 			fmt.Println("Could not create", index)
