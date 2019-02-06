@@ -365,8 +365,7 @@ func startIndex(eclient *elastic.Client, index string) error {
 	if mapping != "DNE" {
 		ctx := context.Background()
 		_, err := eclient.CreateIndex(index).BodyString(mapping).Do(ctx)
-		fmt.Println("Mapping:")
-		fmt.Println(mapping)
+
 		if err != nil {
 			// Handle error
 
