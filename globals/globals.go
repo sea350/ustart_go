@@ -254,7 +254,7 @@ const MappingWidget = `
 }`
 
 //MappingProject ... project mapping
-const projMapping = `
+const MappingProject = `
 {
 	"settings": {
 		"analysis": {

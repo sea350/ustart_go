@@ -93,7 +93,7 @@ const usrMapping = `
 // 	"tokenizer": "standard"
 // },
 
-const projMapping = `
+const MappingProject = `
 {
 	"settings": {
 		"analysis": {
@@ -248,7 +248,7 @@ const widgetMapping = `
     }
 }`
 
-/*const projMapping = `
+/*const MappingProject = `
 {
     "mappings":{
         "PROJECT":{
@@ -320,7 +320,7 @@ const convoMapping = `
     }
 }`
 
-func deleteIndex(eclient *elastic.Client, index string) {
+func deleteIndex(eclient *elastic.Client, index string) error {
 
 	//fmt.Println(globals.EntryIndex)
 
@@ -331,6 +331,7 @@ func deleteIndex(eclient *elastic.Client, index string) {
 		// Handle error
 		fmt.Println(err)
 		fmt.Println(index)
+		return err
 	} else {
 		fmt.Println(index, "deleted")
 	}
@@ -339,14 +340,14 @@ func deleteIndex(eclient *elastic.Client, index string) {
 	}
 }
 
-func startIndex(eclient *elastic.Client, index string) {
+func startIndex(eclient *elastic.Client, index string) error {
 	log.Println("Current index being started:", index)
 	mapping := "DNE"
 	switch index {
 	case globals.UserIndex:
-		mapping = usrMapping
+		mapping = globals.MappingUsr
 	case globals.ProjectIndex:
-		mapping = projMapping
+		mapping = globals.MappingProject
 	case globals.WidgetIndex:
 		mapping = globals.MappingWidget
 	case globals.EventIndex:
@@ -371,6 +372,7 @@ func startIndex(eclient *elastic.Client, index string) {
 			fmt.Println(mapping)
 			fmt.Println(err)
 			fmt.Println("Could not create", index)
+			retrn err
 		} else {
 			fmt.Println(index, "created")
 		}
@@ -385,6 +387,7 @@ func startIndex(eclient *elastic.Client, index string) {
 			fmt.Println(err)
 
 			fmt.Println("Could not create", index)
+			return err
 
 		} else {
 			fmt.Println(index, "created")
@@ -501,23 +504,26 @@ func main() {
 			} else if strings.HasPrefix(input, "delete") {
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex, globals.BadgeIndex)
 				for _, index := range indices {
-					deleteIndex(eclient, index)
+					err = deleteIndex(eclient, index)
 					if err != nil {
+						log.Panicln(err)
 						continue
 					}
 				}
 			} else if strings.HasPrefix(input, "start") {
 				indices = append(indices, globals.UserIndex, globals.ProjectIndex, globals.EntryIndex, globals.ConvoIndex, globals.ProxyMsgIndex, globals.MsgIndex, globals.GuestCodeIndex, globals.NotificationIndex, globals.ProxyNotifIndex, globals.WidgetIndex, globals.FollowIndex, globals.ImgIndex, globals.EventIndex, globals.BadgeIndex)
 				for _, index := range indices {
+					err = startIndex(eclient, index)
 					if err != nil {
 						log.Println(err)
 						continue
 					}
-					startIndex(eclient, index)
+					
 				}
 				_, err := post.IndexBadge(eclient, ustart)
 				if err != nil {
 					log.Println(err)
+					
 
 				}
 

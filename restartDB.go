@@ -54,7 +54,7 @@ const widgetMapping = `
     }
 }`
 
-const projMapping = `
+const MappingProject = `
 {
     "mappings":{
         "Project":{
@@ -98,7 +98,7 @@ func RestartDB() {
 		log.Println(dir, err)
 	}
 
-	createIndex, err = eclient.CreateIndex(globals.ProjectIndex).BodyString(projMapping).Do(ctx)
+	createIndex, err = eclient.CreateIndex(globals.ProjectIndex).BodyString(MappingProject).Do(ctx)
 	if err != nil {
 		// Handle error
 		log.SetFlags(log.LstdFlags | log.Lshortfile)

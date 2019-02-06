@@ -89,7 +89,7 @@ const usrMapping = `
 // 	"tokenizer": "standard"
 // },
 
-const projMapping = `
+const MappingProject = `
 {
 	"settings": {
 		"analysis": {
@@ -244,7 +244,7 @@ const widgetMapping = `
     }
 }`
 
-/*const projMapping = `
+/*const MappingProject = `
 {
     "mappings":{
         "PROJECT":{
@@ -341,7 +341,7 @@ func startIndex(eclient *elastic.Client, index string) {
 	case globals.UserIndex:
 		mapping = usrMapping
 	case globals.ProjectIndex:
-		mapping = projMapping
+		mapping = MappingProject
 	case globals.WidgetIndex:
 		mapping = globals.MappingWidget
 	case globals.EventIndex:
