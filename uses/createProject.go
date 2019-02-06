@@ -1,6 +1,7 @@
 package uses
 
 import (
+	"github.com/sea350/ustart_go/uses"
 	"strings"
 
 	"errors"
@@ -95,6 +96,15 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	if err != nil {
 		return id, err
 	}
+
+	var initMsg types.Message{
+	SenderID       : makerID,
+	ConversationID :convoID,
+	TimeStamp      : time.Now(),
+	Content        : "Welcome to your new project!",
+	Hidden         :false,      
+	}
+	uses.ChatSend(eclient)
 
 	if customURL == `` {
 		id = strings.ToLower(id)
