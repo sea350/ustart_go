@@ -1,7 +1,6 @@
 package uses
 
 import (
-	
 	"strings"
 
 	"errors"
@@ -97,8 +96,6 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		return id, err
 	}
 
-	
-
 	if customURL == `` {
 		id = strings.ToLower(id)
 		err = projPost.UpdateProject(eclient, id, "URLName", id)
@@ -106,13 +103,13 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		id = customURL
 	}
 
-	var initMsg types.Message{}
+	var initMsg types.Message
 	initMsg.SenderID = makerID
-	initMsg.ConversationID =convoID
-	initMsg.TimeStamp      = time.Now()
-	initMsg.Content        = "Welcome to your new project!"
-	initMsg.Hidden         =false
-		
+	initMsg.ConversationID = convoID
+	initMsg.TimeStamp = time.Now()
+	initMsg.Content = "Welcome to your new project!"
+	initMsg.Hidden = false
+
 	err = uses.ChatSend(eclient)
 	if err != nil {
 		return id, err
