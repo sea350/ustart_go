@@ -37,6 +37,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 	heads, numUnread, err := uses.ChatAggregateNotifications(client.Eclient, docID.(string), i)
 	if err != nil {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		panic(err)
 	}
 
 	sendData := make(map[string]interface{})
