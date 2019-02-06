@@ -372,7 +372,7 @@ func startIndex(eclient *elastic.Client, index string) error {
 			fmt.Println(mapping)
 			fmt.Println(err)
 			fmt.Println("Could not create", index)
-			retrn err
+			return err
 		} else {
 			fmt.Println(index, "created")
 		}
@@ -518,12 +518,11 @@ func main() {
 						log.Println(err)
 						continue
 					}
-					
+
 				}
 				_, err := post.IndexBadge(eclient, ustart)
 				if err != nil {
 					log.Println(err)
-					
 
 				}
 
