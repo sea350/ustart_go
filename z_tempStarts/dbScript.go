@@ -338,6 +338,7 @@ func deleteIndex(eclient *elastic.Client, index string) error {
 	if !deleteIndex.Acknowledged {
 		// Not acknowledged
 	}
+	return err
 }
 
 func startIndex(eclient *elastic.Client, index string) error {
@@ -394,6 +395,7 @@ func startIndex(eclient *elastic.Client, index string) error {
 		}
 
 	}
+	return err
 
 }
 
