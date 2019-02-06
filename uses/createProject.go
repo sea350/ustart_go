@@ -97,14 +97,7 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 		return id, err
 	}
 
-	var initMsg types.Message{
-	SenderID       : makerID,
-	ConversationID :convoID,
-	TimeStamp      : time.Now(),
-	Content        : "Welcome to your new project!",
-	Hidden         :false,      
-	}
-	uses.ChatSend(eclient)
+	
 
 	if customURL == `` {
 		id = strings.ToLower(id)
@@ -112,6 +105,18 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	} else {
 		id = customURL
 	}
+
+	var initMsg types.Message{
+		SenderID       : makerID,
+		ConversationID :convoID,
+		TimeStamp      : time.Now(),
+		Content        : "Welcome to your new project!",
+		Hidden         :false,      
+		}
+		err = uses.ChatSend(eclient)
+		if err != nil {
+			return id, err
+		}
 
 	return id, err
 
