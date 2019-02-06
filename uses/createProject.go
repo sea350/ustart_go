@@ -1,7 +1,7 @@
 package uses
 
 import (
-	"github.com/sea350/ustart_go/uses"
+	
 	"strings"
 
 	"errors"
