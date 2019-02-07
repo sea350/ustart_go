@@ -17,7 +17,7 @@ import (
 //Takes care of badge-related modifications and returns relevant tags
 func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrEmail string, newVal string) error {
 
-	usrID, err := getUser.UserIDByEmail(eclient, usrEmail)
+	usrID, err := getUser.UserIDByEmail(eclient, strings.ToLower(usrEmail))
 	if err != nil {
 		log.Panicln(err)
 		return err
