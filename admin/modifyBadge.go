@@ -39,8 +39,8 @@ func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrEm
 			log.Panicln(err)
 			return err
 		}
-		err := post.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badgeID) 
-		f err != nil {
+		err = post.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badgeID) 
+		if err != nil {
 			log.Panicln(err)
 			return err
 		}
