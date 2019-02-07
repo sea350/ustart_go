@@ -9,7 +9,7 @@ import (
 
 //NewBadge...
 //Takes care of badge-related modifications and returns relevant tags
-func NewBadge(eclient *elastic.Client, badgeID string, badgeType string, badgeTags []string, imageLink string, desc string, roster []string) ([]string, error) {
+func NewBadge(eclient *elastic.Client, badgeID string, badgeType string, badgeTags []string, imageLink string, desc string, roster []string) error {
 	var newBadge = types.Badge{
 		Type:        badgeID,
 		ImageLink:   imageLink,
@@ -19,6 +19,7 @@ func NewBadge(eclient *elastic.Client, badgeID string, badgeType string, badgeTa
 
 	_, err := post.IndexBadge(eclient, newBadge)
 	if err != nil {
-		return nil, err
+		return err
 	}
+	return err
 }
