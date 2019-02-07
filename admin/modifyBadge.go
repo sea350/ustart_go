@@ -16,9 +16,13 @@ import (
 
 //ModifyBadge...
 //Takes care of badge-related modifications and returns relevant tags
-func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrID string, newVal string) ( error) {
+func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrEmail string, newVal string) ( error) {
 	ctx := context.Background()
-	
+	usrID, err := getUser.UserIDByEmail(eclient, usrEmail)
+	if err != nil {
+		log.Panicln(err)
+		return err
+	}
 	badge, err := get.BadgeByType(eclient, badgeType)
 	if err != nil {
 		log.Panicln(err)
