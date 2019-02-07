@@ -17,7 +17,7 @@ func NewBadge(eclient *elastic.Client, badgeID string, badgeType string, badgeTa
 		Type: badgeID,
 		ImageLink :imageLink,
 		Roster: roster
-		Description: desc string
+		Description: desc,
 	}
 
 	err := post.IndexBadge(eclient, newBadge)
