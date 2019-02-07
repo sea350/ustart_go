@@ -28,7 +28,7 @@ func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrEm
 		log.Panicln(err)
 		return err
 	}
-	badgeID := badge.Id
+	badgeID := badge.ID
 	// var result string
 
 	switch strings.ToLower(action) {
