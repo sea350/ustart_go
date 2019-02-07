@@ -3,6 +3,7 @@ package get
 import (
 	"context"
 	"errors"
+	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -14,7 +15,7 @@ import (
 func BadgeByType(eclient *elastic.Client, badgeType string) (types.Badge, error) {
 	ctx := context.Background() //intialize context background
 
-	bQuery := elastic.NewTermQuery("Type", badgeType)
+	bQuery := elastic.NewTermQuery("Type", strings.ToLower(badgeType))
 	searchResult, err := eclient.Search(). //Get returns doc type, index, etc.
 						Index(globals.BadgeIndex).
 						Type(globals.BadgeType).
