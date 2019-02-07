@@ -35,8 +35,6 @@ func RemoveEavesFromConversation(eclient *elastic.Client, conversationID string,
 		}
 	}
 
-	AppendToProxyLock.Lock()
-	defer AppendToProxyLock.Unlock()
 	proxyID, err := get.ProxyIDByUserID(eclient, eavesID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
