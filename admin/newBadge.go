@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	get "github.com/sea350/ustart_go/get/"
 	get "github.com/sea350/ustart_go/get/badge"
 	getUser "github.com/sea350/ustart_go/get/user"
 
@@ -21,5 +22,8 @@ func NewBadge(eclient *elastic.Client, badgeID string, badgeType string, badgeTa
 		Description: desc string
 	}
 
-
+	err := post.IndexBadge(eclient, newBadge)
+	if err != nil {
+		return nil, err
+	}
 }
