@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	get "github.com/sea350/ustart_go/get/"
+	get "github.com/sea350/ustart_go/get"
 	get "github.com/sea350/ustart_go/get/badge"
 	getUser "github.com/sea350/ustart_go/get/user"
 
