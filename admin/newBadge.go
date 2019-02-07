@@ -13,7 +13,7 @@ import (
 //NewBadge...
 //Takes care of badge-related modifications and returns relevant tags
 func NewBadge(eclient *elastic.Client, badgeID string, badgeType string, badgeTags []string, imageLink string, roster []string) ([]string, error) {
-	var newBadge types.Badge{
+	var newBadge = types.Badge{
 		Type: badgeID,
 		ImageLink :imageLink,
 		Roster: roster
