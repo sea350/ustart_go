@@ -1,22 +1,22 @@
 package uses
 
 import (
-	"github.com/sea350/ustart_go/post/user"
-	postBadge"github.com/sea350/ustart_go/post/badge"
 	"context"
 	"log"
+	"strings"
+
+	postBadge "github.com/sea350/ustart_go/post/badge"
+	post "github.com/sea350/ustart_go/post/user"
 
 	get "github.com/sea350/ustart_go/get/badge"
 	getUser "github.com/sea350/ustart_go/get/user"
 
-	"github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
-	"os"
 )
 
 //ModifyBadge...
 //Takes care of badge-related modifications and returns relevant tags
-func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrEmail string, newVal string) ( error) {
+func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrEmail string, newVal string) error {
 	ctx := context.Background()
 	usrID, err := getUser.UserIDByEmail(eclient, usrEmail)
 	if err != nil {
@@ -31,7 +31,6 @@ func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrEm
 	badgeID := badge.Id
 	// var result string
 
-
 	switch strings.ToLower(action) {
 	case "give":
 		usr, err := getUser.UserByID(eclient, usrID)
@@ -39,7 +38,7 @@ func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrEm
 			log.Panicln(err)
 			return err
 		}
-		err = post.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badgeID) 
+		err = post.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badgeID))
 		if err != nil {
 			log.Panicln(err)
 			return err
@@ -54,11 +53,10 @@ func ModifyBadge(eclient *elastic.Client, badgeType string, action string, usrEm
 		if err != nil {
 			log.Panicln(err)
 			return err
-	
+		}
+
 	}
 
 	return err
-
-
 
 }
