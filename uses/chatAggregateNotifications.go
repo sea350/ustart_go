@@ -1,6 +1,7 @@
 package uses
 
 import (
+	"errors"
 	"log"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
@@ -59,8 +60,8 @@ func ChatAggregateNotifications(eclient *elastic.Client, usrID string, index int
 
 		length := len(proxy.Conversations)
 		startAt := (length - 1) - index
-		if startAt <= 0 {
-			return notifs, numUnread, err
+		if startAt < 0 {
+			return notifs, numUnread, errors.New("Index is out of bounds")
 		}
 		endAt := (length - 1) - (index + 20)
 		if endAt < 0 {
