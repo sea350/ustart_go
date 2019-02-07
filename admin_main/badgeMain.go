@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/sea350/ustart_go/admin"
+	admin "github.com/sea350/ustart_go/admin"
 
 	"github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
