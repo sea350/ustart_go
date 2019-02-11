@@ -54,7 +54,9 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	}
 
 	amt := 1
-	if scrollID == `` {
+	if len(scrollID) == 0 {
+		//DELETE DEBUG PRINT
+		log.Println("Scroll ID is blank, pulling 3 more users!")
 		amt = 3
 	}
 
@@ -83,7 +85,9 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
 		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 		amt := 1
-		if scrollID == `` {
+		if len(scrollID) == 0 {
+			//DELETE DEBUG PRINT
+			log.Println("Scroll ID is blank, pulling 3 more users!")
 			amt = 3
 		}
 		searchResults = eclient.Scroll().
