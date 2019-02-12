@@ -24,17 +24,14 @@ func main() {
 		fmt.Println("LINE 24,", err)
 	}
 
-	_, foll, err := getFollow.ByID(eclient, ryanID)
+	follID, foll, err := getFollow.ByID(eclient, ryanID)
 	if err != nil {
 		fmt.Println("LINE29,", err)
 	}
 
 	var emptyMap = make(map[string]bool)
 	foll.ProjectFollowing = emptyMap
-	follID, err := getFollow.IDByUserID(eclient, ryanID)
-	if err != nil {
-		fmt.Println("LINE 36,", err)
-	}
+
 	err = postFollow.ReindexFollow(eclient, follID, foll)
 	if err != nil {
 		fmt.Println("LINE 40,", err)
