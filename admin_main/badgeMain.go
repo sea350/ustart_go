@@ -1,6 +1,7 @@
 package main
 
 import (
+	post "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/uses"
 
 	// admin "github.com/sea350/ustart_go/admin"
@@ -42,7 +43,12 @@ func main() {
 
 		if len(badgeIDs) > 0 && badgeIDs[0] != "USTART" {
 			fmt.Println(id.Id, data.Email, badgeIDs, badgeTags)
-			// post.UpdateUser(eclient, )
+			//
+			err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
+			if err != nil {
+				fmt.Println(err)
+			}
+			// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
 		}
 	}
 }
