@@ -34,7 +34,7 @@ func main() {
 		"kps325@nyu.edu", "js8327@nyu.edu", "sps450@nyu.edu", "vsykoralovaas@nyu.edu",
 		"hoyin.wan@nyu.edu", "vz365@nyu.edu"}
 
-	sdB.Tags = []string{"CS4513B_S19"}
+	sdB.Tags = []string{"CS4523B_S19"}
 
 	////////////////////////////////////////////////////////////////////////
 	var sdA types.Badge
@@ -53,7 +53,7 @@ func main() {
 		"ox207@nyu.edu", "ry821@nyu.edu", "ry745@nyu.edu", "ty787@nyu.edu", "chz224@nyu.edu",
 		"david.zheng@nyu.edu", "xz1438@nyu.edu"}
 
-	sdA.Tags = []string{"CS4513A_S19"}
+	sdA.Tags = []string{"CS4523A_S19"}
 	////////////////////////////////////////////////////////////////////////////
 	var sweA types.Badge
 	sweA.ID = "SWESPRING19A"
@@ -66,7 +66,7 @@ func main() {
 		"ln961@nyu.edu", "felicity.ng@nyu.edu", "mr4739@nyu.edu", "asimsatti@nyu.edu",
 		"carrollshen@nyu.edu", "ss10198@nyu.edu", "js10022@nyu.edu", "as9365@nyu.edu",
 		"blw322@nyu.edu", "sx563@nyu.edu", "jz2456@nyu.edu", "zz1241@nyu.edu"}
-	sweA.Tags = []string{"CS4523A_S19"}
+	sweA.Tags = []string{"CS4513A_S19"}
 
 	/////////////////////////////////////////////////////////////////////////
 	var sweB types.Badge
@@ -81,7 +81,7 @@ func main() {
 		"sr4742@nyu.edu", "jinzhaosu@nyu.edu", "jgw298@nyu.edu", "samantha.waln@nyu.edu",
 		"mw3482@nyu.edu", "jwon@nyu.edu", "bx357@nyu.edu", "kennyyip@nyu.edu",
 		"zhangyu@nyu.edu", "nz710@nyu.edu"}
-	sweB.Tags = []string{"CS4523B_S19"}
+	sweB.Tags = []string{"CS4513B_S19"}
 
 	sdAPrint, err1 := post.IndexBadge(eclient, sdA)
 	fmt.Println(sdAPrint, err1)
