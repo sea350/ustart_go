@@ -3,7 +3,9 @@ package main
 import (
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	getUser "github.com/sea350/ustart_go/get/user"
-	post "github.com/sea350/ustart_go/post/user"
+
+	// post "github.com/sea350/ustart_go/post/user"
+	postFollow "github.com/sea350/ustart_go/post/follow"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
@@ -33,7 +35,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	err = post.ReindexFollow(eclient, follID, foll)
+	err = postFollow.ReindexFollow(eclient, follID, foll)
 	if err != nil {
 		fmt.Println(err)
 	}
