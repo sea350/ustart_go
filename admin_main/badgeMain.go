@@ -35,6 +35,9 @@ func main() {
 		}
 		badgeIDs, badgeTags, err := uses.BadgeSetup(eclient, data.Email)
 
+		if err != nil {
+			fmt.Println(err)
+		}
 		if len(badgeIDs) > 0 {
 			fmt.Println(data.Email, badgeIDs, badgeTags)
 		}
