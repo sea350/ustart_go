@@ -41,7 +41,8 @@ func main() {
 		}
 
 		if len(badgeIDs) > 0 && badgeIDs[0] != "USTART" {
-			fmt.Println(data.Email, badgeIDs, badgeTags)
+			fmt.Println(id.Id, data.Email, badgeIDs, badgeTags)
+			// post.UpdateUser(eclient, )
 		}
 	}
 }
