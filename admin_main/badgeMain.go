@@ -38,9 +38,9 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		if len(badgeIDs) > 0 {
-			fmt.Println(data.Email, badgeIDs, badgeTags)
-		}
+
+		fmt.Println(data.Email, badgeIDs, badgeTags)
+
 	}
 }
 
