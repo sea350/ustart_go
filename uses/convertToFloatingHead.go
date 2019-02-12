@@ -46,7 +46,7 @@ func ConvertProjectToFloatingHead(eclient *elastic.Client, projectID string) (ty
 
 	proj, err := getProject.ProjectByID(eclient, projectID)
 	if err != nil {
-		panic(err)
+		return head, err
 	}
 
 	head.FirstName = proj.Name
