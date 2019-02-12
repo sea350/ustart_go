@@ -46,7 +46,7 @@ func main() {
 			//
 			// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
 
-			err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
+			err = post.UpdateUser(eclient, id.Id, "Tags", append(data.Tags, badgeTags...))
 			if err != nil {
 				fmt.Println(err)
 			}
