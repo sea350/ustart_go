@@ -22,8 +22,8 @@ func main() {
 
 	maq := elastic.NewMatchAllQuery()
 	res, err := eclient.Search().
-		Index(index).
-		Type(docType).
+		Index(globals.UserIndex).
+		Type(globals.UserType).
 		Query(maq).
 		Do(ctx)
 
@@ -35,7 +35,7 @@ func main() {
 		}
 		badgeIDs, badgeTags, err := uses.BadgeSetup(eclient, data.Email)
 
-		if len(badgeIDs > 0) {
+		if len(badgeIDs) > 0 {
 			fmt.Println(data.Email, badgeIDs, badgeTags)
 		}
 	}
