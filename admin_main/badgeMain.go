@@ -40,7 +40,7 @@ func main() {
 			fmt.Println(err)
 		}
 
-		if len(badgeIDs) > 0 {
+		if len(badgeIDs) > 0&badgeIDs[0] != "USTART" {
 			fmt.Println(data.Email, badgeIDs, badgeTags)
 		}
 	}
