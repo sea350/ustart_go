@@ -44,11 +44,12 @@ func main() {
 		if len(badgeIDs) > 0 && badgeIDs[0] != "USTART" {
 			fmt.Println(id.Id, data.Email, badgeIDs, badgeTags)
 			//
+			// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
+
 			err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
 			if err != nil {
 				fmt.Println(err)
 			}
-			// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
 		}
 	}
 }
