@@ -25,6 +25,7 @@ func main() {
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		Query(maq).
+		Size(100).
 		Do(ctx)
 
 	for _, id := range res.Hits.Hits {
