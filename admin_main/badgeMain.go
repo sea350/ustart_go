@@ -1,12 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"github.com/sea350/ustart_go/uses"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
+	"context"
+	"encoding/json"
+	"fmt"
+
 	"github.com/sea350/ustart_go/globals"
-	post "github.com/sea350/ustart_go/post/badge"
 	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -14,6 +17,31 @@ import (
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
+
+	ctx := context.Background()
+
+	maq := elastic.NewMatchAllQuery()
+	res, err := eclient.Search().
+		Index(index).
+		Type(docType).
+		Query(maq).
+		Do(ctx)
+
+	for _, id := range res.Hits.Hits {
+		data := types.User{}
+		err = json.Unmarshal(*id.Source, &data)
+		if err != nil {
+			fmt.Println(err)
+		}
+		badgeIDs, badgeTags, err := uses.BadgeSetup(eclient, data.Email)
+
+		if len(badgeIDs > 0) {
+			fmt.Println(data.Email, badgeIDs, badgeTags)
+		}
+	}
+}
+
+/*func main() {
 	// err := admin.ModifyBadge(eclient, "USTART", "give", "gl1144@nyu.edu", "")
 	// badge, err := get.BadgeByType(eclient, "USTART")
 
@@ -94,4 +122,4 @@ func main() {
 
 	sweBPrint, err4 := post.IndexBadge(eclient, sweB)
 	fmt.Println(sweBPrint, err4)
-}
+}*/
