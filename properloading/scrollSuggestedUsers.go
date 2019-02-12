@@ -54,7 +54,7 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	}
 
 	amt := 1
-	if len(scrollID) == 0 {
+	if scrollID == `` {
 
 		amt = 3
 	}
