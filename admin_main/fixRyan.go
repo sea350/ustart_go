@@ -24,7 +24,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	foll, err := getFollow.ByID(eclient, ryanID)
+	_, foll, err := getFollow.ByID(eclient, ryanID)
 	if err != nil {
 		fmt.Println(err)
 	}
