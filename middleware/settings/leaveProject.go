@@ -49,20 +49,27 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var canLeave = false
-	if leavingUser == test1.(string) {
+
+	isLeader, _ := uses.IsLeader(client.Eclient, projID, test1.(string))
+	if isLeader {
+		//checks if is leader
+		canLeave = true
+
+	} else if leavingUser == test1.(string) {
 		//if the current active user wants to leave, they can
 		canLeave = true
-	} else {
-		for _, mem := range proj.Members {
-			if mem.MemberID == test1.(string) && mem.Role == 0 {
-				//if the current acessing user is creator, they can do whatever they want
-				canLeave = true
-
-				client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "checkpoint 2b")
-				break
-			}
-		}
 	}
+	// } else {
+	// 	for _, mem := range proj.Members {
+	// 		if mem.MemberID == test1.(string) && mem.Role == 0 {
+	// 			//if the current acessing user is creator, they can do whatever they want
+	// 			canLeave = true
+
+	// 			client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "checkpoint 2b")
+	// 			break
+	// 		}
+	// 	}
+	// }
 	if !canLeave {
 
 		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "User attempting to leave was not permitted, check variables and try again.")
