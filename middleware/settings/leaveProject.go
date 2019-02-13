@@ -59,7 +59,7 @@ func LeaveProject(w http.ResponseWriter, r *http.Request) {
 		//if the current active user wants to leave, they can
 		canLeave = true
 	}
-	// } else {
+	//  else {
 	// 	for _, mem := range proj.Members {
 	// 		if mem.MemberID == test1.(string) && mem.Role == 0 {
 	// 			//if the current acessing user is creator, they can do whatever they want
