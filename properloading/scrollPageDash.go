@@ -63,7 +63,7 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 
 	for _, hit := range res.Hits.Hits {
 		// fmt.Println(hit.Id)
-		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, false)
+		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, true)
 		arrResults = append(arrResults, head)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)

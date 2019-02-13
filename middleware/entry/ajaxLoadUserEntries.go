@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	
+
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -22,8 +22,7 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 
 	wallID := r.FormValue("userID")
 	if wallID == `` {
-		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"WARNING: docID not received")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "WARNING: docID not received")
 		return
 	}
 	scrollID := r.FormValue("scrollID")
@@ -31,7 +30,6 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 	res, entries, total, err := scrollpkg.ScrollPageUser(client.Eclient, wallID, test1.(string), scrollID)
 	if err != nil {
 		if err != io.EOF {
-			
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err) //we might need special treatment for EOF error
 		}
 	}
@@ -43,7 +41,7 @@ func AjaxLoadUserEntries(w http.ResponseWriter, r *http.Request) {
 
 	data, err := json.Marshal(results)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
