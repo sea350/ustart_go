@@ -24,7 +24,17 @@ func AppendProject(eclient *elastic.Client, usrID string, proj types.ProjectInfo
 		return errors.New("User does not exist")
 	}
 
-	usr.Projects = append(usr.Projects, proj)
+	isDuplicate := false
+	for _, currProj := range usr.Projects {
+		if currProj.ProjectID == proj.ProjectID {
+			isDuplicate = true
+			break
+		}
+	}
+
+	if !isDuplicate {
+		usr.Projects = append(usr.Projects, proj)
+	}
 
 	_, err = eclient.Update().
 		Index(globals.UserIndex).
