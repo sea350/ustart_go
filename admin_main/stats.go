@@ -33,7 +33,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		if len(badgeIDs) == 0 {
+		if len(data.BadgeIDs) == 0 {
 			fmt.Println(data.FirstName, data.LastName, id.Id, data.Email)
 			//
 			// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
