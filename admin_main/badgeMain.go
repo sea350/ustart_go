@@ -1,15 +1,15 @@
 package main
 
 import (
-	// post "github.com/sea350/ustart_go/post/user"
-	post "github.com/sea350/ustart_go/post/badge"
+	"log"
+
+	get "github.com/sea350/ustart_go/get/badge"
+	getUser "github.com/sea350/ustart_go/get/user"
+	postUser "github.com/sea350/ustart_go/post/user"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
-	"fmt"
-
 	"github.com/sea350/ustart_go/globals"
-	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -52,23 +52,49 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 // 	}
 // }
 
+// func main() {
+
+// 	var vip types.Badge
+// 	vip.ID = "USTARTVIP"
+// 	vip.Type = "U·START VIP"
+// 	vip.ImageLink = "https://s3.amazonaws.com/ustart-default/vip_badge.png"
+// 	vip.Roster = []string{"smb866@nyu.edu", "sc5553@nyu.edu", "td1503@nyu.edu", "ae1561@nyu.edu",
+// 		"kristelfung@nyu.edu", "monjur.hasan@nyu.edu", "th1750@nyu.edu",
+// 		"cl4366@nyu.edu", "richelle.newby@nyu.edu", "ss10298@nyu.edu", "tt1507@nyu.edu",
+// 		"sw3784@nyu.edu", "bw1417@nyu.edu", "jx782@nyu.edu", "zx638@nyu.edu",
+// 		"yz4113@nyu.edu", "sz1926@nyu.edu", "hoyin.wan@nyu.edu"}
+
+// 	vip.Tags = []string{"U·START VIP Spring 2019"}
+
+// 	vipPrint, err1 := post.IndexBadge(eclient, vip)
+// 	fmt.Println(vipPrint, err1)
+
+// }
+
 func main() {
+	badge, err := get.BadgeByID(eclient, "USTARTVIP")
 
-	var vip types.Badge
-	vip.ID = "USTARTVIP"
-	vip.Type = "U·START VIP"
-	vip.ImageLink = "https://s3.amazonaws.com/ustart-default/vip_badge.png"
-	vip.Roster = []string{"smb866@nyu.edu", "sc5553@nyu.edu", "td1503@nyu.edu", "ae1561@nyu.edu",
-		"kristelfung@nyu.edu", "monjur.hasan@nyu.edu", "th1750@nyu.edu",
-		"cl4366@nyu.edu", "richelle.newby@nyu.edu", "ss10298@nyu.edu", "tt1507@nyu.edu",
-		"sw3784@nyu.edu", "bw1417@nyu.edu", "jx782@nyu.edu", "zx638@nyu.edu",
-		"yz4113@nyu.edu", "sz1926@nyu.edu", "hoyin.wan@nyu.edu"}
-
-	vip.Tags = []string{"U·START VIP Spring 2019"}
-
-	vipPrint, err1 := post.IndexBadge(eclient, vip)
-	fmt.Println(vipPrint, err1)
-
+	for _, e := range badge.Roster {
+		usrID, err := getUser.UserIDByEmail(eclient, e)
+		if err == nil {
+			usr, err := getUser.UserByID(eclient, usrID)
+			if err == nil {
+				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badge.ID))
+				if badgeErr == nil {
+					postUser.UpdateUser(eclient, usrID, "Tags", append(badge.Tags, usr.Tags...))
+				} else {
+					log.Println(badgeErr)
+					continue
+				}
+			} else {
+				log.Println(berr)
+				continue
+			}
+		} else {
+			log.Println(err)
+			continue
+		}
+	}
 }
 
 /*func main() {
