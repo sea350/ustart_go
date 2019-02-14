@@ -1,7 +1,8 @@
 package main
 
 import (
-	post "github.com/sea350/ustart_go/post/user"
+	// post "github.com/sea350/ustart_go/post/user"
+	post "github.com/sea350/ustart_go/post/badge"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
