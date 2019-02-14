@@ -21,7 +21,7 @@ func main() {
 	usr, err := getUser.UserByUsername(eclient, "ryanrozbiani")
 	usrID, err := getUser.IDByUsername(eclient, "ryanrozbiani")
 
-	fmt.Println(len(updatesProj))
+	fmt.Println(len(usr.Projects))
 	updatesProj := append(usr.Projects[:3], usr.Projects[4:]...)
 	err = post.UpdateUser(eclient, usrID, "Projects", updatesProj)
 	if err != nil {
