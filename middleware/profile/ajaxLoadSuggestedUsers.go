@@ -75,7 +75,5 @@ func AjaxLoadSuggestedUsers(w http.ResponseWriter, r *http.Request) {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
-	//DELETE DEBUG TEXT
-	client.Logger.Println("SCROLL ID:", scrollID)
 	fmt.Fprintln(w, string(data))
 }
