@@ -8,6 +8,7 @@ import (
 	getUser "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	postChat "github.com/sea350/ustart_go/post/chat"
+	postUser "github.com/sea350/ustart_go/post/user"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
@@ -30,7 +31,7 @@ func DeleteMember(eclient *elastic.Client, projID string, userID string) error {
 		return projErr
 	}
 
-	var usrIdx int
+	var usrIdx = -1
 	for idx := range usr.Projects {
 		if usr.Projects[idx].ProjectID == projID {
 			usrIdx = idx
@@ -38,26 +39,38 @@ func DeleteMember(eclient *elastic.Client, projID string, userID string) error {
 		}
 	}
 
+	if usrIdx > len(usr.Projects) {
+		return errors.New("Index out of bounds")
+	}
+	if usrIdx < 0 {
+		return errors.New("Project not found")
+	}
+
 	if usrIdx < len(usr.Projects)-1 {
-		// err = postUser.UpdateUser(eclient, userID, "Projects", append(usr.Projects[:usrIdx], usr.Projects[usrIdx+1:]...))
 		updatedProjects := append(usr.Projects[:usrIdx], usr.Projects[usrIdx+1:]...)
-		_, err = eclient.Update().
-			Index(globals.UserIndex).
-			Type(globals.UserType).
-			Id(projID).
-			Doc(map[string]interface{}{"Projects": updatedProjects}).
-			Do(ctx)
+		err = postUser.UpdateUser(eclient, userID, "Projects", updatedProjects)
+
+		// _, err = eclient.Update().
+		// 	Index(globals.UserIndex).
+		// 	Type(globals.UserType).
+		// 	Id(projID).
+		// 	Doc(map[string]interface{}{"Projects": updatedProjects}).
+		// 	Do(ctx)
+
 		if err != nil {
 			return err
 		}
+	} else if usrIdx == len(usr.Projects)-1 {
+		err = postUser.UpdateUser(eclient, userID, "Projects", usr.Projects[:usrIdx])
+
 	} else if usrIdx == len(usr.Projects) {
-		// err = postUser.UpdateUser(eclient, userID, "Projects", nil)
-		_, err = eclient.Update().
-			Index(globals.UserIndex).
-			Type(globals.UserType).
-			Id(projID).
-			Doc(map[string]interface{}{"Projects": nil}).
-			Do(ctx)
+		err = postUser.UpdateUser(eclient, userID, "Projects", nil)
+		// _, err = eclient.Update().
+		// 	Index(globals.UserIndex).
+		// 	Type(globals.UserType).
+		// 	Id(projID).
+		// 	Doc(map[string]interface{}{"Projects": nil}).
+		// 	Do(ctx)
 		if err != nil {
 			return err
 		}
