@@ -53,10 +53,10 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
 	}
 
-	amt := 1
-	if scrollID == `` {
+	amt := 3
+	if scrollID != `` {
 
-		amt = 3
+		amt = 1
 	}
 
 	searchResults := eclient.Scroll().
