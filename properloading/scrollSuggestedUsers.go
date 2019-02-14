@@ -59,9 +59,6 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 		amt = 3
 	}
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("CURRENT AMOUNT IS:", amt)
-
 	searchResults := eclient.Scroll().
 		Index(globals.UserIndex).
 		Query(suggestedUserQuery).
@@ -70,6 +67,9 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	if len(scrollID) > 0 {
 		searchResults = searchResults.ScrollId(scrollID)
 	}
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("CURRENT AMOUNT IS:", amt)
 
 	res, err := searchResults.Do(ctx)
 	if !(err == io.EOF && res != nil) && err != nil {
