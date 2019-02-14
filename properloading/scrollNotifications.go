@@ -32,7 +32,7 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 		Index(globals.NotificationIndex).
 		Query(notifQuery).
 		Sort("Timestamp", false).
-		Size(5)
+		Size(10)
 
 	if len(scrollID) > 0 {
 		scroll = scroll.ScrollId(scrollID)
