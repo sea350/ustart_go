@@ -50,7 +50,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		emails = append(email, data.Email)
+		emails = append(emails, data.Email)
 	}
 	ver := int(res.TotalHits())
 	notVer := int(res2.TotalHits())
