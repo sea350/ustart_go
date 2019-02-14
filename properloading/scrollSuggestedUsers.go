@@ -59,7 +59,7 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 
 		amt = 1
 	} else {
-		amt = 1
+		amt = 3
 
 	}
 
