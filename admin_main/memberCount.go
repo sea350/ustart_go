@@ -41,8 +41,8 @@ func main() {
 		fmt.Println(err)
 	}
 
-	ver := int(res.Hits.TotalHits())
-	notVer := int(res2.Hits.TotalHits())
+	ver := int(res.TotalHits())
+	notVer := int(res2.TotalHits())
 	fmt.Println("Total:", ver+notVer)
 	fmt.Println("Verified:", ver)
 	fmt.Println("Unverified:", notVer)
