@@ -2,12 +2,9 @@ package main
 
 import (
 	post "github.com/sea350/ustart_go/post/user"
-	"github.com/sea350/ustart_go/uses"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
-	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/sea350/ustart_go/globals"
@@ -17,41 +14,60 @@ import (
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
+// func main() {
+
+// 	ctx := context.Background()
+
+// 	maq := elastic.NewMatchAllQuery()
+// 	res, err := eclient.Search().
+// 		Index(globals.UserIndex).
+// 		Type(globals.UserType).
+// 		Query(maq).
+// 		Size(100).
+// 		Do(ctx)
+
+// 	for _, id := range res.Hits.Hits {
+// 		data := types.User{}
+// 		err = json.Unmarshal(*id.Source, &data)
+// 		if err != nil {
+// 			fmt.Println(err)
+// 		}
+// 		badgeIDs, badgeTags, err := uses.BadgeSetup(eclient, data.Email)
+
+// 		if err != nil {
+// 			fmt.Println(err)
+// 		}
+
+// 		if len(badgeIDs) > 0 && badgeIDs[0] != "USTART" {
+// 			fmt.Println(id.Id, data.Email, badgeIDs, badgeTags)
+// 			//
+// 			// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
+
+// 			err = post.UpdateUser(eclient, id.Id, "Tags", append(data.Tags, badgeTags...))
+// 			if err != nil {
+// 				fmt.Println(err)
+// 			}
+// 		}
+// 	}
+// }
+
 func main() {
 
-	ctx := context.Background()
+	var vip types.Badge
+	vip.ID = "USTARTVIP"
+	vip.Type = "U·START VIP"
+	vip.ImageLink = "https://s3.amazonaws.com/ustart-default/vip_badge.png"
+	vip.Roster = []string{"smb866@nyu.edu", "sc5553@nyu.edu", "td1503@nyu.edu", "ae1561@nyu.edu",
+		"kristelfung@nyu.edu", "monjur.hasan@nyu.edu", "th1750@nyu.edu",
+		"cl4366@nyu.edu", "richelle.newby@nyu.edu", "ss10298@nyu.edu", "tt1507@nyu.edu",
+		"sw3784@nyu.edu", "bw1417@nyu.edu", "jx782@nyu.edu", "zx638@nyu.edu",
+		"yz4113@nyu.edu", "sz1926@nyu.edu", "hoyin.wan@nyu.edu"}
 
-	maq := elastic.NewMatchAllQuery()
-	res, err := eclient.Search().
-		Index(globals.UserIndex).
-		Type(globals.UserType).
-		Query(maq).
-		Size(100).
-		Do(ctx)
+	vip.Tags = []string{"U·START VIP Spring 2019"}
 
-	for _, id := range res.Hits.Hits {
-		data := types.User{}
-		err = json.Unmarshal(*id.Source, &data)
-		if err != nil {
-			fmt.Println(err)
-		}
-		badgeIDs, badgeTags, err := uses.BadgeSetup(eclient, data.Email)
+	vipPrint, err1 := post.IndexBadge(eclient, vip)
+	fmt.Println(vipPrint, err1)
 
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		if len(badgeIDs) > 0 && badgeIDs[0] != "USTART" {
-			fmt.Println(id.Id, data.Email, badgeIDs, badgeTags)
-			//
-			// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
-
-			err = post.UpdateUser(eclient, id.Id, "Tags", append(data.Tags, badgeTags...))
-			if err != nil {
-				fmt.Println(err)
-			}
-		}
-	}
 }
 
 /*func main() {
