@@ -72,14 +72,17 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	log.Println("CURRENT AMOUNT IS:", amt)
 
 	res, err := searchResults.Do(ctx)
-	log.Println("TOTAL HITS:", res.TotalHits())
+
 	if !(err == io.EOF && res != nil) && err != nil {
 		if err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
 		}
+
 		return "", nil, 0, err
 	}
+
+	log.Println("TOTAL HITS:", res.TotalHits())
 
 	// if res.Hits.TotalHits == 0 { //if no results just start recommending random
 	// 	suggestedUserQuery = elastic.NewBoolQuery()
