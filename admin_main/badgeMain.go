@@ -87,7 +87,7 @@ func main() {
 					continue
 				}
 			} else {
-				log.Println(berr)
+				log.Println(err)
 				continue
 			}
 		} else {
