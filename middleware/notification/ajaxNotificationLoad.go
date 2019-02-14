@@ -84,7 +84,7 @@ func AjaxNotificationLoad(w http.ResponseWriter, r *http.Request) {
 	inboxQuery := client.Eclient.Search().
 		Index(globals.NotificationIndex).
 		Query(notifQuery).
-		Sort("Timestamp", true).
+		Sort("Timestamp", false).
 		Size(5)
 
 	res, err := inboxQuery.Do(ctx)
