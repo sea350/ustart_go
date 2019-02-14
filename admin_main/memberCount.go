@@ -33,7 +33,7 @@ func main() {
 	res2, err := eclient.Search().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
-		Query(maq).
+		Query(maq2).
 		Size(100).
 		Do(ctx)
 
