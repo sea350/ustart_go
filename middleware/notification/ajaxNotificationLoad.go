@@ -10,13 +10,13 @@ import (
 
 	"net/http"
 
-	"github.com/olivere/elastic"
 	get "github.com/sea350/ustart_go/get/notification"
 	"github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/notification"
 	"github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
+	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 //AjaxNotificationLoad ... crawling in the 90s
