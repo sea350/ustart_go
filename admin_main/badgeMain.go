@@ -81,7 +81,13 @@ func main() {
 			if err == nil {
 				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badge.ID))
 				if badgeErr == nil {
-					postUser.UpdateUser(eclient, usrID, "Tags", append(badge.Tags, usr.Tags...))
+					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(badge.Tags, usr.Tags...))
+					if tagErr == nil {
+
+					} else {
+						log.Println(tagErr)
+						continue
+					}
 				} else {
 					log.Println(badgeErr)
 					continue
