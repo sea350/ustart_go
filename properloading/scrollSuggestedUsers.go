@@ -70,8 +70,9 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println("CURRENT AMOUNT IS:", amt)
-	log.Println("TOTAL HITS:", searchResults.TotalHits())
+
 	res, err := searchResults.Do(ctx)
+	log.Println("TOTAL HITS:", res.TotalHits())
 	if !(err == io.EOF && res != nil) && err != nil {
 		if err != io.EOF {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
