@@ -73,7 +73,9 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 	badge, err := get.BadgeByID(eclient, "USTARTVIP")
-
+	if err != nil {
+		log.Println(err)
+	}
 	for _, e := range badge.Roster {
 		usrID, err := getUser.UserIDByEmail(eclient, e)
 		if err == nil {
