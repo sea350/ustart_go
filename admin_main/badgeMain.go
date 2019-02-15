@@ -83,7 +83,7 @@ func main() {
 	// vipEmails := []string{"az1440@nyu.edu"}
 	// seAEmails := []string{"zna215@nyu.edu", "aks618@nyu.edu", "lyannelalunio@nyu.edu", "fn513@nyu.edu"}
 	// seBEmails := []string{"js9202@nyu.edu"}
-	dpAEmails := []string{"at3039@nyu.edu"}
+	dpAEmails := []string{"at3089@nyu.edu"}
 	// dpBEmails := []string{}
 
 	theEmails := dpAEmails
