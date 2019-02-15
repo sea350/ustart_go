@@ -84,7 +84,7 @@ func main() {
 	// dpAEmails := []string{"at3039@nyu.edu"}
 	// dpBEmails := []string{}
 
-	theEmails := vipEmails
+	theEmails := seAEmails
 	postBadge.UpdateBadge(eclient, "USTARTVIP", "Roster", append(badge.Roster, theEmails...))
 	for _, e := range theEmails {
 		usrID, err := getUser.UserIDByEmail(eclient, e)
