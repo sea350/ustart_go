@@ -5,6 +5,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/badge"
 	getUser "github.com/sea350/ustart_go/get/user"
+	postBadge "github.com/sea350/ustart_go/post/badge"
 	postUser "github.com/sea350/ustart_go/post/user"
 
 	// admin "github.com/sea350/ustart_go/admin"
@@ -76,7 +77,16 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
-	for _, e := range badge.Roster {
+
+	vipEmails := []string{"kf1562@nyu.edu", "az1140@nyu.edu", "rnn225@nyu.edu"}
+	// seAEmails := []string{"zna215@nyu.edu", "aks618@nyu.edu", "lyannelalunio@nyu.edu", "fn513@nyu.edu"}
+	// seBEmails := []string{"js9202@nyu.edu",}
+	// dpAEmails := []string{"at3039@nyu.edu"}
+	// dpBEmails := []string{}
+
+	theEmails := vipEmails
+	postBadge.UpdateBadge(eclient, "USTARTVIP")
+	for _, e := range theEmails {
 		usrID, err := getUser.UserIDByEmail(eclient, e)
 		if err == nil {
 			usr, err := getUser.UserByID(eclient, usrID)
