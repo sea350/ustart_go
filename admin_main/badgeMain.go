@@ -78,7 +78,7 @@ func main() {
 		log.Println(err)
 	}
 
-	vipEmails := []string{"kf1562@nyu.edu", "az1140@nyu.edu", "rnn225@nyu.edu"}
+	vipEmails := []string{"az1440@nyu.edu"}
 	// seAEmails := []string{"zna215@nyu.edu", "aks618@nyu.edu", "lyannelalunio@nyu.edu", "fn513@nyu.edu"}
 	// seBEmails := []string{"js9202@nyu.edu",}
 	// dpAEmails := []string{"at3039@nyu.edu"}
