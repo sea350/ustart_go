@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	get "github.com/sea350/ustart_go/get/badge"
@@ -75,7 +74,8 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 // }
 
 func main() {
-	badge, err := get.BadgeByID(eclient, "USTARTVIP")
+	badgeDOCID := "SWESPRING19A"
+	badge, err := get.BadgeByID(eclient, badgeDOCID)
 	if err != nil {
 		log.Println(err)
 	}
@@ -87,53 +87,35 @@ func main() {
 	// dpBEmails := []string{}
 
 	theEmails := seAEmails
-	fmt.Println(badge.Roster)
-	fmt.Println(badge.Roster[:len(badge.Roster)-4])
 
-	fmt.Println(theEmails)
-	// for _, e := range theEmails {
-	// 	usrID, err := getUser.UserIDByEmail(eclient, e)
-	// 	if err == nil {
-	// 		err = postUser.UpdateUser(eclient, usrID, "BadgeIDs", nil)
-	// 		if err != nil {
-	// 			fmt.Println(err)
-	// 		}
-	// 		err = postUser.UpdateUser(eclient, usrID, "Tags", nil)
-	// 		if err != nil {
-	// 			fmt.Println(err)
-	// 		}
-	// 	} else {
-	// 		continue
-	// 	}
-	// }
-	postBadge.UpdateBadge(eclient, "USTARTVIP", "Roster", badge.Roster[:len(badge.Roster)-4])
-	// for _, e := range theEmails {
-	// 	usrID, err := getUser.UserIDByEmail(eclient, e)
-	// 	if err == nil {
-	// 		usr, err := getUser.UserByID(eclient, usrID)
-	// 		if err == nil {
-	// 			badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badge.ID))
-	// 			if badgeErr == nil {
-	// 				tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(badge.Tags, usr.Tags...))
-	// 				if tagErr == nil {
+	postBadge.UpdateBadge(eclient, badge.ID, "Roster", append(badge.Roster, theEmails...))
+	for _, e := range theEmails {
+		usrID, err := getUser.UserIDByEmail(eclient, e)
+		if err == nil {
+			usr, err := getUser.UserByID(eclient, usrID)
+			if err == nil {
+				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badge.ID))
+				if badgeErr == nil {
+					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(badge.Tags, usr.Tags...))
+					if tagErr == nil {
 
-	// 				} else {
-	// 					log.Println(tagErr)
-	// 					continue
-	// 				}
-	// 			} else {
-	// 				log.Println(badgeErr)
-	// 				continue
-	// 			}
-	// 		} else {
-	// 			log.Println(err)
-	// 			continue
-	// 		}
-	// 	} else {
-	// 		log.Println(err)
-	// 		continue
-	// 	}
-	// }
+					} else {
+						log.Println(tagErr)
+						continue
+					}
+				} else {
+					log.Println(badgeErr)
+					continue
+				}
+			} else {
+				log.Println(err)
+				continue
+			}
+		} else {
+			log.Println(err)
+			continue
+		}
+	}
 }
 
 /*func main() {
