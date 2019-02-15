@@ -5,7 +5,7 @@ import (
 	"log"
 
 	get "github.com/sea350/ustart_go/get/badge"
-	postUser "github.com/sea350/ustart_go/post/badge"
+	postUser "github.com/sea350/ustart_go/post/user"
 
 	getUser "github.com/sea350/ustart_go/get/user"
 
