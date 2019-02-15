@@ -6,6 +6,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/badge"
 	// postUser "github.com/sea350/ustart_go/post/user"
+	postBadge "github.com/sea350/ustart_go/post/badge"
 
 	// getUser "github.com/sea350/ustart_go/get/user"
 
