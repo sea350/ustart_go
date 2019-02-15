@@ -85,7 +85,7 @@ func main() {
 	// dpBEmails := []string{}
 
 	theEmails := vipEmails
-	postBadge.UpdateBadge(eclient, "USTARTVIP")
+	postBadge.UpdateBadge(eclient, "USTARTVIP", "Roster", append(badge.Roster, theEmails...))
 	for _, e := range theEmails {
 		usrID, err := getUser.UserIDByEmail(eclient, e)
 		if err == nil {
