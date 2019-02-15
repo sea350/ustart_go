@@ -5,9 +5,9 @@ import (
 	"log"
 
 	get "github.com/sea350/ustart_go/get/badge"
-	postUser "github.com/sea350/ustart_go/post/user"
+	// postUser "github.com/sea350/ustart_go/post/user"
 
-	getUser "github.com/sea350/ustart_go/get/user"
+	// getUser "github.com/sea350/ustart_go/get/user"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
@@ -90,22 +90,22 @@ func main() {
 	fmt.Println(badge.Roster[:len(badge.Roster)-4])
 
 	fmt.Println(theEmails)
-	for _, e := range theEmails {
-		usrID, err := getUser.UserIDByEmail(eclient, e)
-		if err == nil {
-			err = postUser.UpdateUser(eclient, usrID, "BadgeIDs", nil)
-			if err != nil {
-				fmt.Println(err)
-			}
-			err = postUser.UpdateUser(eclient, usrID, "Tags", nil)
-			if err != nil {
-				fmt.Println(err)
-			}
-		} else {
-			continue
-		}
-	}
-	// postBadge.UpdateBadge(eclient, "USTARTVIP", "Roster", append(badge.Roster, theEmails...))
+	// for _, e := range theEmails {
+	// 	usrID, err := getUser.UserIDByEmail(eclient, e)
+	// 	if err == nil {
+	// 		err = postUser.UpdateUser(eclient, usrID, "BadgeIDs", nil)
+	// 		if err != nil {
+	// 			fmt.Println(err)
+	// 		}
+	// 		err = postUser.UpdateUser(eclient, usrID, "Tags", nil)
+	// 		if err != nil {
+	// 			fmt.Println(err)
+	// 		}
+	// 	} else {
+	// 		continue
+	// 	}
+	// }
+	postBadge.UpdateBadge(eclient, "USTARTVIP", "Roster", badge.Roster[:len(badge.Roster)-4])
 	// for _, e := range theEmails {
 	// 	usrID, err := getUser.UserIDByEmail(eclient, e)
 	// 	if err == nil {
