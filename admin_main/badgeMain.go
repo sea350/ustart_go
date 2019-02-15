@@ -74,7 +74,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 // }
 
 func main() {
-	badgeDOCID := "SWESPRING19B"
+	badgeDOCID := "SDSPRING19A"
 	badge, err := get.BadgeByID(eclient, badgeDOCID)
 	if err != nil {
 		log.Println(err)
@@ -82,11 +82,11 @@ func main() {
 
 	// vipEmails := []string{"az1440@nyu.edu"}
 	// seAEmails := []string{"zna215@nyu.edu", "aks618@nyu.edu", "lyannelalunio@nyu.edu", "fn513@nyu.edu"}
-	seBEmails := []string{"js9202@nyu.edu"}
-	// dpAEmails := []string{"at3039@nyu.edu"}
+	// seBEmails := []string{"js9202@nyu.edu"}
+	dpAEmails := []string{"at3039@nyu.edu"}
 	// dpBEmails := []string{}
 
-	theEmails := seBEmails
+	theEmails := dpEmails
 
 	postBadge.UpdateBadge(eclient, badge.ID, "Roster", append(badge.Roster, theEmails...))
 	for _, e := range theEmails {
