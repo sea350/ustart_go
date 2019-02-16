@@ -14,7 +14,7 @@ import (
 
 func main() {
 	fmt.Println("getting user by email")
-	id, err := get.IDByUsername(client.Eclient, "nevets")
+	id, err := get.IDByUsername(client.Eclient, "th1750")
 	if err != nil {
 		fmt.Println(err)
 		return
