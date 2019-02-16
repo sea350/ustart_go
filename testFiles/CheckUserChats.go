@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/olivere/elastic"
 	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/client"
+	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id)))
 
 	ctx := context.Background() //intialize context background
-	searchResults, err := eclient.Search().
+	searchResults, err := client.Eclient.Search().
 		Index(globals.ConvoIndex).
 		Query(query).
 		Pretty(true).
