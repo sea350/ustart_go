@@ -14,7 +14,7 @@ import (
 
 func main() {
 	fmt.Println("getting user by email")
-	id, err := get.IDByUsername(client.Eclient, "th1750")
+	id, err := get.IDByUsername(client.Eclient, "nevets")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -48,7 +48,12 @@ func main() {
 		fmt.Println("empty")
 		return
 	}
-	for i, hit := range searchResults.Hits.Hits {
-		fmt.Println(hit.Id + " VS " + proxy.Conversations[i].ConvoID)
+	for _, hit := range searchResults.Hits.Hits {
+		chat, err := getChat.ChatByID(client.Eclient, hit.Id)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		fmt.Println(chat)
 	}
 }
