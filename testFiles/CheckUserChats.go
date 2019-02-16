@@ -49,7 +49,7 @@ func main() {
 		return
 	}
 	for _, hit := range searchResults.Hits.Hits {
-		chat, err := getChat.ChatByID(client.Eclient, hit.Id)
+		chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
 		if err != nil {
 			fmt.Println(err)
 			continue
