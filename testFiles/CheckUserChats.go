@@ -15,11 +15,16 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	proxy, err := getChat.ProxyIDByUserID(client.Eclient, id)
+	proxyid, err := getChat.ProxyIDByUserID(client.Eclient, id)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(proxy)
+	fmt.Println(proxyid)
+	proxy, err := getChat.ProxyMsgByID(client.Eclient, proxyid)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 }
