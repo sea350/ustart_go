@@ -5,10 +5,13 @@ import (
 	"fmt"
 
 	globals "github.com/sea350/ustart_go/globals"
+	elastic "gopkg.in/olivere/elastic.v5"
 )
 
 //9v4r-GgBN3VvtvdieZzG
 // g_5h42gBN3VvtvdiWZt3
+
+var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 	ctx := context.Background()
