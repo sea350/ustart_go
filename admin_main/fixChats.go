@@ -12,49 +12,37 @@ import (
 	elastic "gopkg.in/olivere/elastic.v5"
 )
 
+//9v4r-GgBN3VvtvdieZzG
+// g_5h42gBN3VvtvdiWZt3
+
+
 func main() {
-	fmt.Println("getting user by username")
-	// id, err := get.IDByUsername(client.Eclient, "th1750")
-	id, err := get.IDByUsername(client.Eclient, "HeatherMT")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println("User docID: " + id)
-	proxyid, err := getChat.ProxyIDByUserID(client.Eclient, id)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(proxyid)
-	proxy, err := getChat.ProxyMsgByID(client.Eclient, proxyid)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(proxy)
-
-	query := elastic.NewBoolQuery()
-
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id)))
-
-	ctx := context.Background() //intialize context background
-	searchResults, err := client.Eclient.Search().
+	ctx := context.Background()
+	proxyID := g_5h42gBN3VvtvdiWZt3
+	focusID := 9v4r-GgBN3VvtvdieZzG
+	
+	fmt.Println("Deleting convo")
+	err = eclient.Delete().
 		Index(globals.ConvoIndex).
-		Query(query).
-		Pretty(true).
+		Type(globals.ConvoType).
+		Id(focusID).
+		Do(ctx)
+	
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Deleting proxy")
+	err = eclient.Delete().
+		Index(globals.ProxyMsgIndex).
+		Type(globals.ProxyMsgType).
+		Id(proxyID).
 		Do(ctx)
 
-	if searchResults.TotalHits() == 0 {
-		fmt.Println("empty")
-		return
+	if err != nil {
+		fmt.Println(err)
 	}
-	for _, hit := range searchResults.Hits.Hits {
-		chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		fmt.Println(hit.Id, chat.Class, chat.Size)
-	}
+	
+
+
 }
