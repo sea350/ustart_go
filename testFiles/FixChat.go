@@ -35,8 +35,10 @@ func main() {
 	for i := range proxy.Conversations {
 		if proxy.Conversations[i].ConvoID == "9v4r-GgBN3VvtvdieZzG" {
 			proxy.Conversations = append(proxy.Conversations[:i], proxy.Conversations[i+1:]...)
+			fmt.Println(len(proxy.Conversations))
 			fmt.Println(i)
 			chatFound = true
+			break
 		}
 	}
 	fmt.Println("chat found status: ", chatFound)
