@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"time"
 
+	getChat "github.com/sea350/ustart_go/get/chat"
 	getUser "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
+	postChat "github.com/sea350/ustart_go/post/chat"
 	"github.com/sea350/ustart_go/types"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
@@ -68,7 +70,7 @@ func main() {
 		MuteTimeout: blankTime,
 	}
 
-	convoStates := []types.ConversationStates{convoState, convoState2}
+	convoStates := []types.ConversationState{convoState, convoState2}
 
 	proxyObj, err := getChat.ProxyMsgByID(eclient, proxyID)
 
@@ -76,7 +78,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	err := UpdateProxyMsg(eclient, proxyID, "Conversations", append(proxyObj, convoStates...))
+	err = postChat.UpdateProxyMsg(eclient, proxyID, "Conversations", append(proxyObj, convoStates...))
 
 	if err != nil {
 		fmt.Println(err)
