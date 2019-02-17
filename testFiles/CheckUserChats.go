@@ -13,9 +13,9 @@ import (
 )
 
 func main() {
-	fmt.Println("getting user by email")
-	id, err := get.IDByUsername(client.Eclient, "th1750") //
-	// id, err := get.IDByUsername(client.Eclient, "HeatherMT")
+	fmt.Println("getting user by username")
+	// id, err := get.IDByUsername(client.Eclient, "th1750") //
+	id, err := get.IDByUsername(client.Eclient, "HeatherMT")
 	if err != nil {
 		fmt.Println(err)
 		return
