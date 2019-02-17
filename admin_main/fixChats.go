@@ -40,7 +40,7 @@ func main() {
 	}
 
 	_, err := eclient.Index().
-		Index(globals.ProxyMsgID).
+		Index(globals.ProxyMsgIndex).
 		Type(globals.ProxyMsgType).
 		Id(proxyID).
 		BodyJson(theProxy).
