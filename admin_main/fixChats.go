@@ -87,6 +87,9 @@ func main() {
 		Query(ntq).
 		Do(ctx)
 
+	if err != nil {
+		fmt.Println(err)
+	}
 	for _, r := range res.Hits.Hits {
 		cvo, _ := getChat.ConvoByID(eclient, r.Id)
 		fmt.Println(cvo)
