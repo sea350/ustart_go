@@ -16,7 +16,7 @@ func main() {
 	focusID := "9v4r-GgBN3VvtvdieZzG"
 
 	fmt.Println("Deleting convo")
-	err = eclient.Delete().
+	err := eclient.Delete().
 		Index(globals.ConvoIndex).
 		Type(globals.ConvoType).
 		Id(focusID).
