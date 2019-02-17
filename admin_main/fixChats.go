@@ -15,22 +15,22 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 	ctx := context.Background()
-	proxyID := " g_5h42gBN3VvtvdiWZt3"
+	proxyID := "g_5h42gBN3VvtvdiWZt3"
 	focusID := "9v4r-GgBN3VvtvdieZzG"
 
-	fmt.Println("Deleting convo")
-	_, err := eclient.Delete().
-		Index(globals.ConvoIndex).
-		Type(globals.ConvoType).
-		Id(focusID).
-		Do(ctx)
+	// fmt.Println("Deleting convo")
+	// _, err := eclient.Delete().
+	// 	Index(globals.ConvoIndex).
+	// 	Type(globals.ConvoType).
+	// 	Id(focusID).
+	// 	Do(ctx)
 
-	if err != nil {
-		fmt.Println(err)
-	}
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 
 	fmt.Println("Deleting proxy")
-	_, err = eclient.Delete().
+	_, err := eclient.Delete().
 		Index(globals.ProxyMsgIndex).
 		Type(globals.ProxyMsgType).
 		Id(proxyID).
