@@ -34,7 +34,9 @@ func main() {
 	var chatFound bool
 	for i := range proxy.Conversations {
 		if proxy.Conversations[i].ConvoID == "9v4r-GgBN3VvtvdieZzG" {
-			if i == len(proxy.Conversations)-1 {
+			if i == 0 {
+				proxy.Conversations = proxy.Conversations[1:]
+			} else if i == len(proxy.Conversations)-1 {
 				proxy.Conversations = proxy.Conversations[:i]
 			} else {
 				proxy.Conversations = append(proxy.Conversations[:i], proxy.Conversations[i+1:]...)
