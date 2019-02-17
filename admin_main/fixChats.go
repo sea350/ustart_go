@@ -1,12 +1,10 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"time"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
-	getUser "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	"github.com/sea350/ustart_go/types"
@@ -19,9 +17,9 @@ import (
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
-	ctx := context.Background()
+	// ctx := context.Background()
 	proxyID := "g_5h42gBN3VvtvdiWZt3"
-	usrID, _ := getUser.IDByUsername(eclient, "HeatherMT")
+	// usrID, _ := getUser.IDByUsername(eclient, "HeatherMT")
 	// convoID := "9v4r-GgBN3VvtvdieZzG"
 
 	// fmt.Println("Deleting convo")
