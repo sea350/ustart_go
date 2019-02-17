@@ -63,6 +63,10 @@ func main() {
 		Pretty(true).
 		Do(ctx)
 
+	if err != nil {
+		fmt.Println(err)
+		continue
+	}
 	if searchResults.TotalHits() == 0 {
 		fmt.Println("empty")
 		return
