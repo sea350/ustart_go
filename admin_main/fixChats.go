@@ -80,7 +80,7 @@ func main() {
 	// 	fmt.Println(err)
 	// }
 
-	ntq := elastic.NewTermsQuery("_id", convoID)
+	ntq := elastic.NewTermQuery("_id", convoID)
 
 	res, err := eclient.Search().
 		Index(globals.ConvoIndex).
