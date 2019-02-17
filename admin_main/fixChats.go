@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
@@ -14,7 +15,7 @@ import (
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
-	// ctx := context.Background()
+	ctx := context.Background()
 	// proxyID := "g_5h42gBN3VvtvdiWZt3"
 	// usrID, _ := getUser.IDByUsername(eclient, "HeatherMT")
 	convoID := "9v4r-GgBN3VvtvdieZzG"
