@@ -16,7 +16,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 func main() {
 	ctx := context.Background()
 	proxyID := "g_5h42gBN3VvtvdiWZt3"
-	focusID := "9v4r-GgBN3VvtvdieZzG"
+	// focusID := "9v4r-GgBN3VvtvdieZzG"
 
 	// fmt.Println("Deleting convo")
 	// _, err := eclient.Delete().
