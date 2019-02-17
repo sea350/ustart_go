@@ -55,6 +55,6 @@ func main() {
 			fmt.Println(err)
 			continue
 		}
-		fmt.Println(chat)
+		fmt.Println(hit.Id, chat.Class, chat.Size)
 	}
 }
