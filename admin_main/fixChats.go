@@ -39,7 +39,7 @@ func main() {
 		Conversations: nil,
 	}
 
-	_, err := Index().
+	_, err := eclient.Index().
 		Index(globals.ProxyMsgID).
 		Type(globals.ProxyMsgType).
 		Id(proxyID).
