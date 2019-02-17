@@ -70,14 +70,16 @@ func main() {
 
 	convoStates := []types.ConversationStates{convoState, convoState2}
 
-	err := eclient.Update().
-		Index(globals.ProxyMsgIndex).
-		Type(globals.ProxyMsgType).
-		Doc(map[string]interface{}{"Conversations": convoStates}).
-		Id(proxyID).
-		Do(ctx)
+	proxyObj, err := getChat.ProxyMsgByID(eclient, proxyID)
 
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	err := UpdateProxyMsg(eclient, proxyID, "Conversations", append(proxyObj, convoStates...))
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
 }
