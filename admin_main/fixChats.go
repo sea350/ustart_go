@@ -83,7 +83,6 @@ func main() {
 
 	res, err := eclient.Search().
 		Index(globals.ConvoIndex).
-		Types(globals.ConvoType).
 		Query(ntq).
 		Do(ctx)
 
