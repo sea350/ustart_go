@@ -43,7 +43,7 @@ func main() {
 		Index(globals.ProxyMsgID).
 		Type(globals.ProxyMsgType).
 		Id(proxyID).
-		BodyString().
+		BodyJson(theProxy).
 		Do(ctx)
 
 	if err != nil {
