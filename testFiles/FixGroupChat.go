@@ -65,7 +65,7 @@ func main() {
 
 	if err != nil {
 		fmt.Println(err)
-		continue
+		return
 	}
 	if searchResults.TotalHits() == 0 {
 		fmt.Println("empty")
