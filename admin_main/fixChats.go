@@ -18,7 +18,7 @@ func main() {
 	ctx := context.Background()
 	// proxyID := "g_5h42gBN3VvtvdiWZt3"
 	// usrID, _ := getUser.IDByUsername(eclient, "HeatherMT")
-	convoID := "9v4r-GgBN3VvtvdieZzG"
+	// convoID := "9v4r-GgBN3VvtvdieZzG"
 
 	// fmt.Println("Deleting convo")
 	// _, err := eclient.Delete().
