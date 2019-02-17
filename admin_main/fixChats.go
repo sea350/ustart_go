@@ -90,6 +90,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	fmt.Println(res.TotalHits())
 	for _, r := range res.Hits.Hits {
 		cvo, _ := getChat.ConvoByID(eclient, r.Id)
 		fmt.Println(cvo)
