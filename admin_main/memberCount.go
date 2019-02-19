@@ -38,8 +38,8 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		if data.FirstName = "Emily" && data.LastName == "Long"{
-			email =  data.Email
+		if data.FirstName == "Emily" && data.LastName == "Long" {
+			email = data.Email
 			break
 		}
 	}
