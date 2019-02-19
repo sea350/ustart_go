@@ -31,6 +31,21 @@ func main() {
 		fmt.Println(err)
 	}
 
+	email := ""
+	for _, id := range res.Hits.Hits {
+		data := types.User{}
+		err = json.Unmarshal(*id.Source, &data)
+		if err != nil {
+			fmt.Println(err)
+		}
+		if data.FirstName = "Emily" && data.LastName == "Long"{
+			email =  data.Email
+			break
+		}
+	}
+
+	fmt.Println("EMILY'S EMAIL:", email)
+
 	maq2 := elastic.NewTermQuery("Verified", false)
 	res2, err := eclient.Search().
 		Index(globals.UserIndex).
