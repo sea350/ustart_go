@@ -27,6 +27,7 @@ func main() {
 	LiD, _ := getUser.IDByUsername(eclient, "ln961")
 	RiD, _ := getUser.IDByUsername(eclient, "ryanrozbiani")
 
+	fmt.Println("IDs:", LiD, RiD)
 	maq := elastic.NewBoolQuery()
 	maq = maq.Must(elastic.NewTermQuery("DocID", LiD))
 	maq = maq.Must(elastic.NewTermQuery("ReferenceIDs", RiD))
@@ -37,7 +38,7 @@ func main() {
 		Size(100).
 		Do(ctx)
 
-	fmt.Println("nHits:", res.TotalHits())
+	fmt.Println("nHits:", res.TotalHits())git 
 	for _, id := range res.Hits.Hits {
 		data := types.Notification{}
 		err = json.Unmarshal(*id.Source, &data)
