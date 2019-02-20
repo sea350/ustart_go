@@ -37,6 +37,7 @@ func main() {
 		Size(100).
 		Do(ctx)
 
+	fmt.Println("nHits:", res.TotalHits())
 	for _, id := range res.Hits.Hits {
 		data := types.Notification{}
 		err = json.Unmarshal(*id.Source, &data)
