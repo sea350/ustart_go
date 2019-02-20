@@ -10,8 +10,8 @@ import (
 
 	// postUser "github.com/sea350/ustart_go/post/user"
 	// postNotif "github.com/sea350/ustart_go/post/notification"
+	getNotif "github.com/sea350/ustart_go/get/notification"
 	getUser "github.com/sea350/ustart_go/get/user"
-	// ge/tNotif "github.com/sea350/ustart_go/get/notification"
 	"github.com/sea350/ustart_go/globals"
 	elastic "gopkg.in/olivere/elastic.v5"
 )
