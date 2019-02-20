@@ -31,8 +31,8 @@ func main() {
 	maq = maq.Must(elastic.NewTermQuery("DocID", LiD))
 	maq = maq.Must(elastic.NewTermQuery("ReferenceIDs", RiD))
 	res, err := eclient.Search().
-		Index(globals.NotifIndex).
-		Type(globals.NotifType).
+		Index(globals.NotificationIndex).
+		Type(globals.NotificationType).
 		Query(maq).
 		Size(100).
 		Do(ctx)
@@ -43,15 +43,15 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		if len(data.BadgeIDs) == 0 {
-			fmt.Println(data.Timestamp)
-			//
-			// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
 
-			if err != nil {
-				fmt.Println(err)
-				continue
-			}
+		fmt.Println(data.Timestamp)
+		//
+		// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
+
+		if err != nil {
+			fmt.Println(err)
+			continue
+
 		}
 	}
 }
