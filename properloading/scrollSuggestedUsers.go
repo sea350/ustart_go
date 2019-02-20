@@ -84,30 +84,30 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 		return "", nil, 0, err
 	}
 
-	if res.Hits.TotalHits == 0 { //if no results just start recommending random
-		suggestedUserQuery = elastic.NewBoolQuery()
-		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
-		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
-		suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
-		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
-		searchResults = eclient.Scroll().
-			Index(globals.UserIndex).
-			Query(suggestedUserQuery).
-			Size(1)
+	// if res.Hits.TotalHits == 0 { //if no results just start recommending random
+	// 	suggestedUserQuery = elastic.NewBoolQuery()
+	// 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
+	// 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
+	// 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
+	// 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
+	// 	searchResults = eclient.Scroll().
+	// 		Index(globals.UserIndex).
+	// 		Query(suggestedUserQuery).
+	// 		Size(1)
 
-		if len(scrollID) > 0 {
-			searchResults = searchResults.ScrollId(scrollID)
-		}
+	// 	if len(scrollID) > 0 {
+	// 		searchResults = searchResults.ScrollId(scrollID)
+	// 	}
 
-		res, err = searchResults.Do(ctx)
-		if !(err == io.EOF && res != nil) && err != nil {
-			if err != io.EOF {
-				log.SetFlags(log.LstdFlags | log.Lshortfile)
-				log.Println(err)
-			}
-			return "", nil, 0, err
-		}
-	}
+	// 	res, err = searchResults.Do(ctx)
+	// 	if !(err == io.EOF && res != nil) && err != nil {
+	// 		if err != io.EOF {
+	// 			log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// 			log.Println(err)
+	// 		}
+	// 		return "", nil, 0, err
+	// 	}
+	// }
 
 	var heads []types.FloatingHead
 	for _, hits := range res.Hits.Hits {
