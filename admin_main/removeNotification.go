@@ -5,7 +5,6 @@ import (
 
 	// admin "github.com/sea350/ustart_go/admin"
 
-	"context"
 	"fmt"
 
 	// postUser "github.com/sea350/ustart_go/post/user"
@@ -20,7 +19,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 
-	ctx := context.Background()
+	// ctx := context.Background()
 
 	LiD, _ := getUser.IDByUsername(eclient, "ln961")
 	RiD, _ := getUser.IDByUsername(eclient, "ryanrozbiani")
