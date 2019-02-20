@@ -44,7 +44,7 @@ func main() {
 			fmt.Println(err)
 		}
 
-		fmt.Println(data.Timestamp)
+		fmt.Println("TIMESTAMP:", data.Timestamp)
 		//
 		// err = post.UpdateUser(eclient, id.Id, "BadgeIDs", append(data.BadgeIDs, badgeIDs...))
 
