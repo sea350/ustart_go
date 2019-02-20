@@ -29,8 +29,8 @@ func main() {
 
 	fmt.Println("IDs:", LiD, RiD)
 	maq := elastic.NewBoolQuery()
-	maq = maq.Must(elastic.NewTermQuery("DocID", LiD))
-	maq = maq.Must(elastic.NewTermQuery("ReferenceIDs", RiD))
+	maq = maq.Must(elastic.NewTermQuery("DocID", RiD))
+	maq = maq.Must(elastic.NewTermQuery("ReferenceIDs", LiD))
 	res, err := eclient.Search().
 		Index(globals.NotificationIndex).
 		Type(globals.NotificationType).
