@@ -41,15 +41,10 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 	suggQuery = suggQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 	suggQuery = suggQuery.Must(elastic.NewTermQuery("Visible", true))
 
-	amt := 1
-	if scrollID == `` {
-		amt = 3
-	}
-
 	searchResults := eclient.Scroll().
 		Index(globals.ProjectIndex).
 		Query(suggQuery).
-		Size(amt)
+		Size(1)
 
 	if len(scrollID) > 0 {
 		searchResults = searchResults.ScrollId(scrollID)
