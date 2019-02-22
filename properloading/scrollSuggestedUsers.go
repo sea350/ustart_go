@@ -41,10 +41,10 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	}
 
 	suggestedUserQuery := elastic.NewBoolQuery()
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...))
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...))
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Majors", majorsInterface...))
-	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
+	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...)).Boost(5)
+	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).Boost(4)
+	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Majors", majorsInterface...)).Boost(3)
+	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school)).Boost(1)
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
