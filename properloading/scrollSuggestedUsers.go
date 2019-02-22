@@ -90,15 +90,10 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	// 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
 	// 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
 	// 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
-	// 	amt := 1
-	// 	if len(scrollID) == 0 {
-
-	// 		amt = 3
-	// 	}
 	// 	searchResults = eclient.Scroll().
 	// 		Index(globals.UserIndex).
 	// 		Query(suggestedUserQuery).
-	// 		Size(amt)
+	// 		Size(1)
 
 	// 	if len(scrollID) > 0 {
 	// 		searchResults = searchResults.ScrollId(scrollID)

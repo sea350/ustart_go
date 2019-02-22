@@ -46,15 +46,10 @@ func ScrollSuggestedMentors(eclient *elastic.Client, class int, tagArray []strin
 
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Class", 5))
 
-	amt := 1
-	if scrollID == `` {
-		amt = 3
-	}
-
 	searchResults := eclient.Scroll().
 		Index(globals.UserIndex).
 		Query(suggestedUserQuery).
-		Size(amt)
+		Size(1)
 
 	if len(scrollID) > 0 {
 		searchResults = searchResults.ScrollId(scrollID)
