@@ -6,7 +6,7 @@ import (
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getUser "github.com/sea350/ustart_go/get/user"
 	types "github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ConvertEntryToJournalEntry ... load all relevant data of a single entry into a journal entry struct

@@ -5,7 +5,7 @@ import (
 
 	getProject "github.com/sea350/ustart_go/get/project"
 	types "github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //AggregateProjectData ...

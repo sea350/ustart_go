@@ -1,7 +1,7 @@
 package delete
 
 import (
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 	//"errors"
 
 	"context"

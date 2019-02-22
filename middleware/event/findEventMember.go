@@ -14,7 +14,7 @@ import (
 	"github.com/sea350/ustart_go/globals"
 	client "github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/uses"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //FindEventMember ... find event members

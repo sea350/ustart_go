@@ -4,7 +4,7 @@ import (
 	userPost "github.com/sea350/ustart_go/post/user"
 
 	projPost "github.com/sea350/ustart_go/post/project"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //RequestMember ...

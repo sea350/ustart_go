@@ -7,7 +7,7 @@ import (
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //AppendLike ... APPENDS A NEW LIKE TO AN EXISTING ENTRY DOC

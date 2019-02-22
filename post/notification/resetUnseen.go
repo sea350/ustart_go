@@ -1,7 +1,7 @@
 package post
 
 import (
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ResetUnseen ... resets unseen to 0

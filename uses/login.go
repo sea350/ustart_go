@@ -9,7 +9,7 @@ import (
 	post "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 	"golang.org/x/crypto/bcrypt"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //Login ... Checks username/password combo

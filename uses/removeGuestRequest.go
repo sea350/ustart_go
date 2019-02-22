@@ -2,7 +2,7 @@ package uses
 
 import (
 	evntPost "github.com/sea350/ustart_go/post/event"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //RemoveGuestRequest ...

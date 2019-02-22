@@ -19,7 +19,7 @@ import (
 	postUser "github.com/sea350/ustart_go/post/user"
 	postWarning "github.com/sea350/ustart_go/post/warning"
 	types "github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 
 	"errors"
 	"time"

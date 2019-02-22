@@ -7,7 +7,7 @@ import (
 	get "github.com/sea350/ustart_go/get/event"
 	globals "github.com/sea350/ustart_go/globals"
 	entryPost "github.com/sea350/ustart_go/post/entry"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //AppendEntryID ... appends a created entry ID to user

@@ -1,7 +1,7 @@
 package uses
 
 import (
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 	//types "github.com/sea350/ustart_go/types"
 	get "github.com/sea350/ustart_go/get/user"
 	post "github.com/sea350/ustart_go/post/user"

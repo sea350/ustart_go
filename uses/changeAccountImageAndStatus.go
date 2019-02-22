@@ -2,7 +2,7 @@ package uses
 
 import (
 	post "github.com/sea350/ustart_go/post/user"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 	//"golang.org/x/crypto/bcrypt"
 	//"time"
 )

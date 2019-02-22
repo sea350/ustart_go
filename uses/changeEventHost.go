@@ -5,7 +5,7 @@ import (
 	projGet "github.com/sea350/ustart_go/get/project"
 	eventPost "github.com/sea350/ustart_go/post/event"
 	projPost "github.com/sea350/ustart_go/post/project"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ChangeEventHost ... allows a project to host (or even unhost, works both ways)

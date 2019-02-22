@@ -5,7 +5,7 @@ import (
 	getUser "github.com/sea350/ustart_go/get/user"
 	postProj "github.com/sea350/ustart_go/post/project"
 	postUser "github.com/sea350/ustart_go/post/user"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //UserFollowProjectToggle ... if a user wants to follow or unfollow a project, use this function to toggle
