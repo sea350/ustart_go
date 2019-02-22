@@ -7,7 +7,7 @@ import (
 	getChat "github.com/sea350/ustart_go/get/chat"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	"github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ChatSend ... Executes all necessary database interactions for a message to a chat

@@ -6,7 +6,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/entry"
 	globals "github.com/sea350/ustart_go/globals"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //DeleteReplyID ... REMOVES A SPECIFIC share FROM AN ENTRY'S Likes

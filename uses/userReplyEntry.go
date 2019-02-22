@@ -5,7 +5,7 @@ import (
 
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	types "github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //UserReplyEntry ... CREATES A REPLY ENTRY FROM A USER

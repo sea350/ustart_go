@@ -4,7 +4,7 @@ import (
 	"time"
 
 	post "github.com/sea350/ustart_go/post/event"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ChangeEventTime ... Requires the target event's docID, new name and description

@@ -8,7 +8,7 @@ import (
 	getChat "github.com/sea350/ustart_go/get/chat"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/client"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 func main() {

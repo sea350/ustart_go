@@ -6,7 +6,7 @@ import (
 
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	globals "github.com/sea350/ustart_go/globals"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //NewUserBell ...

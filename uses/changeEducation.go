@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	post "github.com/sea350/ustart_go/post/user"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ChangeEducation ...

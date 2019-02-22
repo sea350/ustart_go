@@ -2,7 +2,7 @@ package uses
 
 import (
 	postWidget "github.com/sea350/ustart_go/post/widget"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //EditWidget ...

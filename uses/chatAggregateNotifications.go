@@ -9,7 +9,7 @@ import (
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postUser "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ChatAggregateNotifications ... Executes all necessary database interactions to pull chat notifs

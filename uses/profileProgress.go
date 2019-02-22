@@ -2,7 +2,7 @@ package uses
 
 import (
 	getUser "github.com/sea350/ustart_go/get/user"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 	//post "github.com/sea350/ustart_go/post"
 )
 

@@ -8,7 +8,7 @@ import (
 
 	getUser "github.com/sea350/ustart_go/get/user"
 	postUser "github.com/sea350/ustart_go/post/user"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //SendVerificationEmail ... resends User Verification Email

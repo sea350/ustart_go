@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
 	//post "github.com/sea350/ustart_go/post"
 )
 

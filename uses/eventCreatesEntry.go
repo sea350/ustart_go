@@ -6,7 +6,7 @@ import (
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	post "github.com/sea350/ustart_go/post/event"
 	"github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //EventCreatesEntry ... creates a new entry for events and handles logic/parallel arrays

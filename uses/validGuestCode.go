@@ -6,7 +6,7 @@ import (
 	"time"
 
 	getCode "github.com/sea350/ustart_go/get/guestCode"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ValidGuestCode ... Check if guest code is valid

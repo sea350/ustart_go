@@ -3,7 +3,7 @@ package post
 import (
 	get "github.com/sea350/ustart_go/get/entry"
 	//post "github.com/sea350/ustart_go/post/entry"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //AppendReplyID ... APPENDS A NEW REPLY TO AN EXISTING ENTRY DOC

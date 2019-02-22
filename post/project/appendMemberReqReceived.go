@@ -8,7 +8,7 @@ import (
 	globals "github.com/sea350/ustart_go/globals"
 	post "github.com/sea350/ustart_go/post/notification"
 	"github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //AppendMemberReqReceived ... APPENDS A USER ID TO A PROJECTS MemberReqReceived ARRAY

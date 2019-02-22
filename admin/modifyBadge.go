@@ -10,7 +10,7 @@ import (
 	get "github.com/sea350/ustart_go/get/badge"
 	getUser "github.com/sea350/ustart_go/get/user"
 
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ModifyBadge...
