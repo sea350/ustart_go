@@ -99,6 +99,7 @@ func (r *Request) Send(templateName string, items interface{}) {
 		log.Panic(err)
 	}
 	if ok := r.sendMail(); ok {
+		log.Printf("Sender email", globals.Sender)
 		log.Printf("Email has been sent to %s\n", r.to)
 	} else {
 		log.Printf("Failed to send the email to %s\n", r.to)
