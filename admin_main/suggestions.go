@@ -165,10 +165,10 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, h1, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll, minID, "", min.Majors, min.University)
-	_, h2, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll, ryanID, "", ryan.Majors, ryan.University)
-	_, h3, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll, stevenID, "", steven.Majors, steven.University)
-	_, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll, yunjieID, "", yunjie.Majors, yunjie.University)
+	_, h1, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, "", min.Majors, min.University)
+	_, h2, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, "", ryan.Majors, ryan.University)
+	_, h3, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, "", steven.Majors, steven.University)
+	_, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.Following, yunjieID, "", yunjie.Majors, yunjie.University)
 
 	fmt.Println(h1[0], h2[0], h3[0], h4[0])
 }
