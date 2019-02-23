@@ -14,12 +14,13 @@ import (
 
 func main() {
 	fmt.Println("getting user by username")
-	id, err := get.IDByUsername(client.Eclient, "min")
+	id, err := get.IDByUsername(client.Eclient, "th1750")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Println("User docID: " + id)
+	fmt.Println(id == "-v4e02gBN3VvtvdiDZYs")
 	proxyid, err := getChat.ProxyIDByUserID(client.Eclient, id)
 	if err != nil {
 		fmt.Println(err)
