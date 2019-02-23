@@ -14,15 +14,12 @@ import (
 
 func main() {
 	fmt.Println("getting user by username")
-	id, err := get.IDByUsername(client.Eclient, "min")
+	id, err := get.IDByUsername(client.Eclient, "th1750")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Println("User docID: " + id)
-	usr, err := get.UserByID(client.Eclient, id)
-	fmt.Println(usr.ProxyMessagesID)
-	fmt.Println(id == "-v4e02gBN3VvtvdiDZYs")
 	proxyid, err := getChat.ProxyIDByUserID(client.Eclient, id)
 	if err != nil {
 		fmt.Println(err)
@@ -45,6 +42,7 @@ func main() {
 	query := elastic.NewBoolQuery()
 
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower("8v5xyWgBN3VvtvdiWpXP")))
 
 	fmt.Println("Printing queried convos: ")
 	ctx := context.Background() //intialize context background
