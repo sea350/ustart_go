@@ -26,17 +26,18 @@ func main() {
 		return
 	}
 	fmt.Println("User msg proxies: " + proxyid)
-	proxy, err := getChat.ProxyMsgByID(client.Eclient, proxyid)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println("Printing cached convos: ")
-	for i := range proxy.Conversations {
-		fmt.Println(i)
-		fmt.Println(proxy.Conversations[i].ConvoID)
-	}
-
+	/*
+		proxy, err := getChat.ProxyMsgByID(client.Eclient, proxyid)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println("Printing cached convos: ")
+		for i := range proxy.Conversations {
+			fmt.Println(i)
+			fmt.Println(proxy.Conversations[i].ConvoID)
+		}
+	*/
 	query := elastic.NewBoolQuery()
 
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id)))
@@ -63,6 +64,7 @@ func main() {
 		}
 		fmt.Println(hit.Id)
 		fmt.Println(chat.ReferenceID)
+		fmt.Println(chat.Eavesdroppers)
 		fmt.Println(chat.Class)
 		fmt.Println(chat.Size)
 	}
