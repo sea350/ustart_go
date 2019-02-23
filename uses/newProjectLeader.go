@@ -3,7 +3,7 @@ package uses
 import (
 	get "github.com/sea350/ustart_go/get/project"
 	post "github.com/sea350/ustart_go/post/project"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //NewProjectLeader ...

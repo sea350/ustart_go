@@ -7,7 +7,7 @@ import (
 	getProject "github.com/sea350/ustart_go/get/project"
 	post "github.com/sea350/ustart_go/post/event"
 	postFollow "github.com/sea350/ustart_go/post/follow"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //Project ... Removes all traces of the project

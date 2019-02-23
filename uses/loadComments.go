@@ -5,7 +5,7 @@ import (
 	"log"
 
 	types "github.com/sea350/ustart_go/types"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //LoadComments ... Loads the replies to a specific entry limited by limits

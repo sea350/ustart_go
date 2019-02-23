@@ -7,7 +7,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/notification"
 	globals "github.com/sea350/ustart_go/globals"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //AppendToProxyNotificationsByUserID ... appends a new conversation state OR brings a certain conversation state to the back of the list

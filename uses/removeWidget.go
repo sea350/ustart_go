@@ -12,7 +12,7 @@ import (
 	postEvnt "github.com/sea350/ustart_go/post/event"
 	postProj "github.com/sea350/ustart_go/post/project"
 	postUser "github.com/sea350/ustart_go/post/user"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //RemoveWidget ...

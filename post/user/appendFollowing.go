@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	get "github.com/sea350/ustart_go/get/user"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //AppendFollowing ... appends to user's following array

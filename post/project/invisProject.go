@@ -11,7 +11,7 @@ import (
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postFollow "github.com/sea350/ustart_go/post/follow"
 	postUser "github.com/sea350/ustart_go/post/user"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //InvisProject ... sets a project to invisible and removes all dependancies

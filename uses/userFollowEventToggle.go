@@ -5,7 +5,7 @@ import (
 	getUser "github.com/sea350/ustart_go/get/user"
 	postEvnt "github.com/sea350/ustart_go/post/event"
 	postUser "github.com/sea350/ustart_go/post/user"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //UserFollowEventToggle ... if a user wants to follow or unfollow an event, use this function to toggle

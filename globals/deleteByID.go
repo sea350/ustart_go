@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 var eclient, _ = elastic.NewClient(elastic.SetURL("http://localhost:9200"))

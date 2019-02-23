@@ -6,7 +6,7 @@ import (
 
 	get "github.com/sea350/ustart_go/get/project"
 	globals "github.com/sea350/ustart_go/globals"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //DeleteMemberReqSent ... DELETES A USER ID IN A PROJECT'S MemberReqSent ARRAY

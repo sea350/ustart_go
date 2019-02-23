@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ScrollTest ...

@@ -7,7 +7,7 @@ import (
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 	//get "github.com/sea350/ustart_go/get"
 	//"encoding/json"
 	//"errors"

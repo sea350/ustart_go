@@ -7,7 +7,7 @@ import (
 	getWidget "github.com/sea350/ustart_go/get/widget"
 	postUser "github.com/sea350/ustart_go/post/user"
 	postWidget "github.com/sea350/ustart_go/post/widget"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //ChangeWidgetPosition ...

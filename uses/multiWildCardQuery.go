@@ -1,7 +1,7 @@
 package uses
 
 import (
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //MultiWildCardQuery ... takes in an existing bool query, a field, array of strings to add, and a should boolead and then adds each string to the query as a wildcard

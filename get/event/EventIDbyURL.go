@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	globals "github.com/sea350/ustart_go/globals"
-	elastic "gopkg.in/olivere/elastic.v5"
+	elastic "github.com/olivere/elastic"
 )
 
 //EventIDByURL ... pulls an event from ES, returns event ID
