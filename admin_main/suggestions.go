@@ -12,8 +12,7 @@ import (
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
-	elastic "gopkg.in/olivere/elastic.v5"
-)
+	elastic "github.com/olivere/elastic"
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
