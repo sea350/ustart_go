@@ -20,8 +20,9 @@ func main() {
 		return
 	}
 	fmt.Println("User docID: " + id)
+	usr, err := get.UserByID(client.Eclient, id)
+	fmt.Println(usr.ProxyMessagesID)
 	fmt.Println(id == "-v4e02gBN3VvtvdiDZYs")
-	id = "v4e02gBN3VvtvdiDZYs"
 	proxyid, err := getChat.ProxyIDByUserID(client.Eclient, id)
 	if err != nil {
 		fmt.Println(err)
