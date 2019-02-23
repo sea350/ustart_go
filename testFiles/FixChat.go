@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 
 	elastic "github.com/olivere/elastic"
@@ -22,12 +23,14 @@ func main() {
 
 	var proxyID string
 
-	for _, element := range searchResult.Hits.Hits {
+	for i, element := range searchResult.Hits.Hits {
 		if "Bf4g02gBN3VvtvdiF5fV" != element.Id {
 			err := globals.DeleteByID(client.Eclient, element.Id, "proxymsg")
 			if err != nil {
 				fmt.Println(element.Id + "failed to be deleted")
 				fmt.Println(err)
+			} else {
+				fmt.Println("number of proxies deleted = " + strconv.Itoa(i))
 			}
 		}
 
