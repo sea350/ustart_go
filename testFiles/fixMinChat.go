@@ -43,7 +43,7 @@ func main() {
 		tempArr = append(tempArr, proxy.Conversations[i])
 	}
 
-	err = postChat.UpdateProxyMsg(client.Eclient, id, "Conversations", tempArr)
+	err = postChat.UpdateProxyMsg(client.Eclient, proxyid, "Conversations", tempArr)
 	if err != nil {
 		fmt.Println(err)
 		return
