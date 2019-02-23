@@ -57,7 +57,7 @@ func main() {
 		return
 	}
 
-	for i, hit := range searchResults.Hits.Hits {
+	for _, hit := range searchResults.Hits.Hits {
 		fmt.Println("--------------------------------")
 		chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
 		if err != nil {
