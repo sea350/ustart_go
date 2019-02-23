@@ -27,7 +27,6 @@ func main() {
 		return
 	}
 	fmt.Println("User msg proxies: " + proxyid)
-	id = "v4e02gBN3VvtvdiDZYs"
 
 	proxy, err := getChat.ProxyMsgByID(client.Eclient, proxyid)
 	if err != nil {
