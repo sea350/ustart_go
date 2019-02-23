@@ -170,7 +170,10 @@ func main() {
 	_, h3, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, "", steven.Majors, steven.University)
 	_, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, "", yunjie.Majors, yunjie.University)
 
-	fmt.Println(h1[0], h2[0], h3[0], h4[0])
+	fmt.Println(h1[0].FirstName, h1[0].LastName)
+	fmt.Println(h2[0].FirstName, h2[0].LastName)
+	fmt.Println(h3[0].FirstName, h3[0].LastName)
+	fmt.Println(h4[0].FirstName, h4[0].LastName)
 }
 
 // eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo,
