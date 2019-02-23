@@ -155,19 +155,19 @@ func main() {
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 
-	minFoll, err := getFollow.ByID(eclient, minID)
+	_, minFoll, err := getFollow.ByID(eclient, minID)
 	if err != nil {
 		fmt.Println(err)
 	}
-	ryanFoll, err := getFollow.ByID(eclient, ryanID)
+	_, ryanFoll, err := getFollow.ByID(eclient, ryanID)
 	if err != nil {
 		fmt.Println(err)
 	}
-	stevenFoll, err := getFollow.ByID(eclient, stevenID)
+	_, stevenFoll, err := getFollow.ByID(eclient, stevenID)
 	if err != nil {
 		fmt.Println(err)
 	}
-	yunjieFoll, err := getFollow.ByID(eclient, yunjieID)
+	_, yunjieFoll, err := getFollow.ByID(eclient, yunjieID)
 	if err != nil {
 		fmt.Println(err)
 	}
