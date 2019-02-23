@@ -78,4 +78,11 @@ func main() {
 		// 	fmt.Println("number of chats deleted = " + strconv.Itoa(i))
 		// }
 	}
+
+	usr, err := get.UserByID(client.Eclient, "7v5wyWgBN3Vvtvdi4pWH")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(usr.FirstName + usr.LastName)
 }
