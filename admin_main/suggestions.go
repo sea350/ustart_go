@@ -19,7 +19,7 @@ import (
 //Scrolls through docs being loaded
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
-func sug(eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string, majors []string, school string) {
+func sugg(eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string, majors []string, school string) (string, []types.FloatingHead, int, error) {
 
 	ctx := context.Background()
 	tags := make([]interface{}, 0)
@@ -86,7 +86,7 @@ func sug(eclient *elastic.Client, class int, tagArray []string, projects []types
 			log.Println(err)
 		}
 
-		fmt.Println("", nil, 0, err)
+		return "", nil, 0, err
 	}
 
 	var heads []types.FloatingHead
@@ -102,7 +102,7 @@ func sug(eclient *elastic.Client, class int, tagArray []string, projects []types
 
 	}
 
-	fmt.Println(res.ScrollId, heads, len(heads), err)
+	return res.ScrollId, heads, len(heads), err
 
 }
 
@@ -165,10 +165,12 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	sugg(eclient, min.Class, min.Tags, min.Projects, minFoll, minID, "", min.Majors, min.University)
-	sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll, ryanID, "", ryan.Majors, ryan.University)
-	sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll, stevenID, "", steven.Majors, steven.University)
-	sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll, yunjieID, "", yunjie.Majors, yunjie.University)
+	_, h1, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll, minID, "", min.Majors, min.University)
+	_, h2, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll, ryanID, "", ryan.Majors, ryan.University)
+	_, h3, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll, stevenID, "", steven.Majors, steven.University)
+	_, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll, yunjieID, "", yunjie.Majors, yunjie.University)
+
+	fmt.Println(h1[0], h2[0], h3[0], h4[0])
 }
 
 // eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo,
