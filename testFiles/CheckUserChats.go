@@ -5,17 +5,16 @@ import (
 	"fmt"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/client"
-	elastic "github.com/olivere/elastic"
 )
 
 func main() {
 	fmt.Println("getting user by username")
-	// id, err := get.IDByUsername(client.Eclient, "th1750") //
-	id, err := get.IDByUsername(client.Eclient, "HeatherMT")
+	id, err := get.IDByUsername(client.Eclient, "th1750")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -26,13 +25,17 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(proxyid)
+	fmt.Println("User msg proxies: " + proxyid)
 	proxy, err := getChat.ProxyMsgByID(client.Eclient, proxyid)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(proxy)
+	fmt.Println("Printing cached convos: ")
+	for i := range proxy.Conversations {
+		fmt.Println(i)
+		fmt.Println(proxy.Conversations[i].ConvoID)
+	}
 
 	query := elastic.NewBoolQuery()
 
@@ -49,7 +52,9 @@ func main() {
 		fmt.Println("empty")
 		return
 	}
+	fmt.Println("Printing queried convos: ")
 	for _, hit := range searchResults.Hits.Hits {
+		fmt.Println("--------------------------------")
 		chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
 		if err != nil {
 			fmt.Println(err)
