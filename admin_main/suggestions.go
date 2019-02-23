@@ -156,19 +156,19 @@ func main() {
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-minFoll err := getFollow.ByID(eclient, minID)
+	minFoll, err := getFollow.ByID(eclient, minID)
 	if err != nil {
 		fmt.Println(err)
 	}
-	ryanFoll err := getFollow.ByID(eclient, ryanID)
+	ryanFoll, err := getFollow.ByID(eclient, ryanID)
 	if err != nil {
 		fmt.Println(err)
 	}
-	stevenFoll err := getFollow.ByID(eclient, stevenID)
+	stevenFoll, err := getFollow.ByID(eclient, stevenID)
 	if err != nil {
 		fmt.Println(err)
 	}
-	yunjieFoll err := getFollow.ByID(eclient, yunjieID)
+	yunjieFoll, err := getFollow.ByID(eclient, yunjieID)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -194,7 +194,7 @@ minFoll err := getFollow.ByID(eclient, minID)
 	sugg(eclient,min.Class, min.Tags, min.Projects, minFoll, minID, "", min.Majors, min.University)
 	sugg(eclient,ryan.Class, ryan.Tags, ryan.Projects, ryanFoll, ryanID, "", ryan.Majors, ryan.University)
 	sugg(eclient,steven.Class, steven.Tags, steven.Projects, stevenFoll, stevenID, "", steven.Majors, steven.University)
-	sugg(eclient,minyunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll, yunjieID, "", yunjie.Majors, yunjie.University)
+	sugg(eclient,yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll, yunjieID, "", yunjie.Majors, yunjie.University)
 }
 
 
