@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 
@@ -11,7 +10,6 @@ import (
 )
 
 func main() {
-	ctx := context.Background()
 
 	//"8v5xyWgBN3VvtvdiWpXP" mins doc id
 	//v4e02gBN3VvtvdiDZYs tarek doc id
