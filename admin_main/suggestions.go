@@ -7,17 +7,18 @@ import (
 	"log"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	getFollow "github.com/sea350/ustart_go/get/follow"
 	getUser "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
-	elastic "github.com/olivere/elastic"
-
-var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
+)
 
 //ScrollSuggestedUsers ...
 //Scrolls through docs being loaded
+var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
+
 func sug(eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string, majors []string, school string) {
 
 	ctx := context.Background()
@@ -87,31 +88,6 @@ func sug(eclient *elastic.Client, class int, tagArray []string, projects []types
 
 		fmt.Println("", nil, 0, err)
 	}
-
-	// if res.Hits.TotalHits == 0 { //if no results just start recommending random
-	// 	suggestedUserQuery = elastic.NewBoolQuery()
-	// 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
-	// 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
-	// 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
-	// 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
-	// 	searchResults = eclient.Scroll().
-	// 		Index(globals.UserIndex).
-	// 		Query(suggestedUserQuery).
-	// 		Size(1)
-
-	// 	if len(scrollID) > 0 {
-	// 		searchResults = searchResults.ScrollId(scrollID)
-	// 	}
-
-	// 	res, err = searchResults.Do(ctx)
-	// 	if !(err == io.EOF && res != nil) && err != nil {
-	// 		if err != io.EOF {
-	// 			log.SetFlags(log.LstdFlags | log.Lshortfile)
-	// 			log.Println(err)
-	// 		}
-	// 		return "", nil, 0, err
-	// 	}
-	// }
 
 	var heads []types.FloatingHead
 	for _, hits := range res.Hits.Hits {
