@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 
 	elastic "github.com/olivere/elastic"
@@ -42,7 +43,7 @@ func main() {
 	query := elastic.NewBoolQuery()
 
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id)))
-	//query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower("8v5xyWgBN3VvtvdiWpXP")))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower("7v5wyWgBN3Vvtvdi4pWH")))
 
 	fmt.Println("Printing queried convos: ")
 	ctx := context.Background() //intialize context background
@@ -57,32 +58,32 @@ func main() {
 		return
 	}
 
-	for _, hit := range searchResults.Hits.Hits {
-		fmt.Println("--------------------------------")
-		chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		fmt.Println(hit.Id)
-		fmt.Println(chat.ReferenceID)
-		fmt.Println(chat.Eavesdroppers)
-		fmt.Println(chat.Class)
-		fmt.Println(chat.Size)
-
-		// err := globals.DeleteByID(client.Eclient, hit.Id, "convo")
+	for i, hit := range searchResults.Hits.Hits {
+		// fmt.Println("--------------------------------")
+		// chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
 		// if err != nil {
-		// 	fmt.Println(hit.Id + "failed to be deleted")
 		// 	fmt.Println(err)
-		// } else {
-		// 	fmt.Println("number of chats deleted = " + strconv.Itoa(i))
+		// 	continue
 		// }
+		// fmt.Println(hit.Id)
+		// fmt.Println(chat.ReferenceID)
+		// fmt.Println(chat.Eavesdroppers)
+		// fmt.Println(chat.Class)
+		// fmt.Println(chat.Size)
+
+		err := globals.DeleteByID(client.Eclient, hit.Id, "convo")
+		if err != nil {
+			fmt.Println(hit.Id + "failed to be deleted")
+			fmt.Println(err)
+		} else {
+			fmt.Println("number of chats deleted = " + strconv.Itoa(i))
+		}
 	}
 
-	usr, err := get.UserByID(client.Eclient, "7v5wyWgBN3Vvtvdi4pWH")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(usr.FirstName + usr.LastName)
+	// usr, err := get.UserByID(client.Eclient, "7v5wyWgBN3Vvtvdi4pWH")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	// fmt.Println(usr.FirstName + usr.LastName)
 }
