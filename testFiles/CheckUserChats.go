@@ -14,7 +14,7 @@ import (
 
 func main() {
 	fmt.Println("getting user by username")
-	id, err := get.IDByUsername(client.Eclient, "th1750")
+	id, err := get.IDByUsername(client.Eclient, "min")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -41,6 +41,7 @@ func main() {
 
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id)))
 
+	fmt.Println("Printing queried convos: ")
 	ctx := context.Background() //intialize context background
 	searchResults, err := client.Eclient.Search().
 		Index(globals.ConvoIndex).
@@ -52,7 +53,7 @@ func main() {
 		fmt.Println("empty")
 		return
 	}
-	fmt.Println("Printing queried convos: ")
+
 	for _, hit := range searchResults.Hits.Hits {
 		fmt.Println("--------------------------------")
 		chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
