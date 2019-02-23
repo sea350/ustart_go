@@ -21,7 +21,6 @@ func main() {
 		Query(termQuery).
 		Do(ctx)
 
-	var proxyID string
 	if err != nil {
 		fmt.Println(err)
 		return
