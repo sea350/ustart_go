@@ -22,7 +22,10 @@ func main() {
 		Do(ctx)
 
 	var proxyID string
-
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	for i, element := range searchResult.Hits.Hits {
 		if "Bf4g02gBN3VvtvdiF5fV" != element.Id {
 			err := globals.DeleteByID(client.Eclient, element.Id, "proxymsg")
