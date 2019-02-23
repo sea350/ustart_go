@@ -7,9 +7,9 @@ import (
 	"log"
 	"strings"
 
-	globals "github.com/sea350/ustart_go/globals"
-	getUser "github.com/sea350/ustart_go/get/user"
 	getFollow "github.com/sea350/ustart_go/get/follow"
+	getUser "github.com/sea350/ustart_go/get/user"
+	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 	elastic "gopkg.in/olivere/elastic.v5"
@@ -133,15 +133,14 @@ func sug(eclient *elastic.Client, class int, tagArray []string, projects []types
 
 func main() {
 
-	// eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, 
+	// eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo,
 	// followingUsers map[string]bool, userID string, scrollID string, majors []string, school string
-
 
 	minID, err := getUser.IDByUsername(eclient, "min")
 	if err != nil {
 		fmt.Println(err)
 	}
-	getFollow.
+
 	ryanID, err := getUser.IDByUsername(eclient, "ryanrozbiani")
 	if err != nil {
 		fmt.Println(err)
@@ -154,7 +153,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-/////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	minFoll, err := getFollow.ByID(eclient, minID)
 	if err != nil {
@@ -173,12 +172,12 @@ func main() {
 		fmt.Println(err)
 	}
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	min, err := getUser.UserByUsername(eclient, "min")
 	if err != nil {
 		fmt.Println(err)
 	}
-	getFollow.
+
 	ryan, err := getUser.UserByUsername(eclient, "ryanrozbiani")
 	if err != nil {
 		fmt.Println(err)
@@ -191,12 +190,11 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	sugg(eclient,min.Class, min.Tags, min.Projects, minFoll, minID, "", min.Majors, min.University)
-	sugg(eclient,ryan.Class, ryan.Tags, ryan.Projects, ryanFoll, ryanID, "", ryan.Majors, ryan.University)
-	sugg(eclient,steven.Class, steven.Tags, steven.Projects, stevenFoll, stevenID, "", steven.Majors, steven.University)
-	sugg(eclient,yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll, yunjieID, "", yunjie.Majors, yunjie.University)
+	sugg(eclient, min.Class, min.Tags, min.Projects, minFoll, minID, "", min.Majors, min.University)
+	sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll, ryanID, "", ryan.Majors, ryan.University)
+	sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll, stevenID, "", steven.Majors, steven.University)
+	sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll, yunjieID, "", yunjie.Majors, yunjie.University)
 }
 
-
-	// eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, 
-	// followingUsers map[string]bool, userID string, scrollID string, majors []string, school string
+// eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo,
+// followingUsers map[string]bool, userID string, scrollID string, majors []string, school string
