@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
@@ -36,8 +37,10 @@ func main() {
 	}
 	fmt.Println("Printing cached convos: ")
 	for i := range proxy.Conversations {
-		fmt.Println(i)
-		fmt.Println(proxy.Conversations[i].ConvoID)
+		if proxy.Conversations[i].ConvoID == "lv5J02gBN3Vvtvdi4JiP" || "7v4i-GgBN3VvtvdiZZzR" == proxy.Conversations[i].ConvoID || "I_5l02gBN3VvtvditZkF" == proxy.Conversations[i].ConvoID || "kf5J02gBN3VvtvdixZgF" == proxy.Conversations[i].ConvoID {
+			fmt.Println("Index" + strconv.Itoa(i) + "needs to be removed")
+		}
 	}
+	fmt.Println(len(proxy.Conversations))
 
 }
