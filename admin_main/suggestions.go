@@ -58,7 +58,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Status", true))
 
 	if class == 5 {
-		suggestedUserQuery2 = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
+		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
 	}
 
 	suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery0.Must(suggestedUserQuery1).Must(suggestedUserQuery2))
