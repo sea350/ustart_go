@@ -179,6 +179,7 @@ func main() {
 	_, h1c, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1b, min.Majors, min.University)
 	if len(minList) > 0{
 		minList = append(minList, h1[0].FirstName, h1b[0].FirstName, h1c[0].FirstName)
+		fmt.Println(minList)
 	}
 
 	s2a, h2, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, "", ryan.Majors, ryan.University)
@@ -186,6 +187,7 @@ func main() {
 	_, h2c, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2b, ryan.Majors, ryan.University)
 	if len(stevenList) > 0{
 		ryanList = append(ryanList, h2[0].FirstName, h2b[0].FirstName, h2c[0].FirstName)
+		fmt.Println(ryanList)
 	}
 
 	s3a, h3, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, "", steven.Majors, steven.University)
@@ -194,6 +196,7 @@ func main() {
 	
 	if len(stevenList) > 0{
 		stevenList = append(stevenList, h3[0].FirstName, h3b[0].FirstName, h3c[0].FirstName)
+		fmt.Println(stevenList)
 	}	
 
 	s4a, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, "", yunjie.Majors, yunjie.University)
@@ -202,12 +205,12 @@ func main() {
 	
 	if len(yunjieList) > 0 (
 		yunjieList = append(yunjieList, h4[0].FirstName, h4b[0].FirstName, h4c[0].FirstName)
+		fmt.Println(yunjieList)
 	)
 
-	fmt.Println(minList)
-	fmt.Println(ryanList)
-	fmt.Println(stevenList)
-	fmt.Println(yunjieList)
+	
+	
+	
 }
 
 // eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo,
