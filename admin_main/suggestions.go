@@ -45,36 +45,36 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 		majorsInterface = append([]interface{}{strings.ToLower(majors[elements])}, majorsInterface...)
 	}
 
-	// suggestedUserQuery := elastic.NewBoolQuery()
-	// suggestedUserQuery0 := elastic.NewTermsQuery("Tags", tags...).Boost(5)
-	// // suggestedUserQuery1 := elastic.NewTermsQuery("Projects.ProjectID", projectIDs...).Boost(4)
-	// // suggestedUserQuery2 := elastic.NewTermsQuery("Majors", majorsInterface...).Boost(3)
-
-	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
-	// suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
-
-	// suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
-	// suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
-	// suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
-
-	// if class == 5 {
-	// 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
-	// }
-
-	// suggestedUserQuery = suggestedUserQuery.Should(suggestedUserQuery0) //, suggestedUserQuery1, suggestedUserQuery2)
-
 	suggestedUserQuery := elastic.NewBoolQuery()
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...)).Boost(2)
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).Boost(1.5)
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Majors", majorsInterface...)).Boost(1.25)
+	suggestedUserQuery0 := elastic.NewTermsQuery("Tags", tags...).Boost(5)
+	suggestedUserQuery1 := elastic.NewTermsQuery("Projects.ProjectID", projectIDs...).Boost(4)
+	suggestedUserQuery2 := elastic.NewTermsQuery("Majors", majorsInterface...).Boost(3)
+
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
-	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Visible", true))
-	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Verified", true))
-	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Status", true))
+
+	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
+	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
+	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
+
 	if class == 5 {
 		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
 	}
+
+	suggestedUserQuery = suggestedUserQuery.Should(suggestedUserQuery0, suggestedUserQuery1, suggestedUserQuery2)
+
+	// suggestedUserQuery := elastic.NewBoolQuery()
+	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...)).Boost(2)
+	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).Boost(1.5)
+	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Majors", majorsInterface...)).Boost(1.25)
+	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
+	// suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
+	// suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Visible", true))
+	// suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Verified", true))
+	// suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Status", true))
+	// if class == 5 {
+	// 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
+	// }
 
 	//Please do not touch, very delicate
 	var amt = 1
