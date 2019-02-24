@@ -5,8 +5,8 @@ import (
 	// post "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/types"
 
-	getProj "github.com/sea350/ustart_go/get/proj"
-	post "github.com/sea350/ustart_go/post/proj"
+	getProj "github.com/sea350/ustart_go/get/project"
+	post "github.com/sea350/ustart_go/post/project"
 
 	// post "github.com/sea350/ustart_go/post/user"
 
