@@ -49,8 +49,10 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...).Boost(5))
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...).Boost(4))
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Majors", majorsInterface...).Boost(3))
+
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
+
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
@@ -165,15 +167,35 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, h1, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, "", min.Majors, min.University)
-	_, h2, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, "", ryan.Majors, ryan.University)
-	_, h3, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, "", steven.Majors, steven.University)
-	_, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, "", yunjie.Majors, yunjie.University)
+	var minList = []string{}
+	var ryanList = []string{}
+	var stevenList = []string{}
+	var yunjieList = []string{}
 
-	fmt.Println(h1[0].FirstName, h1[0].LastName)
-	fmt.Println(h2[0].FirstName, h2[0].LastName)
-	fmt.Println(h3[0].FirstName, h3[0].LastName)
-	fmt.Println(h4[0].FirstName, h4[0].LastName)
+	s1a, h1, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, "", min.Majors, min.University)
+	s1b, h1b, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1a, min.Majors, min.University)
+	_, h1c, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1b, min.Majors, min.University)
+	minList = append(minList, h1[0].FirstName, h1b[0].FirstName, h1c[0].FirstName)
+
+	s2a, h2, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, "", ryan.Majors, ryan.University)
+	s2b, h2b, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2a, ryan.Majors, ryan.University)
+	_, h2c, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2b, ryan.Majors, ryan.University)
+	ryanList = append(ryanList, h2[0].FirstName, h2b[0].FirstName, h2c[0].FirstName)
+
+	s3a, h3, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, "", steven.Majors, steven.University)
+	s3b, h3b, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, s3a, steven.Majors, steven.University)
+	_, h3c, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, s3b, steven.Majors, steven.University)
+	stevenList = append(stevenList, h3[0].FirstName, h3b[0].FirstName, h3c[0].FirstName)
+
+	s4a, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, "", yunjie.Majors, yunjie.University)
+	s4b, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, s4a, yunjie.Majors, yunjie.University)
+	_, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, s4b, yunjie.Majors, yunjie.University)
+	yunjieList = append(yunjieList, h4[0].FirstName, h4b[0].FirstName, h4c[0].FirstName)
+
+	fmt.Println(minList)
+	fmt.Println(ryanList)
+	fmt.Println(stevenList)
+	fmt.Println(yunjieList)
 }
 
 // eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo,
