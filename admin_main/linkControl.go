@@ -24,7 +24,7 @@ func main() {
 	usrID2, err := getUser.IDByUsername(eclient, "min")
 
 	fmt.Println(len(usr.QuickLinks))
-	var emp []string{}
+	var emp []types.Link{}
 	err = post.UpdateUser(eclient, usrID, "QuickLinks", emp)
 	if err != nil {
 		fmt.Println("LINE 24,", err)
