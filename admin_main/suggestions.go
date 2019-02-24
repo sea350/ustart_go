@@ -53,9 +53,9 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 
-	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
-	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
-	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
+	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Visible", true))
+	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Verified", true))
+	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Status", true))
 
 	if class == 5 {
 		suggestedUserQuery2 = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
