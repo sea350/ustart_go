@@ -192,7 +192,7 @@ func main() {
 	s1b, h1b, _, err := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1a, min.Majors, min.University)
 	_, h1c, _, err := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1b, min.Majors, min.University)
 
-	if err != nil {
+	if err != nil && err != io.EOF {
 		fmt.Println(err)
 	}
 
@@ -229,7 +229,7 @@ func main() {
 		fmt.Println(ryanList)
 	}
 
-	if err != nil {
+	if err != nil && err != io.EOF {
 		fmt.Println(err)
 	}
 
@@ -252,7 +252,7 @@ func main() {
 		fmt.Println(stevenList)
 	}
 
-	if err != nil {
+	if err != nil && err != io.EOF {
 		fmt.Println(err)
 	}
 
@@ -274,7 +274,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	if len(yunjieList) != 0 {
+	if len(yunjieList) != 0 && err != io.EOF {
 
 		fmt.Println(yunjieList)
 	}
