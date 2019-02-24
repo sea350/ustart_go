@@ -191,34 +191,36 @@ func main() {
 	s1a, h1, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, "", min.Majors, min.University)
 	s1b, h1b, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1a, min.Majors, min.University)
 	_, h1c, _, _ := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1b, min.Majors, min.University)
+	minList = append(minList, h1[0].FirstName, h1b[0].FirstName, h1c[0].FirstName)
 	if len(minList) > 0 {
-		minList = append(minList, h1[0].FirstName, h1b[0].FirstName, h1c[0].FirstName)
+
 		fmt.Println(minList)
 	}
 
 	s2a, h2, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, "", ryan.Majors, ryan.University)
 	s2b, h2b, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2a, ryan.Majors, ryan.University)
 	_, h2c, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2b, ryan.Majors, ryan.University)
-	if len(stevenList) > 0 {
-		ryanList = append(ryanList, h2[0].FirstName, h2b[0].FirstName, h2c[0].FirstName)
+	ryanList = append(ryanList, h2[0].FirstName, h2b[0].FirstName, h2c[0].FirstName)
+	if len(stevenList) != 0 {
+
 		fmt.Println(ryanList)
 	}
 
 	s3a, h3, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, "", steven.Majors, steven.University)
 	s3b, h3b, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, s3a, steven.Majors, steven.University)
 	_, h3c, _, _ := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, s3b, steven.Majors, steven.University)
+	stevenList = append(stevenList, h3[0].FirstName, h3b[0].FirstName, h3c[0].FirstName)
+	if len(stevenList) != 0 {
 
-	if len(stevenList) > 0 {
-		stevenList = append(stevenList, h3[0].FirstName, h3b[0].FirstName, h3c[0].FirstName)
 		fmt.Println(stevenList)
 	}
 
 	s4a, h4, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, "", yunjie.Majors, yunjie.University)
 	s4b, h4b, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, s4a, yunjie.Majors, yunjie.University)
 	_, h4c, _, _ := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, s4b, yunjie.Majors, yunjie.University)
+	yunjieList = append(yunjieList, h4[0].FirstName, h4b[0].FirstName, h4c[0].FirstName)
+	if len(yunjieList) != 0 {
 
-	if len(yunjieList) > 0 {
-		yunjieList = append(yunjieList, h4[0].FirstName, h4b[0].FirstName, h4c[0].FirstName)
 		fmt.Println(yunjieList)
 	}
 
