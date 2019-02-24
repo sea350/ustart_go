@@ -49,11 +49,11 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hasPermission := uses.HasPrivilege("links", proj.PrivilegeProfiles, member)
+	// hasPermission := uses.HasPrivilege("links", proj.PrivilegeProfiles, member)
 
-	if !hasPermission {
-		return
-	}
+	// if !hasPermission {
+	// 	return
+	// }
 
 	p := bluemonday.UGCPolicy()
 	cleanProjHTML := p.Sanitize(r.FormValue("projectLink"))
