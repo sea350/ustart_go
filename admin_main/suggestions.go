@@ -189,8 +189,8 @@ func main() {
 	var yunjieList = []string{}
 
 	s1a, h1, _, err := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, "", min.Majors, min.University)
-	s1b, h1b, _, err := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1a, min.Majors, min.University)
-	_, h1c, _, err := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1b, min.Majors, min.University)
+	// s1b, h1b, _, err := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1a, min.Majors, min.University)
+	// _, h1c, _, err := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, s1b, min.Majors, min.University)
 
 	if err != nil && err != io.EOF {
 		fmt.Println(err)
@@ -199,12 +199,12 @@ func main() {
 	if len(h1) > 0 {
 		minList = append(minList, h1[0].FirstName)
 	}
-	if len(h1b) > 0 {
-		minList = append(minList, h1b[0].FirstName)
-	}
-	if len(h1c) > 0 {
-		minList = append(minList, h1c[0].FirstName)
-	}
+	// if len(h1b) > 0 {
+	// 	minList = append(minList, h1b[0].FirstName)
+	// }
+	// if len(h1c) > 0 {
+	// 	minList = append(minList, h1c[0].FirstName)
+	// }
 
 	if len(minList) > 0 {
 
@@ -212,17 +212,18 @@ func main() {
 	}
 
 	s2a, h2, _, err := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, "", ryan.Majors, ryan.University)
-	s2b, h2b, _, err := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2a, ryan.Majors, ryan.University)
-	_, h2c, _, err := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2b, ryan.Majors, ryan.University)
+	// s2b, h2b, _, err := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2a, ryan.Majors, ryan.University)
+	// _, h2c, _, err := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2b, ryan.Majors, ryan.University)
+	
 	if len(h2) > 0 {
 		ryanList = append(minList, h2[0].FirstName)
-	}
-	if len(h2b) > 0 {
-		ryanList = append(minList, h2b[0].FirstName)
-	}
-	if len(h2c) > 0 {
-		ryanList = append(minList, h2c[0].FirstName)
-	}
+	// }
+	// if len(h2b) > 0 {
+	// 	ryanList = append(minList, h2b[0].FirstName)
+	// }
+	// if len(h2c) > 0 {
+	// 	ryanList = append(minList, h2c[0].FirstName)
+	// }
 
 	if len(ryanList) != 0 {
 
@@ -234,18 +235,18 @@ func main() {
 	}
 
 	s3a, h3, _, err := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, "", steven.Majors, steven.University)
-	s3b, h3b, _, err := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, s3a, steven.Majors, steven.University)
-	_, h3c, _, err := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, s3b, steven.Majors, steven.University)
+	// s3b, h3b, _, err := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, s3a, steven.Majors, steven.University)
+	// _, h3c, _, err := sugg(eclient, steven.Class, steven.Tags, steven.Projects, stevenFoll.UserFollowing, stevenID, s3b, steven.Majors, steven.University)
 
 	if len(h3) > 0 {
 		stevenList = append(minList, h3[0].FirstName)
 	}
-	if len(h3b) > 0 {
-		stevenList = append(minList, h3b[0].FirstName)
-	}
-	if len(h3c) > 0 {
-		stevenList = append(minList, h3c[0].FirstName)
-	}
+	// if len(h3b) > 0 {
+	// 	stevenList = append(minList, h3b[0].FirstName)
+	// }
+	// if len(h3c) > 0 {
+	// 	stevenList = append(minList, h3c[0].FirstName)
+	// }
 
 	if len(stevenList) != 0 {
 
@@ -257,19 +258,21 @@ func main() {
 	}
 
 	s4a, h4, _, err := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, "", yunjie.Majors, yunjie.University)
-	s4b, h4b, _, err := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, s4a, yunjie.Majors, yunjie.University)
-	_, h4c, _, err := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, s4b, yunjie.Majors, yunjie.University)
+	// s4b, h4b, _, err := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, s4a, yunjie.Majors, yunjie.University)
+	// _, h4c, _, err := sugg(eclient, yunjie.Class, yunjie.Tags, yunjie.Projects, yunjieFoll.UserFollowing, yunjieID, s4b, yunjie.Majors, yunjie.University)
+	
 	yunjieList = append(yunjieList, h4[0].FirstName, h4b[0].FirstName, h4c[0].FirstName)
+	
 	if len(h4) > 0 {
 		stevenList = append(minList, h4[0].FirstName)
 	}
 
-	if len(h4b) > 0 {
-		stevenList = append(minList, h4b[0].FirstName)
-	}
-	if len(h4c) > 0 {
-		stevenList = append(minList, h4c[0].FirstName)
-	}
+	// if len(h4b) > 0 {
+	// 	stevenList = append(minList, h4b[0].FirstName)
+	// }
+	// if len(h4c) > 0 {
+	// 	stevenList = append(minList, h4c[0].FirstName)
+	// }
 
 	if err != nil {
 		fmt.Println(err)
