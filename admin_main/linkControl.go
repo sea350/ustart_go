@@ -1,9 +1,12 @@
 package main
 
 import (
-	getUser "github.com/sea350/ustart_go/get/user"
-	post "github.com/sea350/ustart_go/post/user"
+	// getUser "github.com/sea350/ustart_go/get/user"
+	// post "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/types"
+
+	getProj "github.com/sea350/ustart_go/get/proj"
+	post "github.com/sea350/ustart_go/post/proj"
 
 	// post "github.com/sea350/ustart_go/post/user"
 
@@ -17,22 +20,35 @@ import (
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
+// func main() {
+
+// 	usr, err := getUser.UserByUsername(eclient, "support")
+// 	usrID, err := getUser.IDByUsername(eclient, "support")
+// 	// usr2, err := getUser.UserByUsername(eclient, "min")
+// 	usrID2, err := getUser.IDByUsername(eclient, "min")
+
+// 	fmt.Println(len(usr.QuickLinks))
+// 	var emp []types.Link
+// 	err = post.UpdateUser(eclient, usrID, "QuickLinks", emp)
+// 	if err != nil {
+// 		fmt.Println("LINE 24,", err)
+// 	}
+
+// 	err = post.UpdateUser(eclient, usrID2, "QuickLinks", emp)
+// 	if err != nil {
+// 		fmt.Println("LINE 24,", err)
+// 	}
+// }
+
 func main() {
 
-	usr, err := getUser.UserByUsername(eclient, "support")
-	usrID, err := getUser.IDByUsername(eclient, "support")
-	// usr2, err := getUser.UserByUsername(eclient, "min")
-	usrID2, err := getUser.IDByUsername(eclient, "min")
-
-	fmt.Println(len(usr.QuickLinks))
+	proj, err := getProj.ProjectByURL(eclient, "archieology")
+	projID, err := getUser.ProjectIDByURL(eclient, "archieology")
+	fmt.Println(len(proj.QuickLinks))
 	var emp []types.Link
-	err = post.UpdateUser(eclient, usrID, "QuickLinks", emp)
+	err = post.UpdateProject(eclient, projID, "QuickLinks", emp)
 	if err != nil {
-		fmt.Println("LINE 24,", err)
+		fmt.Println("LINE 51,", err)
 	}
 
-	err = post.UpdateUser(eclient, usrID2, "QuickLinks", emp)
-	if err != nil {
-		fmt.Println("LINE 24,", err)
-	}
 }
