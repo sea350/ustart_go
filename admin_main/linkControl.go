@@ -3,6 +3,7 @@ package main
 import (
 	getUser "github.com/sea350/ustart_go/get/user"
 	post "github.com/sea350/ustart_go/post/user"
+	"github.com/sea350/ustart_go/types"
 
 	// post "github.com/sea350/ustart_go/post/user"
 
@@ -10,8 +11,8 @@ import (
 
 	"fmt"
 
-	"github.com/sea350/ustart_go/globals"
 	elastic "github.com/olivere/elastic"
+	"github.com/sea350/ustart_go/globals"
 )
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
@@ -24,7 +25,7 @@ func main() {
 	usrID2, err := getUser.IDByUsername(eclient, "min")
 
 	fmt.Println(len(usr.QuickLinks))
-	var emp []types.Link{}
+	var emp []types.Link
 	err = post.UpdateUser(eclient, usrID, "QuickLinks", emp)
 	if err != nil {
 		fmt.Println("LINE 24,", err)
