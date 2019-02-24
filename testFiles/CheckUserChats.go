@@ -3,19 +3,19 @@ package main
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/client"
-	elastic "github.com/olivere/elastic"
 )
 
 func main() {
 	fmt.Println("getting user by username")
-	// id, err := get.IDByUsername(client.Eclient, "th1750") //
-	id, err := get.IDByUsername(client.Eclient, "HeatherMT")
+	id, err := get.IDByUsername(client.Eclient, "th1750")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -26,18 +26,26 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(proxyid)
-	proxy, err := getChat.ProxyMsgByID(client.Eclient, proxyid)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(proxy)
-
+	fmt.Println("User msg proxies: " + proxyid)
+	id = "v4e02gBN3VvtvdiDZYs"
+	/*
+		proxy, err := getChat.ProxyMsgByID(client.Eclient, proxyid)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println("Printing cached convos: ")
+		for i := range proxy.Conversations {
+			fmt.Println(i)
+			fmt.Println(proxy.Conversations[i].ConvoID)
+		}
+	*/
 	query := elastic.NewBoolQuery()
 
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower("7v5wyWgBN3Vvtvdi4pWH")))
 
+	fmt.Println("Printing queried convos: ")
 	ctx := context.Background() //intialize context background
 	searchResults, err := client.Eclient.Search().
 		Index(globals.ConvoIndex).
@@ -49,15 +57,33 @@ func main() {
 		fmt.Println("empty")
 		return
 	}
-	for _, hit := range searchResults.Hits.Hits {
-		chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
+
+	for i, hit := range searchResults.Hits.Hits {
+		// fmt.Println("--------------------------------")
+		// chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	continue
+		// }
+		// fmt.Println(hit.Id)
+		// fmt.Println(chat.ReferenceID)
+		// fmt.Println(chat.Eavesdroppers)
+		// fmt.Println(chat.Class)
+		// fmt.Println(chat.Size)
+
+		err := globals.DeleteByID(client.Eclient, hit.Id, "convo")
 		if err != nil {
+			fmt.Println(hit.Id + "failed to be deleted")
 			fmt.Println(err)
-			continue
+		} else {
+			fmt.Println("number of chats deleted = " + strconv.Itoa(i))
 		}
-		fmt.Println(hit.Id)
-		fmt.Println(chat.ReferenceID)
-		fmt.Println(chat.Class)
-		fmt.Println(chat.Size)
 	}
+
+	// usr, err := get.UserByID(client.Eclient, "7v5wyWgBN3Vvtvdi4pWH")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	// fmt.Println(usr.FirstName + usr.LastName)
 }
