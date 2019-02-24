@@ -210,7 +210,7 @@ func main() {
 	s2a, h2, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, "", ryan.Majors, ryan.University)
 	s2b, h2b, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2a, ryan.Majors, ryan.University)
 	_, h2c, _, _ := sugg(eclient, ryan.Class, ryan.Tags, ryan.Projects, ryanFoll.UserFollowing, ryanID, s2b, ryan.Majors, ryan.University)
-	if len(h1) > 0 {
+	if len(h2) > 0 {
 		ryanList = append(minList, h2[0].FirstName)
 	}
 	if len(h2b) > 0 {
