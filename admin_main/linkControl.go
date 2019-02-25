@@ -28,9 +28,9 @@ func main() {
 	// fmt.Println(len(usr.QuickLinks))
 	// var emp []types.Link
 	// err = post.UpdateUser(eclient, usrID, "QuickLinks", emp)
-	// if err != nil {
-	// 	fmt.Println("LINE 24,", err)
-	// }
+	if err != nil {
+		fmt.Println("LINE 24,", err)
+	}
 
 	// err = post.UpdateUser(eclient, usrID2, "QuickLinks", emp)
 	// if err != nil {
