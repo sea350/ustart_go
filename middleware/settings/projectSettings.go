@@ -1,7 +1,6 @@
 package settings
 
 import (
-	
 	"net/http"
 
 	client "github.com/sea350/ustart_go/middleware/client"
@@ -21,14 +20,13 @@ func Project(w http.ResponseWriter, r *http.Request) {
 	// projURL, err := get.ProjectByID(client.Eclient, r.FormValue("projectID"))
 	project, err := uses.AggregateProjectData(client.Eclient, projURL, test1.(string))
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
 	var isAdmin = false
 	for _, member := range project.ProjectData.Members {
-		if member.MemberID == test1.(string) && member.Role <= 0 {
+		if member.MemberID == test1.(string) && member.Role <= 1 {
 			isAdmin = true
 			break
 		}
