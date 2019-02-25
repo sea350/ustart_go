@@ -22,7 +22,7 @@ func main() {
 
 	for _, usr := range usrs {
 		// user, err := getUser.UserByEmail(eclient, usr)
-		usrID, err := getUser.IDByUsername(eclient, usr)
+		usrID, err := getUser.UserIDByEmail(eclient, usr)
 		err = post.UpdateUser(eclient, usrID, "Verified", true)
 		if err != nil {
 			fmt.Println("LINE 24,", err)
