@@ -8,9 +8,9 @@ import (
 	"encoding/json"
 	"fmt"
 
+	elastic "github.com/olivere/elastic"
 	"github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
-	elastic "github.com/olivere/elastic"
 )
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
@@ -24,7 +24,7 @@ func main() {
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		Query(maq).
-		Size(100).
+		Size(500).
 		Do(ctx)
 
 	if err != nil {
