@@ -3,13 +3,13 @@ package main
 import (
 	// getUser "github.com/sea350/ustart_go/get/user"
 	// post "github.com/sea350/ustart_go/post/user"
-	// "context"
+	"context"
 
 	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 
-	// getProj "github.com/sea350/ustart_go/get/project"
-	// post "github.com/sea350/ustart_go/post/project"
+	getProj "github.com/sea350/ustart_go/get/project"
+	post "github.com/sea350/ustart_go/post/project"
 
 	// post "github.com/sea350/ustart_go/post/user"
 
@@ -25,28 +25,28 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 
-	// ctx := context.Background()
+	ctx := context.Background()
 
 	var newPrivs = []types.Privileges{uses.SetMemberPrivileges(0), uses.SetMemberPrivileges(1), uses.SetMemberPrivileges(2)}
 
 	fmt.Println(newPrivs)
 	// maq := elastic.NewMatchAllQuery()
 
-	// res, err := eclient.Search().
-	// 	Index(globals.ProjectIndex).
-	// 	Type(globals.ProjectType).
-	// 	Query(maq).
-	// 	Do(ctx)
+	res, err := eclient.Search().
+		Index(globals.ProjectIndex).
+		Type(globals.ProjectType).
+		Query(maq).
+		Do(ctx)
 
-	// if err != nil {
-	// 	fmt.Println("LINE 40,", err)
-	// }
+	if err != nil {
+		fmt.Println("LINE 40,", err)
+	}
 
-	// for _, hit := res.Hits.Hits{
-	// 	err = post.UpdateProject(eclient, hit.Id, "PrivilegeProfiles", newPrivs)
-	// 	if err != nil {
-	// 		fmt.Println("LINE 42,", err)
-	// 	}
-	// }
+	for _, hit := res.Hits.Hits{
+		err = post.UpdateProject(eclient, hit.Id, "PrivilegeProfiles", newPrivs)
+		if err != nil {
+			fmt.Println("LINE 42,", err)
+		}
+	}
 
 }
