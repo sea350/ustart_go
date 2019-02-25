@@ -44,6 +44,7 @@ func main() {
 
 	for _, hit := res.Hits.Hits{
 		err = post.UpdateProject(eclient, hit.Id, "PrivilegeProfiles", newPrivs)
+		fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 42,", err)
 		}
