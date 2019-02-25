@@ -23,24 +23,15 @@ func SetMemberPrivileges(role int) types.Privileges {
 		}
 	case 1:
 		memberPrivileges = types.Privileges{
-			// RoleName:     "Member",
-			// RoleID:       role,
-			// MemberManage: false,
-			// WidgetManage: false,
-			// PostManage:   false,
-			// Icon:         false,
-			// Banner:       false,
-			// Links:        false,
-			// Tags:         false,
 			RoleName:     "Admin",
 			RoleID:       role,
 			MemberManage: false,
 			WidgetManage: true,
 			PostManage:   true,
-			Icon:         false,
-			Banner:       false,
-			Links:        false,
-			Tags:         false,
+			Icon:         true,
+			Banner:       true,
+			Links:        true,
+			Tags:         true,
 		}
 	case 2:
 		memberPrivileges = types.Privileges{
