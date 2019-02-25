@@ -29,7 +29,7 @@ func main() {
 	var newPrivs = []types.Privileges{uses.SetMemberPrivileges(0), uses.SetMemberPrivileges(1), uses.SetMemberPrivileges(2)}
 
 	fmt.Println(newPrivs)
-	// maq := elastic.NewMatchAllQuery()
+	maq := elastic.NewMatchAllQuery()
 
 	res, err := eclient.Search().
 		Index(globals.ProjectIndex).
