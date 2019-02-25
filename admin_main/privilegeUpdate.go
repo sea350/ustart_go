@@ -35,6 +35,7 @@ func main() {
 		Index(globals.ProjectIndex).
 		Type(globals.ProjectType).
 		Query(maq).
+		Size(200).
 		Do(ctx)
 
 	if err != nil {
