@@ -42,8 +42,8 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 
-	proj, err := getProj.ProjectByURL(eclient, "archieology")
-	projID, err := getProj.ProjectIDByURL(eclient, "archieology")
+	proj, err := getProj.ProjectByURL(eclient, "ITSpackages")
+	projID, err := getProj.ProjectIDByURL(eclient, "ITSpackages")
 	fmt.Println(len(proj.QuickLinks))
 	var emp []types.Link
 	err = post.UpdateProject(eclient, projID, "QuickLinks", emp)
