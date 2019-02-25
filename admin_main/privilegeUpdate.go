@@ -8,7 +8,6 @@ import (
 	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
 
-	getProj "github.com/sea350/ustart_go/get/project"
 	post "github.com/sea350/ustart_go/post/project"
 
 	// post "github.com/sea350/ustart_go/post/user"
@@ -42,7 +41,7 @@ func main() {
 		fmt.Println("LINE 40,", err)
 	}
 
-	for _, hit := res.Hits.Hits{
+	for _, hit := range res.Hits.Hits {
 		err = post.UpdateProject(eclient, hit.Id, "PrivilegeProfiles", newPrivs)
 		fmt.Println(hit.Id)
 		if err != nil {
