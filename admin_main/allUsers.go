@@ -31,18 +31,13 @@ func main() {
 		fmt.Println(err)
 	}
 
-	email := ""
 	for _, id := range res.Hits.Hits {
 		data := types.User{}
 		err = json.Unmarshal(*id.Source, &data)
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(data.FirstName,"  ", data.LastName, "  " data.Email, "  ",  data.Username)
+		fmt.Println(data.FirstName, "  ", data.LastName, "  ", data.Email, "  ", data.Username)
 	}
-
- 
-	
-	
 
 }
