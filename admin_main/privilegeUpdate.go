@@ -26,7 +26,7 @@ func main() {
 
 	// ctx := context.Background()
 
-	var newPrivs = []types.Privilege{SetMemberPrivileges(0), SetMemberPrivileges(1), SetMemberPrivileges(2)}
+	var newPrivs = []types.Privileges{SetMemberPrivileges(0), SetMemberPrivileges(1), SetMemberPrivileges(2)}
 
 	fmt.Println(newPrivs)
 	// maq := elastic.NewMatchAllQuery()
