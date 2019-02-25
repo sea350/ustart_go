@@ -4,11 +4,14 @@ import (
 
 	// admin "github.com/sea350/ustart_go/admin"
 
+	"context"
+	"encoding/json"
 	"fmt"
 
 	elastic "github.com/olivere/elastic"
 	// getUser "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/globals"
+	"github.com/sea350/ustart_go/types"
 )
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
@@ -37,7 +40,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(data.Name "  ", data.URLName)
+		fmt.Println(data.Name, "  ", data.URLName)
 	}
 
 }
