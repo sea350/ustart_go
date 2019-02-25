@@ -6,6 +6,7 @@ import (
 	// "context"
 
 	"github.com/sea350/ustart_go/types"
+	uses "github.com/sea350/ustart_go/uses"
 
 	// getProj "github.com/sea350/ustart_go/get/project"
 	// post "github.com/sea350/ustart_go/post/project"
@@ -26,7 +27,7 @@ func main() {
 
 	// ctx := context.Background()
 
-	var newPrivs = []types.Privileges{SetMemberPrivileges(0), SetMemberPrivileges(1), SetMemberPrivileges(2)}
+	var newPrivs = []types.Privileges{uses.SetMemberPrivileges(0), uses.SetMemberPrivileges(1), uses.SetMemberPrivileges(2)}
 
 	fmt.Println(newPrivs)
 	// maq := elastic.NewMatchAllQuery()
