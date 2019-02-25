@@ -39,7 +39,7 @@ func SetMemberPrivileges(role int) types.Privileges {
 			RoleID:       role,
 			MemberManage: false,
 			WidgetManage: false,
-			PostManage:   false,
+			PostManage:   true,
 			Icon:         false,
 			Banner:       false,
 			Links:        false,
