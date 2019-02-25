@@ -35,7 +35,7 @@ func main() {
 	}
 
 	for _, id := range res.Hits.Hits {
-		data := types.User{}
+		data := types.Project{}
 		err = json.Unmarshal(*id.Source, &data)
 		if err != nil {
 			fmt.Println(err)
