@@ -49,7 +49,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	suggestedUserQuery = suggestedUserQuery.Negative(elastic.NewTermsQuery("Tags", tags...)).NegativeBoost(0.2)
 	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).Boost(1.5)
 	// suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery2, suggestedUserQuery1)
-	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Majors", majorsInterface...)).Boost(1.75)
+	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Majors", majorsInterface...))
 
 	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
 	// suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
