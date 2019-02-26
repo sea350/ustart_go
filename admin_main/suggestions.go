@@ -47,12 +47,12 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 
 	suggestedUserQuery := elastic.NewBoolQuery()
 	// suggestedUserQuery1 := elastic.NewBoolQuery()
-	suggestedUserQuery1 = elastic.NewTermsQuery("Tags", tags...)
+	suggestedUserQuery1 := elastic.NewTermsQuery("Tags", tags...)
 	suggestedUserQuery2 := elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)
 
-	suggestedUserQuery3 = elastic.NewTermsQuery("Majors", majorsInterface...)
+	suggestedUserQuery3 := elastic.NewTermsQuery("Majors", majorsInterface...)
 
-	suggestedUserQuery4 = elastic.NewTermQuery("UndergradSchool", school)
+	suggestedUserQuery4 := elastic.NewTermQuery("UndergradSchool", school)
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 
 	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
@@ -63,7 +63,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
 	}
 
-	suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery0, suggestedUserQuery1, suggestedUserQuery2)
+	suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery1, suggestedUserQuery2, suggestedUserQuery3, suggestedUserQuery4)
 
 	// suggestedUserQuery := elastic.NewBoolQuery()
 	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...)).Boost(2)
