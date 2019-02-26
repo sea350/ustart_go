@@ -46,8 +46,8 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	}
 
 	suggestedUserQuery := elastic.NewBoostingQuery()
-	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Tags", tags...)).Boost(1.5)
-	suggestedUserQuery = suggestedUserQuery.Negative(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).NegativeBoost(1.2)
+	suggestedUserQuery = suggestedUserQuery.Negative(elastic.NewTermsQuery("Tags", tags...)).NegativeBoost(1.5)
+	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).Boost(1.2)
 	// suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery2, suggestedUserQuery1)
 	// suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Majors", majorsInterface...))
 
@@ -126,29 +126,31 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 }
 
 func main() {
-	uname := "nevets"
+	unames := []string{"min", "ryanrozbiani", "nevets", "yh1112"}
 
-	minID, err := getUser.IDByUsername(eclient, uname)
-	if err != nil {
-		fmt.Println(err)
-	}
+	for _, uname := range unames {
+		usrID, err := getUser.IDByUsername(eclient, uname)
+		if err != nil {
+			fmt.Println(err)
+		}
 
-	_, minFoll, err := getFollow.ByID(eclient, minID)
-	if err != nil {
-		fmt.Println(err)
-	}
+		_, usrFoll, err := getFollow.ByID(eclient, usrID)
+		if err != nil {
+			fmt.Println(err)
+		}
 
-	min, err := getUser.UserByUsername(eclient, uname)
-	if err != nil {
-		fmt.Println(err)
-	}
+		usr, err := getUser.UserByUsername(eclient, uname)
+		if err != nil {
+			fmt.Println(err)
+		}
 
-	_, h1, _, err := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, "", min.Majors, min.University)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		for _, h := range h1 {
-			fmt.Println(h.FirstName)
+		_, h1, _, err := sugg(eclient, usr.Class, usr.Tags, usr.Projects, usrFoll.UserFollowing, usrID, "", usr.Majors, usr.University)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			for _, h := range h1 {
+				fmt.Println(h.FirstName)
+			}
 		}
 	}
 }
