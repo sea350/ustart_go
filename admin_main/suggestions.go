@@ -78,7 +78,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	// }
 
 	//Please do not touch, very delicate
-	var amt = 3
+	var amt = 1
 
 	// if scrollID != `` {
 
