@@ -126,7 +126,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 }
 
 func main() {
-	uname := "min"
+	uname := "ryanrozbiani"
 
 	minID, err := getUser.IDByUsername(eclient, uname)
 	if err != nil {
