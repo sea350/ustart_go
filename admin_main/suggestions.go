@@ -45,24 +45,25 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 		majorsInterface = append([]interface{}{strings.ToLower(majors[elements])}, majorsInterface...)
 	}
 
-	suggestedUserQuery := elastic.NewBoostingQuery()
-	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Tags", tags...)).Boost(1.5)
-	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).Boost(1.2)
-	// suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery2, suggestedUserQuery1)
-	// suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Majors", majorsInterface...)).Boost(1.1)
+	suggestedUserQuery := elastic.NewBoolQuery()
+	// suggestedUserQuery1 := elastic.NewBoolQuery()
+	suggestedUserQuery1 = elastic.NewTermsQuery("Tags", tags...)
+	suggestedUserQuery2 := elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)
 
-	suggestedUserQuery = suggestedUserQuery.Negative(elastic.NewTermQuery("UndergradSchool", school)).NegativeBoost(4.4)
-	// suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
+	suggestedUserQuery3 = elastic.NewTermsQuery("Majors", majorsInterface...)
 
-	// suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
-	// suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
-	// suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
+	suggestedUserQuery4 = elastic.NewTermQuery("UndergradSchool", school)
+	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 
-	// if class == 5 {
-	// 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
-	// }
+	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Visible", true))
+	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Verified", true))
+	suggestedUserQuery = suggestedUserQuery.Must(elastic.NewTermQuery("Status", true))
 
-	// suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery0, suggestedUserQuery1, suggestedUserQuery2)
+	if class == 5 {
+		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
+	}
+
+	suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery0, suggestedUserQuery1, suggestedUserQuery2)
 
 	// suggestedUserQuery := elastic.NewBoolQuery()
 	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...)).Boost(2)
