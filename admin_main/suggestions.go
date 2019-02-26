@@ -45,10 +45,10 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 		majorsInterface = append([]interface{}{strings.ToLower(majors[elements])}, majorsInterface...)
 	}
 
-	suggestedUserQuery := elastic.NewBoolQuery()
-	suggestedUserQuery1 := elastic.NewTermsQuery("Tags", tags...).NegativeBoost(2)
-	suggestedUserQuery2 := elastic.NewTermsQuery("Projects.ProjectID", projectIDs...).Boost(4)
-	suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery2, suggestedUserQuery1)
+	suggestedUserQuery := elastic.NewBoostingQuery()
+	suggestedUserQuery = suggestedUserQuery.Negative(elastic.NewTermsQuery("Tags", tags...)).NegativeBoost(2)
+	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).Boost(4)
+	// suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery2, suggestedUserQuery1)
 	// suggestedUserQuery2 := elastic.NewTermsQuery("Majors", majorsInterface...).Boost(3)
 
 	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
