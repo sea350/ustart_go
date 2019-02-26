@@ -124,15 +124,13 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 
 }
 
-func main()
-{
-
+func main() {
 
 	minID, err := getUser.IDByUsername(eclient, "min")
-		if err != nil {
-			fmt.Println(err)
-		}
-	
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	_, minFoll, err := getFollow.ByID(eclient, minID)
 	if err != nil {
 		fmt.Println(err)
@@ -143,16 +141,16 @@ func main()
 		fmt.Println(err)
 	}
 
-
 	_, h1, _, err := sugg(eclient, min.Class, min.Tags, min.Projects, minFoll.UserFollowing, minID, "", min.Majors, min.University)
 	if err != nil {
 		fmt.Println(err)
-	}else{
-		for _, h := range h1{
+	} else {
+		for _, h := range h1 {
 			fmt.Println(h.FirstName)
 		}
 	}
 }
+
 // func main() {
 
 // 	// eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo,
