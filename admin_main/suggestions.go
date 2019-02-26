@@ -46,7 +46,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	}
 
 	// suggestedUserQuery := elastic.NewBoolQuery()
-	suggestedUserQuery = elastic.NewTermsQuery("Tags", tags...).Boost(5)
+	suggestedUserQuery := elastic.NewTermsQuery("Tags", tags...).Boost(5)
 	// suggestedUserQuery1 := elastic.NewTermsQuery("Projects.ProjectID", projectIDs...).Boost(4)
 	// suggestedUserQuery2 := elastic.NewTermsQuery("Majors", majorsInterface...).Boost(3)
 
