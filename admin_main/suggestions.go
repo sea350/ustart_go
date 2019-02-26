@@ -127,7 +127,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 
 func main() {
 
-	minID, err := getUser.IDByUsername(eclient, "ryanrozbiani")
+	minID, err := getUser.IDByUsername(eclient, "yh1112")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -137,7 +137,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	min, err := getUser.UserByUsername(eclient, "ryanrozbiani")
+	min, err := getUser.UserByUsername(eclient, "yh1112")
 	if err != nil {
 		fmt.Println(err)
 	}
