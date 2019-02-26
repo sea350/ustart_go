@@ -49,7 +49,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Tags", tags...)).Boost(1.5)
 	suggestedUserQuery = suggestedUserQuery.Negative(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).NegativeBoost(1.2)
 	// suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery2, suggestedUserQuery1)
-	suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Majors", majorsInterface...))
+	// suggestedUserQuery = suggestedUserQuery.Positive(elastic.NewTermsQuery("Majors", majorsInterface...))
 
 	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
 	// suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
@@ -78,15 +78,15 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	// }
 
 	//Please do not touch, very delicate
-	var amt = 1
+	var amt = 3
 
-	if scrollID != `` {
+	// if scrollID != `` {
 
-		amt = 1
-	} else {
-		amt = 1
+	// 	amt = 1
+	// } else {
+	// 	amt = 1
 
-	}
+	// }
 
 	searchResults := eclient.Scroll().
 		Index(globals.UserIndex).
