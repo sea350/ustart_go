@@ -130,7 +130,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 }
 
 func main() {
-	unames := []string{"min", "ryanrozbiani", "nevets", "yh1112", "sx563", "julietr", "sc6094", "Carlos"}
+	unames := []string{"min", "ryanrozbiani", "nevets", "yh1112", "sx563", "julietr", "sc6094", "Carlos", "HeatherMT"}
 
 	for _, uname := range unames {
 		usrID, err := getUser.IDByUsername(eclient, uname)
