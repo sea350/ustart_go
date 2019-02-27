@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	elastic "github.com/olivere/elastic"
+	getFollow "github.com/sea350/ustart_go/get/follow"
 	getUser "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
@@ -18,7 +19,7 @@ import (
 //Scrolls through docs being loaded
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
-func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string, majors []string, school string) (string, []types.FloatingHead, int, error) {
+func sugg(eclient *elastic.Client, class int, tagArray []string, projects []types.ProjectInfo, followingUsers map[string]bool, userID string, scrollID string, majors []string, school string) (string, []types.FloatingHead, int, error) {
 
 	ctx := context.Background()
 	tags := make([]interface{}, 0)
