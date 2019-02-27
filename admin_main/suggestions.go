@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log"
 	"strings"
 
 	elastic "github.com/olivere/elastic"
+	getUser "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
@@ -248,32 +250,32 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 
 // }
 
-// func main() {
-// 	unames := []string{"min", "ryanrozbiani", "nevets", "yh1112", "sx563", "julietr", "sc6094", "Carlos", "HeatherMT"}
+func main() {
+	unames := []string{"min", "ryanrozbiani", "nevets", "yh1112", "sx563", "julietr", "sc6094", "Carlos", "HeatherMT"}
 
-// 	for _, uname := range unames {
-// 		usrID, err := getUser.IDByUsername(eclient, uname)
-// 		if err != nil {
-// 			fmt.Println(err)
-// 		}
+	for _, uname := range unames {
+		usrID, err := getUser.IDByUsername(eclient, uname)
+		if err != nil {
+			fmt.Println(err)
+		}
 
-// 		_, usrFoll, err := getFollow.ByID(eclient, usrID)
-// 		if err != nil {
-// 			fmt.Println(err)
-// 		}
+		_, usrFoll, err := getFollow.ByID(eclient, usrID)
+		if err != nil {
+			fmt.Println(err)
+		}
 
-// 		usr, err := getUser.UserByUsername(eclient, uname)
-// 		if err != nil {
-// 			fmt.Println(err)
-// 		}
+		usr, err := getUser.UserByUsername(eclient, uname)
+		if err != nil {
+			fmt.Println(err)
+		}
 
-// 		_, h1, _, err := sugg(eclient, usr.Class, usr.Tags, usr.Projects, usrFoll.UserFollowing, usrID, "", usr.Majors, usr.University)
-// 		if err != nil {
-// 			fmt.Println(err)
-// 		} else {
-// 			for _, h := range h1 {
-// 				fmt.Println(h.FirstName, h.LastName)
-// 			}
-// 		}
-// 	}
-// }
+		_, h1, _, err := sugg(eclient, usr.Class, usr.Tags, usr.Projects, usrFoll.UserFollowing, usrID, "", usr.Majors, usr.University)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			for _, h := range h1 {
+				fmt.Println(h.FirstName, h.LastName)
+			}
+		}
+	}
+}
