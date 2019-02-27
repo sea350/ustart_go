@@ -6,10 +6,10 @@ import (
 	"log"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
-	elastic "github.com/olivere/elastic"
 )
 
 //ScrollSuggestedProjects ...
@@ -44,7 +44,8 @@ func ScrollSuggestedProjects(eclient *elastic.Client, tagArray []string, project
 	searchResults := eclient.Scroll().
 		Index(globals.ProjectIndex).
 		Query(suggQuery).
-		Size(1)
+		Size(1).
+		Sort("_score", false)
 
 	if len(scrollID) > 0 {
 		searchResults = searchResults.ScrollId(scrollID)

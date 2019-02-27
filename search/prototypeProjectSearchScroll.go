@@ -116,7 +116,7 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 		Index(globals.ProjectIndex).
 		Query(query).
 		Size(10).
-		Sort("_sort", false)
+		Sort("_score", false)
 
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)

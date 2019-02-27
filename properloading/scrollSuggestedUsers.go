@@ -67,7 +67,8 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	searchResults := eclient.Scroll().
 		Index(globals.UserIndex).
 		Query(suggestedUserQuery).
-		Size(amt)
+		Size(amt).
+		Sort("_sort", false)
 
 	if len(scrollID) > 0 {
 		searchResults = searchResults.ScrollId(scrollID)

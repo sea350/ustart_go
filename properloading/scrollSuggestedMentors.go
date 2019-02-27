@@ -6,10 +6,10 @@ import (
 	"log"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
-	elastic "github.com/olivere/elastic"
 )
 
 //ScrollSuggestedMentors ...
@@ -49,7 +49,8 @@ func ScrollSuggestedMentors(eclient *elastic.Client, class int, tagArray []strin
 	searchResults := eclient.Scroll().
 		Index(globals.UserIndex).
 		Query(suggestedUserQuery).
-		Size(1)
+		Size(1).
+		Sort("_score", false)
 
 	if len(scrollID) > 0 {
 		searchResults = searchResults.ScrollId(scrollID)
