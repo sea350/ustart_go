@@ -79,7 +79,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		}
 	}
 
-	query = query.Must(elastic.NewTermQuery("Status", true))
+	query = query.Filter(elastic.NewTermQuery("Status", true))
 	scroll := eclient.Scroll().
 		Index(globals.UserIndex).
 		Query(query).
