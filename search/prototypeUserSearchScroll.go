@@ -7,10 +7,10 @@ import (
 	"log"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
 	uses "github.com/sea350/ustart_go/uses"
-	elastic "github.com/olivere/elastic"
 )
 
 //PrototypeUserSearchScroll ... Attempt at fully functional user search, returns Floatinghead
@@ -82,7 +82,8 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 	scroll := eclient.Scroll().
 		Index(globals.UserIndex).
 		Query(query).
-		Size(10)
+		Size(10).
+		Sort("_sort", false)
 
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)

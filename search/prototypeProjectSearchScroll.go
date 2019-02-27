@@ -8,10 +8,10 @@ import (
 	"log"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
-	elastic "github.com/olivere/elastic"
 )
 
 //PrototypeProjectSearchScroll ... Attempt at fully functional project search, returns Floatinghead
@@ -115,7 +115,8 @@ func PrototypeProjectSearchScroll(eclient *elastic.Client, searchTerm string, so
 	scroll := eclient.Scroll().
 		Index(globals.ProjectIndex).
 		Query(query).
-		Size(10)
+		Size(10).
+		Sort("_sort", false)
 
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)

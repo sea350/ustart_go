@@ -46,9 +46,9 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	}
 
 	suggestedUserQuery := elastic.NewBoolQuery()
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...)).Boost(2)
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...)).Boost(1.5)
-	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Majors", majorsInterface...)).Boost(1.25)
+	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...).Boost(2))
+	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...).Boost(1.5))
+	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Majors", majorsInterface...).Boost(1.25))
 	suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermQuery("UndergradSchool", school))
 	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermsQuery("_id", followIDs...))
 	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Visible", true))
