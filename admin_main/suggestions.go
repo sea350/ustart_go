@@ -73,7 +73,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 		Index(globals.UserIndex).
 		Query(suggestedUserQuery).
 		Size(amt).
-		Sort("_score", true)
+		Sort("_score", false)
 
 	if len(scrollID) > 0 {
 		searchResults = searchResults.ScrollId(scrollID)
