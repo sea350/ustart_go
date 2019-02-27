@@ -31,6 +31,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 	searchArr = strings.Split(searchTerm, ` `)
 
 	query = query.MustNot(elastic.NewTermQuery("Verified", false))
+	query = query.MustNot(elastic.NewTermQuery("Status", false))
 
 	if len(searchBy) >= 3 {
 		//Name
