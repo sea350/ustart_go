@@ -89,11 +89,11 @@ func main() {
 	fmt.Println(facPrint, err1)
 
 	for _, email := range emails {
-		usrID, err := getUser.UserIDByEmail(eclient, e)
+		usrID, err := getUser.UserIDByEmail(eclient, email)
 		if err == nil {
 			usr, err := getUser.UserByID(eclient, usrID)
 			if err == nil {
-				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badge.ID))
+				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, fac.ID))
 				if badgeErr == nil {
 					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
 					if tagErr == nil {
