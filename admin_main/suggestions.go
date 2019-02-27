@@ -109,7 +109,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 		return "", nil, 0, err
 	}
 
-	fmt.Println("Total Hits:", res.TotalHits)
+	fmt.Println("Total Hits:", res.Hits.TotalHits)
 	var heads []types.FloatingHead
 	for _, hits := range res.Hits.Hits {
 		newHead, err := uses.ConvertUserToFloatingHead(eclient, hits.Id)
