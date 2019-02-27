@@ -46,9 +46,11 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 	}
 
 	suggestedUserQuery := elastic.NewBoolQuery()
-	// suggestedUserQuery1 := elastic.NewBoolQuery()
-	suggestedUserQuery1 := elastic.NewTermsQuery("Tags", tags...).Boost(1.75)
-	suggestedUserQuery2 := elastic.NewTermsQuery("Projects.ProjectID", projectIDs...).Boost(2.5)
+	suggestedUserQuery1 := elastic.NewBoolQuery()
+	suggestedUserQuery1 = suggestedUserQuery1.Should(elastic.NewTermsQuery("Tags", tags...).Boost(1.75))
+	suggestedUserQuery1 = suggestedUserQuery.Should(elastic.NewTermsQuery("Projects.ProjectID", projectIDs...).Boost(2.5))
+
+	// suggestedUserQuery2 := elastic.NewTermsQuery("Projects.ProjectID", projectIDs...).Boost(2.5)
 
 	// suggestedUserQuery3 := elastic.NewTermsQuery("Majors", majorsInterface...).Boost(1.2)
 
