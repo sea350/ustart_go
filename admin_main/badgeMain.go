@@ -1,18 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
-	get "github.com/sea350/ustart_go/get/badge"
-	postBadge "github.com/sea350/ustart_go/post/badge"
+	post "github.com/sea350/ustart_go/post/badge"
 	postUser "github.com/sea350/ustart_go/post/user"
+	"github.com/sea350/ustart_go/types"
 
 	getUser "github.com/sea350/ustart_go/get/user"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
-	"github.com/sea350/ustart_go/globals"
 	elastic "github.com/olivere/elastic"
+	"github.com/sea350/ustart_go/globals"
 )
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
@@ -74,29 +75,27 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 // }
 
 func main() {
-	badgeDOCID := "USTARTVIP"
-	badge, err := get.BadgeByID(eclient, badgeDOCID)
-	if err != nil {
-		log.Println(err)
-	}
 
-	vipEmails := []string{"az1440@nyu.edu", "tg1770@nyu.edu", "lc3940@nyu.edu"}
-	// seAEmails := []string{"zna215@nyu.edu", "aks618@nyu.edu", "lyannelalunio@nyu.edu", "fn513@nyu.edu"}
-	// seBEmails := []string{"js9202@nyu.edu"}
-	// dpAEmails := []string{"at3089@nyu.edu"}
-	// dpBEmails := []string{}
+	emails := []string{"fs817@nyu.edu", "jack.bringardner@nyu.edu"}
+	var fac types.Badge
+	fac.ID = "NYUFACULTY"
+	fac.Type = "NYU Faculty"
+	fac.ImageLink = "https://s3.amazonaws.com/ustart-default/Faculty_badge.png"
+	fac.Roster = emails
 
-	theEmails := vipEmails
+	fac.Tags = []string{"NYU Faculty"}
 
-	postBadge.UpdateBadge(eclient, badge.ID, "Roster", append(badge.Roster, theEmails...))
-	for _, e := range theEmails {
+	facPrint, err1 := post.IndexBadge(eclient, fac)
+	fmt.Println(facPrint, err1)
+
+	for _, email := range emails {
 		usrID, err := getUser.UserIDByEmail(eclient, e)
 		if err == nil {
 			usr, err := getUser.UserByID(eclient, usrID)
 			if err == nil {
 				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badge.ID))
 				if badgeErr == nil {
-					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(badge.Tags, usr.Tags...))
+					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
 					if tagErr == nil {
 
 					} else {
@@ -117,6 +116,51 @@ func main() {
 		}
 	}
 }
+
+// func main() {
+// 	badgeDOCID := "USTARTVIP"
+// 	badge, err := get.BadgeByID(eclient, badgeDOCID)
+// 	if err != nil {
+// 		log.Println(err)
+// 	}
+
+// 	vipEmails := []string{"az1440@nyu.edu", "tg1770@nyu.edu", "lc3940@nyu.edu"}
+// 	// seAEmails := []string{"zna215@nyu.edu", "aks618@nyu.edu", "lyannelalunio@nyu.edu", "fn513@nyu.edu"}
+// 	// seBEmails := []string{"js9202@nyu.edu"}
+// 	// dpAEmails := []string{"at3089@nyu.edu"}
+// 	// dpBEmails := []string{}
+
+// 	theEmails := vipEmails
+
+// 	postBadge.UpdateBadge(eclient, badge.ID, "Roster", append(badge.Roster, theEmails...))
+// 	for _, e := range theEmails {
+// 		usrID, err := getUser.UserIDByEmail(eclient, e)
+// 		if err == nil {
+// 			usr, err := getUser.UserByID(eclient, usrID)
+// 			if err == nil {
+// 				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badge.ID))
+// 				if badgeErr == nil {
+// 					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(badge.Tags, usr.Tags...))
+// 					if tagErr == nil {
+
+// 					} else {
+// 						log.Println(tagErr)
+// 						continue
+// 					}
+// 				} else {
+// 					log.Println(badgeErr)
+// 					continue
+// 				}
+// 			} else {
+// 				log.Println(err)
+// 				continue
+// 			}
+// 		} else {
+// 			log.Println(err)
+// 			continue
+// 		}
+// 	}
+// }
 
 /*func main() {
 	// err := admin.ModifyBadge(eclient, "USTART", "give", "gl1144@nyu.edu", "")
