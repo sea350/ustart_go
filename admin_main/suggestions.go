@@ -153,7 +153,7 @@ func main() {
 			fmt.Println(err)
 		} else {
 			for _, h := range h1 {
-				fmt.Println(h.FirstName)
+				fmt.Println(h.FirstName, h.LastName)
 			}
 		}
 	}
