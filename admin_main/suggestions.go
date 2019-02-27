@@ -63,7 +63,7 @@ func sugg(eclient *elastic.Client, class int, tagArray []string, projects []type
 		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
 	}
 
-	suggestedUserQuery = suggestedUserQuery.Should(suggestedUserQuery1, suggestedUserQuery2) //, suggestedUserQuery3, suggestedUserQuery4)
+	suggestedUserQuery = suggestedUserQuery.Must(suggestedUserQuery1, suggestedUserQuery2) //, suggestedUserQuery3, suggestedUserQuery4)
 
 	// suggestedUserQuery := elastic.NewBoolQuery()
 	// suggestedUserQuery = suggestedUserQuery.Should(elastic.NewTermsQuery("Tags", tags...)).Boost(2)
