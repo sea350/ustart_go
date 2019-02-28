@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"html"
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -54,7 +55,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	target := -1
 	for index, link := range usr.QuickLinks {
 
-		if (link.Name == deleteTitle || link.Name == client.SanitizePolicy.Sanitize(deleteTitle)) && link.URL == deleteURL {
+		if (link.Name == deleteTitle || link.Name == html.EscapeString(client.SanitizePolicy.Sanitize(deleteTitle))) && link.URL == deleteURL {
 			target = index
 			break
 		}
