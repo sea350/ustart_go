@@ -7,10 +7,10 @@ import (
 	"log"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
-	elastic "github.com/olivere/elastic"
 )
 
 //ScrollPageProject ...
@@ -18,6 +18,12 @@ import (
 func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, scrollID string) (string, []types.JournalEntry, int, error) {
 
 	ctx := context.Background()
+
+	var dash byte = '-'
+	var underscore byte = '_'
+	for docID[0] == dash || docID[0] == underscore {
+		docID = docID[1:]
+	}
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
