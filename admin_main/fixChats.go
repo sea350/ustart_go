@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
@@ -17,7 +18,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 func main() {
 	ctx := context.Background()
 
-	query := elastic.NewTermQuery("PosterID", "-v4e02gBN3VvtvdiDZYs")
+	query := elastic.NewTermQuery("PosterID", strings.ToLower("-v4e02gBN3VvtvdiDZYs"))
 
 	res, err := eclient.Search().
 		Index(globals.EntryIndex).
