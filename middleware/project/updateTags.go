@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"html"
 
+	get "github.com/sea350/ustart_go/get/project"
+	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
 
 	"net/http"
@@ -27,6 +29,33 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 
 	ID := r.FormValue("skillArray")
 	theID := r.FormValue("projectWidget")
+
+	proj, err := get.ProjectByID(client.Eclient, theID)
+	if err != nil {
+		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		return
+	}
+
+	var exists bool
+	var member types.Member
+	for _, mem := range proj.Members {
+		if mem.MemberID == session.Values["DocID"].(string) {
+			exists = true
+			member = mem
+			break
+		}
+	}
+
+	if !exists {
+		return
+	}
+
+	hasPermission := uses.HasPrivilege("tags", proj.PrivilegeProfiles, member)
+
+	if !hasPermission {
+		return
+	}
+
 	var ts []string
 	err := json.Unmarshal([]byte(ID), &ts)
 
