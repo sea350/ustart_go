@@ -18,7 +18,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 func main() {
 	ctx := context.Background()
 
-	query := elastic.NewTermQuery("PosterID", strings.ToLower("-v4e02gBN3VvtvdiDZYs"))
+	query := elastic.NewTermQuery("PosterID", strings.ToLower("v4e02gBN3VvtvdiDZYs"))
 
 	res, err := eclient.Search().
 		Index(globals.EntryIndex).
