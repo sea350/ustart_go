@@ -26,6 +26,9 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 		for docIDs[id][0] == dash || docIDs[id][0] == underscore {
 			docIDs[id] = docIDs[id][1:]
 		}
+		for docIDs[id][len(docIDs[id])-1] == dash || docIDs[id][len(docIDs[id])-1] == underscore {
+			docIDs[id] = docIDs[id][:len(docIDs[id])-1]
+		}
 		ids = append([]interface{}{strings.ToLower(docIDs[id])}, ids...)
 	}
 

@@ -36,9 +36,15 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 	for eavesdropperOne[0] == dash || eavesdropperOne[0] == underscore {
 		eavesdropperOne = eavesdropperOne[1:]
 	}
+	for eavesdropperOne[len(eavesdropperOne)-1] == dash || eavesdropperOne[len(eavesdropperOne)-1] == underscore {
+		eavesdropperOne = eavesdropperOne[:len(eavesdropperOne)-1]
+	}
 
 	for eavesdropperTwo[0] == dash || eavesdropperTwo[0] == underscore {
 		eavesdropperTwo = eavesdropperTwo[1:]
+	}
+	for eavesdropperTwo[len(eavesdropperTwo)-1] == dash || eavesdropperTwo[len(eavesdropperTwo)-1] == underscore {
+		eavesdropperTwo = eavesdropperTwo[:len(eavesdropperTwo)-1]
 	}
 
 	query := elastic.NewBoolQuery()
