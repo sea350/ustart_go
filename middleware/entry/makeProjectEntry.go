@@ -12,7 +12,6 @@ import (
 	get "github.com/sea350/ustart_go/get/project"
 	"github.com/sea350/ustart_go/middleware/client"
 	postEntry "github.com/sea350/ustart_go/post/entry"
-	post "github.com/sea350/ustart_go/post/project"
 	"github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
 )
@@ -54,13 +53,14 @@ func MakeProjectEntry(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+			return
 		}
 
-		err = post.AppendEntryID(client.Eclient, projectID, entryID)
-		if err != nil {
+		// err = post.AppendEntryID(client.Eclient, projectID, entryID)
+		// if err != nil {
 
-			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
-		}
+		// 	client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		// }
 
 		jEntry, err := uses.ConvertEntryToJournalEntry(client.Eclient, entryID, docID.(string), true)
 		if err != nil {
@@ -73,5 +73,7 @@ func MakeProjectEntry(w http.ResponseWriter, r *http.Request) {
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		fmt.Fprintln(w, string(data))
+	} else {
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | err: This user does not have permission to perform this action")
 	}
 }
