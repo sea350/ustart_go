@@ -2,6 +2,7 @@ package get
 
 import (
 	"errors"
+	"fmt"
 
 	elastic "github.com/olivere/elastic"
 	types "github.com/sea350/ustart_go/types"
@@ -20,7 +21,9 @@ func ProjAndMember(eclient *elastic.Client, projID string, memberID string) (typ
 	}
 
 	for mem := range project.Members {
+		fmt.Println(project.Members[mem].MemberID, "vs.", memberID)
 		if project.Members[mem].MemberID == memberID {
+
 			return project, project.Members[mem], err
 
 		}
