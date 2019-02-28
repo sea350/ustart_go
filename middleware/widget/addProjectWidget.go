@@ -20,6 +20,8 @@ func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	r.ParseForm()
+
 	project, member, err := getProj.ProjAndMember(client.Eclient, r.FormValue("projectWidget"), test1.(string))
 	if err != nil {
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
