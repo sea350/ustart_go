@@ -22,8 +22,14 @@ func ScrollPageUser(eclient *elastic.Client, docID string, viewerID string, scro
 	for docID[0] == dash || docID[0] == underscore {
 		docID = docID[1:]
 	}
+	for docID[len(docID)-1] == dash || docID[len(docID)-1] == underscore {
+		docID = docID[:len(docID)-1]
+	}
 	for viewerID[0] == dash || viewerID[0] == underscore {
 		viewerID = viewerID[1:]
+	}
+	for viewerID[len(viewerID)-1] == dash || viewerID[len(viewerID)-1] == underscore {
+		viewerID = viewerID[:len(viewerID)-1]
 	}
 	ctx := context.Background()
 
