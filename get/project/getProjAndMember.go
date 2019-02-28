@@ -22,6 +22,7 @@ func ProjAndMember(eclient *elastic.Client, projID string, memberID string) (typ
 
 	for mem := range project.Members {
 		log.Println(project.Members[mem].MemberID, "vs.", memberID)
+
 		if project.Members[mem].MemberID == memberID {
 
 			return project, project.Members[mem], err
