@@ -56,7 +56,11 @@ func ta(eclient *elastic.Client, newTag string) bool {
 
 func main() {
 
-	fmt.Println("Query Escaped String:", url.QueryEscape("U·START VIP Spring 2019"))
-	fmt.Println("Path Escaped String:", url.PathEscape("U·START VIP Spring 2019"))
+	pEscape := url.PathEscape("U·START VIP Spring 2019")
+	qEscape := url.QueryEscape("U·START VIP Spring 2019")
+	fmt.Println("Query Escaped String:", qEscape)
+	fmt.Println("Path Escaped String:", pEscape)
 	fmt.Println(ta(eclient, "U·START VIP Spring 2019"))
+	fmt.Println(ta(eclient, qEscape))
+	fmt.Println(ta(eclient, pEscape))
 }
