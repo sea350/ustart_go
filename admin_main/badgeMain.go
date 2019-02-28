@@ -75,21 +75,21 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 // }
 
 func main() {
-	badge, err := get.BadgeByID(eclient, "USTARTVIP")
+	badge, err := get.BadgeByID(eclient, "NYUFACULTY")
 	if err != nil {
 		fmt.Println(err)
 	}
 	emails := badge.Roster
 
-	badge.Tags = []string{"USTARTVIPSP19"}
+	badge.Tags = []string{"NYUFaculty"}
 
-	post.UpdateBadge(eclient, "USTARTVIP", "Tags", badge.Tags)
+	post.UpdateBadge(eclient, "NYUFACULTY", "Tags", badge.Tags)
 
 	for _, email := range emails {
 		usrID, err := getUser.UserIDByEmail(eclient, email)
 		if err == nil {
 			usr, err := getUser.UserByID(eclient, usrID)
-			usr.Tags[0] = "USTARTVIPSP19"
+			usr.Tags[0] = "NYUFaculty"
 			if err == nil {
 				tagErr := postUser.UpdateUser(eclient, usrID, "Tags", usr.Tags)
 				if tagErr != nil {
