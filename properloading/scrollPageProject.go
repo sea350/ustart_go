@@ -24,6 +24,9 @@ func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, s
 	for docID[0] == dash || docID[0] == underscore {
 		docID = docID[1:]
 	}
+	for docID[len(docID)-1] == dash || docID[len(docID)-1] == underscore {
+		docID = docID[:len(docID)-1]
+	}
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
