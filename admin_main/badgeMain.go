@@ -5,6 +5,7 @@ import (
 	"log"
 
 	post "github.com/sea350/ustart_go/post/badge"
+	get "github.com/sea350/ustart_go/get/badge"
 	postUser "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/types"
 
@@ -74,37 +75,37 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 // }
 
-func main() {
 
-	emails := []string{"fs817@nyu.edu", "jack.bringardner@nyu.edu"}
+
+func main(){
+	badge, err := get.BadgeByID(eclient, "USTARTVIP")
+	if err != nil {
+		fmt.Println(err)
+	}
+	emails := badge.Roster
 	var fac types.Badge
-	fac.ID = "NYUFACULTY"
-	fac.Type = "NYU Faculty"
-	fac.ImageLink = "https://s3.amazonaws.com/ustart-default/Faculty_badge.png"
-	fac.Roster = emails
+	 
+	badge.Tags = []string{"USTARTVIPSP19"}
 
-	fac.Tags = []string{"NYU Faculty"}
-
-	facPrint, err1 := post.IndexBadge(eclient, fac)
-	fmt.Println(facPrint, err1)
+	post.UpdateBadge(eclient,"USTARTVIP", "Tags", badge.Tags)
+	 
 
 	for _, email := range emails {
 		usrID, err := getUser.UserIDByEmail(eclient, email)
 		if err == nil {
 			usr, err := getUser.UserByID(eclient, usrID)
+			usr.Tags[0] = "USTARTVIPSP19"
 			if err == nil {
-				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, fac.ID))
-				if badgeErr == nil {
-					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
+				
+				
+					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", usr.Tags)
 					if tagErr == nil {
 
 					} else {
 						log.Println(tagErr)
 						continue
 					}
-				} else {
-					log.Println(badgeErr)
-					continue
+				
 				}
 			} else {
 				log.Println(err)
@@ -116,6 +117,50 @@ func main() {
 		}
 	}
 }
+
+
+// func main() {
+
+// 	emails := []string{"fs817@nyu.edu", "jack.bringardner@nyu.edu"}
+// 	var fac types.Badge
+// 	fac.ID = "NYUFACULTY"
+// 	fac.Type = "NYU Faculty"
+// 	fac.ImageLink = "https://s3.amazonaws.com/ustart-default/Faculty_badge.png"
+// 	fac.Roster = emails
+
+// 	fac.Tags = []string{"NYU Faculty"}
+
+// 	facPrint, err1 := post.IndexBadge(eclient, fac)
+// 	fmt.Println(facPrint, err1)
+
+// 	for _, email := range emails {
+// 		usrID, err := getUser.UserIDByEmail(eclient, email)
+// 		if err == nil {
+// 			usr, err := getUser.UserByID(eclient, usrID)
+// 			if err == nil {
+// 				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, fac.ID))
+// 				if badgeErr == nil {
+// 					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
+// 					if tagErr == nil {
+
+// 					} else {
+// 						log.Println(tagErr)
+// 						continue
+// 					}
+// 				} else {
+// 					log.Println(badgeErr)
+// 					continue
+// 				}
+// 			} else {
+// 				log.Println(err)
+// 				continue
+// 			}
+// 		} else {
+// 			log.Println(err)
+// 			continue
+// 		}
+// 	}
+// }
 
 // func main() {
 // 	badgeDOCID := "USTARTVIP"
