@@ -19,15 +19,13 @@ func ProjAndMember(eclient *elastic.Client, projID string, memberID string) (typ
 		return types.Project{}, types.Member{}, errors.New("Project has zero members")
 	}
 
-	var retMember types.Member
 	for mem := range project.Members {
 		if project.Members[mem].MemberID == memberID {
-			retMember = project.Members[mem]
-			return project, retMember, err
+			return project, project.Members[mem], err
 
 		}
 	}
 
-	return project, retMember, errors.New("Member does not exist")
+	return project, types.Member{}, errors.New("Member does not exist")
 
 }
