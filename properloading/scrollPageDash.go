@@ -7,10 +7,10 @@ import (
 	"log"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
-	elastic "github.com/olivere/elastic"
 )
 
 //ScrollPageDash ...
@@ -21,6 +21,11 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 
 	ids := make([]interface{}, 0)
 	for id := range docIDs {
+		var dash byte = '-'
+		var underscore byte = '_'
+		for docIDs[id][0] == dash || docIDs[id][0] == underscore {
+			docIDs[id] = docIDs[id][1:]
+		}
 		ids = append([]interface{}{strings.ToLower(docIDs[id])}, ids...)
 	}
 
