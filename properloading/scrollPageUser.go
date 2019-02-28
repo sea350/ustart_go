@@ -3,6 +3,8 @@ package properloading
 import (
 	"context"
 	"errors"
+	"io"
+	"log"
 	"strings"
 
 	elastic "github.com/olivere/elastic"
@@ -42,7 +44,11 @@ func ScrollPageUser(eclient *elastic.Client, docID string, viewerID string, scro
 	scroll = scroll.ScrollId(scrollID)
 
 	res, err := scroll.Do(ctx)
-	if err != nil {
+	if !(err == io.EOF && res != nil) && err != nil {
+		if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
 		return "", arrResults, 0, err
 	}
 
