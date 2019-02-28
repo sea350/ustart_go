@@ -17,10 +17,10 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 func main() {
 	ctx := context.Background()
 
-	query := elastic.NewTermQuery("_id", "-v4e02gBN3VvtvdiDZYs")
+	query := elastic.NewTermQuery("PosterID", "-v4e02gBN3VvtvdiDZYs")
 
 	res, err := eclient.Search().
-		Index(globals.UserIndex).
+		Index(globals.EntryIndex).
 		Query(query).
 		Sort("_score", false).
 		Do(ctx)
