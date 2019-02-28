@@ -28,5 +28,5 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(res.Hits.TotalHits())
+	fmt.Println(res.TotalHits())
 }
