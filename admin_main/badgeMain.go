@@ -94,8 +94,12 @@ func main() {
 			usr.Tags[0] = "USTARTVIPSP19"
 			if err == nil {
 				tagErr := postUser.UpdateUser(eclient, usrID, "Tags", usr.Tags)
+				if tagErr != nil {
+					log.Println(err)
+					continue
+				}
 			} else {
-				log.Println(tagErr)
+				log.Println(err)
 				continue
 			}
 		} else {
