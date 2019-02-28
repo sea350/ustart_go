@@ -60,7 +60,7 @@ func main() {
 	qEscape := url.QueryEscape("U·START VIP Spring 2019")
 	fmt.Println("Query Escaped String:", qEscape)
 	fmt.Println("Path Escaped String:", pEscape)
-	fmt.Println(ta(eclient, "U·STARTVIPSpring2019"))
+	fmt.Println(ta(eclient, "U·START"))
 	fmt.Println(ta(eclient, qEscape))
 	fmt.Println(ta(eclient, pEscape))
 }
