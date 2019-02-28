@@ -13,7 +13,7 @@ import (
 //AddProjectWidget ... After widget form submission adds a widget to database
 func AddProjectWidget(w http.ResponseWriter, r *http.Request) {
 	session, _ := client.Store.Get(r, "session_please")
-	test1, _ := session.Values["Username"]
+	test1, _ := session.Values["DocID"]
 	if test1 == nil {
 		// No username in session
 		http.Redirect(w, r, "/", http.StatusFound)
