@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	post "github.com/sea350/ustart_go/post/badge"
 	get "github.com/sea350/ustart_go/get/badge"
+	post "github.com/sea350/ustart_go/post/badge"
 	postUser "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/types"
 
@@ -75,20 +75,17 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 // }
 
-
-
-func main(){
+func main() {
 	badge, err := get.BadgeByID(eclient, "USTARTVIP")
 	if err != nil {
 		fmt.Println(err)
 	}
 	emails := badge.Roster
 	var fac types.Badge
-	 
+
 	badge.Tags = []string{"USTARTVIPSP19"}
 
-	post.UpdateBadge(eclient,"USTARTVIP", "Tags", badge.Tags)
-	 
+	post.UpdateBadge(eclient, "USTARTVIP", "Tags", badge.Tags)
 
 	for _, email := range emails {
 		usrID, err := getUser.UserIDByEmail(eclient, email)
@@ -96,17 +93,8 @@ func main(){
 			usr, err := getUser.UserByID(eclient, usrID)
 			usr.Tags[0] = "USTARTVIPSP19"
 			if err == nil {
-				
-				
-					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", usr.Tags)
-					if tagErr == nil {
+				tagErr := postUser.UpdateUser(eclient, usrID, "Tags", usr.Tags)
 
-					} else {
-						log.Println(tagErr)
-						continue
-					}
-				
-				}
 			} else {
 				log.Println(err)
 				continue
@@ -117,7 +105,6 @@ func main(){
 		}
 	}
 }
-
 
 // func main() {
 
