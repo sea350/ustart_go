@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"html"
 	"log"
+	"url"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
@@ -56,6 +56,7 @@ func ta(eclient *elastic.Client, newTag string) bool {
 
 func main() {
 
-	fmt.Println("Escaped String:", html.EscapeString("U·START VIP Spring 2019"))
+	fmt.Println("Query Escaped String:", url.QueryEscape("U·START VIP Spring 2019"))
+	fmt.Println("Path Escaped String:", url.PathEscape("U·START VIP Spring 2019"))
 	fmt.Println(ta(eclient, "U·START VIP Spring 2019"))
 }
