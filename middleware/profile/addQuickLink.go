@@ -2,11 +2,9 @@ package profile
 
 import (
 	"html"
-	
-	"net/http"
-	
 
-	"github.com/microcosm-cc/bluemonday"
+	"net/http"
+
 	get "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/middleware/client"
 	post "github.com/sea350/ustart_go/post/user"
@@ -27,32 +25,29 @@ func AddQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
-	p := bluemonday.UGCPolicy()
-
-	htmlLink := p.Sanitize(r.FormValue("userLink"))
+	htmlLink := client.SanitizePolicy.Sanitize(r.FormValue("userLink"))
 	isValid := uses.ValidLink(htmlLink)
 	if len(htmlLink) == 0 {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Link cannot be blank")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Link cannot be blank")
 		return
 	}
 	if !isValid {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Invalid link provided")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Invalid link provided")
 		return
 	}
 
-	cleanTitle := p.Sanitize(r.FormValue("userLinkDesc"))
+	cleanTitle := client.SanitizePolicy.Sanitize(r.FormValue("userLinkDesc"))
 	if len(cleanTitle) == 0 {
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Title cannot be blank")
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Title cannot be blank")
 	}
 	usr.QuickLinks = append(usr.QuickLinks, types.Link{Name: html.EscapeString(cleanTitle), URL: html.EscapeString(htmlLink)})
 
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", usr.QuickLinks)
 	if err != nil {
-		
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}

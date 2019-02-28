@@ -1,7 +1,6 @@
 package profile
 
 import (
-	
 	"net/http"
 
 	get "github.com/sea350/ustart_go/get/user"
@@ -24,7 +23,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	usr, err := get.UserByID(client.Eclient, ID)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
@@ -32,12 +31,12 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	deleteURL := r.FormValue("userLink")
 
 	// if deleteTitle == `` {
-	// 	
+	//
 	// 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"WARNING: link title is blank")
 	// }
 	if deleteURL == `` {
-		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Crucial data was not passed in, now exiting")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Crucial data was not passed in, now exiting")
 		return
 	}
 
@@ -46,7 +45,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	if len(usr.QuickLinks) <= 1 {
 		err := post.UpdateUser(client.Eclient, ID, "QuickLinks", newArr)
 		if err != nil {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		return
@@ -55,15 +54,15 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 	target := -1
 	for index, link := range usr.QuickLinks {
 
-		if link.Name == deleteTitle && link.URL == deleteURL {
+		if (link.Name == deleteTitle || link.Name == client.SanitizePolicy.Sanitize(deleteTitle)) && link.URL == deleteURL {
 			target = index
 			break
 		}
 	}
 
 	if target == -1 {
-		
-				client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | "+"Deleted object not found")
+
+		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Deleted object not found")
 		return
 	} else if (target + 1) < len(usr.QuickLinks) {
 		newArr = append(usr.QuickLinks[:target], usr.QuickLinks[(target+1):]...)
@@ -73,7 +72,7 @@ func DeleteQuickLink(w http.ResponseWriter, r *http.Request) {
 
 	err = post.UpdateUser(client.Eclient, ID, "QuickLinks", newArr)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 

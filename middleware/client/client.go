@@ -7,9 +7,10 @@ import (
 	"os"
 
 	sessions "github.com/gorilla/sessions"
+	"github.com/microcosm-cc/bluemonday"
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
-	elastic "github.com/olivere/elastic"
 )
 
 //Eclient ... Reference to the ElasticSearch
@@ -22,6 +23,9 @@ var htmlPath = globals.HTMLPATH
 
 //Logger is the logger that should be used for all things middleware
 var Logger = log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile)
+
+//SanitizePolicy is the standard, middleware wide cleanse policy
+var SanitizePolicy = bluemonday.UGCPolicy()
 
 //ClientSide ... This struct represents a user state after he/she has logged in. Some fields may no longer be needed
 //or are unnecessary.
