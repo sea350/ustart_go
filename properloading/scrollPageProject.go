@@ -27,7 +27,7 @@ func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, s
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
-	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", strings.ToLower(docID)))
+	projQuery = projQuery.Must(elastic.NewTermQuery("ReferenceID", strings.ToLower(docID)))
 	projQuery = projQuery.Must(elastic.NewTermsQuery("Classification", 3, 5))
 	projQuery = projQuery.Must(elastic.NewTermQuery("Visible", true))
 
@@ -46,12 +46,11 @@ func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, s
 	}
 
 	res, err := scroll.Do(ctx)
-	if err == io.EOF {
-		return "", arrResults, 0, err //we might need special treatment for EOF error
-	}
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
+	if !(err == io.EOF && res != nil) && err != nil {
+		if err != io.EOF {
+			log.SetFlags(log.LstdFlags | log.Lshortfile)
+			log.Println(err)
+		}
 		return "", arrResults, 0, err
 	}
 
