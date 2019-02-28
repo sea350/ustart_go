@@ -55,7 +55,7 @@ func UpdateSkills(w http.ResponseWriter, r *http.Request) {
 	p := bluemonday.UGCPolicy()
 
 	var ss []string
-	err := json.Unmarshal([]byte(skills), &ss)
+	err = json.Unmarshal([]byte(skills), &ss)
 	if err != nil {
 
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)

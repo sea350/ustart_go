@@ -57,7 +57,7 @@ func UpdateTags(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var ts []string
-	err := json.Unmarshal([]byte(ID), &ts)
+	err = json.Unmarshal([]byte(ID), &ts)
 
 	if err != nil {
 		client.Logger.Println("DocID: " + session.Values["DocID"].(string) + " | " + "Could not unmarshal")
