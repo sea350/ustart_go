@@ -5,9 +5,9 @@ import (
 	"errors"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
-	elastic "github.com/olivere/elastic"
 )
 
 //DMExists ...
@@ -29,6 +29,16 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 	}
 	if errTwo != nil {
 		return false, "", errTwo
+	}
+
+	var dash byte = '-'
+	var underscore byte = '_'
+	for eavesdropperOne[0] == dash || eavesdropperOne[0] == underscore {
+		eavesdropperOne = eavesdropperOne[1:]
+	}
+
+	for eavesdropperTwo[0] == dash || eavesdropperTwo[0] == underscore {
+		eavesdropperTwo = eavesdropperTwo[1:]
 	}
 
 	query := elastic.NewBoolQuery()

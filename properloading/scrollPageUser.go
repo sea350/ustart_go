@@ -5,16 +5,24 @@ import (
 	"errors"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
-	elastic "github.com/olivere/elastic"
 )
 
 //ScrollPageUser ...
 //Scrolls through docs being loaded on the user wall
 func ScrollPageUser(eclient *elastic.Client, docID string, viewerID string, scrollID string) (string, []types.JournalEntry, int, error) {
 
+	var dash byte = '-'
+	var underscore byte = '_'
+	for docID[0] == dash || docID[0] == underscore {
+		docID = docID[1:]
+	}
+	for viewerID[0] == dash || viewerID[0] == underscore {
+		viewerID = viewerID[1:]
+	}
 	ctx := context.Background()
 
 	//set up user query
