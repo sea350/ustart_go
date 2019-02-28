@@ -56,6 +56,6 @@ func ta(eclient *elastic.Client, newTag string) bool {
 
 func main() {
 
-	fmt.Println(html.EscapeString("U·START VIP Spring 2019"))
+	fmt.Println("Escaped String:", html.EscapeString("U·START VIP Spring 2019"))
 	fmt.Println(ta(eclient, "U·START VIP Spring 2019"))
 }
