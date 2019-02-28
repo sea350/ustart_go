@@ -11,9 +11,9 @@ import (
 //ALso returns index of member
 func HasPrivilege(privilege string, privs []types.Privileges, member types.Member) bool {
 
-	if member.Role < 0 {
-		return false
-	}
+	// if member.Role < 0 {
+	// 	return false
+	// }
 	if member.Role == 0 {
 		return true
 	}
