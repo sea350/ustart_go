@@ -7,7 +7,6 @@ import (
 	get "github.com/sea350/ustart_go/get/badge"
 	post "github.com/sea350/ustart_go/post/badge"
 	postUser "github.com/sea350/ustart_go/post/user"
-	"github.com/sea350/ustart_go/types"
 
 	getUser "github.com/sea350/ustart_go/get/user"
 
@@ -81,7 +80,6 @@ func main() {
 		fmt.Println(err)
 	}
 	emails := badge.Roster
-	var fac types.Badge
 
 	badge.Tags = []string{"USTARTVIPSP19"}
 
