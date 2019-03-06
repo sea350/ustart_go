@@ -80,6 +80,7 @@ func main() {
 		}
 		intNumUses, err := strconv.Atoi(numUses)
 		if intNumUses == 0 {
+			//if 0, should be infinite
 		}
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
