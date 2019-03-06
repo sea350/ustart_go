@@ -80,28 +80,28 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var ClassYear string
-	if userstruct.Class == 1 {
+	if userstruct.Class == 0 {
 		ClassYear = "Freshman"
 	}
-	if userstruct.Class == 2 {
+	if userstruct.Class == 1 {
 		ClassYear = "Sophomore"
 	}
-	if userstruct.Class == 3 {
+	if userstruct.Class == 2 {
 		ClassYear = "Junior"
 	}
-	if userstruct.Class == 4 {
+	if userstruct.Class == 3 {
 		ClassYear = "Senior"
 	}
-	if userstruct.Class == 5 {
+	if userstruct.Class == 4 {
 		ClassYear = "Graduate"
 	}
-	if userstruct.Class == 6 {
+	if userstruct.Class == 5 {
 		ClassYear = "Post-Graduate"
 	}
 	if userstruct.Class == 6 {
 		ClassYear = "Faculty"
 	}
-	if userstruct.Class == 6 {
+	if userstruct.Class == 7 {
 		ClassYear = "Other"
 	}
 
