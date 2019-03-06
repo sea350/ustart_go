@@ -3,8 +3,8 @@ package uses
 import (
 	"strings"
 
-	post "github.com/sea350/ustart_go/post/user"
 	elastic "github.com/olivere/elastic"
+	post "github.com/sea350/ustart_go/post/user"
 )
 
 //ChangeEducation ...
@@ -49,6 +49,10 @@ func ChangeEducation(eclient *elastic.Client, userID string, uni string, major [
 		classInt = 4
 	case "alumni":
 		classInt = 5
+	case "faculty":
+		classInt = 6
+	case "other":
+		classInt = 7
 	}
 
 	err = post.UpdateUser(eclient, userID, "Class", classInt)

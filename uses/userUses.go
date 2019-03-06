@@ -7,6 +7,7 @@ import (
 	"log"
 	"math"
 
+	elastic "github.com/olivere/elastic"
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getGuestCode "github.com/sea350/ustart_go/get/guestCode"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -19,7 +20,6 @@ import (
 	postUser "github.com/sea350/ustart_go/post/user"
 	postWarning "github.com/sea350/ustart_go/post/warning"
 	types "github.com/sea350/ustart_go/types"
-	elastic "github.com/olivere/elastic"
 
 	"errors"
 	"time"
@@ -293,6 +293,10 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 		newUsr.Class = 4
 	} else if currYear == "Alumni" {
 		newUsr.Class = 5
+	} else if currYear == "Faculty" {
+		newUsr.Class = 6
+	} else if currYear == "Other" {
+		newUsr.Class = 7
 	} else {
 		newUsr.Class = -1
 	}

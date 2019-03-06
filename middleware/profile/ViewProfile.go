@@ -98,6 +98,13 @@ func ViewProfile(w http.ResponseWriter, r *http.Request) {
 	if userstruct.Class == 6 {
 		ClassYear = "Post-Graduate"
 	}
+	if userstruct.Class == 6 {
+		ClassYear = "Faculty"
+	}
+	if userstruct.Class == 6 {
+		ClassYear = "Other"
+	}
+
 	bday := userstruct.Dob.String()
 	month := bday[5:7]
 	day := bday[8:10]
