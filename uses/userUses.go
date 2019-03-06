@@ -162,6 +162,10 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 		newUsr.Class = 4
 	} else if currYear == "Alumni" {
 		newUsr.Class = 5
+	} else if currYear == "Faculty" {
+		newUsr.Class = 6
+	} else if currYear == "Other" {
+		newUsr.Class = 7
 	} else {
 		newUsr.Class = -1
 	}
