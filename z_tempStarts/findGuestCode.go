@@ -35,6 +35,7 @@ func main() {
 			continue
 		}
 		fmt.Println(code.NumUses)
+		fmt.Println(code.Expiration)
 	}
 
 }
