@@ -35,6 +35,10 @@ func main() {
 	// }
 
 	code, err := getCode.GuestCodeByID(client.Eclient, "NYUFEST")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Println(code.Users)
 
 }
