@@ -35,6 +35,6 @@ func main() {
 	// }
 
 	code, err := getCode.GuestCodeByID(client.Eclient, "NYUFEST")
-	fmt.Println(code)
+	fmt.Println(code.Users)
 
 }
