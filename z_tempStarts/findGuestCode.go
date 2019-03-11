@@ -7,6 +7,7 @@ import (
 
 	"github.com/olivere/elastic"
 	"github.com/sea350/ustart_go/globals"
+	"github.com/sea350/ustart_go/middleware/client"
 	"github.com/sea350/ustart_go/types"
 )
 
@@ -14,7 +15,7 @@ func main() {
 
 	//initialize bool query
 	boolSearch := elastic.NewBoolQuery()
-	searchResults, err := eclient.Search().
+	searchResults, err := client.Eclient.Search().
 		Index(globals.GuestCodeIndex).
 		Query(boolSearch).
 		Do(context.Background())
