@@ -1,41 +1,40 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 
-	"github.com/olivere/elastic"
-	"github.com/sea350/ustart_go/globals"
+	getCode "github.com/sea350/ustart_go/get/guestCode"
 	"github.com/sea350/ustart_go/middleware/client"
-	"github.com/sea350/ustart_go/types"
 )
 
 func main() {
 
 	//initialize bool query
-	boolSearch := elastic.NewBoolQuery()
-	searchResults, err := client.Eclient.Search().
-		Index(globals.GuestCodeIndex).
-		Query(boolSearch).
-		Do(context.Background())
+	// boolSearch := elastic.NewBoolQuery()
+	// searchResults, err := client.Eclient.Search().
+	// 	Index(globals.GuestCodeIndex).
+	// 	Query(boolSearch).
+	// 	Do(context.Background())
 
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 
-	code := types.GuestCode{}
+	// code := types.GuestCode{}
 
-	for _, element := range searchResults.Hits.Hits {
-		fmt.Println(element.Id)
-		err := json.Unmarshal(*element.Source, &code) //unmarshal type RawMessage into user struct
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		fmt.Println(code.NumUses)
-		fmt.Println(code.Expiration)
-	}
+	// for _, element := range searchResults.Hits.Hits {
+	// 	fmt.Println(element.Id)
+	// 	err := json.Unmarshal(*element.Source, &code) //unmarshal type RawMessage into user struct
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 		continue
+	// 	}
+	// 	fmt.Println(code.NumUses)
+	// 	fmt.Println(code.Expiration)
+	// }
+
+	code, err := getCode.GuestCodeByID(client.Eclient, "NYUFEST")
+	fmt.Println(code)
 
 }
