@@ -1,10 +1,9 @@
 package main
 
 import (
-	"context"
 	"fmt"
 
-	"github.com/sea350/ustart_go/globals"
+	getCode "github.com/sea350/ustart_go/get/guestCode"
 	"github.com/sea350/ustart_go/middleware/client"
 )
 
@@ -35,26 +34,26 @@ func main() {
 	// 	fmt.Println(code.Expiration)
 	// }
 	//--------------
-	// code, err := getCode.GuestCodeByID(client.Eclient, "NYUFEST")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
-	// fmt.Println(code.Users)
-	// fmt.Println(code.Classification)
-	// fmt.Println(code.Expiration)
-	// fmt.Println(code.NumUses)
-	//-------------
-	_, err := client.Eclient.Update().
-		Index(globals.GuestCodeIndex).
-		Type(globals.GuestCodeType).
-		Id("NYUFEST").
-		Doc(map[string]interface{}{"NumUses": 200}).
-		Do(context.Background())
-
+	code, err := getCode.GuestCodeByID(client.Eclient, "NYUFEST")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+	fmt.Println(code.Users)
+	fmt.Println(code.Classification)
+	fmt.Println(code.Expiration)
+	fmt.Println(code.NumUses)
+	//-------------
+	// _, err := client.Eclient.Update().
+	// 	Index(globals.GuestCodeIndex).
+	// 	Type(globals.GuestCodeType).
+	// 	Id("NYUFEST").
+	// 	Doc(map[string]interface{}{"NumUses": 200}).
+	// 	Do(context.Background())
+
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 
 }
