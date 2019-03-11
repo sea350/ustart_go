@@ -40,5 +40,7 @@ func main() {
 		return
 	}
 	fmt.Println(code.Users)
+	fmt.Println(code.Expiration)
+	fmt.Println(code.NumUses)
 
 }
