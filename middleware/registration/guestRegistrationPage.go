@@ -2,6 +2,7 @@ package registration
 
 import (
 	"errors"
+	"log"
 
 	"net/http"
 	"strconv"
@@ -60,6 +61,9 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 		bday := time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
 	}
 
+	if bday == time.Now() {
+		log.Println(bday)
+	}
 	country := r.FormValue("country")
 	state := r.FormValue("state")
 	city := p.Sanitize(r.FormValue("city"))
