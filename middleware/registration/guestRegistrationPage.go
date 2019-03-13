@@ -58,6 +58,17 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 		month, _ := strconv.Atoi(r.FormValue("dob")[5:7])
 		day, _ := strconv.Atoi(r.FormValue("dob")[8:10])
 		bday = time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
+
+		//proper birth date
+		//skip if not used
+		if !uses.ValidDate(r.FormValue("dob")) {
+
+			client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid date of birth submitted")
+			cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
+			client.RenderTemplate(w, r, "templateNoUser2", cs)
+			client.RenderTemplate(w, r, "new-guest-reg", cs)
+			return
+		}
 	}
 
 	// if bday == time.Now() {
@@ -88,17 +99,6 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 		client.RenderTemplate(w, r, "new-guest-reg", cs)
 		return
 
-	}
-
-	//proper birth date
-	//skip if not used
-	if !uses.ValidDate(r.FormValue("dob")) {
-
-		client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid date of birth submitted")
-		cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
-		client.RenderTemplate(w, r, "templateNoUser2", cs)
-		client.RenderTemplate(w, r, "new-guest-reg", cs)
-		return
 	}
 
 	err2 := uses.GuestSignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, country, state, city, zip, school, major, bday, currYear, guestCode)
