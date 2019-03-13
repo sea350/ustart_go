@@ -2,7 +2,6 @@ package registration
 
 import (
 	"errors"
-	"log"
 
 	"net"
 	"net/http"
@@ -96,9 +95,9 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		day, _ := strconv.Atoi(r.FormValue("dob")[8:10])
 		bday = time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
 	}
-	if bday == time.Now() {
-		log.Println(bday)
-	}
+	// if bday == time.Now() {
+	// 	log.Println(bday)
+	// }
 	// country := r.FormValue("country")
 	// state := r.FormValue("state")
 	// city := p.Sanitize(r.FormValue("city"))
