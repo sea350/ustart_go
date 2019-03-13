@@ -53,7 +53,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	major = append(major, p.Sanitize(r.FormValue("majors")))
 
 	var bday time.Time
-	if len(r.FormValue("dob")) {
+	if len(r.FormValue("dob")) != 0 {
 		year, _ := strconv.Atoi(r.FormValue("dob")[0:4])
 		month, _ := strconv.Atoi(r.FormValue("dob")[5:7])
 		day, _ := strconv.Atoi(r.FormValue("dob")[8:10])
