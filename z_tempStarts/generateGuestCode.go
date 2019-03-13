@@ -78,14 +78,16 @@ func main() {
 				break
 			}
 		}
-		intNumUses, err := strconv.Atoi(numUses)
-		if intNumUses == 0 {
+		number, err := strconv.Atoi(numUses)
+		if number == 0 {
 			//if 0, should be infinite
 		}
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
+			return
 		}
+		intNumUses = number
 	}
 
 	//Take in expiration date
