@@ -88,6 +88,7 @@ func GuestRegistration(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//proper birth date
+	//skip if not used
 	if !uses.ValidDate(r.FormValue("dob")) {
 
 		client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid date of birth submitted")
