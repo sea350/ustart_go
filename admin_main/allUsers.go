@@ -47,6 +47,6 @@ func main() {
 
 	usrID, _ := getUser.IDByUsername(eclient, "AkbarMalikov")
 	usr, _ := getUser.UserByID(eclient, usrID)
-	fmt.Println(usr.FirstName, usr.LastName)
+	fmt.Println(usr.FirstName, usr.LastName, usrID)
 
 }
