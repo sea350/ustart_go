@@ -45,7 +45,8 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 //6v5wyWgBN3Vvtvdiq5Uw
 func main() {
 
-	usr, _ := getUser.UserByID(eclient, "6v5wyWgBN3Vvtvdiq5Uw")
-	fmt.Println(usr.FirstName, usr.LastName)
+	usrID, _ := getUser.IDByUsername(eclient, "AkbarMalikov")
+	usr, _ := getUser.UserByID(eclient, usrID)
+	fmt.Println(usr.FirstName, usr.LastName, usrID)
 
 }

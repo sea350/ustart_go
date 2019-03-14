@@ -64,16 +64,6 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	//proper birth date
-	if !uses.ValidDate(r.FormValue("dob")) {
-
-		client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid birthdate submitted")
-		cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
-		client.RenderTemplate(w, r, "templateNoUser2", cs)
-		client.RenderTemplate(w, r, "new-reg-nil", cs)
-		return
-
-	}
 	//	u.FirstName = r.FormValue("firstName")
 	fname := p.Sanitize(r.FormValue("firstName"))
 	lname := p.Sanitize(r.FormValue("lastName"))
@@ -88,11 +78,26 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	var major []string
 	major = append(major, p.Sanitize(r.FormValue("majors")))
 
-	year, _ := strconv.Atoi(r.FormValue("dob")[0:4])
-	month, _ := strconv.Atoi(r.FormValue("dob")[5:7])
-	day, _ := strconv.Atoi(r.FormValue("dob")[8:10])
-	bday := time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
+	var bday time.Time
+	if len(r.FormValue("dob")) != 0 {
+		year, _ := strconv.Atoi(r.FormValue("dob")[0:4])
+		month, _ := strconv.Atoi(r.FormValue("dob")[5:7])
+		day, _ := strconv.Atoi(r.FormValue("dob")[8:10])
+		bday = time.Date(year, time.Month(month), day, 1, 1, 1, 1, time.UTC)
+		//proper birth date
+		if !uses.ValidDate(r.FormValue("dob")) {
 
+			client.Logger.Println("DocID: " + p.Sanitize(r.FormValue("inputEmail")) + " | " + "Invalid birthdate submitted")
+			cs := client.ClientSide{ErrorOutput: errors.New("Invalid birth date submitted"), ErrorStatus: true}
+			client.RenderTemplate(w, r, "templateNoUser2", cs)
+			client.RenderTemplate(w, r, "new-reg-nil", cs)
+			return
+
+		}
+	}
+	// if bday == time.Now() {
+	// 	log.Println(bday)
+	// }
 	// country := r.FormValue("country")
 	// state := r.FormValue("state")
 	// city := p.Sanitize(r.FormValue("city"))
