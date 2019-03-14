@@ -102,11 +102,11 @@ func main() {
 
 	for i, hit := range searchResults.Hits.Hits {
 		fmt.Println("--------------------------------")
-		chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
+		// chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	continue
+		// }
 		fmt.Println(hit.Id)
 		// fmt.Println(chat.ReferenceID)
 		// fmt.Println(chat.Eavesdroppers)
