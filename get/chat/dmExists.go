@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"strings"
 
 	elastic "github.com/olivere/elastic"
@@ -50,6 +51,10 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 		}
 	}
 	trimmedID2 := string(tempRuneArr)
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("debug text 1 ", trimmedID1)
+	log.Println("debug text 2 ", trimmedID2)
 	// for eavesdropperOne[0] == dash || eavesdropperOne[0] == underscore {
 	// 	eavesdropperOne = eavesdropperOne[1:]
 	// }

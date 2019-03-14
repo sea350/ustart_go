@@ -2,6 +2,7 @@ package properloading
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"io"
 	"log"
@@ -27,11 +28,11 @@ func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, s
 			tempRuneArr = append(tempRuneArr, char)
 		}
 	}
-	docID = string(tempRuneArr)
+	trimmedID := string(tempRuneArr)
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
-	projQuery = projQuery.Must(elastic.NewTermQuery("ReferenceID", strings.ToLower(docID)))
+	projQuery = projQuery.Must(elastic.NewTermQuery("ReferenceID", strings.ToLower(trimmedID)))
 	projQuery = projQuery.Must(elastic.NewTermsQuery("Classification", 3, 5))
 	projQuery = projQuery.Must(elastic.NewTermQuery("Visible", true))
 
@@ -58,8 +59,15 @@ func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, s
 		return "", arrResults, 0, err
 	}
 
+	var tempEntry types.Entry
 	for _, hit := range res.Hits.Hits {
-		// fmt.Println(hit.Id)
+		err := json.Unmarshal(*hit.Source, &tempEntry) //unmarshal type RawMessage into user struct
+		if err != nil {
+			return "", arrResults, 0, err
+		}
+		if tempEntry.ReferenceID != docID {
+			continue
+		}
 		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, true)
 		arrResults = append(arrResults, head)
 		if err != nil {
