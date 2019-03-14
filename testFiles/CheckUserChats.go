@@ -25,6 +25,15 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+	var dash = rune('-')
+	var underscore = rune('_')
+	var tempRuneArr []rune
+	for _, char := range id {
+		if char != dash && char != underscore {
+			tempRuneArr = append(tempRuneArr, char)
+		}
+	}
+	fmt.Println(string(tempRuneArr))
 	fmt.Println("User msg proxies: " + proxyid)
 	// id = "v4e02gBN3VvtvdiDZYs"
 
