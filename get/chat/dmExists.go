@@ -110,10 +110,15 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 		if err != nil {
 			return false, chatID, err
 		}
+		var thankYouNext bool
 		for _, eaves := range convo.Eavesdroppers {
 			if eaves.DocID != eavesdropperOne && eaves.DocID != eavesdropperTwo {
-				continue
+				thankYouNext = true
+				break
 			}
+		}
+		if thankYouNext {
+			continue
 		}
 		chatID = ch.Id
 		return exists, chatID, err
