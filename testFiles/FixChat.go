@@ -98,6 +98,11 @@ func main() {
 
 	if searchResults.TotalHits() == 0 {
 		fmt.Println("empty")
+	}
+
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return
 	}
 
