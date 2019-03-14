@@ -130,13 +130,13 @@ func main() {
 		}
 
 		tempProxyConvos2 := []types.ConversationState{}
-		for _, elem := range proxy.Conversations {
+		for _, elem := range proxy2.Conversations {
 			if elem.ConvoID != hit.Id {
 				tempProxyConvos2 = append(tempProxyConvos2, elem)
 			}
 		}
 
-		err = post.UpdateProxyMsg(client.Eclient, proxyid, "Conversations", tempProxyConvos1)
+		err = post.UpdateProxyMsg(client.Eclient, proxyid2, "Conversations", tempProxyConvos2)
 
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
