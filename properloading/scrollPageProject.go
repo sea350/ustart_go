@@ -19,14 +19,15 @@ func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, s
 
 	ctx := context.Background()
 
-	var dash byte = '-'
-	var underscore byte = '_'
-	for docID[0] == dash || docID[0] == underscore {
-		docID = docID[1:]
+	var dash = rune('-')
+	var underscore = rune('_')
+	var tempRuneArr []rune
+	for _, char := range docID {
+		if char != dash && char != underscore {
+			tempRuneArr = append(tempRuneArr, char)
+		}
 	}
-	for docID[len(docID)-1] == dash || docID[len(docID)-1] == underscore {
-		docID = docID[:len(docID)-1]
-	}
+	docID = string(tempRuneArr)
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
@@ -42,7 +43,7 @@ func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, s
 		Index(globals.EntryIndex).
 		Query(projQuery).
 		Sort("TimeStamp", false).
-		Size(5)
+		Size(12)
 
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)

@@ -21,14 +21,17 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 
 	ids := make([]interface{}, 0)
 	for id := range docIDs {
-		var dash byte = '-'
-		var underscore byte = '_'
-		for docIDs[id][0] == dash || docIDs[id][0] == underscore {
-			docIDs[id] = docIDs[id][1:]
+
+		var dash = rune('-')
+		var underscore = rune('_')
+		var tempRuneArr []rune
+		for _, char := range docIDs[id] {
+			if char != dash && char != underscore {
+				tempRuneArr = append(tempRuneArr, char)
+			}
 		}
-		for docIDs[id][len(docIDs[id])-1] == dash || docIDs[id][len(docIDs[id])-1] == underscore {
-			docIDs[id] = docIDs[id][:len(docIDs[id])-1]
-		}
+		docIDs[id] = string(tempRuneArr)
+
 		ids = append([]interface{}{strings.ToLower(docIDs[id])}, ids...)
 	}
 
@@ -53,7 +56,7 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 		Index(globals.EntryIndex).
 		Query(finalQuery).
 		Sort("TimeStamp", false).
-		Size(5)
+		Size(20)
 
 	if scrollID != "" {
 		scroll = scroll.ScrollId(scrollID)

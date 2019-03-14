@@ -2,12 +2,14 @@ package get
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"strings"
 
 	elastic "github.com/olivere/elastic"
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
+	types "github.com/sea350/ustart_go/types"
 )
 
 //DMExists ...
@@ -31,26 +33,41 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 		return false, "", errTwo
 	}
 
-	var dash byte = '-'
-	var underscore byte = '_'
-	for eavesdropperOne[0] == dash || eavesdropperOne[0] == underscore {
-		eavesdropperOne = eavesdropperOne[1:]
+	var dash = rune('-')
+	var underscore = rune('_')
+	var tempRuneArr []rune
+	for _, char := range eavesdropperOne {
+		if char != dash && char != underscore {
+			tempRuneArr = append(tempRuneArr, char)
+		}
 	}
-	for eavesdropperOne[len(eavesdropperOne)-1] == dash || eavesdropperOne[len(eavesdropperOne)-1] == underscore {
-		eavesdropperOne = eavesdropperOne[:len(eavesdropperOne)-1]
-	}
+	trimmedID1 := string(tempRuneArr)
 
-	for eavesdropperTwo[0] == dash || eavesdropperTwo[0] == underscore {
-		eavesdropperTwo = eavesdropperTwo[1:]
+	tempRuneArr = []rune{}
+	for _, char := range eavesdropperTwo {
+		if char != dash && char != underscore {
+			tempRuneArr = append(tempRuneArr, char)
+		}
 	}
-	for eavesdropperTwo[len(eavesdropperTwo)-1] == dash || eavesdropperTwo[len(eavesdropperTwo)-1] == underscore {
-		eavesdropperTwo = eavesdropperTwo[:len(eavesdropperTwo)-1]
-	}
+	trimmedID2 := string(tempRuneArr)
+	// for eavesdropperOne[0] == dash || eavesdropperOne[0] == underscore {
+	// 	eavesdropperOne = eavesdropperOne[1:]
+	// }
+	// for eavesdropperOne[len(eavesdropperOne)-1] == dash || eavesdropperOne[len(eavesdropperOne)-1] == underscore {
+	// 	eavesdropperOne = eavesdropperOne[:len(eavesdropperOne)-1]
+	// }
+
+	// for eavesdropperTwo[0] == dash || eavesdropperTwo[0] == underscore {
+	// 	eavesdropperTwo = eavesdropperTwo[1:]
+	// }
+	// for eavesdropperTwo[len(eavesdropperTwo)-1] == dash || eavesdropperTwo[len(eavesdropperTwo)-1] == underscore {
+	// 	eavesdropperTwo = eavesdropperTwo[:len(eavesdropperTwo)-1]
+	// }
 
 	query := elastic.NewBoolQuery()
 
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(eavesdropperOne)))
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(eavesdropperTwo)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(trimmedID1)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(trimmedID2)))
 	query = query.Must(elastic.NewTermQuery("Class", "1"))
 
 	if eavesdropperOne == eavesdropperTwo {
@@ -77,15 +94,26 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 		return exists, chatID, err
 
 	}
-	multi := searchResults.TotalHits() > 1
-	if multi {
-		return exists, chatID, errors.New("Too many chats of this type exist")
-	}
+	// multi := searchResults.TotalHits() > 1
+	// if multi {
+	// 	return exists, chatID, errors.New("Too many chats of this type exist")
+	// }
+
+	var convo types.Conversation
 	for _, ch := range searchResults.Hits.Hits {
+		err := json.Unmarshal(*ch.Source, &convo) //unmarshal type RawMessage into user struct
+		if err != nil {
+			return false, chatID, err
+		}
+		for _, eaves := range convo.Eavesdroppers {
+			if eaves.DocID != eavesdropperOne && eaves.DocID != eavesdropperTwo {
+				continue
+			}
+		}
 		chatID = ch.Id
-		break
+		return exists, chatID, err
 	}
 
-	return exists, chatID, err
+	return false, chatID, err
 
 }
