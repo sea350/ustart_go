@@ -59,13 +59,13 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	tempRuneArr = []rune{}
-	for _, char := range id2 {
-		if char != dash && char != underscore {
-			tempRuneArr = append(tempRuneArr, char)
-		}
-	}
-	trimmedUser2 := string(tempRuneArr)
+	// tempRuneArr = []rune{}
+	// for _, char := range id2 {
+	// 	if char != dash && char != underscore {
+	// 		tempRuneArr = append(tempRuneArr, char)
+	// 	}
+	// }
+	// trimmedUser2 := string(tempRuneArr)
 
 	fmt.Println("User msg proxies: " + proxyid2)
 
@@ -85,7 +85,8 @@ func main() {
 	query := elastic.NewBoolQuery()
 
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(trimmedUser1)))
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(trimmedUser2)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id2)))
+	query = query.Must(elastic.NewTermQuery("Class", "1"))
 
 	fmt.Println("Printing queried convos: ")
 	ctx := context.Background() //intialize context background
