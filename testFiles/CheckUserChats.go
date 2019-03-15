@@ -25,11 +25,11 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	// var dash = rune('-')
-	var underscore = rune('_')
+	var dash = rune('-')
+	// var underscore = rune('_')
 	var tempRuneArr []rune
 	for _, char := range id {
-		if char != underscore {
+		if char != dash {
 			tempRuneArr = append(tempRuneArr, char)
 		}
 	}
