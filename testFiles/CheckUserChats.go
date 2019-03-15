@@ -46,6 +46,13 @@ func main() {
 	for i := range proxy.Conversations {
 		fmt.Println(i)
 		fmt.Println(proxy.Conversations[i].ConvoID)
+		chat, err := getChat.ConvoByID(client.Eclient, proxy.Conversations[i].ConvoID)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+
+		fmt.Println(chat.Eavesdroppers)
 	}
 
 	query := elastic.NewBoolQuery()
@@ -68,14 +75,14 @@ func main() {
 
 	for _, hit := range searchResults.Hits.Hits {
 		fmt.Println("--------------------------------")
-		// chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
-		// if err != nil {
-		// 	fmt.Println(err)
-		// 	continue
-		// }
+		chat, err := getChat.ConvoByID(client.Eclient, hit.Id)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
 		fmt.Println(hit.Id)
 		// fmt.Println(chat.ReferenceID)
-		// fmt.Println(chat.Eavesdroppers)
+		fmt.Println(chat.Eavesdroppers)
 		// fmt.Println(chat.Class)
 		// fmt.Println(chat.Size)
 
