@@ -6,7 +6,6 @@ import (
 
 	"context"
 	"fmt"
-	"strings"
 
 	elastic "github.com/olivere/elastic"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -57,7 +56,7 @@ func main() {
 
 	query := elastic.NewBoolQuery()
 
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(usrID)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", usrID))
 	// query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(trimmedID2)))
 	query = query.Must(elastic.NewTermQuery("Class", "1"))
 
