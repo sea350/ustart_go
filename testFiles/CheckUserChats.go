@@ -25,11 +25,11 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	var dash = rune('-')
-	//var underscore = rune('_')
+	// var dash = rune('-')
+	var underscore = rune('_')
 	var tempRuneArr []rune
 	for _, char := range id {
-		if char != dash {
+		if char != underscore {
 			tempRuneArr = append(tempRuneArr, char)
 		}
 	}
@@ -46,13 +46,13 @@ func main() {
 	for i := range proxy.Conversations {
 		fmt.Println(i)
 		fmt.Println(proxy.Conversations[i].ConvoID)
-		chat, err := getChat.ConvoByID(client.Eclient, proxy.Conversations[i].ConvoID)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
+		// chat, err := getChat.ConvoByID(client.Eclient, proxy.Conversations[i].ConvoID)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	continue
+		// }
 
-		fmt.Println(chat.Eavesdroppers)
+		// fmt.Println(chat.Eavesdroppers)
 	}
 
 	query := elastic.NewBoolQuery()
