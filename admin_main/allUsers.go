@@ -77,7 +77,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		fmt.Println(searchResults.Hits.TotalHits())
+		fmt.Println(searchResults.TotalHits())
 	}
 
 }
