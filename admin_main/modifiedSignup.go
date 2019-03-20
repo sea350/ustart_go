@@ -6,13 +6,11 @@ import (
 
 	elastic "github.com/olivere/elastic"
 	getUser "github.com/sea350/ustart_go/get/user"
-	getWarning "github.com/sea350/ustart_go/get/warning"
 	"github.com/sea350/ustart_go/globals"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postFollow "github.com/sea350/ustart_go/post/follow"
 	postNotif "github.com/sea350/ustart_go/post/notification"
 	postUser "github.com/sea350/ustart_go/post/user"
-	postWarning "github.com/sea350/ustart_go/post/warning"
 	types "github.com/sea350/ustart_go/types"
 
 	"errors"
@@ -26,68 +24,68 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 //Returns an error if there was a problem with database submission
 func s(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, school string, major []string, bday time.Time, currYear string, addressIP string) error { //, country string, state string, city string, zip string) error {
 
-	newSignWarning, err := getWarning.SingupWarningByIP(eclient, addressIP)
-	if err != nil {
-		return err
-	}
-	if newSignWarning.SignLockoutUntil.After(time.Now()) {
-		err := errors.New("IP Address in Lockout")
-		return err
-	}
+	// newSignWarning, err := getWarning.SingupWarningByIP(eclient, addressIP)
+	// if err != nil {
+	// 	return err
+	// }
+	// if newSignWarning.SignLockoutUntil.After(time.Now()) {
+	// 	err := errors.New("IP Address in Lockout")
+	// 	return err
+	// }
 
 	inUse, err := getUser.EmailInUse(eclient, email)
 	if err != nil {
 		return err
 	}
-	if inUse { //We start keeping track here of signup warnings
-		newSignWarning.SignIPAddress = addressIP
-		newSignWarning.SignNumberofAttempts = newSignWarning.SignNumberofAttempts + 1
-		if newSignWarning.SignLastAttempt.IsZero() {
-			newSignWarning.SignLastAttempt = time.Now()
-		} else {
-			if time.Since(newSignWarning.SignLastAttempt) >= (time.Hour * 168) {
-				newSignWarning.SignNumberofAttempts = 0
-				newSignWarning.SignLockoutCounter = 0
-			}
-			newSignWarning.SignLastAttempt = time.Now()
-		}
+	// if inUse { //We start keeping track here of signup warnings
+	// 	newSignWarning.SignIPAddress = addressIP
+	// 	newSignWarning.SignNumberofAttempts = newSignWarning.SignNumberofAttempts + 1
+	// 	if newSignWarning.SignLastAttempt.IsZero() {
+	// 		newSignWarning.SignLastAttempt = time.Now()
+	// 	} else {
+	// 		if time.Since(newSignWarning.SignLastAttempt) >= (time.Hour * 168) {
+	// 			newSignWarning.SignNumberofAttempts = 0
+	// 			newSignWarning.SignLockoutCounter = 0
+	// 		}
+	// 		newSignWarning.SignLastAttempt = time.Now()
+	// 	}
 
-		if newSignWarning.SignNumberofAttempts > 10 {
-			newSignWarning.SignLockoutCounter = newSignWarning.SignLockoutCounter + 1
-			newSignWarning.SignLockoutUntil = newSignWarning.SignLastAttempt.Add(time.Minute * 30 * time.Duration(lockoutOP2(newSignWarning.SignLockoutCounter)))
-			newSignWarning.SignNumberofAttempts = 0
-		}
-		if newSignWarning.SignDiscovered == false {
-			newSignWarning.SignDiscovered = true
-		}
-		postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
-		return errors.New("email is in use ")
-	}
+	// 	if newSignWarning.SignNumberofAttempts > 10 {
+	// 		newSignWarning.SignLockoutCounter = newSignWarning.SignLockoutCounter + 1
+	// 		newSignWarning.SignLockoutUntil = newSignWarning.SignLastAttempt.Add(time.Minute * 30 * time.Duration(lockoutOP2(newSignWarning.SignLockoutCounter)))
+	// 		newSignWarning.SignNumberofAttempts = 0
+	// 	}
+	// 	if newSignWarning.SignDiscovered == false {
+	// 		newSignWarning.SignDiscovered = true
+	// 	}
+	// 	postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
+	// 	return errors.New("email is in use ")
+	// }
 
-	validEmail := ValidEmail(email)
-	if !validEmail {
-		if newSignWarning.SignDiscovered == true {
-			newSignWarning.SignIPAddress = addressIP
-			newSignWarning.SignNumberofAttempts = newSignWarning.SignNumberofAttempts + 1
-			if newSignWarning.SignLastAttempt.IsZero() {
-				newSignWarning.SignLastAttempt = time.Now()
-			} else {
-				if time.Since(newSignWarning.SignLastAttempt) >= (time.Hour * 168) {
-					newSignWarning.SignNumberofAttempts = 0
-					newSignWarning.SignLockoutCounter = 0
-				}
-				newSignWarning.SignLastAttempt = time.Now()
-			}
+	// validEmail := ValidEmail(email)
+	// if !validEmail {
+	// 	if newSignWarning.SignDiscovered == true {
+	// 		newSignWarning.SignIPAddress = addressIP
+	// 		newSignWarning.SignNumberofAttempts = newSignWarning.SignNumberofAttempts + 1
+	// 		if newSignWarning.SignLastAttempt.IsZero() {
+	// 			newSignWarning.SignLastAttempt = time.Now()
+	// 		} else {
+	// 			if time.Since(newSignWarning.SignLastAttempt) >= (time.Hour * 168) {
+	// 				newSignWarning.SignNumberofAttempts = 0
+	// 				newSignWarning.SignLockoutCounter = 0
+	// 			}
+	// 			newSignWarning.SignLastAttempt = time.Now()
+	// 		}
 
-			if newSignWarning.SignNumberofAttempts > 10 {
-				newSignWarning.SignLockoutCounter = newSignWarning.SignLockoutCounter + 1
-				newSignWarning.SignLockoutUntil = newSignWarning.SignLastAttempt.Add(time.Minute * 30 * time.Duration(lockoutOP2(newSignWarning.SignLockoutCounter)))
-				newSignWarning.SignNumberofAttempts = 0
-			}
-			postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
-		}
-		return errors.New("invalid email")
-	}
+	// 		if newSignWarning.SignNumberofAttempts > 10 {
+	// 			newSignWarning.SignLockoutCounter = newSignWarning.SignLockoutCounter + 1
+	// 			newSignWarning.SignLockoutUntil = newSignWarning.SignLastAttempt.Add(time.Minute * 30 * time.Duration(lockoutOP2(newSignWarning.SignLockoutCounter)))
+	// 			newSignWarning.SignNumberofAttempts = 0
+	// 		}
+	// 		postWarning.ReIndexSignupWarning(eclient, newSignWarning, addressIP)
+	// 	}
+	// 	return errors.New("invalid email")
+	// }
 
 	inUse, err = getUser.UsernameInUse(eclient, username)
 	if err != nil {
