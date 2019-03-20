@@ -17,7 +17,6 @@ import (
 
 	// "github.com/sea350/ustart_go/uses"
 
-	"errors"
 	"time"
 )
 
@@ -91,13 +90,13 @@ func s(eclient *elastic.Client, username string, email string, password []byte, 
 	// 	return errors.New("invalid email")
 	// }
 
-	inUse, err = getUser.UsernameInUse(eclient, username)
-	if err != nil {
-		return err
-	}
-	if inUse {
-		return errors.New("username is in use")
-	}
+	// inUse, err = getUser.UsernameInUse(eclient, username)
+	// if err != nil {
+	// 	return err
+	// }
+	// if inUse {
+	// 	return errors.New("username is in use")
+	// }
 
 	newUsr := types.User{}
 	newUsr.Avatar = "https://i.imgur.com/8BnkFLO.png"
