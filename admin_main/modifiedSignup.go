@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/sea350/ustart_go/uses"
+
 	elastic "github.com/olivere/elastic"
 	getUser "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/globals"
@@ -12,6 +14,7 @@ import (
 	postNotif "github.com/sea350/ustart_go/post/notification"
 	postUser "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/uses"
 
 	"errors"
 	"time"
@@ -135,7 +138,7 @@ func s(eclient *elastic.Client, username string, email string, password []byte, 
 	newUsr.Visible = true
 	newUsr.Status = true
 
-	badgeIDs, badgeTags, err := BadgeSetup(eclient, email)
+	badgeIDs, badgeTags, err := uses.BadgeSetup(eclient, email)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
@@ -164,7 +167,7 @@ func s(eclient *elastic.Client, username string, email string, password []byte, 
 		newUsr.Class = -1
 	}
 
-	id, retErr := postUser.ReIndexUser(eclient, "6_7VeGkBN3Vvtvdi-6q6", newUsr)
+	id, retErr := postUser.ReindexUser(eclient, "6_7VeGkBN3Vvtvdi-6q6", newUsr)
 	if retErr != nil {
 		return retErr
 	}
@@ -195,7 +198,7 @@ func s(eclient *elastic.Client, username string, email string, password []byte, 
 		log.Println(err)
 	}
 
-	go SendVerificationEmail(eclient, email)
+	go uses.SendVerificationEmail(eclient, email)
 
 	return err
 }
