@@ -14,7 +14,8 @@ import (
 	postNotif "github.com/sea350/ustart_go/post/notification"
 	postUser "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
-	"github.com/sea350/ustart_go/uses"
+
+	// "github.com/sea350/ustart_go/uses"
 
 	"errors"
 	"time"
@@ -167,7 +168,8 @@ func s(eclient *elastic.Client, username string, email string, password []byte, 
 		newUsr.Class = -1
 	}
 
-	id, retErr := postUser.ReindexUser(eclient, "6_7VeGkBN3Vvtvdi-6q6", newUsr)
+	id := "6_7VeGkBN3Vvtvdi-6q6"
+	retErr := postUser.ReindexUser(eclient, id, newUsr)
 	if retErr != nil {
 		return retErr
 	}
