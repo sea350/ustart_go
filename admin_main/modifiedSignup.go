@@ -108,7 +108,7 @@ func s(eclient *elastic.Client, username string, email string, password []byte, 
 	newUsr.Email = email
 	newUsr.Username = username
 	//New user verification process
-	newUsr.Verified = false
+	newUsr.Verified = true
 	// SendVerificationEmail(email)
 	// token, err := GenerateRandomString(32)
 	// if err != nil {
