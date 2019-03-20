@@ -36,7 +36,7 @@ func s(eclient *elastic.Client, username string, email string, password []byte, 
 	// 	return err
 	// }
 
-	inUse, err := getUser.EmailInUse(eclient, email)
+	_, err := getUser.EmailInUse(eclient, email)
 	if err != nil {
 		return err
 	}
