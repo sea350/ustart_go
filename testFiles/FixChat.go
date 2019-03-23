@@ -1,11 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
-	"strings"
 
 	elastic "github.com/olivere/elastic"
 	getChat "github.com/sea350/ustart_go/get/chat"
@@ -17,8 +18,11 @@ import (
 )
 
 func main() {
-	fmt.Println("getting user by username")
-	id, err := get.IDByUsername(client.Eclient, "AkbarMalikov")
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter first user's username: ")
+	username1, _ := reader.ReadString('\n')
+	username1 = username1[:len(username1)-1]
+	id, err := get.IDByUsername(client.Eclient, username1)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -29,15 +33,6 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	var dash = rune('-')
-	var underscore = rune('_')
-	var tempRuneArr []rune
-	for _, char := range id {
-		if char != dash && char != underscore {
-			tempRuneArr = append(tempRuneArr, char)
-		}
-	}
-	trimmedUser1 := string(tempRuneArr)
 
 	fmt.Println("User msg proxies: " + proxyid)
 
@@ -47,8 +42,10 @@ func main() {
 		return
 	}
 	//-------------------------------------------
-	fmt.Println("getting user by username")
-	id2, err := get.IDByUsername(client.Eclient, "min")
+	fmt.Print("Enter first user's username: ")
+	username2, _ := reader.ReadString('\n')
+	username2 = username2[:len(username2)-1]
+	id2, err := get.IDByUsername(client.Eclient, username2)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -84,8 +81,8 @@ func main() {
 
 	query := elastic.NewBoolQuery()
 
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(trimmedUser1)))
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id2)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID.keyword", id))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID.keyword", id2))
 	query = query.Must(elastic.NewTermQuery("Class", "1"))
 
 	fmt.Println("Printing queried convos: ")
