@@ -4,6 +4,7 @@ import (
 
 	// admin "github.com/sea350/ustart_go/admin"
 
+	"context"
 	"fmt"
 
 	elastic "github.com/olivere/elastic"
@@ -45,8 +46,37 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 //6v5wyWgBN3Vvtvdiq5Uw
 func main() {
 
-	usrID, _ := getUser.IDByUsername(eclient, "AkbarMalikov")
+	// usrID, _ := getUser.IDByUsername(eclient, "AkbarMalikov")
+	// usr, _ := getUser.UserByID(eclient, usrID)
+	// fmt.Println(usr.FirstName, usr.LastName, usrID)
+
+	usrID, _ := getUser.IDByUsername(eclient, "min")
 	usr, _ := getUser.UserByID(eclient, usrID)
 	fmt.Println(usr.FirstName, usr.LastName, usrID)
+
+	query := elastic.NewBoolQuery()
+
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", usrID))
+	// query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(trimmedID2)))
+	query = query.Must(elastic.NewTermQuery("Class", "1"))
+
+	// if eavesdropperOne == eavesdropperTwo {
+	// 	query = query.Must(elastic.NewTermQuery("Size", "1"))
+	// } else {
+	// 	query = query.Must(elastic.NewTermQuery("Size", "2"))
+	// }
+
+	ctx := context.Background() //intialize context background
+	searchResults, err := eclient.Search().
+		Index(globals.ConvoIndex).
+		Query(query).
+		Pretty(true).
+		Do(ctx)
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(searchResults.TotalHits())
+	}
 
 }
