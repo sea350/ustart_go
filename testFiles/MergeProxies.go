@@ -31,7 +31,7 @@ func main() {
 	ctx := context.Background()
 
 	termQuery := elastic.NewTermQuery("DocID.keyword", userID)
-	searchResult, err := eclient.Search().
+	searchResult, err := client.Eclient.Search().
 		Index(globals.ProxyMsgIndex).
 		Query(termQuery).
 		Do(ctx)
@@ -75,7 +75,7 @@ func main() {
 			proxiesRemaining--
 
 		}
-		err := postUser.UpdateUser(eclient, userID, "ProxyMessagesID", finalID)
+		err := postUser.UpdateUser(client.Eclient, userID, "ProxyMessagesID", finalID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
 			log.Println(err)
