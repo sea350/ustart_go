@@ -56,7 +56,7 @@ func main() {
 
 	query := elastic.NewBoolQuery()
 
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", id))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID.keyword", id))
 	//query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower("7v5wyWgBN3Vvtvdi4pWH")))
 
 	fmt.Println("Printing queried convos: ")
