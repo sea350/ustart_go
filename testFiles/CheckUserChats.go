@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	elastic "github.com/olivere/elastic"
 	getChat "github.com/sea350/ustart_go/get/chat"
@@ -57,7 +56,7 @@ func main() {
 
 	query := elastic.NewBoolQuery()
 
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(id)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", id))
 	//query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower("7v5wyWgBN3Vvtvdi4pWH")))
 
 	fmt.Println("Printing queried convos: ")
