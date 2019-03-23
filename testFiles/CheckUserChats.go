@@ -13,7 +13,7 @@ import (
 
 func main() {
 	fmt.Println("getting user by username")
-	id, err := get.IDByUsername(client.Eclient, "AkbarMalikov")
+	id, err := get.IDByUsername(client.Eclient, "cl3616")
 	if err != nil {
 		fmt.Println(err)
 		return
