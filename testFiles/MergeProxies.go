@@ -44,14 +44,13 @@ func main() {
 		return
 	}
 
-	proxiesRemaining := searchResult.TotalHits()
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("Proxies found: ", proxiesRemaining)
+	log.Println("Proxies found: ", searchResult.TotalHits())
 	var totalRemoved int
 	var tempProxy types.ProxyMessages
-	var finalID string
+	finalID := searchResult.Hits.Hits[len(searchResult.Hits.Hits)-1].Id
 	masterList := make(map[string]types.ConversationState)
-	if proxiesRemaining > 1 {
+	if searchResult.TotalHits() > 1 {
 		//do stuff
 		for _, element := range searchResult.Hits.Hits {
 			err := json.Unmarshal(*element.Source, &tempProxy)
@@ -60,35 +59,25 @@ func main() {
 				log.Println(err)
 				return
 			}
-			if proxiesRemaining > 1 {
+			for _, convo := range tempProxy.Conversations {
+				masterList[convo.ConvoID] = convo
+			}
+			if element.Id != finalID {
 				if len(tempProxy.Conversations) == 0 {
-					err = globals.DeleteByID(client.Eclient, element.Id, "proxymsg")
-					if err != nil {
-						log.SetFlags(log.LstdFlags | log.Lshortfile)
-						log.Println(err)
-						return
-					}
-					totalRemoved++
-					fmt.Println(totalRemoved)
+					fmt.Println("empty proxy being removed")
 				} else {
-					for _, convo := range tempProxy.Conversations {
-						masterList[convo.ConvoID] = convo
-					}
-					err = globals.DeleteByID(client.Eclient, element.Id, "proxymsg")
-					if err != nil {
-						log.SetFlags(log.LstdFlags | log.Lshortfile)
-						log.Println(err)
-						return
-					}
-					totalRemoved++
-					fmt.Println(totalRemoved)
+					fmt.Println("occupied proxy being removed ")
 				}
+				err = globals.DeleteByID(client.Eclient, element.Id, "proxymsg")
+				if err != nil {
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+					return
+				}
+				totalRemoved++
+				fmt.Println(totalRemoved)
 			} else {
-				finalID = element.Id
 				fmt.Println(finalID)
-				for _, convo := range tempProxy.Conversations {
-					masterList[convo.ConvoID] = convo
-				}
 				var lastArray []types.ConversationState
 				for id := range masterList {
 					_, err := getChat.ConvoByID(client.Eclient, id)
@@ -104,9 +93,8 @@ func main() {
 					return
 				}
 			}
-			proxiesRemaining--
-
 		}
+		fmt.Println("Done!")
 		err := postUser.UpdateUser(client.Eclient, userID, "ProxyMessagesID", finalID)
 		if err != nil {
 			log.SetFlags(log.LstdFlags | log.Lshortfile)
