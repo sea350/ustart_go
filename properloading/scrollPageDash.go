@@ -5,7 +5,6 @@ import (
 	"errors"
 	"io"
 	"log"
-	"strings"
 
 	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
@@ -22,28 +21,28 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 	ids := make([]interface{}, 0)
 	for id := range docIDs {
 
-		var dash = rune('-')
-		var underscore = rune('_')
-		var tempRuneArr []rune
-		for _, char := range docIDs[id] {
-			if char != dash && char != underscore {
-				tempRuneArr = append(tempRuneArr, char)
-			}
-		}
-		docIDs[id] = string(tempRuneArr)
+		// var dash = rune('-')
+		// var underscore = rune('_')
+		// var tempRuneArr []rune
+		// for _, char := range docIDs[id] {
+		// 	if char != dash && char != underscore {
+		// 		tempRuneArr = append(tempRuneArr, char)
+		// 	}
+		// }
+		// docIDs[id] = string(tempRuneArr)
 
-		ids = append([]interface{}{strings.ToLower(docIDs[id])}, ids...)
+		ids = append([]interface{}{docIDs[id]}, ids...)
 	}
 
 	//set up user query
 	usrQuery := elastic.NewBoolQuery()
-	usrQuery = usrQuery.Must(elastic.NewTermsQuery("PosterID", ids...))
+	usrQuery = usrQuery.Must(elastic.NewTermsQuery("PosterID.keyword", ids...))
 	usrQuery = usrQuery.Must(elastic.NewTermsQuery("Classification", 0, 2))
 	usrQuery = usrQuery.Must(elastic.NewTermQuery("Visible", true))
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
-	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID", ids...))
+	projQuery = projQuery.Must(elastic.NewTermsQuery("ReferenceID.keyword", ids...))
 	projQuery = projQuery.Must(elastic.NewTermsQuery("Classification", 3, 5))
 	projQuery = projQuery.Must(elastic.NewTermQuery("Visible", true))
 	//yeah....

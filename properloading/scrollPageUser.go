@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io"
 	"log"
-	"strings"
 
 	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
@@ -18,29 +17,29 @@ import (
 //Scrolls through docs being loaded on the user wall
 func ScrollPageUser(eclient *elastic.Client, docID string, viewerID string, scrollID string) (string, []types.JournalEntry, int, error) {
 
-	var dash = rune('-')
-	var underscore = rune('_')
-	var tempRuneArr []rune
-	for _, char := range docID {
-		if char != dash && char != underscore {
-			tempRuneArr = append(tempRuneArr, char)
-		}
-	}
-	docID = string(tempRuneArr)
+	// var dash = rune('-')
+	// var underscore = rune('_')
+	// var tempRuneArr []rune
+	// for _, char := range docID {
+	// 	if char != dash && char != underscore {
+	// 		tempRuneArr = append(tempRuneArr, char)
+	// 	}
+	// }
+	// docID = string(tempRuneArr)
 
-	tempRuneArr = []rune{}
-	for _, char := range viewerID {
-		if char != dash && char != underscore {
-			tempRuneArr = append(tempRuneArr, char)
-		}
-	}
-	viewerID = string(tempRuneArr)
+	// tempRuneArr = []rune{}
+	// for _, char := range viewerID {
+	// 	if char != dash && char != underscore {
+	// 		tempRuneArr = append(tempRuneArr, char)
+	// 	}
+	// }
+	// viewerID = string(tempRuneArr)
 
 	ctx := context.Background()
 
 	//set up user query
 	usrQuery := elastic.NewBoolQuery()
-	usrQuery = usrQuery.Must(elastic.NewTermQuery("PosterID", strings.ToLower(docID)))
+	usrQuery = usrQuery.Must(elastic.NewTermQuery("PosterID.keyword", docID))
 	usrQuery = usrQuery.Must(elastic.NewTermsQuery("Classification", 0, 2))
 	usrQuery = usrQuery.Must(elastic.NewTermQuery("Visible", true))
 

@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"log"
-	"strings"
 
 	elastic "github.com/olivere/elastic"
 	get "github.com/sea350/ustart_go/get/user"
@@ -34,25 +32,25 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 		return false, "", errTwo
 	}
 
-	var dash = rune('-')
-	var underscore = rune('_')
-	var tempRuneArr []rune
-	for _, char := range eavesdropperOne {
-		if char != dash && char != underscore {
-			tempRuneArr = append(tempRuneArr, char)
-		}
-	}
-	trimmedID1 := string(tempRuneArr)
+	// var dash = rune('-')
+	// var underscore = rune('_')
+	// var tempRuneArr []rune
+	// for _, char := range eavesdropperOne {
+	// 	if char != dash && char != underscore {
+	// 		tempRuneArr = append(tempRuneArr, char)
+	// 	}
+	// }
+	// trimmedID1 := string(tempRuneArr)
 
-	tempRuneArr = []rune{}
-	for _, char := range eavesdropperTwo {
-		if char != dash && char != underscore {
-			tempRuneArr = append(tempRuneArr, char)
-		}
-	}
-	trimmedID2 := string(tempRuneArr)
+	// tempRuneArr = []rune{}
+	// for _, char := range eavesdropperTwo {
+	// 	if char != dash && char != underscore {
+	// 		tempRuneArr = append(tempRuneArr, char)
+	// 	}
+	// }
+	// trimmedID2 := string(tempRuneArr)
 
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	// log.SetFlags(log.LstdFlags | log.Lshortfile)
 	// log.Println("debug text 1 ", trimmedID1)
 	// log.Println("debug text 2 ", trimmedID2)
 	// for eavesdropperOne[0] == dash || eavesdropperOne[0] == underscore {
@@ -71,8 +69,8 @@ func DMExists(eclient *elastic.Client, eavesdropperOne string, eavesdropperTwo s
 
 	query := elastic.NewBoolQuery()
 
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(trimmedID1)))
-	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID", strings.ToLower(trimmedID2)))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID.keyword", eavesdropperOne))
+	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID.keyword", eavesdropperTwo))
 	query = query.Must(elastic.NewTermQuery("Class", "1"))
 
 	if eavesdropperOne == eavesdropperTwo {

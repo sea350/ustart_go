@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io"
 	"log"
-	"strings"
 
 	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
@@ -20,19 +19,19 @@ func ScrollPageProject(eclient *elastic.Client, docID string, viewerID string, s
 
 	ctx := context.Background()
 
-	var dash = rune('-')
-	var underscore = rune('_')
-	var tempRuneArr []rune
-	for _, char := range docID {
-		if char != dash && char != underscore {
-			tempRuneArr = append(tempRuneArr, char)
-		}
-	}
-	trimmedID := string(tempRuneArr)
+	// var dash = rune('-')
+	// var underscore = rune('_')
+	// var tempRuneArr []rune
+	// for _, char := range docID {
+	// 	if char != dash && char != underscore {
+	// 		tempRuneArr = append(tempRuneArr, char)
+	// 	}
+	// }
+	// trimmedID := string(tempRuneArr)
 
 	//set up project query
 	projQuery := elastic.NewBoolQuery()
-	projQuery = projQuery.Must(elastic.NewTermQuery("ReferenceID", strings.ToLower(trimmedID)))
+	projQuery = projQuery.Must(elastic.NewTermQuery("ReferenceID.keyword", docID))
 	projQuery = projQuery.Must(elastic.NewTermsQuery("Classification", 3, 5))
 	projQuery = projQuery.Must(elastic.NewTermQuery("Visible", true))
 
