@@ -75,4 +75,9 @@ func main() {
 		log.Println(err)
 	}
 
+	for _, msg := range msgs {
+		fmt.Println(msg.SenderID)
+		fmt.Println(msg.Content)
+	}
+
 }
