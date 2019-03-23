@@ -13,7 +13,6 @@ import (
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/client"
 	postChat "github.com/sea350/ustart_go/post/chat"
-	types "github.com/sea350/ustart_go/types"
 )
 
 func main() {
@@ -58,7 +57,6 @@ func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println("Chats found: ", searchResult.TotalHits())
 
-	var lastArray []types.ConversationState
 	for _, element := range searchResult.Hits.Hits {
 		err := postChat.AppendToProxy(client.Eclient, proxyid, element.Id, true)
 		if err != nil {
