@@ -12,6 +12,7 @@ import (
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/client"
+	postChat "github.com/sea350/ustart_go/post/chat"
 	postUser "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
 )
@@ -48,6 +49,7 @@ func main() {
 	var totalRemoved int
 	var tempProxy types.ProxyMessages
 	var finalID string
+	masterList := make(map[string]types.ConversationState)
 	if proxiesRemaining > 1 {
 		//do stuff
 		for _, element := range searchResult.Hits.Hits {
@@ -67,9 +69,36 @@ func main() {
 					}
 					totalRemoved++
 					fmt.Println(totalRemoved)
+				} else {
+					for _, convo := range tempProxy.Conversations {
+						masterList[convo.ConvoID] = convo
+					}
+					err = globals.DeleteByID(client.Eclient, element.Id, "proxymsg")
+					if err != nil {
+						log.SetFlags(log.LstdFlags | log.Lshortfile)
+						log.Println(err)
+						return
+					}
+					totalRemoved++
+					fmt.Println(totalRemoved)
 				}
 			} else {
 				finalID = element.Id
+				fmt.Println(finalID)
+				for _, convo := range tempProxy.Conversations {
+					masterList[convo.ConvoID] = convo
+				}
+				var lastArray []types.ConversationState
+				for id := range masterList {
+					lastArray = append(lastArray, masterList[id])
+				}
+				err := postChat.UpdateProxyMsg(client.Eclient, finalID, "Conversations", lastArray)
+				if err != nil {
+					fmt.Println(lastArray)
+					log.SetFlags(log.LstdFlags | log.Lshortfile)
+					log.Println(err)
+					return
+				}
 			}
 			proxiesRemaining--
 
