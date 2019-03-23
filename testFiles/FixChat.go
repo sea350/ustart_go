@@ -83,7 +83,7 @@ func main() {
 
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID.keyword", id))
 	query = query.Must(elastic.NewTermQuery("Eavesdroppers.DocID.keyword", id2))
-	query = query.Must(elastic.NewTermQuery("Class", "1"))
+	query = query.Must(elastic.NewTermQuery("Class", 1))
 
 	fmt.Println("Printing queried convos: ")
 	ctx := context.Background() //intialize context background
