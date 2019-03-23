@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
-	elastic "github.com/olivere/elastic"
 )
 
 //ConvoByID ..
@@ -23,12 +23,12 @@ func ConvoByID(eclient *elastic.Client, convoID string) (types.Conversation, err
 						Id(convoID).
 						Do(ctx)
 
-	if !searchResult.Found {
-		return convo, errors.New("Conversation not found")
-	}
-
 	if err != nil {
 		return convo, err
+	}
+
+	if !searchResult.Found {
+		return convo, errors.New("Conversation not found")
 	}
 
 	Err := json.Unmarshal(*searchResult.Source, &convo) //unmarshal type RawMessage into user struct
