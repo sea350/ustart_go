@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"os"
 
 	elastic "github.com/olivere/elastic"
 	getChat "github.com/sea350/ustart_go/get/chat"
@@ -12,8 +14,11 @@ import (
 )
 
 func main() {
-	fmt.Println("getting user by username")
-	id, err := get.IDByUsername(client.Eclient, "cl3616")
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter first user's username: ")
+	username1, _ := reader.ReadString('\n')
+	username1 = username1[:len(username1)-1]
+	id, err := get.IDByUsername(client.Eclient, username1)
 	if err != nil {
 		fmt.Println(err)
 		return

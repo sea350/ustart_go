@@ -9,6 +9,7 @@ import (
 	"os"
 
 	elastic "github.com/olivere/elastic"
+	getChat "github.com/sea350/ustart_go/get/chat"
 	get "github.com/sea350/ustart_go/get/user"
 	globals "github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/middleware/client"
@@ -90,7 +91,10 @@ func main() {
 				}
 				var lastArray []types.ConversationState
 				for id := range masterList {
-					lastArray = append(lastArray, masterList[id])
+					_, err := getChat.ConvoByID(client.Eclient, id)
+					if err == nil {
+						lastArray = append(lastArray, masterList[id])
+					}
 				}
 				err := postChat.UpdateProxyMsg(client.Eclient, finalID, "Conversations", lastArray)
 				if err != nil {
