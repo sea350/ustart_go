@@ -5,11 +5,10 @@ import (
 	"encoding/json"
 	"io"
 	"log"
-	"strings"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
-	elastic "github.com/olivere/elastic"
 )
 
 //ScrollNotifications ...
@@ -20,7 +19,7 @@ func ScrollNotifications(eclient *elastic.Client, docID string, scrollID string)
 
 	//set up user query
 	notifQuery := elastic.NewBoolQuery()
-	notifQuery = notifQuery.Must(elastic.NewTermQuery("DocID", strings.ToLower(docID)))
+	notifQuery = notifQuery.Must(elastic.NewTermQuery("DocID.keyword", docID))
 
 	//notifQuery = notifQuery.Must(elastic.NewTermQuery("Invisible", false))
 
