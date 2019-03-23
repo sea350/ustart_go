@@ -36,7 +36,6 @@ func main() {
 		Query(termQuery).
 		Do(ctx)
 
-	var proxyID string
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
