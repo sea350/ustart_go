@@ -69,22 +69,17 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 		return "", arrResults, 0, err
 	}
 
+	var report error
 	for _, hit := range res.Hits.Hits {
 		// fmt.Println(hit.Id)
 		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, true)
-		arrResults = append(arrResults, head)
 		if err != nil {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println("ISSUE WITH CONVERT FUNCTION")
+			report = errors.New("One or more problems loading journal entries")
 			continue
 		}
-
-		if err == io.EOF {
-			return res.ScrollId, arrResults, int(res.Hits.TotalHits), errors.New("Out of bounds")
-
-		}
+		arrResults = append(arrResults, head)
 
 	}
 
-	return res.ScrollId, arrResults, int(res.Hits.TotalHits), err
+	return res.ScrollId, arrResults, int(res.Hits.TotalHits), report
 }

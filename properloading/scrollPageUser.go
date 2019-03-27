@@ -2,7 +2,6 @@ package properloading
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"io"
 	"log"
@@ -63,21 +62,15 @@ func ScrollPageUser(eclient *elastic.Client, docID string, viewerID string, scro
 	//fmt.Println(res.Hits.TotalHits)
 
 	var report error
-	var tempEntry types.Entry
 	for _, hit := range res.Hits.Hits {
-		err := json.Unmarshal(*hit.Source, &tempEntry) //unmarshal type RawMessage into user struct
+		// fmt.Println(hit.Id)
+		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, true)
 		if err != nil {
-			return "", arrResults, 0, err
-		}
-		if tempEntry.ReferenceID != docID {
+			report = errors.New("One or more problems loading journal entries")
 			continue
 		}
-		head, err := uses.ConvertEntryToJournalEntry(eclient, hit.Id, viewerID, true)
 		arrResults = append(arrResults, head)
-		if err != nil && err != errors.New("This entry is not visible") {
-			report = errors.New("One or more problems loading journal entries")
 
-		}
 	}
 
 	return res.ScrollId, arrResults, int(res.Hits.TotalHits), report
