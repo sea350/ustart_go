@@ -54,11 +54,9 @@ func ScrollPageUser(eclient *elastic.Client, docID string, viewerID string, scro
 	scroll = scroll.ScrollId(scrollID)
 
 	res, err := scroll.Do(ctx)
-	if !(err == io.EOF && res != nil) && err != nil {
-		if err != io.EOF {
-			log.SetFlags(log.LstdFlags | log.Lshortfile)
-			log.Println(err)
-		}
+	if (err != nil && err != io.EOF) || res == nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
 		return "", arrResults, 0, err
 	}
 

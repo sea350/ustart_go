@@ -62,10 +62,8 @@ func ScrollPageDash(eclient *elastic.Client, docIDs []string, viewerID string, s
 	}
 
 	res, err := scroll.Do(ctx)
-	if err == io.EOF {
-		return "", arrResults, 0, err //we might need special treatment for EOF error
-	}
-	if err != nil {
+
+	if (err != nil && err != io.EOF) || res == nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 		log.Println(err)
 		return "", arrResults, 0, err
