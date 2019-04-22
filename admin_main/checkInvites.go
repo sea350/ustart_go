@@ -21,7 +21,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 
-	proj, err := get.ProjectByProjectURL(eclient, "pottymints")
+	proj, err := get.ProjectByURL(eclient, "pottymints")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -39,7 +39,7 @@ func main() {
 
 		}
 	} else {
-		fmt.Println("No membebr join requests")
+		fmt.Println("No member join requests")
 	}
 
 }
