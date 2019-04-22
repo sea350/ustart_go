@@ -3,10 +3,6 @@ package main
 import (
 	// getUser "github.com/sea350/ustart_go/get/user"
 	// post "github.com/sea350/ustart_go/post/user"
-	"context"
-
-	"github.com/sea350/ustart_go/types"
-	uses "github.com/sea350/ustart_go/uses"
 
 	get "github.com/sea350/ustart_go/get/project"
 	getUser "github.com/sea350/ustart_go/get/user"
@@ -32,17 +28,18 @@ func main() {
 
 	reqs := proj.MemberReqReceived
 
-	if len(reqs > 0{
-		for _, id := range reqs{
+	if len(reqs > 0) {
+		fmt.Println("Number of requests:", len(reqs))
+		for _, id := range reqs {
 			usr, err := getUser.UserByID(eclient, id)
 			if err != nil {
 				fmt.Println(err)
 			}
-			fmt.Println(usr.FirstName, usr.LastName )
-
+			fmt.Println(usr.FirstName, usr.LastName)
 
 		}
+	} else {
+		fmt.Println("No membebr join requests")
 	}
-
 
 }
