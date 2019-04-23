@@ -28,7 +28,7 @@ func main() {
 
 	reqs := proj.MemberReqReceived
 
-	if len(reqs > 0) {
+	if len(reqs) > 0 {
 		fmt.Println("Number of requests:", len(reqs))
 		for _, id := range reqs {
 			usr, err := getUser.UserByID(eclient, id)
