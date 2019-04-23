@@ -21,7 +21,8 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 
-	proj, err := get.ProjectByURL(eclient, "pottymints")
+	uname := "pottymints"
+	proj, err := get.ProjectByURL(eclient, uname)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -29,7 +30,7 @@ func main() {
 	reqs := proj.MemberReqReceived
 
 	if len(reqs) > 0 {
-		fmt.Println("Number of requests:", len(reqs))
+		fmt.Println("Number of requests for", uname, ":", len(reqs))
 		for _, id := range reqs {
 			usr, err := getUser.UserByID(eclient, id)
 			if err != nil {
