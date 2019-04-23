@@ -35,7 +35,7 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 			}
-			fmt.Println(usr.FirstName, usr.LastName)
+			fmt.Println(usr.FirstName, usr.LastName, usr.Username)
 
 		}
 	} else {
