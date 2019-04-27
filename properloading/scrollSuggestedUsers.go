@@ -49,9 +49,9 @@ func ScrollSuggestedUsers(eclient *elastic.Client, class int, tagArray []string,
 	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Visible", true))
 	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Verified", true))
 	suggestedUserQuery = suggestedUserQuery.Filter(elastic.NewTermQuery("Status", true))
-	if class == 5 {
-		suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
-	}
+	// if class == 5 {
+	suggestedUserQuery = suggestedUserQuery.MustNot(elastic.NewTermQuery("Class", 5))
+	// }
 
 	//Please do not touch, very delicate
 	var amt = 1
