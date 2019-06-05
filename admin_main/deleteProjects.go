@@ -23,7 +23,7 @@ func main() {
 
 	urls := []string{"TestProject", "hello", "ustartvipmarketing"}
 	for _, url := range urls {
-		projID, err := get.ProjectIDByURL(eclient, "")
+		projID, err := get.ProjectIDByURL(eclient, url)
 		if err != nil {
 			fmt.Println(err)
 		}
