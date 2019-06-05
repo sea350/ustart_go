@@ -40,7 +40,7 @@ func main() {
 	}
 	for _, hit := range res.Hits.Hits {
 		err = postUser.UpdateUser(eclient, hit.Id, "Avatar", "https://ustart-default.s3.amazonaws.com/Defult_Profile_Page_Logo.png")
-		fmt.Println(hit.Id)
+		// fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 45,", err)
 		}
@@ -60,7 +60,7 @@ func main() {
 	}
 	for _, hit := range res.Hits.Hits {
 		err = postProject.UpdateProject(eclient, hit.Id, "Avatar", "https://ustart-default.s3.amazonaws.com/Defult_Project_Page_Logo.png")
-		fmt.Println(hit.Id)
+		// fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 65,", err)
 		}
@@ -80,7 +80,7 @@ func main() {
 	}
 	for _, hit := range res.Hits.Hits {
 		err = postUser.UpdateUser(eclient, hit.Id, "Banner", "https://ustart-default.s3.amazonaws.com/Defult_Profile_Banner_Logo.png")
-		fmt.Println(hit.Id)
+		// fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 45,", err)
 		}
@@ -100,7 +100,7 @@ func main() {
 	}
 	for _, hit := range res.Hits.Hits {
 		err = postProject.UpdateProject(eclient, hit.Id, "Banner", "https://ustart-default.s3.amazonaws.com/Defult_Profile_Banner_Logo.png")
-		fmt.Println(hit.Id)
+		// fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 65,", err)
 		}
