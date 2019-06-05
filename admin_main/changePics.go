@@ -26,7 +26,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 func main() {
 	ctx := context.Background()
 
-	queryUAvi := elastic.NewTermQuery("Avatar", "https://i.imgur.com/")
+	queryUAvi := elastic.NewTermQuery("Avatar", "imgur.com")
 
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
