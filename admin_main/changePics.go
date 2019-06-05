@@ -31,6 +31,7 @@ func main() {
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
 		Query(queryUAvi).
+		Size(500).
 		Do(ctx)
 
 	fmt.Println("Hits A:", res.TotalHits())
@@ -50,6 +51,7 @@ func main() {
 	res, err = eclient.Search().
 		Index(globals.ProjectIndex).
 		Query(queryPAvi).
+		Size(500).
 		Do(ctx)
 
 	fmt.Println("Hits B:", res.TotalHits())
@@ -69,6 +71,7 @@ func main() {
 	res, err = eclient.Search().
 		Index(globals.UserIndex).
 		Query(queryUBan).
+		Size(500).
 		Do(ctx)
 
 	fmt.Println("Hits C:", res.TotalHits())
@@ -88,6 +91,7 @@ func main() {
 	res, err = eclient.Search().
 		Index(globals.ProjectIndex).
 		Query(queryPBan).
+		Size(500).
 		Do(ctx)
 
 	fmt.Println("Hits D:", res.TotalHits())
