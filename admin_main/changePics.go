@@ -26,7 +26,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 func main() {
 	ctx := context.Background()
 
-	queryUAvi := elastic.NewTermQuery("Avatar.Keyword", "https://i.imgur.com/8BnFLO.png")
+	queryUAvi := elastic.NewTermQuery("Avatar.keyword", "https://i.imgur.com/8BnFLO.png")
 
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
@@ -45,7 +45,7 @@ func main() {
 		}
 	}
 	//////////////////////////////////////////////////////////////////////////////////////////////
-	queryPAvi := elastic.NewTermQuery("Avatar.Keyword", "https://i.imgur.com/8BnkFLO.png")
+	queryPAvi := elastic.NewTermQuery("Avatar.keyword", "https://i.imgur.com/8BnkFLO.png")
 
 	res, err = eclient.Search().
 		Index(globals.ProjectIndex).
@@ -64,7 +64,7 @@ func main() {
 		}
 	}
 	//////////////////////////////////////////////////////////////////////////////
-	queryUBan := elastic.NewTermQuery("Banner.Keyword", "https://i.imgur.com/XTj1t1J.png")
+	queryUBan := elastic.NewTermQuery("Banner.keyword", "https://i.imgur.com/XTj1t1J.png")
 
 	res, err = eclient.Search().
 		Index(globals.UserIndex).
@@ -83,7 +83,7 @@ func main() {
 		}
 	}
 	/////////////////////////////////////////////////////////////
-	queryPBan := elastic.NewTermQuery("Banner.Keyword", "https://i.imgur.com/XTj1t1J.png")
+	queryPBan := elastic.NewTermQuery("Banner.keyword", "https://i.imgur.com/XTj1t1J.png")
 
 	res, err = eclient.Search().
 		Index(globals.ProjectIndex).
