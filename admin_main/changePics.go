@@ -34,7 +34,7 @@ func main() {
 		Query(queryUAvi).
 		Do(ctx)
 
-	fmt.Println("Hits A:", res.Hits.TotalHits())
+	fmt.Println("Hits A:", res.TotalHits())
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -53,7 +53,7 @@ func main() {
 		Query(queryPAvi).
 		Do(ctx)
 
-	fmt.Println("Hits B:", res.Hits.TotalHits())
+	fmt.Println("Hits B:", res.TotalHits())
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -72,7 +72,7 @@ func main() {
 		Query(queryUBan).
 		Do(ctx)
 
-	fmt.Println("Hits C:", res.Hits.TotalHits())
+	fmt.Println("Hits C:", res.TotalHits())
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -91,7 +91,7 @@ func main() {
 		Query(queryPBan).
 		Do(ctx)
 
-	fmt.Println("Hits D:", res.Hits.TotalHits())
+	fmt.Println("Hits D:", res.TotalHits())
 	if err != nil {
 		fmt.Println(err)
 	}
