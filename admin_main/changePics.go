@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
@@ -27,7 +26,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 func main() {
 	ctx := context.Background()
 
-	queryUAvi := elastic.NewTermQuery("Avatar", strings.ToLower("https://i.imgur.com/8BnFLO.png"))
+	queryUAvi := elastic.NewTermQuery("Avatar", "https://i.imgur.com/8BnFLO.png")
 
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
@@ -46,7 +45,7 @@ func main() {
 		}
 	}
 	//////////////////////////////////////////////////////////////////////////////////////////////
-	queryPAvi := elastic.NewTermQuery("Avatar", strings.ToLower("https://i.imgur.com/8BnkFLO.png"))
+	queryPAvi := elastic.NewTermQuery("Avatar", "https://i.imgur.com/8BnkFLO.png")
 
 	res, err = eclient.Search().
 		Index(globals.ProjectIndex).
@@ -65,7 +64,7 @@ func main() {
 		}
 	}
 	//////////////////////////////////////////////////////////////////////////////
-	queryUBan := elastic.NewTermQuery("Banner", strings.ToLower("https://i.imgur.com/XTj1t1J.png"))
+	queryUBan := elastic.NewTermQuery("Banner", "https://i.imgur.com/XTj1t1J.png")
 
 	res, err = eclient.Search().
 		Index(globals.UserIndex).
@@ -84,7 +83,7 @@ func main() {
 		}
 	}
 	/////////////////////////////////////////////////////////////
-	queryPBan := elastic.NewTermQuery("Banner", strings.ToLower("https://i.imgur.com/XTj1t1J.png"))
+	queryPBan := elastic.NewTermQuery("Banner", "https://i.imgur.com/XTj1t1J.png")
 
 	res, err = eclient.Search().
 		Index(globals.ProjectIndex).
