@@ -26,7 +26,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 func main() {
 	ctx := context.Background()
 
-	queryUAvi := elastic.NewTermQuery("Avatar", "imgur.com")
+	queryUAvi := elastic.NewTermQuery("Avatar.Keyword", "https://i.imgur.com/8BnFLO.png")
 
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
@@ -38,14 +38,14 @@ func main() {
 		fmt.Println(err)
 	}
 	for _, hit := range res.Hits.Hits {
-		err = postUser.UpdateUser(eclient, hit.Id, "Avatar", "https://ustart-default.s3.amazonaws.com/Defult_Profile_Page_Logo.png")
+		err = postUser.UpdateUser(eclient, hit.Id, "Avatar.Keyword", "https://ustart-default.s3.amazonaws.com/Defult_Profile_Page_Logo.png")
 		fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 45,", err)
 		}
 	}
 	//////////////////////////////////////////////////////////////////////////////////////////////
-	queryPAvi := elastic.NewTermQuery("Avatar", "https://i.imgur.com/8BnkFLO.png")
+	queryPAvi := elastic.NewTermQuery("Avatar.Keyword", "https://i.imgur.com/8BnkFLO.png")
 
 	res, err = eclient.Search().
 		Index(globals.ProjectIndex).
@@ -57,14 +57,14 @@ func main() {
 		fmt.Println(err)
 	}
 	for _, hit := range res.Hits.Hits {
-		err = postProject.UpdateProject(eclient, hit.Id, "Avatar", "https://ustart-default.s3.amazonaws.com/Defult_Project_Page_Logo.png")
+		err = postProject.UpdateProject(eclient, hit.Id, "Avatar.Keyword", "https://ustart-default.s3.amazonaws.com/Defult_Project_Page_Logo.png")
 		fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 65,", err)
 		}
 	}
 	//////////////////////////////////////////////////////////////////////////////
-	queryUBan := elastic.NewTermQuery("Banner", "https://i.imgur.com/XTj1t1J.png")
+	queryUBan := elastic.NewTermQuery("Banner.Keyword", "https://i.imgur.com/XTj1t1J.png")
 
 	res, err = eclient.Search().
 		Index(globals.UserIndex).
@@ -76,14 +76,14 @@ func main() {
 		fmt.Println(err)
 	}
 	for _, hit := range res.Hits.Hits {
-		err = postUser.UpdateUser(eclient, hit.Id, "Banner", "https://ustart-default.s3.amazonaws.com/Defult_Profile_Banner_Logo.png")
+		err = postUser.UpdateUser(eclient, hit.Id, "Banner.Keyword", "https://ustart-default.s3.amazonaws.com/Defult_Profile_Banner_Logo.png")
 		fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 45,", err)
 		}
 	}
 	/////////////////////////////////////////////////////////////
-	queryPBan := elastic.NewTermQuery("Banner", "https://i.imgur.com/XTj1t1J.png")
+	queryPBan := elastic.NewTermQuery("Banner.Keyword", "https://i.imgur.com/XTj1t1J.png")
 
 	res, err = eclient.Search().
 		Index(globals.ProjectIndex).
