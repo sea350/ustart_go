@@ -99,8 +99,8 @@ func s(eclient *elastic.Client, username string, email string, password []byte, 
 	// }
 
 	newUsr := types.User{}
-	newUsr.Avatar = "https://i.imgur.com/8BnkFLO.png"
-	newUsr.Banner = "https://i.imgur.com/XTj1t1J.png"
+	newUsr.Avatar = "https://ustart-default.s3.amazonaws.com/Defult_Profile_Page_Logo.png"
+	newUsr.Banner = "https://ustart-default.s3.amazonaws.com/Defult_Profile_Banner_Logo.png"
 
 	newUsr.FirstName = fname
 	newUsr.LastName = lname

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"time"
 
+	elastic "github.com/olivere/elastic"
 	getChat "github.com/sea350/ustart_go/get/chat"
 	projGet "github.com/sea350/ustart_go/get/project"
 	postChat "github.com/sea350/ustart_go/post/chat"
@@ -13,7 +14,6 @@ import (
 	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
 	types "github.com/sea350/ustart_go/types"
-	elastic "github.com/olivere/elastic"
 )
 
 //CreateProject ... CREATE A NORMAL PROJECT
@@ -33,8 +33,8 @@ func CreateProject(eclient *elastic.Client, title string, description []rune, ma
 	newProj.Description = description
 	newProj.Visible = true
 	newProj.CreationDate = time.Now()
-	newProj.Avatar = "https://i.imgur.com/8BnkFLO.png"
-	newProj.Banner = "https://i.imgur.com/XTj1t1J.png"
+	newProj.Avatar = "https://ustart-default.s3.amazonaws.com/Defult_Project_Page_Logo.png"
+	newProj.Banner = "https://ustart-default.s3.amazonaws.com/Defult_Profile_Banner_Logo.png"
 	newProj.Category = category
 	newProj.Organization = college
 	newProj.Location = location
