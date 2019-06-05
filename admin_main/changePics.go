@@ -7,6 +7,8 @@ import (
 
 	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
+	postProject "github.com/sea350/ustart_go/post/project"
+	postUser "github.com/sea350/ustart_go/post/user"
 )
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
@@ -54,7 +56,7 @@ func main() {
 		fmt.Println(err)
 	}
 	for _, hit := range res.Hits.Hits {
-		err = postUser.UpdateProject(eclient, hit.Id, "Avatar", "https://ustart-default.s3.amazonaws.com/Defult_Project_Page_Logo.png")
+		err = postProject.UpdateProject(eclient, hit.Id, "Avatar", "https://ustart-default.s3.amazonaws.com/Defult_Project_Page_Logo.png")
 		fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 65,", err)
@@ -90,7 +92,7 @@ func main() {
 		fmt.Println(err)
 	}
 	for _, hit := range res.Hits.Hits {
-		err = postUser.UpdateProject(eclient, hit.Id, "Banner", "https://ustart-default.s3.amazonaws.com/Defult_Profile_Banner_Logo.png")
+		err = postProject.UpdateProject(eclient, hit.Id, "Banner", "https://ustart-default.s3.amazonaws.com/Defult_Profile_Banner_Logo.png")
 		fmt.Println(hit.Id)
 		if err != nil {
 			fmt.Println("LINE 65,", err)
