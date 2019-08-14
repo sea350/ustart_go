@@ -141,6 +141,20 @@ func SignUpBasic(eclient *elastic.Client, username string, email string, passwor
 	newUsr.Visible = true
 	newUsr.Status = true
 
+	/*
+		HERE WE CAN APPEND AN EMAIL FOR COACHES TO A DOC IN THE BADGE INDEX, WHICH WILL BE RETRIEVED IN THE NEXT LINE
+		badge, err := getBadge.BadgeByID(eclient, "COACH")
+		if err != nil{
+			return err
+		}
+
+		err = badgePost.UpdateBadge(eclient, "COACH","Tags", append(badge.Tags, email))
+		if err != nil{
+			return err
+		}
+
+	*/
+
 	badgeIDs, badgeTags, err := BadgeSetup(eclient, email)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -284,6 +298,30 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	newUsr.Location = newLoc
 	newUsr.Visible = true
 	newUsr.Status = true
+
+	/*
+		HERE WE CAN APPEND AN EMAIL FOR COACHES TO A DOC IN THE BADGE INDEX, WHICH WILL BE RETRIEVED IN THE NEXT LINE
+		badge, err := getBadge.BadgeByID(eclient, "COACH")
+		if err != nil{
+			return err
+		}
+
+		err = badgePost.UpdateBadge(eclient, "COACH","Tags", append(badge.Tags, email))
+		if err != nil{
+			return err
+		}
+
+	*/
+
+	badgeIDs, badgeTags, err := BadgeSetup(eclient, email)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
+	newUsr.Tags = badgeTags
+	newUsr.BadgeIDs = badgeIDs
+
 	newUsr.AccCreation = time.Now()
 	if currYear == "Freshman" {
 		newUsr.Class = 0
