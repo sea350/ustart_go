@@ -168,7 +168,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	client.Store.MaxAge(8640 * 7)
 	session, _ := client.Store.Get(r, "session_please")
 	test1, _ := session.Values["DocID"]
-
+	cs := client.ClientSide{ErrorStatus: false}
 	if test1 != nil {
 		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
 		return
@@ -177,12 +177,15 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	ref := r.FormValue("ref")
 
-	isValid, _ := uses.ValidGuestCode(client.Eclient, ref)
-	// if len(ref) != 0 && err != nil {
-	// 	client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
-	// 	http.Redirect(w, r, "/404/", http.StatusFound)
-	// 	return
-	// }
+	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
+	client.Logger.Println(r.URL.Path[8:])
+	if (len(ref) != 0 && len(r.URL.Path[8:]) > 0) && err != nil {
+		client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
+		cs.ErrorStatus = true
+		cs.ErrorOutput = errors.New("Invalid reference code")
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
+	}
 
 	if len(ref) != 0 && isValid {
 
@@ -207,7 +210,6 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	session.Save(r, w)
-	cs := client.ClientSide{ErrorStatus: false}
 	client.RenderTemplate(w, r, "templateNoUser2", cs)
 	client.RenderTemplate(w, r, "new-reg-nil", cs)
 }
