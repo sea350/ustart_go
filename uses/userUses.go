@@ -390,7 +390,7 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 
 	tempUserArray := gcObj.Users
 	tempUserArray = append(tempUserArray, id)
-	err = updateCode.UpdateGuestCode(eclient, guestCode, "Users", tempUserArray)
+	err = updateCode.UpdateGuestCode(eclient, badgeCode, "Users", tempUserArray)
 	if err != nil {
 		return err
 	}
