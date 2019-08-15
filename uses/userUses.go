@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"strings"
 
 	elastic "github.com/olivere/elastic"
 	getBadge "github.com/sea350/ustart_go/get/badge"
@@ -356,13 +355,13 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 		return err
 	}
 
-	err = postBadge.UpdateBadge(eclient, gcObj.Description, "Roster", append(badge.Roster, strings.ToLower(email)))
+	err = postBadge.UpdateBadge(eclient, gcObj.Description, "Roster", append(badge.Roster, email))
 	if err != nil {
 		return err
 	}
 
 	newUsr.Tags = append(badgeTags, badge.Tags...)
-	newUsr.BadgeIDs = append(badgeIDs, gcObj.Description)
+	newUsr.BadgeIDs = append([]string{gcObj.Description}, badgeIDs...)
 	newUsr.AccCreation = time.Now()
 	if currYear == "Freshman" {
 		newUsr.Class = 0
