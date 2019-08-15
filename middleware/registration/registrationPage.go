@@ -180,11 +180,13 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	ref := r.FormValue("ref")
-	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
 
-	if !isValid {
-		http.Redirect(w, r, "/404/", http.StatusFound)
-		return
+	if len(ref) != 0 {
+		isValid, err := uses.ValidGuestCode(client.Eclient, ref)
+		if !isValid {
+			http.Redirect(w, r, "/404/", http.StatusFound)
+			return
+		}
 	}
 	session.Save(r, w)
 	cs := client.ClientSide{ErrorStatus: false}
