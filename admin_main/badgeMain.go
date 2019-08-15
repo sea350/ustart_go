@@ -74,69 +74,26 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 // }
 
-func main() {
-	badge, err := get.BadgeByID(eclient, "NYUFACULTY")
-	if err != nil {
-		fmt.Println(err)
-	}
-	emails := badge.Roster
-
-	badge.Tags = []string{"NYUFaculty"}
-
-	post.UpdateBadge(eclient, "NYUFACULTY", "Tags", badge.Tags)
-
-	for _, email := range emails {
-		usrID, err := getUser.UserIDByEmail(eclient, email)
-		if err == nil {
-			usr, err := getUser.UserByID(eclient, usrID)
-			usr.Tags[0] = "NYUFaculty"
-			if err == nil {
-				tagErr := postUser.UpdateUser(eclient, usrID, "Tags", usr.Tags)
-				if tagErr != nil {
-					log.Println(err)
-					continue
-				}
-			} else {
-				log.Println(err)
-				continue
-			}
-		} else {
-			log.Println(err)
-			continue
-		}
-	}
-}
-
 // func main() {
+// 	badge, err := get.BadgeByID(eclient, "NYUFACULTY")
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	emails := badge.Roster
 
-// 	emails := []string{"fs817@nyu.edu", "jack.bringardner@nyu.edu"}
-// 	var fac types.Badge
-// 	fac.ID = "NYUFACULTY"
-// 	fac.Type = "NYU Faculty"
-// 	fac.ImageLink = "https://s3.amazonaws.com/ustart-default/Faculty_badge.png"
-// 	fac.Roster = emails
+// 	badge.Tags = []string{"NYUFaculty"}
 
-// 	fac.Tags = []string{"NYU Faculty"}
-
-// 	facPrint, err1 := post.IndexBadge(eclient, fac)
-// 	fmt.Println(facPrint, err1)
+// 	post.UpdateBadge(eclient, "NYUFACULTY", "Tags", badge.Tags)
 
 // 	for _, email := range emails {
 // 		usrID, err := getUser.UserIDByEmail(eclient, email)
 // 		if err == nil {
 // 			usr, err := getUser.UserByID(eclient, usrID)
+// 			usr.Tags[0] = "NYUFaculty"
 // 			if err == nil {
-// 				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, fac.ID))
-// 				if badgeErr == nil {
-// 					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
-// 					if tagErr == nil {
-
-// 					} else {
-// 						log.Println(tagErr)
-// 						continue
-// 					}
-// 				} else {
-// 					log.Println(badgeErr)
+// 				tagErr := postUser.UpdateUser(eclient, usrID, "Tags", usr.Tags)
+// 				if tagErr != nil {
+// 					log.Println(err)
 // 					continue
 // 				}
 // 			} else {
@@ -149,6 +106,49 @@ func main() {
 // 		}
 // 	}
 // }
+
+func main() {
+
+	emails := []string{"fan224@nyu.edu"}
+	var fac types.Badge
+	fac.ID = "UCOACH"
+	fac.Type = "Verified Coach"
+	fac.ImageLink = "https://ustart-default.s3.amazonaws.com/CoachBadge.png"
+	fac.Roster = emails
+
+	fac.Tags = []string{"NYU Faculty"}
+
+	facPrint, err1 := post.IndexBadge(eclient, fac)
+	fmt.Println(facPrint, err1)
+
+	for _, email := range emails {
+		usrID, err := getUser.UserIDByEmail(eclient, email)
+		if err == nil {
+			usr, err := getUser.UserByID(eclient, usrID)
+			if err == nil {
+				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, fac.ID))
+				if badgeErr == nil {
+					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
+					if tagErr == nil {
+
+					} else {
+						log.Println(tagErr)
+						continue
+					}
+				} else {
+					log.Println(badgeErr)
+					continue
+				}
+			} else {
+				log.Println(err)
+				continue
+			}
+		} else {
+			log.Println(err)
+			continue
+		}
+	}
+}
 
 // func main() {
 // 	badgeDOCID := "USTARTVIP"
