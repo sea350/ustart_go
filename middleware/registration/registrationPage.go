@@ -47,6 +47,10 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	ref := r.FormValue("ref")
 
+	client.Logger.Println(ref)
+	client.Logger.Println(r.URL.RequestURI())
+	client.Logger.Println(r.URL.Path)
+
 	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
 	if len(ref) != 0 && err != nil {
 		client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
