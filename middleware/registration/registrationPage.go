@@ -193,18 +193,18 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 		gcObject, err := getGC.GuestCodeByID(client.Eclient, ref)
 		if err != nil {
-			http.Redirect(w, r, "/404/", err)
+			http.Redirect(w, r, "/404/", http.StatusFound)
 			return
 		}
 
 		badge, err := getBadge.BadgeByID(client.Eclient, gcObject.Description)
 		if err != nil {
-			http.Redirect(w, r, "/404/", err)
+			http.Redirect(w, r, "/404/", http.StatusFound)
 			return
 		}
 
 		if len(badge.ID) == 0 {
-			http.Redirect(w, r, "/404/", errors.New("Invalid code"))
+			http.Redirect(w, r, "/404/", http.StatusFound)
 			return
 		}
 	}
