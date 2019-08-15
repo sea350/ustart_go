@@ -45,9 +45,9 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	}
 	p := bluemonday.UGCPolicy()
 
-	if len(r.FormValue("inputEmail")) == 0 {
-		return
-	}
+	// if len(r.FormValue("inputEmail")) == 0 {
+	// 	return
+	// }
 
 	//proper email
 	if !uses.ValidEmail(p.Sanitize(r.FormValue("inputEmail"))) {
