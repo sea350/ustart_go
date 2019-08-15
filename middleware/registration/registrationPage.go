@@ -10,8 +10,11 @@ import (
 	"time"
 
 	"github.com/microcosm-cc/bluemonday"
+	getBadge "github.com/sea350/ustart_go/get/badge"
+	getGC "github.com/sea350/ustart_go/get/guestCode"
 	client "github.com/sea350/ustart_go/middleware/client"
 	uses "github.com/sea350/ustart_go/uses"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -185,6 +188,23 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		isValid, err := uses.ValidGuestCode(client.Eclient, ref)
 		if !isValid || err != nil {
 			http.Redirect(w, r, "/404/", http.StatusFound)
+			return
+		}
+
+		gcObject, err := getGC.GuestCodeByID(client.Eclient, ref)
+		if err != nil {
+			http.Redirect(w, r, "/404/", err)
+			return
+		}
+
+		badge, err := getBadge.BadgeByID(client.Eclient, gcObject.Description)
+		if err != nil {
+			http.Redirect(w, r, "/404/", err)
+			return
+		}
+
+		if len(badge.ID) == 0 {
+			http.Redirect(w, r, "/404/", errors.New("Invalid code"))
 			return
 		}
 	}
