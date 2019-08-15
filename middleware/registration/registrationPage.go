@@ -198,10 +198,11 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 				http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
 			}
 		}
+	} else {
+		client.RenderTemplate(w, r, "templateNoUser2", cs)
+		client.RenderTemplate(w, r, "new-reg-nil", cs)
 	}
 
-	client.RenderTemplate(w, r, "templateNoUser2", cs)
-	client.RenderTemplate(w, r, "new-reg-nil", cs)
 }
 
 //Signup ... tests for an existing docId in sesson, if no id then render signup, if there is id redirect to profile
