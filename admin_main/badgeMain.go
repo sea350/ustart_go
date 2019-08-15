@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	get "github.com/sea350/ustart_go/get/badge"
 	post "github.com/sea350/ustart_go/post/badge"
 	postUser "github.com/sea350/ustart_go/post/user"
+	"github.com/sea350/ustart_go/types"
 
 	getUser "github.com/sea350/ustart_go/get/user"
 
@@ -116,7 +116,7 @@ func main() {
 	fac.ImageLink = "https://ustart-default.s3.amazonaws.com/CoachBadge.png"
 	fac.Roster = emails
 
-	fac.Tags = []string{"NYU Faculty"}
+	fac.Tags = []string{"Project Coaching"}
 
 	facPrint, err1 := post.IndexBadge(eclient, fac)
 	fmt.Println(facPrint, err1)
