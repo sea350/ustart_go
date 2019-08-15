@@ -415,6 +415,12 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 		log.Println(err)
 	}
 
+	gcObj.Users = append(gcObj.Users, id)
+	err = updateCode.UpdateGuestCode(eclient, badgeCode, "Users", gcObj.Users)
+	if err != nil {
+		return err
+	}
+
 	err = postUser.UpdateUser(eclient, id, "ProxyMessages", proxyID)
 	if err != nil {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
