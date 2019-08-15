@@ -181,6 +181,8 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
 		return
 	}
+	r.ParseForm()
+	ref := r.FormValue("ref")
 
 	session.Save(r, w)
 	cs := client.ClientSide{ErrorStatus: false}
