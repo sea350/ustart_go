@@ -349,7 +349,7 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 		return err
 	}
 
-	err = postBadge.UpdateBadge(eclient, gcObj.Description, "Tags", append(badge.Tags, email))
+	err = postBadge.UpdateBadge(eclient, gcObj.Description, "Roster", append(badge.Roster, email))
 	if err != nil {
 		return err
 	}
