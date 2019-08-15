@@ -121,19 +121,18 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	/*
 
-		signupPath := r.URL.Path[8:]
+		ref := r.FormValue("ref")
 		guestCode := ""
 		//check if URL is valid (url code is legitimate)
-		if len(signupPath) > 0{
-			validGuestcode, err := ValidGuestCode(eclient, guestCode)
+		if len(ref) > 0{
+			validGuestcode, err := ValidGuestCode(eclient, ref)
 			//add error handling
 
 			if !validGuestcode {
 				http.Redirect(w, r, "/404/", http.StatusFound)
 			}
 
-			guestCode, err :=  getGC.GuestCodeByID(client.Eclient, signupPath)
-			//error handling
+
 		}
 		next: add guestCode parameter to signup basic
 
