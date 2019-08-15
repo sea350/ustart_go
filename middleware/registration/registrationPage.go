@@ -122,7 +122,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	ref := r.FormValue("ref")
 
 	//check if URL is valid (url code is legitimate)
-	if len(ref) > 0 {
+	if len(ref) != 0 {
 		isValid, err := uses.ValidGuestCode(eclient, ref)
 
 		if err != nil {
