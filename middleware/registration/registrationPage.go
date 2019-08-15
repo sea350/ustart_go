@@ -119,6 +119,26 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		clientIP = userIP.String()
 	}
 
+	/*
+
+		signupPath := r.URL.Path[8:]
+		guestCode := ""
+		//check if URL is valid (url code is legitimate)
+		if len(signupPath) > 0{
+			validGuestcode, err := ValidGuestCode(eclient, guestCode)
+			//add error handling
+
+			if !validGuestcode {
+				http.Redirect(w, r, "/404/", http.StatusFound)
+			}
+
+			guestCode, err :=  getGC.GuestCodeByID(client.Eclient, signupPath)
+			//error handling
+		}
+		next: add guestCode parameter to signup basic
+
+
+	*/
 	err2 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP) // country, state, city, zip,
 
 	if err2 != nil {

@@ -28,6 +28,7 @@ import (
 //SignUpBasic ... A basic user signup process
 //Requires all basic signup feilds (email, password ...)
 //Returns an error if there was a problem with database submission
+//TODO: add
 func SignUpBasic(eclient *elastic.Client, username string, email string, password []byte, fname string, lname string, school string, major []string, bday time.Time, currYear string, addressIP string) error { //, country string, state string, city string, zip string) error {
 
 	newSignWarning, err := getWarning.SingupWarningByIP(eclient, addressIP)
@@ -301,16 +302,19 @@ func GuestSignUpBasic(eclient *elastic.Client, username string, email string, pa
 
 	/*
 		HERE WE CAN APPEND AN EMAIL FOR COACHES TO A DOC IN THE BADGE INDEX, WHICH WILL BE RETRIEVED IN THE NEXT LINE
-		badge, err := getBadge.BadgeByID(eclient, "COACH")
-		if err != nil{
-			return err
-		}
 
-		err = badgePost.UpdateBadge(eclient, "COACH","Tags", append(badge.Tags, email))
-		if err != nil{
-			return err
-		}
+		if len(signupType) > 0{
+			badge, err := getBadge.BadgeByID(eclient, signupType)
+			if err != nil{
+				return err
+			}
 
+			err = badgePost.UpdateBadge(eclient, signupType,"Tags", append(badge.Tags, email))
+			if err != nil{
+				return err
+			}
+
+		}
 	*/
 
 	badgeIDs, badgeTags, err := BadgeSetup(eclient, email)
