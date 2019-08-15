@@ -175,7 +175,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	}
 	//r.ParseForm()
 
-	client.Logger.Println(r.URL.Path)
+	// client.Logger.Println(r.URL.Path)
 	ref := r.FormValue("ref")
 
 	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
