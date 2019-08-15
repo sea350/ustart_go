@@ -11,6 +11,7 @@ import (
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getGuestCode "github.com/sea350/ustart_go/get/guestCode"
 	getUser "github.com/sea350/ustart_go/get/user"
+	getBadge "github.com/sea350/ustart_go/get/badge"
 	getWarning "github.com/sea350/ustart_go/get/warning"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postEntry "github.com/sea350/ustart_go/post/entry"
@@ -18,6 +19,7 @@ import (
 	updateCode "github.com/sea350/ustart_go/post/guestCode"
 	postNotif "github.com/sea350/ustart_go/post/notification"
 	postUser "github.com/sea350/ustart_go/post/user"
+	postBadge "github.com/sea350/ustart_go/post/badge"
 	postWarning "github.com/sea350/ustart_go/post/warning"
 	types "github.com/sea350/ustart_go/types"
 
@@ -291,7 +293,7 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	if err != nil {
 		return err
 	}
-	if inUse {
+	if inUse { 
 		return errors.New("username is in use")
 	}
 
@@ -344,13 +346,20 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	}
 
 
+	tempUserArray := guestObj.Users
+	tempUserArray = append(tempUserArray, id)
+	err = updateCode.UpdateGuestCode(eclient, guestCode, "Users", tempUserArray)
+	if err != nil {
+		return err
+	}
+
 	//	HERE WE CAN APPEND AN EMAIL FOR SPECIAL SIGNUPS TO A DOC IN THE BADGE INDEX, WHICH WILL BE RETRIEVED IN THE NEXT LINE
 	badge, err := getBadge.BadgeByID(eclient, gcObj.Description)
 	if err != nil{
 		return err
 	}
 
-	err = badgePost.UpdateBadge(eclient, gcObj.Description,"Tags", append(badge.Tags, email))
+	err = postBadge.UpdateBadge(eclient, gcObj.Description,"Tags", append(badge.Tags, email))
 	if err != nil{
 		return err
 	}
