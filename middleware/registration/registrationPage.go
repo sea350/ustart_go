@@ -183,7 +183,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	if len(ref) != 0 {
 		isValid, err := uses.ValidGuestCode(client.Eclient, ref)
-		if !isValid {
+		if !isValid || err != nil {
 			http.Redirect(w, r, "/404/", http.StatusFound)
 			return
 		}
