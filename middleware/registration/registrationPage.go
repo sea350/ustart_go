@@ -45,9 +45,39 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	}
 	p := bluemonday.UGCPolicy()
 
-	// if len(r.FormValue("inputEmail")) == 0 {
-	// 	return
-	// }
+	ref := r.FormValue("ref")
+
+	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
+	if len(ref) != 0 && err != nil {
+		client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
+		// cs.ErrorStatus = true
+		// cs.ErrorOutput = errors.New("Invalid reference code")
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
+	}
+
+	if len(ref) != 0 && isValid {
+
+		gcObject, err := getGC.GuestCodeByID(client.Eclient, ref)
+		if err != nil {
+			client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
+			http.Redirect(w, r, "/404/", http.StatusFound)
+			return
+		}
+
+		badge, err := getBadge.BadgeByID(client.Eclient, gcObject.Description)
+		if err != nil {
+			client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
+			http.Redirect(w, r, "/404/", http.StatusFound)
+			return
+		}
+
+		if len(badge.ID) == 0 {
+			client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
+			http.Redirect(w, r, "/404/", http.StatusFound)
+			return
+		}
+	}
 
 	//proper email
 	if !uses.ValidEmail(p.Sanitize(r.FormValue("inputEmail"))) {
@@ -125,11 +155,6 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	} else {
 		clientIP = userIP.String()
 	}
-
-	ref := r.FormValue("ref")
-
-	//check if URL is valid (url code is legitimate)
-	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
 
 	if len(ref) != 0 && err != nil {
 		client.Logger.Println("Email: "+email+" | Badge code validation error: ", err)
