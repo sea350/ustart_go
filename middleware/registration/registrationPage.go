@@ -123,7 +123,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	//check if URL is valid (url code is legitimate)
 	if len(ref) != 0 {
-		isValid, err := uses.ValidGuestCode(eclient, ref)
+		isValid, err := uses.ValidGuestCode(client.Eclient, ref)
 
 		if err != nil {
 			client.Logger.Printf("Badge code validation error: ", err)
