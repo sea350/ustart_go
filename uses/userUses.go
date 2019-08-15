@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"strings"
 
 	elastic "github.com/olivere/elastic"
 	getBadge "github.com/sea350/ustart_go/get/badge"
@@ -337,6 +338,12 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	newUsr.Visible = true
 	newUsr.Status = true
 
+	badgeIDs, badgeTags, err := BadgeSetup(eclient, email)
+	if err != nil {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.Println(err)
+	}
+
 	//Gets GuestCode object and also check if guest code is valid
 	gcObj, err := getGuestCode.GuestCodeByID(eclient, badgeCode)
 	if err != nil {
@@ -349,19 +356,13 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 		return err
 	}
 
-	err = postBadge.UpdateBadge(eclient, gcObj.Description, "Roster", append(badge.Roster, email))
+	err = postBadge.UpdateBadge(eclient, gcObj.Description, "Roster", append(badge.Roster, strings.ToLower(email)))
 	if err != nil {
 		return err
 	}
 
-	badgeIDs, badgeTags, err := BadgeSetup(eclient, email)
-	if err != nil {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
-		log.Println(err)
-	}
-
-	newUsr.Tags = badgeTags
-	newUsr.BadgeIDs = badgeIDs
+	newUsr.Tags = append(badgeTags, badge.Tags...)
+	newUsr.BadgeIDs = append(badgeIDs, gcObj.Description)
 	newUsr.AccCreation = time.Now()
 	if currYear == "Freshman" {
 		newUsr.Class = 0
