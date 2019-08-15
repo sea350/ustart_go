@@ -123,12 +123,12 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	//check if URL is valid (url code is legitimate)
 	if len(ref) > 0 {
-		validGuestcode, err := uses.ValidGuestCode(eclient, ref)
+		isValid, err := uses.ValidGuestCode(eclient, ref)
 
 		if err != nil {
 			client.Logger.Printf("Badge code validation error: ", err)
 		}
-		if validGuestcode {
+		if isValid {
 			err2 := uses.BadgeSignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP, ref)
 
 			if err2 != nil {
@@ -144,11 +144,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 				http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
 				return
 			}
-		} else {
-			http.Redirect(w, r, "/404/", http.StatusFound)
-			return
 		}
-
 	}
 
 	err3 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP) // country, state, city, zip,
@@ -182,8 +178,14 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	ref := r.FormValue("ref")
 
+	ref := r.FormValue("ref")
+	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
+
+	if !isValid {
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
+	}
 	session.Save(r, w)
 	cs := client.ClientSide{ErrorStatus: false}
 	client.RenderTemplate(w, r, "templateNoUser2", cs)
