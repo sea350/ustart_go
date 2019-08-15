@@ -179,7 +179,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
 	client.Logger.Println(ref)
-	client.Logger.Println(r.URL.Path[8:])
+	client.Logger.Println(r.URL.Path)
 	if (len(ref) != 0 && len(r.URL.Path[8:]) > 0) && err != nil {
 		client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
 		cs.ErrorStatus = true
