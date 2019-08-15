@@ -2,13 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	post "github.com/sea350/ustart_go/post/badge"
-	postUser "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/types"
-
-	getUser "github.com/sea350/ustart_go/get/user"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
@@ -109,45 +105,45 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 
-	emails := []string{"fan224@nyu.edu"}
+	// emails := []string{"fan224@nyu.edu"}
 	var fac types.Badge
 	fac.ID = "UCOACH"
 	fac.Type = "Verified Coach"
 	fac.ImageLink = "https://ustart-default.s3.amazonaws.com/CoachBadge.png"
-	fac.Roster = emails
+	// fac.Roster = emails
 
 	fac.Tags = []string{"Project Coaching"}
 
 	facPrint, err1 := post.IndexBadge(eclient, fac)
 	fmt.Println(facPrint, err1)
 
-	for _, email := range emails {
-		usrID, err := getUser.UserIDByEmail(eclient, email)
-		if err == nil {
-			usr, err := getUser.UserByID(eclient, usrID)
-			if err == nil {
-				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, fac.ID))
-				if badgeErr == nil {
-					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
-					if tagErr == nil {
+	// for _, email := range emails {
+	// 	usrID, err := getUser.UserIDByEmail(eclient, email)
+	// 	if err == nil {
+	// 		usr, err := getUser.UserByID(eclient, usrID)
+	// 		if err == nil {
+	// 			badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, fac.ID))
+	// 			if badgeErr == nil {
+	// 				tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
+	// 				if tagErr == nil {
 
-					} else {
-						log.Println(tagErr)
-						continue
-					}
-				} else {
-					log.Println(badgeErr)
-					continue
-				}
-			} else {
-				log.Println(err)
-				continue
-			}
-		} else {
-			log.Println(err)
-			continue
-		}
-	}
+	// 				} else {
+	// 					log.Println(tagErr)
+	// 					continue
+	// 				}
+	// 			} else {
+	// 				log.Println(badgeErr)
+	// 				continue
+	// 			}
+	// 		} else {
+	// 			log.Println(err)
+	// 			continue
+	// 		}
+	// 	} else {
+	// 		log.Println(err)
+	// 		continue
+	// 	}
+	// }
 }
 
 // func main() {
