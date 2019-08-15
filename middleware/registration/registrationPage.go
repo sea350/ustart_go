@@ -131,8 +131,8 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		client.Logger.Println("Email: "+email+" | Badge code validation error: ", err)
 	}
 
-	client.Logger.Println(ref)
-	client.Logger.Println(isValid)
+	// client.Logger.Println(ref)
+	// client.Logger.Println(isValid)
 
 	if len(ref) != 0 && isValid {
 		err2 := uses.BadgeSignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP, ref)
