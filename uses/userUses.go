@@ -8,18 +8,18 @@ import (
 	"math"
 
 	elastic "github.com/olivere/elastic"
+	getBadge "github.com/sea350/ustart_go/get/badge"
 	getEntry "github.com/sea350/ustart_go/get/entry"
 	getGuestCode "github.com/sea350/ustart_go/get/guestCode"
 	getUser "github.com/sea350/ustart_go/get/user"
-	getBadge "github.com/sea350/ustart_go/get/badge"
 	getWarning "github.com/sea350/ustart_go/get/warning"
+	postBadge "github.com/sea350/ustart_go/post/badge"
 	postChat "github.com/sea350/ustart_go/post/chat"
 	postEntry "github.com/sea350/ustart_go/post/entry"
 	postFollow "github.com/sea350/ustart_go/post/follow"
 	updateCode "github.com/sea350/ustart_go/post/guestCode"
 	postNotif "github.com/sea350/ustart_go/post/notification"
 	postUser "github.com/sea350/ustart_go/post/user"
-	postBadge "github.com/sea350/ustart_go/post/badge"
 	postWarning "github.com/sea350/ustart_go/post/warning"
 	types "github.com/sea350/ustart_go/types"
 
@@ -293,7 +293,7 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	if err != nil {
 		return err
 	}
-	if inUse { 
+	if inUse {
 		return errors.New("username is in use")
 	}
 
@@ -337,34 +337,22 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	newUsr.Visible = true
 	newUsr.Status = true
 
-	
-
 	//Gets GuestCode object and also check if guest code is valid
 	gcObj, err := getGuestCode.GuestCodeByID(eclient, badgeCode)
 	if err != nil {
 		return errors.New("There was a problem finding your code")
 	}
 
-
-	tempUserArray := guestObj.Users
-	tempUserArray = append(tempUserArray, id)
-	err = updateCode.UpdateGuestCode(eclient, guestCode, "Users", tempUserArray)
+	//	HERE WE CAN APPEND AN EMAIL FOR SPECIAL SIGNUPS TO A DOC IN THE BADGE INDEX, WHICH WILL BE RETRIEVED IN THE NEXT LINE
+	badge, err := getBadge.BadgeByID(eclient, gcObj.Description)
 	if err != nil {
 		return err
 	}
 
-	//	HERE WE CAN APPEND AN EMAIL FOR SPECIAL SIGNUPS TO A DOC IN THE BADGE INDEX, WHICH WILL BE RETRIEVED IN THE NEXT LINE
-	badge, err := getBadge.BadgeByID(eclient, gcObj.Description)
-	if err != nil{
+	err = postBadge.UpdateBadge(eclient, gcObj.Description, "Tags", append(badge.Tags, email))
+	if err != nil {
 		return err
 	}
-
-	err = postBadge.UpdateBadge(eclient, gcObj.Description,"Tags", append(badge.Tags, email))
-	if err != nil{
-		return err
-	}
-
-	
 
 	badgeIDs, badgeTags, err := BadgeSetup(eclient, email)
 	if err != nil {
@@ -398,6 +386,13 @@ func BadgeSignUpBasic(eclient *elastic.Client, username string, email string, pa
 	id, retErr := postUser.IndexUser(eclient, newUsr)
 	if retErr != nil {
 		return retErr
+	}
+
+	tempUserArray := gcObj.Users
+	tempUserArray = append(tempUserArray, id)
+	err = updateCode.UpdateGuestCode(eclient, guestCode, "Users", tempUserArray)
+	if err != nil {
+		return err
 	}
 
 	errFollow := postFollow.IndexFollow(eclient, id)
