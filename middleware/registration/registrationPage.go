@@ -125,45 +125,40 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	ref := r.FormValue("ref")
 
 	//check if URL is valid (url code is legitimate)
-	if len(ref) != 0 {
-		isValid, err := uses.ValidGuestCode(client.Eclient, ref)
+	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
 
-		if err != nil {
-			client.Logger.Printf("Badge code validation error: ", err)
-		}
-		if isValid {
-			err2 := uses.BadgeSignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP, ref)
-
-			if err2 != nil {
-
-				client.Logger.Println("Email: "+email+" | err at signup: ", err2)
-				cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
-				client.RenderTemplate(w, r, "templateNoUser2", cs)
-				client.RenderTemplate(w, r, "new-reg-nil", cs)
-
-			}
-
-			if err2 == nil {
-				http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
-				return
-			}
-		}
+	if len(ref) != 0 && err != nil {
+		client.Logger.Println("Email: "+email+" | Badge code validation error: ", err)
 	}
 
-	err3 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP) // country, state, city, zip,
+	if len(ref) != 0 && isValid {
+		err2 := uses.BadgeSignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP, ref)
 
-	if err3 != nil {
+		if err2 != nil {
 
-		client.Logger.Println("Email: "+email+" | err at signup: ", err3)
-		cs := client.ClientSide{ErrorOutput: err3, ErrorStatus: true}
-		client.RenderTemplate(w, r, "templateNoUser2", cs)
-		client.RenderTemplate(w, r, "new-reg-nil", cs)
+			client.Logger.Println("Email: "+email+" | err at signup: ", err2)
+			cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
+			client.RenderTemplate(w, r, "templateNoUser2", cs)
+			client.RenderTemplate(w, r, "new-reg-nil", cs)
 
-	}
+		} else {
+			http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
+		}
 
-	if err3 == nil {
-		http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
-		return
+	} else {
+
+		err3 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP) // country, state, city, zip,
+
+		if err3 != nil {
+
+			client.Logger.Println("Email: "+email+" | err at signup: ", err3)
+			cs := client.ClientSide{ErrorOutput: err3, ErrorStatus: true}
+			client.RenderTemplate(w, r, "templateNoUser2", cs)
+			client.RenderTemplate(w, r, "new-reg-nil", cs)
+
+		} else {
+			http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
+		}
 	}
 
 }
@@ -175,8 +170,6 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	test1, _ := session.Values["DocID"]
 
 	if test1 != nil {
-
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", test1)
 		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
 		return
 	}
@@ -184,26 +177,31 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	ref := r.FormValue("ref")
 
-	if len(ref) != 0 {
-		isValid, err := uses.ValidGuestCode(client.Eclient, ref)
-		if !isValid || err != nil {
-			http.Redirect(w, r, "/404/", http.StatusFound)
-			return
-		}
+	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
+	if len(ref) != 0 && err != nil {
+		client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
+	}
+
+	if len(ref) != 0 && isValid {
 
 		gcObject, err := getGC.GuestCodeByID(client.Eclient, ref)
 		if err != nil {
+			client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
 			http.Redirect(w, r, "/404/", http.StatusFound)
 			return
 		}
 
 		badge, err := getBadge.BadgeByID(client.Eclient, gcObject.Description)
 		if err != nil {
+			client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
 			http.Redirect(w, r, "/404/", http.StatusFound)
 			return
 		}
 
 		if len(badge.ID) == 0 {
+			client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
 			http.Redirect(w, r, "/404/", http.StatusFound)
 			return
 		}
