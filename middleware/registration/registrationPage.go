@@ -173,8 +173,9 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/profile/"+test1.(string), http.StatusFound)
 		return
 	}
-	r.ParseForm()
+	//r.ParseForm()
 
+	client.Logger.Println(r.URL.Path)
 	ref := r.FormValue("ref")
 
 	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
