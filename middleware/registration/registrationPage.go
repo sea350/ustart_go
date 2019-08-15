@@ -177,12 +177,12 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	ref := r.FormValue("ref")
 
-	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
-	if len(ref) != 0 && err != nil {
-		client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
-		http.Redirect(w, r, "/404/", http.StatusFound)
-		return
-	}
+	isValid, _ := uses.ValidGuestCode(client.Eclient, ref)
+	// if len(ref) != 0 && err != nil {
+	// 	client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
+	// 	http.Redirect(w, r, "/404/", http.StatusFound)
+	// 	return
+	// }
 
 	if len(ref) != 0 && isValid {
 
