@@ -123,29 +123,29 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 	//check if URL is valid (url code is legitimate)
 	if len(ref) != 0 {
-		// isValid, err := uses.ValidGuestCode(eclient, ref)
+		isValid, err := uses.ValidGuestCode(eclient, ref)
 
-		// if err != nil {
-		// 	client.Logger.Printf("Badge code validation error: ", err)
-		// }
-		// if isValid {
-		err2 := uses.BadgeSignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP, ref)
-
-		if err2 != nil {
-
-			client.Logger.Println("Email: "+email+" | err at signup: ", err2)
-			cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
-			client.RenderTemplate(w, r, "templateNoUser2", cs)
-			client.RenderTemplate(w, r, "new-reg-nil", cs)
-
+		if err != nil {
+			client.Logger.Printf("Badge code validation error: ", err)
 		}
+		if isValid {
+			err2 := uses.BadgeSignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP, ref)
 
-		if err2 == nil {
-			http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
-			return
+			if err2 != nil {
+
+				client.Logger.Println("Email: "+email+" | err at signup: ", err2)
+				cs := client.ClientSide{ErrorOutput: err2, ErrorStatus: true}
+				client.RenderTemplate(w, r, "templateNoUser2", cs)
+				client.RenderTemplate(w, r, "new-reg-nil", cs)
+
+			}
+
+			if err2 == nil {
+				http.Redirect(w, r, "/registrationcomplete/", http.StatusFound)
+				return
+			}
 		}
 	}
-	// }
 
 	err3 := uses.SignUpBasic(client.Eclient, username, email, hashedPassword, fname, lname, school, major, bday, currYear, clientIP) // country, state, city, zip,
 
