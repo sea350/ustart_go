@@ -37,7 +37,6 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	session, _ := client.Store.Get(r, "session_please")
 	// check DOCID instead
-	cs := client.ClientSide{}
 	test1, _ := session.Values["DocID"]
 	if test1 != nil {
 		// REGISTRATION SHOULD NOT LOG YOU IN
@@ -45,22 +44,23 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	p := bluemonday.UGCPolicy()
-
+	cs := client.ClientSide{}
 	ref := r.FormValue("ref")
 
-	client.Logger.Println(ref)
-	client.Logger.Println(r.URL.RequestURI())
-	client.Logger.Println(r.URL.Path)
+	// client.Logger.Println(ref)
+	// client.Logger.Println(r.URL.RequestURI())
+	// client.Logger.Println(r.URL.Path)
+
+	isValid, err := uses.ValidGuestCode(client.Eclient, ref)
+	if len(ref) != 0 && err != nil {
+		client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
+		// cs.ErrorStatus = true
+		// cs.ErrorOutput = errors.New("Invalid reference code")
+		http.Redirect(w, r, "/404/", http.StatusFound)
+		return
+	}
 
 	if len(r.FormValue("inputEmail")) > 0 {
-		isValid, err := uses.ValidGuestCode(client.Eclient, ref)
-		if len(ref) != 0 && err != nil {
-			client.Logger.Println("Reference: "+ref+" | err at signup: ", err)
-			// cs.ErrorStatus = true
-			// cs.ErrorOutput = errors.New("Invalid reference code")
-			http.Redirect(w, r, "/404/", http.StatusFound)
-			return
-		}
 
 		if len(ref) != 0 && isValid {
 
