@@ -64,7 +64,8 @@ func (r *Request) sendMail() bool {
 	svc := ses.New(sess)
 
 	sendTo := r.to[0]
-	log.Println("Params:", r)
+	log.Println("Params:", r.to, r.from)
+
 	// Assemble the email.
 	input := &ses.SendEmailInput{
 		Destination: &ses.Destination{
