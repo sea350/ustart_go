@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/sea350/ustart_go/uses"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
@@ -43,10 +44,16 @@ func main() {
 
 	notVer := int(res2.TotalHits())
 
+	sendTo := []string{}
 	fmt.Println("Unverified:", notVer)
 	fmt.Println("The following users are unverified: ")
 	for _, e := range emails {
+		sendTo = append(sendTo, e)
 		fmt.Println(e)
+	}
+
+	for _, e := range sendTo {
+		uses.SendVerificationEmail(eclient, e)
 	}
 
 }
