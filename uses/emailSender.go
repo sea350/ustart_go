@@ -63,12 +63,14 @@ func (r *Request) sendMail() bool {
 	// Create an SES session.
 	svc := ses.New(sess)
 
+	sendTo := r.to[0]
+	log.Println("Params:", r)
 	// Assemble the email.
 	input := &ses.SendEmailInput{
 		Destination: &ses.Destination{
 			CcAddresses: []*string{},
 			ToAddresses: []*string{
-				aws.String(r.to[0]),
+				aws.String(sendTo),
 			},
 		},
 		Message: &ses.Message{
