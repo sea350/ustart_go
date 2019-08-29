@@ -6,9 +6,9 @@ import (
 
 	"github.com/sea350/ustart_go/globals"
 
+	elastic "github.com/olivere/elastic"
 	getUser "github.com/sea350/ustart_go/get/user"
 	postUser "github.com/sea350/ustart_go/post/user"
-	elastic "github.com/olivere/elastic"
 )
 
 //SendVerificationEmail ... resends User Verification Email
