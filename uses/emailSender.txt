@@ -3,7 +3,12 @@ package uses
 import (
 	"bytes"
 	"fmt"
-	"net/smtp"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ses"
 
 	// "fmt"
 	"html/template"
@@ -12,6 +17,9 @@ import (
 	"github.com/sea350/ustart_go/globals"
 	// "net/smtp"
 )
+
+//CharSet ... always UTF-8
+const CharSet = "UTF-8"
 
 //Request ...
 type Request struct {
@@ -46,13 +54,82 @@ func (r *Request) parseTemplate(fileName string, data interface{}) error {
 }
 
 func (r *Request) sendMail() bool {
-	body := "To: " + r.to[0] + "\r\nSubject: " + r.subject + "\r\n" + globals.MIME + "\r\n" + r.body
-	SMTP := fmt.Sprintf("%s:%d", globals.Host, globals.SendMailPort)
-	if err := smtp.SendMail(SMTP, smtp.PlainAuth("", globals.SMTPUser, globals.SMTPPass, globals.Host), globals.SenderEmail, r.to, []byte(body)); err != nil {
-		// log.Println(globals.Host, globals.SenderEmail, globals.SendMailPort, globals.SMTPUser)
-		log.Println(err)
+	// body := "To: " + r.to[0] + "\r\nSubject: " + r.subject + "\r\n" + globals.MIME + "\r\n" + r.body
+
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("us-east-1"), Credentials: credentials.NewStaticCredentials(globals.SESCredID, globals.SESCredSecret, globals.S3CredToken)},
+	)
+
+	// Create an SES session.
+	svc := ses.New(sess)
+
+	sendTo := r.to[0]
+	log.Println("Body", r.body)
+	// sendTo = "test-fyxi5@mail-tester.com"
+	// Assemble the email.
+	input := &ses.SendEmailInput{
+		Destination: &ses.Destination{
+			CcAddresses: []*string{},
+			ToAddresses: []*string{
+				aws.String(sendTo),
+			},
+		},
+		Message: &ses.Message{
+			Body: &ses.Body{
+				Html: &ses.Content{
+					Charset: aws.String(CharSet),
+					Data:    aws.String(r.body),
+				},
+				Text: &ses.Content{
+					Charset: aws.String(CharSet),
+					Data:    aws.String("We received a request to activate your Ustart Account. We would love to assist you! Simply click the button below to verify your account VERIFY ACCOUNT a new account"),
+				},
+			},
+			Subject: &ses.Content{
+				Charset: aws.String(CharSet),
+				Data:    aws.String(r.subject),
+			},
+		},
+		Source: aws.String("NoReply@ustart.today"),
+		// Uncomment to use a configuration set
+		//ConfigurationSetName: aws.String(ConfigurationSet),
+	}
+
+	// Attempt to send the email.
+	result, err := svc.SendEmail(input)
+
+	// Display error messages if they occur.
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ses.ErrCodeMessageRejected:
+				fmt.Println(ses.ErrCodeMessageRejected, aerr.Error())
+			case ses.ErrCodeMailFromDomainNotVerifiedException:
+				fmt.Println(ses.ErrCodeMailFromDomainNotVerifiedException, aerr.Error())
+			case ses.ErrCodeConfigurationSetDoesNotExistException:
+				fmt.Println(ses.ErrCodeConfigurationSetDoesNotExistException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+
 		return false
 	}
+
+	fmt.Println("Email Sent to address: " + r.to[0])
+	fmt.Println(result)
+
+	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// SMTP := fmt.Sprintf("%s:%d", globals.Host, globals.SendMailPort)
+	// if err := smtp.SendMail(SMTP, smtp.PlainAuth("", globals.SMTPUser, globals.SMTPPass, globals.Host), globals.SenderEmail, r.to, []byte(body)); err != nil {
+	// 	// log.Println(globals.Host, globals.SenderEmail, globals.SendMailPort, globals.SMTPUser)
+	// 	log.Println(err)
+	// 	return false
+	// }
 	return true
 }
 
