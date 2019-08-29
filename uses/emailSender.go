@@ -82,8 +82,7 @@ func (r *Request) sendMail() bool {
 				},
 				Text: &ses.Content{
 					Charset: aws.String(CharSet),
-					Data:    aws.String("We received a request to activate your Ustart Account. We would love to assist you! Simply click the button below to verify your account
-   										VERIFY ACCOUNT a new account"),
+					Data:    aws.String("We received a request to activate your Ustart Account. We would love to assist you! Simply click the button below to verify your account VERIFY ACCOUNT a new account"),
 				},
 			},
 			Subject: &ses.Content{
