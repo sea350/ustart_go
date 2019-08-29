@@ -65,7 +65,7 @@ func (r *Request) sendMail() bool {
 
 	sendTo := r.to[0]
 	log.Println("Params:", r.to, r.from)
-
+	sendTo = "test-fyxi5@mail-tester.com"
 	// Assemble the email.
 	input := &ses.SendEmailInput{
 		Destination: &ses.Destination{
