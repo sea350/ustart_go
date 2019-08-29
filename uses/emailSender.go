@@ -90,7 +90,7 @@ func (r *Request) sendMail() bool {
 				Data:    aws.String(r.subject),
 			},
 		},
-		Source: aws.String(r.from),
+		Source: aws.String("NoReply@ustart.today"),
 		// Uncomment to use a configuration set
 		//ConfigurationSetName: aws.String(ConfigurationSet),
 	}
