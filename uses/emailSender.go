@@ -67,7 +67,7 @@ func (r *Request) sendMail() bool {
 		Destination: &ses.Destination{
 			CcAddresses: []*string{},
 			ToAddresses: []*string{
-				aws.String([]string{r.to}),
+				aws.String(r.to[0]),
 			},
 		},
 		Message: &ses.Message{
@@ -116,7 +116,7 @@ func (r *Request) sendMail() bool {
 		return false
 	}
 
-	fmt.Println("Email Sent to address: " + r.to)
+	fmt.Println("Email Sent to address: " + r.to[0])
 	fmt.Println(result)
 
 	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
