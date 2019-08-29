@@ -57,7 +57,7 @@ func (r *Request) sendMail() bool {
 	// body := "To: " + r.to[0] + "\r\nSubject: " + r.subject + "\r\n" + globals.MIME + "\r\n" + r.body
 
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"), Credentials: credentials.NewStaticCredentials(globals.S3CredID, globals.S3CredSecret)},
+		Region: aws.String("us-east-1"), Credentials: credentials.NewStaticCredentials(globals.SESCredID, globals.SESCredSecret, globals.S3CredToken)},
 	)
 
 	// Create an SES session.
