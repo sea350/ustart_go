@@ -64,8 +64,8 @@ func (r *Request) sendMail() bool {
 	svc := ses.New(sess)
 
 	sendTo := r.to[0]
-	log.Println("Params:", r.to, r.from)
-	sendTo = "test-fyxi5@mail-tester.com"
+	log.Println("Body", r.body)
+	// sendTo = "test-fyxi5@mail-tester.com"
 	// Assemble the email.
 	input := &ses.SendEmailInput{
 		Destination: &ses.Destination{
@@ -82,7 +82,8 @@ func (r *Request) sendMail() bool {
 				},
 				Text: &ses.Content{
 					Charset: aws.String(CharSet),
-					Data:    aws.String(r.body),
+					Data:    aws.String("We received a request to activate your Ustart Account. We would love to assist you! Simply click the button below to verify your account
+   										VERIFY ACCOUNT a new account"),
 				},
 			},
 			Subject: &ses.Content{
