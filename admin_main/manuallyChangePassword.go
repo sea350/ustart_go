@@ -30,10 +30,10 @@ func main() {
 
 	fmt.Println("Get user by email error", err)
 
-	userID, err := getUser.UseIDByUsernamer(eclient, usr.Username)
+	userID, err := getUser.UseIDByUsername(eclient, usr.Username)
 
 	fmt.Println("Get userID by username error", err)
-	newPass := "adanat11341"
+	newPass := []byte("adanat11341")
 	newHashedPass, err := bcrypt.GenerateFromPassword(newPass, bcrypt.DefaultCost)
 	// err = post.UpdateUser(eclient, userID, "Password", newHashedPass)
 	usr.Password = newHashedPass
