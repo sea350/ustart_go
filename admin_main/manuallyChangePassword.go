@@ -45,6 +45,6 @@ func main() {
 		err = post.ReindexUser(eclient, userID, usr)
 	}
 
-	fmt.Println("Reindex user error," err)
+	fmt.Println("Reindex user error", err)
 
 }
