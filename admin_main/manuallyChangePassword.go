@@ -30,7 +30,7 @@ func main() {
 
 	fmt.Println("Get user by email error", err)
 
-	userID, err := getUser.UseIDByUsername(eclient, usr.Username)
+	userID, err := getUser.UserIDByUsername(eclient, usr.Username)
 
 	fmt.Println("Get userID by username error", err)
 	newPass := []byte("adanat11341")
