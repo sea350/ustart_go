@@ -69,8 +69,8 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 	if len(mustMajor) > 0 {
 		for _, element := range mustMajor {
 			//Check if NewMatchQuery order is correct
-			// query = query.Must(elastic.NewMatchQuery("Major", strings.ToLower(element)))
-			query = query.Should(elastic.NewFuzzyQuery("Majors.keyword", strings.ToLower(element)).Fuzziness("AUTO"))
+			query = query.Must(elastic.NewMatchQuery("Majors.keyword", strings.ToLower(element)))
+			// query = query.Should(elastic.NewFuzzyQuery("Majors", strings.ToLower(element)).Fuzziness("AUTO"))
 		}
 	}
 
