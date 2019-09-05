@@ -55,10 +55,10 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 		}
 		//Tags
 		if searchBy[2] {
-			query = uses.MultiWildCardQuery(query, "Tags.keyword", searchArr, true)
+			query = uses.MultiWildCardQuery(query, "Tags", searchArr, true)
 
 			for _, element := range searchArr {
-				query = query.Should(elastic.NewFuzzyQuery("Tags.keyword", strings.ToLower(element)).Fuzziness("AUTO"))
+				query = query.Should(elastic.NewFuzzyQuery("Tags", strings.ToLower(element)).Fuzziness("AUTO"))
 			}
 		}
 	} else {
@@ -76,7 +76,7 @@ func PrototypeUserSearchScroll(eclient *elastic.Client, searchTerm string, sortB
 
 	if len(mustTag) > 0 {
 		for _, tag := range mustTag {
-			query = query.Must(elastic.NewTermQuery("Tags.keyword", strings.ToLower(tag)))
+			query = query.Must(elastic.NewTermQuery("Tags", strings.ToLower(tag)))
 		}
 	}
 
