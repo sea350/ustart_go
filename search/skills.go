@@ -5,10 +5,10 @@ import (
 	"errors"
 	"strings"
 
+	elastic "github.com/olivere/elastic"
 	globals "github.com/sea350/ustart_go/globals"
 	types "github.com/sea350/ustart_go/types"
 	"github.com/sea350/ustart_go/uses"
-	elastic "github.com/olivere/elastic"
 )
 
 //Skills ... Attempt at general skills search
@@ -20,7 +20,7 @@ func Skills(eclient *elastic.Client, searchTerm string) ([]types.FloatingHead, e
 
 	stringArray := strings.Split(searchTerm, ` `)
 	for _, element := range stringArray {
-		query = query.Should(elastic.NewWildcardQuery("Tags", strings.ToLower(element)))
+		query = query.Should(elastic.NewWildcardQuery("Tags.keyword", strings.ToLower(element)))
 	}
 
 	searchResults, err := eclient.Search().
