@@ -28,6 +28,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchlistmajors"))
 	searchSkills := uses.ConvertStrToStrArr(r.FormValue("searchlistskills")) //array
 
+	log.Println("Majors Array:", searchMajors)
 	log.Println("Skills Array:", searchSkills)
 	if filter == `projects` {
 		if r.FormValue("searchbyprojectname") != `` {
