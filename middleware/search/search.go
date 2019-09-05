@@ -2,7 +2,8 @@ package search
 
 import (
 	"io"
-	
+	"log"
+
 	"net/http"
 	"strings"
 
@@ -27,6 +28,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	searchMajors := uses.ConvertStrToStrArr(r.FormValue("searchlistmajors"))
 	searchSkills := uses.ConvertStrToStrArr(r.FormValue("searchlistskills")) //array
 
+	log.Println("Skills Array:", searchSkills)
 	if filter == `projects` {
 		if r.FormValue("searchbyprojectname") != `` {
 			searchBy = append(searchBy, true)
@@ -50,7 +52,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		numHits, scrollID, results, err := search.PrototypeProjectSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil && err != io.EOF {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		cs.ListOfHeads = results
@@ -85,7 +87,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		numHits, scrollID, results, err := search.PrototypeEventSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil && err != io.EOF {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		cs.ListOfHeads = results
@@ -110,7 +112,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 		}
 		numHits, scrollID, results, err := search.PrototypeUserSearchScroll(client.Eclient, strings.ToLower(query), 0, searchBy, searchMajors, searchSkills, []types.LocStruct{}, "")
 		if err != nil && err != io.EOF {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		cs.ListOfHeads = results
@@ -120,7 +122,7 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	if filter == `skills` {
 		results, err := search.Skills(client.Eclient, strings.ToLower(query))
 		if err != nil && err != io.EOF {
-			
+
 			client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 		}
 		cs.ListOfHeads = results
