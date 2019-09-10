@@ -19,7 +19,7 @@ func main() {
 
 	ctx := context.Background()
 
-	maq := elastic.NewTermQuery("Tags", "Project Coaching")
+	maq := elastic.NewMatchQuery("Tags", "Project Coaching")
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
