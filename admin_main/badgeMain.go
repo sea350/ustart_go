@@ -1,18 +1,64 @@
 package main
 
 import (
-	"fmt"
-
-	post "github.com/sea350/ustart_go/post/badge"
-	"github.com/sea350/ustart_go/types"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
+	"log"
+
 	elastic "github.com/olivere/elastic"
+	get "github.com/sea350/ustart_go/get/badge"
+	getUser "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/globals"
+	postUser "github.com/sea350/ustart_go/post/user"
 )
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
+
+func main() {
+	badgeDOCID := "UCOACH"
+	badge, err := get.BadgeByID(eclient, badgeDOCID)
+	if err != nil {
+		log.Println(err)
+	}
+
+	vipEmails := []string{"ronald11341@aol.com"}
+	// seAEmails := []string{"zna215@nyu.edu", "aks618@nyu.edu", "lyannelalunio@nyu.edu", "fn513@nyu.edu"}
+	// seBEmails := []string{"js9202@nyu.edu"}
+	// dpAEmails := []string{"at3089@nyu.edu"}
+	// dpBEmails := []string{}
+
+	theEmails := vipEmails
+
+	postBadge.UpdateBadge(eclient, badge.ID, "Roster", append(badge.Roster, theEmails...))
+	for _, e := range theEmails {
+		usrID, err := getUser.UserIDByEmail(eclient, e)
+		if err == nil {
+			usr, err := getUser.UserByID(eclient, usrID)
+			if err == nil {
+				badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, badge.ID))
+				if badgeErr == nil {
+					tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(badge.Tags, usr.Tags...))
+					if tagErr == nil {
+
+					} else {
+						log.Println(tagErr)
+						continue
+					}
+				} else {
+					log.Println(badgeErr)
+					continue
+				}
+			} else {
+				log.Println(err)
+				continue
+			}
+		} else {
+			log.Println(err)
+			continue
+		}
+	}
+}
 
 // func main() {
 
@@ -103,55 +149,55 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 // 	}
 // }
 
-func main() {
-
-	// emails := []string{"fan224@nyu.edu"}
-	var fac types.Badge
-	fac.ID = "UCOACH"
-	fac.Type = "Verified Coach"
-	fac.ImageLink = "https://ustart-default.s3.amazonaws.com/CoachBadge.png"
-	// fac.Roster = emails
-
-	fac.Tags = []string{"Project Coaching"}
-
-	facPrint, err1 := post.IndexBadge(eclient, fac)
-	fmt.Println(facPrint, err1)
-
-	// for _, email := range emails {
-	// 	usrID, err := getUser.UserIDByEmail(eclient, email)
-	// 	if err == nil {
-	// 		usr, err := getUser.UserByID(eclient, usrID)
-	// 		if err == nil {
-	// 			badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, fac.ID))
-	// 			if badgeErr == nil {
-	// 				tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
-	// 				if tagErr == nil {
-
-	// 				} else {
-	// 					log.Println(tagErr)
-	// 					continue
-	// 				}
-	// 			} else {
-	// 				log.Println(badgeErr)
-	// 				continue
-	// 			}
-	// 		} else {
-	// 			log.Println(err)
-	// 			continue
-	// 		}
-	// 	} else {
-	// 		log.Println(err)
-	// 		continue
-	// 	}
-	// }
-}
-
 // func main() {
-// 	badgeDOCID := "USTARTVIP"
-// 	badge, err := get.BadgeByID(eclient, badgeDOCID)
-// 	if err != nil {
-// 		log.Println(err)
-// 	}
+
+// 	// emails := []string{"fan224@nyu.edu"}
+// 	var fac types.Badge
+// 	fac.ID = "UCOACH"
+// 	fac.Type = "Verified Coach"
+// 	fac.ImageLink = "https://ustart-default.s3.amazonaws.com/CoachBadge.png"
+// 	// fac.Roster = emails
+
+// 	fac.Tags = []string{"Project Coaching"}
+
+// 	facPrint, err1 := post.IndexBadge(eclient, fac)
+// 	fmt.Println(facPrint, err1)
+
+// 	// for _, email := range emails {
+// 	// 	usrID, err := getUser.UserIDByEmail(eclient, email)
+// 	// 	if err == nil {
+// 	// 		usr, err := getUser.UserByID(eclient, usrID)
+// 	// 		if err == nil {
+// 	// 			badgeErr := postUser.UpdateUser(eclient, usrID, "BadgeIDs", append(usr.BadgeIDs, fac.ID))
+// 	// 			if badgeErr == nil {
+// 	// 				tagErr := postUser.UpdateUser(eclient, usrID, "Tags", append(fac.Tags, usr.Tags...))
+// 	// 				if tagErr == nil {
+
+// 	// 				} else {
+// 	// 					log.Println(tagErr)
+// 	// 					continue
+// 	// 				}
+// 	// 			} else {
+// 	// 				log.Println(badgeErr)
+// 	// 				continue
+// 	// 			}
+// 	// 		} else {
+// 	// 			log.Println(err)
+// 	// 			continue
+// 	// 		}
+// 	// 	} else {
+// 	// 		log.Println(err)
+// 	// 		continue
+// 	// 	}
+// 	// }
+// }
+
+// // func main() {
+// // 	badgeDOCID := "USTARTVIP"
+// // 	badge, err := get.BadgeByID(eclient, badgeDOCID)
+// // 	if err != nil {
+// // 		log.Println(err)
+// // 	}
 
 // 	vipEmails := []string{"az1440@nyu.edu", "tg1770@nyu.edu", "lc3940@nyu.edu"}
 // 	// seAEmails := []string{"zna215@nyu.edu", "aks618@nyu.edu", "lyannelalunio@nyu.edu", "fn513@nyu.edu"}
