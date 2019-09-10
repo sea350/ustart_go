@@ -53,7 +53,7 @@ func main() {
 	}
 
 	pc := []string{}
-	for _, id := range res2.Hits.Hits {
+	for _, id := range res.Hits.Hits {
 		data := types.User{}
 		err = json.Unmarshal(*id.Source, &data)
 		if err != nil {
