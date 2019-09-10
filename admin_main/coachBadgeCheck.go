@@ -52,15 +52,25 @@ func main() {
 		fmt.Println(err)
 	}
 
+	skills := make(map[string]int{})
+
 	pc := []string{}
 	for _, id := range res.Hits.Hits {
+		skills := make(map[string]int{})
 		data := types.User{}
 		err = json.Unmarshal(*id.Source, &data)
 		if err != nil {
 			fmt.Println(err)
 		}
 		pc = append(pc, data.Email)
-		fmt.Println(data.FirstName, data.LastName, data.Tags)
+		for _, s := range data.Tags {
+			skills[s] = 1
+		}
+		fmt.Println(data.FirstName, data.LastName)
+		for k := range skills {
+			fmt.Println(k)
+		}
+
 	}
 
 	pc2 := []string{}
