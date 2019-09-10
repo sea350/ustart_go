@@ -62,13 +62,14 @@ func main() {
 		pc = append(pc, data.Email)
 	}
 
-	// pc2 := []string{}
+	pc2 := []string{}
 	for _, id := range res2.Hits.Hits {
 		badgeData := types.Badge{}
 		err = json.Unmarshal(*id.Source, &badgeData)
 		if err != nil {
 			fmt.Println(err)
 		}
+		pc2 = badgeData.Roster
 	}
 	// ver := int(res.TotalHits())
 	// notVer := int(res2.TotalHits())
@@ -82,7 +83,7 @@ func main() {
 	}
 	fmt.Println("--------------------------------")
 	fmt.Println("The following used the code: ")
-	for _, e := range badgeData.Roster {
+	for _, e := range pc2 {
 		fmt.Println(e)
 	}
 
