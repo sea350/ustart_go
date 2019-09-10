@@ -40,12 +40,12 @@ func main() {
 
 	}
 
-	maq2 := elastic.NewMatchQuery("Tags", "Coaching")
+	maq2 := elastic.NewMatchQuery("ID", "UCOACH")
 	res2, err := eclient.Search().
-		Index(globals.UserIndex).
-		Type(globals.UserType).
+		Index(globals.BadgeIndex).
+		Type(globals.BadgeType).
 		Query(maq2).
-		Size(100).
+		Size(500).
 		Do(ctx)
 
 	if err != nil {
@@ -62,14 +62,13 @@ func main() {
 		pc = append(pc, data.Email)
 	}
 
-	pc2 := []string{}
+	// pc2 := []string{}
 	for _, id := range res2.Hits.Hits {
-		data := types.User{}
-		err = json.Unmarshal(*id.Source, &data)
+		badgeData := types.Badge{}
+		err = json.Unmarshal(*id.Source, &badgeData)
 		if err != nil {
 			fmt.Println(err)
 		}
-		pc2 = append(pc2, data.Email)
 	}
 	// ver := int(res.TotalHits())
 	// notVer := int(res2.TotalHits())
@@ -81,8 +80,9 @@ func main() {
 	for _, e := range pc {
 		fmt.Println(e)
 	}
-	fmt.Println("Coaching: ")
-	for _, e := range pc2 {
+	fmt.Println("--------------------------------")
+	fmt.Println("The following used the code: ")
+	for _, e := range badgeData.Roster {
 		fmt.Println(e)
 	}
 
