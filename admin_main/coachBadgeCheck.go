@@ -52,11 +52,11 @@ func main() {
 		fmt.Println(err)
 	}
 
-	skills := make(map[string]int{})
+	// skills := make(map[string]int{})
 
 	pc := []string{}
 	for _, id := range res.Hits.Hits {
-		skills := make(map[string]int{})
+		skills := make(map[string]int)
 		data := types.User{}
 		err = json.Unmarshal(*id.Source, &data)
 		if err != nil {
