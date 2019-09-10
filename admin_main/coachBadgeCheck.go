@@ -10,6 +10,7 @@ import (
 
 	elastic "github.com/olivere/elastic"
 	"github.com/sea350/ustart_go/globals"
+	post "github.com/sea350/ustart_go/post/user"
 	"github.com/sea350/ustart_go/types"
 )
 
@@ -59,6 +60,10 @@ func main() {
 		}
 		fmt.Println(newSkills)
 		fmt.Println("---------------------")
+		err := post.UpdateUser(eclient, id, "Tags", newSkills)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 
 }
