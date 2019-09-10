@@ -60,6 +60,7 @@ func main() {
 			fmt.Println(err)
 		}
 		pc = append(pc, data.Email)
+		fmt.Println(data.FirstName, data.LastName, data.Tags)
 	}
 
 	pc2 := []string{}
