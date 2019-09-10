@@ -10,6 +10,7 @@ import (
 	get "github.com/sea350/ustart_go/get/badge"
 	getUser "github.com/sea350/ustart_go/get/user"
 	"github.com/sea350/ustart_go/globals"
+	postBadge "github.com/sea350/ustart_go/post/badge"
 	postUser "github.com/sea350/ustart_go/post/user"
 )
 
