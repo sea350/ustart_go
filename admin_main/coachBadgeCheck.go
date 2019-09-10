@@ -60,7 +60,7 @@ func main() {
 		}
 		fmt.Println(newSkills)
 		fmt.Println("---------------------")
-		err := post.UpdateUser(eclient, id, "Tags", newSkills)
+		err := post.UpdateUser(eclient, id.Id, "Tags", newSkills)
 		if err != nil {
 			fmt.Println(err)
 		}
