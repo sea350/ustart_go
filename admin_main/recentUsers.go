@@ -19,7 +19,7 @@ func main() {
 
 	ctx := context.Background()
 
-	maq := elastic.NewBoolQuery().Filter(elastic.NewRangeQuery("AccCreation")
+	maq := elastic.NewBoolQuery().Filter(elastic.NewRangeQuery("AccCreation"))
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
