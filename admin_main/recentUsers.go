@@ -24,7 +24,7 @@ func main() {
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		Query(maq).
-		Size(20).
+		Size(500).
 		Sort("_score", true).
 		Do(ctx)
 
