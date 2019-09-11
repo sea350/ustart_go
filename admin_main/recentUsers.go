@@ -20,7 +20,7 @@ func main() {
 
 	ctx := context.Background()
 
-	from := time.Date(2019, time.September, 1, 0, 0, 0, 0, time.UTC)
+	from := time.Date(2019, time.August, 25, 0, 0, 0, 0, time.UTC)
 	maq := elastic.NewBoolQuery().Filter(elastic.NewRangeQuery("AccCreation").From(from))
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
