@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	elastic "github.com/olivere/elastic"
 	"github.com/sea350/ustart_go/globals"
@@ -19,13 +20,14 @@ func main() {
 
 	ctx := context.Background()
 
-	maq := elastic.NewBoolQuery().Filter(elastic.NewRangeQuery("AccCreation"))
+	from := time.Date(2019, time.September, 1, 0, 0, 0, 0, time.UTC)
+	maq := elastic.NewBoolQuery().Filter(elastic.NewRangeQuery("AccCreation")).From(from)
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		Query(maq).
 		Size(500).
-		Sort("_score", true).
+		// Sort("_score", true).
 		Do(ctx)
 
 	if err != nil {
