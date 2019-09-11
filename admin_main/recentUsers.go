@@ -38,7 +38,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(data.FirstName, "  ", data.LastName, "  ", data.Username, "  ", data.Email)
+		fmt.Println(data.FirstName, " || ", data.LastName, " ||  ", data.Username, " || ", data.Email, " || " data.AccCreation)
 	}
 
 }
