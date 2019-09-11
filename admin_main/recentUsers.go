@@ -25,7 +25,7 @@ func main() {
 		Type(globals.UserType).
 		Query(maq).
 		Size(20).
-		Sort("_score", false).
+		Sort("_score", true).
 		Do(ctx)
 
 	if err != nil {
