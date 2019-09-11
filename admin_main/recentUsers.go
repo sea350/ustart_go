@@ -19,12 +19,11 @@ func main() {
 
 	ctx := context.Background()
 
-	maq := elastic.NewMatchAllQuery()
+	maq := elastic.NewBoolQuery().Filter(elastic.NewRangeQuery("AccCreation")
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
 		Query(maq).
-		SortBy("AccCreation").
 		Size(20).
 		Sort("_score", false).
 		Do(ctx)
