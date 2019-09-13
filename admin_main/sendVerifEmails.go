@@ -12,6 +12,7 @@ import (
 	elastic "github.com/olivere/elastic"
 	"github.com/sea350/ustart_go/globals"
 	"github.com/sea350/ustart_go/types"
+	"github.com/sea350/ustart_go/uses"
 )
 
 var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
@@ -55,9 +56,9 @@ func main() {
 		fmt.Println(e)
 	}
 
-	fmt.Println(sendTo)
-	// for _, e := range sendTo {
-	// 	uses.SendVerificationEmail(eclient, e)
-	// }
+	// fmt.Println(sendTo)
+	for _, e := range sendTo {
+		uses.SendVerificationEmail(eclient, e)
+	}
 
 }
