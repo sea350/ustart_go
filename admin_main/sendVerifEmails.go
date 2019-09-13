@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/sea350/ustart_go/uses"
+	// "github.com/sea350/ustart_go/uses"
 
 	// admin "github.com/sea350/ustart_go/admin"
 
@@ -20,7 +20,10 @@ func main() {
 
 	ctx := context.Background()
 
-	maq2 := elastic.NewTermQuery("Verified", false)
+	maq2 := elastic.NewBoolQuery()
+	maq2 = maq.Must(elastic.NewTermQuery("Verified", false))
+	maq2 = maq.Must(elastic.NewMatchQuery("Tags", "Coaching"))
+
 	res2, err := eclient.Search().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
@@ -52,8 +55,9 @@ func main() {
 		fmt.Println(e)
 	}
 
-	for _, e := range sendTo {
-		uses.SendVerificationEmail(eclient, e)
-	}
+	fmt.Println(sendTo)
+	// for _, e := range sendTo {
+	// 	uses.SendVerificationEmail(eclient, e)
+	// }
 
 }
