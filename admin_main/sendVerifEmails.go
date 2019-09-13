@@ -21,8 +21,8 @@ func main() {
 	ctx := context.Background()
 
 	maq2 := elastic.NewBoolQuery()
-	maq2 = maq.Must(elastic.NewTermQuery("Verified", false))
-	maq2 = maq.Must(elastic.NewMatchQuery("Tags", "Coaching"))
+	maq2 = maq2.Must(elastic.NewTermQuery("Verified", false))
+	maq2 = maq2.Must(elastic.NewMatchQuery("Tags", "Coaching"))
 
 	res2, err := eclient.Search().
 		Index(globals.UserIndex).
