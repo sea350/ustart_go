@@ -19,7 +19,7 @@ func main() {
 
 	ctx := context.Background()
 
-	maq := elastic.NewMatchAllQuery()
+	maq := elastic.NewTermQuery("Verified", true)
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
 		Type(globals.UserType).
