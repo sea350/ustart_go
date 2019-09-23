@@ -32,6 +32,7 @@ func main() {
 		fmt.Println(err)
 	}
 
+	fmt.Println("Printing emails: ")
 	for _, id := range res.Hits.Hits {
 		data := types.User{}
 		err = json.Unmarshal(*id.Source, &data)
