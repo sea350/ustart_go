@@ -1,14 +1,16 @@
 package project
 
 import (
-	
 	"net/http"
+	"sync"
 
 	get "github.com/sea350/ustart_go/get/project"
 	client "github.com/sea350/ustart_go/middleware/client"
 	projPost "github.com/sea350/ustart_go/post/project"
 	userPost "github.com/sea350/ustart_go/post/user"
 )
+
+var sktchyLck sync.Mutex
 
 //RequestToJoin ...
 func RequestToJoin(w http.ResponseWriter, r *http.Request) {
@@ -20,9 +22,12 @@ func RequestToJoin(w http.ResponseWriter, r *http.Request) {
 	}
 	ID := r.FormValue("projID") //project docID
 
+	sktchyLck.Lock()
+	defer sktchyLck.Unlock()
+
 	proj, err := get.ProjectByID(client.Eclient, ID)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
@@ -40,12 +45,12 @@ func RequestToJoin(w http.ResponseWriter, r *http.Request) {
 	}
 	err = userPost.AppendSentProjReq(client.Eclient, test1.(string), ID)
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 	err = projPost.AppendMemberReqReceived(client.Eclient, ID, test1.(string))
 	if err != nil {
-		
+
 		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
 	}
 
