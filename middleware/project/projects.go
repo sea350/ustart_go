@@ -38,12 +38,13 @@ func ProjectsPage(w http.ResponseWriter, r *http.Request) {
 	project, err := uses.AggregateProjectData(client.Eclient, r.URL.Path[10:], docID.(string))
 	if err != nil {
 
-		client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
-		cs.ErrorStatus = true
-		cs.ErrorOutput = err
-		client.RenderSidebar(w, r, "template2-nil")
-		client.RenderSidebar(w, r, "leftnav-nil")
-		client.RenderTemplate(w, r, "projectsF", cs)
+		// client.Logger.Println("DocID: "+session.Values["DocID"].(string)+" | err: ", err)
+		// cs.ErrorStatus = true
+		// cs.ErrorOutput = err
+		// client.RenderSidebar(w, r, "template2-nil")
+		// client.RenderSidebar(w, r, "leftnav-nil")
+		// client.RenderTemplate(w, r, "projectsF", cs)
+		http.Redirect(w, r, "/404/", http.StatusFound)
 		return
 	}
 	if !project.ProjectData.Visible {
