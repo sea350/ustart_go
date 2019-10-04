@@ -23,7 +23,7 @@ func main() {
 	from := time.Date(2019, time.August, 1, 0, 0, 0, 0, time.UTC)
 	maq := elastic.NewBoolQuery().Filter(elastic.NewRangeQuery("AccCreation").From(from))
 	maq = maq.MustNot(elastic.NewMatchQuery("Tags", "Project Coaching"))
-	maq = maq.Must(elastic.NewMatchQuery("Verified", "true"))
+	// maq = maq.Must(elastic.NewMatchQuery("Verified", "true"))
 
 	res, err := eclient.Search().
 		Index(globals.UserIndex).
@@ -44,6 +44,7 @@ func main() {
 			fmt.Println(err)
 		}
 		fmt.Println(data.Email)
+		fmt.Println(data.FirstName, data.LastName)
 	}
 
 }
