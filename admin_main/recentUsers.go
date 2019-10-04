@@ -44,7 +44,7 @@ func main() {
 			fmt.Println(err)
 		}
 		fmt.Println(data.Email, +","+data.FirstName, +","+data.LastName)
-		A
+
 	}
 
 }
