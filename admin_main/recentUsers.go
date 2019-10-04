@@ -43,8 +43,8 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(data.Email)
-		fmt.Println(data.FirstName, data.LastName)
+		fmt.Println(data.Email, data.FirstName, data.LastName)
+
 	}
 
 }
