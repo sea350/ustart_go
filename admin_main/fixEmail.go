@@ -23,7 +23,7 @@ func main() {
 
 	// fmt.Println(len(usr.Projects))
 	// updatesProj := append(usr.Projects[:3], usr.Projects[4:]...)
-	err = post.UpdateUser(eclient, usrID, "Email", "support@ustart.today")
+	err = post.UpdateUser(eclient, usrID, "Email", "contact@ustart.today")
 	if err != nil {
 		fmt.Println("LINE 24,", err)
 	}
