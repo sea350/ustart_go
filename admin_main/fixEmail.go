@@ -18,7 +18,7 @@ var eclient, _ = elastic.NewSimpleClient(elastic.SetURL(globals.ClientURL))
 
 func main() {
 
-	usr, err := getUser.UserByUsername(eclient, "support")
+	// _, err := getUser.UserByUsername(eclient, "support")
 	usrID, err := getUser.IDByUsername(eclient, "support")
 
 	// fmt.Println(len(usr.Projects))
