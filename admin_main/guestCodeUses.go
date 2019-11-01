@@ -62,7 +62,8 @@ func main() {
 	for _, id := range res.Hits.Hits {
 		data := types.GuestCode{}
 		err = json.Unmarshal(*id.Source, &data)
-		fmt.Println(data.Code + "," + "," + data.Expiration)
+		fmt.Println(data.Code)
+		fmt.Println(data.Expiration)
 		fmt.Println(data.Users)
 		if err != nil {
 			fmt.Println(err)
