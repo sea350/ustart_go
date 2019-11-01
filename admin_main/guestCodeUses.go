@@ -45,7 +45,7 @@ func main() {
 		}
 	}
 
-	maq = maq.Must(elastic.NewMatchQuery("_id", guestID))
+	maq = elastic.NewTermQuery("_id", guestID)
 
 	res, err = eclient.Search().
 		Index(globals.UserIndex).
@@ -62,7 +62,8 @@ func main() {
 	for _, id := range res.Hits.Hits {
 		data := types.GuestCode{}
 		err = json.Unmarshal(*id.Source, &data)
-		fmt.Println(data.Code + "," + data.Users + "," + data.Expiration)
+		fmt.Println(data.Code + "," + "," + data.Expiration)
+		fmt.Println(data.Users)
 		if err != nil {
 			fmt.Println(err)
 
