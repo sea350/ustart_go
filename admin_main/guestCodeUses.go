@@ -45,7 +45,7 @@ func main() {
 		}
 	}
 
-	maq = elastic.NewTermQuery("Users", guestID)
+	maq = elastic.NewTermQuery("Users.keyword", guestID)
 
 	res, err = eclient.Search().
 		Index(globals.GuestCodeIndex).
