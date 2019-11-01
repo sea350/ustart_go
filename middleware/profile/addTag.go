@@ -59,6 +59,17 @@ func AddTag(w http.ResponseWriter, r *http.Request) {
 	if len(badgeTags) > 0 {
 		validTags = append(badgeTags, validTags...)
 	}
+
+	tagMap := make(map[string]int)
+	for t := range validTags {
+		tagMap[validTags[t]] = 0
+	}
+	validTags = nil
+	for key := range tagMap {
+		validTags = append(validTags, key)
+
+	}
+
 	err = post.UpdateUser(client.Eclient, ID, "Tags", validTags)
 	if err != nil {
 
