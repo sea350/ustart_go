@@ -36,7 +36,7 @@ func main() {
 	for _, id := range res.Hits.Hits {
 		data := types.User{}
 		err = json.Unmarshal(*id.Source, &data)
-		fmt.Println(data.Email+","+data.FirstName+","+data.LastName, +","+id.Id)
+		fmt.Println(data.Email, ",", data.FirstName, ",", data.LastName, ",", id.Id)
 		guestID = id.Id
 		break
 		if err != nil {
