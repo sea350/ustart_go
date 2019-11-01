@@ -45,11 +45,11 @@ func main() {
 		}
 	}
 
-	maq = elastic.NewTermQuery("_id", guestID)
+	maq = elastic.NewTermQuery("Users", guestID)
 
 	res, err = eclient.Search().
-		Index(globals.UserIndex).
-		Type(globals.UserType).
+		Index(globals.GuestCodeIndex).
+		Type(globals.GuestCodeType).
 		Query(maq).
 		Size(500).
 		// Sort("_score", true).
